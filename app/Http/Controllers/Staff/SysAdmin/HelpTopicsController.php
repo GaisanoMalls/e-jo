@@ -55,7 +55,6 @@ class HelpTopicsController extends Controller
             'slug' => \Str::slug($request->input('name'))
         ]);
 
-
         return back()->with('success', 'Help topic is successfully created.');
     }
 
@@ -65,9 +64,14 @@ class HelpTopicsController extends Controller
         return response()->json($sla);
     }
 
-
     public function teams(ServiceDepartment $serviceDepartment)
     {
         return response()->json($serviceDepartment->teams);
+    }
+
+    public function loadApprovers()
+    {
+        $approvers = User::with('profile')->where('role_id', Role::APPROVER)->get();
+        return response()->json($approvers);
     }
 }

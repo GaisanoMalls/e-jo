@@ -450,7 +450,6 @@ if (helpTopicServiceDepartmentDropdown || helpTopicTeamsDropdown) {
 // Assign approvers for help topic
 const levelOfApproverDropdown = document.getElementById('levelOfApproverDropdown');
 const selectApproverContainer = document.getElementById('selectApproverContainer');
-const tagifySample = document.getElementById('tagifySample');
 
 if (levelOfApproverDropdown) {
     levelOfApproverDropdown.addEventListener('change', function () {
@@ -463,12 +462,9 @@ if (levelOfApproverDropdown) {
                     <div class="col-md-12">
                         <div class="mb-2">
                             <label class="form-label form__field__label">
-                                Level ${i} approver
+                                Level ${i} approver/s
                             </label>
                             <select select id="level${i}Approver" name="approver" placeholder="Choose an approver" multiple>
-                                <option selected>Sam Sabellano</option>
-                                <option selected>Onnie Bunny</option>
-                                <option selected>John Doe</option>
                             </select>
                         </div>
                     </div>
@@ -479,7 +475,34 @@ if (levelOfApproverDropdown) {
                 VirtualSelect.init({
                     ele: `#level${i}Approver`,
                     showValueAsTags: true,
+                    markSearchResults: true,
                 });
+
+
+                const levelOfApproverSelect = document.getElementById(`level${i}Approver`);
+
+                axios.get('/staff/manage/help-topics/approvers')
+                    .then((response) => {
+                        const approvers = response.data;
+                        const approversOption = [];
+
+                        if (approvers && approvers.length > 0) {
+                            approvers.forEach(function (approver) {
+                                const middleName = `${approver.profile.middle_name ?? ''}`;
+                                const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+
+                                approversOption.push({
+                                    value: approver.id,
+                                    label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`
+                                });
+                            });
+
+                            levelOfApproverSelect.setOptions(approversOption);
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
             }
         }
     });

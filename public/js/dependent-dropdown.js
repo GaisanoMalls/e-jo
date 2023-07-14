@@ -2757,19 +2757,41 @@ if (helpTopicServiceDepartmentDropdown || helpTopicTeamsDropdown) {
 // Assign approvers for help topic
 var levelOfApproverDropdown = document.getElementById('levelOfApproverDropdown');
 var selectApproverContainer = document.getElementById('selectApproverContainer');
-var tagifySample = document.getElementById('tagifySample');
 if (levelOfApproverDropdown) {
   levelOfApproverDropdown.addEventListener('change', function () {
     var approverNumber = parseInt(this.value);
     selectApproverContainer.innerHTML = '';
     if (approverNumber) {
-      for (var i = 1; i <= approverNumber; i++) {
-        var html = "\n                    <div class=\"col-md-12\">\n                        <div class=\"mb-2\">\n                            <label class=\"form-label form__field__label\">\n                                Level ".concat(i, " approver\n                            </label>\n                            <select select id=\"level").concat(i, "Approver\" name=\"approver\" placeholder=\"Choose an approver\" multiple>\n                                <option selected>Sam Sabellano</option>\n                                <option selected>Onnie Bunny</option>\n                                <option selected>John Doe</option>\n                            </select>\n                        </div>\n                    </div>\n                ");
+      var _loop = function _loop() {
+        var html = "\n                    <div class=\"col-md-12\">\n                        <div class=\"mb-2\">\n                            <label class=\"form-label form__field__label\">\n                                Level ".concat(i, " approver/s\n                            </label>\n                            <select select id=\"level").concat(i, "Approver\" name=\"approver\" placeholder=\"Choose an approver\" multiple>\n                            </select>\n                        </div>\n                    </div>\n                ");
         selectApproverContainer.insertAdjacentHTML('beforeend', html);
         VirtualSelect.init({
           ele: "#level".concat(i, "Approver"),
-          showValueAsTags: true
+          showValueAsTags: true,
+          markSearchResults: true
         });
+        var levelOfApproverSelect = document.getElementById("level".concat(i, "Approver"));
+        axios.get('/staff/manage/help-topics/approvers').then(function (response) {
+          var approvers = response.data;
+          var approversOption = [];
+          if (approvers && approvers.length > 0) {
+            approvers.forEach(function (approver) {
+              var _approver$profile$mid;
+              var middleName = "".concat((_approver$profile$mid = approver.profile.middle_name) !== null && _approver$profile$mid !== void 0 ? _approver$profile$mid : '');
+              var firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+              approversOption.push({
+                value: approver.id,
+                label: "".concat(approver.profile.first_name, " ").concat(firstLetter, " ").concat(approver.profile.last_name)
+              });
+            });
+            levelOfApproverSelect.setOptions(approversOption);
+          }
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      };
+      for (var i = 1; i <= approverNumber; i++) {
+        _loop();
       }
     }
   });

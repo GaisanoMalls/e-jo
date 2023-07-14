@@ -214,6 +214,7 @@ Route::middleware(['auth', Role::systemAdmin()])->group(function () {
                     Route::post('store', 'store')->name('store');
 
                     // Axios endpoints
+                    Route::get('/approvers', 'loadApprovers');
                     Route::get('/assign/service-department/{serviceDepartment}/teams', 'teams');
                 });
             });
