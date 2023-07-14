@@ -1,0 +1,92 @@
+@use "../_generic"as generic;
+$fs-14: 0.875rem;
+$fs-15: 0.938rem;
+$border-radius-8: 0.5rem;
+$color-1: #ff0000;
+$body-color: #f5f7f9;
+
+@mixin padding {
+    padding: 0.75rem 1rem;
+}
+
+@mixin rounded-8 {
+    border-radius: $border-radius-8;
+}
+
+.vscomp-ele {
+    width: 100%;
+    max-width: 100%;
+}
+
+.vscomp-toggle-button {
+    @include padding;
+    font-size: 0.875rem;
+    border-radius: 0.563rem;
+    border: 1px solid #e7e9eb;
+}
+
+.vscomp-wrapper.focused .vscomp-toggle-button,
+.vscomp-wrapper:focus .vscomp-toggle-button {
+    box-shadow: none;
+    @include generic.input-field-focus-border;
+}
+
+.vscomp-option:last-child {
+    border-bottom-left-radius: $border-radius-8;
+    border-bottom-right-radius: $border-radius-8;
+}
+
+.vscomp-option.focused {
+    background-color: $body-color;
+}
+
+.vscomp-option.selected {
+    &::after {
+        content: "✔";
+        position: absolute;
+        right: 15px;
+    }
+}
+
+.vscomp-option:hover {
+    color: #d32839;
+
+    &::after {
+        content: "✔";
+        position: absolute;
+        right: 15px;
+    }
+}
+
+.vscomp-dropbox-container {
+    z-index: 3 !important;
+}
+
+.pop-comp-wrapper {
+    border-radius: $border-radius-8;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+
+    .vscomp-dropbox {
+        border-radius: $border-radius-8 !important;
+    }
+}
+
+.vscomp-wrapper.show-value-as-tags .vscomp-arrow {
+    display: none;
+}
+
+.vscomp-wrapper.show-value-as-tags:not(.has-value) .vscomp-toggle-button {
+    padding-bottom: 8px;
+}
+
+.vscomp-wrapper.show-value-as-tags .vscomp-toggle-button {
+    padding: 8px 16px 14px 16px;
+}
+
+.vscomp-wrapper.show-value-as-tags:not(.has-value) .vscomp-value {
+    padding-bottom: 0;
+}
+
+.vscomp-wrapper.show-value-as-tags .vscomp-clear-button {
+    top: 9px;
+}

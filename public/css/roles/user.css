@@ -1,0 +1,512 @@
+@import url(https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  scroll-behavior: smooth;
+  text-decoration: none !important;
+  list-style: none !important;
+  letter-spacing: normal;
+}
+
+/* Keyframes */
+@keyframes slideIn {
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0rem);
+    opacity: 1;
+  }
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 0.563rem;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 0.625rem;
+  background: #ccc;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.error__message {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: red;
+}
+
+.custom__field__message {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.slideIn {
+  animation-name: slideIn;
+}
+
+.animate {
+  animation-duration: 0.3s;
+  -webkit-animation-duration: 0.3s;
+  animation-fill-mode: both;
+  -webkit-animation-fill-mode: both;
+}
+
+body {
+  background-color: #f5f7f9;
+}
+
+.navbar .company__logo {
+  height: 35px;
+}
+.navbar .company__app__name {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #00695b;
+  top: -5px;
+}
+.navbar .company__app__name .lbl__system {
+  font-size: 11px;
+  bottom: -9px;
+  left: 1px;
+}
+.navbar .custom__navbar__toggler {
+  font-size: 0.875rem;
+}
+.navbar .custom__navbar__toggler:focus {
+  box-shadow: none;
+}
+.navbar .navbar-nav .dropdown-menu,
+.navbar .navbar-nav .dropdown-item {
+  border-radius: 0.5rem;
+}
+.navbar .navbar-nav .dropdown-menu {
+  border: 0 !important;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+  padding: 6px;
+}
+.navbar .navbar-nav .dropdown-menu .dropdown-item {
+  padding: 9px 14px;
+  font-size: 0.875rem;
+}
+.navbar .navbar-nav .dropdown-menu i {
+  font-size: 0.813rem;
+}
+.navbar .navbar-nav .custom__nav__link,
+.navbar .navbar-nav .icon__nav__link {
+  color: #24292f;
+}
+.navbar .navbar-nav .icon__nav__link i {
+  font-size: 0.875rem;
+}
+.navbar .navbar-nav .custom__nav__link {
+  font-size: 0.938rem;
+  font-weight: 500;
+  padding: 0.8rem 0;
+  position: relative;
+}
+.navbar .navbar-nav .custom__nav__link.active {
+  color: #d32839;
+  font-weight: 600;
+}
+.navbar .navbar-nav .custom__nav__link:hover {
+  color: #d32839;
+}
+.navbar .navbar-nav .custom__nav__item {
+  padding: 0 8px 0 8px;
+}
+.navbar .navbar-nav .custom__nav__item .btn__nav__create__ticket {
+  background-color: #d32839;
+  color: white;
+  padding: 0.6rem 1rem;
+  font-size: 0.938rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+}
+.navbar .navbar-nav .custom__nav__item .custom__dropdown__menu {
+  margin-top: -20px;
+}
+.navbar .navbar-nav .notification__dropdown__menu {
+  width: 330px;
+  min-width: 130px;
+}
+.navbar .navbar-nav .notification__dropdown__menu .notification__header {
+  padding: 8px 14px;
+  margin-bottom: 10px;
+}
+.navbar .navbar-nav .notification__dropdown__menu .notification__header .title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6d6d6d;
+}
+.navbar .navbar-nav .notification__dropdown__menu .notification__header .btn__mark__all__as__read {
+  font-size: 0.75rem;
+  color: #5882ce;
+}
+.navbar .nav__user__picture {
+  height: 35px;
+  width: 35px;
+  -o-object-fit: contain;
+     object-fit: contain;
+  border: 3px solid rgba(36, 105, 92, 0.2);
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
+}
+
+.ticket__tab__header {
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+  background-color: #fcfdfd;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow: scroll;
+  border-radius: 0.5rem;
+}
+.ticket__tab__header::-webkit-scrollbar {
+  display: none;
+}
+.ticket__tab__header .ticket__tab__link {
+  padding: 20px 0;
+  border: 0;
+  font-size: 0.813rem;
+  font-weight: 500;
+  border-radius: 0;
+  position: relative;
+  color: #666666;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  min-width: 100px;
+  width: 100%;
+  min-width: 130px;
+  white-space: nowrap;
+}
+.ticket__tab__header .ticket__tab__link.active {
+  background-color: inherit !important;
+  border-bottom: 0.2rem solid #d32839;
+  color: #d32839 !important;
+  font-weight: 600;
+}
+.ticket__tab__header .ticket__tab__link.active > .ticket__count__tab {
+  color: #d32839 !important;
+}
+.ticket__tab__header .ticket__tab__link.active > .arrow__down__active__tab {
+  display: block;
+}
+.ticket__tab__header .ticket__tab__link:hover {
+  color: #d32839;
+}
+.ticket__tab__header .ticket__tab__link:hover > .ticket__count__tab {
+  color: #d32839;
+}
+.ticket__tab__header .ticket__tab__link .ticket__count__tab {
+  color: #6d6d6d;
+}
+
+.ticket__content.header {
+  margin-bottom: 20px;
+}
+.ticket__content .content__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #d32839;
+}
+.ticket__content .count-item {
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: #7BA504;
+  padding: 0.27rem 0.67rem;
+  border-radius: 20px;
+  color: #FFFFFF;
+}
+.ticket__content .btn__filter__ticket {
+  font-size: 0.875rem;
+  padding: 0.4rem 0.7rem;
+  background-color: #e4eeed;
+  gap: 7px;
+  font-weight: 500;
+  color: #353535;
+  border-radius: 0.5rem;
+}
+
+.ticket__card {
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+.ticket__card .custom__table {
+  font-size: 0.875rem;
+  padding: 0;
+  margin: 0;
+  border-bottom: none !important;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+}
+.ticket__card .custom__table > :not(caption) > * > * {
+  border-bottom-width: 0 !important;
+}
+.ticket__card .custom__table .table__head__label {
+  letter-spacing: 0.01rem;
+  font-weight: 500;
+  font-size: 0.813rem;
+  padding: 15px 25px;
+  color: #6d6d6d;
+}
+.ticket__card .custom__table th,
+.ticket__card .custom__table td {
+  padding: 25px;
+  white-space: nowrap;
+}
+.ticket__card .custom__table tbody tr {
+  background-color: white;
+  font-weight: 500;
+  color: #363636;
+}
+.ticket__card .custom__table tbody td:first-child {
+  border-left-style: solid;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.ticket__card .custom__table tbody td:last-child {
+  border-right-style: solid;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.ticket__card .custom__table .custom__table__data {
+  position: relative;
+}
+.ticket__card .custom__table .custom__table__data .ticket__list__status__line {
+  position: absolute;
+  width: 3px;
+  height: 19px;
+  background-color: #d32839;
+  left: 0;
+  border-radius: 0.625rem;
+}
+.ticket__card .custom__table .custom__table__data .ticket__subject {
+  font-weight: 600;
+}
+
+.account__settings {
+  margin-top: 4rem;
+}
+.account__settings .custom__card {
+  border: 0;
+  padding: 20px 23px;
+}
+.account__settings .custom__card .user__picture {
+  height: 8rem;
+  width: 8rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 6px solid rgba(36, 105, 92, 0.2);
+  border-radius: 50%;
+}
+.account__settings .custom__card .user__date__joined {
+  font-size: 0.813rem;
+}
+.account__settings .custom__card .user__date__joined .date {
+  font-weight: 500;
+}
+.account__settings .account__content__header .account__content__header__title {
+  padding: 1.6rem 2rem;
+  color: #434040;
+  font-size: 1.125rem;
+}
+.account__settings .account__content__header .account__content__tab {
+  padding: 0 2rem;
+}
+.account__settings .account__content__header .account__content__tab::-webkit-scrollbar {
+  display: none;
+}
+.account__settings .account__content__header .account__content__tab .account__tab__button {
+  font-size: 0.875rem;
+  padding: 0.2rem 0 0.9rem 0;
+  font-weight: 500;
+}
+.account__settings .account__content__header .account__content__tab .account__tab__button.active {
+  border-bottom: 0.2rem solid #d32839 !important;
+  border-radius: 0;
+  font-weight: 600;
+  color: #d32839;
+}
+.account__settings .account__content {
+  padding: 1.6rem 2rem;
+}
+.account__settings .account__content .account__info__fields__container {
+  border: 0;
+}
+.account__settings .account__content .account__info__fields__container .upload__new__photo {
+  height: 60px;
+  width: 60px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 3px solid rgba(36, 105, 92, 0.2);
+  border-radius: 50%;
+}
+.account__settings .account__content .account__info__fields__container .upload__photo__field {
+  width: 100px;
+}
+.account__settings .account__content .account__info__fields__container .upload__photo__field:focus {
+  box-shadow: none;
+}
+.account__settings .account__content .account__info__fields__container #inputFileErrorMsg {
+  font-size: 0.75rem;
+}
+.account__settings .account__content .account__info__fields__container .account__form__container .input__field__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4a5568;
+}
+.account__settings .account__content .account__info__fields__container .account__form__container .input__field {
+  padding: 0.6rem 1rem;
+  font-size: 0.938rem;
+  border-radius: 0.5rem;
+}
+.account__settings .account__content .account__info__fields__container .account__form__container .input__field:focus {
+  border-color: #d32839;
+  box-shadow: none;
+}
+.account__settings .account__content .account__info__fields__container .account__form__container .btn__save__account {
+  background-color: #d32839;
+  color: white;
+  padding: 0.6rem 1rem;
+  font-size: 0.938rem;
+  border-radius: 0.5rem;
+}
+
+.confirm__logout__modal {
+  border-radius: 0.625rem;
+  border: none;
+}
+
+.btn__confirm__modal {
+  background-color: #d32839;
+  color: white;
+  padding: 0.6rem 1rem;
+  font-size: 0.938rem;
+  border-radius: 0.5rem;
+}
+
+.btn__cancel__logout {
+  background-color: #f5f7f9;
+  color: black;
+}
+.btn__cancel__logout:hover {
+  background-color: #f5f7f9;
+}
+
+.btn__confirm__logout:hover {
+  background-color: #d32839;
+  color: white;
+}
+
+.create__ticket__modal .modal__content {
+  padding: 1.6rem 1.2rem;
+  border: 0;
+  border-radius: 0.625rem;
+}
+.create__ticket__modal .modal__content .modal__title {
+  font-size: 1.125rem !important;
+  font-weight: 600;
+}
+.create__ticket__modal .modal__content .modal__body .input__field__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4a5568;
+}
+.create__ticket__modal .modal__content .modal__body .input__field {
+  padding: 0.6rem 1rem;
+  font-size: 0.938rem;
+  border-radius: 0.5rem;
+}
+.create__ticket__modal .modal__content .modal__body .input__field:focus {
+  border-color: #d32839;
+  box-shadow: none;
+}
+.create__ticket__modal .modal__content .modal__body .input__field:focus {
+  box-shadow: none;
+}
+.create__ticket__modal .modal__content .modal__body #checkOtherBranch {
+  height: 16px;
+  width: 16px;
+  border: 2px solid #CED4DA;
+  box-shadow: none !important;
+}
+.create__ticket__modal .modal__content .modal__body #checkOtherBranch:checked {
+  background-color: #D32839;
+  border-color: #D32839;
+}
+.create__ticket__modal .modal__content .modal__body #checkOtherBranch:checked + .labelCheckOtherBranch {
+  color: #d32839;
+  font-weight: 600;
+}
+.create__ticket__modal .modal__content .modal__body .labelCheckOtherBranch {
+  font-size: 0.938rem;
+  font-weight: 500;
+}
+.create__ticket__modal .modal__content .radio__button__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.create__ticket__modal .modal__content .ticket__file {
+  box-shadow: none;
+}
+.create__ticket__modal .modal__content .ticket__modal__button {
+  background-color: #d32839;
+  color: white;
+  padding: 0.6rem 1rem;
+  font-size: 0.938rem;
+  border-radius: 0.5rem;
+}
+.create__ticket__modal .modal__content .ticket__modal__button.btn__close__ticket__modal {
+  background-color: #f5f7f9 !important;
+  color: black;
+}
+.create__ticket__modal .modal__content input[type=radio] {
+  height: 17px;
+  width: 17px;
+  border: 2px solid #ced4da;
+}
+.create__ticket__modal .modal__content input[type=radio]:checked {
+  background-color: #d32839;
+  box-shadow: none;
+  border: 0;
+}
+.create__ticket__modal .modal__content #checkSendTicketToOtherBranch {
+  height: 16px;
+  width: 16px;
+  box-shadow: none;
+  border: 0.15rem solid #d32839;
+}
+.create__ticket__modal .modal__content #checkSendTicketToOtherBranch:checked {
+  background-color: #d32839;
+  border: none;
+}
+.create__ticket__modal .modal__content #checkSendTicketToOtherBranch:checked + .labelcheckSendTicketToOtherBranch {
+  color: #d32839;
+}
+.create__ticket__modal .modal__content .labelcheckSendTicketToOtherBranch {
+  font-weight: 600;
+  color: #4a5568;
+}
+
+@media (max-width: 991px) {
+  .navbar {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+}

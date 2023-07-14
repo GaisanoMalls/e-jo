@@ -1,0 +1,3176 @@
+@use "../generic"as generic;
+@import "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap";
+@import "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css";
+
+/* Keyframes */
+@keyframes slideIn {
+    0% {
+        transform: translateY(1rem);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0rem);
+        opacity: 1;
+    }
+
+    0% {
+        transform: translateY(1rem);
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes slideIn {
+    0% {
+        -webkit-transform: transform;
+        -webkit-opacity: 0;
+    }
+
+    100% {
+        -webkit-transform: translateY(0);
+        -webkit-opacity: 1;
+    }
+
+    0% {
+        -webkit-transform: translateY(1rem);
+        -webkit-opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes center-animate {
+    0% {
+        transform: scaleX(120);
+    }
+
+    100% {
+        transform: scaleX(0);
+    }
+}
+
+/* End Keyframes */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+    scroll-behavior: smooth;
+    text-decoration: none !important;
+    // list-style: none;
+    letter-spacing: normal;
+}
+
+$fw-400: 400;
+$fw-500: 500;
+$fw-600: 600;
+$fw-700: 700;
+$fs-11: 0.688rem;
+$fs-12: 0.75rem;
+$fs-13: 0.813rem;
+$fs-14: 0.875rem;
+$fs-15: 0.938rem;
+$fs-16: 1rem;
+$fs-18: 1.125rem;
+$fs-20: 1.25rem;
+$alert-message-background: rgba(241, 243, 244, 0.871);
+$shadows-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+$border-radius-10: 0.625rem;
+$border-radius-12: 0.75rem;
+$border-radius-9: 0.563rem;
+$border-radius-8: 0.5rem;
+$border-radius-50: 3.125rem;
+$border-radius-50-percent: 3.125rem;
+$black-color: black;
+$body-color: #f5f7f9;
+$white: #ffffff;
+$link-font-color: #24695c;
+$link-font-hover-color: #123831;
+$hover-button-background-color: #f7f7f6;
+$active-button-background-color: #1a3c40;
+$button-background-2: #3b8890;
+$search-button-background: #1a3c40;
+$button-box-shadow: 0 0.25rem 0.375rem -0.0625rem rgb(20 20 20 / 12%),
+0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
+$gradient-background: linear-gradient(310deg, #d28b27 0%, #f7be44 100%);
+$sidebar-gradient-background: linear-gradient(310deg, #2c287f 0%, #9079ce 100%);
+$box-shadow-global: 0 20px 27px 0 rgb(0 0 0 / 5%);
+$hover-background: #eceff4;
+$sidebar-badge-background: #31316a;
+$dropdown-icon-color: #67799f;
+$sidebar-badge-color: #ffffff;
+$dark-background: #1f2937;
+$extra-button-background: #564aa0;
+$bg-dark-green: #1d5c63;
+$color-1: #d32839;
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: $border-radius-9;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: $border-radius-10;
+    background: #ccc;
+
+    &:hover {
+        background: #999;
+    }
+}
+
+.slideIn {
+    -webkit-animation-name: slideIn;
+    animation-name: slideIn;
+}
+
+.animate {
+    animation-duration: 0.3s;
+    -webkit-animation-duration: 0.3s;
+    animation-fill-mode: both;
+    -webkit-animation-fill-mode: both;
+}
+
+.error__message {
+    @include generic.error-message;
+}
+
+body {
+    background-color: $body-color;
+}
+
+.action__button {
+    color: #8d94a1;
+    font-size: $fs-12;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    // margin-top: 13px;
+}
+
+.card__rounded__and__no__border {
+    border: none;
+    border-radius: $border-radius-10;
+}
+
+.file__input__field {
+    padding: 9px 16px;
+    border-radius: $border-radius-10;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 7%) !important;
+    font-size: $fs-13;
+
+    &:active {
+        box-shadow: none;
+    }
+}
+
+.form-check-label {
+    font-size: $fs-14;
+}
+
+.form-check-input {
+    margin-top: 6px;
+    margin-right: 15px;
+}
+
+.btn__submit {
+    background-color: $dark-background;
+    box-shadow: $button-box-shadow;
+    color: $white;
+    padding: 9px 18px;
+    font-size: $fs-12;
+    border-radius: $border-radius-10;
+    text-transform: uppercase;
+    font-weight: $fw-500 !important;
+
+    &:focus {
+        background-color: $dark-background !important;
+        color: $white !important;
+        border-color: $body-color !important;
+    }
+
+    &:hover {
+        background-color: $dark-background;
+        box-shadow: $button-box-shadow;
+        color: $white;
+    }
+}
+
+.modal__btnsubmit__bottom {
+    &:focus {
+        background-color: $dark-background !important;
+        color: $white !important;
+    }
+
+    background-color: $dark-background;
+    box-shadow: $button-box-shadow;
+    color: $white;
+
+    &:hover {
+        background-color: $dark-background;
+        box-shadow: $button-box-shadow;
+        color: $white;
+    }
+}
+
+.modal__btnclose__bottom {
+    background-color: #e9ecef;
+
+    &:active {
+        outline: none !important;
+        border-color: transparent;
+    }
+}
+
+.btn__cancel {
+    background-color: #e9ecef;
+    padding: 9px 18px;
+    font-size: $fs-12;
+    border-radius: $border-radius-10;
+    text-transform: capitalize;
+    font-weight: $fw-500 !important;
+
+    &:hover {
+        background-color: #e9ecef;
+    }
+
+    &:active {
+        outline: none !important;
+        border-color: transparent;
+    }
+
+    &:focus {
+        border-color: $body-color !important;
+    }
+}
+
+.btn__x {
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8d94a1;
+
+    &:focus {
+        border: none !important;
+    }
+}
+
+.modal__footer__button {
+    padding: 9px 18px;
+    font-size: $fs-12;
+    border-radius: $border-radius-10;
+    text-transform: uppercase;
+    font-weight: $fw-500 !important;
+
+    &:focus {
+        border-color: $body-color !important;
+    }
+}
+
+.page__header__back__button {
+    &:focus {
+        border-color: $body-color !important;
+    }
+}
+
+.form__errors {
+    padding: 8px 16px;
+    background-color: #eaebef;
+    color: #721c24;
+    font-size: $fs-13;
+    border-radius: $border-radius-10;
+}
+
+.initial__as__profile__picture {
+    position: relative;
+    height: 43px;
+    width: 43px;
+    border-radius: $border-radius-50-percent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    background-color: #24695c;
+    padding: 0 !important;
+
+    .name__initial {
+        font-size: $fs-13;
+        font-weight: $fw-600;
+        color: $white;
+        margin-top: 2px;
+        letter-spacing: 1px;
+    }
+}
+
+.initial__as__profile__picture__sm {
+    position: relative;
+    height: 43px;
+    width: 43px;
+    border-radius: $border-radius-50-percent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    background-color: #24695c;
+    padding: 0 !important;
+    height: 20px !important;
+    width: 20px !important;
+    border: 1px solid $white;
+    margin-right: -8px;
+
+    .name__initial__sm {
+        font-size: $fs-13;
+        font-weight: $fw-600;
+        color: $white;
+        margin-top: 2px;
+        letter-spacing: 1px;
+        font-size: 7px !important;
+    }
+}
+
+.form-control.is-invalid {
+    box-shadow: none !important;
+    border: 0.09rem solid #dc3545 !important;
+}
+
+.invalid-feedback {
+    strong {
+        font-size: $fs-12 !important;
+        font-weight: $fw-500 !important;
+    }
+
+    font-size: $fs-11;
+    margin-bottom: 0;
+    color: #dc3545 !important;
+}
+
+.toast__message__container {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    margin-left: 20px;
+    transition: background-color 0.3s, opacity 0.5s, visibility 0.5s;
+    z-index: 40;
+    border: none;
+    color: #ffffff;
+    border-radius: $border-radius-10;
+    box-shadow: $button-box-shadow;
+}
+
+.toast__message__content {
+    i {
+        color: #1f2937;
+    }
+}
+
+.toast__message {
+    font-size: $fs-13;
+    color: #1f2937;
+}
+
+.btn__close__toast__message {
+    font-size: 20px;
+    color: #67799f !important;
+    height: 20px;
+    width: 20px;
+
+    &:active {
+        box-shadow: none;
+    }
+}
+
+.file__preview {
+    height: 35px;
+    width: 35px;
+    border-radius: $border-radius-8;
+    box-shadow: $button-box-shadow;
+    object-fit: cover;
+}
+
+.custom__alert__message {
+    background-color: $alert-message-background;
+    border: 1px solid #e6edef;
+    font-size: $fs-14;
+    color: #5f6368;
+    padding: 14px 16px;
+    text-align: center;
+}
+
+.txt__search__header {
+    padding: 12px 19px;
+    border-radius: $border-radius-10;
+    outline: none;
+    font-size: 13px;
+    border: 0.08rem solid #d1d3d3 !important;
+}
+
+.search__button__header {
+    height: 30px;
+    width: 30px;
+    right: 24px;
+    top: 49%;
+    transform: translateY(-50%);
+    border-radius: $border-radius-10;
+}
+
+.dropdown-menu {
+    position: absolute;
+    padding: 1rem 0.5rem 1rem 0.5rem;
+    top: 60px;
+    right: 0px;
+    left: auto;
+    background: #ffffff;
+    border: 1px solid #e6edef;
+    z-index: 3;
+    border-radius: $border-radius-8;
+    box-shadow: $box-shadow-global;
+}
+
+.dropdown__menu__items {
+    padding: 0.3rem 1rem;
+
+    i {
+        color: $dropdown-icon-color;
+        font-size: $fs-13;
+    }
+}
+
+.dropdown__menu__item__label {
+    font-size: $fs-13;
+    font-weight: $fw-500;
+    color: #66799e;
+}
+
+.table {
+    td {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    th {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    tbody {
+        tr {
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid transparent;
+        }
+    }
+
+    &:not(caption) {
+        >* {
+            >* {
+                border-bottom-width: 0px;
+            }
+        }
+    }
+}
+
+.app__button {
+    border-radius: $border-radius-9;
+
+    &:hover {
+        transform: scale(1.02);
+    }
+}
+
+a {
+    color: $link-font-color;
+
+    &:hover {
+        color: $link-font-hover-color;
+    }
+}
+
+.dropdown-toggle {
+    &::after {
+        content: none;
+    }
+}
+
+.page__wrapper {
+    position: relative;
+
+    .page__body__wrapper {
+        background-color: $body-color;
+
+        .page__body {
+            min-height: calc(100vh - 76px);
+            margin-top: 76px;
+            margin-bottom: 35px;
+            padding: 0 15px 0 15px;
+            position: relative;
+
+            .page__header {
+                .page__header__title {
+                    font-size: $fs-20;
+                    font-weight: 600;
+                    margin-right: 10px;
+                    margin-bottom: 0 !important;
+                }
+
+                .breadcrumb {
+                    font-size: $fs-11;
+                    padding-top: 5px;
+                }
+            }
+        }
+    }
+
+    .page__main__header {
+        position: fixed;
+        top: 0;
+        z-index: 9;
+        width: 100%;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        background-color: #fff;
+        -webkit-box-shadow: 0 0 20px rgb(25 124 207 / 8%);
+        box-shadow: 0 0 20px rgb(25 124 207 / 8%);
+        border-bottom: 1px solid #e6edef;
+        padding: 0.8rem 0 0.8rem 0;
+    }
+}
+
+.page__wrapper.compact__wrapper {
+    .page__body__wrapper {
+        .page__body {
+            padding-top: 20px;
+            margin-left: 290px;
+        }
+    }
+}
+
+.dropdown {
+    .nav-link {
+        padding: 3px 9px;
+    }
+}
+
+.page__main__header {
+    .company__logo {
+        height: 35px;
+    }
+
+    .company__app__name {
+        font-size: 1.4rem;
+        font-weight: $fw-600;
+        color: #00695b;
+        top: -5px;
+
+        .lbl__system {
+            font-size: $fs-11;
+            bottom: -9px;
+            left: 1px;
+        }
+    }
+
+    .nav-link {
+        i {
+            font-size: $fs-13;
+            color: #262b40;
+        }
+    }
+
+    .nav-item {
+        padding: 6px;
+        list-style: none;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .nav-item.more__menu {
+        display: none;
+    }
+}
+
+.sidebar__buttons {
+    font-size: $fs-14;
+    color: #131313 !important;
+    padding: 5px 10px;
+    margin-bottom: 3px;
+    border-radius: $border-radius-9;
+    text-transform: capitalize;
+    line-height: 2.4rem;
+    font-weight: $fw-500;
+
+    &:hover {
+        background-color: $body-color;
+    }
+}
+
+.sidebar__btn__active {
+    background-color: $white;
+    color: $color-1 !important;
+    font-weight: 600;
+
+    &:hover {
+        color: $black-color;
+    }
+}
+
+.sidebar__button__icon__container {
+    height: 35px;
+    width: 35px;
+    border-radius: $border-radius-9;
+    box-shadow: $button-box-shadow;
+    background-color: $white;
+
+    i {
+        color: #00695b;
+    }
+}
+
+.sidebar__btn__active.active {
+    background-color: $body-color;
+    color: #31316a;
+    font-weight: $fw-600;
+
+    >.sidebar__button__icon__container {
+        background-color: $color-1;
+        height: 35px;
+        width: 35px;
+
+        i {
+            color: $white;
+            font-size: $fs-12;
+        }
+    }
+}
+
+.sidebar__collapse__ul {
+    border-left: 0.08rem solid #d1d3d3;
+    margin-left: 25px;
+    padding: 7px 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar__collapse__btnlink {
+    padding: 7px 9px 7px 9px;
+    border-radius: $border-radius-9;
+
+    &:hover {
+        background-color: $body-color;
+    }
+
+    .sidebar__btn__link__name {
+        color: $link-font-color;
+        font-size: $fs-13;
+    }
+}
+
+.sidebar__collapse__btnlink__active {
+    font-weight: 600;
+}
+
+.sidebar__active__dot {
+    height: 8px;
+    width: 8px;
+    left: -1.22rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: $white;
+    border: 0.11rem solid #d1d3d3;
+}
+
+.sidebar__btn__link__badge {
+    font-size: $fs-11;
+    color: $sidebar-badge-color;
+    background-color: $bg-dark-green;
+    padding: 5px 6px;
+    min-width: 25px;
+    font-weight: 500;
+}
+
+.sidebar {
+    background: $white;
+    position: fixed;
+    top: 72px;
+    left: 0;
+    z-index: 90;
+    width: 290px;
+    height: 100%;
+    padding: 20px 0;
+    overflow-y: auto;
+    text-align: left;
+    line-height: inherit;
+    border-right: 1px solid #e6edef;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+
+    .sidebar__user {
+        padding: 0px 20px 20px 20px;
+        position: relative;
+        border-bottom: 0.08rem solid #e6edef;
+        margin: 10px 0 20px 0;
+
+        .sidebar__userfullname {
+            font-size: $fs-14;
+        }
+
+        .sidebar__userdepartment {
+            color: #999;
+            font-size: $fs-12;
+            margin-bottom: 0;
+        }
+
+        .sidebar__badge__bottom {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            top: 60px;
+
+            .user__role__badge {
+                padding: 4px 6px 3px;
+                -webkit-box-shadow: 0px 7px 10px rgb(36 105 92 / 30%);
+                box-shadow: 0px 7px 10px rgb(36 105 92 / 30%);
+                font-family: "Roboto", sans-serif;
+                background: #24695c;
+            }
+        }
+
+        .staff__ticket__count {
+            .counter {
+                font-size: $fs-13;
+            }
+
+            li {
+                margin: 0 20px 0 20px;
+                position: relative;
+                list-style: none;
+
+                span {
+                    font-weight: 600;
+                }
+            }
+
+            .counter__label {
+                font-size: $fs-11;
+                margin-bottom: 0;
+            }
+        }
+
+        p {
+            color: #999;
+            font-size: $fs-13;
+        }
+    }
+
+    .sidebar__userimage {
+        border: 6px solid rgba(36, 105, 92, 0.2);
+        height: 90px;
+        width: 90px;
+        object-fit: cover;
+    }
+
+    .sidebar__button__badge__count {
+        font-size: $fs-12;
+        background-color: #f2f2f2;
+        color: #00695b;
+        font-weight: $fw-400;
+        border-radius: 20px 0px 0px 20px;
+        margin-right: -34px;
+        padding: 5px 10px;
+    }
+}
+
+.sidebar.close {
+    margin-left: 0;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+
+.dashboard__section {
+    .dashboard__card__by__status {
+        overflow: hidden;
+        margin-bottom: 23px;
+        background-color: #fff;
+        padding: 5px 9px;
+
+        p {
+            font-size: $fs-12;
+            color: #717171;
+            font-weight: $fw-400;
+            text-transform: capitalize;
+        }
+
+        .card__label__name {
+            font-size: $fs-18 !important;
+        }
+
+        .progress__bar__container {
+            .progress__bar__ticket__count {
+                font-size: $fs-15;
+                font-weight: $fw-600;
+            }
+
+            .custom__progress {
+                height: 9px;
+                width: 100%;
+
+                .custom__progress__bar {
+                    border-radius: $border-radius-50;
+                }
+            }
+        }
+
+        .dashboad__card__icon__container {
+            width: 60px;
+            height: 60px;
+            padding: 3px 5px;
+            border-radius: $border-radius-12;
+            background-color: #fbf8f8;
+
+            i {
+                font-size: 2rem;
+            }
+        }
+    }
+}
+
+.custom__table {
+    padding: 0;
+    margin: 0;
+    font-size: $fs-14;
+
+    &::-webkit-scrollbar {
+        height: 3px;
+    }
+
+    tbody {
+        tr {
+            td {
+                span {
+                    font-size: $fs-13;
+                    color: #626060;
+                    font-weight: $fw-500;
+                }
+            }
+        }
+    }
+
+    .table__head__label {
+        letter-spacing: 0.01rem;
+        font-weight: $fw-600;
+        font-size: $fs-14;
+        text-transform: capitalize;
+    }
+
+    .media {
+        padding: 10px 20px;
+
+        .user__name {
+            font-size: $fs-13;
+            font-weight: $fw-600;
+            margin-bottom: -0.3rem;
+            color: #1a3c40;
+        }
+    }
+
+    .table__header {
+        padding: 23px 30px !important;
+    }
+
+    .table__name {
+        font-size: $fs-13;
+        font-weight: $fw-600;
+    }
+
+    i {
+        font-size: $fs-14;
+    }
+
+    .ticket__priority__badge {
+        padding: 3px 10px;
+        background-color: #7ba504;
+        border-radius: $border-radius-50;
+        color: $white;
+    }
+}
+
+.team__row {
+    padding: 20px 0 !important;
+    border-top: 1px solid #eaeaea;
+    margin: 0 30px;
+
+    .team__name {
+        font-size: $fs-13;
+        font-weight: $fw-600;
+        color: #1a3c40;
+    }
+
+    .team__ticket__count {
+        i {
+            color: #bab6b6 !important;
+            font-size: $fs-13;
+        }
+
+        .ticket__count {
+            font-size: $fs-13;
+            color: #212529;
+            font-weight: $fw-500;
+        }
+    }
+
+    .team__ticket__details {
+        font-size: $fs-13;
+        color: #595959;
+
+        i {
+            color: black;
+        }
+    }
+}
+
+.ticket__section {
+    .tickets__card {
+        border: none;
+        border-radius: $border-radius-10;
+        padding: 1.5rem;
+
+        .tickets__card__header {
+            .card__title {
+                font-weight: $fw-600;
+                color: #3d3d3d;
+            }
+
+            .card__description {
+                color: #3e3d3d;
+                font-size: $fs-13;
+                font-weight: $fw-500;
+            }
+        }
+
+        .tickets__table__card {
+            .custom__table {
+                .td__content {
+                    padding: 9px 20px;
+                    height: 50px;
+
+                    .ticket__checkbox {
+                        height: 15px;
+                        width: 15px;
+                        box-shadow: none;
+                        outline: none;
+
+                        &:hover {
+                            cursor: default;
+                        }
+
+                        &:checked {
+                            background-color: $color-1;
+                            border: 0;
+                        }
+                    }
+                }
+
+                .ticket__list__status__line {
+                    position: absolute;
+                    width: 3px;
+                    height: 19px;
+                    background-color: $color-1;
+                    left: 0;
+                    top: 50%;
+                    -ms-transform: translateY(-50%);
+                    transform: translateY(-50%);
+                    border-radius: $border-radius-10;
+                }
+
+                .ticket__tr {
+                    .clickable {
+                        :hover {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .ticket__details__container {
+        .ticket__details__status {
+            font-weight: $fw-600;
+            font-size: $fs-11;
+            background-color: $bg-dark-green;
+            color: $white;
+            padding: 0.3rem 0.9rem;
+            border-radius: $border-radius-9;
+            text-transform: uppercase;
+        }
+
+        .ticket__details__priority {
+            font-weight: $fw-600;
+            color: red;
+            font-size: $fs-13;
+        }
+
+        .ticket__details__header {
+            .ticket__detatails__btn__reply_ticket {
+                color: $white;
+                background-image: $gradient-background;
+                height: 33px;
+                width: 33px;
+                border-radius: $border-radius-50-percent;
+                background-color: #e9ecef;
+                border: 1px solid #dee2e6;
+
+                &:hover {
+                    box-shadow: $button-box-shadow;
+                }
+
+                i {
+                    font-size: $fs-12;
+                }
+            }
+
+            .ticket__detatails__btn__bookmark {
+                height: 33px;
+                width: 33px;
+                border-radius: $border-radius-50-percent;
+                background-color: #e9ecef;
+                border: 1px solid #dee2e6;
+
+                &:hover {
+                    background-color: #e5e4e5;
+                }
+
+                i {
+                    font-size: $fs-12;
+                }
+            }
+
+            .ticket__detatails__btn__markasresolved {
+                height: 33px;
+                width: 33px;
+                border-radius: $border-radius-50-percent;
+                background-color: #e9ecef;
+                border: 1px solid #dee2e6;
+
+                &:hover {
+                    background-color: #e5e4e5;
+                }
+
+                i {
+                    font-size: $fs-12;
+                }
+            }
+
+            .ticket__detatails__btn__transfer {
+                height: 33px;
+                width: 33px;
+                border-radius: $border-radius-50-percent;
+                background-color: #e9ecef;
+                border: 1px solid #dee2e6;
+
+                &:hover {
+                    background-color: #e5e4e5;
+                }
+
+                i {
+                    font-size: $fs-12;
+                }
+            }
+
+            .ticket__details__title {
+                font-weight: $fw-600;
+                font-size: $fs-15;
+            }
+
+            .ticket__details__datetime {
+                font-weight: $fw-500;
+                color: #4a5568;
+                font-size: $fs-12;
+            }
+        }
+
+        .ticket__details__ticketnumber {
+            font-weight: $fw-500;
+            color: #4a5568;
+            font-size: $fs-13;
+        }
+
+        .ticket__discussions {
+            font-size: $fs-13;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .card__ticket__details__right {
+            .btn__add__tags {
+                font-size: $fs-12;
+                border: none;
+                background-color: transparent;
+            }
+        }
+    }
+
+    .card__ticket__details {
+        .ticket__details__card__header {
+            padding: 1.5rem;
+
+            .ticket__details__user__picture {
+                height: 35px;
+                width: 35px;
+                border-radius: $border-radius-50;
+                box-shadow: $shadows-sm;
+                margin-right: 0.7rem;
+                object-fit: cover;
+            }
+
+            .ticket__details__user__picture__user__name__initial__reply {
+                height: 30px;
+                width: 32px;
+                border-radius: $border-radius-50;
+                box-shadow: $shadows-sm;
+                background-color: #24695c;
+                margin-right: 0.7rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .ticket__details__user__picture__user__name__initial__reply_sm {
+                    font-size: 10px;
+                    font-weight: $fw-600;
+                    color: $white;
+                    margin-top: 2px;
+                    letter-spacing: 1px;
+                }
+            }
+
+            .reply__ticket__details__user__fullname {
+                font-size: $fs-13;
+                font-weight: $fw-600;
+                color: #1f2937;
+            }
+        }
+
+        overflow: hidden;
+        border-radius: $border-radius-10;
+        margin-bottom: 15px;
+        border: none;
+        background-color: #fff;
+        padding: 15px;
+
+        .ticket__details__user__picture__default__user__initial {
+            position: relative;
+            height: 35px;
+            width: 35px;
+            border-radius: $border-radius-10;
+            box-shadow: $shadows-sm;
+            background-color: #24695c;
+            margin-right: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ticket__details__user__picture__user__sender__name__initial {
+            font-size: 10px;
+            font-weight: $fw-600;
+            color: $white;
+            margin-top: 2px;
+            letter-spacing: 1px;
+        }
+
+        .ticket__details__user__fullname {
+            font-size: $fs-14;
+            font-weight: $fw-500;
+        }
+
+        .ticket__details__card__body {
+            padding: 0 1.5rem 0 1.5rem;
+
+            a {
+                color: blue;
+                text-decoration: underline !important;
+            }
+
+            .ticket__description {
+                font-size: $fs-13;
+                font-weight: $fw-400;
+                color: $black-color;
+            }
+
+            .ticket__attachments {
+                color: #4a5568;
+                font-size: $fs-14;
+
+                &:hover {
+                    cursor: pointer;
+                    color: black;
+                }
+            }
+
+            .ticket__reply__content {
+                border-left: 0.08rem solid #d8e0e2;
+                padding-left: 1.3rem;
+                padding-top: 1rem;
+                margin-left: 0.8rem;
+                margin-top: 0.5rem;
+                position: relative;
+
+                .ticket__reply__content__check__icon {
+                    position: absolute;
+                    left: -8px;
+                    bottom: 0;
+                    font-size: $fs-16;
+                    color: rgba(242, 242, 242, 1);
+                    background-color: $black-color;
+                    border-radius: 50%;
+                }
+
+                p {
+                    font-size: $fs-13 !important;
+                    font-weight: $fw-400;
+                    text-transform: none;
+                }
+
+                span {
+                    font-size: $fs-13 !important;
+                    font-weight: $fw-400;
+                    text-transform: none;
+                }
+            }
+        }
+
+        .ticket__details__time {
+            color: #717171;
+            font-size: $fs-12;
+            font-weight: $fw-500;
+        }
+
+        .ticket__details__user__department {
+            color: #717171;
+            font-size: $fs-12;
+            font-weight: $fw-500;
+        }
+
+        .reply__ticket__details__user__picture {
+            height: 30px !important;
+            width: 30px !important;
+        }
+
+        .ticket__details__card__body__right {
+            padding: 1.5rem;
+
+            .ticket__actions {
+                >li {
+                    list-style-type: square !important;
+                    font-size: $fs-15;
+                }
+
+                .priority__name {
+                    font-weight: $fw-500;
+                }
+            }
+
+            .ticket__details__info__label {
+                font-size: $fs-13;
+            }
+
+            .ticket__details__info {
+                font-size: $fs-12;
+                padding: 2px 8px;
+                border-radius: 5px;
+                background-color: #F3F3F3;
+
+                &.not__set {
+                    background-color: transparent;
+                }
+            }
+        }
+
+        .btn__ticket__set__action {
+            background-color: $dark-background;
+            font-weight: $fw-500;
+            box-shadow: $button-box-shadow;
+            color: $white;
+            padding: 0.5rem 0.8rem;
+            font-size: $fs-12;
+            border-radius: $border-radius-9;
+            text-transform: capitalize;
+            letter-spacing: 0.05rem;
+        }
+
+        .ticket__dropdown__select {
+            &:focus {
+                border: 1px solid #1d5c63;
+            }
+        }
+    }
+
+    .container__ticket__details__right {
+        top: 240px;
+        position: sticky;
+    }
+
+    .ticket__details__top {
+        padding: 1.5rem;
+        top: 70px;
+        position: sticky;
+        z-index: 1;
+        background-color: $white;
+        border-radius: $border-radius-8;
+
+        .ticket__details__topbuttons__label {
+            font-size: $fs-12;
+        }
+    }
+}
+
+.custom__button__menu {
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+    margin-left: 1rem;
+
+    &:focus {
+        border: none !important;
+    }
+}
+
+.custom__dropdown__menu__container {
+    margin-top: 2rem !important;
+    padding: 0.5rem !important;
+}
+
+.custom__dropdown__menu__items {
+    padding: 0.1rem 0.8rem;
+
+    i {
+        font-size: $fs-12 !important;
+    }
+
+    .custom__dropdown__menu__items {
+        font-size: $fs-12 !important;
+        font-weight: $fw-500;
+    }
+
+    .danger__label {
+        color: #fa5252 !important;
+    }
+
+    .danger__icon {
+        color: #fa5252 !important;
+    }
+}
+
+.custom__list__group {
+    .list__ticket__discription {
+        font-size: $fs-13;
+
+        a {
+            text-decoration: underline;
+            color: blue;
+        }
+    }
+
+    .ticket__title__and__description {
+        p {
+            span {
+                font-size: $fs-12 !important;
+                color: #717171;
+                font-weight: $fw-400;
+            }
+        }
+    }
+
+    .ticket__status {
+        font-weight: $fw-500;
+        font-size: $fs-13;
+    }
+}
+
+.ticket__user__picture {
+    height: 30px;
+    width: 30px;
+    border-radius: $border-radius-10;
+    box-shadow: $shadows-sm;
+}
+
+.custom__card {
+    .custom__table {
+        .ticket__user__media {
+            border-radius: $border-radius-10;
+        }
+    }
+}
+
+.form-check {
+    padding-left: 1.42rem;
+}
+
+input[type="checkbox"] {
+    &:focus {
+        box-shadow: none !important;
+        border: 1px solid $color-1;
+    }
+
+    &:checked {
+        background-color: $color-1 !important;
+        border: 1px solid $color-1;
+    }
+
+    height: 17px;
+    width: 19px;
+    border: 1px solid $color-1;
+}
+
+.custom__dropdown__menu__container__ticket__details {
+    margin-top: auto !important;
+    margin-right: 20px !important;
+}
+
+.ticket__actions__label {
+    font-size: $fs-14;
+    font-weight: $fw-600;
+    margin-bottom: 3px;
+    color: #131313;
+}
+
+.ticket__actions__modal {
+    .ticket__dropdown__select {
+        font-size: $fs-13;
+        font-weight: $fw-500;
+        padding: 9px 16px;
+        border-radius: $border-radius-9;
+        box-shadow: none !important;
+    }
+
+    .cb__transfer__ticket__to__department {
+        height: 14px !important;
+        width: 14px !important;
+        margin-bottom: 2px;
+    }
+}
+
+#transferDepartmentSection {
+    display: none;
+}
+
+.modal__close__button {
+    height: 30px;
+    width: 30px;
+    font-size: $fs-15;
+    border-radius: $border-radius-50 !important;
+
+    &:focus {
+        border: none;
+    }
+}
+
+.offcanvas__close__button {
+    height: 30px;
+    width: 30px;
+    font-size: $fs-15;
+    border-radius: $border-radius-50 !important;
+
+    &:focus {
+        border: none;
+    }
+}
+
+.btn__reply__ticket {
+    border-radius: $border-radius-9;
+    font-size: $fs-15;
+    padding: 0.5rem 1rem;
+    font-weight: $fw-500;
+    box-shadow: $button-box-shadow;
+    background-color: #00695b;
+    color: $white;
+
+    &:hover {
+        background-color: #00695b;
+        color: $white;
+    }
+
+    i {
+        font-size: $fs-14;
+    }
+}
+
+.custom__reply__ticket__offcanvas {
+    border-radius: $border-radius-9 $border-radius-9 0 0;
+    transition: width 0.3s;
+    height: 80% !important;
+    width: 60% !important;
+}
+
+.custom__offcanvas__title {
+    font-size: $fs-16;
+    text-transform: capitalize;
+}
+
+.ticket__file__input {
+    border: 0;
+    border-radius: 0;
+    font-size: $fs-13;
+
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+.tox {
+    .tox-promotion {
+        display: none !important;
+    }
+}
+
+.btn__send__ticket__reply {
+    padding: 0.5rem 1rem;
+    font-size: $fs-15;
+    border-radius: $border-radius-9;
+    background-color: $color-1;
+    color: $white;
+    font-weight: $fw-500;
+
+    &:focus {
+        color: $white;
+        background-color: $color-1;
+    }
+
+    &:hover {
+        color: $white;
+        background-color: $color-1;
+    }
+}
+
+#btnSaveAssignTicketToAnotherAgent {
+    &:disabled {
+        opacity: 2;
+        background-color: #e9ecef;
+        color: #212529;
+        border: 1px solid #ced4da;
+        box-shadow: none !important;
+    }
+}
+
+#btnSaveTransferTicket {
+    &:disabled {
+        opacity: 2;
+        background-color: #e9ecef;
+        color: #212529;
+        border: 1px solid #ced4da;
+        box-shadow: none !important;
+    }
+}
+
+.reply__ticket__info {
+    padding: 1.2rem;
+    background-color: #f7f7f7;
+    border-radius: $border-radius-9;
+
+    img.sender__profile {
+        height: 30px !important;
+        width: 30px !important;
+        border-radius: $border-radius-50;
+    }
+
+    .time__sent {
+        font-size: $fs-12;
+    }
+
+    .ticet__description {
+        font-size: $fs-13;
+    }
+}
+
+.settings__content {
+    .settings__tab__container {
+        padding: 0px 0px 10px 0 !important;
+        background-color: transparent;
+        border: 0 !important;
+
+        .ul__tab {
+            gap: 2rem;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+    }
+
+    .card__settings {
+        padding: 0.7rem 0;
+        margin-bottom: 10px;
+
+        .settings__tab__button {
+            padding: 1.2rem 0;
+            font-size: $fs-13;
+            border-radius: 0 !important;
+            white-space: nowrap;
+            color: #1f2937 !important;
+            font-weight: $fw-500;
+
+            i {
+                font-size: $fs-13;
+                color: $dropdown-icon-color;
+                margin-right: 10px !important;
+            }
+        }
+
+        .settings__active__tab {
+            color: #5b5943 !important;
+            font-weight: $fw-600;
+            border-bottom: 0.18rem solid #5b5943 !important;
+
+            &:hover {
+                color: $white;
+            }
+
+            .settings__icon__active__tab {
+                color: #5b5943;
+            }
+        }
+
+        .settings__menu__button__group {
+            position: absolute;
+            right: 10px !important;
+
+            .settings__custom__dropdown__menu__container {
+                right: 30px !important;
+                top: -48px !important;
+            }
+        }
+
+        .card__settings__content__main {
+            .settings__department__assigned__agent {
+                padding-right: 15px;
+
+                .settings__count__the__rest__of__agent {
+                    font-size: $fs-12;
+                    margin-right: 3px;
+                }
+            }
+
+            .settings__department__agent__picture {
+                height: 20px;
+                width: 20px;
+                border-radius: $border-radius-50-percent;
+                border: 1px solid $white;
+                margin-right: -8px;
+
+                &:hover {
+                    z-index: 2 !important;
+                    transform: scale(1.1) !important;
+                    cursor: pointer;
+                }
+            }
+
+            .initial__as__profile__picture__sm {
+                &:hover {
+                    z-index: 2 !important;
+                    transform: scale(1.1) !important;
+                    cursor: pointer;
+                }
+            }
+
+            .settings__txtsearch__agent {
+                padding: 8px 16px;
+                border-radius: $border-radius-10;
+                outline: none;
+                border: 1px solid #d1d3d3;
+                font-size: $fs-13;
+            }
+
+            .agent__search__icon {
+                color: $black-color;
+                position: absolute;
+                right: 13px;
+                height: 15px;
+                width: 15px;
+                color: #212529;
+            }
+
+            .tag__count__tickets {
+                font-size: $fs-12;
+                font-weight: $fw-400;
+                color: #1f2937;
+            }
+
+            .ticket__tag__icon {
+                color: #6b7280;
+            }
+
+            .edit__department {
+                .department__logo {
+                    height: 130px;
+                    width: 130px;
+                }
+            }
+
+            .department__card__info {
+                padding: 20px;
+                border-radius: $border-radius-10;
+                box-shadow: $button-box-shadow;
+
+                i {
+                    font-size: 30px;
+                    color: #262b40;
+                }
+
+                .card__info__label {
+                    color: #4a5568;
+                    font-size: $fs-13;
+                    font-weight: $fw-500;
+                }
+
+                .ticket__count {
+                    font-size: $fs-18;
+                    color: #212529;
+                    font-weight: $fw-600;
+                }
+            }
+
+            .department__card__info__ticket {
+                background-color: rgb(158 85 20 / 10%);
+            }
+
+            .department__card__info__agent {
+                background-color: rgba(36, 105, 92, 0.1);
+            }
+
+            .department__info {
+                .settings__department__name {
+                    font-size: $fs-14 !important;
+                    color: initial;
+                    font-weight: $fw-600;
+                }
+            }
+        }
+    }
+}
+
+.custom__modal {
+    .custom__modal__content {
+        padding: 1.5rem;
+
+        .modal__header {
+            .modal__title {
+                font-size: $fs-15;
+                font-weight: $fw-600;
+                margin-bottom: 0 !important;
+                text-transform: capitalize;
+            }
+        }
+
+        .modal__footer {
+            margin-top: 30px;
+        }
+
+        .modal__btnclose__bottom {
+            background-color: #e9ecef;
+
+            &:active {
+                outline: none !important;
+                border-color: transparent;
+            }
+        }
+    }
+}
+
+.accounts__section {
+    .users__account__card {
+        border: none;
+        border-radius: $border-radius-10;
+        padding: 1.5rem;
+
+        .users__account__card__header {
+            .users__account__card__name {
+                font-size: $fs-15;
+                font-weight: $fw-500;
+                padding: 0.6rem 1.5rem;
+                margin-left: -24px;
+                border-radius: 0 2px 2px 0;
+                color: $white;
+            }
+
+            .btn__add__user__account,
+            .btn__view__user__accounts {
+                padding: 0.4rem 0.9rem;
+                border: 1px solid #bdbcbd;
+                border-radius: $border-radius-8;
+                font-weight: $fw-500;
+                color: #777d87;
+                font-size: $fs-14;
+            }
+        }
+
+        .user__role__description {
+            font-size: $fs-12;
+            color: #3e3d3d;
+            text-transform: none;
+        }
+
+        .table-striped {
+            >tbody {
+                >tr {
+                    &:nth-of-type(odd) {
+                        background-color: #ffffff !important;
+                    }
+
+                    .td__content {
+                        padding: 9px 21px;
+                        height: 50px;
+                    }
+                }
+            }
+        }
+    }
+
+    .account__type__card {
+        border: 1px solid #efefef;
+        border-radius: $border-radius-10;
+    }
+
+    .account__modal {
+        .modal__content {
+            padding: 2rem 2.3rem;
+            border: 0;
+            border-radius: $border-radius-9;
+
+            .modal__header {
+                .modal__title {
+                    font-size: $fs-18;
+                    font-weight: $fw-600;
+                }
+            }
+
+            .modal__body {
+                padding: 1.3rem 0 0.5rem 0;
+            }
+
+            .modal__footer {
+                .btn__modal__footer {
+                    @include generic.button-config;
+                    width: 6rem;
+
+                    &.btn__cancel {
+                        @include generic.form-button-cancel;
+                    }
+
+                    &.btn__send {
+                        @include generic.form-button-submit;
+                    }
+                }
+            }
+
+            .form__field__label {
+                font-size: $fs-14;
+            }
+
+            .form__field {
+                padding: 0.75rem 1rem;
+                font-size: $fs-14;
+                border-radius: $border-radius-9;
+                border: 1px solid #e7e9eb;
+
+                &:focus {
+                    box-shadow: none;
+                    border-color: $color-1;
+                }
+            }
+        }
+    }
+
+    .modal__confirm__delete__user__account {
+        .btn__confirm__modal {
+            @include generic.button-config;
+
+            &.btn__cancel__delete {
+                @include generic.form-button-cancel;
+            }
+
+            &.btn__confirm__delete {
+                @include generic.form-button-submit;
+            }
+        }
+    }
+}
+
+.user__account__media {
+    .user__picture {
+        height: 35px !important;
+        width: 35px !important;
+        border-radius: $border-radius-10;
+        box-shadow: $shadows-sm;
+        border: 2px solid #d9ddd9;
+    }
+
+    .user__name__initial {
+        height: 35px !important;
+        width: 35px !important;
+        border-radius: $border-radius-10;
+        box-shadow: $shadows-sm;
+        border: 2px solid #d9ddd9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: $fs-12;
+        padding-top: 1px;
+        font-weight: $fw-500;
+    }
+}
+
+.ticket__tag {
+    background-color: rgba(242, 242, 242, 1);
+    border-radius: $border-radius-50;
+    font-size: $fs-12;
+    color: rgba(41, 41, 41, 1);
+    padding: 6px 12px;
+    white-space: nowrap;
+    margin-bottom: 7px;
+
+    &:hover {
+        background-color: rgba(230, 230, 230, 1);
+    }
+}
+
+.modal__confirmation__message {
+    font-size: $fs-14;
+    font-weight: $fw-600;
+}
+
+.modal__confirm__content {
+    background-color: #f5f7fb;
+    padding: 10px 17px;
+    border-radius: $border-radius-10;
+    color: #1f2937;
+    font-size: $fs-14;
+    width: 100%;
+    text-align: center;
+    font-weight: $fw-500;
+}
+
+.btn__add__new__annoucement {
+    background-color: #e35558;
+    border-radius: $border-radius-9;
+    color: $white;
+    padding: 0.5rem 1rem;
+    font-size: $fs-14;
+
+    &:hover {
+        background-color: #e35558;
+        color: $white;
+    }
+}
+
+.announcement__section {
+    .announcement__button__tab {
+        padding: 0.7rem 1.6rem;
+        border-radius: $border-radius-9;
+        position: relative;
+        font-size: $fs-14;
+        color: #686868 !important;
+
+        .announcement__tab__button__badge {
+            color: #686868 !important;
+            font-size: $fs-13;
+        }
+
+        .announcement__active__tab__line {
+            height: 18px;
+            width: 3px;
+            background-color: $color-1;
+            position: absolute;
+            left: -1px;
+            border-radius: $border-radius-12;
+            display: none;
+        }
+    }
+
+    .announcement__button__tab.active__announcement__button__tab {
+        background-color: #e4eeed;
+        color: $color-1 !important;
+        font-weight: $fw-600 !important;
+
+        >.announcement__active__tab__line {
+            display: block;
+        }
+    }
+
+    .announcement__card {
+        border: none;
+        border-radius: $border-radius-10;
+
+        .announcement__card__header {
+            padding: 1.5rem;
+            border-bottom: 0.1rem solid #efefef;
+
+            .btn__filter__announcement {
+                border-radius: $border-radius-50;
+                border: 1px solid #bdbcbd;
+                font-size: $fs-14;
+                padding: 0.2rem 1rem;
+                height: 38px;
+                color: #595959;
+                font-weight: $fw-500;
+
+                i {
+                    font-size: $fs-13;
+                }
+            }
+        }
+
+        .announcement__card__list {
+            padding: 1.5rem;
+
+            .announcement__content {
+                border-bottom: 1px solid #efefef;
+                padding-bottom: 1rem;
+
+                .announcement__title {
+                    font-size: $fs-15;
+                    font-weight: $fw-600;
+                }
+
+                .announcement__description {
+                    font-size: $fs-13;
+                    line-height: 1.1rem;
+                }
+
+                .breadcrumb {
+                    font-size: $fs-13;
+                }
+
+                .description__content {
+                    font-size: $fs-13;
+                    line-height: 1.1rem;
+                    text-align: justify;
+                }
+
+                .btn__menu {
+                    height: 25px;
+                    width: 25px;
+                    position: relative;
+                    top: -5px;
+                    right: 0px;
+                    font-size: $fs-18;
+                    color: rgb(104, 102, 102);
+                    border-radius: $border-radius-50-percent;
+                    background-color: $body-color;
+
+                    &:hover {
+                        background-color: $body-color;
+                    }
+                }
+
+                .custom__dropdown__menu {
+                    padding: 5px;
+                    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+                    .custom__dropdown__item {
+                        padding: 0.5rem 1rem;
+                        font-size: $fs-14;
+                        border-radius: $border-radius-8;
+                        font-weight: $fw-500;
+                        transition: all 0.3s;
+
+                        i {
+                            font-size: $fs-13;
+                        }
+                    }
+                }
+            }
+
+            .day__year {
+                margin-top: 0px;
+
+                .month {
+                    font-size: $fs-12;
+                    font-weight: $fw-500;
+                    color: #867777;
+                    margin-bottom: 0px;
+                }
+
+                .year {
+                    font-size: $fs-13;
+                    color: #a69d9d;
+                }
+
+                .time {
+                    font-size: $fs-12;
+                }
+            }
+        }
+    }
+
+    .modal__confirm__delete__announcement {
+        .btn__confirm__modal {
+            @include generic.button-config;
+
+            &.btn__cancel__delete {
+                @include generic.form-button-cancel;
+            }
+
+            &.btn__confirm__delete {
+                @include generic.form-button-submit;
+            }
+        }
+    }
+}
+
+.announcement__modal {
+    .modal__content {
+        padding: 2rem 2.3rem;
+        border: 0;
+        border-radius: $border-radius-9;
+
+        .modal__header {
+            .modal__title {
+                font-size: $fs-18;
+                font-weight: $fw-600;
+            }
+        }
+
+        .modal__body {
+            padding: 1.3rem 0;
+        }
+
+        .modal__footer {
+            .btn__modal__footer {
+                @include generic.button-config;
+                width: 6rem;
+
+                &.btn__cancel {
+                    @include generic.form-button-cancel;
+                }
+
+                &.btn__send {
+                    @include generic.form-button-submit;
+                }
+            }
+
+            .is__urgent__check {
+                margin-left: -25px !important;
+                margin-right: 9px;
+            }
+
+            .is__urgent__check__label {
+                margin-top: 3px;
+            }
+        }
+
+        .form__field__label {
+            font-size: $fs-14;
+        }
+
+        .form__field {
+            padding: 0.75rem 1rem;
+            font-size: $fs-14;
+            border-radius: $border-radius-9;
+            border: 1px solid #e7e9eb;
+
+            &:focus {
+                box-shadow: none;
+                border-color: $color-1;
+            }
+        }
+    }
+}
+
+.search__field {
+    padding: 0.57rem 3rem 0.57rem 1.2rem;
+    border-radius: $border-radius-50;
+    box-shadow: none !important;
+    font-size: $fs-15;
+
+    &::placeholder {
+        color: #a1a5b7;
+    }
+
+    &:focus {
+        border-color: #e35558 !important;
+    }
+
+    &:focus+.announcement__search__icon {
+        color: #e35558 !important;
+    }
+}
+
+.announcement__search__icon {
+    position: absolute;
+    right: 22px;
+    color: #a1a5b7;
+}
+
+.departments__section {
+    .table__header {
+        padding: 20px 30px !important;
+
+        .table__name {
+            font-size: 0.938rem;
+            font-weight: 500;
+            padding: 0.6rem 1.8rem;
+            margin-left: -30px;
+            border-radius: 0 2px 2px 0;
+            color: #ffffff;
+            background-color: #9da85c;
+        }
+    }
+
+    .td__content {
+        padding: 9px 20px;
+        height: 50px;
+    }
+
+    .custom__table {
+        .department__admin__picture {
+            height: 35px;
+            width: 35px;
+            border-radius: $border-radius-9;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+            border: 2px solid #d9ddd9;
+            object-fit: cover;
+        }
+
+        .dept__admin__name {
+            font-weight: $fw-600;
+            font-size: $fs-13;
+            color: #212529;
+        }
+
+        .department__agent__picture {
+            height: 30px;
+            width: 30px;
+            object-fit: cover;
+            border: 3px solid $white;
+            margin-left: -13px;
+            border-radius: $border-radius-50-percent;
+        }
+    }
+
+    .department__modal {
+        .modal__content {
+            padding: 2rem 2.3rem;
+            border: 0;
+            border-radius: $border-radius-9;
+
+            .modal__header {
+                .modal__title {
+                    font-size: $fs-18;
+                    font-weight: $fw-600;
+                }
+            }
+
+            .modal__body {
+                padding: 1.3rem 0 0.5rem 0;
+            }
+
+            .modal__footer {
+                .btn__modal__footer {
+                    @include generic.button-config;
+                    width: 6rem;
+
+                    &.btn__cancel {
+                        @include generic.form-button-cancel;
+                    }
+
+                    &.btn__send {
+                        @include generic.form-button-submit;
+                    }
+                }
+
+                .is__urgent__check {
+                    margin-left: -25px !important;
+                    margin-right: 9px;
+                }
+
+                .is__urgent__check__label {
+                    margin-top: 3px;
+                }
+            }
+
+            .form__field__label {
+                font-size: $fs-14;
+            }
+
+            .form__field {
+                padding: 0.75rem 1rem;
+                font-size: $fs-14;
+                border-radius: $border-radius-9;
+                border: 1px solid #e7e9eb;
+
+                &:focus {
+                    box-shadow: none;
+                    border-color: $color-1;
+                }
+            }
+        }
+    }
+
+    .assign__form__container {
+        .btn__branch__department__save {
+            @include generic.form-button-submit;
+        }
+
+        .btn__branch__department__cancel {
+            @include generic.form-button-cancel;
+        }
+    }
+
+    .department__button__tab {
+        color: $color-1;
+        font-weight: $fw-500;
+        padding: 0.7rem 1.6rem;
+        color: #686868;
+        font-size: $fs-14;
+        border-radius: $border-radius-10;
+
+        &:focus {
+            border: 1px solid $color-1;
+        }
+    }
+}
+
+.button__header {
+    font-size: $fs-14;
+    border-radius: $border-radius-9;
+    color: #00695b;
+    padding: 0.4rem 0.9rem;
+    background-color: $color-1;
+    color: $white;
+    height: 37px;
+    font-weight: $fw-500;
+
+    &:hover {
+        color: $white;
+        background-color: $color-1;
+        box-shadow: $button-box-shadow;
+    }
+
+    &:focus {
+        background-color: $color-1;
+        color: $white;
+    }
+}
+
+.team__section {
+    .table__header {
+        padding: 20px 30px !important;
+
+        .table__name {
+            font-size: 0.938rem;
+            font-weight: 500;
+            padding: 0.6rem 1.8rem;
+            margin-left: -30px;
+            border-radius: 0 2px 2px 0;
+            color: #ffffff;
+            background-color: #9da85c;
+        }
+    }
+
+    .td__content {
+        padding: 9px 20px;
+        height: 50px;
+    }
+
+    .service__department__modal {
+        .modal__content {
+            padding: 2rem 2.3rem;
+            border: 0;
+            border-radius: $border-radius-9;
+
+            .modal__header {
+                .modal__title {
+                    font-size: $fs-18;
+                    font-weight: $fw-600;
+                }
+            }
+
+            .modal__body {
+                padding: 1.3rem 0 0.5rem 0;
+            }
+
+            .modal__footer {
+                .btn__modal__footer {
+                    @include generic.button-config;
+                    width: 6rem;
+
+                    &.btn__cancel {
+                        @include generic.form-button-cancel;
+                    }
+
+                    &.btn__send {
+                        @include generic.form-button-submit;
+                    }
+                }
+
+                .is__urgent__check {
+                    margin-left: -25px !important;
+                    margin-right: 9px;
+                }
+
+                .is__urgent__check__label {
+                    margin-top: 3px;
+                }
+            }
+
+            .form__field__label {
+                font-size: $fs-14;
+            }
+
+            .form__field {
+                padding: 0.75rem 1rem;
+                font-size: $fs-14;
+                border-radius: $border-radius-9;
+                border: 1px solid #e7e9eb;
+
+                &:focus {
+                    box-shadow: none;
+                    border-color: $color-1;
+                }
+            }
+        }
+    }
+}
+
+.roles__permissions__section {
+    .roles__permissions__card {
+        border: none;
+        border-radius: $border-radius-10;
+        padding: 1.5rem;
+
+        .roles__permissions__card__header {
+            .card__title {
+                font-weight: $fw-600;
+                color: #3d3d3d;
+            }
+
+            .card__description {
+                color: #3e3d3d;
+                font-size: $fs-13;
+                font-weight: $fw-500;
+            }
+        }
+
+        .roles__permissions__type__card {
+            .roles__permission__type__card {
+                border: none;
+                border-radius: $border-radius-8;
+                padding: 1.5rem;
+                box-shadow: 0px 0px 3px rgba(22, 22, 22, 0.25);
+
+                .roles__permission__type__card__header {
+                    .account__number {
+                        text-transform: uppercase;
+                        color: #7c858f;
+                        font-size: $fs-13;
+                        font-weight: $fw-500;
+                    }
+
+                    .user__picture__container {
+                        &:not(:first-child) img {
+                            margin-left: -10px;
+                        }
+
+                        .picture {
+                            height: 26px;
+                            width: 26px;
+                            object-fit: cover;
+                            border-radius: $border-radius-50;
+                            border: 2px solid white;
+                        }
+                    }
+                }
+
+                .card__name {
+                    color: #3d3d3d;
+                    font-weight: $fw-600;
+                    font-size: $fs-14;
+
+                    i {
+                        font-size: $fs-13;
+                    }
+                }
+            }
+
+            .custom__table {
+                .td__content {
+                    padding: 9px 20px;
+                    height: 50px;
+                }
+            }
+        }
+
+        .filter__user__with__roles__modal {
+            .modal__content {
+                padding: 1.8rem 2rem;
+                border: 0;
+                border-radius: $border-radius-9;
+
+                .modal__header {
+                    .modal__title {
+                        font-size: $fs-18;
+                        font-weight: $fw-600;
+                    }
+                }
+
+                .modal__body {
+                    padding: 1.3rem 0 0.5rem 0;
+                }
+
+                .modal__footer {
+                    .btn__modal__footer {
+                        @include generic.button-config;
+                        width: 6rem;
+
+                        &.btn__cancel {
+                            @include generic.form-button-cancel;
+                        }
+
+                        &.btn__send {
+                            @include generic.form-button-submit;
+                        }
+                    }
+                }
+
+                .form__field__label {
+                    font-size: $fs-14;
+                }
+
+                .form__field {
+                    padding: 0.75rem 1rem;
+                    font-size: $fs-14;
+                    border-radius: $border-radius-9;
+                    border: 1px solid #e7e9eb;
+
+                    &:focus {
+                        box-shadow: none;
+                        border-color: $color-1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.help__topics__section {
+    .table__header {
+        padding: 20px 30px !important;
+
+        .table__name {
+            font-size: 0.938rem;
+            font-weight: 500;
+            padding: 0.6rem 1.8rem;
+            margin-left: -30px;
+            border-radius: 0 2px 2px 0;
+            color: #ffffff;
+            background-color: #9da85c;
+        }
+    }
+
+    .td__content {
+        padding: 9px 20px;
+        height: 50px;
+    }
+
+    .custom__table {
+        .department__admin__picture {
+            height: 35px;
+            width: 35px;
+            border-radius: $border-radius-9;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+            border: 2px solid #d9ddd9;
+            object-fit: cover;
+        }
+
+        .dept__admin__name {
+            font-weight: $fw-600;
+            font-size: $fs-13;
+            color: #212529;
+        }
+
+        .department__agent__picture {
+            height: 30px;
+            width: 30px;
+            object-fit: cover;
+            border: 3px solid $white;
+            margin-left: -13px;
+            border-radius: $border-radius-50-percent;
+        }
+    }
+
+    .help__topic__modal {
+        .modal__content {
+            padding: 2rem 2.3rem;
+            border: 0;
+            border-radius: $border-radius-9;
+
+            .modal__header {
+                .modal__title {
+                    font-size: $fs-18;
+                    font-weight: $fw-600;
+                }
+            }
+
+            .modal__body {
+                padding: 1.3rem 0 0.5rem 0;
+            }
+
+            .modal__footer {
+                .btn__modal__footer {
+                    @include generic.button-config;
+                    width: 6rem;
+
+                    &.btn__cancel {
+                        @include generic.form-button-cancel;
+                    }
+
+                    &.btn__send {
+                        @include generic.form-button-submit;
+                    }
+                }
+            }
+
+            .form__field__label {
+                font-size: $fs-14;
+            }
+
+            .form__field {
+                padding: 0.75rem 1rem;
+                font-size: $fs-14;
+                border-radius: $border-radius-9;
+                border: 1px solid #e7e9eb;
+
+                &:focus {
+                    box-shadow: none;
+                    border-color: $color-1;
+                }
+            }
+        }
+    }
+}
+
+.sla__section {
+    .table__header {
+        padding: 20px 30px !important;
+
+        .table__name {
+            font-size: 0.938rem;
+            font-weight: 500;
+            padding: 0.6rem 1.8rem;
+            margin-left: -30px;
+            border-radius: 0 2px 2px 0;
+            color: #ffffff;
+            background-color: #9da85c;
+        }
+    }
+
+    .td__content {
+        padding: 9px 20px;
+        height: 50px;
+    }
+
+    .sla__modal {
+        .modal__content {
+            padding: 2rem 2.3rem;
+            border: 0;
+            border-radius: $border-radius-9;
+
+            .modal__header {
+                .modal__title {
+                    font-size: $fs-18;
+                    font-weight: $fw-600;
+                }
+            }
+
+            .modal__body {
+                padding: 1.3rem 0 0.5rem 0;
+            }
+
+            .modal__footer {
+                .btn__modal__footer {
+                    @include generic.button-config;
+                    width: 6rem;
+
+                    &.btn__cancel {
+                        @include generic.form-button-cancel;
+                    }
+
+                    &.btn__send {
+                        @include generic.form-button-submit;
+                    }
+                }
+            }
+
+            .form__field__label {
+                font-size: $fs-14;
+            }
+
+            .form__field {
+                padding: 0.75rem 1rem;
+                font-size: $fs-14;
+                border-radius: $border-radius-9;
+                border: 1px solid #e7e9eb;
+
+                &:focus {
+                    box-shadow: none;
+                    border-color: $color-1;
+                }
+            }
+        }
+    }
+
+    .card__rounded__and__no__border {
+        .card__title {
+            font-weight: $fw-600;
+            color: #3d3d3d;
+        }
+
+        .card__description {
+            color: #3e3d3d;
+            font-size: $fs-13;
+            font-weight: $fw-500;
+        }
+
+        .btn__add__sla {
+            background-color: #d32839;
+            color: $white;
+            font-weight: $fw-500;
+            padding: 0.4rem 0.9rem;
+            font-size: $fs-14;
+            height: 39px;
+            @include generic.button-config;
+        }
+    }
+}
+
+.tags__section {
+    .table__header {
+        padding: 20px 30px !important;
+
+        .table__name {
+            font-size: 0.938rem;
+            font-weight: 500;
+            padding: 0.6rem 1.8rem;
+            margin-left: -30px;
+            border-radius: 0 2px 2px 0;
+            color: #ffffff;
+            background-color: #9da85c;
+        }
+    }
+
+    .td__content {
+        padding: 9px 20px;
+        height: 50px;
+    }
+
+    .tag__modal {
+        .modal__content {
+            padding: 2rem 2.3rem;
+            border: 0;
+            border-radius: $border-radius-9;
+
+            .modal__header {
+                .modal__title {
+                    font-size: $fs-18;
+                    font-weight: $fw-600;
+                }
+            }
+
+            .modal__body {
+                padding: 1.3rem 0 0.5rem 0;
+            }
+
+            .modal__footer {
+                .btn__modal__footer {
+                    @include generic.button-config;
+                    width: 6rem;
+
+                    &.btn__cancel {
+                        @include generic.form-button-cancel;
+                    }
+
+                    &.btn__send {
+                        @include generic.form-button-submit;
+                    }
+                }
+            }
+
+            .form__field__label {
+                font-size: $fs-14;
+            }
+
+            .form__field {
+                padding: 0.75rem 1rem;
+                font-size: $fs-14;
+                border-radius: $border-radius-9;
+                border: 1px solid #e7e9eb;
+
+                &:focus {
+                    box-shadow: none;
+                    border-color: $color-1;
+                }
+            }
+        }
+    }
+
+    .card__rounded__and__no__border {
+        .card__title {
+            font-weight: $fw-600;
+            color: #3d3d3d;
+        }
+
+        .card__description {
+            color: #3e3d3d;
+            font-size: $fs-13;
+            font-weight: $fw-500;
+        }
+
+        .btn__add__tag {
+            background-color: #d32839;
+            color: $white;
+            font-weight: $fw-500;
+            padding: 0.4rem 0.9rem;
+            font-size: $fs-14;
+            height: 39px;
+            @include generic.button-config;
+        }
+    }
+}
+
+.ticket__statuses__section {
+    .table__header {
+        padding: 20px 30px !important;
+
+        .table__name {
+            font-size: 0.938rem;
+            font-weight: 500;
+            padding: 0.6rem 1.8rem;
+            margin-left: -30px;
+            border-radius: 0 2px 2px 0;
+            color: #ffffff;
+            background-color: #9da85c;
+        }
+    }
+
+    .td__content {
+        padding: 9px 20px;
+        height: 50px;
+    }
+
+    .status__modal {
+        .modal__content {
+            padding: 2rem 2.3rem;
+            border: 0;
+            border-radius: $border-radius-9;
+
+            .modal__header {
+                .modal__title {
+                    font-size: $fs-18;
+                    font-weight: $fw-600;
+                }
+            }
+
+            .modal__body {
+                padding: 1.3rem 0 0.5rem 0;
+            }
+
+            .modal__footer {
+                .btn__modal__footer {
+                    @include generic.button-config;
+                    width: 6rem;
+
+                    &.btn__cancel {
+                        @include generic.form-button-cancel;
+                    }
+
+                    &.btn__send {
+                        @include generic.form-button-submit;
+                    }
+                }
+            }
+
+            .form__field__label {
+                font-size: $fs-14;
+            }
+
+            .form__field {
+                padding: 0.75rem 1rem;
+                font-size: $fs-14;
+                border-radius: $border-radius-9;
+                border: 1px solid #e7e9eb;
+
+                &:focus {
+                    box-shadow: none;
+                    border-color: $color-1;
+                }
+            }
+        }
+    }
+
+    .card__rounded__and__no__border {
+        .card__title {
+            font-weight: $fw-600;
+            color: #3d3d3d;
+        }
+
+        .card__description {
+            color: #3e3d3d;
+            font-size: $fs-13;
+            font-weight: $fw-500;
+        }
+
+        .btn__add__status {
+            background-color: #d32839;
+            color: $white;
+            font-weight: $fw-500;
+            padding: 0.4rem 0.9rem;
+            font-size: $fs-14;
+            height: 39px;
+            @include generic.button-config;
+        }
+    }
+
+    .btn__add__status {
+        background-color: #d32839;
+        color: $white;
+        font-weight: $fw-500;
+        padding: 0.4rem 0.9rem;
+        font-size: $fs-14;
+        height: 39px;
+        @include generic.button-config;
+    }
+}
+
+// Directory Section
+.directory__content {
+    .directory__tab__container {
+        padding: 0px 0px 10px 0 !important;
+        background-color: transparent;
+        border: 0 !important;
+
+        .ul__tab {
+            gap: 2rem;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+    }
+
+    .card__directory {
+        padding: 0.7rem 0;
+        margin-bottom: 10px;
+
+        .directory__tab__button {
+            padding: 1.2rem 0;
+            font-size: $fs-13;
+            border-radius: 0 !important;
+            white-space: nowrap;
+            color: #1f2937 !important;
+            font-weight: $fw-500;
+
+            i {
+                font-size: $fs-13;
+                color: $dropdown-icon-color;
+                margin-right: 10px !important;
+            }
+        }
+
+        .directory__active__tab {
+            color: #5b5943 !important;
+            font-weight: $fw-600;
+            border-bottom: 0.18rem solid #5b5943 !important;
+
+            &:hover {
+                color: $white;
+            }
+
+        }
+
+        .directory__icon__active__tab {
+            color: #5b5943;
+            border-bottom: 0 !important;
+        }
+    }
+
+    .directory__card {
+        border: none;
+        border-radius: $border-radius-10;
+        padding: 1.5rem;
+
+        .directory__card__header {
+            .card__title {
+                font-weight: $fw-600;
+                color: #3d3d3d;
+            }
+
+            .card__description {
+                color: #3e3d3d;
+                font-size: $fs-13;
+                font-weight: $fw-500;
+            }
+        }
+
+        .directory__type__card {
+            border: none;
+            border-radius: $border-radius-8;
+
+            .custom__table {
+                .td__content {
+                    padding: 9px 20px;
+                    height: 50px;
+                }
+            }
+        }
+    }
+
+}
+
+// End Directory Section
+
+@media (max-width: 400px) {
+
+    .btn__add__user__account,
+    .btn__view__user__accounts {
+        border-radius: $border-radius-50 !important;
+        height: 33px;
+        width: 33px;
+        font-size: $fs-13 !important;
+    }
+
+    .btn__add__user__account .label,
+    .btn__view__user__accounts .label {
+        display: none;
+    }
+}
+
+@media (max-width: 420px) {
+    .page__body {
+        .ticket__details__container {
+            padding: 0 5px;
+        }
+    }
+
+    .dashboard__section {
+        .dashboard__card {
+            margin-bottom: 8px !important;
+        }
+    }
+
+    .page__main__header {
+        .show__in__420px {
+            display: flex !important;
+        }
+
+        .hide__in__420px {
+            display: none !important;
+        }
+    }
+}
+
+@media (max-width: 450px) {
+    .btn__send__ticket__reply {
+        width: 100%;
+    }
+}
+
+@media (max-width: 487px) {
+    .button__header {
+        width: 37px;
+
+        .button__name {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .animate {
+        animation-duration: 0.3s;
+        -webkit-animation-duration: 0.3s;
+        animation-fill-mode: both;
+        -webkit-animation-fill-mode: both;
+    }
+
+    .btn__reply__ticket {
+        .lbl__reply {
+            display: none !important;
+        }
+    }
+
+    .btn__reply__ticket.btn__reply__ticket__mobile {
+        position: fixed !important;
+        bottom: 11px;
+        right: 30px;
+        z-index: 1;
+        border-radius: $border-radius-50 !important;
+        height: 3rem;
+        width: 3rem;
+    }
+
+    .page__body {
+        padding: 6px 0 !important;
+    }
+
+    .dashboard__section {
+        .dashboard__card {
+            margin-bottom: 8px !important;
+        }
+    }
+}
+
+@media (max-width: 990px) {
+    .page__main__header {
+        .nav-item.more__menu {
+            display: block;
+        }
+    }
+
+    .sidebar {
+        margin-left: -20rem;
+    }
+
+    .page__wrapper {
+        .page__body__wrapper {
+            .page__body {
+                width: 100% !important;
+                margin-left: 0 !important;
+            }
+        }
+    }
+
+    .custom__reply__ticket__offcanvas {
+        width: 100% !important;
+        height: 100% !important;
+    }
+}

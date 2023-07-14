@@ -1,0 +1,35 @@
+<?php
+
+use App\Models\Ticket;
+use App\Models\User;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('replies', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(User::class, 'user_id')->constrained();
+            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained();
+            $table->longText('description');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('replies');
+    }
+};

@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Http\Controllers\Staff\SysAdmin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Traits\SlugGenerator;
+use App\Models\Branch;
+use App\Models\Profile;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class AccountDeptAdminController extends Controller
+{
+    use SlugGenerator;
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'branch' => ['required'],
+            'bu_department' => ['required'],
+            'service_department' => ['required'],
+            'first_name' => ['required', 'min:2', 'max:100'],
+            'middle_name' => ['nullable', 'min:2', 'max:100'],
+            'last_name' => ['required', 'min:2', 'max:100'],
+            'suffix' => ['nullable', 'min:1', 'max:4'],
+            'email' => ['required', 'max:80']
+        ]);
+
+        if ($validator->fails()) return back()->withErrors($validator, 'storeDeptAdmin')->withInput();
+
+        $user = User::create([
+            'branch_id' => (int) $request->input('branch'),
+            'department_id' => (int) $request->input('bu_department'),
+            'service_department_id' => (int) $request->input('service_department'),
+            'role_id' => (int) Role::DEPARTMENT_ADMIN,
+            'email' => $request->input('email'),
+            'password' => \Hash::make('departmentadmin')
+        ]);
+
+        Profile::create([
+            'user_id' => $user->id,
+            'first_name' => $request->input('first_name'),
+            'middle_name' => $request->input('middle_name'),
+            'last_name' => $request->input('last_name'),
+            'suffix' => $request->input('suffix'),
+            'slug' => $this->slugify(implode(" ", [
+                $request->first_name,
+                $request->middle_name,
+                $request->last_name,
+                $request->suffix
+            ]))
+        ]);
+
+        return back()->with('success', 'You have successfully created a new department admin.');
+    }
+
+    public function delete(User $departmentAdmin)
+    {
+        try {
+            $departmentAdmin->delete();
+            return back()->with('success', `Department admin successfully deleted.`);
+        } catch (\Exception $e) {
+            return back()->with('error', `Failed to delete the department admin.`);
+        }
+    }
+
+    public function branchBUDepartments(Branch $branch)
+    {
+        return response()->json($branch->departments);
+    }
+}

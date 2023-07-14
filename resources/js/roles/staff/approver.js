@@ -1,0 +1,67 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const countSelectedChbx = document.querySelector('#countSelectedChbx');
+    const ticketCheckAll = document.querySelector('#ticketCheckAll');
+    const ticketCheckBoxes = document.querySelectorAll('.ticketCheckBox');
+    const ticketActionContainer = document.getElementById('ticketActionContainer');
+
+    // ticketActionContainer.style.visibility = 'hidden';
+    let countCheckAll = 0;
+    let initialIndividualSelection = false;
+    let individualCountCheck;
+
+    function updateCount() {
+        individualCountCheck = 0;
+        let countIndividual = {};
+
+        ticketCheckBoxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                individualCountCheck++;
+                countIndividual[checkbox.value] = (countIndividual[checkbox.value] || 0) + 1;
+            }
+        });
+
+        countSelectedChbx.textContent = `${individualCountCheck} selected`;
+        ticketCheckAll.checked = individualCountCheck === ticketCheckBoxes.length || initialIndividualSelection;
+
+        if (individualCountCheck === 0) {
+            countSelectedChbx.textContent = '';
+            ticketCheckAll.checked = false;
+        }
+
+        // if (individualCountCheck > 0 || ticketCheckAll.checked) {
+        //     ticketActionContainer.style.visibility = 'visible';
+        // } else {
+        //     ticketActionContainer.style.visibility = 'hidden';
+        // }
+    }
+
+    function selectAllCheckboxes() {
+        const isChecked = ticketCheckAll.checked;
+
+        ticketCheckBoxes.forEach((checkbox) => {
+            checkbox.checked = isChecked;
+
+            if (checkbox.checked) {
+                countCheckAll++;
+            }
+        });
+
+        updateCount();
+
+        if (!ticketCheckAll.checked) {
+            countCheckAll = '';
+            countSelectedChbx.textContent = '';
+        } else {
+            countSelectedChbx.textContent = `${countCheckAll} selected`;
+        }
+    }
+
+    function handleCheckboxChange() {
+        updateCount();
+    }
+
+    ticketCheckAll.addEventListener('change', selectAllCheckboxes);
+    ticketCheckBoxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', handleCheckboxChange);
+    });
+});

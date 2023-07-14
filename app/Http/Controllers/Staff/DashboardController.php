@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Controllers\Staff;
+
+use App\Http\Controllers\Controller;
+use App\Http\Traits\AuthStaffRedirect;
+use App\Models\Department;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class DashboardController extends Controller
+{
+    use AuthStaffRedirect;
+
+    public function __construct()
+    {
+        $this->middleware(['auth', Role::systemAdmin()]);
+    }
+
+    public function dashboard()
+    {   
+        return view('layouts.staff.dashboard');
+    }
+}

@@ -1,0 +1,252 @@
+@import url(https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  scroll-behavior: smooth;
+  text-decoration: none !important;
+  list-style: none !important;
+  letter-spacing: normal;
+}
+
+input[type=password] {
+  letter-spacing: 4px;
+  font-weight: 600;
+}
+input[type=password]::-moz-placeholder {
+  letter-spacing: normal;
+  font-weight: normal;
+}
+input[type=password]::placeholder {
+  letter-spacing: normal;
+  font-weight: normal;
+}
+
+.form-control.is-invalid {
+  box-shadow: none !important;
+  border: 0.09rem solid #dc3545 !important;
+}
+
+.invalid-feedback {
+  margin-bottom: 0;
+}
+.invalid-feedback strong {
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+}
+
+.login__card {
+  background-color: #f5f7f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 12px;
+}
+.login__card .app__name__container {
+  top: -11%;
+  left: 50%;
+  transform: translate(-50%);
+}
+.login__card .app__name__container::before {
+  content: "Gaisano";
+  position: absolute;
+  top: -18px;
+  font-size: 0.875rem;
+  left: 1px;
+}
+.login__card .company__logo {
+  height: 80px;
+  width: 80px;
+}
+.login__card .label__welcome__back {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: black;
+}
+.login__card .label__type__of__user {
+  font-size: 0.875rem;
+  color: #737373;
+}
+
+.login__form__container {
+  padding: 40px;
+  width: 470px;
+  background-color: #fff;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+}
+.login__form__container .login__form__user__type {
+  font-size: 1.11rem;
+  font-weight: 600;
+}
+.login__form__container .form__name {
+  font-size: 1rem;
+}
+.login__form__container h6 {
+  font-size: 0.813rem;
+  margin-bottom: 25px;
+  color: #999;
+  margin-bottom: -10px;
+}
+.login__form__container .company__system__name {
+  font-size: 1rem;
+}
+.login__form__container .login__social {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  list-style-type: none !important;
+}
+.login__form__container .login__social__title {
+  position: relative;
+  z-index: 2;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.login__form__container .login__social__title::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #d1d3d3;
+  z-index: -1;
+}
+.login__form__container .login__social__title h5 {
+  font-weight: 500;
+  font-size: 0.813rem;
+  color: #999;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #fff;
+}
+.login__form__container .input__login__label {
+  color: #4a5568;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.login__form__container .custom__field__message {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.login__form__container .login__input__field {
+  padding: 0.8rem 1rem;
+  border-radius: 0.625rem;
+  outline: none;
+  border: 1px solid #d1d3d3;
+  font-size: 0.938rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.07) !important;
+}
+.login__form__container .login__input__field:focus {
+  box-shadow: none;
+  border-color: #d32839;
+}
+.login__form__container .login__input__field::-moz-placeholder {
+  color: #91a1b2;
+}
+.login__form__container .login__input__field::placeholder {
+  color: #91a1b2;
+}
+.login__form__container .login__button {
+  background-color: #d32839;
+  color: #ffffff !important;
+  padding: 0.8rem 1rem;
+  font-size: 0.938rem;
+  border-radius: 0.625rem;
+  white-space: nowrap;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+.login__form__container .login__button:active {
+  background-color: #d32839;
+  color: #ffffff !important;
+}
+.login__form__container .login__button:hover {
+  background-color: #d32839;
+  color: #ffffff !important;
+}
+.login__form__container .login__button:focus {
+  background-color: #d32839;
+  color: #ffffff !important;
+}
+.login__form__container .login__back__button {
+  padding: 0.8rem 1rem;
+  font-size: 0.938rem;
+  border-radius: 0.625rem;
+  white-space: nowrap;
+  text-transform: capitalize;
+  font-weight: 500;
+  background-color: transparent;
+  color: #4a5568;
+}
+.login__form__container .login__back__button:focus {
+  border: 1px solid transparent !important;
+}
+.login__form__container .link {
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-align: center;
+  display: block;
+}
+.login__form__container .form__errors {
+  padding: 16px;
+  background-color: #fff8dd;
+  color: #721c24;
+  font-size: 0.875rem;
+  border-radius: 0.625rem;
+}
+.login__form__container .create__account__bottom small {
+  font-size: 0.813rem;
+}
+.login__form__container .user__selection .user__icons__container .btn__user {
+  margin-left: 2rem !important;
+}
+.login__form__container .user__selection .user__icons__container .btn__staff {
+  margin-right: 2rem !important;
+}
+.login__form__container .user__selection .user__icons__container .user__icon {
+  height: 90px;
+  position: absolute;
+}
+.login__form__container .user__selection .user__icons__container .btn__select__user {
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: none !important;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12) !important;
+}
+.login__form__container .user__selection .user__icons__container .btn__select__user.btn__user {
+  background-image: linear-gradient(310deg, #6e6cda 0%, #c57acc 100%);
+  color: #f8e4de;
+}
+.login__form__container .user__selection .user__icons__container .btn__select__user.btn__staff {
+  background-image: linear-gradient(310deg, #7d7d8b 0%, #252525 100%);
+  color: #00e4d9;
+}
+
+input[type=checkbox] {
+  height: 14px;
+  width: 14px;
+}
+
+@media (max-width: 420px) {
+  .login__form__container {
+    padding: 40px 10px;
+  }
+  .login__card {
+    background-color: unset !important;
+  }
+  .user__selection .user__icons__container {
+    gap: 40px !important;
+  }
+}

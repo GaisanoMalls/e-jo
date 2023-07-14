@@ -1,0 +1,364 @@
+@import url(https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  scroll-behavior: smooth;
+  text-decoration: none !important;
+  list-style: none !important;
+  letter-spacing: normal;
+  font-weight: 500;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 15px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 0.625rem;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 0.625rem;
+  background: #ccc;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+body {
+  background-color: #f5f7f9;
+}
+
+.btn__create__feedback {
+  position: fixed !important;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1;
+  border-radius: 3.125rem !important;
+  height: 2.8rem;
+  width: 2.8rem;
+  background-color: #d32839;
+  color: white;
+}
+.btn__create__feedback:hover {
+  background-color: #d32839;
+  color: white;
+}
+.btn__create__feedback:focus {
+  background-color: #d32839;
+}
+
+.banner {
+  opacity: 2;
+  height: 350px;
+  transform: scaleX(-1);
+  width: 100%;
+  background-position: bottom center;
+  background-size: cover;
+  position: relative;
+  overflow: hidden;
+  /* background-position: 100.00% 38.69%; */
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.banner .banner__container {
+  word-wrap: break-word;
+}
+.banner .banner__container .banner__overlay {
+  background-color: transparent;
+  background-image: linear-gradient(210deg, #ffffff 0%, rgba(255, 255, 255, 0) 100%);
+  opacity: 1;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+.banner .banner__container .banner__text__container {
+  transform: scaleX(-1) !important;
+}
+.banner .banner__container .banner__text__container .banner__title {
+  font-size: 4rem;
+  color: #d32839;
+  font-weight: 600;
+}
+.banner .banner__container .banner__text__container .lbl__rate {
+  text-transform: uppercase;
+  margin-bottom: -1px;
+  font-size: 0.938rem;
+  font-weight: 500;
+}
+
+nav .company__logo {
+  height: 35px;
+}
+nav .company__app__name {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #00695b;
+  top: -5px;
+}
+nav .company__app__name .lbl__system {
+  font-size: 11px;
+  bottom: -9px;
+  left: 1px;
+}
+nav .feedback__user__picture {
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+nav .feedback__user__dropdown__menu {
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+nav .feedback__user__dropdown__menu .dropdown__item {
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: 0.3s;
+}
+nav .feedback__user__dropdown__menu .dropdown__item:focus {
+  background-color: #d32839;
+  color: white;
+}
+
+.tab__container {
+  position: relative;
+  margin-top: -50px;
+  display: flex;
+  justify-content: center;
+}
+.tab__container .tab__header {
+  background-color: white;
+  border-radius: 0.625rem;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.tab__container .tab__link {
+  padding: 25px 80px;
+  font-size: 0.875rem;
+  color: #383838;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.tab__container .tab__link i {
+  font-size: 1.5rem;
+}
+.tab__container .tab__link.active {
+  border-bottom: 0.2rem solid #d32839;
+  color: #d32839;
+  font-weight: 600;
+}
+
+.feedback__container .feedback__card {
+  border: none;
+  border-radius: 0.625rem;
+  padding: 1.5rem;
+}
+.feedback__container .feedback__card .card__header .feedback__user {
+  gap: 0.7rem;
+}
+.feedback__container .feedback__card .card__header .feedback__user .user__picture {
+  height: 35px;
+  width: 35px;
+  border-radius: 3.125rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.feedback__container .feedback__card .card__header .feedback__user .user__name {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.feedback__container .feedback__card .card__header .ratings i {
+  font-size: 0.75rem;
+  color: #e1e1e1;
+}
+.feedback__container .feedback__card .card__header .ratings i.filled {
+  color: #b9b43e;
+}
+.feedback__container .feedback__card .card__body {
+  font-size: 0.875rem;
+  margin: 0.8rem 0;
+  padding: 0.9rem;
+  border-radius: 0.5rem;
+  background-color: #f5f5f5;
+}
+.feedback__container .feedback__card .card__body .body__section__title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #54b579;
+}
+.feedback__container .feedback__card .card__body .long__desc {
+  text-align: justify;
+}
+.feedback__container .feedback__card .feedback__footer {
+  font-size: 0.813rem;
+}
+.feedback__container .feedback__card .feedback__footer .ticket {
+  border-bottom: 1px dashed #d32839;
+}
+.feedback__container .feedback__card .feedback__footer .ticket .number {
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #d32839;
+}
+.feedback__container .feedback__card .feedback__footer .ticket,
+.feedback__container .feedback__card .feedback__footer .date {
+  color: #808080;
+}
+.feedback__container .feedback__card .ticket__container {
+  font-size: 0.875rem;
+}
+.feedback__container .feedback__card .ticket__container .lbl__ticket__num,
+.feedback__container .feedback__card .ticket__container .ticket__number {
+  font-weight: 600;
+}
+.feedback__container .feedback__card .ticket__container .ticket__number {
+  color: #d32839;
+}
+.feedback__container .feedback__card .btn__give__rate {
+  background-color: #f6f6f6;
+  color: #353535;
+  font-weight: 500;
+  font-size: 0.813rem;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border: none;
+}
+.feedback__container .feedback__card .btn__give__rate i {
+  color: #b9b43e;
+}
+.feedback__container .feedback__card .ticket__title {
+  font-weight: 700;
+  font-size: 0.938rem;
+}
+.feedback__container .feedback__card .ticket__description {
+  font-size: 0.875rem;
+  text-align: justify;
+}
+.feedback__container .feedback__card .feedback__footer .replies__count {
+  color: #808080;
+}
+
+.feedback__modal .feedback__content {
+  border: none;
+  border-radius: 0.625rem;
+  padding: 2rem;
+}
+.feedback__modal .feedback__content .feedback__form__pic {
+  height: auto;
+  width: 100%;
+}
+.feedback__modal .feedback__content .ticket__number {
+  padding: 0.8rem 1rem;
+  background-color: #ececec;
+  margin: auto;
+  color: #d32839;
+  font-weight: 600;
+  border-radius: 0.5rem;
+}
+.feedback__modal .feedback__content .feedback__error__message {
+  font-size: 0.75rem;
+}
+.feedback__modal .form__inputs .form__field__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2a4953;
+}
+.feedback__modal .form__inputs .form__field {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e7e9eb;
+  font-size: 0.875rem;
+  border-radius: 0.563rem;
+  border: 0.1rem solid #d5dde5;
+}
+.feedback__modal .form__inputs .form__field:focus {
+  box-shadow: none;
+  border-color: #d32839;
+}
+.feedback__modal .form__inputs .stars__container i {
+  font-size: 0.875rem;
+  color: #e1e1e1;
+}
+.feedback__modal .form__inputs .stars__container i.filled {
+  color: #ff725c;
+}
+.feedback__modal .form__inputs .radio__button {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #d99595;
+  margin-top: 1px;
+  box-shadow: none !important;
+}
+.feedback__modal .form__inputs .radio__button:checked {
+  background-color: #ff725c;
+  border: 1px solid #ff725c;
+}
+.feedback__modal .form__inputs .radio__button:checked + .check__label {
+  color: #ff725c;
+}
+.feedback__modal .form__inputs .check__privacy__policy {
+  width: 15px;
+  height: 15px;
+  border: 1px solid #d99595;
+  margin-top: 6px;
+  box-shadow: none !important;
+}
+.feedback__modal .form__inputs .check__privacy__policy:checked {
+  background-color: #ff725c;
+  border: 1px solid #ff725c;
+}
+.feedback__modal .form__inputs .check__label {
+  font-size: 0.875rem;
+}
+.feedback__modal .form__inputs .custom__textarea {
+  height: 100px;
+}
+.feedback__modal .form__inputs .btn__submit {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  background-color: #d32839;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+}
+
+@media (max-width: 490px) {
+  .banner__text__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .banner__text__container .banner__title {
+    font-size: 3.3rem !important;
+  }
+  .banner__text__container .sub__title__banner i {
+    font-size: 13px !important;
+  }
+  .banner__text__container .sub__title__banner .lbl__rate {
+    font-size: 0.813rem !important;
+  }
+  .tab__container {
+    margin-top: -40px;
+  }
+  .tab__container .tab__link {
+    padding: 18px 40px;
+    font-size: 0.813rem;
+  }
+  .tab__container .tab__link i {
+    font-size: 16px;
+  }
+}

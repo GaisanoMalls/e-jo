@@ -1,0 +1,88 @@
+$border-radius-8: 0.5rem;
+$border-radius-9: 0.563rem;
+$border-radius-10: 0.625rem;
+$fs-12: 0.75rem;
+$fs-14: 0.875rem;
+$fs-16: 1rem;
+$fs-20: 1.25rem;
+$fw-500: 500;
+$fw-600: 600;
+$color-1: #d32839;
+$button-box-shadow: 0 0.25rem 0.375rem -0.0625rem rgb(20 20 20 / 12%), 0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
+
+@mixin input-field-border {
+    border: 1px solid #e7e9eb;
+}
+
+@mixin input-field-focus-border {
+    border-color: $color-1;
+    box-shadow: none;
+}
+
+@mixin input-field-padding {
+    padding: 0.75rem 1rem;
+}
+
+@mixin form-button-padding {
+    padding: 0.6rem 1rem;
+}
+
+@mixin button-config {
+    @include form-button-padding();
+    border-radius: $border-radius-9;
+    font-size: $fs-14;
+}
+
+@mixin input-field-config {
+    @include input-field-padding();
+    @include input-field-border();
+    font-size: $fs-14;
+    border-radius: $border-radius-9;
+}
+
+@mixin form-button-submit {
+    @include form-button-padding();
+    @include button-config();
+    background-color: $color-1;
+    color: white;
+    font-weight: 500;
+    box-shadow: $button-box-shadow;
+}
+
+@mixin form-button-cancel {
+    @include form-button-padding();
+    @include button-config();
+    @include input-field-border();
+    background-color: transparent;
+    color: $color-1;
+    font-weight: 500;
+}
+
+@mixin title-color {
+    color: #131313;
+}
+
+@mixin error-message {
+    font-size: $fs-12;
+    font-weight: $fw-500;
+    color: red;
+}
+
+@mixin confirm-modal-padding {
+    padding: 20px;
+}
+
+@mixin modal-confirm-config {
+    @include confirm-modal-padding();
+    border: 0;
+}
+
+@mixin cancel-confirm-config {
+    @include form-button-cancel();
+}
+
+@mixin section-card-config {
+    border: none;
+    border-radius: $border-radius-10;
+    padding: 1.5rem;
+}

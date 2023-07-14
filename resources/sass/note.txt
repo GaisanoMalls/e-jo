@@ -1,0 +1,1 @@
+Do not add the scss file named "_generic.scss" to blade template.
