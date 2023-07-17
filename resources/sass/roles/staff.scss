@@ -1027,7 +1027,7 @@ a {
             background-color: $bg-dark-green;
             color: $white;
             padding: 0.3rem 0.9rem;
-            border-radius: $border-radius-9;
+            border-radius: $border-radius-50;
             text-transform: uppercase;
         }
 
@@ -1333,7 +1333,7 @@ a {
     }
 
     .container__ticket__details__right {
-        top: 240px;
+        top: 235px;
         position: sticky;
     }
 
@@ -1507,8 +1507,8 @@ input[type="checkbox"] {
 
 .btn__reply__ticket {
     border-radius: $border-radius-9;
-    font-size: $fs-15;
-    padding: 0.5rem 1rem;
+    font-size: $fs-14;
+    padding: 0.45rem 0.8rem;
     font-weight: $fw-500;
     box-shadow: $button-box-shadow;
     background-color: #00695b;
@@ -1520,7 +1520,7 @@ input[type="checkbox"] {
     }
 
     i {
-        font-size: $fs-14;
+        font-size: $fs-12;
     }
 }
 
@@ -1606,7 +1606,7 @@ input[type="checkbox"] {
         font-size: $fs-12;
     }
 
-    .ticet__description {
+    .ticket__description {
         font-size: $fs-13;
     }
 }

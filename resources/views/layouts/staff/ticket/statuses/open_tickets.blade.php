@@ -59,6 +59,9 @@
                                     <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                         Priority
                                     </th>
+                                    <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                        Approval Status
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -29,7 +29,7 @@ class DepartmentBranch extends Model
     }
 
     public function dateUpdated()
-    {   
+    {
         $created_at = Carbon::parse($this->created_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         $updated_at = Carbon::parse($this->updated_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         return $updated_at === $created_at

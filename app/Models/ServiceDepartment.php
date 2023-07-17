@@ -11,7 +11,7 @@ class ServiceDepartment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'department_id',
+        'branch_id',
         'name',
         'slug'
     ];
@@ -31,9 +31,9 @@ class ServiceDepartment extends Model
         return $this->belongsToMany(Branch::class);
     }
 
-    public function department()
+    public function branch()
     {
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Branch::class);
     }
 
     public function teams()

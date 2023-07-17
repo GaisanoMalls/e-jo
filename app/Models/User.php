@@ -105,9 +105,9 @@ class User extends Authenticatable
      *
      * @return boolean Returns true if the user has Department Admin role, otherwise returns false.
      */
-    public function isDepartmentAdmin(): bool
+    public function isServiceDepartmentAdmin(): bool
     {
-        return $this->role === Role::DEPARTMENT_ADMIN;
+        return $this->role === Role::SERVICE_DEPARTMENT_ADMIN;
     }
 
     /**
@@ -156,9 +156,9 @@ class User extends Authenticatable
         return self::where('role_id', Role::SYSTEM_ADMIN)->get();
     }
 
-    public function departmentAdmins()
+    public function serviceDepartmentAdmins()
     {
-        return self::where('role_id', Role::DEPARTMENT_ADMIN)->get();
+        return self::where('role_id', Role::SERVICE_DEPARTMENT_ADMIN)->get();
     }
 
     public static function approvers()

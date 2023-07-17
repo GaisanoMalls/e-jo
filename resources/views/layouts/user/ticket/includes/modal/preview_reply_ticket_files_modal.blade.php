@@ -8,13 +8,14 @@
                     {{ $reply->fileAttachments->count() > 1 ? 'Reply file attachments' : 'Reply file attachment'}}
                     ({{ $reply->fileAttachments->count() }})
                 </h6>
-                <a href="" style="font-size: 14px;">Download all</a>
+                <a href="" style="font-size: 14px; color: #123831;">Download all</a>
             </div>
             <div class="modal__body mt-3">
                 <ul class="list-group list-group-flush">
                     @foreach ($reply->fileAttachments as $replyFile)
                     <li class="list-group-item d-flex align-items-center px-0 py-3 justify-content-between">
-                        <a href="{{ Storage::url($replyFile->file_attachment) }}" target="_blank">
+                        <a href="{{ Storage::url($replyFile->file_attachment) }}" class="file__preview__link"
+                            target="_blank">
                             <div class="d-flex align-items-center gap-2">
                                 @switch(pathinfo(basename($replyFile->file_attachment), PATHINFO_EXTENSION))
                                 @case('jpeg')
@@ -49,8 +50,8 @@
                                 <p class="mb-0" style="font-size: 14px;">{{ basename($replyFile->file_attachment) }}</p>
                             </div>
                         </a>
-                        <a href="{{ Storage::url($replyFile->file_attachment) }}" download target="_blank"
-                            style="font-size: 20px;">
+                        <a href="{{ Storage::url($replyFile->file_attachment) }}" class="file__preview__link" download
+                            target="_blank" style="font-size: 20px;">
                             <i class="fa-solid fa-download"></i>
                         </a>
                     </li>

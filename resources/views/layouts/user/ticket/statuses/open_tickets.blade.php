@@ -22,11 +22,13 @@
                         <th class="table__head__label">Subject</th>
                         <th class="table__head__label">Assigned To</th>
                         <th class="table__head__label">Priority Level</th>
+                        <th class="table__head__label">Approval Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($openTickets as $ticket)
-                    <tr>
+                    <tr class="custom__tr"
+                        onclick="window.location='{{ route('user.ticket.view_ticket', [$ticket->status->slug, $ticket->id]) }}'">
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
@@ -51,6 +53,13 @@
                         <td class="custom__table__data">
                             <p class="mb-0" style="color: {{ $ticket->priorityLevel->color }};">
                                 {{ $ticket->priorityLevel->name ?? '' }}</p>
+                        </td>
+                        <td class="custom__table__data">
+                            @if ($ticket->approval_status == 'for_approval')
+                            <p class="mb-0">For approval</p>
+                            @elseif ($ticket->approval_status == 'approved')
+                            <p class="mb-0">Approved</p>
+                            @endif
                         </td>
                     </tr>
                     @endforeach

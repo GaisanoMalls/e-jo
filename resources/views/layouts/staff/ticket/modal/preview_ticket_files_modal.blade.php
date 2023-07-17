@@ -27,10 +27,22 @@
                                 <img src="{{ Storage::url($file->file_attachment) }}" class="file__preview">
                                 @break
                                 @case('pdf')
-                                <i class="fa-solid fa-file-pdf" style="font-size: 35px;"></i>
+                                <i class="bi bi-filetype-pdf" style="font-size: 35px;"></i>
+                                @break
+                                @case('doc')
+                                <i class="bi bi-filetype-doc" style="font-size: 35px;"></i>
                                 @break
                                 @case('docx')
-                                <i class="fa-solid fa-file-word" style="font-size: 35px;"></i>
+                                <i class="bi bi-filetype-docx" style="font-size: 35px;"></i>
+                                @break
+                                @case('xlsx')
+                                <i class="bi bi-filetype-xlsx" style="font-size: 35px;"></i>
+                                @break
+                                @case('xls')
+                                <i class="bi bi-filetype-xls" style="font-size: 35px;"></i>
+                                @break
+                                @case('csv')
+                                <i class="bi bi-filetype-csv" style="font-size: 35px;"></i>
                                 @break
                                 @default
                                 @endswitch

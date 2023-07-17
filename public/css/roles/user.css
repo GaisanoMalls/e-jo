@@ -65,6 +65,43 @@
   -webkit-animation-fill-mode: both;
 }
 
+.file__preview {
+  height: 35px;
+  width: 35px;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.file__preview__link {
+  text-decoration: none !important;
+  color: #123831;
+}
+.file__preview__link:hover {
+  color: #123831;
+}
+
+.custom__modal .custom__modal__content {
+  padding: 1.5rem;
+}
+.custom__modal .custom__modal__content .modal__header .modal__title {
+  font-size: 0.938rem;
+  font-weight: 600;
+  margin-bottom: 0 !important;
+  text-transform: capitalize;
+}
+.custom__modal .custom__modal__content .modal__footer {
+  margin-top: 30px;
+}
+.custom__modal .custom__modal__content .modal__btnclose__bottom {
+  background-color: #e9ecef;
+}
+.custom__modal .custom__modal__content .modal__btnclose__bottom:active {
+  outline: none !important;
+  border-color: transparent;
+}
+
 body {
   background-color: #f5f7f9;
 }
@@ -275,6 +312,9 @@ body {
   font-weight: 500;
   color: #363636;
 }
+.ticket__card .custom__table tbody tr:hover {
+  cursor: pointer;
+}
 .ticket__card .custom__table tbody td:first-child {
   border-left-style: solid;
   border-top-left-radius: 10px;
@@ -298,6 +338,315 @@ body {
 }
 .ticket__card .custom__table .custom__table__data .ticket__subject {
   font-weight: 600;
+}
+.ticket__card .ticket__details__section {
+  margin-top: 1.5rem;
+}
+.ticket__card .ticket__details__section .details__card__top {
+  padding: 1rem 1.5rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  top: 80px;
+  position: sticky;
+  z-index: 1;
+}
+.ticket__card .ticket__details__section .details__card__top .ticket__details__status {
+  font-weight: 600;
+  font-size: 0.688rem;
+  color: #FFFFFF;
+  background-color: #1D5C63;
+  padding: 0.3rem 0.9rem;
+  border-radius: 3.125rem;
+  text-transform: uppercase;
+}
+.ticket__card .ticket__details__section .details__card__top .ticket__details__priority {
+  font-weight: 600;
+  color: red;
+  font-size: 0.813rem;
+}
+.ticket__card .ticket__details__section .details__card__top .ticket__details__ticketnumber {
+  font-weight: 500;
+  color: #4a5568;
+  font-size: 0.813rem;
+}
+.ticket__card .ticket__details__section .details__card__top .ticket__details__header .ticket__details__title {
+  font-weight: 600;
+  font-size: 0.938rem;
+}
+.ticket__card .ticket__details__section .details__card__top .ticket__details__header .ticket__details__datetime {
+  font-weight: 500;
+  color: #4a5568;
+  font-size: 0.75rem;
+}
+.ticket__card .ticket__details__section .card__ticket__details {
+  overflow: hidden;
+  border-radius: 0.625rem;
+  margin-bottom: 15px;
+  border: none;
+  background-color: #fff;
+  padding: 15px;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header {
+  padding: 1.5rem;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header .ticket__details__user__picture {
+  height: 35px;
+  width: 35px;
+  border-radius: 3.125rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  margin-right: 0.7rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header .ticket__details__user__picture__user__name__initial__reply {
+  height: 30px;
+  width: 32px;
+  border-radius: 3.125rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  background-color: #24695c;
+  margin-right: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header .ticket__details__user__picture__user__name__initial__reply .ticket__details__user__picture__user__name__initial__reply_sm {
+  font-size: 10px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-top: 2px;
+  letter-spacing: 1px;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header .reply__ticket__details__user__fullname {
+  font-size: 0.813rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__user__picture__default__user__initial {
+  position: relative;
+  height: 35px;
+  width: 35px;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  background-color: #24695c;
+  margin-right: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__user__picture__user__sender__name__initial {
+  font-size: 10px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-top: 2px;
+  letter-spacing: 1px;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__user__fullname {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body {
+  padding: 0 1.5rem 0 1.5rem;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body a {
+  color: blue;
+  text-decoration: underline !important;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__description {
+  font-size: 0.813rem;
+  font-weight: 400;
+  color: black;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__attachments {
+  color: #4a5568;
+  font-size: 0.875rem;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__attachments:hover {
+  cursor: pointer;
+  color: black;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__reply__content {
+  border-left: 0.08rem solid #d8e0e2;
+  padding-left: 1.3rem;
+  padding-top: 1rem;
+  margin-left: 0.8rem;
+  margin-top: 0.5rem;
+  position: relative;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__reply__content .ticket__reply__content__check__icon {
+  position: absolute;
+  left: -8px;
+  bottom: 0;
+  font-size: 1rem;
+  color: rgb(242, 242, 242);
+  background-color: black;
+  border-radius: 50%;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__reply__content p {
+  font-size: 0.813rem !important;
+  font-weight: 400;
+  text-transform: none;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__reply__content span {
+  font-size: 0.813rem !important;
+  font-weight: 400;
+  text-transform: none;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__time {
+  color: #717171;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__user__department {
+  color: #717171;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.ticket__card .ticket__details__section .card__ticket__details .reply__ticket__details__user__picture {
+  height: 30px !important;
+  width: 30px !important;
+}
+.ticket__card .ticket__details__section .ticket__discussions {
+  font-size: 0.813rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.ticket__card .container__ticket__details__right {
+  top: 218px;
+  position: sticky;
+}
+.ticket__card .container__ticket__details__right .ticket__details__card__body__right {
+  padding: 1.5rem;
+}
+.ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__actions > li {
+  list-style-type: square !important;
+  font-size: 0.938rem;
+}
+.ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__actions .priority__name {
+  font-weight: 500;
+}
+.ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__details__info__label {
+  font-size: 0.813rem;
+}
+.ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__details__info {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 5px;
+  background-color: #F3F3F3;
+}
+.ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__details__info.not__set {
+  background-color: transparent;
+}
+.ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__actions__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 3px;
+  color: #131313;
+}
+.ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__details__info__label {
+  font-size: 0.813rem;
+}
+.ticket__card .user__account__media .user__picture {
+  height: 35px !important;
+  width: 35px !important;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  border: 2px solid #d9ddd9;
+}
+.ticket__card .user__account__media .user__name__initial {
+  height: 35px !important;
+  width: 35px !important;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  border: 2px solid #d9ddd9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.75rem;
+  padding-top: 1px;
+  font-weight: 500;
+}
+
+.btn__reply__ticket {
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  padding: 0.45rem 0.8rem;
+  font-weight: 400;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+  background-color: #00695b;
+  color: #FFFFFF;
+}
+.btn__reply__ticket:hover {
+  background-color: #00695b;
+  color: #FFFFFF;
+}
+.btn__reply__ticket i {
+  font-size: 0.75rem;
+}
+
+.custom__reply__ticket__offcanvas {
+  border-radius: 0.563rem 0.563rem 0 0;
+  transition: width 0.3s;
+  height: 80% !important;
+  width: 60% !important;
+}
+.custom__reply__ticket__offcanvas .custom__offcanvas__title {
+  font-size: 1rem;
+  text-transform: capitalize;
+}
+.custom__reply__ticket__offcanvas .offcanvas__close__button {
+  height: 30px;
+  width: 30px;
+  font-size: 0.938rem;
+  border-radius: 3.125rem !important;
+}
+.custom__reply__ticket__offcanvas .offcanvas__close__button:focus {
+  border: none;
+}
+.custom__reply__ticket__offcanvas .reply__ticket__info {
+  padding: 1.2rem;
+  background-color: #f7f7f7;
+  border-radius: 0.563rem;
+}
+.custom__reply__ticket__offcanvas .reply__ticket__info img.sender__profile {
+  height: 30px !important;
+  width: 30px !important;
+  border-radius: 3.125rem;
+}
+.custom__reply__ticket__offcanvas .reply__ticket__info .user__name__initial {
+  height: 30px !important;
+  width: 30px !important;
+  border-radius: 3.125rem;
+}
+.custom__reply__ticket__offcanvas .reply__ticket__info .time__sent {
+  font-size: 0.75rem;
+}
+.custom__reply__ticket__offcanvas .reply__ticket__info .ticet__description {
+  font-size: 0.813rem;
+}
+.custom__reply__ticket__offcanvas .ticket__file__input {
+  border: 0;
+  border-radius: 0;
+  font-size: 0.813rem;
+}
+.custom__reply__ticket__offcanvas .ticket__file__input:focus {
+  box-shadow: none;
+}
+.custom__reply__ticket__offcanvas .btn__send__ticket__reply {
+  padding: 0.5rem 1rem;
+  font-size: 0.938rem;
+  border-radius: 0.563rem;
+  background-color: #d32839;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+.custom__reply__ticket__offcanvas .btn__send__ticket__reply:focus {
+  color: #FFFFFF;
+  background-color: #d32839;
+}
+.custom__reply__ticket__offcanvas .btn__send__ticket__reply:hover {
+  color: #FFFFFF;
+  background-color: #d32839;
 }
 
 .account__settings {
@@ -504,6 +853,20 @@ body {
   color: #4a5568;
 }
 
+@media (max-width: 767px) {
+  .btn__reply__ticket .lbl__reply {
+    display: none !important;
+  }
+  .btn__reply__ticket.btn__reply__ticket__mobile {
+    position: fixed !important;
+    bottom: 11px;
+    right: 30px;
+    z-index: 1;
+    border-radius: 3.125rem !important;
+    height: 3rem;
+    width: 3rem;
+  }
+}
 @media (max-width: 991px) {
   .navbar {
     padding-left: 18px !important;

@@ -52,6 +52,8 @@
     <script src="{{ asset('js/toaster-message.js') }}"></script>
     <script src="{{ asset('js/dependent-dropdown.js') }}"></script>
 
+    @stack('offcanvas-error')
+
     @if ($errors->storeTicket->any())
     <script>
         $(function () {

@@ -1,5 +1,5 @@
 <div class="accounts__section">
-    @include('layouts.staff.system_admin.manage.accounts.includes.modal.add_dept_admin_modal_form')
+    @include('layouts.staff.system_admin.manage.accounts.includes.modal.add_service_dept_admin_modal_form')
     <div class="col-12">
         <div class="card d-flex flex-column gap-2 users__account__card">
             <div class="users__account__card__header d-flex align-items-center justify-content-between">
@@ -8,7 +8,7 @@
                 <div class="d-flex align-items-center justify-content-end gap-2 mb-1">
                     <button type="button"
                         class="btn d-flex align-items-center justify-content-center gap-2 btn__add__user__account"
-                        data-bs-toggle="modal" data-bs-target="#addNewDeptAdminModal">
+                        data-bs-toggle="modal" data-bs-target="#addNewServiceDeptAdminModal">
                         <i class="fa-solid fa-plus"></i>
                         <span class="label">New</span>
                     </button>
@@ -26,7 +26,7 @@
                     </p>
                 </div>
                 <div class="col-xxl-10 col-lg-10 col-md-10">
-                    @if ($departmentAdmins->count() > 0)
+                    @if ($serviceDepartmentAdmins->count() > 0)
                     <div class="card account__type__card">
                         <div class="table-responsive custom__table">
                             <table class="table table-striped mb-0">
@@ -54,28 +54,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($departmentAdmins as $departmentAdmin)
+                                    @foreach ($serviceDepartmentAdmins as $serviceDepartmentAdmin)
                                     @include('layouts.staff.system_admin.manage.accounts.includes.modal.confirm_delete_deptadmin_modal')
                                     <tr>
                                         <td>
                                             <a href="">
                                                 <div class="media d-flex align-items-center user__account__media">
                                                     <div class="flex-shrink-0">
-                                                        @if ($departmentAdmin->profile->picture != null)
+                                                        @if ($serviceDepartmentAdmin->profile->picture != null)
                                                         <img src="https://appsrv1-147a1.kxcdn.com/soft-ui-dashboard/img/team-2.jpg"
                                                             alt="" class="image-fluid user__picture">
                                                         @else
                                                         <div class="user__name__initial"
                                                             style="background-color: #9DA85C;">
-                                                            {{ $departmentAdmin->profile->getNameInitial() }}
+                                                            {{ $serviceDepartmentAdmin->profile->getNameInitial() }}
                                                         </div>
                                                         @endif
                                                     </div>
                                                     <div class="flex-grow-1 ms-3 w-100">
                                                         <a href="" class="d-flex flex-column gap-1 w-100">
                                                             <span
-                                                                class="user__name">{{ $departmentAdmin->profile->getFullName() }}</span>
-                                                            <small>{{ $departmentAdmin->email }}</small>
+                                                                class="user__name">{{ $serviceDepartmentAdmin->profile->getFullName() }}</span>
+                                                            <small>{{ $serviceDepartmentAdmin->email }}</small>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -83,34 +83,34 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $departmentAdmin->department->name }}</span>
+                                                <span>{{ $serviceDepartmentAdmin->department->name }}</span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $departmentAdmin->branch->name }}</span>
+                                                <span>{{ $serviceDepartmentAdmin->branch->name }}</span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $departmentAdmin->isActive() ? 'Active' : 'Inactive' }}</span>
+                                                <span>{{ $serviceDepartmentAdmin->isActive() ? 'Active' : 'Inactive' }}</span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $departmentAdmin->dateCreated() }}</span>
+                                                <span>{{ $serviceDepartmentAdmin->dateCreated() }}</span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $departmentAdmin->dateUpdated() }}</span>
+                                                <span>{{ $serviceDepartmentAdmin->dateUpdated() }}</span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                                                 <button type="button" href="" class="btn action__button"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#confirmDeleteDeptAdmin{{ $departmentAdmin->id }}">
+                                                    data-bs-target="#confirmDeleteServiceDeptAdmin{{ $serviceDepartmentAdmin->id }}">
                                                     <i class="bi bi-trash-fill"></i>
                                                 </button>
                                             </div>
@@ -125,7 +125,7 @@
                     <div class="alert text-center d-flex align-items-center justify-content-center gap-2" role="alert"
                         style="background-color: #F5F7F9; font-size: 14px;">
                         <i class="fa-solid fa-circle-info"></i>
-                        Empty records for department administrators.
+                        Empty records for service department administrators.
                     </div>
                     @endif
                 </div>

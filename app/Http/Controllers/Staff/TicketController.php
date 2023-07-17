@@ -49,11 +49,17 @@ class TicketController extends Controller
             $query->where('slug', $ticketStatusSlug);
         })->where('id', $ticketId)->first();
 
+        $latestReply = Reply::where('ticket_id', $ticketId)
+                        ->where('user_id', '!=', auth()->user()->id)
+                        ->orderBy('created_at', 'desc')
+                            ->first();
+
         return view('layouts.staff.ticket.view_ticket',
             compact([
                 'ticket',
                 'departments',
-                'serviceDepartments'
+                'serviceDepartments',
+                'latestReply'
             ])
         );
     }
@@ -62,7 +68,7 @@ class TicketController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'description' => ['required'],
-            'replyFiles.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,docx', 'max:30000']
+            'replyFiles.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000']
         ]);
 
         if ($validator->fails()) return back()->withErrors($validator, 'storeTicketReply')->withInput();

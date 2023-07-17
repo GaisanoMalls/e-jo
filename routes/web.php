@@ -23,12 +23,12 @@ use App\Http\Controllers\Staff\SysAdmin\AccountUserController;
 use App\Http\Controllers\Staff\SysAdmin\AnnouncementController;
 use App\Http\Controllers\Staff\SysAdmin\AccountAgentController;
 use App\Http\Controllers\Staff\SysAdmin\AccountApproverController;
-use App\Http\Controllers\Staff\SysAdmin\AccountDeptAdminController;
+use App\Http\Controllers\Staff\SysAdmin\AccountServiceDeptAdminController;
 use App\Http\Controllers\Staff\SysAdmin\ServiceDepartmentBranchController;
 use App\Http\Controllers\Staff\SysAdmin\RolesAndPermissionsController;
 
 use App\Http\Controllers\Staff\SysAdmin\TicketStatusController;
-use App\Http\Controllers\Staff\TicketController;
+use App\Http\Controllers\Staff\TicketController as StaffTicketController;
 use App\Http\Controllers\User\AuthControllerUser;
 use App\Http\Controllers\User\Dashboard as UserDashboardController;
 use App\Http\Controllers\User\TicketsController as UserTicketsController;
@@ -69,7 +69,7 @@ Route::middleware(['auth', Role::systemAdmin()])->group(function () {
     Route::prefix('staff')->name('staff.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::prefix('tickets')->name('tickets.')->group(function () {
-            Route::controller(TicketController::class)->group(function () {
+            Route::controller(StaffTicketController::class)->group(function () {
                 Route::get('/open', 'openTickets')->name('open_tickets');
                 Route::get('/on-process', 'onProcessTickets')->name('on_process_tickets');
                 Route::get('/approved', 'approvedTickets')->name('approved_tickets');
@@ -169,8 +169,8 @@ Route::middleware(['auth', Role::systemAdmin()])->group(function () {
                     });
                 });
                 // Department Admin Routes
-                Route::prefix('department-admin')->name('department_admin.')->group(function () {
-                    Route::controller(AccountDeptAdminController::class)->group(function () {
+                Route::prefix('service-department-admin')->name('service_department_admin.')->group(function () {
+                    Route::controller(AccountServiceDeptAdminController::class)->group(function () {
                         Route::post('/store', 'store')->name('store');
                         Route::delete('/{departmentAdmin}/store', 'delete')->name('delete');
 
@@ -287,6 +287,8 @@ Route::middleware(['auth', Role::user()])->group(function () {
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(UserTicketsController::class)->group(function () {
                 Route::post('/store','store')->name('store');
+                Route::get('/{ticketStatusSlug}/{ticketId}/view', 'viewTicket')->name('view_ticket');
+                Route::post('/{ticket}/reply/store', 'requesterReplyTicket')->name('requesterStoreTicketReply');
 
                 // Axios endpoints
                 Route::get('/branches', 'loadBranches');

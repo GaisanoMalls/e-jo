@@ -2,7 +2,8 @@
     aria-labelledby="confirmDeleteUserLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal__content">
-            <form action="{{ route('staff.manage.user_account.department_admin.delete', $user->id) }}" method="post">
+            <form action="{{ route('staff.manage.user_account.service_department_admin.delete', $user->id) }}"
+                method="post">
                 @csrf
                 @method('DELETE')
                 <div class="modal-body border-0 text-center pt-4 pb-1">

@@ -79,7 +79,7 @@ if (deptAdminBranchesDropdown || deptAdminBUDepartmentsDropdown) {
 
         if (branchId) {
             // Get the BU/Departments from based on the branch.
-            axios.get(`/staff/manage/user-accounts/department-admin/${branchId}/bu-departments`)
+            axios.get(`/staff/manage/user-accounts/service-department-admin/${branchId}/bu-departments`)
                 .then((response) => {
                     const buDepartments = response.data;
                     const buDepartmentsOption = []

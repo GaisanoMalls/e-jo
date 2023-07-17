@@ -1,5 +1,5 @@
-<div class="modal account__modal" id="addNewDeptAdminModal" tabindex="-1" aria-labelledby="addNewDeptAdminModalLabel"
-    aria-hidden="true">
+<div class="modal account__modal" id="addNewServiceDeptAdminModal" tabindex="-1"
+    aria-labelledby="addNewDeptAdminModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">
@@ -8,7 +8,7 @@
                     <i class="fa-sharp fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form action="{{ route('staff.manage.user_account.department_admin.store') }}" method="post"
+            <form action="{{ route('staff.manage.user_account.service_department_admin.store') }}" method="post"
                 autocomplete="off" id="modalForm">
                 @csrf
                 <div class="modal-body modal__body">
@@ -28,7 +28,7 @@
                                                 name</label>
                                             <input type="text" name="first_name" class="form-control form__field"
                                                 id="first_name" value="{{ old('first_name') }}">
-                                            @error('first_name', 'storeDeptAdmin')
+                                            @error('first_name', 'storeServiceDeptAdmin')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -44,7 +44,7 @@
                                             </label>
                                             <input type="text" name="middle_name" class="form-control form__field"
                                                 id="middle_name" value="{{ old('middle_name') }}">
-                                            @error('middle_name', 'storeDeptAdmin')
+                                            @error('middle_name', 'storeServiceDeptAdmin')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -58,7 +58,7 @@
                                                 name</label>
                                             <input type="text" name="last_name" class="form-control form__field"
                                                 id="last_name" value="{{ old('last_name') }}">
-                                            @error('last_name', 'storeDeptAdmin')
+                                            @error('last_name', 'storeServiceDeptAdmin')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -82,7 +82,7 @@
                                                 </option>
                                                 @endforeach
                                             </select>
-                                            @error('suffix', 'storeDeptAdmin')
+                                            @error('suffix', 'storeServiceDeptAdmin')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -98,7 +98,7 @@
                                                 address</label>
                                             <input type="email" name="email" class="form-control form__field" id="email"
                                                 value="{{ old('email') }}">
-                                            @error('email', 'storeDeptAdmin')
+                                            @error('email', 'storeServiceDeptAdmin')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -128,7 +128,7 @@
                                                 </option>
                                                 @endforeach
                                             </select>
-                                            @error('branch', 'storeDeptAdmin')
+                                            @error('branch', 'storeServiceDeptAdmin')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -149,7 +149,7 @@
                                                 data-silent-initial-value-set="true"
                                                 id="deptAdminBUDepartmentsDropdown">
                                             </select>
-                                            @error('bu_department', 'storeDeptAdmin')
+                                            @error('bu_department', 'storeServiceDeptAdmin')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}

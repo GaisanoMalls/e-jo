@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\TicketNumberGenerator;
 use App\Models\ApprovalStatus;
 use App\Models\Branch;
+use App\Models\Department;
 use App\Models\HelpTopic;
+use App\Models\Reply;
+use App\Models\ReplyFile;
 use App\Models\ServiceDepartment;
 use App\Models\Status;
 use App\Models\Team;
@@ -93,7 +96,7 @@ class TicketsController extends Controller
             'help_topic' => ['required'],
             'subject' => ['required'],
             'description' => ['required'],
-            'file_attachments.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,docx', 'max:30000'],
+            'file_attachments.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000'],
         ]);
 
         if ($validator->fails()) return back()->withErrors($validator, 'storeTicket')->withInput();
@@ -126,6 +129,58 @@ class TicketsController extends Controller
         }
 
         return back()->with('success', 'Ticket successfully created');
+    }
+
+    public function viewTicket($ticketStatusSlug, $ticketId)
+    {
+        $ticket = Ticket::whereHas('status', function ($query) use ($ticketStatusSlug) {
+            $query->where('slug', $ticketStatusSlug);
+        })->where('id', $ticketId)->first();
+
+        $latestReply = Reply::where('ticket_id', $ticketId)
+                            ->where('user_id', '!=', auth()->user()->id)
+                            ->orderBy('created_at', 'desc')
+                            ->first();
+
+        return view('layouts.user.ticket.view_ticket',
+            compact([
+                'ticket',
+                'latestReply'
+            ])
+        );
+    }
+
+    public function requesterReplyTicket(Request $request, Ticket $ticket)
+    {
+        $validator = Validator::make($request->all(), [
+            'description' => ['required'],
+            'replyFiles.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000']
+        ]);
+
+        if ($validator->fails()) return back()->withErrors($validator, 'requesterStoreTicketReply')->withInput();
+
+        $ticket->update(['status_id' => Status::ON_PROCESS]);
+
+        $reply = Reply::create([
+            'ticket_id' => $ticket->id,
+            'user_id' => auth()->user()->id,
+            'description' => $request->input('description')
+        ]);
+
+        if ($request->hasFile('replyFiles')) {
+            foreach ($request->file('replyFiles') as $uploadedReplyFile) {
+                $fileName = $uploadedReplyFile->getClientOriginalName();
+                $fileAttachment = $uploadedReplyFile->storeAs('public/ticket/reply/files', $fileName);
+
+                $replyFile = new ReplyFile();
+                $replyFile->file_attachment = $fileAttachment;
+                $replyFile->reply_id = $reply->id;
+
+                $reply->fileAttachments()->save($replyFile);
+            }
+        }
+
+        return to_route('user.ticket.view_ticket', [$ticket->status->slug, $ticket->id])->with('success', 'Your reply has been sent successfully.');
     }
 
     public function loadBranches()

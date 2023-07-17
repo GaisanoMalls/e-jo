@@ -2449,7 +2449,7 @@ if (deptAdminBranchesDropdown || deptAdminBUDepartmentsDropdown) {
     var branchId = this.value;
     if (branchId) {
       // Get the BU/Departments from based on the branch.
-      axios.get("/staff/manage/user-accounts/department-admin/".concat(branchId, "/bu-departments")).then(function (response) {
+      axios.get("/staff/manage/user-accounts/service-department-admin/".concat(branchId, "/bu-departments")).then(function (response) {
         var buDepartments = response.data;
         var buDepartmentsOption = [];
         if (buDepartments && buDepartments.length > 0) {

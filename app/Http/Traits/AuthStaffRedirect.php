@@ -21,7 +21,7 @@ trait AuthStaffRedirect
                     return redirect()->intended(RouteServiceProvider::SUPERADMIN_REDIRECT_URL);
                 case Role::APPROVER:
                     return redirect()->intended(RouteServiceProvider::APPROVER_REDIRECT_URL);
-                case Role::DEPARTMENT_ADMIN:
+                case Role::SERVICE_DEPARTMENT_ADMIN:
                     return redirect()->intended(RouteServiceProvider::DEPARTMENT_ADMIN_REDIRECT_URL);
                 case Role::AGENT:
                     return redirect()->intended(RouteServiceProvider::AGENT_REDIRECT_URL);

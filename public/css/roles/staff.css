@@ -809,7 +809,7 @@ a:hover {
   background-color: #1d5c63;
   color: #ffffff;
   padding: 0.3rem 0.9rem;
-  border-radius: 0.563rem;
+  border-radius: 3.125rem;
   text-transform: uppercase;
 }
 .ticket__section .ticket__details__container .ticket__details__priority {
@@ -1059,7 +1059,7 @@ a:hover {
   border: 1px solid #1d5c63;
 }
 .ticket__section .container__ticket__details__right {
-  top: 240px;
+  top: 235px;
   position: sticky;
 }
 .ticket__section .ticket__details__top {
@@ -1205,8 +1205,8 @@ input[type=checkbox]:checked {
 
 .btn__reply__ticket {
   border-radius: 0.563rem;
-  font-size: 0.938rem;
-  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  padding: 0.45rem 0.8rem;
   font-weight: 500;
   box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
   background-color: #00695b;
@@ -1217,7 +1217,7 @@ input[type=checkbox]:checked {
   color: #ffffff;
 }
 .btn__reply__ticket i {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .custom__reply__ticket__offcanvas {
@@ -1291,7 +1291,7 @@ input[type=checkbox]:checked {
 .reply__ticket__info .time__sent {
   font-size: 0.75rem;
 }
-.reply__ticket__info .ticet__description {
+.reply__ticket__info .ticket__description {
   font-size: 0.813rem;
 }
 

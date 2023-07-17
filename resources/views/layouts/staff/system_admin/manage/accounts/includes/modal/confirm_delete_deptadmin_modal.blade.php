@@ -1,8 +1,10 @@
-<div class="modal modal__confirm__delete__user__account" id="confirmDeleteDeptAdmin{{ $departmentAdmin->id }}"
-    tabindex="-1" aria-labelledby="confirmDeleteDeptAdminLabel" aria-hidden="true">
+<div class="modal modal__confirm__delete__user__account"
+    id="confirmDeleteServiceDeptAdmin{{ $serviceDepartmentAdmin->id }}" tabindex="-1"
+    aria-labelledby="confirmDeleteDeptAdminLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal__content">
-            <form action="{{ route('staff.manage.user_account.department_admin.delete', $departmentAdmin->id) }}"
+            <form
+                action="{{ route('staff.manage.user_account.service_department_admin.delete', $serviceDepartmentAdmin->id) }}"
                 method="post">
                 @csrf
                 @method('DELETE')
@@ -12,7 +14,7 @@
                     </h5>
                     <p class="mb-1" style="font-weight: 500; font-size: 15px;">
                         Approver -
-                        {{ $departmentAdmin->profile->getFullName() }}
+                        {{ $serviceDepartmentAdmin->profile->getFullName() }}
                     </p>
                 </div>
                 <hr>

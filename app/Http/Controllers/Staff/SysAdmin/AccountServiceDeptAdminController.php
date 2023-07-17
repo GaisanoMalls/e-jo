@@ -11,7 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class AccountDeptAdminController extends Controller
+class AccountServiceDeptAdminController extends Controller
 {
     use SlugGenerator;
 
@@ -28,13 +28,13 @@ class AccountDeptAdminController extends Controller
             'email' => ['required', 'max:80']
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeDeptAdmin')->withInput();
+        if ($validator->fails()) return back()->withErrors($validator, 'storeServiceDeptAdmin')->withInput();
 
         $user = User::create([
-            'branch_id' => (int) $request->input('branch'),
-            'department_id' => (int) $request->input('bu_department'),
-            'service_department_id' => (int) $request->input('service_department'),
-            'role_id' => (int) Role::DEPARTMENT_ADMIN,
+            'branch_id' => $request->input('branch'),
+            'department_id' => $request->input('bu_department'),
+            'service_department_id' => $request->input('service_department'),
+            'role_id' => Role::SERVICE_DEPARTMENT_ADMIN,
             'email' => $request->input('email'),
             'password' => \Hash::make('departmentadmin')
         ]);

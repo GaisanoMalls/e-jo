@@ -11,11 +11,11 @@ class Role extends Model
 
     protected $fillable = ['name'];
     public $timestamps = false;
-    
+
     // TODO Create a controller to run RolesSeeder prgrammatically. To be managed by System Admin.
     // * "The values (integers) of these constant variables are equal to the primary key of the 'roles' table. Therefore, the mentioned requirement is necessary."
     const SYSTEM_ADMIN = 1;
-    const DEPARTMENT_ADMIN = 2;
+    const SERVICE_DEPARTMENT_ADMIN = 2;
     const APPROVER = 3;
     const AGENT = 4;
     const USER = 5;
@@ -30,7 +30,7 @@ class Role extends Model
     /**
      * For system admin route middleware.
      * Route::middleware(['auth', 'role:1'])
-     * 
+     *
      * @return string
      */
     public static function systemAdmin(): string
@@ -41,18 +41,18 @@ class Role extends Model
     /**
      * For department admin route middleware.
      * Route::middleware(['auth', 'role:2'])
-     * 
+     *
      * @return string
      */
-    public static function departmentAdmin(): string
+    public static function serviceDepartmentAdmin(): string
     {
-        return self::$lbl_user_role . self::DEPARTMENT_ADMIN;
+        return self::$lbl_user_role . self::SERVICE_DEPARTMENT_ADMIN;
     }
-    
+
     /**
      * For approver route middleware
      * Route::middleware(['auth', 'role:3'])
-     * 
+     *
      * @return string
      */
     public static function approver(): string
@@ -63,7 +63,7 @@ class Role extends Model
     /**
      * For agent route middleware.
      * Route::middleware(['auth', 'role:4'])
-     * 
+     *
      * @return string
      */
     public static function agent(): string
@@ -74,7 +74,7 @@ class Role extends Model
     /**
      * For user route middleware
      * Route::middleware(['auth', 'role:USER'])
-     * 
+     *
      * @return string
      */
     public static function user(): string
@@ -83,45 +83,50 @@ class Role extends Model
     }
 
     /**
-     * Returns a string containing the roles of agents and department administrators, 
+     * Returns a string containing the roles of agents and department administrators,
      * separated by commas and prefixed with "role:" for use in Laravel middleware authentication.
      * A string containing the roles of agents and department administrators, prefixed with "role:"
-     * 
+     *
      * @var array<string>
      * @return string
      */
     public static function onlyAgentAndDeptAdmin(): string
     {
         $userRoles = [
-            self::DEPARTMENT_ADMIN,
+            self::SERVICE_DEPARTMENT_ADMIN,
             self::AGENT
         ];
-       
+
         return self::$lbl_user_role . implode(",", $userRoles);
     }
-    
+
     public static function onlyStaffs(): string
     {
         $userRoles = [
-            self::DEPARTMENT_ADMIN,
+            self::SERVICE_DEPARTMENT_ADMIN,
             self::AGENT,
             self::SYSTEM_ADMIN
         ];
-        
+
         return self::$lbl_user_role . implode(",", $userRoles);
     }
 
     /**
      * Allow authenticated staffs (Agent, Admin, Superuser) and users to access the route.
      * Append the user's role to the array named $allUsersRole, if the user has a role.
-     * 
+     *
      * @var array<string>
      * @return string
      */
-    public function allStaffsAndUsers(): string
+    public static function allStaffsAndUsers(): string
     {
-        $allUserRoles = [];
-        
+        $allUserRoles = [
+            self::SERVICE_DEPARTMENT_ADMIN,
+            self::AGENT,
+            self::SYSTEM_ADMIN,
+            self::USER
+        ];
+
         return self::$lbl_user_role . implode(",", $allUserRoles);
     }
 }
