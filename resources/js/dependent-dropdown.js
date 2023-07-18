@@ -517,11 +517,14 @@ const userCreateTicketHelpTopicDropdown = document.getElementById('userCreateTic
 const userCreateTicketNoHelpTopicMessage = document.getElementById('userCreateTicketNoHelpTopicMessage');
 const userCreateTicketHelpTopicCount = document.getElementById('userCreateTicketHelpTopicCount');
 const helpTopicTeam = document.getElementById('helpTopicTeam');
+const helpTopicSLA = document.getElementById('helpTopicSLA');
 
 function userCreateTicketClearHelpTopicWhenResetDepartment() {
     userCreateTicketHelpTopicDropdown.disable();
     userCreateTicketNoHelpTopicMessage.textContent = '';
     userCreateTicketHelpTopicCount.textContent = '';
+    helpTopicTeam.value = '';
+    helpTopicSLA.value = '';
 }
 
 // Load the deparments based on authenticated user's branch.
@@ -552,6 +555,10 @@ window.onload = function () {
 if (userCreateTicketServiceDepartmentDropdown) {
     userCreateTicketHelpTopicDropdown.disable();
     userCreateTicketServiceDepartmentDropdown.addEventListener('reset', userCreateTicketClearHelpTopicWhenResetDepartment);
+    userCreateTicketHelpTopicDropdown.addEventListener('reset', function () {
+        helpTopicTeam.value = '';
+        helpTopicSLA.value = '';
+    });
 
     userCreateTicketServiceDepartmentDropdown.addEventListener('change', function () {
         const servideDepartmentId = this.value;
@@ -602,6 +609,15 @@ if (userCreateTicketServiceDepartmentDropdown) {
                 .catch((error) => {
                     console.log(error);
                 });
+
+            axios.get(`/user/ticket/${helpTopicId}/sla`)
+                .then((response) => {
+                    const sla = response.data;
+                    helpTopicSLA.value = sla.id;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         }
     });
 }

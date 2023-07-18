@@ -8,6 +8,24 @@
                 <div class="modal-body modal__body">
                     <div class="row">
                         <div class="col-12">
+                            @error('sla', 'storeTicket')
+                            <div class="alert alert-warning mb-2 py-2 px-3" role="alert">
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                            </div>
+                            @enderror
+                            @error('team', 'storeTicket')
+                            <div class="alert alert-warning mb-2 py-2 px-3" role="alert">
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="col-12">
                             <div class="form-check mt-2 mb-4">
                                 <input class="form-check-input" type="checkbox" value="" id="checkOtherBranch">
                                 <label class="form-check-label labelCheckOtherBranch" for="checkOtherBranch">
@@ -56,6 +74,7 @@
                                 </span>
                                 @enderror
                                 <input type="hidden" name="team" value="" id="helpTopicTeam">
+                                <input type="hidden" name="sla" value="" id="helpTopicSLA">
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">

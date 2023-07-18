@@ -72,13 +72,13 @@
                                             <input class="form-check-input mb-2 me-3 ticket__checkbox" type="checkbox"
                                                 value="{{ $ticket->id }}" id="flexCheckDefault">
                                             <span class="clickable"
-                                                onclick="window.location='{{ route('staff.tickets.view_ticket', [$ticket->status->slug, $ticket->id]) }}'">
+                                                onclick="window.location='{{ route('staff.ticket.view_ticket', [$ticket->status->slug, $ticket->id]) }}'">
                                                 {{ $ticket->dateCreated() }} @
                                                 {{ $ticket->created_at->format('g:i A') }}</span>
                                         </div>
                                     </td>
                                     <td class="clickable"
-                                        onclick="window.location='{{ route('staff.tickets.view_ticket', [$ticket->status->slug, $ticket->id]) }}'">
+                                        onclick="window.location='{{ route('staff.ticket.view_ticket', [$ticket->status->slug, $ticket->id]) }}'">
                                         <div class="d-flex align-items-center text-start td__content">
                                             <span>{{ $ticket->ticket_number }}</span>
                                         </div>

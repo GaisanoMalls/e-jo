@@ -2659,6 +2659,7 @@ input[type=checkbox]:checked {
     border-radius: 3.125rem !important;
     height: 3rem;
     width: 3rem;
+    opacity: 0.8;
   }
   .page__body {
     padding: 6px 0 !important;

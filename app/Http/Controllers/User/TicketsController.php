@@ -91,24 +91,33 @@ class TicketsController extends Controller
 
     public function store(Request $request, Ticket $ticket)
     {
-        $validator = Validator::make($request->all(), [
-            'service_department' => ['required'],
-            'help_topic' => ['required'],
-            'subject' => ['required'],
-            'description' => ['required'],
-            'file_attachments.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000'],
-        ]);
+        $validator = Validator::make($request->all(),
+            [
+                'service_department' => ['required'],
+                'help_topic' => ['required'],
+                'team' => ['required'],
+                'sla' => ['required'],
+                'subject' => ['required'],
+                'description' => ['required'],
+                'file_attachments.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000'],
+            ],
+            [
+                'team.required' => 'The team field is required. Please select a help topic.',
+                'sla.required' => 'The SLA field is required. Please select a help topic.'
+            ]
+        );
 
         if ($validator->fails()) return back()->withErrors($validator, 'storeTicket')->withInput();
 
         $ticket = Ticket::create([
-            'user_id' => (int) Auth::user()->id,
-            'branch_id' => (int) $request->input('branch') ?: (int) Auth::user()->branch->id,
-            'service_department_id' => (int) $request->input('service_department'),
-            'team_id' => (int) $request->input('team'),
-            'help_topic_id' => (int) $request->input('help_topic'),
+            'user_id' => Auth::user()->id,
+            'branch_id' => $request->input('branch') ?: Auth::user()->branch->id,
+            'service_department_id' => $request->input('service_department'),
+            'team_id' => $request->input('team'),
+            'help_topic_id' => $request->input('help_topic'),
             'status_id' => Status::OPEN,
-            'priority_level_id' => (int) $request->input('priority_level'),
+            'priority_level_id' => $request->input('priority_level'),
+            'sla_id' => $request->input('sla'),
             'ticket_number' => $this->generatedTicketNumber(),
             'subject' => $request->input('subject'),
             'description' => $request->input('description'),
@@ -206,5 +215,10 @@ class TicketsController extends Controller
     public function helpTopicTeam(HelpTopic $helpTopic)
     {
         return response()->json($helpTopic->team);
+    }
+
+    public function helpTopicSLA(HelpTopic $helpTopic)
+    {
+        return response()->json($helpTopic->sla);
     }
 }

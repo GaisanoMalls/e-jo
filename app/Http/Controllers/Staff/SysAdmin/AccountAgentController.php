@@ -35,7 +35,7 @@ class AccountAgentController extends Controller
             'department_id' => $request['bu_department'],
             'role_id' => Role::AGENT,
             'email' => $request['email'],
-            'password' => 'agent'
+            'password' => \Hash::make('agent'),
         ]);
 
         $fullname = $request['first_name'] . $request['middl_name'] ?? "" . $request['last_name'];

@@ -516,10 +516,10 @@ body {
         margin-top: 1.5rem;
 
         .details__card__top {
-            padding: 1rem 1.5rem;
+            padding: 1rem 1.5rem 1rem 2.3rem;
             background-color: #ffffff;
             border-radius: 0.5rem;
-            top: 80px;
+            top: 75px;
             position: sticky;
             z-index: 1;
 
@@ -556,6 +556,17 @@ body {
                     color: #4a5568;
                     font-size: $fs-12;
                 }
+            }
+
+            .btn__back {
+                position: absolute;
+                left: -19px;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: $body-color;
+                height: 2.3rem;
+                width: 2.3rem;
+                border: none !important;
             }
         }
 
@@ -715,7 +726,7 @@ body {
     }
 
     .container__ticket__details__right {
-        top: 218px;
+        top: 214px;
         position: sticky;
 
         .ticket__details__card__body__right {
@@ -757,6 +768,28 @@ body {
             .ticket__details__info__label {
                 font-size: $fs-13;
             }
+
+            .ticket__assigned__agent__picture {
+                height: 40px;
+                width: 40px;
+                object-fit: cover;
+                border-radius: 50%;
+                border: 2px solid #d9ddd9;
+
+            }
+
+            .btn__assigned__agent__details {
+                font-size: $fs-13;
+                padding: 0.4rem 0.8rem;
+                background-color: #d0f0f7;
+                border-radius: $border-radius-8;
+                border: 0;
+
+                &:hover {
+                    background-color: #bee6ef;
+                }
+            }
+
         }
     }
 
@@ -844,7 +877,7 @@ body {
             height: 30px !important;
             width: 30px !important;
             border-radius: $border-radius-50;
-            
+
         }
 
         .time__sent {
@@ -1130,6 +1163,9 @@ body {
         border-radius: $border-radius-50 !important;
         height: 3rem;
         width: 3rem;
+        opacity: 0.8;
+        box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12),
+            0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
     }
 }
 
@@ -1137,5 +1173,74 @@ body {
     .navbar {
         padding-left: 18px !important;
         padding-right: 18px !important;
+    }
+}
+
+@media (max-width: 990px) {
+    .custom__reply__ticket__offcanvas {
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
+@media (max-width: 375px) {
+    .ticket__card .ticket__details__section .details__card__top .ticket__details__status {
+        font-size: 9px;
+    }
+
+    .ticket__card .ticket__details__section .details__card__top .ticket__details__ticketnumber {
+        font-size: $fs-11;
+    }
+
+    .ticket__card .ticket__details__section .details__card__top .ticket__details__priority {
+        font-size: $fs-11;
+    }
+
+    .ticket__card .ticket__details__section .details__card__top .ticket__details__header .ticket__details__title {
+        font-size: $fs-13;
+    }
+
+    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__user__fullname {
+        font-size: $fs-12;
+    }
+
+    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__user__department {
+        font-size: 10px;
+    }
+
+    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__time {
+        font-size: 10px;
+    }
+
+    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__description {
+        font-size: $fs-12;
+    }
+
+    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__attachments {
+        font-size: $fs-11;
+    }
+
+    .ticket__card .ticket__details__section .ticket__discussions {
+        font-size: $fs-11;
+    }
+
+    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header .reply__ticket__details__user__fullname {
+        font-size: $fs-12;
+    }
+
+    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__reply__content p {
+        font-size: $fs-11 !important;
+    }
+
+    .ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__actions__label {
+        font-size: $fs-12;
+    }
+
+    .ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__details__info__label {
+        font-size: $fs-11;
+    }
+
+    .ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__details__info {
+        font-size: $fs-11;
     }
 }

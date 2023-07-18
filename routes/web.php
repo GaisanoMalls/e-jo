@@ -73,13 +73,16 @@ Route::middleware(['auth', Role::systemAdmin()])->group(function () {
                 Route::get('/open', 'openTickets')->name('open_tickets');
                 Route::get('/on-process', 'onProcessTickets')->name('on_process_tickets');
                 Route::get('/approved', 'approvedTickets')->name('approved_tickets');
-
-                Route::get('/{ticketStatusSlug}/{ticketId}/view', 'viewTicket')->name('view_ticket');
-                Route::post('/{ticket}/reply/store', 'replyTicket')->name('storeTicketReply');
             });
             // Endpoint for axios
             Route::controller(DependentsController::class)->group(function () {
                 Route::get('/{department}/teams', 'ticketActionGetDepartmentServiceDepartments');
+            });
+        });
+        Route::prefix('ticket')->name('ticket.')->group(function () {
+            Route::controller(StaffTicketController::class)->group(function () {
+                Route::get('/{ticketStatusSlug}/{ticketId}/view', 'viewTicket')->name('view_ticket');
+                Route::post('/{ticket}/reply/store', 'replyTicket')->name('storeTicketReply');
             });
         });
         Route::prefix('/announcement')->name('announcement.')->group(function () {
@@ -295,6 +298,8 @@ Route::middleware(['auth', Role::user()])->group(function () {
                 Route::get('/{user}/service-departments', 'loadServiceDepartmentsByUserBranch');
                 Route::get('/{serviceDepartment}/help-topics', 'serviceDepartmentHelpTopics');
                 Route::get('/{helpTopic}/team', 'helpTopicTeam');
+                Route::get('/{helpTopic}/sla', 'helpTopicSLA');
+
             });
         });
         Route::prefix('account-settings')->name('account_settings.')->group(function () {

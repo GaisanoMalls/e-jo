@@ -93,16 +93,18 @@
                     </a>
                 </li>
                 <li class="mb-1">
-                    <button class="btn btn-toggle d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
-                        sidebar__btn__collapse {{ Route::is('staff.tickets.*') ? 'sidebar__btn__active active' : '' }}"
+                    <button
+                        class="btn btn-toggle d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
+                        sidebar__btn__collapse
+                        {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'sidebar__btn__active active' : '' }}"
                         data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="true">
                         <div class="d-flex align-items-center justify-content-center sidebar__button__icon__container">
                             <i class="bi bi-ticket-perforated-fill"></i>
                         </div>
                         Tickets
                     </button>
-                    <div class="collapse {{ Route::is('staff.tickets.*') ? 'show' : '' }}" id="dashboard-collapse"
-                        style="">
+                    <div class="collapse {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'show' : '' }}"
+                        id="dashboard-collapse" style="">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small sidebar__collapse__ul">
                             <li>
                                 <a href="{{ route('staff.tickets.approved_tickets') }}"

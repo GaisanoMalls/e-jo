@@ -1,4 +1,4 @@
-<form action="{{ route('staff.tickets.storeTicketReply', $ticket->id) }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('staff.ticket.storeTicketReply', $ticket->id) }}" method="post" enctype="multipart/form-data">
     @csrf
     <textarea id="myeditorinstance" name="description" placeholder="Type here..."></textarea>
     @error('description', 'storeTicketReply')

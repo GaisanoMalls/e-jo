@@ -55,7 +55,7 @@
                         <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                             <div class="d-flex align-items-center user__account__media">
                                 @if ($ticket->user->profile->picture)
-                                <img src="{{ asset('storage/' . $ticket->user->profile->picture) }}"
+                                <img src="{{ Storage::url($ticket->user->profile->picture) }}"
                                     class="image-fluid ticket__details__user__picture" alt="">
                                 @else
                                 <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center
@@ -99,7 +99,7 @@
                     @foreach ($ticket->replies as $reply)
                     @include('layouts.staff.ticket.modal.preview_reply_ticket_files_modal')
                     <div class="card border-0 p-0 card__ticket__details"
-                        style="background-color: {{ $reply->user_id === auth()->user()->id ? '#f3f3f3' : '' }}">
+                        style="background-color: {{ $reply->user_id === auth()->user()->id ? '#D9EBFF' : '#E9ECEF' }}">
                         <div
                             class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
                             <div class="d-flex align-items-center w-100">

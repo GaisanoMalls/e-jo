@@ -8,6 +8,7 @@
         </button>
     </div>
     <div class="offcanvas-body small">
+        @if ($latestReply)
         <div class="mb-4 d-flex flex-column gap-3 reply__ticket__info">
             <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
@@ -25,6 +26,7 @@
             </div>
             <div class="mb-0 ticket__description">{!! $latestReply->description !!}</div>
         </div>
+        @endif
         @include('layouts.staff.ticket.forms.reply_ticket_form')
     </div>
 </div>
