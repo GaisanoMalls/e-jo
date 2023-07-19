@@ -48,4 +48,14 @@ class BUDepartmentBranchController extends Controller
 
         return back()->with('success', 'BU/department successfully assigned to a branch.');
     }
+
+    public function delete(DepartmentBranch $departmentBranch)
+    {
+        try {
+            $departmentBranch->delete();
+            return back()->with('success', 'BU department with branch has been successfully deleted.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'BU department with branch cannot be deleted.');
+        }
+    }
 }

@@ -24,7 +24,6 @@ use App\Http\Controllers\Staff\SysAdmin\AnnouncementController;
 use App\Http\Controllers\Staff\SysAdmin\AccountAgentController;
 use App\Http\Controllers\Staff\SysAdmin\AccountApproverController;
 use App\Http\Controllers\Staff\SysAdmin\AccountServiceDeptAdminController;
-use App\Http\Controllers\Staff\SysAdmin\ServiceDepartmentBranchController;
 use App\Http\Controllers\Staff\SysAdmin\RolesAndPermissionsController;
 
 use App\Http\Controllers\Staff\SysAdmin\TicketStatusController;
@@ -65,7 +64,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
 });
 
 // * Staff Routes
-Route::middleware(['auth', Role::systemAdmin()])->group(function () {
+Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
     Route::prefix('staff')->name('staff.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::prefix('tickets')->name('tickets.')->group(function () {
@@ -115,6 +114,7 @@ Route::middleware(['auth', Role::systemAdmin()])->group(function () {
                     Route::controller(BUDepartmentBranchController::class)->group(function () {
                         Route::get('/', 'index')->name('index');
                         Route::post('/store', 'store')->name('store');
+                        Route::delete('{departmentBranch}/delete', 'delete')->name('delete');
                     });
                 });
             });
@@ -123,16 +123,6 @@ Route::middleware(['auth', Role::systemAdmin()])->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::post('/store', 'store')->name('store');
                     Route::delete('/{serviceDepartment}/delete', 'delete')->name('delete');
-                });
-                Route::prefix('assign-branch')->name('assign_branch.')->group(function () {
-                    Route::controller(ServiceDepartmentBranchController::class)->group(function () {
-                        Route::get('/', 'index')->name('index');
-                        Route::post('/store', 'store')->name('store');
-                        Route::delete('{serviceDepartmentBranch}/delete', 'delete')->name('delete');
-
-                        // Axios endpoints
-                        Route::get('/{branch}/bu-departments', 'branchDepartments');
-                    });
                 });
             });
             Route::prefix('team')->name('team.')->group(function () {
@@ -145,11 +135,10 @@ Route::middleware(['auth', Role::systemAdmin()])->group(function () {
                     Route::controller(TeamBranchController::class)->group(function () {
                         Route::get('/', 'index')->name('index');
                         Route::post('/store', 'store')->name('store');
-                        Route::delete('/{team}/delete', 'delete')->name('delete');
+                        Route::delete('/{teamBranch}/delete', 'delete')->name('delete');
 
                         // Axios endpoints
                         Route::get('/{team}/service-department', 'serviceDepartment');
-                        Route::get('/department/{serviceDepartment}/branches', 'branches');
                     });
                 });
             });
@@ -260,6 +249,8 @@ Route::middleware(['auth', Role::systemAdmin()])->group(function () {
     });
 });
 
+
+// * Approver Routes
 Route::middleware(['auth', Role::approver()])->group(function () {
     Route::prefix('approver')->name('approver.')->group(function () {
         Route::get('/dashboard', [ApproverDashboardController::class, 'index'])->name('dashboard');
@@ -295,7 +286,7 @@ Route::middleware(['auth', Role::user()])->group(function () {
 
                 // Axios endpoints
                 Route::get('/branches', 'loadBranches');
-                Route::get('/{user}/service-departments', 'loadServiceDepartmentsByUserBranch');
+                Route::get('/service-departments', 'loadServiceDepartments');
                 Route::get('/{serviceDepartment}/help-topics', 'serviceDepartmentHelpTopics');
                 Route::get('/{helpTopic}/team', 'helpTopicTeam');
                 Route::get('/{helpTopic}/sla', 'helpTopicSLA');

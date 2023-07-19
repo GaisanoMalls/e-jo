@@ -27,7 +27,8 @@ class TicketsController extends Controller
     public function openTickets()
     {
 
-        $tickets = Ticket::where('user_id', auth()->user()->id)
+        $tickets = Ticket::with(['replies', 'priorityLevel'])
+                         ->where('user_id', auth()->user()->id)
                          ->orderBy('created_at', 'desc')
                          ->get();
 
@@ -48,7 +49,8 @@ class TicketsController extends Controller
 
     public function onProcessTickets()
     {
-        $tickets = Ticket::where('user_id', auth()->user()->id)
+        $tickets = Ticket::with(['replies', 'priorityLevel'])
+                        ->where('user_id', auth()->user()->id)
                         ->orderBy('created_at', 'desc')
                         ->get();
 
@@ -69,9 +71,10 @@ class TicketsController extends Controller
 
     public function closedTickets()
     {
-        $tickets = Ticket::where('user_id', auth()->user()->id)
-                        ->orderBy('created_at', 'desc')
-                        ->get();
+        $tickets = Ticket::with(['replies', 'priorityLevel'])
+                         ->where('user_id', auth()->user()->id)
+                         ->orderBy('created_at', 'desc')
+                         ->get();
 
         $closedTickets = $tickets->where('status_id', Status::CLOSED);
 
@@ -198,13 +201,9 @@ class TicketsController extends Controller
         return response()->json($branches);
     }
 
-    public function loadServiceDepartmentsByUserBranch(User $user)
+    public function loadServiceDepartments()
     {
-        $serviceDepartments = ServiceDepartment::whereHas('branches', function ($query) use ($user) {
-            $query->where('branches.id', $user->branch_id);
-        })->get();
-
-        return response()->json($serviceDepartments);
+        return response()->json(ServiceDepartment::all());
     }
 
     public function serviceDepartmentHelpTopics(ServiceDepartment $serviceDepartment)

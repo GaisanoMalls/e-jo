@@ -21,6 +21,8 @@ class AccountAgentController extends Controller
         $validator = Validator::make($request->all(), [
             'branch' => ['required'],
             'bu_department' => ['required'],
+            'team' => ['required'],
+            'service_department' => ['required'],
             'first_name' => ['required', 'min:2', 'max:100'],
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],
@@ -33,6 +35,8 @@ class AccountAgentController extends Controller
         $user = User::create([
             'branch_id' => $request['branch'],
             'department_id' => $request['bu_department'],
+            'team_id' => $request->input('team'),
+            'service_department_id' => $request->input('service_department'),
             'role_id' => Role::AGENT,
             'email' => $request['email'],
             'password' => \Hash::make('agent'),

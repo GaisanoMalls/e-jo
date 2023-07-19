@@ -34,20 +34,26 @@ class TeamBranchController extends Controller
             'branch' => ['required']
         ]);
 
+        $isExists = TeamBranch::where('team_id', $request['team'])
+                                    ->where('branch_id', $request['branch'])
+                                    ->exists();
+
+        if ($isExists) return back()->withErrors(['team' => 'Team name already assigned to this branch.'], 'storeTeamBranch')->withInput();
+
         if ($validator->fails()) return back()->withErrors($validator, 'storeTeamBranch')->withInput();
 
         $tdb->create([
-            'team_id' => (int) $request->input('team'),
-            'branch_id' => (int) $request->input('branch')
+            'team_id' => $request->input('team'),
+            'branch_id' => $request->input('branch')
         ]);
 
         return back()->with('success', 'Team successfully assigned to branch.');
     }
 
-    public function delete(TeamBranch $tdb)
+    public function delete(TeamBranch $teamBranch)
     {
         try {
-            $tdb->delete();
+            $teamBranch->delete();
             return back()->with('success', 'Team successfully deleted.');
         } catch (\Exception $e) {
             return back()->with('error', 'Team setup cannot be deleted.');
@@ -57,10 +63,5 @@ class TeamBranchController extends Controller
     public function serviceDepartment(Team $team)
     {
         return response()->json($team->serviceDepartment);
-    }
-
-    public function branches(ServiceDepartment $serviceDepartment)
-    {
-        return response()->json($serviceDepartment->branches);
     }
 }

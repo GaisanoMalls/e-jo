@@ -1,11 +1,34 @@
 <div class="sidebar" id="sidebar__toggle" data-turbolinks="true">
     <div class="sidebar__user text-center">
-        <div class="position-relative">
-            <img src="https://samuelsabellano.pythonanywhere.com/media/profile/1_Sabellano_Samuel_Jr_C__DSC9469.JPG"
-                class="rounded-circle sidebar__userimage" alt="">
+        <div class="position-relative d-flex justify-content-center">
+            @if (auth()->user()->profile->picture)
+            <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="rounded-circle sidebar__userimage"
+                alt="">
+            @else
+            <div class="d-flex align-items-center justify-content-center rounded-circle sidebar__userinitial">
+                {{ auth()->user()->profile->getNameInitial() }}
+            </div>
+            @endif
             <div class="sidebar__badge__bottom">
                 <span class="badge user__role__badge">
-                    Admin
+                    @switch(auth()->user()->role_id)
+                    @case(App\MOdels\Role::SYSTEM_ADMIN)
+                    System Admin
+                    @break
+                    @case(App\MOdels\Role::SERVICE_DEPARTMENT_ADMIN)
+                    Service Department Admin
+                    @break
+                    @default
+                    @case(App\MOdels\Role::APPROVER)
+                    Approver
+                    @break
+                    @case(App\MOdels\Role::AGENT)
+                    Agent
+                    @break
+                    @case(App\MOdels\Role::USER)
+                    User
+                    @break
+                    @endswitch
                 </span>
             </div>
         </div>
@@ -17,7 +40,7 @@
             </a>
             @if (auth()->user()->department)
             @switch(auth()->user()->role_id)
-            @case(2)
+            @case(App\MOdels\Role::SERVICE_DEPARTMENT_ADMIN)
             <small class="fw-semibold px-3 py-2 rounded-5" style="font-size: 12px; background-color:
                 #9DA85C; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
                 0.25rem -0.0625rem rgba(20, 20, 20,
@@ -25,8 +48,7 @@
                 {{ auth()->user()->department->name ?? '' }}
             </small>
             @break
-
-            @case(3)
+            @case(App\MOdels\Role::APPROVER)
             <small class="fw-semibold px-3 py-2 rounded-5" style="font-size: 12px; background-color:
                 #3B4053; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
                 0.25rem -0.0625rem rgba(20, 20, 20,
@@ -34,8 +56,7 @@
                 {{ auth()->user()->department->name ?? '' }}
             </small>
             @break
-
-            @case(4)
+            @case(App\MOdels\Role::AGENT)
             <small class="fw-semibold px-3 py-2 rounded-5" style="font-size: 12px; background-color:
                 #196837; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
                 0.25rem -0.0625rem rgba(20, 20, 20,
@@ -43,8 +64,7 @@
                 {{ auth()->user()->department->name ?? '' }}
             </small>
             @break
-
-            @case(5)
+            @case(App\MOdels\Role::USER)
             <small class="fw-semibold px-3 py-2 rounded-5" style="font-size: 12px; background-color:
                 #24695C; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
                 0.25rem -0.0625rem rgba(20, 20, 20,
@@ -52,7 +72,6 @@
                 {{ auth()->user()->department->name ?? '' }}
             </small>
             @break
-
             @default
             <small class="fw-semibold px-3 py-2 rounded-5" style="font-size: 12px; background-color:
                 #F2F2F2; color: #5b5943; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
@@ -246,6 +265,7 @@
                         Statistics
                     </a>
                 </li>
+                @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
                 <li class="mb-1">
                     <a href="{{ route('staff.announcement.home') }}" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
                         {{ Route::is('staff.announcement.*') ? 'sidebar__btn__active active' : '' }}">
@@ -255,7 +275,9 @@
                         Announcements
                     </a>
                 </li>
+                @endif
                 <hr>
+                @if (auth()->user()->role_id === App\Models\Role::SYSTEM_ADMIN)
                 <li class="mb-1">
                     <a href="{{ route('staff.manage.home') }}" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
                         {{ Route::is('staff.manage.*') ? 'sidebar__btn__active active' : '' }}">
@@ -265,20 +287,13 @@
                         Manage
                     </a>
                 </li>
+                @endif
                 <li class="mb-1">
                     <a href="" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons">
                         <div class="d-flex align-items-center justify-content-center sidebar__button__icon__container">
                             <i class="bi bi-file-earmark-bar-graph-fill"></i>
                         </div>
                         Reports
-                    </a>
-                </li>
-                <li class="mb-1">
-                    <a href="" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons">
-                        <div class="d-flex align-items-center justify-content-center sidebar__button__icon__container">
-                            <i class="bi bi-trash-fill"></i>
-                        </div>
-                        Trash
                     </a>
                 </li>
                 <hr>

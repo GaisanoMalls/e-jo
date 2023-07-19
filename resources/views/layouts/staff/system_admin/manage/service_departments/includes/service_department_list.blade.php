@@ -2,7 +2,6 @@
     <thead>
         <tr>
             <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
-            <th class="border-0 table__head__label" style="padding: 17px 30px;">Branches</th>
             <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
             <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
         </tr>
@@ -13,11 +12,6 @@
             <td>
                 <div class="d-flex align-items-center text-start td__content">
                     <span>{{ $department->name }}</span>
-                </div>
-            </td>
-            <td>
-                <div class="d-flex align-items-center text-start td__content">
-                    <span>{{ $department->getBranches() }}</span>
                 </div>
             </td>
             <td>

@@ -5,12 +5,18 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
 use App\Models\Department;
+use App\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class AnnouncementController extends Controller
 {
+     public function __construct()
+    {
+        $this->middleware(['auth', Role::onlyServiceAndSystemAdmin()]);
+    }
+
     public function index()
     {
         $departments = Department::orderBy('name', 'asc')->get();

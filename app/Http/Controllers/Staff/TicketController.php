@@ -17,19 +17,23 @@ class TicketController extends Controller
 {
     public function openTickets()
     {
-        $openTickets = Ticket::where('status_id', Status::OPEN)
+        $openTickets = Ticket::with(['replies', 'priorityLevel', 'user'])
+                             ->where('status_id', Status::OPEN)
                              ->where('approval_status', ApprovalStatus::APPROVED)
                              ->orderBy('created_at', 'desc')
                              ->get();
+
         return view('layouts.staff.ticket.statuses.open_tickets', compact('openTickets'));
     }
 
     public function onProcessTickets()
     {
-        $onProcessTickets = Ticket::where('status_id', Status::ON_PROCESS)
+        $onProcessTickets = Ticket::with(['replies', 'priorityLevel', 'user'])
+                                  ->where('status_id', Status::ON_PROCESS)
                                   ->where('approval_status', ApprovalStatus::APPROVED)
                                   ->orderBy('updated_at', 'desc')
                                   ->get();
+
         return view('layouts.staff.ticket.statuses.on_process_tickets', compact('onProcessTickets'));
     }
 
@@ -94,6 +98,6 @@ class TicketController extends Controller
             }
         }
 
-        return to_route('staff.tickets.view_ticket', [$ticket->status->slug, $ticket->id])->with('success', 'Your reply has been sent successfully.');
+        return to_route('staff.ticket.view_ticket', [$ticket->status->slug, $ticket->id])->with('success', 'Your reply has been sent successfully.');
     }
 }

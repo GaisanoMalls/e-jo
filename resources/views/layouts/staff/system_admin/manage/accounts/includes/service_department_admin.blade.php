@@ -3,7 +3,7 @@
     <div class="col-12">
         <div class="card d-flex flex-column gap-2 users__account__card">
             <div class="users__account__card__header d-flex align-items-center justify-content-between">
-                <h5 class="users__account__card__name shadow" style="background-color: #9DA85C;">Dept. Admins
+                <h5 class="users__account__card__name shadow" style="background-color: #9DA85C;">Service Dept. Admins
                 </h5>
                 <div class="d-flex align-items-center justify-content-end gap-2 mb-1">
                     <button type="button"
@@ -36,10 +36,13 @@
                                             Name
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                                            BU/Department
+                                            Service Department
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                             Branch
+                                        </th>
+                                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                            BU/Department
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                             Status
@@ -61,8 +64,8 @@
                                             <a href="">
                                                 <div class="media d-flex align-items-center user__account__media">
                                                     <div class="flex-shrink-0">
-                                                        @if ($serviceDepartmentAdmin->profile->picture != null)
-                                                        <img src="https://appsrv1-147a1.kxcdn.com/soft-ui-dashboard/img/team-2.jpg"
+                                                        @if ($serviceDepartmentAdmin->profile->picture)
+                                                        <img src="{{ Storage::url($serviceDepartmentAdmin->profile->picture) }}"
                                                             alt="" class="image-fluid user__picture">
                                                         @else
                                                         <div class="user__name__initial"
@@ -83,12 +86,17 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $serviceDepartmentAdmin->department->name }}</span>
+                                                <span>{{ $serviceDepartmentAdmin->serviceDepartment->name ?? '----' }}</span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
                                                 <span>{{ $serviceDepartmentAdmin->branch->name }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center text-start td__content">
+                                                <span>{{ $serviceDepartmentAdmin->department->name }}</span>
                                             </div>
                                         </td>
                                         <td>

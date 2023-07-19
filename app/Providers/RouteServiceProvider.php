@@ -21,9 +21,9 @@ class RouteServiceProvider extends ServiceProvider
     const LOGOUT_REDIRECT_URL = '/';
     const LOGIN_REDIRECT_URL = '/';
     const SUPERADMIN_REDIRECT_URL = '/staff/dashboard';
+    const DEPARTMENT_ADMIN_REDIRECT_URL = '/staff/dashboard';
+    const AGENT_REDIRECT_URL = '/staff/dashboard';
     const APPROVER_REDIRECT_URL = '/approver/dashboard';
-    const DEPARTMENT_ADMIN_REDIRECT_URL = '/department-admin/dashboard';
-    const AGENT_REDIRECT_URL = '/agent/dashboard';
     const USER_REDIRECT_URL = '/user/dashboard';
 
     /**

@@ -343,7 +343,7 @@ body {
   margin-top: 1.5rem;
 }
 .ticket__card .ticket__details__section .details__card__top {
-  padding: 1rem 1.5rem 1rem 2.3rem;
+  padding: 1.5rem 1.5rem 1.5rem 2.3rem;
   background-color: #ffffff;
   border-radius: 0.5rem;
   top: 75px;
@@ -521,7 +521,7 @@ body {
   padding-right: 0.5rem;
 }
 .ticket__card .container__ticket__details__right {
-  top: 214px;
+  top: 230px;
   position: sticky;
 }
 .ticket__card .container__ticket__details__right .ticket__details__card__body__right {

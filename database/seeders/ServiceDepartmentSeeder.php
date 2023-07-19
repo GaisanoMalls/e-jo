@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Department;
 use App\Models\ServiceDepartment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -33,7 +32,6 @@ class ServiceDepartmentSeeder extends Seeder
 
         foreach ($serviceDepartments as $serviceDepartment) {
             ServiceDepartment::firstOrCreate([
-                'department_id' => Department::pluck('id')->first(),
                 'name' => $serviceDepartment['name'],
                 'slug' => \Str::slug($serviceDepartment['name'])
             ]);

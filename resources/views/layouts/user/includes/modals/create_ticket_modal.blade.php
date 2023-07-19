@@ -83,7 +83,6 @@
                                     To which branch will this ticket be sent?
                                 </label>
                                 <select name="branch" id="userCreateTicketBranchesDropdown">
-                                    <option value="" selected>{{ auth()->user()->branch->name }}</option>
                                 </select>
                                 @error('branch', 'storeTicket')
                                 <span class="error__message">

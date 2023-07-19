@@ -54,8 +54,8 @@
                                             <a href="">
                                                 <div class="media d-flex align-items-center user__account__media">
                                                     <div class="flex-shrink-0">
-                                                        @if ($approver->profile->picture != null)
-                                                        <img src="https://appsrv1-147a1.kxcdn.com/soft-ui-dashboard/img/team-2.jpg"
+                                                        @if ($approver->profile->picture)
+                                                        <img src="{{ Storage::url($approver->profile->picture) }}"
                                                             alt="" class="image-fluid user__picture">
                                                         @else
                                                         <div class="user__name__initial"

@@ -178,6 +178,29 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-2">
+                                            <label for="department" class="form-label form__field__label">
+                                                Service Department
+                                            </label>
+                                            <select name="service_department" data-search="true"
+                                                data-silent-initial-value-set="true">
+                                                <option value="" selected disabled>Choose a servic department</option>
+                                                @foreach ($global_service_departments as $service_department)
+                                                <option value="{{ $service_department->id }}"
+                                                    {{ old('service_department') == $service_department->id ? 'selected' : '' }}>
+                                                    {{ $service_department->name }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                            @error('service_department', 'storeServiceDeptAdmin')
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                            @enderror
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-5 px-2 mt-3">
                                     <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">

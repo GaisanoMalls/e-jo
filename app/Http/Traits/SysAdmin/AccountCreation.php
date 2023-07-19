@@ -10,7 +10,7 @@ trait AccountCreation
     use SlugGenerator;
 
     public function storeInfo($request, User $user)
-    {   
+    {
         $user->create([
             'department_id' => $request['department'] ?? null,
             'team_id' => $request['team'] ?? null,

@@ -32,8 +32,12 @@
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
                             <p class="mb-0">{{ $ticket->dateCreated() }}</p>
                         </td>
-                        <td class="custom__table__data">
+                        <td class="custom__table__data d-flex gap-3">
                             <p class="mb-0">{{ $ticket->ticket_number }}</p>
+                            <div class="d-flex align-items-center gap-2 text-muted">
+                                <i class="fa-regular fa-comment-dots"></i>
+                                <small>{{ $ticket->replies->count() }}</small>
+                            </div>
                         </td>
                         <td class="custom__table__data">
                             <p class="mb-0">{{ $ticket->user->department->name }}</p>

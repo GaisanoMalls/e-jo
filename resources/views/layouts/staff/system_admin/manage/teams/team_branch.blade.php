@@ -48,7 +48,7 @@ Manage Team
                                     </div>
                                     <div class="mb-2" id="serviceDepartmentFieldContainer">
                                         <label class="form-label form__field__label">
-                                            <small>Service Department</small>
+                                            <small>Assigned service department</small>
                                         </label>
                                         <input type="text" name="name" class="form-control form__field"
                                             id="serviceDepartmentField" disabled readonly
@@ -57,10 +57,7 @@ Manage Team
                                     <div class="mb-2">
                                         <label class="form-label form__field__label">
                                             <small>Assign to branch</small>
-                                            <small id="countBranches"></small>
-                                            <br>
-                                            <small id="noBranchMessage" class="text-danger fw-normal"
-                                                style="font-size: 12px;"></small>
+                                            <small id="countBranches">({{ $branches->count() }})</small>
                                         </label>
                                         <select name="branch" placeholder="Choose a branch" data-search="true"
                                             data-silent-initial-value-set="true" id="branchDropdown">
@@ -94,8 +91,7 @@ Manage Team
                     <div class="card card__rounded__and__no__border pt-4">
                         <div class="mb-2" style="padding: 0 29px;">
                             <h6 style="color: #212529; font-weight: 600; font-size: 0.95rem;">
-                                Departments
-                                assigned to branches
+                                Team assigned to branches
                             </h6>
                         </div>
                         <div class="table-responsive custom__table">

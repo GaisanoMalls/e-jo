@@ -5,7 +5,7 @@
     <div class="card ticket__card" id="userTicketCard">
         <div class="ticket__details__section">
             <div class="mb-3 d-flex flex-column details__card__top">
-                @switch($ticket->status->id)
+                @switch($ticket->status_id)
                 @case(App\Models\Status::ON_PROCESS)
                 <a href="{{ route('user.tickets.on_process_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
@@ -79,18 +79,17 @@
                             @endif
                         </div>
                     </div>
-                    <div class="mb-2">
-                        <small class="ticket__discussions">
-                            {{ $ticket->replies->count() }}
+                    <div class="mb-2 mt-4">
+                        <small class="ticket__discussions text-muted">
                             {{ $ticket->replies->count() > 1 ? 'Discussions' : 'Discussion' }}
+                            ({{ $ticket->replies->count() }})
                         </small>
                     </div>
                     {{-- Replies/Comments --}}
                     @include('layouts.user.ticket.includes.ticket_replies')
-                    <button type="button"
-                        class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 d-flex align-items-center justify-content-center gap-2"
-                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasRequesterReplyTicketForm"
-                        aria-controls="offcanvasBottom">
+                    <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
+                        justify-content-center gap-2" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRequesterReplyTicketForm" aria-controls="offcanvasBottom">
                         <i class="fa-solid fa-pen"></i>
                         <span class="lbl__reply">Reply</span>
                     </button>

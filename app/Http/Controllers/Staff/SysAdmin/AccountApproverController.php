@@ -32,6 +32,7 @@ class AccountApproverController extends Controller
         $user = User::create([
             'branch_id' => $request->input('branch'),
             'department_id' => $request->input('bu_department'),
+            'service_department_id' => $request->input('service_department'),
             'role_id' => Role::APPROVER,
             'email' => $request->input('email'),
             'password' => \Hash::make('approver'),

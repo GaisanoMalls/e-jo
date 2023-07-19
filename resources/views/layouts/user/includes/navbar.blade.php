@@ -5,7 +5,7 @@
             <img src="{{ asset('images/gmall.png') }}" class="company__logo" alt="GMall Ticketing System">
             <h5 class="mb-0 company__app__name position-relative">
                 E-JO
-                <span class="position-absolute lbl__system">System</span>
+                <span class="position-absolute lbl__system">Ticketing System</span>
             </h5>
         </a>
         <button class="navbar-toggler border-0 p-0 custom__navbar__toggler" type="button" data-bs-toggle="collapse"

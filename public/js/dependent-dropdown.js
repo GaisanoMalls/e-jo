@@ -2603,70 +2603,14 @@ if (userDepartmentsDropdown || userBranchesDropdown) {
 }
 
 // ------------------------------------------------------------------------------------------------------------------------
-// Service Department - Assign Branch and BU/Department
-var serviceDepartmentBranchesDropdown = document.getElementById('serviceDepartmentBranchesDropdown');
-var serviceDepartmentBranchBUDepartmentsDropdown = document.getElementById('serviceDepartmentBranchBUDepartmentsDropdown');
-var serviceDepartmentBranchCountBranchDepartments = document.getElementById('serviceDepartmentBranchCountBranchDepartments');
-var serviceDepartmentBranchNoDepartmentsMessage = document.getElementById('serviceDepartmentBranchNoDepartmentsMessage');
-if (serviceDepartmentBranchesDropdown) {
-  serviceDepartmentBranchBUDepartmentsDropdown.disable();
-  serviceDepartmentBranchesDropdown.addEventListener('reset', function () {
-    serviceDepartmentBranchCountBranchDepartments.textContent = '';
-    serviceDepartmentBranchNoDepartmentsMessage.textContent = '';
-    serviceDepartmentBranchBUDepartmentsDropdown.reset();
-    serviceDepartmentBranchBUDepartmentsDropdown.disable();
-  });
-  serviceDepartmentBranchesDropdown.addEventListener('change', function () {
-    var branchId = this.value;
-    if (branchId) {
-      axios.get("/staff/manage/service-department/assign-branch/".concat(branchId, "/bu-departments")).then(function (response) {
-        var buDepartments = response.data;
-        var buDepartmentsOption = [];
-        if (buDepartments && buDepartments.length > 0) {
-          buDepartments.forEach(function (buDepartment) {
-            buDepartmentsOption.push({
-              value: buDepartment.id,
-              label: buDepartment.name
-            });
-          });
-          serviceDepartmentBranchBUDepartmentsDropdown.enable();
-          serviceDepartmentBranchBUDepartmentsDropdown.setOptions(buDepartmentsOption);
-          serviceDepartmentBranchCountBranchDepartments.textContent = "(".concat(buDepartments.length, ")");
-          serviceDepartmentBranchNoDepartmentsMessage.textContent = '';
-        } else {
-          serviceDepartmentBranchBUDepartmentsDropdown.reset();
-          serviceDepartmentBranchBUDepartmentsDropdown.disable();
-          serviceDepartmentBranchCountBranchDepartments.textContent = '';
-          serviceDepartmentBranchNoDepartmentsMessage.textContent = 'No bu/department assigned on the selected branch.';
-        }
-      })["catch"](function (error) {
-        console.log(error);
-      });
-    } else {
-      serviceDepartmentBranchBUDepartmentsDropdown.reset();
-    }
-  });
-}
-
-// ------------------------------------------------------------------------------------------------------------------------
 // Team - Assign Branch
 var teamsDropdown = document.getElementById('teamsDropdown');
 var serviceDepartmentFieldContainer = document.getElementById('serviceDepartmentFieldContainer');
 var serviceDepartmentField = document.getElementById('serviceDepartmentField');
-var branchDropdown = document.getElementById('branchDropdown');
-var noBranchMessage = document.getElementById('noBranchMessage');
-var countBranches = document.getElementById('countBranches');
-function clearBranchWhenResetTeam() {
-  branchDropdown.disable();
-  noBranchMessage.textContent = "";
-  countBranches.textContent = "";
-}
-if (branchDropdown || serviceDepartmentFieldContainer || teamsDropdown) {
-  branchDropdown.disable();
+if (serviceDepartmentFieldContainer || teamsDropdown) {
   serviceDepartmentFieldContainer.style.display = 'none';
-  teamsDropdown.addEventListener('reset', clearBranchWhenResetTeam);
 }
-if (branchDropdown || teamsDropdown) {
+if (teamsDropdown) {
   teamsDropdown.addEventListener('change', function () {
     var teamId = this.value;
     if (teamId) {
@@ -2674,34 +2618,10 @@ if (branchDropdown || teamsDropdown) {
         var department = response.data;
         serviceDepartmentField.value = department.name;
         serviceDepartmentFieldContainer.style.display = 'block';
-        axios.get("/staff/manage/team/assign-branch/department/".concat(department.id, "/branches")).then(function (response) {
-          var branches = response.data;
-          var branchesOption = [];
-          if (branches && branches.length > 0) {
-            branches.forEach(function (branch) {
-              branchesOption.push({
-                value: branch.id,
-                label: branch.name
-              });
-            });
-            branchDropdown.enable();
-            branchDropdown.setOptions(branchesOption);
-            countBranches.textContent = "(".concat(branchesOption.length, ")");
-            noBranchMessage.textContent = "";
-          } else {
-            branchDropdown.reset();
-            branchDropdown.disable();
-            countBranches.textContent = "";
-            noBranchMessage.textContent = "No branch assigned on this service department.";
-          }
-        })["catch"](function (error) {
-          console.log(error.response.data);
-        });
       })["catch"](function (error) {
-        console.log(error.response.data);
+        console.log(error);
       });
     } else {
-      branchDropdown.reset();
       serviceDepartmentField.value = "";
       serviceDepartmentFieldContainer.style.display = 'none';
     }
@@ -2745,7 +2665,7 @@ if (helpTopicServiceDepartmentDropdown || helpTopicTeamsDropdown) {
           helpTopicCountTeams.textContent = "";
           helpTopicNoTeamsMessage.textContent = "No teams assigned on this service department.";
         }
-      }).then(function (error) {
+      })["catch"](function (error) {
         console.log(error.response.data);
       });
     } else {
@@ -2799,7 +2719,6 @@ if (levelOfApproverDropdown) {
 
 // ------------------------------------------------------------------------------------------------------------------------
 // User/Requester Page (For Ticket Creation)
-var authUserId = document.getElementById('secret'); // This is the authenticated user id
 var userCreateTicketServiceDepartmentDropdown = document.getElementById('userCreateTicketServiceDepartmentDropdown');
 var userCreateTicketHelpTopicDropdown = document.getElementById('userCreateTicketHelpTopicDropdown');
 var userCreateTicketNoHelpTopicMessage = document.getElementById('userCreateTicketNoHelpTopicMessage');
@@ -2815,9 +2734,10 @@ function userCreateTicketClearHelpTopicWhenResetDepartment() {
 }
 
 // Load the deparments based on authenticated user's branch.
-window.onload = function () {
-  if (authUserId) {
-    axios.get("/user/ticket/".concat(authUserId.value, "/service-departments")).then(function (response) {
+var navBtnCreateNewTicket = document.getElementById('navBtnCreateNewTicket');
+if (navBtnCreateNewTicket) {
+  navBtnCreateNewTicket.addEventListener('click', function () {
+    axios.get("/user/ticket/service-departments").then(function (response) {
       var serviceDepartments = response.data;
       var serviceDepartmentsOption = [];
       if (serviceDepartments && serviceDepartments.length > 0) {
@@ -2832,8 +2752,8 @@ window.onload = function () {
     })["catch"](function (error) {
       console.log(error);
     });
-  }
-};
+  });
+}
 if (userCreateTicketServiceDepartmentDropdown) {
   userCreateTicketHelpTopicDropdown.disable();
   userCreateTicketServiceDepartmentDropdown.addEventListener('reset', userCreateTicketClearHelpTopicWhenResetDepartment);
@@ -2897,7 +2817,6 @@ if (userCreateTicketBranchesDropdown || userCreateTicketBranchSelectionContainer
   userCreateTicketBranchSelectionContainer.style.display = 'none';
   if (checkOtherBranch) {
     checkOtherBranch.addEventListener('change', function (e) {
-      console.log("checked");
       if (e.target.checked) {
         userCreateTicketBranchSelectionContainer.style.display = 'block';
         userCreateTicketBranchesDropdown.enable();

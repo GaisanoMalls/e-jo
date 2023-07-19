@@ -26,11 +26,6 @@ class ServiceDepartment extends Model
         return $this->hasMany(Ticket::class);
     }
 
-    public function branches()
-    {
-        return $this->belongsToMany(Branch::class);
-    }
-
     public function branch()
     {
         return $this->belongsTo(Branch::class);
@@ -44,21 +39,6 @@ class ServiceDepartment extends Model
     public function helpTopics()
     {
         return $this->hasMany(HelpTopic::class);
-    }
-
-    public function getBranches()
-    {
-        $branchNames = [];
-
-        foreach ($this->branches as $branch) {
-            array_push($branchNames, $branch->name);
-        }
-
-        if (!empty($branchNames)) {
-            return implode(', ', $branchNames);
-        }
-
-        return '----';
     }
 
      public function dateCreated()

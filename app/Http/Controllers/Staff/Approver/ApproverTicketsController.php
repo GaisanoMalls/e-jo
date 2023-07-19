@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff\Approver;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\Approver\CountTicketsForTabUse;
 use App\Models\ApprovalStatus;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -10,30 +11,33 @@ use Illuminate\Http\Request;
 
 class ApproverTicketsController extends Controller
 {
+    use CountTicketsForTabUse;
+
     public function openTickets()
     {
-        $openTickets = Ticket::where('status_id', Status::OPEN)
-                             ->orWhere('approval_status', ApprovalStatus::APPROVED)
-                             ->orWhere('approval_status', ApprovalStatus::DISAPPROVED)
-                             ->orderBy('created_at', 'desc')
-                             ->get();
+        $openTickets = $this->countOpenTickets();
 
-        $forApprovalTickets = Ticket::where('status_id', Status::OPEN)
-                                    ->orWhere('approval_status', ApprovalStatus::FOR_APPROVAL)
-                                    ->orderBy('created_at', 'desc')
-                                    ->get();
+        $forApprovalTickets = Ticket::where(function ($query) {
+                                    $query->where('status_id', Status::OPEN)
+                                        ->where('branch_id', auth()->user()->branch_id)
+                                        ->where('approval_status', ApprovalStatus::FOR_APPROVAL);
+                                })
+                                ->orderBy('created_at', 'desc')
+                                ->get();
 
         return view('layouts.staff.approver.tickets.open', compact('openTickets', 'forApprovalTickets'));
     }
 
     public function approvedTickets()
     {
+        $openTickets = $this->countOpenTickets();
+
         $approvedTickets = Ticket::where('status_id', Status::OPEN)
                                  ->where('approval_status', ApprovalStatus::APPROVED)
                                  ->orderBy('created_at', 'desc')
                                  ->get();
 
-        return view('layouts.staff.approver.tickets.approved', compact('approvedTickets'));
+        return view('layouts.staff.approver.tickets.approved', compact('approvedTickets', 'openTickets'));
     }
 
     public function disapprovedTickets()

@@ -6,6 +6,26 @@
     <div class="row">
         <div class="col-xl-12 ticket__details__container">
             <div class="mb-3 ticket__details__top">
+                @switch($ticket->status->id)
+                @case(App\Models\Status::ON_PROCESS)
+                <a href="{{ route('staff.tickets.on_process_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @break
+                @case(App\Models\Status::OPEN)
+                <a href="{{ route('staff.tickets.open_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @break
+                @case(App\Models\Status::APPROVED)
+                <a href="{{ route('staff.tickets.approved_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @break
+                @endswitch
                 <div class="d-flex align-items-center gap-3 mb-4">
                     <p class="mb-0 ticket__details__status">{{ $ticket->status->name }}</p>
                     <p class="mb-0 ticket__details__priority">{{ $ticket->priorityLevel->name }}</p>
@@ -88,10 +108,10 @@
                             @endif
                         </div>
                     </div>
-                    <div class="mb-2">
-                        <small class="ticket__discussions">
-                            {{ $ticket->replies->count() }}
+                    <div class="mb-2 mt-4">
+                        <small class="ticket__discussions text-muted">
                             {{ $ticket->replies->count() > 1 ? 'Discussions' : 'Discussion' }}
+                            ({{ $ticket->replies->count() }})
                         </small>
                     </div>
                     {{-- Replies/Comments --}}
@@ -99,10 +119,12 @@
                     @foreach ($ticket->replies as $reply)
                     @include('layouts.staff.ticket.modal.preview_reply_ticket_files_modal')
                     <div class="card border-0 p-0 card__ticket__details"
-                        style="background-color: {{ $reply->user_id === auth()->user()->id ? '#D9EBFF' : '#E9ECEF' }}">
+                        style="width: fit-content; max-width: 70%;
+                        {{ $reply->user_id === auth()->user()->id ? 'background-color: #D0F0F7; margin-left: auto;' : 'background-color: #E9ECEF; margin-right: auto;' }}">
                         <div
                             class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
                             <div class="d-flex align-items-center w-100">
+                                @if ($reply->user->id !== auth()->user()->id)
                                 @if ($reply->user->profile->picture)
                                 <img src="{{ Storage::url($reply->user->profile->picture) }}" alt="" class="image-fluid ticket__details__user__picture
                                         reply__ticket__details__user__picture">
@@ -111,12 +133,17 @@
                                     text-white" style="background-color: #24695C;">
                                     {{ $reply->user->profile->getNameInitial() }}</div>
                                 @endif
+                                @endif
                                 <div class="d-flex flex-wrap justify-content-between w-100">
+                                    @if ($reply->user->id !== auth()->user()->id)
                                     <small
-                                        class="ticket__details__user__fullname reply__ticket__details__user__fullname">
+                                        class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                                         {{ $reply->user->profile->getFullName() }}
                                         {{ $reply->user_id === auth()->user()->id ? '(me)' : '' }}
                                     </small>
+                                    @else
+                                    <small class="pe-3 text-muted" style="font-size: 12px;">Sent</small>
+                                    @endif
                                     <small
                                         class="ticket__details__time">{{ $reply->created_at->diffForHumans(null, true) }}</small>
                                 </div>
@@ -145,7 +172,7 @@
                     </div>
                     @endif
                     <button type="button"
-                        class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 d-flex align-items-center justify-content-center gap-2"
+                        class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2"
                         data-bs-toggle="offcanvas" data-bs-target="#offcanvasReplyTicketForm"
                         aria-controls="offcanvasBottom">
                         <i class="fa-solid fa-pen"></i>

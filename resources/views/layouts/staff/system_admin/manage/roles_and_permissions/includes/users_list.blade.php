@@ -44,33 +44,40 @@
                             <a href="">
                                 <div class="media d-flex align-items-center user__account__media">
                                     <div class="flex-shrink-0">
-                                        @if ($user->profile->picture != null)
-                                        <img src="https://appsrv1-147a1.kxcdn.com/soft-ui-dashboard/img/team-2.jpg"
-                                            alt="" class="image-fluid user__picture">
+                                        @if ($user->profile->picture)
+                                        <img src="{{ Storage::url($user->profile->picture) }}" alt=""
+                                            class="image-fluid user__picture">
                                         @else
-                                        @switch($user->role->id)
-                                        @case(2)
-                                        <div class="user__name__initial" style="background-color: #9DA85C;">
-                                            {{-- Department Admin --}}
+                                        @switch($user->role_id)
+                                        @case(App\Models\Role::SYSTEM_ADMIN)
+                                        <div class="user__name__initial" style="background-color: #D32839;">
+                                            {{-- Service Department Admin --}}
                                             {{ $user->profile->getNameInitial() }}
                                         </div>
                                         @break
 
-                                        @case(3)
+                                        @case(App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+                                        <div class="user__name__initial" style="background-color: #9DA85C;">
+                                            {{-- Service Department Admin --}}
+                                            {{ $user->profile->getNameInitial() }}
+                                        </div>
+                                        @break
+
+                                        @case(App\Models\Role::APPROVER)
                                         <div class="user__name__initial" style="background-color: #3B4053;">
                                             {{-- Approver --}}
                                             {{ $user->profile->getNameInitial() }}
                                         </div>
                                         @break
 
-                                        @case(4)
+                                        @case(App\Models\Role::AGENT)
                                         <div class="user__name__initial" style="background-color: #196837;">
                                             {{-- Agent --}}
                                             {{ $user->profile->getNameInitial() }}
                                         </div>
                                         @break
 
-                                        @case(5)
+                                        @case(App\Models\Role::USER)
                                         <div class="user__name__initial" style="background-color: #24695C;">
                                             {{-- User/Requester --}}
                                             {{ $user->profile->getNameInitial() }}

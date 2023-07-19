@@ -53,6 +53,7 @@ Manage Department
                                         </label>
                                         <select name="branch" placeholder="Choose a branch" data-search="true"
                                             data-silent-initial-value-set="true">
+                                            <option value="" selected disabled>Choose a branch</option>
                                             @foreach ($branches as $branch)
                                             <option value="{{ $branch->id }}"
                                                 {{ old('branch') == $branch->id ? 'selected' : '' }}>

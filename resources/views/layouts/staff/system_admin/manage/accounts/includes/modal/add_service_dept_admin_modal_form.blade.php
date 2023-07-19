@@ -3,7 +3,8 @@
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">
-                <h1 class="modal-title modal__title" id="addNewDeptAdminModalLabel">Add new department Admin</h1>
+                <h1 class="modal-title modal__title" id="addNewDeptAdminModalLabel">Add new service department Admin
+                </h1>
                 <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
                     <i class="fa-sharp fa-solid fa-xmark"></i>
                 </button>
@@ -150,6 +151,29 @@
                                                 id="deptAdminBUDepartmentsDropdown">
                                             </select>
                                             @error('bu_department', 'storeServiceDeptAdmin')
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-2">
+                                            <label for="department" class="form-label form__field__label">
+                                                Service Department
+                                            </label>
+                                            <select name="service_department" data-search="true"
+                                                data-silent-initial-value-set="true">
+                                                <option value="" selected disabled>Choose a servic department</option>
+                                                @foreach ($global_service_departments as $service_department)
+                                                <option value="{{ $service_department->id }}"
+                                                    {{ old('service_department') == $service_department->id ? 'selected' : '' }}>
+                                                    {{ $service_department->name }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                            @error('service_department', 'storeServiceDeptAdmin')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}

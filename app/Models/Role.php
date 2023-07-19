@@ -100,6 +100,16 @@ class Role extends Model
         return self::$lbl_user_role . implode(",", $userRoles);
     }
 
+    public static function onlyServiceAndSystemAdmin(): string
+    {
+        $userRoles = [
+            self::SERVICE_DEPARTMENT_ADMIN,
+            self::SYSTEM_ADMIN
+        ];
+
+        return self::$lbl_user_role . implode(",", $userRoles);
+    }
+
     public static function onlyStaffs(): string
     {
         $userRoles = [

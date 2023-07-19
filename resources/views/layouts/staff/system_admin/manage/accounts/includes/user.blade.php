@@ -36,10 +36,10 @@
                                             Name
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                                            BU/Department
+                                            Branch
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                                            Branch
+                                            BU/Department
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                             Status
@@ -60,9 +60,9 @@
                                             <a href="">
                                                 <div class="media d-flex align-items-center user__account__media">
                                                     <div class="flex-shrink-0">
-                                                        @if ($user->profile->picture != null)
-                                                        <img src="https://appsrv1-147a1.kxcdn.com/soft-ui-dashboard/img/team-2.jpg"
-                                                            alt="" class="image-fluid user__picture">
+                                                        @if ($user->profile->picture)
+                                                        <img src="{{ Storage::url($user->profile->picture) }}" alt=""
+                                                            class="image-fluid user__picture">
                                                         @else
                                                         <div class="user__name__initial"
                                                             style="background-color: #24695C;">
@@ -82,12 +82,12 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $user->department->name }}</span>
+                                                <span>{{ $user->branch->name }}</span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $user->branch->name }}</span>
+                                                <span>{{ $user->department->name }}</span>
                                             </div>
                                         </td>
                                         <td>

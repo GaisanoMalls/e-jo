@@ -21,7 +21,7 @@ class ServiceDepartmentController extends Controller
 
     public function index()
     {
-        $serviceDepartments = ServiceDepartment::with('branches')->orderBy('created_at', 'desc')->get();
+        $serviceDepartments = ServiceDepartment::orderBy('created_at', 'desc')->get();
         $buDepartments = Department::orderBy('name', 'desc')->get();
 
         return view('layouts.staff.system_admin.manage.service_departments.service_department_index',

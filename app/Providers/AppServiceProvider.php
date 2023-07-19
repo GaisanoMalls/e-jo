@@ -31,13 +31,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $global_departments = Department::all();
-        $global_service_departments = ServiceDepartment::all();
+        $global_service_departments = ServiceDepartment::orderBy('name', 'asc')->get();
         $global_branches = Branch::all();
         $suffixes = Suffix::orderBy('name', 'asc')->get();
-
-        $openTickets = Ticket::where('status_id', Status::OPEN)
-                             ->orderBy('created_at', 'desc')
-                             ->get();
 
         $approvedTickets = Ticket::where('status_id', Status::OPEN)
                                  ->where('approval_status', ApprovalStatus::APPROVED)
@@ -55,7 +51,6 @@ class AppServiceProvider extends ServiceProvider
             'suffixes' => $suffixes,
 
             // Approver
-            'openTickets' => $openTickets,
             'approvedTickets' => $approvedTickets,
             'disapprovedTickets' => $disapprovedTickets
         ]);

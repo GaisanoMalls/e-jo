@@ -38,7 +38,6 @@
         @include('layouts.user.includes.dashboard')
         @show
     </div>
-    <input type="hidden" id="secret" value="{{ auth()->user()->id }}">
     @yield('action-js')
     @stack('toasts-js')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

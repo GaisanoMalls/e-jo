@@ -35,7 +35,7 @@
                     <a href="" class="btn action__button mt-0">
                         <i class="bi bi-pencil-fill"></i>
                     </a>
-                    <form action="{{ route('staff.manage.service_department.assign_branch.delete', $sdb->id) }}"
+                    <form action="{{ route('staff.manage.bu_department.assign_branch.delete', $sdb->id) }}"
                         method="post">
                         @csrf
                         @method('DELETE')

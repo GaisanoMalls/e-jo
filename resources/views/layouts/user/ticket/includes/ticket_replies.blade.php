@@ -1,12 +1,12 @@
 @if ($ticket->replies->count() > 0)
 @foreach ($ticket->replies as $reply)
 @include('layouts.user.ticket.includes.modal.preview_reply_ticket_files_modal')
-<div class="card border-0 p-0 card__ticket__details w-75"
-    style="
-    {{ $reply->user_id === auth()->user()->id ? 'background-color: #D9EBFF; margin-left: auto;' : 'background-color: #E9ECEF; margin-right: auto;' }}">
+<div class="card border-0 p-0 card__ticket__details"
+    style="width: fit-content; max-width: 70%;
+    {{ $reply->user_id === auth()->user()->id ? 'background-color: #D0F0F7; margin-left: auto;' : 'background-color: #E9ECEF; margin-right: auto;' }}">
     <div class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
         <div class="d-flex align-items-center w-100">
-            @if ($reply->user->role_id === App\Models\Role::AGENT)
+            @if ($reply->user->role_id !== App\Models\Role::USER)
             @if ($reply->user->profile->picture)
             <img src="{{ Storage::url($reply->user->profile->picture) }}" alt="" class="image-fluid ticket__details__user__picture
                                          reply__ticket__details__user__picture">
@@ -17,13 +17,13 @@
             @endif
             @endif
             <div class="d-flex flex-wrap justify-content-between w-100">
-                @if ($reply->user->role_id === App\Models\Role::AGENT)
-                <small class="ticket__details__user__fullname reply__ticket__details__user__fullname">
+                @if ($reply->user->role_id !== App\Models\Role::USER)
+                <small class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                     {{ $reply->user->profile->getFullName() }}
                     {{ $reply->user_id === auth()->user()->id ? '(me)' : '' }}
                 </small>
                 @else
-                <small style="font-size: 13px;">Sent</small>
+                <small class="pe-3 text-muted" style="font-size: 12px;">Sent</small>
                 @endif
                 <small class="ticket__details__time">{{ $reply->created_at->diffForHumans(null, true) }}</small>
             </div>

@@ -36,13 +36,16 @@
                                             Name
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                                            Team
+                                            Service Department
+                                        </th>
+                                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                            Branch
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                             BU/Department
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                                            Branch
+                                            Team
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                             Status
@@ -63,9 +66,9 @@
                                             <a href="">
                                                 <div class="media d-flex align-items-center user__account__media">
                                                     <div class="flex-shrink-0">
-                                                        @if ($agent->profile->picture != null)
-                                                        <img src="https://appsrv1-147a1.kxcdn.com/soft-ui-dashboard/img/team-2.jpg"
-                                                            alt="" class="image-fluid user__picture">
+                                                        @if ($agent->profile->picture)
+                                                        <img src="{{ Storage::url($agent->profile->picture) }}" alt=""
+                                                            class="image-fluid user__picture">
                                                         @else
                                                         <div class="user__name__initial"
                                                             style="background-color: #196837;">
@@ -85,7 +88,12 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $agent->team->name ?? '----' }}</span>
+                                                <span>{{ $agent->serviceDepartment->name ?? '----' }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center text-start td__content">
+                                                <span>{{ $agent->branch->name }}</span>
                                             </div>
                                         </td>
                                         <td>
@@ -95,7 +103,7 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $agent->branch->name }}</span>
+                                                <span>{{ $agent->team->name ?? '----' }}</span>
                                             </div>
                                         </td>
                                         <td>

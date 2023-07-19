@@ -635,6 +635,15 @@ a:hover {
   -o-object-fit: cover;
      object-fit: cover;
 }
+.sidebar .sidebar__userinitial {
+  height: 90px;
+  width: 90px;
+  background-color: #f5f7f9;
+  color: #d32839;
+  border: 3px solid #d32839;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
 .sidebar .sidebar__button__badge__count {
   font-size: 0.75rem;
   background-color: #f2f2f2;
@@ -1063,7 +1072,7 @@ a:hover {
   position: sticky;
 }
 .ticket__section .ticket__details__top {
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 1.5rem 2.3rem;
   top: 70px;
   position: sticky;
   z-index: 1;
@@ -1072,6 +1081,16 @@ a:hover {
 }
 .ticket__section .ticket__details__top .ticket__details__topbuttons__label {
   font-size: 0.75rem;
+}
+.ticket__section .ticket__details__top .btn__back {
+  position: absolute;
+  left: -19px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #f5f7f9;
+  height: 2.3rem;
+  width: 2.3rem;
+  border: none !important;
 }
 
 .custom__button__menu {
@@ -1311,7 +1330,8 @@ input[type=checkbox]:checked {
   margin-bottom: 10px;
 }
 .settings__content .card__settings .settings__tab__button {
-  padding: 1.2rem 0;
+  margin-top: 15px;
+  padding: 0.5rem 0 1.2rem 0;
   font-size: 0.813rem;
   border-radius: 0 !important;
   white-space: nowrap;
@@ -1565,6 +1585,8 @@ input[type=checkbox]:checked {
   border-radius: 0.625rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
   border: 2px solid #d9ddd9;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .user__account__media .user__name__initial {
   height: 35px !important;
@@ -2084,6 +2106,7 @@ input[type=checkbox]:checked {
   color: #3e3d3d;
   font-size: 0.813rem;
   font-weight: 500;
+  margin-bottom: 0;
 }
 .roles__permissions__section .roles__permissions__card .roles__permissions__type__card .roles__permission__type__card {
   border: none;
@@ -2338,6 +2361,7 @@ input[type=checkbox]:checked {
   color: #3e3d3d;
   font-size: 0.813rem;
   font-weight: 500;
+  margin-bottom: 0;
 }
 .sla__section .card__rounded__and__no__border .btn__add__sla {
   background-color: #d32839;
@@ -2426,6 +2450,7 @@ input[type=checkbox]:checked {
   color: #3e3d3d;
   font-size: 0.813rem;
   font-weight: 500;
+  margin-bottom: 0;
 }
 .tags__section .card__rounded__and__no__border .btn__add__tag {
   background-color: #d32839;
@@ -2514,6 +2539,7 @@ input[type=checkbox]:checked {
   color: #3e3d3d;
   font-size: 0.813rem;
   font-weight: 500;
+  margin-bottom: 0;
 }
 .ticket__statuses__section .card__rounded__and__no__border .btn__add__status {
   background-color: #d32839;
@@ -2591,6 +2617,7 @@ input[type=checkbox]:checked {
   color: #3e3d3d;
   font-size: 0.813rem;
   font-weight: 500;
+  margin-bottom: 0;
 }
 .directory__content .directory__card .directory__type__card {
   border: none;

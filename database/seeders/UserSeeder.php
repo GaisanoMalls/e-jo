@@ -19,9 +19,7 @@ class UserSeeder extends Seeder
     {
         User::firstOrCreate([
             'branch_id' => 1,
-            // 'department_id' => 1,
-            // 'team_id' => 1,
-            'role_id' => 1,
+            'role_id' => Role::SYSTEM_ADMIN,
             'email' => 'admin@gmail.com',
             'password' => Hash::make('admin'),
         ]);

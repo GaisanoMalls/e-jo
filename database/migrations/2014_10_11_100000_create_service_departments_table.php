@@ -16,7 +16,6 @@ return new class extends Migration
     {
         Schema::create('service_departments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Department::class, 'department_id')->nullable()->constrained()->restrictOnDelete();
             $table->string('name')->unique();
             $table->string('slug')->unique();
             $table->timestamps();

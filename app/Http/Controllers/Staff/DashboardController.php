@@ -14,13 +14,8 @@ class DashboardController extends Controller
 {
     use AuthStaffRedirect;
 
-    public function __construct()
-    {
-        $this->middleware(['auth', Role::systemAdmin()]);
-    }
-
     public function dashboard()
-    {   
-        return view('layouts.staff.dashboard');
+    {
+        return view('layouts.staff.system_admin.dashboard');
     }
 }

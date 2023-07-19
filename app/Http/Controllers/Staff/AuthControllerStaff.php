@@ -24,12 +24,12 @@ class AuthControllerStaff extends Controller
         $this->validateLoginCrendentials($request, 'email', 'password');
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'is_active' => true])) {
-            
+
             if (Auth::user()->role_id === Role::USER) {
                 Auth::logout();
                 return back()->with('error', 'The account is not recognized as a staff.');
             }
-            
+
             $request->session()->regenerate();
             return $this->redirectAuthenticatedStaffWithRole();
         }

@@ -27,11 +27,6 @@ Service Departments
                                 <i class="fa-solid fa-plus"></i>
                                 <span class="button__name">Add new</span>
                             </button>
-                            <a type="button" href="{{ route('staff.manage.service_department.assign_branch.index') }}"
-                                class="btn d-flex align-items-center justify-content-center gap-2 button__header">
-                                <span class="button__name">Manage service dept.</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
                         </div>
                     </div>
                     <div class="table-responsive custom__table">

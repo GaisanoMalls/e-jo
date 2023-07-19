@@ -264,82 +264,16 @@ if (userDepartmentsDropdown || userBranchesDropdown) {
 }
 
 // ------------------------------------------------------------------------------------------------------------------------
-// Service Department - Assign Branch and BU/Department
-const serviceDepartmentBranchesDropdown = document.getElementById('serviceDepartmentBranchesDropdown');
-const serviceDepartmentBranchBUDepartmentsDropdown = document.getElementById('serviceDepartmentBranchBUDepartmentsDropdown');
-const serviceDepartmentBranchCountBranchDepartments = document.getElementById('serviceDepartmentBranchCountBranchDepartments');
-const serviceDepartmentBranchNoDepartmentsMessage = document.getElementById('serviceDepartmentBranchNoDepartmentsMessage');
-
-if (serviceDepartmentBranchesDropdown) {
-    serviceDepartmentBranchBUDepartmentsDropdown.disable();
-
-    serviceDepartmentBranchesDropdown.addEventListener('reset', function () {
-        serviceDepartmentBranchCountBranchDepartments.textContent = '';
-        serviceDepartmentBranchNoDepartmentsMessage.textContent = '';
-        serviceDepartmentBranchBUDepartmentsDropdown.reset();
-        serviceDepartmentBranchBUDepartmentsDropdown.disable();
-    });
-
-    serviceDepartmentBranchesDropdown.addEventListener('change', function () {
-        const branchId = this.value;
-
-        if (branchId) {
-            axios.get(`/staff/manage/service-department/assign-branch/${branchId}/bu-departments`)
-                .then((response) => {
-                    const buDepartments = response.data;
-                    const buDepartmentsOption = [];
-
-                    if (buDepartments && buDepartments.length > 0) {
-                        buDepartments.forEach(function (buDepartment) {
-                            buDepartmentsOption.push({
-                                value: buDepartment.id,
-                                label: buDepartment.name
-                            });
-                        });
-
-                        serviceDepartmentBranchBUDepartmentsDropdown.enable();
-                        serviceDepartmentBranchBUDepartmentsDropdown.setOptions(buDepartmentsOption);
-                        serviceDepartmentBranchCountBranchDepartments.textContent = `(${buDepartments.length})`;
-                        serviceDepartmentBranchNoDepartmentsMessage.textContent = '';
-
-                    } else {
-                        serviceDepartmentBranchBUDepartmentsDropdown.reset();
-                        serviceDepartmentBranchBUDepartmentsDropdown.disable();
-                        serviceDepartmentBranchCountBranchDepartments.textContent = '';
-                        serviceDepartmentBranchNoDepartmentsMessage.textContent = 'No bu/department assigned on the selected branch.';
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else {
-            serviceDepartmentBranchBUDepartmentsDropdown.reset();
-        }
-    });
-}
-
-// ------------------------------------------------------------------------------------------------------------------------
 // Team - Assign Branch
 const teamsDropdown = document.getElementById('teamsDropdown');
 const serviceDepartmentFieldContainer = document.getElementById('serviceDepartmentFieldContainer');
 const serviceDepartmentField = document.getElementById('serviceDepartmentField');
-const branchDropdown = document.getElementById('branchDropdown');
-const noBranchMessage = document.getElementById('noBranchMessage');
-const countBranches = document.getElementById('countBranches');
 
-function clearBranchWhenResetTeam() {
-    branchDropdown.disable();
-    noBranchMessage.textContent = "";
-    countBranches.textContent = "";
-}
-
-if (branchDropdown || serviceDepartmentFieldContainer || teamsDropdown) {
-    branchDropdown.disable();
+if (serviceDepartmentFieldContainer || teamsDropdown) {
     serviceDepartmentFieldContainer.style.display = 'none';
-    teamsDropdown.addEventListener('reset', clearBranchWhenResetTeam)
 }
 
-if (branchDropdown || teamsDropdown) {
+if (teamsDropdown) {
     teamsDropdown.addEventListener('change', function () {
         const teamId = this.value;
 
@@ -350,41 +284,11 @@ if (branchDropdown || teamsDropdown) {
 
                     serviceDepartmentField.value = department.name;
                     serviceDepartmentFieldContainer.style.display = 'block';
-
-                    axios.get(`/staff/manage/team/assign-branch/department/${department.id}/branches`)
-                        .then((response) => {
-                            const branches = response.data;
-                            const branchesOption = [];
-
-                            if (branches && branches.length > 0) {
-                                branches.forEach(function (branch) {
-                                    branchesOption.push({
-                                        value: branch.id,
-                                        label: branch.name
-                                    });
-                                });
-
-                                branchDropdown.enable();
-                                branchDropdown.setOptions(branchesOption);
-                                countBranches.textContent = `(${branchesOption.length})`;
-                                noBranchMessage.textContent = "";
-
-                            } else {
-                                branchDropdown.reset();
-                                branchDropdown.disable();
-                                countBranches.textContent = "";
-                                noBranchMessage.textContent = "No branch assigned on this service department.";
-                            }
-                        })
-                        .catch((error) => {
-                            console.log(error.response.data);
-                        });
                 })
                 .catch((error) => {
-                    console.log(error.response.data);
+                    console.log(error);
                 });
         } else {
-            branchDropdown.reset();
             serviceDepartmentField.value = "";
             serviceDepartmentFieldContainer.style.display = 'none';
         }
@@ -438,7 +342,7 @@ if (helpTopicServiceDepartmentDropdown || helpTopicTeamsDropdown) {
                         helpTopicNoTeamsMessage.textContent = "No teams assigned on this service department.";
                     }
                 })
-                .then((error) => {
+                .catch((error) => {
                     console.log(error.response.data);
                 });
         } else {
@@ -511,7 +415,6 @@ if (levelOfApproverDropdown) {
 
 // ------------------------------------------------------------------------------------------------------------------------
 // User/Requester Page (For Ticket Creation)
-const authUserId = document.getElementById('secret'); // This is the authenticated user id
 const userCreateTicketServiceDepartmentDropdown = document.getElementById('userCreateTicketServiceDepartmentDropdown');
 const userCreateTicketHelpTopicDropdown = document.getElementById('userCreateTicketHelpTopicDropdown');
 const userCreateTicketNoHelpTopicMessage = document.getElementById('userCreateTicketNoHelpTopicMessage');
@@ -528,12 +431,14 @@ function userCreateTicketClearHelpTopicWhenResetDepartment() {
 }
 
 // Load the deparments based on authenticated user's branch.
-window.onload = function () {
-    if (authUserId) {
-        axios.get(`/user/ticket/${authUserId.value}/service-departments`)
+const navBtnCreateNewTicket = document.getElementById('navBtnCreateNewTicket');
+
+if (navBtnCreateNewTicket) {
+    navBtnCreateNewTicket.addEventListener('click', function () {
+        axios.get(`/user/ticket/service-departments`)
             .then((response) => {
                 const serviceDepartments = response.data;
-                const serviceDepartmentsOption = []
+                const serviceDepartmentsOption = [];
 
                 if (serviceDepartments && serviceDepartments.length > 0) {
                     serviceDepartments.forEach(function (serviceDepartment) {
@@ -549,7 +454,7 @@ window.onload = function () {
             .catch((error) => {
                 console.log(error)
             });
-    }
+    })
 }
 
 if (userCreateTicketServiceDepartmentDropdown) {
@@ -632,7 +537,6 @@ if (userCreateTicketBranchesDropdown || userCreateTicketBranchSelectionContainer
 
     if (checkOtherBranch) {
         checkOtherBranch.addEventListener('change', (e) => {
-            console.log("checked");
             if (e.target.checked) {
                 userCreateTicketBranchSelectionContainer.style.display = 'block';
                 userCreateTicketBranchesDropdown.enable();
