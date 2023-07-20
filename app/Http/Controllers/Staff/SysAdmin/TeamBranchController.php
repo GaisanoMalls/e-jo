@@ -18,7 +18,8 @@ class TeamBranchController extends Controller
         $branches = Branch::orderBy('name', 'asc')->get();
         $teamBranch = TeamBranch::with(['team', 'branch'])->orderBy('created_at', 'desc')->get();
 
-        return view('layouts.staff.system_admin.manage.teams.team_branch',
+        return view(
+            'layouts.staff.system_admin.manage.teams.team_branch',
             compact([
                 'teams',
                 'teamBranch',
@@ -27,7 +28,7 @@ class TeamBranchController extends Controller
         );
     }
 
-   public function store(Request $request, TeamBranch $tdb)
+    public function store(Request $request, TeamBranch $tdb)
     {
         $validator = Validator::make($request->all(), [
             'team' => ['required'],
@@ -35,12 +36,14 @@ class TeamBranchController extends Controller
         ]);
 
         $isExists = TeamBranch::where('team_id', $request['team'])
-                                    ->where('branch_id', $request['branch'])
-                                    ->exists();
+            ->where('branch_id', $request['branch'])
+            ->exists();
 
-        if ($isExists) return back()->withErrors(['team' => 'Team name already assigned to this branch.'], 'storeTeamBranch')->withInput();
+        if ($isExists)
+            return back()->withErrors(['team' => 'Team name already assigned to this branch.'], 'storeTeamBranch')->withInput();
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeTeamBranch')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeTeamBranch')->withInput();
 
         $tdb->create([
             'team_id' => $request->input('team'),

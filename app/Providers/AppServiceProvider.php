@@ -35,24 +35,11 @@ class AppServiceProvider extends ServiceProvider
         $global_branches = Branch::all();
         $suffixes = Suffix::orderBy('name', 'asc')->get();
 
-        $approvedTickets = Ticket::where('status_id', Status::OPEN)
-                                 ->where('approval_status', ApprovalStatus::APPROVED)
-                                 ->get();
-
-        $disapprovedTickets = Ticket::where('status_id', Status::OPEN)
-                                    ->where('approval_status', ApprovalStatus::DISAPPROVED)
-                                    ->orderBy('created_at', 'desc')
-                                    ->get();
-
         view()->share([
             'global_departments' => $global_departments,
             'global_service_departments' => $global_service_departments,
             'global_branches' => $global_branches,
             'suffixes' => $suffixes,
-
-            // Approver
-            'approvedTickets' => $approvedTickets,
-            'disapprovedTickets' => $disapprovedTickets
         ]);
 
         // foreach (Ticket::all() as $ticket) {

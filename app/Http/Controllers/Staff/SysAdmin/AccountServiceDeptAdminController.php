@@ -28,7 +28,8 @@ class AccountServiceDeptAdminController extends Controller
             'email' => ['required', 'max:80']
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeServiceDeptAdmin')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeServiceDeptAdmin')->withInput();
 
         $user = User::create([
             'branch_id' => $request->input('branch'),

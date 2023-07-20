@@ -173,16 +173,6 @@
                                     rounded justify-content-between sidebar__collapse__btnlink">
                                     <div class="d-flex align-items-center">
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
-                                        <span class="sidebar__btn__link__name ">On Hold</span>
-                                    </div>
-                                    <span class="badge sidebar__btn__link__badge">30</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" class="position-relative link-dark d-flex align-items-center text-decoration-none
-                                    rounded justify-content-between sidebar__collapse__btnlink">
-                                    <div class="d-flex align-items-center">
-                                        <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Claimed</span>
                                     </div>
                                     <span class="badge sidebar__btn__link__badge">30</span>

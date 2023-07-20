@@ -19,13 +19,16 @@ class TeamController extends Controller
     {
         $serviceDepartments = ServiceDepartment::orderby('name', 'asc')->get();
         $teams = Team::with('serviceDepartment')
-                     ->with(['users' => function($query) {
-                        $query->whereHas('role', function($roleQuery) {
-                            $roleQuery->where('id', Role::AGENT);
+            ->with([
+                'users' => function ($query) {
+                    $query->whereHas('role', function ($roleQuery) {
+                        $roleQuery->where('id', Role::AGENT);
                     });
-        }])->orderBy('created_at', 'desc')->get();
+                }
+            ])->orderBy('created_at', 'desc')->get();
 
-        return view('layouts.staff.system_admin.manage.teams.teams_index',
+        return view(
+            'layouts.staff.system_admin.manage.teams.teams_index',
             compact([
                 'serviceDepartments',
                 'teams'
@@ -50,7 +53,8 @@ class TeamController extends Controller
             ]
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeTeam')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeTeam')->withInput();
 
         $team->create([
             'service_department_id' => (int) $request['service_department'],

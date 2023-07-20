@@ -17,7 +17,8 @@ class BUDepartmentBranchController extends Controller
         $buDepartments = Department::orderby('name', 'asc')->get();
         $buDepartmentBranches = DepartmentBranch::with('branch')->orderBy('created_at', 'desc')->get();
 
-        return view('layouts.staff.system_admin.manage.bu_departments.bu_department_branch',
+        return view(
+            'layouts.staff.system_admin.manage.bu_departments.bu_department_branch',
             compact([
                 'buDepartmentBranches',
                 'buDepartments',
@@ -33,13 +34,15 @@ class BUDepartmentBranchController extends Controller
             'branch' => ['required']
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeBUDepartmentBranch')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeBUDepartmentBranch')->withInput();
 
         $isExists = DepartmentBranch::where('department_id', $request['bu_department'])
-                                    ->where('branch_id', $request['branch'])
-                                    ->exists();
+            ->where('branch_id', $request['branch'])
+            ->exists();
 
-        if ($isExists) return back()->withErrors(['bu_department' => 'BU/department already assigned to this branch.'], 'storeBUDepartmentBranch')->withInput();
+        if ($isExists)
+            return back()->withErrors(['bu_department' => 'BU/department already assigned to this branch.'], 'storeBUDepartmentBranch')->withInput();
 
         $departmentBranch->create([
             'department_id' => $request->input('bu_department'),

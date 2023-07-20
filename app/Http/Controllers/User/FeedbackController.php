@@ -19,8 +19,8 @@ class FeedbackController extends Controller
     public function reviews()
     {
         $reviews = Feedback::where('user_id', auth()->user()->id)
-                           ->orderBy('created_at', 'desc')
-                           ->get();
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('layouts.feedback.reviews', compact('reviews'));
     }
@@ -28,9 +28,9 @@ class FeedbackController extends Controller
     public function ticketsToRate()
     {
         $closedTickets = Ticket::where('status_id', Status::CLOSED)
-                               ->where('user_id', auth()->user()->id)
-                               ->orderBy('created_at', 'desc')
-                               ->get();
+            ->where('user_id', auth()->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('layouts.feedback.tickets_to_rate', compact('closedTickets'));
     }

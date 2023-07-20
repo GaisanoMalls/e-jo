@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class HelpTopicsController extends Controller
 {
-     public function index()
+    public function index()
     {
         $serviceDepartments = ServiceDepartment::orderBy('name', 'asc')->get();
         $levelOfApprovals = ApprovalLevel::orderBy('description', 'asc')->get();
@@ -23,7 +23,8 @@ class HelpTopicsController extends Controller
         $slas = ServiceLevelAgreement::orderBy('time_unit', 'asc')->get();
         $helpTopics = HelpTopic::with(['serviceDepartment', 'department', 'sla'])->orderBy('created_at', 'desc')->get();
 
-        return view('layouts.staff.system_admin.manage.help_topics.help_topics_index',
+        return view(
+            'layouts.staff.system_admin.manage.help_topics.help_topics_index',
             compact([
                 'serviceDepartments',
                 'levelOfApprovals',
@@ -44,7 +45,8 @@ class HelpTopicsController extends Controller
             'level_of_approver' => ['nullable'],
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeHelpTopic')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeHelpTopic')->withInput();
 
         $helpTopic->create([
             'service_department_id' => (int) $request->input('service_department'),

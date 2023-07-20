@@ -15,23 +15,20 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link" href="#">
-                <span class="ticket__count__tab">13</span>
+            <a href="{{ route('user.tickets.viewed_tickets') }}" class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
+                {{ Route::is('user.tickets.viewed_tickets') ? 'active' : '' }}">
+                <span class="ticket__count__tab">{{ $viewedTickets->count() }}</span>
                 Viewed
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link" href="#">
-                <span class="ticket__count__tab">2</span>
-                On Hold
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link" href="#">
-                <span class="ticket__count__tab">13</span>
+            <a href="{{ route('user.tickets.approved_tickets') }}" class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
+                {{ Route::is('user.tickets.approved_tickets') ? 'active' : '' }}">
+                <span class="ticket__count__tab">{{ $approvedTickets->count() }}</span>
                 Approved
             </a>
         </li>
+
         <li class="nav-item">
             <a class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link" href="#">
                 <span class="ticket__count__tab">8</span>

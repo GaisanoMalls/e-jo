@@ -23,14 +23,14 @@ class AuthControllerUser extends Controller
     public function authenticate(Request $request)
     {
         $this->validateLoginCrendentials($request, 'email', 'password');
-        
+
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'is_active' => true])) {
 
             if (Auth::user()->role_id === Role::USER) {
                 $request->session()->regenerate();
                 return $this->redirectAuthenticatedUserWithRole();
             }
-            
+
             Auth::logout();
             return back()->with('error', 'The account is not recognized as a user.');
         }

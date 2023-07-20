@@ -1048,24 +1048,6 @@ a {
         }
 
         .ticket__details__header {
-            .ticket__detatails__btn__reply_ticket {
-                color: $white;
-                background-image: $gradient-background;
-                height: 33px;
-                width: 33px;
-                border-radius: $border-radius-50-percent;
-                background-color: #e9ecef;
-                border: 1px solid #dee2e6;
-
-                &:hover {
-                    box-shadow: $button-box-shadow;
-                }
-
-                i {
-                    font-size: $fs-12;
-                }
-            }
-
             .ticket__detatails__btn__bookmark {
                 height: 33px;
                 width: 33px;
@@ -1160,24 +1142,18 @@ a {
                 object-fit: cover;
             }
 
-            .ticket__details__user__picture__user__name__initial__reply {
+            .user__name__initial {
                 height: 30px;
-                width: 32px;
-                border-radius: $border-radius-50;
+                width: 30px;
+                border-radius: $border-radius-9;
                 box-shadow: $shadows-sm;
                 background-color: #24695c;
                 margin-right: 0.7rem;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-
-                .ticket__details__user__picture__user__name__initial__reply_sm {
-                    font-size: 10px;
-                    font-weight: $fw-600;
-                    color: $white;
-                    margin-top: 2px;
-                    letter-spacing: 1px;
-                }
+                border: 2px solid #d9ddd9;
+                font-size: $fs-12;
             }
 
             .reply__ticket__details__user__fullname {

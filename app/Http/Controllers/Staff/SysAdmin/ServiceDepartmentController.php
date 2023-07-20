@@ -24,7 +24,8 @@ class ServiceDepartmentController extends Controller
         $serviceDepartments = ServiceDepartment::orderBy('created_at', 'desc')->get();
         $buDepartments = Department::orderBy('name', 'desc')->get();
 
-        return view('layouts.staff.system_admin.manage.service_departments.service_department_index',
+        return view(
+            'layouts.staff.system_admin.manage.service_departments.service_department_index',
             compact([
                 'serviceDepartments',
                 'buDepartments',
@@ -47,7 +48,8 @@ class ServiceDepartmentController extends Controller
             ]
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeServiceDepartment')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeServiceDepartment')->withInput();
 
         $serviceDepartment->create([
             'department_id' => $request->input('bu_department'),

@@ -1,4 +1,4 @@
-@extends('layouts.user.base', ['title' => $ticket->subject ])
+@extends('layouts.staff.approver.base', ['title' => $ticket->subject])
 
 @section('main-content')
 <div class="row mx-0">
@@ -7,25 +7,25 @@
             <div class="mb-3 d-flex flex-column details__card__top">
                 @switch($ticket->status_id)
                 @case(App\Models\Status::OPEN)
-                <a href="{{ route('user.tickets.open_tickets') }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @break
-                @case(App\Models\Status::ON_PROCESS)
-                <a href="{{ route('user.tickets.on_process_tickets') }}" type="button"
+                <a href="{{ route('approver.tickets.open') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @break
                 @case(App\Models\Status::VIEWED)
-                <a href="{{ route('user.tickets.viewed_tickets') }}" type="button"
+                <a href="{{ route('approver.tickets.viewed') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @break
-                @case(App\Models\Status::CLOSED)
-                <a href="{{ route('user.tickets.closed_tickets') }}" type="button"
+                @case(App\Models\Status::APPROVED)
+                <a href="{{ route('approver.tickets.approved') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @break
+                @case(App\Models\Status::DISAPPROVED)
+                <a href="{{ route('approver.tickets.disapproved') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
@@ -38,12 +38,26 @@
                     </div>
                     <p class="mb-0 ticket__details__priority">{{ $ticket->priorityLevel->name }}</p>
                 </div>
-                <div class="d-flex flex-wrap justify-content-between ticket__details__header">
+                <div class="d-flex flex-wrap align-items-center justify-content-between ticket__details__header">
                     <div class="mb-2">
                         <h6 class="ticket__details__title mb-0">{{ $ticket->subject }}</h6>
                         <small class="ticket__details__datetime">{{ $ticket->dateCreated() }},
                             {{ $ticket->created_at->format('D') }} @ {{ $ticket->created_at->format('g:i A') }}</small>
                     </div>
+                    @if ($ticket->status_id !== App\Models\Status::APPROVED && $ticket->approval_status !==
+                    App\Models\ApprovalStatus::APPROVED)
+                    <form action="{{ route('approver.ticket.ticketDetialsApproveTicket', $ticket->id) }}" method="post">
+                        @csrf
+                        <div class="d-flex flex-wrap align-items-center justify-content-center gap-3">
+                            <button type="submit" class="btn btn-sm btn__disapprove__ticket">
+                                Disapprove
+                            </button>
+                            <button type="submit" class="btn btn-sm shadow btn__approve__ticket">
+                                Approve
+                            </button>
+                        </div>
+                    </form>
+                    @endif
                 </div>
             </div>
             <div class="row">
@@ -79,8 +93,9 @@
                                 <i class="fa-solid fa-file-zipper"></i>
                                 <small class="attachment__count">{{ $ticket->fileAttachments->count() }}</small>
                                 <small class="attachment__label">
-                                    {{ $ticket->fileAttachments->count() > 1 ? 'file attachments' : 'file attachement'
-                                    }}
+                                    {{ $ticket->fileAttachments->count() > 1
+                                    ? 'file attachments'
+                                    : 'file attachement' }}
                                 </small>
                             </div>
                             @endif
@@ -88,42 +103,53 @@
                     </div>
                     <div class="mb-2 mt-4">
                         <small class="ticket__discussions text-muted">
-                            {{ $ticket->replies->count() > 1 ? 'Discussions' : 'Discussion' }}
-                            ({{ $ticket->replies->count() }})
+                            {{ $ticket->clarifications->count() > 1 ? 'Discussions' : 'Discussion' }}
+                            ({{ $ticket->clarifications->count() }})
                         </small>
                     </div>
                     {{-- Replies/Comments --}}
-                    @include('layouts.user.ticket.includes.ticket_replies')
-                    <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
-                        justify-content-center gap-2" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasRequesterReplyTicketForm" aria-controls="offcanvasBottom">
+                    @include('layouts.staff.approver.ticket.includes.ticket_clarifications')
+                    @if ($ticket->clarifications->count() === 0)
+                    <div class="row align-items-center bg-light p-2 py-1 rounded-3 mx-1 mt-2 mb-4">
+                        <div class="col-md-8">
+                            <p class="mb-0" style="font-size: 13px; line-height: 13px;">
+                                If you have any questions or clarifications, or any other matters with regards to this
+                                ticket,
+                                you can connect with {{ $ticket->user->profile->first_name }}.
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <div
+                                class="d-flex align-items-center justify-content-start justify-content-lg-end justify-content-md-end">
+                                <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center
+                                justify-content-center gap-2" data-bs-toggle="offcanvas"
+                                    data-bs-target="#offcanvasTicketClarificationForm" aria-controls="offcanvasBottom">
+                                    <i class="fa-solid fa-pen"></i>
+                                    <span class="lbl__reply">Connect with {{ $ticket->user->profile->first_name
+                                        }}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    @else
+                    <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center
+                                                    justify-content-center gap-2" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasTicketClarificationForm" aria-controls="offcanvasBottom">
                         <i class="fa-solid fa-pen"></i>
                         <span class="lbl__reply">Reply</span>
                     </button>
+                    @endif
                     {{-- End Replies/Comments --}}
                 </div>
                 <div class="col-md-4">
                     <div class="container__ticket__details__right">
-                        @include('layouts.user.ticket.includes.ticket_details')
-                        @include('layouts.user.ticket.includes.ticket_assigned_agent')
+                        @include('layouts.staff.approver.ticket.includes.ticket_details')
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@include('layouts.user.ticket.includes.modal.preview_ticket_files_modal')
-@include('layouts.user.ticket.includes.offcanvas.reply_ticket_offcanvas')
+@include('layouts.staff.approver.ticket.includes.modal.preview_ticket_files_modal')
+@include('layouts.staff.approver.ticket.includes.offcanvas.ticket_clarifications_offcanvas')
 @endsection
-
-@if ($errors->requesterStoreTicketReply->any())
-@push('offcanvas-error')
-<script>
-    $(function () {
-        var offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRequesterReplyTicketForm'));
-        offcanvas.show();
-    });
-
-</script>
-@endpush
-@endif

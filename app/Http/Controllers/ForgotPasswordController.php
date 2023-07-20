@@ -10,6 +10,4 @@ class ForgotPasswordController extends Controller
     {
         return view('layouts.auth.forgot_password');
     }
-
-    
 }

@@ -408,23 +408,18 @@ body {
   -o-object-fit: cover;
      object-fit: cover;
 }
-.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header .ticket__details__user__picture__user__name__initial__reply {
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header .user__name__initial {
   height: 30px;
-  width: 32px;
-  border-radius: 3.125rem;
+  width: 30px;
+  border-radius: 0.563rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
   background-color: #24695c;
   margin-right: 0.7rem;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header .ticket__details__user__picture__user__name__initial__reply .ticket__details__user__picture__user__name__initial__reply_sm {
-  font-size: 10px;
-  font-weight: 600;
-  color: #FFFFFF;
-  margin-top: 2px;
-  letter-spacing: 1px;
+  border: 2px solid #d9ddd9;
+  font-size: 0.75rem;
 }
 .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header .reply__ticket__details__user__fullname {
   font-size: 0.813rem;
@@ -642,9 +637,11 @@ body {
   border-radius: 3.125rem;
 }
 .custom__reply__ticket__offcanvas .reply__ticket__info .user__name__initial {
+  font-size: 0.75rem;
   height: 30px !important;
   width: 30px !important;
-  border-radius: 3.125rem;
+  border-radius: 0.563rem;
+  border: 2px solid #d9ddd9;
 }
 .custom__reply__ticket__offcanvas .reply__ticket__info .time__sent {
   font-size: 0.75rem;

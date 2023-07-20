@@ -21,7 +21,8 @@ class AccountsController extends Controller
         $departments = Department::orderBy('name', 'asc')->get();
         $branches = Branch::orderBy('name', 'asc')->get();
 
-        return view('layouts.staff.system_admin.manage.accounts.account_main',
+        return view(
+            'layouts.staff.system_admin.manage.accounts.account_main',
             compact([
                 'approvers',
                 'serviceDepartmentAdmins',

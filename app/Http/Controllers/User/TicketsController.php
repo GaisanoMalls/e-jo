@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\Requester\Tickets;
 use App\Http\Traits\TicketNumberGenerator;
 use App\Models\ApprovalStatus;
 use App\Models\Branch;
@@ -23,78 +24,124 @@ use Illuminate\Support\Facades\Validator;
 class TicketsController extends Controller
 {
     use TicketNumberGenerator;
+    use Tickets;
 
     public function openTickets()
     {
-
-        $tickets = Ticket::with(['replies', 'priorityLevel'])
-                         ->where('user_id', auth()->user()->id)
-                         ->orderBy('created_at', 'desc')
-                         ->get();
-
-        $openTickets = $tickets->where('status_id', Status::OPEN);
-
         // For ticket count purpose
-        $onProcessTickets = $tickets->where('status_id', Status::ON_PROCESS);
-        $closedTickets = $tickets->where('status_id', Status::CLOSED);
+        $onProcessTickets = $this->getOnProcessTickets();
+        $closedTickets = $this->getClosedTickets();
+        $viewedTickets = $this->getViewedTickets();
+        $approvedTickets = $this->getApprovedTickets();
 
-        return view('layouts.user.ticket.statuses.open_tickets',
+        $openTickets = $this->getOpenTickets();
+
+
+        return view(
+            'layouts.user.ticket.statuses.open_tickets',
             compact([
-                'openTickets',
                 'onProcessTickets',
-                'closedTickets'
+                'closedTickets',
+                'viewedTickets',
+                'approvedTickets',
+                'openTickets',
             ])
         );
     }
 
     public function onProcessTickets()
     {
-        $tickets = Ticket::with(['replies', 'priorityLevel'])
-                        ->where('user_id', auth()->user()->id)
-                        ->orderBy('created_at', 'desc')
-                        ->get();
-
-        $onProcessTickets = $tickets->where('status_id', Status::ON_PROCESS);
-
         // For ticket count purpose
-        $openTickets = $tickets->where('status_id', Status::OPEN);
-        $closedTickets = $tickets->where('status_id', Status::CLOSED);
+        $openTickets = $this->getOpenTickets();
+        $closedTickets = $this->getClosedTickets();
+        $viewedTickets = $this->getViewedTickets();
+        $approvedTickets = $this->getApprovedTickets();
 
-        return view('layouts.user.ticket.statuses.on_process_tickets',
+        $onProcessTickets = $this->getOnProcessTickets();
+
+        return view(
+            'layouts.user.ticket.statuses.on_process_tickets',
             compact([
-                'onProcessTickets',
                 'openTickets',
-                'closedTickets'
+                'closedTickets',
+                'viewedTickets',
+                'approvedTickets',
+                'onProcessTickets',
+            ])
+        );
+    }
+
+    public function viewedTickets()
+    {
+        // For ticket count purpose
+        $openTickets = $this->getOpenTickets();
+        $onProcessTickets = $this->getOnProcessTickets();
+        $closedTickets = $this->getClosedTickets();
+        $approvedTickets = $this->getApprovedTickets();
+
+        $viewedTickets = $this->getViewedTickets();
+
+        return view(
+            'layouts.user.ticket.statuses.viewed_tickets',
+            compact([
+                'openTickets',
+                'onProcessTickets',
+                'closedTickets',
+                'approvedTickets',
+                'viewedTickets',
+            ])
+        );
+    }
+
+    public function approvedTickets()
+    {
+        // For ticket count purpose
+        $openTickets = $this->getOpenTickets();
+        $onProcessTickets = $this->getOnProcessTickets();
+        $closedTickets = $this->getClosedTickets();
+        $viewedTickets = $this->getViewedTickets();
+
+        $approvedTickets = $this->getApprovedTickets();
+
+
+        return view(
+            'layouts.user.ticket.statuses.approved_tickets',
+            compact([
+                'openTickets',
+                'onProcessTickets',
+                'closedTickets',
+                'viewedTickets',
+                'approvedTickets',
             ])
         );
     }
 
     public function closedTickets()
     {
-        $tickets = Ticket::with(['replies', 'priorityLevel'])
-                         ->where('user_id', auth()->user()->id)
-                         ->orderBy('created_at', 'desc')
-                         ->get();
-
-        $closedTickets = $tickets->where('status_id', Status::CLOSED);
-
         // For ticket count purpose
-        $openTickets = $tickets->where('status_id', Status::OPEN);
-        $onProcessTickets = $tickets->where('status_id', Status::ON_PROCESS);
+        $openTickets = $this->getOpenTickets();
+        $onProcessTickets = $this->getOnProcessTickets();
+        $viewedTickets = $this->getViewedTickets();
+        $approvedTickets = $this->getApprovedTickets();
 
+        $closedTickets = $this->getClosedTickets();
 
-        return view('layouts.user.ticket.statuses.closed_tickets',
+        return view(
+            'layouts.user.ticket.statuses.closed_tickets',
             compact([
-                'closedTickets',
                 'openTickets',
                 'onProcessTickets',
+                'viewedTickets',
+                'approvedTickets',
+                'closedTickets',
             ])
         );
     }
 
     public function store(Request $request, Ticket $ticket)
     {
-        $validator = Validator::make($request->all(),
+        $validator = Validator::make(
+            $request->all(),
             [
                 'service_department' => ['required'],
                 'help_topic' => ['required'],
@@ -110,7 +157,8 @@ class TicketsController extends Controller
             ]
         );
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeTicket')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeTicket')->withInput();
 
         $ticket = Ticket::create([
             'user_id' => Auth::user()->id,
@@ -150,11 +198,12 @@ class TicketsController extends Controller
         })->where('id', $ticketId)->first();
 
         $latestReply = Reply::where('ticket_id', $ticketId)
-                            ->where('user_id', '!=', auth()->user()->id)
-                            ->orderBy('created_at', 'desc')
-                            ->first();
+            ->where('user_id', '!=', auth()->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
 
-        return view('layouts.user.ticket.view_ticket',
+        return view(
+            'layouts.user.ticket.view_ticket',
             compact([
                 'ticket',
                 'latestReply'
@@ -169,7 +218,8 @@ class TicketsController extends Controller
             'replyFiles.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000']
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'requesterStoreTicketReply')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'requesterStoreTicketReply')->withInput();
 
         $ticket->update(['status_id' => Status::ON_PROCESS]);
 

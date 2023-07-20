@@ -30,13 +30,13 @@ class BranchController extends Controller
     }
 
     public function edit(EditBranchRequest $request, Branch $branch)
-    {   
+    {
         $branch->update(['name' => $request['name']]);
         return back();
     }
 
     public function delete(Branch $branch)
-    {   
+    {
         try {
             $branch->delete();
             return back()->with('success', 'Branch successfully deleted.');

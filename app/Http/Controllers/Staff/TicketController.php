@@ -18,10 +18,10 @@ class TicketController extends Controller
     public function openTickets()
     {
         $openTickets = Ticket::with(['replies', 'priorityLevel', 'user'])
-                             ->where('status_id', Status::OPEN)
-                             ->where('approval_status', ApprovalStatus::APPROVED)
-                             ->orderBy('created_at', 'desc')
-                             ->get();
+            ->where('status_id', Status::OPEN)
+            ->where('approval_status', ApprovalStatus::APPROVED)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('layouts.staff.ticket.statuses.open_tickets', compact('openTickets'));
     }
@@ -29,10 +29,10 @@ class TicketController extends Controller
     public function onProcessTickets()
     {
         $onProcessTickets = Ticket::with(['replies', 'priorityLevel', 'user'])
-                                  ->where('status_id', Status::ON_PROCESS)
-                                  ->where('approval_status', ApprovalStatus::APPROVED)
-                                  ->orderBy('updated_at', 'desc')
-                                  ->get();
+            ->where('status_id', Status::ON_PROCESS)
+            ->where('approval_status', ApprovalStatus::APPROVED)
+            ->orderBy('updated_at', 'desc')
+            ->get();
 
         return view('layouts.staff.ticket.statuses.on_process_tickets', compact('onProcessTickets'));
     }
@@ -40,8 +40,8 @@ class TicketController extends Controller
     public function approvedTickets()
     {
         $approvedTickets = Ticket::where('approval_status', ApprovalStatus::APPROVED)
-                                  ->orderBy('updated_at', 'desc')
-                                  ->get();
+            ->orderBy('updated_at', 'desc')
+            ->get();
         return view('layouts.staff.ticket.statuses.approved_tickets', compact('approvedTickets'));
     }
 
@@ -54,11 +54,12 @@ class TicketController extends Controller
         })->where('id', $ticketId)->first();
 
         $latestReply = Reply::where('ticket_id', $ticketId)
-                        ->where('user_id', '!=', auth()->user()->id)
-                        ->orderBy('created_at', 'desc')
-                            ->first();
+            ->where('user_id', '!=', auth()->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
 
-        return view('layouts.staff.ticket.view_ticket',
+        return view(
+            'layouts.staff.ticket.view_ticket',
             compact([
                 'ticket',
                 'departments',
@@ -75,13 +76,14 @@ class TicketController extends Controller
             'replyFiles.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000']
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeTicketReply')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeTicketReply')->withInput();
 
         $ticket->update(['status_id' => Status::ON_PROCESS]);
 
         $reply = Reply::create([
-            'ticket_id' => (int) $ticket->id,
-            'user_id' => (int) auth()->user()->id,
+            'user_id' => auth()->user()->id,
+            'ticket_id' => $ticket->id,
             'description' => $request->input('description')
         ]);
 

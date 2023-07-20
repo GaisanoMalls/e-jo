@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Traits;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -51,7 +52,7 @@ trait AuthUserAccount
 
     public function authUserUpdatePassword(string $current, string $new)
     {
-        if (!Hash::check($current, Auth::user()->password)){
+        if (!Hash::check($current, Auth::user()->password)) {
             return back()->with('error', 'Current password not matched. Please try again.');
         }
 

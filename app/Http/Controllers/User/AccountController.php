@@ -17,8 +17,8 @@ class AccountController extends Controller
     public function profile()
     {
         $tickets = Ticket::where('user_id', auth()->user()->id)
-                         ->orderBy('created_at', 'desc')
-                         ->get();
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         $allTickets = $tickets;
         $openTickets = $tickets->where('status_id', Status::OPEN);

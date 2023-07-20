@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Traits\SysAdmin;
+
 use App\Http\Traits\SlugGenerator;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;

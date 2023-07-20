@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Validator;
 class TagController extends Controller
 {
     public function index()
-    {   
+    {
         $tags = Tag::orderBy('created_at', 'desc')->get();
-        return view('layouts.staff.system_admin.manage.tags.tag_index',
+        return view(
+            'layouts.staff.system_admin.manage.tags.tag_index',
             compact([
                 'tags'
             ])
@@ -25,7 +26,8 @@ class TagController extends Controller
             'name' => ['required', 'unique:tags,name'],
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeTag')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeTag')->withInput();
 
         $tag->create([
             'name' => $request->input('name'),

@@ -7,14 +7,14 @@ const updatePasswordForm = document.querySelector('#updatePasswordForm');
 
 const submitForm = async (e) => {
     e.preventDefault();
-    
+
     const formActionURL = updatePasswordForm.getAttribute('action');
     const formData = new FormData(updatePasswordForm);
 
     axios.post(formActionURL, formData)
         .then((response) => {
             const errorElements = updatePasswordForm.getElementsByClassName('custom__field__message');
-            
+
             for (let i = 0; i < errorElements.length; i++) {
                 errorElements[i].textContent = '';
             }
@@ -27,7 +27,7 @@ const submitForm = async (e) => {
         })
         .catch((error) => {
             if (error.response) {
-                
+
                 const errors = error.response.data.errors;
                 Object.keys(errors).forEach(field => {
                     const errorElement = document.getElementById(`${field}Error`);
@@ -36,7 +36,7 @@ const submitForm = async (e) => {
                         successMessage.style.display = 'none';
                     }
                 });
-                
+
                 resetForm();
             }
         })
@@ -56,7 +56,7 @@ const submitForm = async (e) => {
     // } catch (error) {
     //     if (error.response) {
     //         const errors = error.response.data.errors;
-           
+
     //         Object.keys(errors).forEach(field => {
     //             const errorElement = document.getElementById(`${field}Error`);
     //             if (errorElement) {

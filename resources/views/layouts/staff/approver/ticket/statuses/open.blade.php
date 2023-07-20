@@ -7,12 +7,6 @@
             <h5 class="page__header__title">For Approval</h5>
             <small class="fw-semibold mb-1" id="countSelectedChbx" style="color: #d32839;"></small>
         </div>
-        <div class="d-flex align-items-center justify-content-center">
-            <button class="btn d-flex align-items-center justify-content-center gap-2 btn__approve__all__tickets">
-                <i class="fa-solid fa-check-double"></i>
-                Approve all
-            </button>
-        </div>
     </div>
 </div>
 <div class="row mx-0">
@@ -34,17 +28,16 @@
                 <tbody>
                     @foreach ($forApprovalTickets as $ticket)
                     @if ($ticket->approval_status === 'for_approval')
-                    <tr>
+                    <tr class="clickable_tr" data-ticket-id="{{ $ticket->id }}"
+                        onclick="window.location='{{ route('approver.ticket.viewTicketDetails', $ticket->id) }}'">
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
                             <p class="mb-0">
-                                {{ $ticket->dateCreated() }}
-                                @
-                                {{ $ticket->created_at->format('g:i A') }}
+                                {{ $ticket->dateCreated() }} @ {{ $ticket->created_at->format('g:i A') }}
                             </p>
                         </td>
-                        <td class="custom__table__data">
+                        <td class="custom__table__data clickable_td">
                             <p class="mb-0">{{ $ticket->ticket_number }}</p>
                         </td>
                         <td class="custom__table__data">
@@ -95,12 +88,10 @@
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
                             <p class="mb-0">
-                                {{ $ticket->dateCreated() }}
-                                @
-                                {{ $ticket->created_at->format('g:i A') }}
+                                {{ $ticket->dateCreated() }} @ {{ $ticket->created_at->format('g:i A') }}
                             </p>
                         </td>
-                        <td class="custom__table__data">
+                        <td class="custom__table__data clickable_td" data-ticket-id="{{ $ticket->id }}">
                             <p class="mb-0">{{ $ticket->ticket_number }}</p>
                         </td>
                         <td class="custom__table__data">

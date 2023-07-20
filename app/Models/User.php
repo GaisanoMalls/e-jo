@@ -189,8 +189,8 @@ class User extends Authenticatable
     public function helpTopics()
     {
         return $this->belongsToMany(HelpTopic::class, 'help_topic_level_approvers', 'approver_id', 'help_topic_id')
-                    ->using(HelpTopicLevelApprover::class)
-                    ->withTimestamps();
+            ->using(HelpTopicLevelApprover::class)
+            ->withTimestamps();
     }
 
     public function dateCreated()
@@ -203,7 +203,7 @@ class User extends Authenticatable
         $created_at = Carbon::parse($this->created_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         $updated_at = Carbon::parse($this->updated_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         return $updated_at === $created_at
-        ? "----"
-        : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
+            ? "----"
+            : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
     }
 }

@@ -8,7 +8,7 @@ trait TicketNumberGenerator
 {
     public static function generatedTicketNumber()
     {
-        return  self::alphaNum() . "-" . self::currentMonth();
+        return self::alphaNum() . "-" . self::currentMonth();
     }
 
     private static function currentMonth(): string
@@ -33,6 +33,6 @@ trait TicketNumberGenerator
             }
         }
 
-        throw new Exception('Unable to generate a unique value after '.$maxAttempts.' attempts.');
+        throw new Exception('Unable to generate a unique value after ' . $maxAttempts . ' attempts.');
     }
 }

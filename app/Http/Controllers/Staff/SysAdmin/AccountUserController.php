@@ -16,7 +16,8 @@ class AccountUserController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),
+        $validator = Validator::make(
+            $request->all(),
             [
                 'department' => ['required'],
                 'branch' => ['required'],
@@ -35,7 +36,8 @@ class AccountUserController extends Controller
             ]
         );
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeUser')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeUser')->withInput();
 
         $user = User::create([
             'department_id' => (int) $request->input('department'),

@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Validator;
 class SLAController extends Controller
 {
     public function index()
-    {      
+    {
         $slas = ServiceLevelAgreement::orderBy('created_at', 'desc')->get();
-        return view('layouts.staff.system_admin.manage.sla.sla_index',
+        return view(
+            'layouts.staff.system_admin.manage.sla.sla_index',
             compact([
                 'slas'
             ])
@@ -26,7 +27,8 @@ class SLAController extends Controller
             'time_unit' => ['required', 'unique:service_level_agreements,time_unit']
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeSLA')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeSLA')->withInput();
 
         $sla->create([
             'countdown_approach' => $request->input('countdown_approach'),
@@ -35,7 +37,7 @@ class SLAController extends Controller
 
         return back()->with('success', 'A new SLA is created.');
     }
-    
+
     public function delete(ServiceLevelAgreement $sla)
     {
         try {

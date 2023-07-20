@@ -22,7 +22,8 @@ class TicketStatusController extends Controller
             'color' => ['required', 'unique:statuses,color']
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeTicketStatus')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeTicketStatus')->withInput();
 
         $status->create($request->all());
 

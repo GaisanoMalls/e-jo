@@ -1,19 +1,22 @@
-@extends('layouts.user.base', ['title' => 'On Process Tickets'])
-
-@section('ticket-list-header')
-<h5 class="mb-0 content__title">On Process Tickets</h5>
-@endsection
-
-@section('count-items')
-<small class="count-item">{{ $onProcessTickets->count() }} items</small>
-@endsection
+@extends('layouts.staff.approver.base', ['title' => 'Disapproved Tickets'])
 
 @section('main-content')
+<div class="row">
+    <div class="mb-4 d-flex flex-wrap justify-content-between">
+        <div class="d-flex align-items-center gap-4">
+            <h5 class="page__header__title">Disapproved Tickets</h5>
+            <small class="fw-semibold mb-1" id="countSelectedChbx" style="color: #d32839;"></small>
+        </div>
+        <div class="d-flex align-items-center justify-content-center">
+            <small class="count-item">{{ $disapprovedTickets->count() }} items</small>
+        </div>
+    </div>
+</div>
 <div class="row mx-0">
-    @if ($onProcessTickets->count() > 0)
+    @if ($disapprovedTickets->count() > 0)
     <div class="card ticket__card" id="userTicketCard">
         <div class="table-responsive">
-            <table class="table mb-0 custom__table" id="userTable">
+            <table class="table mb-0 custom__table" id="approverTable">
                 <thead>
                     <tr>
                         <th class="table__head__label">Date Created</th>
@@ -22,23 +25,23 @@
                         <th class="table__head__label">Subject</th>
                         <th class="table__head__label">Assigned To</th>
                         <th class="table__head__label">Priority Level</th>
+                        <th class="table__head__label">Approval Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($onProcessTickets as $ticket)
-                    <tr
-                        onclick="window.location='{{ route('user.ticket.view_ticket', [$ticket->status->slug, $ticket->id]) }}'">
+                    @foreach ($disapprovedTickets as $ticket)
+                    <tr>
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
-                            <p class="mb-0">{{ $ticket->dateCreated() }}</p>
+                            <p class="mb-0">
+                                {{ $ticket->dateCreated() }}
+                                @
+                                {{ $ticket->created_at->format('g:i A') }}
+                            </p>
                         </td>
-                        <td class="custom__table__data d-flex gap-3">
+                        <td class="custom__table__data">
                             <p class="mb-0">{{ $ticket->ticket_number }}</p>
-                            <div class="d-flex align-items-center gap-2 text-muted">
-                                <i class="fa-regular fa-comment-dots"></i>
-                                <small>{{ $ticket->replies->count() }}</small>
-                            </div>
                         </td>
                         <td class="custom__table__data">
                             <p class="mb-0">{{ $ticket->user->department->name }}</p>
@@ -57,6 +60,13 @@
                             <p class="mb-0" style="color: {{ $ticket->priorityLevel->color }};">
                                 {{ $ticket->priorityLevel->name ?? '' }}</p>
                         </td>
+                        <td class="custom__table__data py-0">
+                            <small class="rounded-5"
+                                style="background-color: red; color: #FFFFFF; font-size: 11px; padding: 7px 12px;">
+                                <i class="fa-solid fa-xmark me-1"></i>
+                                Disapproved
+                            </small>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -64,8 +74,8 @@
         </div>
     </div>
     @else
-    <div class="py-3 px-4 rounded-3" style="margin: 20px 0px; background-color: #e9ecef;">
-        <small style="font-size: 14px;">No on process tickets.</small>
+    <div class="py-3 px-4 rounded-3" style="background-color: #e9ecef;">
+        <small style="font-size: 14px;">No disapproved tickets.</small>
     </div>
     @endif
 </div>

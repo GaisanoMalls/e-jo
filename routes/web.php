@@ -242,8 +242,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
         Route::prefix('directory')->name('directory.')->group(function () {
             Route::controller(DirectoryController::class)->group(function () {
                 Route::get('/', 'index')->name('index');
-                Route::get('/approvers', 'approvers')->name('approvers');
                 Route::get('/agents', 'agents')->name('agents');
+                Route::get('/approvers', 'approvers')->name('approvers');
             });
         });
     });
@@ -257,11 +257,20 @@ Route::middleware(['auth', Role::approver()])->group(function () {
         Route::prefix('tickets')->name('tickets.')->group(function () {
             Route::controller(ApproverTicketsController::class)->group(function () {
                 Route::get('/open', 'openTickets')->name('open');
+                Route::get('/viewed', 'viewedTickets')->name('viewed');
                 Route::get('/approved', 'approvedTickets')->name('approved');
                 Route::get('/disapproved', 'disapprovedTickets')->name('disapproved');
 
-                Route::put('{ticket}/approve', 'approveTicket')->name('approve');
                 Route::put('{ticket}/reject', 'disapproveTicket')->name('reject');
+                Route::put('{ticket}/approve', 'approveTicket')->name('approve');
+                Route::put('{ticket}/update-status-as-viewed', 'ticketStatusToViewed');
+            });
+        });
+        Route::prefix('ticket')->name('ticket.')->group(function () {
+            Route::controller(ApproverTicketsController::class)->group(function () {
+                Route::get('/{ticketId}/view', 'viewTicketDetails')->name('viewTicketDetails');
+                Route::post('/{ticket}/approve', 'ticketDetialsApproveTicket')->name('ticketDetialsApproveTicket');
+                Route::post('/{ticket}/clarification', 'sendClarification')->name('sendClarification');
             });
         });
     });
@@ -275,29 +284,31 @@ Route::middleware(['auth', Role::user()])->group(function () {
             Route::controller(UserTicketsController::class)->group(function () {
                 Route::get('/open', 'openTickets')->name('open_tickets');
                 Route::get('/on-process', 'onProcessTickets')->name('on_process_tickets');
+                Route::get('/viewed', 'viewedTickets')->name('viewed_tickets');
+                Route::get('/approved', 'approvedTickets')->name('approved_tickets');
                 Route::get('/closed', 'closedTickets')->name('closed_tickets');
             });
         });
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(UserTicketsController::class)->group(function () {
-                Route::post('/store','store')->name('store');
-                Route::get('/{ticketStatusSlug}/{ticketId}/view', 'viewTicket')->name('view_ticket');
+                Route::post('/store', 'store')->name('store');
                 Route::post('/{ticket}/reply/store', 'requesterReplyTicket')->name('requesterStoreTicketReply');
+                Route::get('/{ticketStatusSlug}/{ticketId}/view', 'viewTicket')->name('view_ticket');
 
                 // Axios endpoints
                 Route::get('/branches', 'loadBranches');
+                Route::get('/{helpTopic}/sla', 'helpTopicSLA');
+                Route::get('/{helpTopic}/team', 'helpTopicTeam');
                 Route::get('/service-departments', 'loadServiceDepartments');
                 Route::get('/{serviceDepartment}/help-topics', 'serviceDepartmentHelpTopics');
-                Route::get('/{helpTopic}/team', 'helpTopicTeam');
-                Route::get('/{helpTopic}/sla', 'helpTopicSLA');
 
             });
         });
         Route::prefix('account-settings')->name('account_settings.')->group(function () {
             Route::controller(UserAccountSettingsController::class)->group(function () {
                 Route::get('/profile', 'profile')->name('profile');
-                Route::put('/profile/update', 'updateProfile')->name('updateProfile');
                 Route::get('/password', 'password')->name('password');
+                Route::put('/profile/update', 'updateProfile')->name('updateProfile');
                 Route::put('/password/update', 'updatePassword')->name('updatePassword');
             });
         });
@@ -309,8 +320,8 @@ Route::middleware(['auth', Role::user()])->group(function () {
     Route::prefix('feedback')->name('feedback.')->group(function () {
         Route::controller(FeedbackController::class)->group(function () {
             Route::get('/', 'index')->name('index');
-            Route::get('/my-reviews', 'reviews')->name('reviews');
             Route::get('/to-rate', 'ticketsToRate')->name('to_rate');
+            Route::get('/my-reviews', 'reviews')->name('reviews');
             Route::post('/rate/store', 'store')->name('store');
         });
     });

@@ -11,7 +11,8 @@ class RolesAndPermissionsController extends Controller
     public function index()
     {
         $users = User::with(['department', 'branch', 'role'])->orderBy('created_at', 'asc')->get();
-        return view('layouts.staff.system_admin.manage.roles_and_permissions.roles_and_permissions_index',
+        return view(
+            'layouts.staff.system_admin.manage.roles_and_permissions.roles_and_permissions_index',
             compact([
                 'users'
             ])

@@ -30,7 +30,8 @@ class AccountAgentController extends Controller
             'email' => ['required', 'max:80']
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeAgent')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeAgent')->withInput();
 
         $user = User::create([
             'branch_id' => $request['branch'],

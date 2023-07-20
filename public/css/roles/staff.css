@@ -826,21 +826,6 @@ a:hover {
   color: red;
   font-size: 0.813rem;
 }
-.ticket__section .ticket__details__container .ticket__details__header .ticket__detatails__btn__reply_ticket {
-  color: #ffffff;
-  background-image: linear-gradient(310deg, #d28b27 0%, #f7be44 100%);
-  height: 33px;
-  width: 33px;
-  border-radius: 3.125rem;
-  background-color: #e9ecef;
-  border: 1px solid #dee2e6;
-}
-.ticket__section .ticket__details__container .ticket__details__header .ticket__detatails__btn__reply_ticket:hover {
-  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
-}
-.ticket__section .ticket__details__container .ticket__details__header .ticket__detatails__btn__reply_ticket i {
-  font-size: 0.75rem;
-}
 .ticket__section .ticket__details__container .ticket__details__header .ticket__detatails__btn__bookmark {
   height: 33px;
   width: 33px;
@@ -924,23 +909,18 @@ a:hover {
   -o-object-fit: cover;
      object-fit: cover;
 }
-.ticket__section .card__ticket__details .ticket__details__card__header .ticket__details__user__picture__user__name__initial__reply {
+.ticket__section .card__ticket__details .ticket__details__card__header .user__name__initial {
   height: 30px;
-  width: 32px;
-  border-radius: 3.125rem;
+  width: 30px;
+  border-radius: 0.563rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
   background-color: #24695c;
   margin-right: 0.7rem;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.ticket__section .card__ticket__details .ticket__details__card__header .ticket__details__user__picture__user__name__initial__reply .ticket__details__user__picture__user__name__initial__reply_sm {
-  font-size: 10px;
-  font-weight: 600;
-  color: #ffffff;
-  margin-top: 2px;
-  letter-spacing: 1px;
+  border: 2px solid #d9ddd9;
+  font-size: 0.75rem;
 }
 .ticket__section .card__ticket__details .ticket__details__card__header .reply__ticket__details__user__fullname {
   font-size: 0.813rem;

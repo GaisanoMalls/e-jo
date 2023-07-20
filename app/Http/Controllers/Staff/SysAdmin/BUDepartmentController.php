@@ -12,7 +12,8 @@ class BUDepartmentController extends Controller
     public function index()
     {
         $buDepartments = Department::with('branches')->orderBy('created_at', 'desc')->get();
-        return view('layouts.staff.system_admin.manage.bu_departments.bu_department_index',
+        return view(
+            'layouts.staff.system_admin.manage.bu_departments.bu_department_index',
             compact([
                 'buDepartments'
             ])
@@ -34,7 +35,8 @@ class BUDepartmentController extends Controller
             ]
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeBUDepartment')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeBUDepartment')->withInput();
 
         $buDepartment->create([
             'name' => $request->input('name'),

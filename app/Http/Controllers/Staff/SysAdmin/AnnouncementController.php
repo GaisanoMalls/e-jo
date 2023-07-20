@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AnnouncementController extends Controller
 {
-     public function __construct()
+    public function __construct()
     {
         $this->middleware(['auth', Role::onlyServiceAndSystemAdmin()]);
     }
@@ -25,11 +25,12 @@ class AnnouncementController extends Controller
         $today_announcements = $annnouncements->whereDate('created_at', Carbon::today()->toDateString())->orderBy('created_at', 'desc')->get();
         $yesterday_announcements = $annnouncements->whereDate('created_at', Carbon::yesterday()->toDateString())->orderBy('created_at', 'desc')->get();
         $recent_announcements = $annnouncements->whereDate('created_at', '!=', Carbon::today()->toDateString())
-                                               ->whereDate('created_at', '!=', Carbon::yesterday()->toDateString())
-                                               ->orderBy('created_at', 'desc')
-                                               ->get();
+            ->whereDate('created_at', '!=', Carbon::yesterday()->toDateString())
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        return view('layouts.staff.system_admin.announcement.announcement_main',
+        return view(
+            'layouts.staff.system_admin.announcement.announcement_main',
             compact([
                 'departments',
                 'today_announcements',
@@ -50,7 +51,8 @@ class AnnouncementController extends Controller
             'is_draft' => ['boolean']
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeAnnouncement')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeAnnouncement')->withInput();
 
         $announcement->create([
             'title' => $request['title'],

@@ -8,6 +8,13 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="{{ route('approver.tickets.viewed') }}" class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
+                        {{ Route::is('approver.tickets.viewed') ? 'ticket__tab__link active' : '' }}">
+                <span class="ticket__count__tab">{{ $viewedTickets->count() }}</span>
+                Viewed
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ route('approver.tickets.approved') }}" class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
                 {{ Route::is('approver.tickets.approved') ? 'ticket__tab__link active' : '' }}">
                 <span class="ticket__count__tab">{{ $approvedTickets->count() }}</span>
@@ -19,18 +26,6 @@
                 {{ Route::is('approver.tickets.disapproved') ? 'ticket__tab__link active' : '' }}">
                 <span class="ticket__count__tab">{{ $disapprovedTickets->count() }}</span>
                 Disapproved
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link">
-                <span class="ticket__count__tab">13</span>
-                On Hold
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link" href="#">
-                <span class="ticket__count__tab">4</span>
-                On Process
             </a>
         </li>
     </ul>

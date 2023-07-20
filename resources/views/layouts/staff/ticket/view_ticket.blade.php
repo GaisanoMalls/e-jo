@@ -91,8 +91,8 @@
                                     </small>
                                 </div>
                             </div>
-                            <small
-                                class="ticket__details__time mt-2">{{ $ticket->created_at->diffForHumans(null, true) }}</small>
+                            <small class="ticket__details__time mt-2">{{ $ticket->created_at->diffForHumans(null, true)
+                                }}</small>
                         </div>
                         <div class="ticket__details__card__body">
                             <div class="ticket__description">{!! $ticket->description !!}</div>
@@ -102,7 +102,8 @@
                                 <i class="fa-solid fa-file-zipper"></i>
                                 <small class="attachment__count">{{ $ticket->fileAttachments->count() }}</small>
                                 <small class="attachment__label">
-                                    {{ $ticket->fileAttachments->count() > 1 ? 'file attachments' : 'file attachement' }}
+                                    {{ $ticket->fileAttachments->count() > 1 ? 'file attachments' : 'file attachement'
+                                    }}
                                 </small>
                             </div>
                             @endif
@@ -144,8 +145,8 @@
                                     @else
                                     <small class="pe-3 text-muted" style="font-size: 12px;">Sent</small>
                                     @endif
-                                    <small
-                                        class="ticket__details__time">{{ $reply->created_at->diffForHumans(null, true) }}</small>
+                                    <small class="ticket__details__time">{{ $reply->created_at->diffForHumans(null,
+                                        true) }}</small>
                                 </div>
                             </div>
                         </div>
@@ -215,8 +216,8 @@
                                     <div class="d-flex align-items-center justify-content-between">
                                         <small class="ticket__details__info__label" style="font-weight: 500;">
                                             Service department:</small>
-                                        <small
-                                            class="ticket__details__info">{{ $ticket->serviceDepartment->name }}</small>
+                                        <small class="ticket__details__info">{{ $ticket->serviceDepartment->name
+                                            }}</small>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <small class="ticket__details__info__label"
@@ -240,8 +241,8 @@
                                     <div class="d-flex align-items-center justify-content-between">
                                         <small class="ticket__details__info__label" style="font-weight: 500;">
                                             SLA:</small>
-                                        <small
-                                            class="ticket__details__info">{{ $ticket->sla->time_unit ?? '----' }}</small>
+                                        <small class="ticket__details__info">{{ $ticket->sla->time_unit ?? '----'
+                                            }}</small>
                                     </div>
                                 </div>
                             </div>

@@ -27,7 +27,8 @@ class AccountApproverController extends Controller
             'email' => ['required', 'max:80'],
         ]);
 
-        if ($validator->fails()) return back()->withErrors($validator, 'storeApprover')->withInput();
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeApprover')->withInput();
 
         $user = User::create([
             'branch_id' => $request->input('branch'),
@@ -65,7 +66,8 @@ class AccountApproverController extends Controller
         // !     - role is null
         // !     - suffix is null
 
-        $validator = Validator::make($request->all(),
+        $validator = Validator::make(
+            $request->all(),
             [
                 'branch' => ['required'],
                 'bu_department' => ['required'],

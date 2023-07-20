@@ -1,3 +1,6 @@
+const axios = require('axios').default;
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const countSelectedChbx = document.querySelector('#countSelectedChbx');
     const ticketCheckAll = document.querySelector('#ticketCheckAll');
@@ -60,8 +63,32 @@ document.addEventListener('DOMContentLoaded', function () {
         updateCount();
     }
 
-    ticketCheckAll.addEventListener('change', selectAllCheckboxes);
+    // ticketCheckAll.addEventListener('change', selectAllCheckboxes);
     ticketCheckBoxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', handleCheckboxChange);
     });
+
+
 });
+
+// Mark ticket as Viewed when clicked.
+document.addEventListener("DOMContentLoaded", function () {
+    const clickableTableRowCells = document.querySelectorAll('.clickable_tr');
+
+    clickableTableRowCells.forEach(tdCells => {
+        tdCells.addEventListener('click', function () {
+            const ticketId = this.getAttribute('data-ticket-id');
+            markTicketAsViewed(ticketId);
+        });
+    });
+});
+
+const markTicketAsViewed = (ticketId) => {
+    axios.put(`/approver/tickets/${ticketId}/update-status-as-viewed`)
+        .then((response) => {
+            //
+        })
+        .catch((error) => {
+            console.error(error.response.data.error);
+        });
+};

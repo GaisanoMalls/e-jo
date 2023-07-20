@@ -1,19 +1,16 @@
-@extends('layouts.staff.approver.base', ['title' => 'Disapproved Tickets'])
+@extends('layouts.staff.approver.base', ['title' => 'Open Tickets'])
 
 @section('main-content')
 <div class="row">
     <div class="mb-4 d-flex flex-wrap justify-content-between">
         <div class="d-flex align-items-center gap-4">
-            <h5 class="page__header__title">Approved Tickets</h5>
+            <h5 class="page__header__title">Viewed</h5>
             <small class="fw-semibold mb-1" id="countSelectedChbx" style="color: #d32839;"></small>
-        </div>
-        <div class="d-flex align-items-center justify-content-center">
-            <small class="count-item">{{ $disapprovedTickets->count() }} items</small>
         </div>
     </div>
 </div>
 <div class="row mx-0">
-    @if ($disapprovedTickets->count() > 0)
+    @if ($viewedTickets->count() > 0 )
     <div class="card ticket__card" id="userTicketCard">
         <div class="table-responsive">
             <table class="table mb-0 custom__table" id="approverTable">
@@ -25,22 +22,20 @@
                         <th class="table__head__label">Subject</th>
                         <th class="table__head__label">Assigned To</th>
                         <th class="table__head__label">Priority Level</th>
-                        <th class="table__head__label">Approval Status</th>
+                        <th class="table__head__label">Action/Approval Status</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($disapprovedTickets as $ticket)
-                    <tr>
+                    @foreach ($viewedTickets as $ticket)
+                    <tr onclick="window.location='{{ route('approver.ticket.viewTicketDetails', $ticket->id) }}'">
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
                             <p class="mb-0">
-                                {{ $ticket->dateCreated() }}
-                                @
-                                {{ $ticket->created_at->format('g:i A') }}
+                                {{ $ticket->dateCreated() }} @ {{ $ticket->created_at->format('g:i A') }}
                             </p>
                         </td>
-                        <td class="custom__table__data">
+                        <td class="custom__table__data clickable_td">
                             <p class="mb-0">{{ $ticket->ticket_number }}</p>
                         </td>
                         <td class="custom__table__data">
@@ -61,11 +56,24 @@
                                 {{ $ticket->priorityLevel->name ?? '' }}</p>
                         </td>
                         <td class="custom__table__data py-0">
-                            <small class="rounded-5"
-                                style="background-color: red; color: #FFFFFF; font-size: 11px; padding: 7px 12px;">
-                                <i class="fa-solid fa-xmark me-1"></i>
-                                Disapproved
-                            </small>
+                            @if ($ticket->approval_status === 'for_approval')
+                            <div class="d-flex align-items-center justify-content-start gap-2">
+                                <form action="{{ route('approver.tickets.reject', $ticket->id) }}" method="post">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-sm btn__disapprove__ticket">
+                                        Disapprove
+                                    </button>
+                                </form>
+                                <form action="{{ route('approver.tickets.approve', $ticket->id) }}" method="post">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-sm shadow btn__approve__ticket">
+                                        Approve
+                                    </button>
+                                </form>
+                            </div>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -75,7 +83,7 @@
     </div>
     @else
     <div class="py-3 px-4 rounded-3" style="background-color: #e9ecef;">
-        <small style="font-size: 14px;">No disapproved tickets.</small>
+        <small style="font-size: 14px;">No tickets.</small>
     </div>
     @endif
 </div>

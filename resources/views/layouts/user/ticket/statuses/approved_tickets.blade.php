@@ -1,16 +1,16 @@
-@extends('layouts.user.base', ['title' => 'On Process Tickets'])
+@extends('layouts.user.base', ['title' => 'Approved Tickets'])
 
 @section('ticket-list-header')
-<h5 class="mb-0 content__title">On Process Tickets</h5>
+<h5 class="mb-0 content__title">Approved Tickets</h5>
 @endsection
 
 @section('count-items')
-<small class="count-item">{{ $onProcessTickets->count() }} items</small>
+<small class="count-item">{{ $approvedTickets->count() }} items</small>
 @endsection
 
 @section('main-content')
 <div class="row mx-0">
-    @if ($onProcessTickets->count() > 0)
+    @if ($approvedTickets->count() > 0)
     <div class="card ticket__card" id="userTicketCard">
         <div class="table-responsive">
             <table class="table mb-0 custom__table" id="userTable">
@@ -25,7 +25,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($onProcessTickets as $ticket)
+                    @foreach ($approvedTickets as $ticket)
                     <tr
                         onclick="window.location='{{ route('user.ticket.view_ticket', [$ticket->status->slug, $ticket->id]) }}'">
                         <td class="custom__table__data">
@@ -65,7 +65,7 @@
     </div>
     @else
     <div class="py-3 px-4 rounded-3" style="margin: 20px 0px; background-color: #e9ecef;">
-        <small style="font-size: 14px;">No on process tickets.</small>
+        <small style="font-size: 14px;">No on viewed tickets.</small>
     </div>
     @endif
 </div>
