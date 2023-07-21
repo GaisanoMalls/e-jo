@@ -989,22 +989,6 @@ a {
                 .td__content {
                     padding: 9px 20px;
                     height: 50px;
-
-                    .ticket__checkbox {
-                        height: 15px;
-                        width: 15px;
-                        box-shadow: none;
-                        outline: none;
-
-                        &:hover {
-                            cursor: default;
-                        }
-
-                        &:checked {
-                            background-color: $color-1;
-                            border: 0;
-                        }
-                    }
                 }
 
                 .ticket__list__status__line {
@@ -1020,10 +1004,8 @@ a {
                 }
 
                 .ticket__tr {
-                    .clickable {
-                        :hover {
-                            cursor: pointer;
-                        }
+                    :hover {
+                        cursor: pointer;
                     }
                 }
             }

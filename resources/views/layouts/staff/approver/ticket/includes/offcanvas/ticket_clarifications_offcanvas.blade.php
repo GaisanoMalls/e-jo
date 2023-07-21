@@ -31,7 +31,7 @@
             <div class="ticket__description" style="font-size: 13px;">{!! $latestClarification->description !!}</div>
         </div>
         @endif
-        <form action="{{ route('approver.ticket.sendClarification', $ticket->id) }}" method="post"
+        <form action="{{ route('approver.ticket.send_clarification', $ticket->id) }}" method="post"
             enctype="multipart/form-data">
             @csrf
             <textarea id="myeditorinstance" name="description" placeholder="Type here..."></textarea>

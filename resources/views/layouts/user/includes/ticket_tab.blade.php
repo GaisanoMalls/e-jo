@@ -28,16 +28,16 @@
                 Approved
             </a>
         </li>
-
         <li class="nav-item">
-            <a class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link" href="#">
-                <span class="ticket__count__tab">8</span>
+            <a href="{{ route('user.tickets.disapproved_tickets') }}" class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
+                {{ Route::is('user.tickets.disapproved_tickets') ? 'active' : '' }}">
+                <span class="ticket__count__tab">{{ $disapprovedTickets->count() }}</span>
                 Disapproved
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link" href="#">
-                <span class="ticket__count__tab">4</span>
+                <span class="ticket__count__tab">0</span>
                 Reopened
             </a>
         </li>

@@ -41,7 +41,7 @@
                         <table class="table table-striped mb-0" id="table">
                             <thead>
                                 <tr>
-                                    <th class="border-0 table__head__label" style="padding: 17px 30px 17px 63px;">
+                                    <th class="border-0 table__head__label" style="padding: 17px 30px">
                                         Date Created
                                     </th>
                                     <th class="border-0 table__head__label" style="padding: 17px 30px;">
@@ -63,22 +63,20 @@
                             </thead>
                             <tbody>
                                 @foreach ($approvedTickets as $ticket)
-                                <tr class="ticket__tr">
+                                <tr class="ticket__tr"
+                                    onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'">
                                     <td class="position-relative">
                                         <div class="ticket__list__status__line"
                                             style="background-color: {{ $ticket->priorityLevel->color }};">
                                         </div>
                                         <div class="d-flex align-items-center text-start td__content">
-                                            <input class="form-check-input mb-2 me-3 ticket__checkbox" type="checkbox"
-                                                value="{{ $ticket->id }}" id="flexCheckDefault">
                                             <span>
                                                 {{ $ticket->dateCreated() }} @
                                                 {{ $ticket->created_at->format('g:i A') }}
                                             </span>
                                         </div>
                                     </td>
-                                    <td class="clickable"
-                                        onclick="window.location='{{ route('staff.ticket.view_ticket', [$ticket->status->slug, $ticket->id]) }}'">
+                                    <td>
                                         <div class="d-flex align-items-center text-start gap-3 td__content">
                                             <span>{{ $ticket->ticket_number }}</span>
                                             <div class="d-flex align-items-center gap-2 text-muted">
@@ -87,7 +85,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="clickable">
+                                    <td>
                                         <div class="d-flex align-items-center text-start td__content">
                                             <span>
                                                 {{ $ticket->user->department->name }} -
@@ -113,8 +111,8 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center text-start td__content">
-                                            <span
-                                                style="color: {{ $ticket->priorityLevel->color }};">{{ $ticket->priorityLevel->name }}</span>
+                                            <span style="color: {{ $ticket->priorityLevel->color }};">{{
+                                                $ticket->priorityLevel->name }}</span>
                                         </div>
                                     </td>
                                 </tr>

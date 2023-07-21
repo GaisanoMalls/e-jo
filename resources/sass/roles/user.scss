@@ -33,7 +33,6 @@ $color-1: #d32839;
     font-family: "Inter", sans-serif;
     scroll-behavior: smooth;
     text-decoration: none !important;
-    list-style: none !important;
     letter-spacing: normal;
 }
 
@@ -710,6 +709,22 @@ body {
                 width: 30px !important;
             }
 
+
+        }
+
+        .threads__clarifications__tab__container {
+            a {
+                font-size: $fs-13;
+                font-weight: $fw-500;
+                border: 0;
+                padding-bottom: 6px;
+
+                &.active {
+                    border-bottom: 2px solid $color-1;
+                    color: $color-1;
+                    font-weight: $fw-600;
+                }
+            }
         }
 
         .ticket__discussions {

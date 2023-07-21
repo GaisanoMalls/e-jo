@@ -786,19 +786,6 @@ a:hover {
   padding: 9px 20px;
   height: 50px;
 }
-.ticket__section .tickets__card .tickets__table__card .custom__table .td__content .ticket__checkbox {
-  height: 15px;
-  width: 15px;
-  box-shadow: none;
-  outline: none;
-}
-.ticket__section .tickets__card .tickets__table__card .custom__table .td__content .ticket__checkbox:hover {
-  cursor: default;
-}
-.ticket__section .tickets__card .tickets__table__card .custom__table .td__content .ticket__checkbox:checked {
-  background-color: #d32839;
-  border: 0;
-}
 .ticket__section .tickets__card .tickets__table__card .custom__table .ticket__list__status__line {
   position: absolute;
   width: 3px;
@@ -809,7 +796,7 @@ a:hover {
   transform: translateY(-50%);
   border-radius: 0.625rem;
 }
-.ticket__section .tickets__card .tickets__table__card .custom__table .ticket__tr .clickable :hover {
+.ticket__section .tickets__card .tickets__table__card .custom__table .ticket__tr :hover {
   cursor: pointer;
 }
 .ticket__section .ticket__details__container .ticket__details__status {

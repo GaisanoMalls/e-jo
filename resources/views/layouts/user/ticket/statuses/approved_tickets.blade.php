@@ -26,8 +26,7 @@
                 </thead>
                 <tbody>
                     @foreach ($approvedTickets as $ticket)
-                    <tr
-                        onclick="window.location='{{ route('user.ticket.view_ticket', [$ticket->status->slug, $ticket->id]) }}'">
+                    <tr onclick="window.location='{{ route('user.ticket.view_ticket', $ticket->id) }}'">
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
@@ -65,7 +64,7 @@
     </div>
     @else
     <div class="py-3 px-4 rounded-3" style="margin: 20px 0px; background-color: #e9ecef;">
-        <small style="font-size: 14px;">No on viewed tickets.</small>
+        <small style="font-size: 14px;">No approved tickets.</small>
     </div>
     @endif
 </div>

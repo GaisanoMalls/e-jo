@@ -1,5 +1,5 @@
 <div class="offcanvas offcanvas-bottom custom__reply__ticket__offcanvas m-auto" tabindex="-1"
-    id="offcanvasRequesterReplyTicketForm" aria-labelledby="offcanvasBottomLabel">
+    id="offcanvasRequesterReplyTicketClarificationForm" aria-labelledby="offcanvasBottomLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title custom__offcanvas__title" id="offcanvasBottomLabel">
             Reply
@@ -10,32 +10,32 @@
         </button>
     </div>
     <div class="offcanvas-body small">
-        @if ($latestReply)
+        @if ($latestClarification)
         <div class="mb-4 d-flex flex-column gap-3 reply__ticket__info">
             <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
-                    @if ($latestReply->user->profile->picture)
-                    <img src="{{ Storage::url($latestReply->user->profile->picture) }}" class="me-2 sender__profile"
-                        alt="">
+                    @if ($latestClarification->user->profile->picture)
+                    <img src="{{ Storage::url($latestClarification->user->profile->picture) }}"
+                        class="me-2 sender__profile" alt="">
                     @else
                     <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center
                                     text-white" style="background-color: #24695C;">
-                        {{ $latestReply->user->profile->getNameInitial() }}</div>
+                        {{ $latestClarification->user->profile->getNameInitial() }}</div>
                     @endif
                     <p class="mb-0" style="font-size: 0.813rem; font-weight: 600;">
-                        {{ $latestReply->user->profile->getFullName() }}
+                        {{ $latestClarification->user->profile->getFullName() }}
                     </p>
                 </div>
-                <p class="mb-0 time__sent">{{ $latestReply->created_at->diffForHumans(null, true) }} ago</p>
+                <p class="mb-0 time__sent">{{ $latestClarification->created_at->diffForHumans(null, true) }} ago</p>
             </div>
-            <div class="ticket__description" style="font-size: 13px;">{!! $latestReply->description !!}</div>
+            <div class="ticket__description" style="font-size: 13px;">{!! $latestClarification->description !!}</div>
         </div>
         @endif
-        <form action="{{ route('user.ticket.store_reply_ticket', $ticket->id) }}" method="post"
+        <form action="{{ route('user.ticket.send_clarification', $ticket->id) }}" method="post"
             enctype="multipart/form-data">
             @csrf
             <textarea id="myeditorinstance" name="description" placeholder="Type here..."></textarea>
-            @error('description', 'requesterStoreTicketReply')
+            @error('description', 'storeTicketReplyClarification')
             <span class="error__message">
                 <i class="fa-solid fa-triangle-exclamation"></i>
                 {{ $message }}
@@ -45,7 +45,7 @@
                 <div class="d-flex flex-column gap-1">
                     <input class="form-control ticket__file__input w-auto my-3" type="file" name="replyFiles[]"
                         id="ticketFile" multiple>
-                    @error('replyFiles', 'requesterStoreTicketReply')
+                    @error('replyFiles', 'storeTicketReplyClarification')
                     <span class="error__message">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         {{ $message }}

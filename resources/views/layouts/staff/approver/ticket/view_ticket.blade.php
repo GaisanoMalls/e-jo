@@ -1,6 +1,11 @@
 @extends('layouts.staff.approver.base', ['title' => $ticket->subject])
 
 @section('main-content')
+@if ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
+<div class="alert alert-warning p-3 rounded-3 mx-1 mt-2 mb-4" role="alert" style="font-size: 13px;">
+    This ticket has been disapproved.
+</div>
+@endif
 <div class="row mx-0">
     <div class="card ticket__card" id="userTicketCard">
         <div class="ticket__details__section">
@@ -24,13 +29,13 @@
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @break
-                @case(App\Models\Status::DISAPPROVED)
+                @endswitch
+                @if ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
                 <a href="{{ route('approver.tickets.disapproved') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                @break
-                @endswitch
+                @endif
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div class="d-flex align-items-center gap-3">
                         <p class="mb-0 ticket__details__status">{{ $ticket->status->name }}</p>
@@ -44,24 +49,29 @@
                         <small class="ticket__details__datetime">{{ $ticket->dateCreated() }},
                             {{ $ticket->created_at->format('D') }} @ {{ $ticket->created_at->format('g:i A') }}</small>
                     </div>
-                    @if ($ticket->status_id !== App\Models\Status::APPROVED && $ticket->approval_status !==
-                    App\Models\ApprovalStatus::APPROVED)
-                    <form action="{{ route('approver.ticket.ticketDetialsApproveTicket', $ticket->id) }}" method="post">
-                        @csrf
-                        <div class="d-flex flex-wrap align-items-center justify-content-center gap-3">
+                    @if ($ticket->status_id !== App\Models\Status::CLOSED || $ticket->approval_status !==
+                    App\Models\ApprovalStatus::DISAPPROVED)
+                    <div class="d-flex flex-wrap align-items-center justify-content-center gap-3">
+                        <form action="{{ route('approver.ticket.disapprove_ticket', $ticket->id) }}" method="post">
+                            @csrf
+                            @method('PUT')
                             <button type="submit" class="btn btn-sm btn__disapprove__ticket">
                                 Disapprove
                             </button>
+                        </form>
+                        <form action="{{ route('approver.ticket.approve_ticket', $ticket->id) }}" method="post">
+                            @csrf
+                            @method('PUT')
                             <button type="submit" class="btn btn-sm shadow btn__approve__ticket">
                                 Approve
                             </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                     @endif
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8 position-relative">
+                <div class="col-md-8 position-relative mb-3">
                     <div class="card border-0 p-0 card__ticket__details">
                         <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                             <div class="d-flex align-items-center user__account__media">
@@ -112,7 +122,7 @@
                     @if ($ticket->clarifications->count() === 0)
                     <div class="row align-items-center bg-light p-2 py-1 rounded-3 mx-1 mt-2 mb-4">
                         <div class="col-md-8">
-                            <p class="mb-0" style="font-size: 13px; line-height: 13px;">
+                            <p class="mb-0" style="font-size: 13px; line-height: 19px;">
                                 If you have any questions or clarifications, or any other matters with regards to this
                                 ticket,
                                 you can connect with {{ $ticket->user->profile->first_name }}.
@@ -153,3 +163,15 @@
 @include('layouts.staff.approver.ticket.includes.modal.preview_ticket_files_modal')
 @include('layouts.staff.approver.ticket.includes.offcanvas.ticket_clarifications_offcanvas')
 @endsection
+
+@if ($errors->storeTicketClarification->any())
+@push('offcanvas-error')
+<script>
+    $(function () {
+        var offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasTicketClarificationForm'));
+        offcanvas.show();
+    });
+
+</script>
+@endpush
+@endif

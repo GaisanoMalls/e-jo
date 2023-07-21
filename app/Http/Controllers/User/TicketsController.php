@@ -7,6 +7,8 @@ use App\Http\Traits\Requester\Tickets;
 use App\Http\Traits\TicketNumberGenerator;
 use App\Models\ApprovalStatus;
 use App\Models\Branch;
+use App\Models\Clarification;
+use App\Models\ClarificationFile;
 use App\Models\Department;
 use App\Models\HelpTopic;
 use App\Models\Reply;
@@ -33,6 +35,7 @@ class TicketsController extends Controller
         $closedTickets = $this->getClosedTickets();
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
+        $disapprovedTickets = $this->getDisapprovedTickets();
 
         $openTickets = $this->getOpenTickets();
 
@@ -44,6 +47,7 @@ class TicketsController extends Controller
                 'closedTickets',
                 'viewedTickets',
                 'approvedTickets',
+                'disapprovedTickets',
                 'openTickets',
             ])
         );
@@ -56,6 +60,7 @@ class TicketsController extends Controller
         $closedTickets = $this->getClosedTickets();
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
+        $disapprovedTickets = $this->getDisapprovedTickets();
 
         $onProcessTickets = $this->getOnProcessTickets();
 
@@ -66,6 +71,7 @@ class TicketsController extends Controller
                 'closedTickets',
                 'viewedTickets',
                 'approvedTickets',
+                'disapprovedTickets',
                 'onProcessTickets',
             ])
         );
@@ -78,6 +84,7 @@ class TicketsController extends Controller
         $onProcessTickets = $this->getOnProcessTickets();
         $closedTickets = $this->getClosedTickets();
         $approvedTickets = $this->getApprovedTickets();
+        $disapprovedTickets = $this->getDisapprovedTickets();
 
         $viewedTickets = $this->getViewedTickets();
 
@@ -88,6 +95,7 @@ class TicketsController extends Controller
                 'onProcessTickets',
                 'closedTickets',
                 'approvedTickets',
+                'disapprovedTickets',
                 'viewedTickets',
             ])
         );
@@ -100,6 +108,7 @@ class TicketsController extends Controller
         $onProcessTickets = $this->getOnProcessTickets();
         $closedTickets = $this->getClosedTickets();
         $viewedTickets = $this->getViewedTickets();
+        $disapprovedTickets = $this->getDisapprovedTickets();
 
         $approvedTickets = $this->getApprovedTickets();
 
@@ -111,7 +120,32 @@ class TicketsController extends Controller
                 'onProcessTickets',
                 'closedTickets',
                 'viewedTickets',
+                'disapprovedTickets',
                 'approvedTickets',
+            ])
+        );
+    }
+
+    public function disapprovedTickets()
+    {
+        // For ticket count purpose
+        $openTickets = $this->getOpenTickets();
+        $onProcessTickets = $this->getOnProcessTickets();
+        $closedTickets = $this->getClosedTickets();
+        $viewedTickets = $this->getViewedTickets();
+        $approvedTickets = $this->getApprovedTickets();
+
+        $disapprovedTickets = $this->getDisapprovedTickets();
+
+        return view(
+            'layouts.user.ticket.statuses.disapproved_tickets',
+            compact([
+                'openTickets',
+                'onProcessTickets',
+                'closedTickets',
+                'viewedTickets',
+                'approvedTickets',
+                'disapprovedTickets',
             ])
         );
     }
@@ -123,6 +157,7 @@ class TicketsController extends Controller
         $onProcessTickets = $this->getOnProcessTickets();
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
+        $disapprovedTickets = $this->getDisapprovedTickets();
 
         $closedTickets = $this->getClosedTickets();
 
@@ -133,6 +168,7 @@ class TicketsController extends Controller
                 'onProcessTickets',
                 'viewedTickets',
                 'approvedTickets',
+                'disapprovedTickets',
                 'closedTickets',
             ])
         );
@@ -191,22 +227,19 @@ class TicketsController extends Controller
         return back()->with('success', 'Ticket successfully created');
     }
 
-    public function viewTicket($ticketStatusSlug, $ticketId)
+    public function viewTicket(int $ticketId)
     {
-        $ticket = Ticket::whereHas('status', function ($query) use ($ticketStatusSlug) {
-            $query->where('slug', $ticketStatusSlug);
-        })->where('id', $ticketId)->first();
+        $ticket = Ticket::with('replies')->where('id', $ticketId)->first();
 
-        $latestReply = Reply::where('ticket_id', $ticketId)
-            ->where('user_id', '!=', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
-            ->first();
+        $latestReply = $this->getLatestReply($ticketId);
+        $latestClarification = $this->getLatestClarification($ticketId);
 
         return view(
             'layouts.user.ticket.view_ticket',
             compact([
                 'ticket',
-                'latestReply'
+                'latestReply',
+                'latestClarification',
             ])
         );
     }
@@ -224,8 +257,8 @@ class TicketsController extends Controller
         $ticket->update(['status_id' => Status::ON_PROCESS]);
 
         $reply = Reply::create([
-            'ticket_id' => $ticket->id,
             'user_id' => auth()->user()->id,
+            'ticket_id' => $ticket->id,
             'description' => $request->input('description')
         ]);
 
@@ -242,7 +275,56 @@ class TicketsController extends Controller
             }
         }
 
-        return to_route('user.ticket.view_ticket', [$ticket->status->slug, $ticket->id])->with('success', 'Your reply has been sent successfully.');
+        return to_route('user.ticket.view_ticket', $ticket->id)->with('success', 'Your reply has been sent successfully.');
+    }
+
+    public function ticketClarifications(int $ticketId)
+    {
+        $ticket = Ticket::with(['clarifications'])->where('id', $ticketId)->first();
+
+        $latestReply = $this->getLatestReply($ticketId);
+        $latestClarification = $this->getLatestClarification($ticketId);
+
+        return view(
+            'layouts.user.ticket.includes.ticket_clarifications',
+            compact([
+                'ticket',
+                'latestReply',
+                'latestClarification'
+            ])
+        );
+    }
+
+    public function sendClarification(Request $request, Ticket $ticket)
+    {
+        $validator = Validator::make($request->all(), [
+            'description' => ['required'],
+            'clarificationFiles.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000']
+        ]);
+
+        if ($validator->fails())
+            return back()->withErrors($validator, 'storeTicketReplyClarification')->withInput();
+
+        $clarification = Clarification::create([
+            'user_id' => auth()->user()->id,
+            'ticket_id' => $ticket->id,
+            'description' => $request->input('description')
+        ]);
+
+        if ($request->hasFile('clarificationFiles')) {
+            foreach ($request->file('clarificationFiles') as $uploadedClarificationFile) {
+                $fileName = $uploadedClarificationFile->getClientOriginalName();
+                $fileAttachment = $uploadedClarificationFile->storeAs('public/ticket/clarification/files', $fileName);
+
+                $clarificationFile = new ClarificationFile();
+                $clarificationFile->file_attachment = $fileAttachment;
+                $clarificationFile->clarification_id = $clarification->id;
+
+                $clarification->fileAttachments()->save($clarificationFile);
+            }
+        }
+
+        return to_route('user.ticket.ticket_clarifications', $ticket->id)->with('success', 'Your clarification has been sent successfully.');
     }
 
     public function loadBranches()

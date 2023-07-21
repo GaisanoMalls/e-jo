@@ -178,6 +178,10 @@ $color-1: #d32839;
     box-shadow: 0px 1px 4px 0px rgba(132, 132, 132, 0.25);
 }
 
+.error__message {
+    @include generic.error-message;
+}
+
 .slideIn {
     -webkit-animation-name: slideIn;
     animation-name: slideIn;

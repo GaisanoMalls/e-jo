@@ -61,6 +61,12 @@
   background: #999;
 }
 
+.error__message {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: red;
+}
+
 .slideIn {
   animation-name: slideIn;
 }

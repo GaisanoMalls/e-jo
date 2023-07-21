@@ -140,7 +140,9 @@
                                     <small
                                         class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                                         {{ $reply->user->profile->getFullName() }}
-                                        {{ $reply->user_id === auth()->user()->id ? '(me)' : '' }}
+                                        @if ($reply->user->role_id === App\Models\Role::SYSTEM_ADMIN)
+                                        <i class="bi bi-person-fill-gear text-muted ms-1" title="System Admin"></i>
+                                        @endif
                                     </small>
                                     @else
                                     <small class="pe-3 text-muted" style="font-size: 12px;">Sent</small>

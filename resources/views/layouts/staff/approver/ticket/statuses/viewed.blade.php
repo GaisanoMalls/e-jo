@@ -27,7 +27,7 @@
                 </thead>
                 <tbody>
                     @foreach ($viewedTickets as $ticket)
-                    <tr onclick="window.location='{{ route('approver.ticket.viewTicketDetails', $ticket->id) }}'">
+                    <tr onclick="window.location='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
@@ -58,7 +58,7 @@
                         <td class="custom__table__data py-0">
                             @if ($ticket->approval_status === 'for_approval')
                             <div class="d-flex align-items-center justify-content-start gap-2">
-                                <form action="{{ route('approver.tickets.reject', $ticket->id) }}" method="post">
+                                <form action="{{ route('approver.tickets.disapprove', $ticket->id) }}" method="post">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="btn btn-sm btn__disapprove__ticket">

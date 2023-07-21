@@ -5,12 +5,12 @@
 @endsection
 
 @section('count-items')
-<small class="count-item">{{ $openTickets->count() }} items</small>
+<small class="count-item">{{ $closedTickets->count() }} items</small>
 @endsection
 
 @section('main-content')
 <div class="row mx-0">
-    @if ($openTickets->count() > 0)
+    @if ($closedTickets->count() > 0)
     <div class="card ticket__card" id="userTicketCard">
         <div class="table-responsive">
             <table class="table mb-0 custom__table" id="userTable">
@@ -25,8 +25,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($openTickets as $ticket)
-                    <tr>
+                    @foreach ($closedTickets as $ticket)
+                    <tr class="custom__tr"
+                        onclick="window.location='{{ route('user.ticket.view_ticket', $ticket->id) }}'">
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>

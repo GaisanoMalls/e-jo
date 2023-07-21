@@ -125,6 +125,7 @@
                     <div class="collapse {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'show' : '' }}"
                         id="dashboard-collapse" style="">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small sidebar__collapse__ul">
+                            @if (auth()->user()->role_id !== App\Models\Role::AGENT)
                             <li>
                                 <a href="{{ route('staff.tickets.approved_tickets') }}"
                                     class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
@@ -136,6 +137,7 @@
                                     <span class="badge sidebar__btn__link__badge">30</span>
                                 </a>
                             </li>
+                            @endif
                             <li>
                                 <a href="{{ route('staff.tickets.open_tickets') }}"
                                     class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
@@ -143,6 +145,17 @@
                                     <div class="d-flex align-items-center">
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Open</span>
+                                    </div>
+                                    <span class="badge sidebar__btn__link__badge">30</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href=""
+                                    class="position-relative link-dark d-flex align-items-center text-decoration-none
+                                                                rounded justify-content-between sidebar__collapse__btnlink">
+                                    <div class="d-flex align-items-center">
+                                        <div class="sidebar__active__dot position-absolute rounded-circle"></div>
+                                        <span class="sidebar__btn__link__name ">Claimed</span>
                                     </div>
                                     <span class="badge sidebar__btn__link__badge">30</span>
                                 </a>
@@ -158,6 +171,7 @@
                                     <span class="badge sidebar__btn__link__badge">30</span>
                                 </a>
                             </li>
+                            @if (auth()->user()->role_id !== App\Models\Role::AGENT)
                             <li>
                                 <a href="" class="position-relative link-dark d-flex align-items-center text-decoration-none rounded
                                     justify-content-between sidebar__collapse__btnlink">
@@ -168,16 +182,8 @@
                                     <span class="badge sidebar__btn__link__badge">30</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="" class="position-relative link-dark d-flex align-items-center text-decoration-none
-                                    rounded justify-content-between sidebar__collapse__btnlink">
-                                    <div class="d-flex align-items-center">
-                                        <div class="sidebar__active__dot position-absolute rounded-circle"></div>
-                                        <span class="sidebar__btn__link__name ">Claimed</span>
-                                    </div>
-                                    <span class="badge sidebar__btn__link__badge">30</span>
-                                </a>
-                            </li>
+                            @endif
+                            @if (auth()->user()->role_id !== App\Models\Role::AGENT)
                             <li>
                                 <a href="" class="position-relative link-dark d-flex align-items-center text-decoration-none
                                     rounded justify-content-between sidebar__collapse__btnlink">
@@ -188,6 +194,7 @@
                                     <span class="badge sidebar__btn__link__badge">30</span>
                                 </a>
                             </li>
+                            @endif
                             <li>
                                 <a href="" class="position-relative link-dark d-flex align-items-center text-decoration-none
                                     rounded justify-content-between sidebar__collapse__btnlink">

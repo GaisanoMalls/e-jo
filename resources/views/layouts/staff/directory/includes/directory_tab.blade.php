@@ -5,7 +5,7 @@
             <a href="{{ route('staff.directory.index') }}" class="btn d-flex align-items-center border-0 directory__tab__button
                 {{ Route::is('staff.directory.index') ? 'directory__active__tab' : '' }}">
                 <i class="fa-solid fa-user-shield directory__icon__active__tab directory__active__tab"></i>
-                Department Admins
+                Service Dept. Admins
             </a>
         </li>
         <li>

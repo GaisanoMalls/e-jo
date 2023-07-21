@@ -4,7 +4,7 @@
 <div class="justify-content-between d-flex flex-wrap ticket__content__top">
     <div class="w-100 d-flex flex-wrap justify-content-between">
         <h3 class="page__header__title">
-            @yield('directory-header-title', 'Dept. Admins Directory')
+            @yield('directory-header-title', 'Service Dept. Admins Directory')
         </h3>
         @section('directory-breadcrumbs')
         <ol class="breadcrumb">

@@ -80,7 +80,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
         });
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
-                Route::get('/{ticketStatusSlug}/{ticketId}/view', 'viewTicket')->name('view_ticket');
+                Route::get('/{ticketId}/view', 'viewTicket')->name('view_ticket');
                 Route::post('/{ticket}/reply/store', 'replyTicket')->name('storeTicketReply');
             });
         });
@@ -261,16 +261,17 @@ Route::middleware(['auth', Role::approver()])->group(function () {
                 Route::get('/approved', 'approvedTickets')->name('approved');
                 Route::get('/disapproved', 'disapprovedTickets')->name('disapproved');
 
-                Route::put('{ticket}/reject', 'disapproveTicket')->name('reject');
                 Route::put('{ticket}/approve', 'approveTicket')->name('approve');
+                Route::put('{ticket}/disapprove', 'disapproveTicket')->name('disapprove');
                 Route::put('{ticket}/update-status-as-viewed', 'ticketStatusToViewed');
             });
         });
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(ApproverTicketsController::class)->group(function () {
-                Route::get('/{ticketId}/view', 'viewTicketDetails')->name('viewTicketDetails');
-                Route::post('/{ticket}/approve', 'ticketDetialsApproveTicket')->name('ticketDetialsApproveTicket');
-                Route::post('/{ticket}/clarification', 'sendClarification')->name('sendClarification');
+                Route::get('/{ticketId}/view', 'viewTicketDetails')->name('view_ticket_details');
+                Route::put('/{ticket}/approve', 'ticketDetialsApproveTicket')->name('approve_ticket');
+                Route::put('/{ticket}/disapprove', 'ticketDetialsDisapproveTicket')->name('disapprove_ticket');
+                Route::post('/{ticket}/clarification/send', 'sendClarification')->name('send_clarification');
             });
         });
     });
@@ -286,14 +287,17 @@ Route::middleware(['auth', Role::user()])->group(function () {
                 Route::get('/on-process', 'onProcessTickets')->name('on_process_tickets');
                 Route::get('/viewed', 'viewedTickets')->name('viewed_tickets');
                 Route::get('/approved', 'approvedTickets')->name('approved_tickets');
+                Route::get('/disapproved', 'disapprovedTickets')->name('disapproved_tickets');
                 Route::get('/closed', 'closedTickets')->name('closed_tickets');
             });
         });
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(UserTicketsController::class)->group(function () {
                 Route::post('/store', 'store')->name('store');
-                Route::post('/{ticket}/reply/store', 'requesterReplyTicket')->name('requesterStoreTicketReply');
-                Route::get('/{ticketStatusSlug}/{ticketId}/view', 'viewTicket')->name('view_ticket');
+                Route::post('/{ticket}/reply/store', 'requesterReplyTicket')->name('store_reply_ticket');
+                Route::get('/{ticketId}/view', 'viewTicket')->name('view_ticket');
+                Route::get('/{ticketId}/view/clarifications', 'ticketClarifications')->name('ticket_clarifications');
+                Route::post('/{ticket}/view/clarification/send', 'sendClarification')->name('send_clarification');
 
                 // Axios endpoints
                 Route::get('/branches', 'loadBranches');

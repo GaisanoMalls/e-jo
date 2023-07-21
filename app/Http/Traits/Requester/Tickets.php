@@ -3,6 +3,8 @@
 namespace App\Http\Traits\Requester;
 
 use App\Models\ApprovalStatus;
+use App\Models\Clarification;
+use App\Models\Reply;
 use App\Models\Status;
 use App\Models\Ticket;
 
@@ -62,6 +64,20 @@ trait Tickets
         return $approvedTickets;
     }
 
+    public function getDisapprovedTickets()
+    {
+        $disapprovedTickets = Ticket::with(['replies', 'priorityLevel'])
+            ->where(function ($query) {
+                $query->where('user_id', auth()->user()->id)
+                    ->where('status_id', Status::CLOSED)
+                    ->where('approval_status', ApprovalStatus::DISAPPROVED);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $disapprovedTickets;
+    }
+
     public function getClosedTickets()
     {
         $onProcessTickets = Ticket::with(['replies', 'priorityLevel'])
@@ -74,5 +90,25 @@ trait Tickets
             ->get();
 
         return $onProcessTickets;
+    }
+
+    public function getLatestReply(int $id)
+    {
+        $latestReply = Reply::where('ticket_id', $id)
+            ->where('user_id', '!=', auth()->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        return $latestReply;
+    }
+
+    public function getLatestClarification(int $id)
+    {
+        $latestClarification = Clarification::where('ticket_id', $id)
+            ->where('user_id', '!=', auth()->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        return $latestClarification;
     }
 }

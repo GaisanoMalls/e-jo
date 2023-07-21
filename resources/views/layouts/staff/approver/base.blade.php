@@ -41,6 +41,8 @@
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
 
+    @stack('offcanvas-error')
+
     <script>
         var table = document.getElementById('approverTable');
         var options = {

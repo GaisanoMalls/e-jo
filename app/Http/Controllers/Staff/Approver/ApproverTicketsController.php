@@ -28,6 +28,7 @@ class ApproverTicketsController extends Controller
 
     public function openTickets()
     {
+        $forApprovalTickets = $this->getForApprovalTickets();
         $openTickets = $this->getOpenTickets();
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
@@ -39,6 +40,7 @@ class ApproverTicketsController extends Controller
             'layouts.staff.approver.ticket.statuses.open',
             compact(
                 [
+                    'forApprovalTickets',
                     'openTickets',
                     'viewedTickets',
                     'approvedTickets',
@@ -112,7 +114,7 @@ class ApproverTicketsController extends Controller
         );
     }
 
-    public function viewTicketDetails($ticketId)
+    public function viewTicketDetails(int $ticketId)
     {
         $latestClarification = Clarification::where('ticket_id', $ticketId)
             ->where('user_id', '!=', auth()->user()->id)
@@ -158,7 +160,7 @@ class ApproverTicketsController extends Controller
             'approval_status' => ApprovalStatus::APPROVED
         ]);
 
-        return to_route('approver.ticket.viewTicketDetails', [$ticket->id])->with('success', 'The ticket has been approved.');
+        return to_route('approver.ticket.view_ticket_details', [$ticket->id])->with('success', 'The ticket has been approved.');
     }
 
     public function ticketDetialsDisapproveTicket(Ticket $ticket)
@@ -168,7 +170,7 @@ class ApproverTicketsController extends Controller
             'approval_status' => ApprovalStatus::DISAPPROVED
         ]);
 
-        return to_route('approver.ticket.viewTicketDetails', $ticket->id)->with('info', 'The ticket has been disapproved.');
+        return to_route('approver.ticket.view_ticket_details', $ticket->id)->with('info', 'The ticket has been disapproved.');
     }
 
     // * Clarifications
@@ -201,6 +203,6 @@ class ApproverTicketsController extends Controller
             }
         }
 
-        return to_route('approver.ticket.viewTicketDetails', $ticket->id)->with('success', 'The message has been successfully sent.');
+        return to_route('approver.ticket.view_ticket_details', $ticket->id)->with('success', 'The message has been successfully sent.');
     }
 }

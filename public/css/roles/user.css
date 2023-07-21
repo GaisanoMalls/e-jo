@@ -6,7 +6,6 @@
   font-family: "Inter", sans-serif;
   scroll-behavior: smooth;
   text-decoration: none !important;
-  list-style: none !important;
   letter-spacing: normal;
 }
 
@@ -509,6 +508,17 @@ body {
 .ticket__card .ticket__details__section .card__ticket__details .reply__ticket__details__user__picture {
   height: 30px !important;
   width: 30px !important;
+}
+.ticket__card .ticket__details__section .threads__clarifications__tab__container a {
+  font-size: 0.813rem;
+  font-weight: 500;
+  border: 0;
+  padding-bottom: 6px;
+}
+.ticket__card .ticket__details__section .threads__clarifications__tab__container a.active {
+  border-bottom: 2px solid #d32839;
+  color: #d32839;
+  font-weight: 600;
 }
 .ticket__card .ticket__details__section .ticket__discussions {
   font-size: 0.813rem;

@@ -1,12 +1,12 @@
 @if ($ticket->clarifications->count() > 0)
 @foreach ($ticket->clarifications as $clarification)
 @include('layouts.staff.approver.ticket.includes.modal.preview_clarification_ticket_files_modal')
-<div class="card border-0 p-0 card__ticket__details"
+<div class="card border-0 p-0 shadow-none card__ticket__details"
     style="width: fit-content; max-width: 70%;
-    {{ $clarification->user_id === auth()->user()->id ? 'background-color: #D0F0F7; margin-left: auto;' : 'background-color: #EFF6FC; margin-right: auto;' }}">
+    {{ $clarification->user_id === auth()->user()->id ? 'background-color: #dff9ff; margin-left: auto;' : 'background-color: #F5F7F9; margin-right: auto;' }}">
     <div class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
         <div class="d-flex align-items-center w-100">
-            @if ($clarification->user !== null && $clarification->user->role_id !== App\Models\Role::USER)
+            @if ($clarification->user->role_id === App\Models\Role::USER)
             @if ($clarification->user->profile->picture)
             <img src="{{ Storage::url($clarification->user->profile->picture) }}" alt="" class="image-fluid ticket__details__user__picture
                                          reply__ticket__details__user__picture">
@@ -17,10 +17,9 @@
             @endif
             @endif
             <div class="d-flex flex-wrap justify-content-between w-100">
-                @if ($clarification->user !== null && $clarification->user->role_id !== App\Models\Role::USER)
+                @if ($clarification->user->role_id === App\Models\Role::USER)
                 <small class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                     {{ $clarification->user->profile->getFullName() }}
-                    {{ $clarification->user_id === auth()->user()->id ? '(me)' : '' }}
                 </small>
                 @else
                 <small class="pe-3 text-muted" style="font-size: 12px;">Sent</small>

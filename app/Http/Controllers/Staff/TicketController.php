@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\ServiceDepartmentAdmin\Tickets;
 use App\Models\ApprovalStatus;
 use App\Models\Department;
 use App\Models\Reply;
@@ -12,46 +13,36 @@ use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use SebastianBergmann\Type\ObjectType;
 
 class TicketController extends Controller
 {
+    use Tickets;
+
+    public function approvedTickets()
+    {
+        $approvedTickets = $this->getApprovedTickets();
+        return view('layouts.staff.ticket.statuses.approved_tickets', compact('approvedTickets'));
+    }
+
     public function openTickets()
     {
-        $openTickets = Ticket::with(['replies', 'priorityLevel', 'user'])
-            ->where('status_id', Status::OPEN)
-            ->where('approval_status', ApprovalStatus::APPROVED)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
+        $openTickets = $this->getOpentTickets();
         return view('layouts.staff.ticket.statuses.open_tickets', compact('openTickets'));
     }
 
     public function onProcessTickets()
     {
-        $onProcessTickets = Ticket::with(['replies', 'priorityLevel', 'user'])
-            ->where('status_id', Status::ON_PROCESS)
-            ->where('approval_status', ApprovalStatus::APPROVED)
-            ->orderBy('updated_at', 'desc')
-            ->get();
-
+        $onProcessTickets = $this->getOnProcessTickets();
         return view('layouts.staff.ticket.statuses.on_process_tickets', compact('onProcessTickets'));
     }
 
-    public function approvedTickets()
-    {
-        $approvedTickets = Ticket::where('approval_status', ApprovalStatus::APPROVED)
-            ->orderBy('updated_at', 'desc')
-            ->get();
-        return view('layouts.staff.ticket.statuses.approved_tickets', compact('approvedTickets'));
-    }
 
-    public function viewTicket($ticketStatusSlug, $ticketId)
+    public function viewTicket(int $ticketId)
     {
         $departments = Department::orderBy('name', 'asc')->get();
         $serviceDepartments = ServiceDepartment::orderBy('name', 'asc')->get();
-        $ticket = Ticket::whereHas('status', function ($query) use ($ticketStatusSlug) {
-            $query->where('slug', $ticketStatusSlug);
-        })->where('id', $ticketId)->first();
+        $ticket = Ticket::with('replies')->where('id', $ticketId)->first();
 
         $latestReply = Reply::where('ticket_id', $ticketId)
             ->where('user_id', '!=', auth()->user()->id)
@@ -100,6 +91,6 @@ class TicketController extends Controller
             }
         }
 
-        return to_route('staff.ticket.view_ticket', [$ticket->status->slug, $ticket->id])->with('success', 'Your reply has been sent successfully.');
+        return to_route('staff.ticket.view_ticket', $ticket->id)->with('success', 'Your reply has been sent successfully.');
     }
 }

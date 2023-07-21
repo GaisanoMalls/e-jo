@@ -27,7 +27,7 @@
                 <tbody>
                     @foreach ($onProcessTickets as $ticket)
                     <tr
-                        onclick="window.location='{{ route('user.ticket.view_ticket', [$ticket->status->slug, $ticket->id]) }}'">
+                        onclick="window.location='{{ route('user.ticket.view_ticket', $ticket->id) }}'">
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>

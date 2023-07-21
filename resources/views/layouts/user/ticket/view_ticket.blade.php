@@ -1,6 +1,17 @@
 @extends('layouts.user.base', ['title' => $ticket->subject ])
 
 @section('main-content')
+@if ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
+<div class="alert alert-warning p-3 rounded-3 mx-1 mt-4 mb-0" role="alert" style="font-size: 13px;">
+    We regret to inform you that the approver has disapproved your ticket. After careful consideration, the
+    decision has been made not to proceed with the requested action at this time.
+    <br>
+    Please feel free to reach out
+    to the approver or the relevant team if you have any questions or require further
+    clarification on the disapproval decision. They will be more than willing to assist you with any concerns
+    you may have.
+</div>
+@endif
 <div class="row mx-0">
     <div class="card ticket__card" id="userTicketCard">
         <div class="ticket__details__section">
@@ -24,6 +35,12 @@
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @break
+                @case(App\Models\Status::APPROVED)
+                <a href="{{ route('user.tickets.approved_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @break
                 @case(App\Models\Status::CLOSED)
                 <a href="{{ route('user.tickets.closed_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
@@ -31,6 +48,12 @@
                 </a>
                 @break
                 @endswitch
+                @if ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
+                <a href="{{ route('user.tickets.disapproved_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @endif
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div class="d-flex align-items-center gap-3">
                         <p class="mb-0 ticket__details__status">{{ $ticket->status->name }}</p>
@@ -68,8 +91,9 @@
                                     </small>
                                 </div>
                             </div>
-                            <small class="ticket__details__time mt-2">{{ $ticket->created_at->diffForHumans(null, true)
-                                }}</small>
+                            <small class="ticket__details__time mt-2">
+                                {{ $ticket->created_at->diffForHumans(null, true) }}
+                            </small>
                         </div>
                         <div class="ticket__details__card__body">
                             <div class="ticket__description">{!! $ticket->description !!}</div>
@@ -86,20 +110,31 @@
                             @endif
                         </div>
                     </div>
-                    <div class="mb-2 mt-4">
+                    <div class="mb-4 mt-4 d-flex align-items-center justify-content-between">
                         <small class="ticket__discussions text-muted">
+                            @section('count-replyThraeds-clarificafions')
                             {{ $ticket->replies->count() > 1 ? 'Discussions' : 'Discussion' }}
                             ({{ $ticket->replies->count() }})
+                            @show
                         </small>
+                        <div class="d-flex align-items-center gap-3 threads__clarifications__tab__container">
+                            <a onclick="window.location='{{ route('user.ticket.view_ticket', $ticket->id) }}'"
+                                class="btn btn-sm px-0 rounded-0 {{ Route::is('user.ticket.view_ticket') ? 'active' : '' }}"
+                                type="button">
+                                Reply Threads
+                            </a>
+                            <a onclick="window.location='{{ route('user.ticket.ticket_clarifications', $ticket->id) }}'"
+                                class="btn btn-sm px-0 rounded-0 {{ Route::is('user.ticket.ticket_clarifications') ? 'active' : '' }}"
+                                type="button">
+                                Clarifications
+                            </a>
+                        </div>
                     </div>
                     {{-- Replies/Comments --}}
+                    @section('ticket-reply-clarifications')
                     @include('layouts.user.ticket.includes.ticket_replies')
-                    <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
-                        justify-content-center gap-2" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasRequesterReplyTicketForm" aria-controls="offcanvasBottom">
-                        <i class="fa-solid fa-pen"></i>
-                        <span class="lbl__reply">Reply</span>
-                    </button>
+
+                    @show
                     {{-- End Replies/Comments --}}
                 </div>
                 <div class="col-md-4">
@@ -114,6 +149,7 @@
 </div>
 @include('layouts.user.ticket.includes.modal.preview_ticket_files_modal')
 @include('layouts.user.ticket.includes.offcanvas.reply_ticket_offcanvas')
+@include('layouts.user.ticket.includes.offcanvas.reply_clarification_offcanvas')
 @endsection
 
 @if ($errors->requesterStoreTicketReply->any())
@@ -121,6 +157,18 @@
 <script>
     $(function () {
         var offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRequesterReplyTicketForm'));
+        offcanvas.show();
+    });
+
+</script>
+@endpush
+@endif
+
+@if ($errors->storeTicketReplyClarification->any())
+@push('offcanvas-error')
+<script>
+    $(function () {
+        var offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRequesterReplyTicketClarificationForm'));
         offcanvas.show();
     });
 

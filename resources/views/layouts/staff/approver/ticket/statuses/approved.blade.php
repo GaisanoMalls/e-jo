@@ -30,7 +30,7 @@
                 </thead>
                 <tbody>
                     @foreach ($approvedTickets as $ticket)
-                    <tr>
+                    <tr onclick="window.location='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
