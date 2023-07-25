@@ -49,8 +49,7 @@ class TicketController extends Controller
 
     public function reopenedTickets()
     {
-        $reopenedTickets = $this->getReopenedTickets();
-        return view('layouts.staff.ticket.statuses.reopened_tickets', compact('reopenedTickets'));
+        return view('layouts.staff.ticket.statuses.reopened_tickets');
     }
 
     public function overdueTickets()

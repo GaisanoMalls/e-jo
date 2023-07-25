@@ -28,7 +28,8 @@ trait Tickets
     {
         $openTickets = Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OPEN)
-                ->where('approval_status', ApprovalStatus::APPROVED);
+                ->orWhere('approval_status', ApprovalStatus::APPROVED)
+                ->where('status_id', '!=', Status::CLAIMED);
         })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('branch_id', auth()->user()->branch_id)
@@ -86,22 +87,6 @@ trait Tickets
             ->get();
 
         return $viewedTickets;
-    }
-
-    public function serviceDeptAdminGetReopenedTickets()
-    {
-        $reopenedTickets = Ticket::where(function ($statusQuery) {
-            $statusQuery->where('status_id', Status::REOPENED)
-                ->where('approval_status', ApprovalStatus::APPROVED);
-        })
-            ->where(function ($byUserQuery) {
-                $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id);
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return $reopenedTickets;
     }
 
     public function serviceDeptAdminGetOverdueTickets()

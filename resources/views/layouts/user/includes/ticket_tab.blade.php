@@ -36,12 +36,6 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link" href="#">
-                <span class="ticket__count__tab">0</span>
-                Reopened
-            </a>
-        </li>
-        <li class="nav-item">
             <a href="{{ route('user.tickets.closed_tickets') }}" class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
                 {{ Route::is('user.tickets.closed_tickets') ? 'active' : '' }}">
                 <span class="ticket__count__tab">{{ $closedTickets->count() }}</span>

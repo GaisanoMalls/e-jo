@@ -13,22 +13,20 @@ class Status extends Model
     protected $fillable = ['name', 'color', 'slug'];
     const OPEN = 1;
     const VIEWED = 2;
-    const ON_HOLD = 3;
-    const APPROVED = 4;
+    const APPROVED = 3;
+    const DISAPPROVED = 4;
     const CLAIMED = 5;
     const ON_PROCESS = 6;
-    const REOPENED = 7;
-    const OVERDUE = 8;
-    const CLOSED = 9;
+    const OVERDUE = 7;
+    const CLOSED = 8;
 
     const COLOR = [
         self::OPEN => '#3F993F',
         self::VIEWED => '#1F75CC',
-        self::ON_HOLD => '#408AA8',
         self::APPROVED => '#BD7332',
+        self::DISAPPROVED => '#FF0000',
         self::CLAIMED => '#FF8B8B',
         self::ON_PROCESS => '#1E1C1D',
-        self::REOPENED => '#309431',
         self::OVERDUE => '#FD6852',
         self::CLOSED => '#7A7E87'
     ];

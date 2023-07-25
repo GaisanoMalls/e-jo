@@ -3,15 +3,35 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Status;
-use App\Models\Ticket;
+use App\Http\Traits\Requester\Tickets as RequestserTickets;
 use Illuminate\Http\Request;
 
 class Dashboard extends Controller
 {
+    use RequestserTickets;
+
     public function index()
     {
-        return view('layouts.user.base');
+        $openTickets = $this->getOpenTickets();
+        $onProcessTickets = $this->getOnProcessTickets();
+        $viewedTickets = $this->getViewedTickets();
+        $approvedTickets = $this->getApprovedTickets();
+        $disapprovedTickets = $this->getDisapprovedTickets();
+        // $reopenedTickets = $this->getReopenedTickets();
+        $closedTickets = $this->getClosedTickets();
+
+        return view(
+            'layouts.user.includes.dashboard',
+            compact([
+                'openTickets',
+                'onProcessTickets',
+                'viewedTickets',
+                'approvedTickets',
+                'disapprovedTickets',
+                // 'reopenedTickets',
+                'closedTickets'
+            ])
+        );
     }
 
 }

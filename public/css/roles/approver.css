@@ -239,9 +239,16 @@ nav .nav__user__picture {
   font-weight: 500;
   word-wrap: break-word;
 }
+.approver__section .custom__card .card__content .icon__container {
+  height: 50px;
+  width: 50px;
+  padding: 13px;
+  background-color: #FBF8F8;
+  border-radius: 0.563rem;
+}
 .approver__section .custom__card .card__content i {
-  font-size: 2.5rem;
-  color: #5B5943;
+  font-size: 1.5rem;
+  color: #1d5c63;
 }
 .approver__section .ticket__tab__header {
   margin-bottom: 1.8rem;

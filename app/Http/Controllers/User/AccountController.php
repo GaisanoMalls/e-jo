@@ -16,28 +16,11 @@ class AccountController extends Controller
 
     public function profile()
     {
-        $tickets = Ticket::where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        $allTickets = $tickets;
-        $openTickets = $tickets->where('status_id', Status::OPEN);
-        return view('layouts.user.account.account_settings_base', compact('allTickets', 'openTickets'));
+        return view('layouts.user.account.account_settings_base');
     }
 
     public function password()
     {
         return view('layouts.user.account.password');
-    }
-
-    public function updateProfile(UpdateUserProfileRequest $request)
-    {
-        $this->authUserStoreProfilePicture($request, 'picture', 'profile_picture');
-        return $this->authUserUpdateProfileInfo($request);
-    }
-
-    public function updatePassword(UpdatePasswordRequest $request)
-    {
-        return $this->authUserUpdatePassword($request->current_password, $request->new_password);
     }
 }

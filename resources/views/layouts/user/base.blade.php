@@ -21,9 +21,9 @@
     @include('layouts.user.includes.navbar')
     @include('layouts.user.account.includes.confirm_logout')
     @include('layouts.user.includes.modals.create_ticket_modal')
-    <div class="container mb-5">
+    <div class="container mb-5 requester__section">
         @if (Route::is('user.tickets.*'))
-        {{-- Show this section if the route matches the given pattern  --}}
+        {{-- Show this section if the route matches the given pattern --}}
         @include('layouts.user.includes.ticket_tab')
         <div class="row mx-0 ticket__content header user">
             <div class="d-flex flex-wrap px-0 align-items-center justify-content-between">
@@ -34,9 +34,7 @@
             </div>
         </div>
         @endif
-        @section('main-content')
-        @include('layouts.user.includes.dashboard')
-        @show
+        @yield('main-content')
     </div>
     @yield('action-js')
     @stack('toasts-js')

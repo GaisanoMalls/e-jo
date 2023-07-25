@@ -34,7 +34,7 @@ trait TicketsByUserRole
     {
         switch (auth()->user()->role_id) {
             case Role::SYSTEM_ADMIN:
-                $openTickets = $this->sysAdminGetOpentTickets();
+                $openTickets = $this->sysAdminGetOpenTickets();
                 break;
             case Role::SERVICE_DEPARTMENT_ADMIN:
                 $openTickets = $this->serviceDeptAdminGetOpentTickets();
@@ -101,22 +101,6 @@ trait TicketsByUserRole
         }
 
         return $viewedTickets;
-    }
-
-    public function getReopenedTickets()
-    {
-        switch (auth()->user()->role_id) {
-            case Role::SYSTEM_ADMIN:
-                $reopenedTickets = $this->sysAdminGetReopenedTickets();
-                break;
-            case Role::SERVICE_DEPARTMENT_ADMIN:
-                $reopenedTickets = $this->serviceDeptAdminGetReopenedTickets();
-                break;
-            default:
-                $reopenedTickets = null;
-        }
-
-        return $reopenedTickets;
     }
 
     public function getOverdueTickets()

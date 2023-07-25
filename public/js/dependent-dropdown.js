@@ -2734,26 +2734,23 @@ function userCreateTicketClearHelpTopicWhenResetDepartment() {
 }
 
 // Load the deparments based on authenticated user's branch.
-var navBtnCreateNewTicket = document.getElementById('navBtnCreateNewTicket');
-if (navBtnCreateNewTicket) {
-  navBtnCreateNewTicket.addEventListener('click', function () {
-    axios.get("/user/ticket/service-departments").then(function (response) {
-      var serviceDepartments = response.data;
-      var serviceDepartmentsOption = [];
-      if (serviceDepartments && serviceDepartments.length > 0) {
-        serviceDepartments.forEach(function (serviceDepartment) {
-          serviceDepartmentsOption.push({
-            value: serviceDepartment.id,
-            label: serviceDepartment.name
-          });
+window.onload = function () {
+  axios.get("/ticket/service-departments").then(function (response) {
+    var serviceDepartments = response.data;
+    var serviceDepartmentsOption = [];
+    if (serviceDepartments && serviceDepartments.length > 0) {
+      serviceDepartments.forEach(function (serviceDepartment) {
+        serviceDepartmentsOption.push({
+          value: serviceDepartment.id,
+          label: serviceDepartment.name
         });
-        userCreateTicketServiceDepartmentDropdown.setOptions(serviceDepartmentsOption);
-      }
-    })["catch"](function (error) {
-      console.log(error);
-    });
+      });
+      userCreateTicketServiceDepartmentDropdown.setOptions(serviceDepartmentsOption);
+    }
+  })["catch"](function (error) {
+    console.log(error);
   });
-}
+};
 if (userCreateTicketServiceDepartmentDropdown) {
   userCreateTicketHelpTopicDropdown.disable();
   userCreateTicketServiceDepartmentDropdown.addEventListener('reset', userCreateTicketClearHelpTopicWhenResetDepartment);
@@ -2764,7 +2761,7 @@ if (userCreateTicketServiceDepartmentDropdown) {
   userCreateTicketServiceDepartmentDropdown.addEventListener('change', function () {
     var servideDepartmentId = this.value;
     if (servideDepartmentId) {
-      axios.get("/user/ticket/".concat(servideDepartmentId, "/help-topics")).then(function (response) {
+      axios.get("/ticket/".concat(servideDepartmentId, "/help-topics")).then(function (response) {
         var helpTopics = response.data;
         var helpTopicsOption = [];
         if (helpTopics && helpTopics.length > 0) {

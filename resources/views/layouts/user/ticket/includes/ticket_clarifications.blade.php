@@ -6,7 +6,7 @@
 @endsection
 
 @section('ticket-reply-clarifications')
-@if ($ticket->clarifications->count() === 0)
+@if ($ticket->clarifications->count() === 0 && $ticket->status_id !== App\Models\Status::CLOSED)
 <div class="row align-items-center px-2 py-3 rounded-3 mx-1 mt-2 mb-4" style="background-color: #FFF3CD;">
     <div class="col-md-8">
         <p class="mb-0" style="font-size: 13px; line-height: 18px;">
@@ -75,9 +75,9 @@
     </div>
 </div>
 @endforeach
-@if ($ticket->clarifications->count() !== 0)
+@if ($ticket->clarifications->count() !== 0 && $ticket->status_id !== App\Models\Status::CLOSED)
 <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
-                    justify-content-center gap-2" data-bs-toggle="offcanvas"
+    justify-content-center gap-2" data-bs-toggle="offcanvas"
     data-bs-target="#offcanvasRequesterReplyTicketClarificationForm" aria-controls="offcanvasBottom">
     <i class="fa-solid fa-pen"></i>
     <span class="lbl__reply">Reply</span>

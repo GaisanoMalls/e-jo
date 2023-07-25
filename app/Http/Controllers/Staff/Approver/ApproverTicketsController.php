@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Staff\Approver;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Approver\CountTicketsForTabUse;
-use App\Http\Traits\Approver\Tickets;
+use App\Http\Traits\Approver\Tickets as ApproverTickets;
 use App\Models\ApprovalStatus;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ApproverTicketsController extends Controller
 {
-    use Tickets;
+    use ApproverTickets;
 
     public function ticketStatusToViewed(Ticket $ticket)
     {

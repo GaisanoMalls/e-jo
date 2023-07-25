@@ -34,6 +34,7 @@ use App\Http\Controllers\User\Dashboard as UserDashboardController;
 use App\Http\Controllers\User\TicketsController as UserTicketsController;
 use App\Http\Controllers\User\AccountController as UserAccountSettingsController;
 
+use App\Http\Controllers\UsersAccountController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
@@ -75,7 +76,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::get('/on-process', 'onProcessTickets')->name('on_process_tickets');
                 Route::get('/claimed', 'claimedTickets')->name('claimed_tickets');
                 Route::get('/viewed', 'viewedTickets')->name('viewed_tickets');
-                Route::get('/reopened', 'reopenedTickets')->name('reopened_tickets');
+                // Route::get('/reopened', 'reopenedTickets')->name('reopened_tickets');
                 Route::get('/overdue', 'overdueTickets')->name('overdue_tickets');
                 Route::get('/closed', 'closedTickets')->name('closed_tickets');
             });
@@ -313,21 +314,28 @@ Route::middleware(['auth', Role::user()])->group(function () {
                 Route::get('/branches', 'loadBranches');
                 Route::get('/{helpTopic}/sla', 'helpTopicSLA');
                 Route::get('/{helpTopic}/team', 'helpTopicTeam');
-                Route::get('/service-departments', 'loadServiceDepartments');
-                Route::get('/{serviceDepartment}/help-topics', 'serviceDepartmentHelpTopics');
-
             });
         });
         Route::prefix('account-settings')->name('account_settings.')->group(function () {
             Route::controller(UserAccountSettingsController::class)->group(function () {
                 Route::get('/profile', 'profile')->name('profile');
                 Route::get('/password', 'password')->name('password');
+            });
+            Route::controller(UsersAccountController::class)->group(function () {
                 Route::put('/profile/update', 'updateProfile')->name('updateProfile');
                 Route::put('/password/update', 'updatePassword')->name('updatePassword');
             });
         });
     });
 });
+
+Route::prefix('ticket')->group(function () {
+    Route::controller(UserTicketsController::class)->group(function () {
+        Route::get('/service-departments', 'loadServiceDepartments');
+        Route::get('/{serviceDepartment}/help-topics', 'serviceDepartmentHelpTopics');
+    });
+});
+
 
 // * Feedback Routes
 Route::middleware(['auth', Role::user()])->group(function () {

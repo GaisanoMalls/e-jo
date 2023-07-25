@@ -65,8 +65,7 @@ trait Tickets
 
     public function getOnHoldTickets()
     {
-        $onHoldTickets = Ticket::where('status_id', Status::ON_HOLD)
-            ->where('approval_status', ApprovalStatus::APPROVED)
+        $onHoldTickets = Ticket::where('approval_status', ApprovalStatus::APPROVED)
             ->where('branch_id', auth()->user()->branch_id)
             ->orderBy('created_at', 'desc')
             ->get();

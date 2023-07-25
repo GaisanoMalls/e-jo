@@ -127,6 +127,18 @@
                     <div class="collapse {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'show' : '' }}"
                         id="dashboard-collapse" style="">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small sidebar__collapse__ul">
+                            <li>
+                                <a href="{{ route('staff.tickets.open_tickets') }}"
+                                    class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
+                                                                {{ Route::is('staff.tickets.open_tickets') ? 'sidebar__collapse__btnlink__active' : '' }}">
+                                    <div class="d-flex align-items-center">
+                                        <div class="sidebar__active__dot position-absolute rounded-circle"></div>
+                                        <span class="sidebar__btn__link__name ">Open</span>
+                                    </div>
+                                    {{-- <span class="badge sidebar__btn__link__badge">{{ $openTickets->count()
+                                        }}</span> --}}
+                                </a>
+                            </li>
                             @if (auth()->user()->role_id !== App\Models\Role::AGENT)
                             <li>
                                 <a href="{{ route('staff.tickets.approved_tickets') }}"
@@ -136,21 +148,21 @@
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Approved</span>
                                     </div>
-                                    <span class="badge sidebar__btn__link__badge">30</span>
+                                    {{-- <span class="badge sidebar__btn__link__badge">{{ $approvedTickets->count()
+                                        }}</span> --}}
+                                </a>
+                            </li>
+                            <li>
+                                <a href=""
+                                    class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink ">
+                                    <div class="d-flex align-items-center">
+                                        <div class="sidebar__active__dot position-absolute rounded-circle"></div>
+                                        <span class="sidebar__btn__link__name ">Disapproved</span>
+                                    </div>
+                                    {{-- <span class="badge sidebar__btn__link__badge">30</span> --}}
                                 </a>
                             </li>
                             @endif
-                            <li>
-                                <a href="{{ route('staff.tickets.open_tickets') }}"
-                                    class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
-                                    {{ Route::is('staff.tickets.open_tickets') ? 'sidebar__collapse__btnlink__active' : '' }}">
-                                    <div class="d-flex align-items-center">
-                                        <div class="sidebar__active__dot position-absolute rounded-circle"></div>
-                                        <span class="sidebar__btn__link__name ">Open</span>
-                                    </div>
-                                    <span class="badge sidebar__btn__link__badge">30</span>
-                                </a>
-                            </li>
                             <li>
                                 <a href="{{ route('staff.tickets.claimed_tickets') }}"
                                     class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
@@ -159,7 +171,8 @@
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Claimed</span>
                                     </div>
-                                    <span class="badge sidebar__btn__link__badge">30</span>
+                                    {{-- <span class="badge sidebar__btn__link__badge">{{ $claimedTickets->count()
+                                        }}</span> --}}
                                 </a>
                             </li>
                             <li>
@@ -170,7 +183,8 @@
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">On Process</span>
                                     </div>
-                                    <span class="badge sidebar__btn__link__badge">30</span>
+                                    {{-- <span class="badge sidebar__btn__link__badge">{{ $onProcessTickets->count()
+                                        }}</span> --}}
                                 </a>
                             </li>
                             @if (auth()->user()->role_id !== App\Models\Role::AGENT)
@@ -182,10 +196,10 @@
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Viewed</span>
                                     </div>
-                                    <span class="badge sidebar__btn__link__badge">30</span>
+                                    {{-- <span class="badge sidebar__btn__link__badge">30</span> --}}
                                 </a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="{{ route('staff.tickets.reopened_tickets') }}"
                                     class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
                                     {{ Route::is('staff.tickets.reopened_tickets') ? 'sidebar__collapse__btnlink__active' : '' }}">
@@ -195,7 +209,7 @@
                                     </div>
                                     <span class="badge sidebar__btn__link__badge">30</span>
                                 </a>
-                            </li>
+                            </li> --}}
                             @endif
                             <li>
                                 <a href="{{ route('staff.tickets.overdue_tickets') }}"
@@ -205,7 +219,7 @@
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Overdue</span>
                                     </div>
-                                    <span class="badge sidebar__btn__link__badge">30</span>
+                                    {{-- <span class="badge sidebar__btn__link__badge">30</span> --}}
                                 </a>
                             </li>
                             <li>
@@ -216,10 +230,10 @@
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Closed</span>
                                     </div>
-                                    <span class="badge sidebar__btn__link__badge">30</span>
+                                    {{-- <span class="badge sidebar__btn__link__badge">30</span> --}}
                                 </a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="" class="position-relative link-dark d-flex align-items-center text-decoration-none
                                     rounded justify-content-between sidebar__collapse__btnlink">
                                     <div class="d-flex align-items-center">
@@ -228,7 +242,7 @@
                                     </div>
                                     <span class="badge sidebar__btn__link__badge">30</span>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </li>

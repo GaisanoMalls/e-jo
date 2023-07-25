@@ -21,8 +21,8 @@
                         <label for="firstName" class="form-label input__field__label">First Name</label>
                         <input type="text" name="first_name" class="form-control input__field" id="firstName"
                             value="{{ auth()->user()->profile->first_name }}">
-                        @error('first_name')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                        @error('first_name', 'updateProfile')
+                        <span class="text-danger custom__field__message">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
@@ -31,8 +31,8 @@
                         <label for="middleName" class="form-label input__field__label">Middle Name</label>
                         <input type="text" name="middle_name" class="form-control input__field" id="middleName"
                             value="{{ auth()->user()->profile->middle_name }}">
-                        @error('middle_name')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                        @error('middle_name', 'updateProfile')
+                        <span class="text-danger custom__field__message">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
@@ -41,8 +41,8 @@
                         <label for="lastName" class="form-label input__field__label">Last Name</label>
                         <input type="text" name="last_name" class="form-control input__field" id="lastName"
                             value="{{ auth()->user()->profile->last_name }}">
-                        @error('last_name')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                        @error('last_name', 'updateProfile')
+                        <span class="text-danger custom__field__message">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
@@ -51,8 +51,8 @@
                         <label for="suffix" class="form-label input__field__label">Suffix</label>
                         <input type="text" name="suffix" class="form-control input__field" id="suffix"
                             value="{{ auth()->user()->profile->suffix }}">
-                        @error('suffix')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                        @error('suffix', 'updateProfile')
+                        <span class="text-danger custom__field__message">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
@@ -61,8 +61,8 @@
                         <label for="email" class="form-label input__field__label">Email</label>
                         <input type="text" name="email" class="form-control input__field" id="email"
                             value="{{ auth()->user()->email }}">
-                        @error('email')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                        @error('email', 'updateProfile')
+                        <span class="text-danger custom__field__message">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
@@ -71,8 +71,8 @@
                         <label for="mobileNumber" class="form-label input__field__label">Mobile No.</label>
                         <input type="text" name="mobile_number" class="form-control input__field" maxlength="11"
                             id="mobileNumber" value="{{ auth()->user()->profile->mobile_number }}">
-                        @error('mobile_number')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                        @error('mobile_number', 'updateProfile')
+                        <span class="text-danger custom__field__message">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>

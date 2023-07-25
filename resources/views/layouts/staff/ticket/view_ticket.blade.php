@@ -37,12 +37,6 @@
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @break
-                @case(App\Models\Status::REOPENED)
-                <a href="{{ route('staff.tickets.reopened_tickets') }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @break
                 @case(App\Models\Status::OVERDUE)
                 <a href="{{ route('staff.tickets.overdue_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
@@ -204,8 +198,6 @@
                         <small style="font-size: 14px;">No replies.</small>
                     </div>
                     @endif
-                    @if (auth()->user()->role_id !== App\Models\Role::SERVICE_DEPARTMENT_ADMIN &&
-                    auth()->user()->role_id !== App\Models\Role::SYSTEM_ADMIN)
                     <button type="button"
                         class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2"
                         data-bs-toggle="offcanvas" data-bs-target="#offcanvasReplyTicketForm"
@@ -213,7 +205,6 @@
                         <i class="fa-solid fa-pen"></i>
                         <span class="lbl__reply">Reply</span>
                     </button>
-                    @endif
                     {{-- End Replies/Comments --}}
                 </div>
                 <div class="col-md-4">
@@ -269,8 +260,13 @@
                                         <small class="ticket__details__info__label" style="font-weight: 500;">
                                             Assigned agent:
                                         </small>
-                                        <small class="ticket__details__info {{ $ticket->agent ? '' : 'not__set'}}">
-                                            {{ $ticket->agent->name ?? '----' }}
+                                        <small
+                                            class="ticket__details__info {{ $ticket->agent_id !== null ? '' : 'not__set'}}">
+                                            @if ($ticket->agent)
+                                            {{ $ticket->agent->profile->getFullName() }}
+                                            @else
+                                            ----
+                                            @endif
                                         </small>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between">

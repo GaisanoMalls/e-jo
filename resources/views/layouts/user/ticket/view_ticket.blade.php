@@ -2,7 +2,7 @@
 
 @section('main-content')
 @if ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
-<div class="alert alert-warning p-3 rounded-3 mx-1 mt-4 mb-0" role="alert" style="font-size: 13px;">
+<div class="alert alert-warning p-3 rounded-3 border-0 mt-4 mb-3" role="alert" style="font-size: 13px;">
     We regret to inform you that the approver has disapproved your ticket. After careful consideration, the
     decision has been made not to proceed with the requested action at this time.
     <br>

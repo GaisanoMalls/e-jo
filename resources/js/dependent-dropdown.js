@@ -431,30 +431,26 @@ function userCreateTicketClearHelpTopicWhenResetDepartment() {
 }
 
 // Load the deparments based on authenticated user's branch.
-const navBtnCreateNewTicket = document.getElementById('navBtnCreateNewTicket');
+window.onload = function () {
+    axios.get(`/ticket/service-departments`)
+        .then((response) => {
+            const serviceDepartments = response.data;
+            const serviceDepartmentsOption = [];
 
-if (navBtnCreateNewTicket) {
-    navBtnCreateNewTicket.addEventListener('click', function () {
-        axios.get(`/user/ticket/service-departments`)
-            .then((response) => {
-                const serviceDepartments = response.data;
-                const serviceDepartmentsOption = [];
-
-                if (serviceDepartments && serviceDepartments.length > 0) {
-                    serviceDepartments.forEach(function (serviceDepartment) {
-                        serviceDepartmentsOption.push({
-                            value: serviceDepartment.id,
-                            label: serviceDepartment.name
-                        });
+            if (serviceDepartments && serviceDepartments.length > 0) {
+                serviceDepartments.forEach(function (serviceDepartment) {
+                    serviceDepartmentsOption.push({
+                        value: serviceDepartment.id,
+                        label: serviceDepartment.name
                     });
+                });
 
-                    userCreateTicketServiceDepartmentDropdown.setOptions(serviceDepartmentsOption);
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-            });
-    })
+                userCreateTicketServiceDepartmentDropdown.setOptions(serviceDepartmentsOption);
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        });
 }
 
 if (userCreateTicketServiceDepartmentDropdown) {
@@ -469,7 +465,7 @@ if (userCreateTicketServiceDepartmentDropdown) {
         const servideDepartmentId = this.value;
 
         if (servideDepartmentId) {
-            axios.get(`/user/ticket/${servideDepartmentId}/help-topics`)
+            axios.get(`/ticket/${servideDepartmentId}/help-topics`)
                 .then((response) => {
                     const helpTopics = response.data;
                     const helpTopicsOption = [];

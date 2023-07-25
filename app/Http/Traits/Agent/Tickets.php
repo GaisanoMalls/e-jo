@@ -11,7 +11,7 @@ trait Tickets
     public function agentGetOpenTickets()
     {
         $openTickets = Ticket::where(function ($statusQuery) {
-            $statusQuery->where('status_id', Status::OPEN)
+            $statusQuery->where('status_id', Status::APPROVED)
                 ->where('approval_status', ApprovalStatus::APPROVED)
                 ->where('status_id', '!=', Status::CLAIMED);
         })

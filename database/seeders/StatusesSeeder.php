@@ -17,11 +17,10 @@ class StatusesSeeder extends Seeder
         $statuses = [
             ['name' => 'Open', 'color' => '#3F993F'],
             ['name' => 'Viewed', 'color' => '#1F75CC'],
-            ['name' => 'On Hold', 'color' => '#408AA8'],
             ['name' => 'Approved', 'color' => '#BD7332'],
+            ['name' => 'Disapproved', 'color' => '#FF0000'],
             ['name' => 'Claimed', 'color' => '#FF8B8B'],
             ['name' => 'On Process', 'color' => '#1E1C1D'],
-            ['name' => 'Reopened', 'color' => '#309431'],
             ['name' => 'Overdue', 'color' => '#FD6852'],
             ['name' => 'Closed', 'color' => '#7A7E87'],
         ];

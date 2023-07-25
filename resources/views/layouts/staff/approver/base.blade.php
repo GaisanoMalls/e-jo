@@ -25,9 +25,7 @@
         @if (Route::is('approver.tickets.*'))
         @include('layouts.staff.approver.includes.ticket_tab')
         @endif
-        @section('main-content')
-        @include('layouts.staff.approver.includes.dashboard')
-        @show
+        @yield('main-content')
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

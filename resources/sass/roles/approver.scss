@@ -377,9 +377,17 @@ nav {
                 word-wrap: break-word;
             }
 
+            .icon__container {
+                height: 50px;
+                width: 50px;
+                padding: 13px;
+                background-color: #FBF8F8;
+                border-radius: $border-radius-9
+            }
+
             i {
-                font-size: 2.5rem;
-                color: #5B5943;
+                font-size: 1.5rem;
+                color: #1d5c63;
             }
         }
     }

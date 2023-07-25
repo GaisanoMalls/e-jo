@@ -91,6 +91,10 @@ $color-1: #d32839;
     padding: 20px 23px;
 }
 
+@mixin card-shadow {
+    box-shadow: 0px 1px 4px 0px rgba(132, 132, 132, 0.25);
+}
+
 @mixin form-input-and-button {
     padding: 0.6rem 1rem;
     font-size: $fs-15;
@@ -321,7 +325,6 @@ body {
 }
 
 .ticket__tab__header {
-    margin-top: 4rem;
     margin-bottom: 3rem;
     background-color: #fcfdfd;
     padding-left: 5px;
@@ -512,8 +515,6 @@ body {
     }
 
     .ticket__details__section {
-        margin-top: 1.5rem;
-
         .details__card__top {
             padding: 1.5rem 1.5rem 1.5rem 2.3rem;
             background-color: #ffffff;
@@ -1028,6 +1029,47 @@ body {
                 .btn__save__account {
                     @include button;
                 }
+            }
+        }
+    }
+}
+
+.requester__section {
+    margin-top: 30px;
+    margin-bottom: 50px;
+
+    .custom__card {
+        border: 0;
+        margin-bottom: 20px;
+        border-radius: $border-radius-8;
+        @include card-padding;
+
+        .card__content {
+            .ticket__count {
+                color: #7C858F;
+                font-size: 1.8rem;
+                font-weight: $fw-600;
+            }
+
+            .card__title {
+                margin-bottom: 0;
+                color: #3D3D3D;
+                font-size: $fs-15;
+                font-weight: $fw-500;
+                word-wrap: break-word;
+            }
+
+            .icon__container {
+                height: 50px;
+                width: 50px;
+                padding: 13px;
+                background-color: #FBF8F8;
+                border-radius: $border-radius-9
+            }
+
+            i {
+                font-size: 1.5rem;
+                color: #1d5c63;
             }
         }
     }

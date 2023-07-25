@@ -20,11 +20,11 @@ trait Tickets
         return $approvedTickets;
     }
 
-    public function sysAdminGetOpentTickets()
+    public function sysAdminGetOpenTickets()
     {
         $openTickets = Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OPEN)
-                ->where('approval_status', ApprovalStatus::APPROVED);
+                ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
         })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -36,7 +36,8 @@ trait Tickets
     {
         $claimedTickets = Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLAIMED)
-                ->where('approval_status', ApprovalStatus::APPROVED);
+                ->where('approval_status', ApprovalStatus::APPROVED)
+                ->where('agent_id', '!=', null);
         })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -66,18 +67,6 @@ trait Tickets
             ->get();
 
         return $viewedTickets;
-    }
-
-    public function sysAdminGetReopenedTickets()
-    {
-        $reopenedTickets = Ticket::where(function ($statusQuery) {
-            $statusQuery->where('status_id', Status::REOPENED)
-                ->where('approval_status', ApprovalStatus::APPROVED);
-        })
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return $reopenedTickets;
     }
 
     public function sysAdminGetOverdueTickets()

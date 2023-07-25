@@ -13,9 +13,8 @@ class LandingController extends Controller
 
     public function landingPage()
     {
-        if (Auth::check()) {
+        if (Auth::check())
             return self::redirectAuthenticatedStaffWithRole() ?: $this->redirectAuthenticatedUserWithRole();
-        }
 
         return view('layouts.auth.base');
     }
