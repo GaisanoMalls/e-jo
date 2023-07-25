@@ -10,8 +10,8 @@ trait Tickets
 {
     public function sysAdminGetApprovedTickets()
     {
-        $approvedTickets = Ticket::where(function ($query) {
-            $query->where('status_id', Status::APPROVED)
+        $approvedTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::APPROVED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
             ->orderBy('created_at', 'desc')
@@ -22,9 +22,9 @@ trait Tickets
 
     public function sysAdminGetOpentTickets()
     {
-        $openTickets = Ticket::where(function ($query) {
-            $query->where('status_id', Status::OPEN)
-                ->orWhere('approval_status', ApprovalStatus::APPROVED);
+        $openTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::OPEN)
+                ->where('approval_status', ApprovalStatus::APPROVED);
         })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -34,8 +34,8 @@ trait Tickets
 
     public function sysAdminGetClaimedTickets()
     {
-        $claimedTickets = Ticket::where(function ($query) {
-            $query->where('status_id', Status::CLAIMED)
+        $claimedTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::CLAIMED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
             ->orderBy('created_at', 'desc')
@@ -46,8 +46,8 @@ trait Tickets
 
     public function sysAdminGetOnProcessTickets()
     {
-        $onProcessTickets = Ticket::where(function ($query) {
-            $query->where('status_id', Status::ON_PROCESS)
+        $onProcessTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::ON_PROCESS)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
             ->orderBy('created_at', 'desc')
@@ -58,8 +58,8 @@ trait Tickets
 
     public function sysAdminGetViewedTickets()
     {
-        $viewedTickets = Ticket::where(function ($query) {
-            $query->where('status_id', Status::VIEWED)
+        $viewedTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::VIEWED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
             ->orderBy('created_at', 'desc')
@@ -70,8 +70,8 @@ trait Tickets
 
     public function sysAdminGetReopenedTickets()
     {
-        $reopenedTickets = Ticket::where(function ($query) {
-            $query->where('status_id', Status::REOPENED)
+        $reopenedTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::REOPENED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
             ->orderBy('created_at', 'desc')
@@ -82,8 +82,8 @@ trait Tickets
 
     public function sysAdminGetOverdueTickets()
     {
-        $overdueTickets = Ticket::where(function ($query) {
-            $query->where('status_id', Status::OVERDUE)
+        $overdueTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::OVERDUE)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
             ->orderBy('created_at', 'desc')
@@ -94,11 +94,10 @@ trait Tickets
 
     public function sysAdminGetClosedTickets()
     {
-        $closedTickets = Ticket::where(function ($query) {
-            $query->where('status_id', Status::CLOSED)
-                ->orWhere(function ($query) {
-                    $query->where('approval_status', ApprovalStatus::APPROVED)
-                        ->where('approval_status', ApprovalStatus::DISAPPROVED);
+        $closedTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::CLOSED)
+                ->where(function ($approvalStatusQuery) {
+                    $approvalStatusQuery->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::DISAPPROVED]);
                 });
         })
             ->orderBy('created_at', 'desc')
