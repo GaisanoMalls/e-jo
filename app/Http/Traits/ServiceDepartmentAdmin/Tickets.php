@@ -8,51 +8,134 @@ use App\Models\Ticket;
 
 trait Tickets
 {
-    public function getApprovedTickets()
+    public function serviceDeptAdminGetApprovedTickets()
     {
         $approvedTickets = Ticket::where(function ($query) {
             $query->where('status_id', Status::APPROVED)
-                ->orWhere('approval_status', ApprovalStatus::APPROVED)
-                ->where(function ($query) {
-                    $query->where('branch_id', auth()->user()->branch_id)
-                        ->where('service_department_id', auth()->user()->service_department_id);
-                });
+                ->where('approval_status', ApprovalStatus::APPROVED);
         })
+            ->where(function ($query) {
+                $query->where('branch_id', auth()->user()->branch_id)
+                    ->where('service_department_id', auth()->user()->service_department_id);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
         return $approvedTickets;
     }
 
-    public function getOpentTickets()
+    public function serviceDeptAdminGetOpentTickets()
     {
         $openTickets = Ticket::where(function ($query) {
             $query->where('status_id', Status::OPEN)
-                ->where('approval_status', ApprovalStatus::APPROVED)
-                ->where(function ($query) {
-                    $query->where('branch_id', auth()->user()->branch_id)
-                        ->where('service_department_id', auth()->user()->service_department_id);
-                });
+                ->where('approval_status', ApprovalStatus::APPROVED);
         })
+            ->where(function ($query) {
+                $query->where('branch_id', auth()->user()->branch_id)
+                    ->where('service_department_id', auth()->user()->service_department_id);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
         return $openTickets;
     }
 
-    public function getOnProcessTickets()
+    public function serviceDeptAdminGetClaimedTickets()
+    {
+        $claimedTickets = Ticket::where(function ($query) {
+            $query->where('status_id', Status::CLAIMED)
+                ->where('approval_status', ApprovalStatus::APPROVED);
+        })
+            ->where(function ($query) {
+                $query->where('branch_id', auth()->user()->branch_id)
+                    ->where('service_department_id', auth()->user()->service_department_id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $claimedTickets;
+    }
+
+    public function serviceDeptAdminGetOnProcessTickets()
     {
         $onProcessTickets = Ticket::where(function ($query) {
             $query->where('status_id', Status::ON_PROCESS)
-                ->where('approval_status', ApprovalStatus::APPROVED)
-                ->where(function ($query) {
-                    $query->where('branch_id', auth()->user()->branch_id)
-                        ->where('service_department_id', auth()->user()->service_department_id);
-                });
+                ->where('approval_status', ApprovalStatus::APPROVED);
         })
+            ->where(function ($query) {
+                $query->where('branch_id', auth()->user()->branch_id)
+                    ->where('service_department_id', auth()->user()->service_department_id);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
         return $onProcessTickets;
+    }
+
+    public function serviceDeptAdminGetViewedTickets()
+    {
+        $viewedTickets = Ticket::where(function ($query) {
+            $query->where('status_id', Status::VIEWED)
+                ->where('approval_status', ApprovalStatus::APPROVED);
+        })
+            ->where(function ($query) {
+                $query->where('branch_id', auth()->user()->branch_id)
+                    ->where('service_department_id', auth()->user()->service_department_id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $viewedTickets;
+    }
+
+    public function serviceDeptAdminGetReopenedTickets()
+    {
+        $reopenedTickets = Ticket::where(function ($query) {
+            $query->where('status_id', Status::REOPENED)
+                ->where('approval_status', ApprovalStatus::APPROVED);
+        })
+            ->where(function ($query) {
+                $query->where('branch_id', auth()->user()->branch_id)
+                    ->where('service_department_id', auth()->user()->service_department_id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $reopenedTickets;
+    }
+
+    public function serviceDeptAdminGetOverdueTickets()
+    {
+        $overdueTickets = Ticket::where(function ($query) {
+            $query->where('status_id', Status::OVERDUE)
+                ->where('approval_status', ApprovalStatus::APPROVED);
+        })
+            ->where(function ($query) {
+                $query->where('branch_id', auth()->user()->branch_id)
+                    ->where('service_department_id', auth()->user()->service_department_id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $overdueTickets;
+    }
+
+    public function serviceDeptAdminGetClosedTickets()
+    {
+        $closedTickets = Ticket::where(function ($query) {
+            $query->where('status_id', Status::CLOSED)
+                ->where(function ($innerQuery) {
+                    $innerQuery->where('branch_id', auth()->user()->branch_id)
+                        ->where('service_department_id', auth()->user()->service_department_id);
+                });
+        })
+            ->orWhere(function ($query) {
+                $query->where('approval_status', ApprovalStatus::APPROVED)
+                    ->where('approval_status', ApprovalStatus::DISAPPROVED);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $closedTickets;
     }
 }

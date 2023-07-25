@@ -1,4 +1,4 @@
-@extends('layouts.staff.base', ['title' => 'Open Tickets'])
+@extends('layouts.staff.base', ['title' => 'Claimed Tickets'])
 
 @section('page-header')
 <div class="justify-content-between d-flex flex-wrap ticket__content__top">
@@ -6,7 +6,7 @@
         <h3 class="page__header__title">Tickets</h3>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">Tickets</li>
-            <li class="breadcrumb-item active">Open</li>
+            <li class="breadcrumb-item active">Claimed</li>
         </ol>
     </div>
 </div>
@@ -20,7 +20,7 @@
                 <div class="tickets__card__header pb-0 pt-4 px-4">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex flex-column me-3">
-                            <h6 class="card__title">Open Tickets</h6>
+                            <h6 class="card__title">Claimed Tickets</h6>
                             <p class="card__description">
                                 Respond the tickets sent by the requester
                             </p>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="tickets__table__card">
                     <div class="table-responsive custom__table">
-                        @if ($openTickets->count() > 0)
+                        @if ($claimedTickets->count() > 0)
                         <table class="table table-striped mb-0" id="table">
                             <thead>
                                 <tr>
@@ -59,15 +59,10 @@
                                     <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                         Priority
                                     </th>
-                                    @if (auth()->user()->role_id === App\Models\Role::AGENT)
-                                    <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                                        Action
-                                    </th>
-                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($openTickets as $ticket)
+                                @foreach ($claimedTickets as $ticket)
                                 <tr class="ticket__tr"
                                     onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'">
                                     <td class="position-relative">
@@ -120,27 +115,13 @@
                                                 $ticket->priorityLevel->name }}</span>
                                         </div>
                                     </td>
-                                    @if (auth()->user()->role_id === App\Models\Role::AGENT)
-                                    <td>
-                                        <div class="d-flex align-items-center justify-content-start td__content">
-                                            <form action="{{ route('staff.ticket.claim_ticket', $ticket->id) }}"
-                                                method="post">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="btn btn-sm btn__claim__ticket">
-                                                    Claim ticket
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                         @else
                         <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                            <small style="font-size: 14px;">No records for open tickets.</small>
+                            <small style="font-size: 14px;">No records for claimed tickets.</small>
                         </div>
                         @endif
                     </div>

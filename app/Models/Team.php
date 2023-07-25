@@ -56,7 +56,7 @@ class Team extends Model
         return '----';
     }
 
-     public function dateCreated()
+    public function dateCreated()
     {
         return Carbon::parse($this->created_at)->format('M d, Y');
     }
@@ -66,7 +66,7 @@ class Team extends Model
         $created_at = Carbon::parse($this->created_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         $updated_at = Carbon::parse($this->updated_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         return $updated_at === $created_at
-        ? "----"
-        : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
+            ? "----"
+            : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
     }
 }

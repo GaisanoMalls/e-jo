@@ -82,7 +82,9 @@
             @endswitch
             @endif
         </div>
-        <p class="sidebar__userdepartment">{{ auth()->user()->department->name ?? '' }}</p>
+        <p class="sidebar__userdepartment">
+            {{ auth()->user()->branch->name ?? '' }} - {{ auth()->user()->serviceDepartment->name ?? '' }}
+        </p>
         <div class="mt-3 d-flex staff__ticket__count justify-content-center">
             <li>
                 <span class="counter">9</span>
@@ -150,9 +152,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a href=""
-                                    class="position-relative link-dark d-flex align-items-center text-decoration-none
-                                                                rounded justify-content-between sidebar__collapse__btnlink">
+                                <a href="{{ route('staff.tickets.claimed_tickets') }}"
+                                    class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
+                                    {{ Route::is('staff.tickets.claimed_tickets') ? 'sidebar__collapse__btnlink__active' : '' }}">
                                     <div class="d-flex align-items-center">
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Claimed</span>
@@ -173,8 +175,9 @@
                             </li>
                             @if (auth()->user()->role_id !== App\Models\Role::AGENT)
                             <li>
-                                <a href="" class="position-relative link-dark d-flex align-items-center text-decoration-none rounded
-                                    justify-content-between sidebar__collapse__btnlink">
+                                <a href="{{ route('staff.tickets.viewed_tickets') }}"
+                                    class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
+                                    {{ Route::is('staff.tickets.viewed_tickets') ? 'sidebar__collapse__btnlink__active' : '' }}">
                                     <div class="d-flex align-items-center">
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Viewed</span>
@@ -182,11 +185,10 @@
                                     <span class="badge sidebar__btn__link__badge">30</span>
                                 </a>
                             </li>
-                            @endif
-                            @if (auth()->user()->role_id !== App\Models\Role::AGENT)
                             <li>
-                                <a href="" class="position-relative link-dark d-flex align-items-center text-decoration-none
-                                    rounded justify-content-between sidebar__collapse__btnlink">
+                                <a href="{{ route('staff.tickets.reopened_tickets') }}"
+                                    class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
+                                    {{ Route::is('staff.tickets.reopened_tickets') ? 'sidebar__collapse__btnlink__active' : '' }}">
                                     <div class="d-flex align-items-center">
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Reopened</span>
@@ -196,8 +198,9 @@
                             </li>
                             @endif
                             <li>
-                                <a href="" class="position-relative link-dark d-flex align-items-center text-decoration-none
-                                    rounded justify-content-between sidebar__collapse__btnlink">
+                                <a href="{{ route('staff.tickets.overdue_tickets') }}"
+                                    class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
+                                    {{ Route::is('staff.tickets.overdue_tickets') ? 'sidebar__collapse__btnlink__active' : '' }}">
                                     <div class="d-flex align-items-center">
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Overdue</span>
@@ -206,8 +209,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="" class="position-relative link-dark d-flex align-items-center text-decoration-none
-                                    rounded justify-content-between sidebar__collapse__btnlink">
+                                <a href="{{ route('staff.tickets.closed_tickets') }}"
+                                    class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
+                                    {{ Route::is('staff.tickets.closed_tickets') ? 'sidebar__collapse__btnlink__active' : '' }}">
                                     <div class="d-flex align-items-center">
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Closed</span>

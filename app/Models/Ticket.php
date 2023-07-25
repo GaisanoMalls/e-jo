@@ -96,5 +96,4 @@ class Ticket extends Model
     {
         return Carbon::parse($this->created_at)->format('M d, Y');
     }
-
 }

@@ -1060,6 +1060,19 @@ a:hover {
   border: none !important;
 }
 
+.btn__claim__ticket {
+  color: #FFFFFF;
+  background-color: #9DA85C;
+  padding: 0.4rem 0.9rem;
+  font-weight: 500;
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+}
+.btn__claim__ticket:hover {
+  color: #FFFFFF;
+  background-color: #9DA85C;
+}
+
 .custom__button__menu {
   border-radius: 50%;
   height: 25px;

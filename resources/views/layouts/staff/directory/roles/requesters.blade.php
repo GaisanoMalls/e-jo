@@ -23,7 +23,7 @@ Service Dept. Admins Directory
             </div>
         </div>
     </div>
-    @if ($department_admins->count() > 0)
+    @if ($requesters->count() > 0)
     <div class="directory__type__card">
         <div class="table-responsive custom__table">
             <table class="table table-striped mb-0" id="table">
@@ -47,7 +47,7 @@ Service Dept. Admins Directory
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($department_admins as $user)
+                    @foreach ($requesters as $user)
                     <tr>
                         <td>
                             <a href="">

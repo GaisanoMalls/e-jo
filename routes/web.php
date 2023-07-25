@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\Staff\Agent\AgentTicketController;
 use App\Http\Controllers\User\FeedbackController;
 use App\Http\Controllers\DependentsController;
 use App\Http\Controllers\ForgotPasswordController;
@@ -69,9 +70,14 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::prefix('tickets')->name('tickets.')->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
+                Route::get('/approved', 'approvedTickets')->name('approved_tickets');
                 Route::get('/open', 'openTickets')->name('open_tickets');
                 Route::get('/on-process', 'onProcessTickets')->name('on_process_tickets');
-                Route::get('/approved', 'approvedTickets')->name('approved_tickets');
+                Route::get('/claimed', 'claimedTickets')->name('claimed_tickets');
+                Route::get('/viewed', 'viewedTickets')->name('viewed_tickets');
+                Route::get('/reopened', 'reopenedTickets')->name('reopened_tickets');
+                Route::get('/overdue', 'overdueTickets')->name('overdue_tickets');
+                Route::get('/closed', 'closedTickets')->name('closed_tickets');
             });
             // Endpoint for axios
             Route::controller(DependentsController::class)->group(function () {
@@ -82,6 +88,9 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
                 Route::get('/{ticketId}/view', 'viewTicket')->name('view_ticket');
                 Route::post('/{ticket}/reply/store', 'replyTicket')->name('storeTicketReply');
+            });
+            Route::controller(AgentTicketController::class)->group(function () {
+                Route::put('{ticket}/claim', 'claimTicket')->name('claim_ticket');
             });
         });
         Route::prefix('/announcement')->name('announcement.')->group(function () {
@@ -241,9 +250,10 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
         // Directory Routes
         Route::prefix('directory')->name('directory.')->group(function () {
             Route::controller(DirectoryController::class)->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/agents', 'agents')->name('agents');
+                Route::get('/service-departmetn-administrators', 'index')->name('index');
                 Route::get('/approvers', 'approvers')->name('approvers');
+                Route::get('/agents', 'agents')->name('agents');
+                Route::get('/requesters', 'requesters')->name('requesters');
             });
         });
     });

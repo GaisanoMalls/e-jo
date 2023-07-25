@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,19 +15,17 @@ class DirectoryController extends Controller
     {
         $department_admins = User::with(['branch', 'department', 'role'])->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN)->get();
 
-        return view('layouts.staff.directory.directory_main', compact('department_admins'));
+        return view('layouts.staff.directory.roles.department_admins', compact('department_admins'));
     }
 
     public function approvers()
     {
         $approvers = User::where('role_id', Role::APPROVER)->get();
-        $department_admins = User::with(['branch', 'role'])->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN)->get();
 
         return view(
             'layouts.staff.directory.roles.approvers',
             compact([
                 'approvers',
-                'department_admins'
             ])
         );
     }
@@ -34,14 +33,29 @@ class DirectoryController extends Controller
     public function agents()
     {
         $agents = User::with(['branch', 'department', 'serviceDepartment', 'role'])->where('role_id', Role::AGENT)->get();
-        $department_admins = User::where('role_id', Role::SERVICE_DEPARTMENT_ADMIN)->get();
 
         return view(
             'layouts.staff.directory.roles.agents',
             compact([
                 'agents',
-                'department_admins'
             ])
         );
+    }
+
+    public function requesters()
+    {
+        $requesters = User::with(['branch', 'department', 'serviceDepartment', 'role'])->where('role_id', Role::USER)->get();
+
+        return view(
+            'layouts.staff.directory.roles.requesters',
+            compact([
+                'requesters',
+            ])
+        );
+    }
+
+    public function teams()
+    {
+        $teams = Team::orderBy('created_at', 'desc')->get();
     }
 }

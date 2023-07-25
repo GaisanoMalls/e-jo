@@ -43,7 +43,7 @@
             @enderror
             <div class="mt-1 d-flex flex-wrap align-items-center justify-content-between">
                 <div class="d-flex flex-column gap-1">
-                    <input class="form-control ticket__file__input w-auto my-3" type="file" name="replyFiles[]"
+                    <input class="form-control ticket__file__input w-auto my-3" type="file" name="clarificationFiles[]"
                         id="ticketFile" multiple>
                     @error('replyFiles', 'storeTicketReplyClarification')
                     <span class="error__message">

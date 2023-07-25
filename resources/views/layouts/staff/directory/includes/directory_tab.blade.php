@@ -23,9 +23,10 @@
             </a>
         </li>
         <li>
-            <a href="" class="btn d-flex align-items-center border-0 directory__tab__button">
+            <a href="{{ route('staff.directory.requesters') }}" class="btn d-flex align-items-center border-0 directory__tab__button
+                {{ Route::is('staff.directory.requesters') ? 'directory__active__tab' : '' }}">
                 <i class="fa-solid fa-user-check directory__icon__active__tab"></i>
-                Users
+                Requesters
             </a>
         </li>
         <li>

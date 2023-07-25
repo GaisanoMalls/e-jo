@@ -4,7 +4,7 @@
 <div class="justify-content-between d-flex flex-wrap ticket__content__top">
     <div class="w-100 d-flex flex-wrap justify-content-between">
         <h3 class="page__header__title">
-            @yield('directory-header-title', 'Service Dept. Admins Directory')
+            @yield('directory-header-title')
         </h3>
         @section('directory-breadcrumbs')
         <ol class="breadcrumb">
@@ -23,9 +23,7 @@
             <div class="row mt-3">
                 <div class="col-12">
                     @include('layouts.staff.directory.includes.directory_tab')
-                    @section('directory-content')
-                    @include('layouts.staff.directory.roles.department_admins')
-                    @show
+                    @yield('directory-content')
                 </div>
             </div>
         </div>

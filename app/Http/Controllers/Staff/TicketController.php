@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\ServiceDepartmentAdmin\Tickets;
-use App\Models\ApprovalStatus;
+use App\Http\Traits\TicketsByUserRole;
 use App\Models\Department;
 use App\Models\Reply;
 use App\Models\ReplyFile;
@@ -13,11 +12,10 @@ use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use SebastianBergmann\Type\ObjectType;
 
 class TicketController extends Controller
 {
-    use Tickets;
+    use TicketsByUserRole;
 
     public function approvedTickets()
     {
@@ -27,7 +25,7 @@ class TicketController extends Controller
 
     public function openTickets()
     {
-        $openTickets = $this->getOpentTickets();
+        $openTickets = $this->getOpenTickets();
         return view('layouts.staff.ticket.statuses.open_tickets', compact('openTickets'));
     }
 
@@ -37,6 +35,35 @@ class TicketController extends Controller
         return view('layouts.staff.ticket.statuses.on_process_tickets', compact('onProcessTickets'));
     }
 
+    public function claimedTickets()
+    {
+        $claimedTickets = $this->getClaimedTickets();
+        return view('layouts.staff.ticket.statuses.claimed_tickets', compact('claimedTickets'));
+    }
+
+    public function viewedTickets()
+    {
+        $viewedTickets = $this->getViewedTickets();
+        return view('layouts.staff.ticket.statuses.viewed_tickets', compact('viewedTickets'));
+    }
+
+    public function reopenedTickets()
+    {
+        $reopenedTickets = $this->getReopenedTickets();
+        return view('layouts.staff.ticket.statuses.reopened_tickets', compact('reopenedTickets'));
+    }
+
+    public function overdueTickets()
+    {
+        $overdueTickets = $this->getOverdueTickets();
+        return view('layouts.staff.ticket.statuses.overdue_tickets', compact('overdueTickets'));
+    }
+
+    public function closedTickets()
+    {
+        $closedTickets = $this->getClosedTickets();
+        return view('layouts.staff.ticket.statuses.closed_tickets', compact('closedTickets'));
+    }
 
     public function viewTicket(int $ticketId)
     {

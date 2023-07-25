@@ -7,8 +7,8 @@
         <div class="col-xl-12 ticket__details__container">
             <div class="mb-3 ticket__details__top">
                 @switch($ticket->status->id)
-                @case(App\Models\Status::ON_PROCESS)
-                <a href="{{ route('staff.tickets.on_process_tickets') }}" type="button"
+                @case(App\Models\Status::APPROVED)
+                <a href="{{ route('staff.tickets.approved_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
@@ -19,8 +19,38 @@
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @break
-                @case(App\Models\Status::APPROVED)
-                <a href="{{ route('staff.tickets.approved_tickets') }}" type="button"
+                @case(App\Models\Status::CLAIMED)
+                <a href="{{ route('staff.tickets.claimed_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @break
+                @case(App\Models\Status::ON_PROCESS)
+                <a href="{{ route('staff.tickets.on_process_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @break
+                @case(App\Models\Status::VIEWED)
+                <a href="{{ route('staff.tickets.viewed_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @break
+                @case(App\Models\Status::REOPENED)
+                <a href="{{ route('staff.tickets.reopened_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @break
+                @case(App\Models\Status::OVERDUE)
+                <a href="{{ route('staff.tickets.overdue_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @break
+                @case(App\Models\Status::CLOSED)
+                <a href="{{ route('staff.tickets.closed_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
@@ -174,6 +204,8 @@
                         <small style="font-size: 14px;">No replies.</small>
                     </div>
                     @endif
+                    @if (auth()->user()->role_id !== App\Models\Role::SERVICE_DEPARTMENT_ADMIN &&
+                    auth()->user()->role_id !== App\Models\Role::SYSTEM_ADMIN)
                     <button type="button"
                         class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2"
                         data-bs-toggle="offcanvas" data-bs-target="#offcanvasReplyTicketForm"
@@ -181,6 +213,7 @@
                         <i class="fa-solid fa-pen"></i>
                         <span class="lbl__reply">Reply</span>
                     </button>
+                    @endif
                     {{-- End Replies/Comments --}}
                 </div>
                 <div class="col-md-4">

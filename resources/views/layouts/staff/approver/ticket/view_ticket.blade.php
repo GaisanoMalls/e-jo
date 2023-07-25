@@ -49,8 +49,8 @@
                         <small class="ticket__details__datetime">{{ $ticket->dateCreated() }},
                             {{ $ticket->created_at->format('D') }} @ {{ $ticket->created_at->format('g:i A') }}</small>
                     </div>
-                    @if ($ticket->status_id !== App\Models\Status::CLOSED || $ticket->approval_status !==
-                    App\Models\ApprovalStatus::DISAPPROVED)
+                    @if ($ticket->status_id === App\Models\Status::OPEN || $ticket->approval_status ===
+                    App\Models\ApprovalStatus::FOR_APPROVAL)
                     <div class="d-flex flex-wrap align-items-center justify-content-center gap-3">
                         <form action="{{ route('approver.ticket.disapprove_ticket', $ticket->id) }}" method="post">
                             @csrf
@@ -111,6 +111,8 @@
                             @endif
                         </div>
                     </div>
+                    @if ($ticket->status_id !== App\Models\Status::CLOSED || $ticket->approval_status !==
+                    App\Models\ApprovalStatus::DISAPPROVED && $ticket->clarifications->count() !== 0)
                     <div class="mb-2 mt-4">
                         <small class="ticket__discussions text-muted">
                             {{ $ticket->clarifications->count() > 1 ? 'Discussions' : 'Discussion' }}
@@ -123,9 +125,8 @@
                     <div class="row align-items-center bg-light p-2 py-1 rounded-3 mx-1 mt-2 mb-4">
                         <div class="col-md-8">
                             <p class="mb-0" style="font-size: 13px; line-height: 19px;">
-                                If you have any questions or clarifications, or any other matters with regards to this
-                                ticket,
-                                you can connect with {{ $ticket->user->profile->first_name }}.
+                                If you have any questions or clarifications, or any other concerns with regards to this
+                                ticket, you can connect with {{ $ticket->user->profile->first_name }}.
                             </p>
                         </div>
                         <div class="col-md-4">
@@ -148,6 +149,15 @@
                         <i class="fa-solid fa-pen"></i>
                         <span class="lbl__reply">Reply</span>
                     </button>
+                    @endif
+                    @else
+                    <div class="row align-items-center bg-light p-2 py-3 rounded-3 mx-1 mt-2 mb-4">
+                        <div class="col-md-12">
+                            <p class="mb-0" style="font-size: 13px; line-height: 19px;">
+                                Discussion with agent has been disabled.
+                            </p>
+                        </div>
+                    </div>
                     @endif
                     {{-- End Replies/Comments --}}
                 </div>
