@@ -6,50 +6,58 @@
     <div class="row">
         <div class="col-xl-12 ticket__details__container">
             <div class="mb-3 ticket__details__top">
-                @switch($ticket->status->id)
-                @case(App\Models\Status::APPROVED)
+                @if($ticket->status->id === App\Models\Status::APPROVED)
                 <a href="{{ route('staff.tickets.approved_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                @break
-                @case(App\Models\Status::OPEN)
+                @endif
+                @if($ticket->status->id === App\Models\Status::OPEN)
                 <a href="{{ route('staff.tickets.open_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                @break
-                @case(App\Models\Status::CLAIMED)
+                @endif
+                @if($ticket->status->id === App\Models\Status::CLAIMED)
                 <a href="{{ route('staff.tickets.claimed_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                @break
-                @case(App\Models\Status::ON_PROCESS)
+                @endif
+                @if($ticket->status->id === App\Models\Status::ON_PROCESS)
                 <a href="{{ route('staff.tickets.on_process_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                @break
-                @case(App\Models\Status::VIEWED)
+                @endif
+                @if($ticket->status->id === App\Models\Status::VIEWED)
                 <a href="{{ route('staff.tickets.viewed_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                @break
-                @case(App\Models\Status::OVERDUE)
+                @endif
+                @if($ticket->status->id === App\Models\Status::OVERDUE)
                 <a href="{{ route('staff.tickets.overdue_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                @break
-                @case(App\Models\Status::CLOSED)
+                @endif
+                @if($ticket->status->id === App\Models\Status::CLOSED && $ticket->approval_status ===
+                App\Models\ApprovalStatus::DISAPPROVED)
+                <a href="{{ route('staff.tickets.disapproved_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @endif
+                @if($ticket->status->id === App\Models\Status::CLOSED || $ticket->approval_status ===
+                App\Models\ApprovalStatus::APPROVED && $ticket->approval_status ===
+                App\Models\ApprovalStatus::DISAPPROVED)
                 <a href="{{ route('staff.tickets.closed_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                @break
-                @endswitch
+                @endif
+
                 <div class="d-flex align-items-center gap-3 mb-4">
                     <p class="mb-0 ticket__details__status">{{ $ticket->status->name }}</p>
                     <p class="mb-0 ticket__details__priority">{{ $ticket->priorityLevel->name }}</p>

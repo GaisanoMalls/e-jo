@@ -55,11 +55,11 @@ class TeamSeeder extends Seeder
         foreach ($teams as $team) {
             // $department = Department::where('id', $team['id'])->first();
             // if ($department) {
-                Team::firstOrCreate([
-                    // 'service_department_id' => 1,
-                    'name' => $team['name'],
-                    'slug' => \Str::slug($team['name'])
-                ]);
+            Team::firstOrCreate([
+                // 'service_department_id' => 1,
+                'name' => $team['name'],
+                'slug' => \Str::slug($team['name'])
+            ]);
             // }
         }
     }

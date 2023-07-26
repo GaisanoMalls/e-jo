@@ -153,13 +153,15 @@
                                 </a>
                             </li>
                             <li>
-                                <a href=""
-                                    class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink ">
+                                <a href="{{ route('staff.tickets.disapproved_tickets') }}"
+                                    class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
+                                    {{ Route::is('staff.tickets.disapproved_tickets') ? 'sidebar__collapse__btnlink__active' : '' }}">
                                     <div class="d-flex align-items-center">
                                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                                         <span class="sidebar__btn__link__name ">Disapproved</span>
                                     </div>
-                                    {{-- <span class="badge sidebar__btn__link__badge">30</span> --}}
+                                    {{-- <span class="badge sidebar__btn__link__badge">{{ $approvedTickets->count()
+                                        }}</span> --}}
                                 </a>
                             </li>
                             @endif

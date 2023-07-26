@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\TicketsByUserRole;
+use App\Http\Traits\TicketsByStaffWithSameTemplates;
 use App\Models\Department;
 use App\Models\Reply;
 use App\Models\ReplyFile;
@@ -15,12 +15,18 @@ use Illuminate\Support\Facades\Validator;
 
 class TicketController extends Controller
 {
-    use TicketsByUserRole;
+    use TicketsByStaffWithSameTemplates;
 
     public function approvedTickets()
     {
         $approvedTickets = $this->getApprovedTickets();
         return view('layouts.staff.ticket.statuses.approved_tickets', compact('approvedTickets'));
+    }
+
+    public function disapprovedTickets()
+    {
+        $disapprovedTickets = $this->getDisapprovedTickets();
+        return view('layouts.staff.ticket.statuses.disapproved_tickets', compact('disapprovedTickets'));
     }
 
     public function openTickets()

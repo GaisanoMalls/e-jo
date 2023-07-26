@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
-trait TicketsByUserRole
+trait TicketsByStaffWithSameTemplates
 {
     use ServiceDepartmentAdminTickets, SysAdminTickets, AgentTickets;
 
@@ -22,6 +22,22 @@ trait TicketsByUserRole
                 break;
             case Role::SERVICE_DEPARTMENT_ADMIN:
                 $approvedTickets = $this->serviceDeptAdminGetApprovedTickets();
+                break;
+            default:
+                $approvedTickets = null;
+        }
+
+        return $approvedTickets;
+    }
+
+    public function getDisapprovedTickets()
+    {
+        switch (auth()->user()->role_id) {
+            case Role::SYSTEM_ADMIN:
+                $approvedTickets = $this->sysAdminGetDisapprovedTickets();
+                break;
+            case Role::SERVICE_DEPARTMENT_ADMIN:
+                $approvedTickets = $this->serviceDeptAdminGetDisapprovedTickets();
                 break;
             default:
                 $approvedTickets = null;

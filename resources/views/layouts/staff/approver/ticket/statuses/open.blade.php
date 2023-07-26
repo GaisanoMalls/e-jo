@@ -27,7 +27,7 @@
                 </thead>
                 <tbody>
                     @foreach ($forApprovalTickets as $ticket)
-                    @if ($ticket->approval_status === 'for_approval')
+                    @if ($ticket->approval_status === App\Models\ApprovalStatus::FOR_APPROVAL)
                     <tr class="clickable_tr" data-ticket-id="{{ $ticket->id }}"
                         onclick="window.location='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
                         <td class="custom__table__data">
@@ -82,8 +82,10 @@
                     @endforeach
 
                     @foreach ($openTickets as $ticket)
-                    @if ($ticket->approval_status === 'approved' || $ticket->approval_status === 'disapproved')
-                    <tr>
+                    @if ($ticket->approval_status === App\Models\ApprovalStatus::APPROVED || $ticket->approval_status
+                    === App\Models\ApprovalStatus::DISAPPROVED)
+                    <tr class="clickable_tr" data-ticket-id="{{ $ticket->id }}"
+                        onclick="window.location='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>

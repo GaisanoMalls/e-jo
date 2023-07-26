@@ -19,6 +19,17 @@ trait Tickets
         return $forApprovalTickets;
     }
 
+    public function getDisapprovedTickets()
+    {
+        $disapprovedTickets = Ticket::where('status_id', Status::CLOSED)
+            ->where('approval_status', ApprovalStatus::DISAPPROVED)
+            ->where('branch_id', auth()->user()->branch_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $disapprovedTickets;
+    }
+
     public function getOpenTickets()
     {
         $openTickets = Ticket::where('status_id', Status::OPEN)
@@ -50,17 +61,6 @@ trait Tickets
             ->get();
 
         return $approvedTickets;
-    }
-
-    public function getDisapprovedTickets()
-    {
-        $disapprovedTickets = Ticket::where('status_id', Status::CLOSED)
-            ->where('approval_status', ApprovalStatus::DISAPPROVED)
-            ->where('branch_id', auth()->user()->branch_id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return $disapprovedTickets;
     }
 
     public function getOnHoldTickets()

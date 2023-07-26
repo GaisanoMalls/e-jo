@@ -42,7 +42,8 @@ trait Tickets
         $viewedTickets = Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($query) {
                 $query->where('user_id', auth()->user()->id)
-                    ->where('status_id', Status::VIEWED);
+                    ->where('status_id', Status::VIEWED)
+                    ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
             })
             ->orderBy('created_at', 'desc')
             ->get();

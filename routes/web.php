@@ -72,6 +72,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
         Route::prefix('tickets')->name('tickets.')->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
                 Route::get('/approved', 'approvedTickets')->name('approved_tickets');
+                Route::get('/disapproved', 'disapprovedTickets')->name('disapproved_tickets');
                 Route::get('/open', 'openTickets')->name('open_tickets');
                 Route::get('/on-process', 'onProcessTickets')->name('on_process_tickets');
                 Route::get('/claimed', 'claimedTickets')->name('claimed_tickets');
