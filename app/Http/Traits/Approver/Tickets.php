@@ -63,13 +63,16 @@ trait Tickets
         return $approvedTickets;
     }
 
-    public function getOnHoldTickets()
+    public function getOnProcessTickets()
     {
-        $onHoldTickets = Ticket::where('approval_status', ApprovalStatus::APPROVED)
+        $onProcessTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::ON_PROCESS)
+                ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
+        })
             ->where('branch_id', auth()->user()->branch_id)
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return $onHoldTickets;
+        return $onProcessTickets;
     }
 }

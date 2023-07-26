@@ -28,5 +28,12 @@
                 Disapproved
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('approver.tickets.on_process') }}" class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
+                {{ Route::is('approver.tickets.on_process') ? 'ticket__tab__link active' : '' }}">
+                <span class="ticket__count__tab">{{ $onProcessTickets->count() }}</span>
+                On Process
+            </a>
+        </li>
     </ul>
 </div>

@@ -272,6 +272,7 @@ Route::middleware(['auth', Role::approver()])->group(function () {
                 Route::get('/viewed', 'viewedTickets')->name('viewed');
                 Route::get('/approved', 'approvedTickets')->name('approved');
                 Route::get('/disapproved', 'disapprovedTickets')->name('disapproved');
+                Route::get('/on-process', 'onProcessTickets')->name('on_process');
 
                 Route::put('{ticket}/approve', 'approveTicket')->name('approve');
                 Route::put('{ticket}/disapprove', 'disapproveTicket')->name('disapprove');

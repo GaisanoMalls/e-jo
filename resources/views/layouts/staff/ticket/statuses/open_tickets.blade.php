@@ -100,7 +100,7 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center text-start td__content">
-                                            <span>{{ $ticket->subject }}</span>
+                                            <span>{{ Str::limit($ticket->subject, 30) }}</span>
                                         </div>
                                     </td>
                                     <td>

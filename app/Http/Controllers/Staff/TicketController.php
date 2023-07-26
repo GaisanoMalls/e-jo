@@ -72,9 +72,9 @@ class TicketController extends Controller
 
     public function viewTicket(int $ticketId)
     {
+        $ticket = Ticket::with('replies')->findOrFail($ticketId);
         $departments = Department::orderBy('name', 'asc')->get();
         $serviceDepartments = ServiceDepartment::orderBy('name', 'asc')->get();
-        $ticket = Ticket::with('replies')->where('id', $ticketId)->first();
 
         $latestReply = Reply::where('ticket_id', $ticketId)
             ->where('user_id', '!=', auth()->user()->id)

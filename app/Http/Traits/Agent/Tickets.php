@@ -48,7 +48,7 @@ trait Tickets
     {
         $onProcessTickets = Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::ON_PROCESS)
-                ->where('approval_status', ApprovalStatus::APPROVED);
+                ->whereIn('approval_status', [ApprovalStatus::FOR_APPROVAL, ApprovalStatus::APPROVED]);
         })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('agent_id', auth()->user()->id)

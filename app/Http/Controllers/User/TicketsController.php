@@ -229,7 +229,7 @@ class TicketsController extends Controller
 
     public function viewTicket(int $ticketId)
     {
-        $ticket = Ticket::with('replies')->where('id', $ticketId)->first();
+        $ticket = Ticket::with('replies')->findOrFail($ticketId);
 
         $latestReply = $this->getLatestReply($ticketId);
         $latestClarification = $this->getLatestClarification($ticketId);
@@ -280,7 +280,7 @@ class TicketsController extends Controller
 
     public function ticketClarifications(int $ticketId)
     {
-        $ticket = Ticket::with(['clarifications'])->where('id', $ticketId)->first();
+        $ticket = Ticket::with(['clarifications'])->findOrFail($ticketId);
 
         $latestReply = $this->getLatestReply($ticketId);
         $latestClarification = $this->getLatestClarification($ticketId);
@@ -309,6 +309,10 @@ class TicketsController extends Controller
             'user_id' => auth()->user()->id,
             'ticket_id' => $ticket->id,
             'description' => $request->input('description')
+        ]);
+
+        $ticket->update([
+            'status_id' => Status::ON_PROCESS
         ]);
 
         if ($request->hasFile('clarificationFiles')) {

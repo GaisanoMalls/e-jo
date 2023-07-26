@@ -1,16 +1,16 @@
-@extends('layouts.staff.approver.base', ['title' => 'Open Tickets'])
+@extends('layouts.staff.approver.base', ['title' => 'On Process'])
 
 @section('main-content')
 <div class="row">
     <div class="mb-4 d-flex flex-wrap justify-content-between">
         <div class="d-flex align-items-center gap-4">
-            <h5 class="page__header__title">Viewed</h5>
+            <h5 class="page__header__title">On Process</h5>
             <small class="fw-semibold mb-1" id="countSelectedChbx" style="color: #d32839;"></small>
         </div>
     </div>
 </div>
 <div class="row mx-0">
-    @if ($viewedTickets->count() > 0 )
+    @if ($onProcessTickets->count() > 0 )
     <div class="card ticket__card" id="userTicketCard">
         <div class="table-responsive">
             <table class="table mb-0 custom__table" id="approverTable">
@@ -26,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($viewedTickets as $ticket)
+                    @foreach ($onProcessTickets as $ticket)
                     <tr onclick="window.location='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
@@ -56,7 +56,7 @@
                                 {{ $ticket->priorityLevel->name ?? '' }}</p>
                         </td>
                         <td class="custom__table__data py-0">
-                            @if ($ticket->approval_status === 'for_approval')
+                            @if ($ticket->approval_status === App\Models\ApprovalStatus::FOR_APPROVAL)
                             <div class="d-flex align-items-center justify-content-start gap-2">
                                 <form action="{{ route('approver.tickets.disapprove', $ticket->id) }}" method="post">
                                     @csrf
@@ -73,6 +73,13 @@
                                     </button>
                                 </form>
                             </div>
+                            @endif
+                            @if ($ticket->approval_status === App\Models\ApprovalStatus::APPROVED)
+                            <small class="rounded-5"
+                                style="background-color: #243C44; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
+                                <i class="fa-solid fa-check me-1"></i>
+                                Approved
+                            </small>
                             @endif
                         </td>
                     </tr>

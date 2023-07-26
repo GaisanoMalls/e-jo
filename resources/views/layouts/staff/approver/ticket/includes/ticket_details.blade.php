@@ -9,14 +9,16 @@
                     Approval status:
                 </small>
                 <small class="ticket__details__info">
-                    @if ($ticket->approval_status === 'approved')
-                    <i class="fa-solid fa-circle-check" style="color: #D32839;"></i>
+                    @if ($ticket->approval_status === App\Models\ApprovalStatus::APPROVED)
+                    <i class="fa-solid fa-circle-check me-1" style="color: green; font-size: 11px;"></i>
                     Approved
-                    @elseif ($ticket->approval_status === 'for_approval')
-                    <i class="fa-solid fa-paper-plane" style="color: #D32839;"></i>
+                    @elseif ($ticket->approval_status ===
+                    App\Models\ApprovalStatus::FOR_APPROVAL)
+                    <i class="fa-solid fa-paper-plane me-1" style="color: orange; font-size: 11px;"></i>
                     For Approval
-                    @elseif ($ticket->approval_status === 'disapproved')
-                    <i class="fa-solid fa-xmark" style="color: #D32839;"></i>
+                    @elseif ($ticket->approval_status ===
+                    App\Models\ApprovalStatus::DISAPPROVED)
+                    <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
                     Disapproved
                     @else
                     ----
@@ -25,27 +27,54 @@
             </div>
             <div class="d-flex align-items-center justify-content-between">
                 <small class="ticket__details__info__label" style="font-weight: 500;">Branch:</small>
-                <small class="ticket__details__info">{{ $ticket->branch->name }}</small>
+                <small class="ticket__details__info">
+                    <i class="fa-solid fa-location-dot me-1 text-muted" style="font-size: 11px;"></i>
+                    {{ $ticket->branch->name }}
+                </small>
             </div>
             <div class="d-flex align-items-center justify-content-between">
                 <small class="ticket__details__info__label" style="font-weight: 500;">
                     Service department:</small>
-                <small class="ticket__details__info">{{ $ticket->serviceDepartment->name }}</small>
+                <small class="ticket__details__info">
+                    <i class="fa-solid fa-gears me-1 text-muted" style="font-size: 11px;"></i>
+                    {{ $ticket->serviceDepartment->name }}
+                </small>
             </div>
             <div class="d-flex align-items-center justify-content-between">
                 <small class="ticket__details__info__label" style="font-weight: 500;">Team:</small>
-                <small class="ticket__details__info">{{ $ticket->team->name }}</small>
+                <small class="ticket__details__info">
+                    <i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>
+                    {{ $ticket->team->name }}
+                </small>
             </div>
             <div class="d-flex align-items-center justify-content-between">
                 <small class="ticket__details__info__label" style="font-weight: 500;">
                     Help topic:
                 </small>
-                <small class="ticket__details__info">{{ $ticket->helpTopic->name }}</small>
+                <small class="ticket__details__info">
+                    <i class="bi bi-question-circle-fill me-1 text-muted" style="font-size: 11px;"></i>
+                    {{ $ticket->helpTopic->name }}
+                </small>
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+                <small class="ticket__details__info__label" style="font-weight: 500;">
+                    Assigned agent:
+                </small>
+                <small class="ticket__details__info {{ $ticket->agent_id !== null ? '' : 'not__set'}}">
+                    <i class="fa-solid fa-user-check me-1 text-muted" style="font-size: 11px;"></i>
+                    @if ($ticket->agent)
+                    {{ $ticket->agent->profile->getFullName() }}
+                    @else
+                    ----
+                    @endif
+                </small>
             </div>
             <div class="d-flex align-items-center justify-content-between">
                 <small class="ticket__details__info__label" style="font-weight: 500;">
                     SLA:</small>
-                <small class="ticket__details__info">{{ $ticket->sla->time_unit ?? '----' }}</small>
+                <small class="ticket__details__info">
+                    <i class="fa-solid fa-clock me-1 text-muted" style="font-size: 11px;"></i>
+                    {{ $ticket->sla->time_unit ?? '----' }}</small>
             </div>
         </div>
     </div>

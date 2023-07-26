@@ -26,8 +26,7 @@
                 </thead>
                 <tbody>
                     @foreach ($onProcessTickets as $ticket)
-                    <tr
-                        onclick="window.location='{{ route('user.ticket.view_ticket', $ticket->id) }}'">
+                    <tr onclick="window.location='{{ route('user.ticket.view_ticket', $ticket->id) }}'">
                         <td class="custom__table__data">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
@@ -44,7 +43,7 @@
                             <p class="mb-0">{{ $ticket->user->department->name }}</p>
                         </td>
                         <td class="custom__table__data">
-                            <p class="mb-0">{{ $ticket->subject }}</p>
+                            <p class="mb-0">{{ Str::limit($ticket->subject, 30) }}</p>
                         </td>
                         <td class="custom__table__data">
                             @if ($ticket->agent)

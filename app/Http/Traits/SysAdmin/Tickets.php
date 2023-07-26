@@ -61,7 +61,7 @@ trait Tickets
     {
         $onProcessTickets = Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::ON_PROCESS)
-                ->where('approval_status', ApprovalStatus::APPROVED);
+                ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
         })
             ->orderBy('created_at', 'desc')
             ->get();

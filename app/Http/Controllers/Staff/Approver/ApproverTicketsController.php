@@ -33,6 +33,7 @@ class ApproverTicketsController extends Controller
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
         $disapprovedTickets = $this->getDisapprovedTickets();
+        $onProcessTickets = $this->getOnProcessTickets();
 
         $forApprovalTickets = $this->getForApprovalTickets();
 
@@ -45,7 +46,8 @@ class ApproverTicketsController extends Controller
                     'viewedTickets',
                     'approvedTickets',
                     'disapprovedTickets',
-                    'forApprovalTickets'
+                    'onProcessTickets',
+                    'forApprovalTickets',
                 ]
             )
         );
@@ -56,6 +58,7 @@ class ApproverTicketsController extends Controller
         $openTickets = $this->getOpenTickets();
         $approvedTickets = $this->getApprovedTickets();
         $disapprovedTickets = $this->getDisapprovedTickets();
+        $onProcessTickets = $this->getOnProcessTickets();
 
         $viewedTickets = $this->getViewedTickets();
 
@@ -66,6 +69,7 @@ class ApproverTicketsController extends Controller
                     'openTickets',
                     'approvedTickets',
                     'disapprovedTickets',
+                    'onProcessTickets',
                     'viewedTickets',
                 ]
             )
@@ -77,6 +81,7 @@ class ApproverTicketsController extends Controller
         $openTickets = $this->getOpenTickets();
         $viewedTickets = $this->getViewedTickets();
         $disapprovedTickets = $this->getDisapprovedTickets();
+        $onProcessTickets = $this->getOnProcessTickets();
 
         $approvedTickets = $this->getApprovedTickets();
 
@@ -87,6 +92,7 @@ class ApproverTicketsController extends Controller
                     'openTickets',
                     'viewedTickets',
                     'disapprovedTickets',
+                    'onProcessTickets',
                     'approvedTickets',
                 ]
             )
@@ -98,6 +104,7 @@ class ApproverTicketsController extends Controller
         $openTickets = $this->getOpenTickets();
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
+        $onProcessTickets = $this->getOnProcessTickets();
 
         $disapprovedTickets = $this->getDisapprovedTickets();
 
@@ -108,7 +115,31 @@ class ApproverTicketsController extends Controller
                     'openTickets',
                     'viewedTickets',
                     'approvedTickets',
+                    'onProcessTickets',
                     'disapprovedTickets'
+                ]
+            )
+        );
+    }
+
+    public function onProcessTickets()
+    {
+        $openTickets = $this->getOpenTickets();
+        $viewedTickets = $this->getViewedTickets();
+        $approvedTickets = $this->getApprovedTickets();
+        $disapprovedTickets = $this->getDisapprovedTickets();
+
+        $onProcessTickets = $this->getOnProcessTickets();
+
+        return view(
+            'layouts.staff.approver.ticket.statuses.on_process',
+            compact(
+                [
+                    'openTickets',
+                    'viewedTickets',
+                    'approvedTickets',
+                    'disapprovedTickets',
+                    'onProcessTickets'
                 ]
             )
         );
@@ -116,12 +147,12 @@ class ApproverTicketsController extends Controller
 
     public function viewTicketDetails(int $ticketId)
     {
+        $ticket = Ticket::with(['clarifications', 'user', 'status'])->findOrFail($ticketId);
+
         $latestClarification = Clarification::where('ticket_id', $ticketId)
             ->where('user_id', '!=', auth()->user()->id)
             ->orderBy('created_at', 'desc')
             ->first();
-
-        $ticket = Ticket::with(['clarifications', 'user', 'status'])->where('id', $ticketId)->first();
 
         return view(
             'layouts.staff.approver.ticket.view_ticket',
@@ -188,6 +219,10 @@ class ApproverTicketsController extends Controller
             'user_id' => auth()->user()->id,
             'ticket_id' => $ticket->id,
             'description' => $request->input('description')
+        ]);
+
+        $ticket->update([
+            'status_id' => Status::ON_PROCESS
         ]);
 
         if ($request->hasFile('clarificationFiles')) {
