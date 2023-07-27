@@ -25,7 +25,7 @@ class DepartmentRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 
+                'required',
                 'unique:departments,name',
                 'regex:/^[a-zA-Z\s]+$/u',
                 function ($attribute, $value, $fail) {
@@ -43,5 +43,5 @@ class DepartmentRequest extends FormRequest
             'name.unique' => 'The department name already exists. Please try another name.'
         ];
     }
-    
+
 }

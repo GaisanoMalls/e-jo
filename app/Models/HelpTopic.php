@@ -52,15 +52,15 @@ class HelpTopic extends Model
     public function approvalLevels()
     {
         return $this->belongsToMany(ApprovalLevel::class, 'help_topic_level_approvers', 'help_topic_id', 'approval_level_id')
-                    ->using(HelpTopicLevelApprover::class)
-                    ->withTimestamps();
+            ->using(HelpTopicLevelApprover::class)
+            ->withTimestamps();
     }
 
     public function approvers()
     {
         return $this->belongsToMany(User::class, 'help_topic_level_approvers', 'help_topic_id', 'approver_id')
-                    ->using(HelpTopicLevelApprover::class)
-                    ->withTimestamps();
+            ->using(HelpTopicLevelApprover::class)
+            ->withTimestamps();
     }
 
     public function dateCreated()
@@ -73,7 +73,7 @@ class HelpTopic extends Model
         $created_at = Carbon::parse($this->created_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         $updated_at = Carbon::parse($this->updated_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         return $updated_at === $created_at
-        ? "----"
-        : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
+            ? "----"
+            : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
     }
 }

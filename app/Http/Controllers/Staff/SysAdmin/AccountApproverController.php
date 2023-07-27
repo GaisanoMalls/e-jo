@@ -9,6 +9,7 @@ use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AccountApproverController extends Controller
@@ -30,89 +31,94 @@ class AccountApproverController extends Controller
         if ($validator->fails())
             return back()->withErrors($validator, 'storeApprover')->withInput();
 
-        $user = User::create([
-            'branch_id' => $request->input('branch'),
-            'department_id' => $request->input('bu_department'),
-            'service_department_id' => $request->input('service_department'),
-            'role_id' => Role::APPROVER,
-            'email' => $request->input('email'),
-            'password' => \Hash::make('approver'),
-        ]);
+        try {
+            DB::transaction(function () use ($request) {
+                $user = User::create([
+                    'branch_id' => $request->input('branch'),
+                    'department_id' => $request->input('bu_department'),
+                    'service_department_id' => $request->input('service_department'),
+                    'role_id' => Role::APPROVER,
+                    'email' => $request->input('email'),
+                    'password' => \Hash::make('approver'),
+                ]);
 
-        Profile::create([
-            'user_id' => $user->id,
-            'first_name' => $request->input('first_name'),
-            'middle_name' => $request->input('middle_name'),
-            'last_name' => $request->input('last_name'),
-            'suffix' => $request->input('suffix'),
-            'slug' => $this->slugify(implode(" ", [
-                $request->first_name,
-                $request->middle_name,
-                $request->last_name,
-                $request->suffix
-            ]))
-        ]);
+                Profile::create([
+                    'user_id' => $user->id,
+                    'first_name' => $request->input('first_name'),
+                    'middle_name' => $request->input('middle_name'),
+                    'last_name' => $request->input('last_name'),
+                    'suffix' => $request->input('suffix'),
+                    'slug' => $this->slugify(implode(" ", [
+                        $request->first_name,
+                        $request->middle_name,
+                        $request->last_name,
+                        $request->suffix
+                    ]))
+                ]);
+            });
 
-        return back()->with('success', 'You have successfully created a new approver.');
+            return back()->with('success', 'You have successfully created a new approver.');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to save a new approver.');
+        }
     }
 
     public function edit(Request $request, User $approver)
     {
+        $validator = Validator::make($request->all(), [
+            'branch' => ['required'],
+            'bu_department' => ['required'],
+            'first_name' => ['required', 'min:2', 'max:100'],
+            'middle_name' => ['nullable', 'min:2', 'max:100'],
+            'last_name' => ['required', 'min:2', 'max:100'],
+            'suffix' => ['nullable', 'min:1', 'max:4'],
+            'email' => ['required', 'max:80'],
+        ]);
 
-        // ! TO BE FIXED ASAP
-        // ! Issues:
-        // !   * Upon request
-        // !     - branch is null
-        // !     - role is null
-        // !     - suffix is null
+        if ($validator->fails())
+            return back()->withErrors($validator, 'editApprover')->withInput();
 
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'branch' => ['required'],
-                'bu_department' => ['required'],
-                'first_name' => ['required', 'min:2', 'max:100'],
-                'middle_name' => ['nullable', 'min:2', 'max:100'],
-                'last_name' => ['required', 'min:2', 'max:100'],
-                'suffix' => ['nullable', 'min:1', 'max:4'],
-                'email' => ['required', 'max:80'],
-            ],
-        );
+        try {
+            DB::transaction(function () use ($approver, $request) {
+                $approver->update([
+                    'branch_id' => $request->input('branch'),
+                    'department_id' => $request->input('bu_department'),
+                    'role_id' => $request->input('role'),
+                    'email' => $request->input('email')
+                ]);
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator, 'editApprover')->withInput()->with('error', 'Failed to update. Please check the errors.');
+                $approver->profile->update([
+                    'first_name' => $request->input('first_name'),
+                    'middle_name' => $request->input('middle_name'),
+                    'last_name' => $request->input('last_name'),
+                    'suffix' => $request->input('suffix'),
+                    'slug' => $this->slugify(implode(" ", [
+                        $request->first_name,
+                        $request->middle_name,
+                        $request->last_name,
+                        $request->suffix
+                    ]))
+                ]);
+            });
+
+            return back()->with('success', `You have successfully updated the info for {$approver->profile->getFullName()}.`);
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update the approver. Please try again.');
         }
-
-        $approver->update([
-            'branch_id' => $request->input('branch'),
-            'department_id' => $request->input('bu_department'),
-            'role_id' => $request->input('role'),
-            'email' => $request->input('email')
-        ]);
-
-        $approver->profile->update([
-            'first_name' => $request->input('first_name'),
-            'middle_name' => $request->input('middle_name'),
-            'last_name' => $request->input('last_name'),
-            'suffix' => $request->input('suffix'),
-            'slug' => $this->slugify(implode(" ", [
-                $request->first_name,
-                $request->middle_name,
-                $request->last_name,
-                $request->suffix
-            ]))
-        ]);
-
-        return back()->with('success', `You have successfully updated the info for {$approver->profile->getFullName()}.`);
     }
 
     public function delete(User $approver)
     {
         try {
             $approver->delete();
-            return back()->with('success', `Approver successfully deleted.`);
+            $approver->profile()->delete();
+
+            return back()->with('success', 'Approver successfully deleted.');
+
         } catch (\Exception $e) {
-            return back()->with('error', `Failed to delete the approver.`);
+            return back()->with('error', 'Failed to delete the approver. Please try again.');
         }
     }
 

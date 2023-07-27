@@ -50,7 +50,7 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="form-check d-flex gap-2 align-items-center">
                                                 <input class="form-check-input radio__button" type="radio" name="rating"
-                                                    id="terrible" value="1" {{ old('rating') == 1 ? 'checked' : '' }}>
+                                                    id="terrible" value="1" {{ old('rating')==1 ? 'checked' : '' }}>
                                                 <label class="form-check-label check__label" for="terrible">
                                                     Terrible
                                                 </label>
@@ -67,7 +67,7 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="form-check d-flex gap-2 align-items-center">
                                                 <input class="form-check-input radio__button" type="radio" name="rating"
-                                                    id="bad" value="2" {{ old('rating') == 2 ? 'checked' : '' }}>
+                                                    id="bad" value="2" {{ old('rating')==2 ? 'checked' : '' }}>
                                                 <label class="form-check-label check__label" for="bad">
                                                     Bad
                                                 </label>
@@ -84,7 +84,7 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="form-check d-flex gap-2 align-items-center">
                                                 <input class="form-check-input radio__button" type="radio" name="rating"
-                                                    id="good" value="3" {{ old('rating') == 3 ? 'checked' : '' }}>
+                                                    id="good" value="3" {{ old('rating')==3 ? 'checked' : '' }}>
                                                 <label class="form-check-label check__label" for="good">
                                                     Good
                                                 </label>
@@ -101,7 +101,7 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="form-check d-flex gap-2 align-items-center">
                                                 <input class="form-check-input radio__button" type="radio" name="rating"
-                                                    id="very_good" value="4" {{ old('rating') == 4 ? 'checked' : '' }}>
+                                                    id="very_good" value="4" {{ old('rating')==4 ? 'checked' : '' }}>
                                                 <label class="form-check-label check__label" for="very_good">
                                                     Very Good
                                                 </label>
@@ -118,7 +118,7 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="form-check d-flex gap-2 align-items-center">
                                                 <input class="form-check-input radio__button" type="radio" name="rating"
-                                                    id="excellent" value="5" {{ old('rating') == 5 ? 'checked' : '' }}>
+                                                    id="excellent" value="5" {{ old('rating')==5 ? 'checked' : '' }}>
                                                 <label class="form-check-label check__label" for="excellent">
                                                     Excellent
                                                 </label>
@@ -133,7 +133,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @error('rating')
+                                    @error('rating', 'storeFeedback')
                                     <small class="text-danger feedback__error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -149,22 +149,22 @@
                                     <div class="d-flex flex-column gap-1">
                                         <div class="form-check d-flex gap-2 align-items-center">
                                             <input class="form-check-input radio__button" type="radio"
-                                                name="had_issues_encountered" value="Yes" id="yes"
-                                                {{ old('had_issues_encountered') == 'Yes' ? 'checked' : '' }}>
+                                                name="had_issues_encountered" value="Yes" id="yes" {{
+                                                old('had_issues_encountered')=='Yes' ? 'checked' : '' }}>
                                             <label class="form-check-label check__label" for="yes">
                                                 Yes
                                             </label>
                                         </div>
                                         <div class="form-check d-flex gap-2 align-items-center">
                                             <input class="form-check-input radio__button" type="radio"
-                                                name="had_issues_encountered" value="No" id="no"
-                                                {{ old('had_issues_encountered') == 'No' ? 'checked' : '' }}>
+                                                name="had_issues_encountered" value="No" id="no" {{
+                                                old('had_issues_encountered')=='No' ? 'checked' : '' }}>
                                             <label class="form-check-label check__label" for="no">
                                                 No
                                             </label>
                                         </div>
                                     </div>
-                                    @error('had_issues_encountered')
+                                    @error('had_issues_encountered', 'storeFeedback')
                                     <small class="text-danger feedback__error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -179,7 +179,7 @@
                                     <textarea class="form-control form__field custom__textarea" name="description"
                                         placeholder="Type your feedback here"
                                         id="feedback">{{ old('description') }}</textarea>
-                                    @error('description')
+                                    @error('description', 'storeFeedback')
                                     <small class="text-danger feedback__error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -206,12 +206,12 @@
                                     <div class="form-check">
                                         <input class="form-check-input check__privacy__policy" type="checkbox"
                                             name="accepted_privacy_policy" id="privacy_policy" style="margin-top: 5px;"
-                                            value="1" {{ old('accepted_privacy_policy') == 1 ? 'checked' : '' }}>
+                                            value="1" {{ old('accepted_privacy_policy')==1 ? 'checked' : '' }}>
                                         <label class="form-check-label check__label" for="privacy_policy">
                                             I have read and accept the Privacy Policy.
                                         </label>
                                     </div>
-                                    @error('accepted_privacy_policy')
+                                    @error('accepted_privacy_policy', 'storeFeedback')
                                     <small class="text-danger feedback__error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}

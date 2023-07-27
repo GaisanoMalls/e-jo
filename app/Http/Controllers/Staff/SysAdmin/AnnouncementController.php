@@ -55,10 +55,10 @@ class AnnouncementController extends Controller
             return back()->withErrors($validator, 'storeAnnouncement')->withInput();
 
         $announcement->create([
-            'title' => $request['title'],
-            'department_id' => (int) $request['department'],
-            'description' => $request['description'],
-            'is_important' => (bool) $request['is_important']
+            'title' => $request->input('title'),
+            'department_id' => (int) $request->input('department'),
+            'description' => $request->input('description'),
+            'is_important' => (bool) $request->input('is_important')
         ]);
 
         return back()->with('success', 'Announcement successfully created.');
@@ -73,15 +73,14 @@ class AnnouncementController extends Controller
             'is_draft' => ['boolean']
         ]);
 
-        if ($validator->fails()) {
+        if ($validator->fails())
             return back()->withErrors($validator, 'editAnnouncement')->withInput()->with('error', 'Failed to update. There was an error while updating the announcement.');
-        }
 
         $announcement->update([
-            'title' => $request['title'],
-            'department_id' => (int) $request['department'],
-            'description' => $request['description'],
-            'is_important' => (bool) $request['is_important']
+            'title' => $request->input('title'),
+            'department_id' => (int) $request->input('department'),
+            'description' => $request->input('description'),
+            'is_important' => (bool) $request->input('is_important')
         ]);
 
         return back()->with('success', 'Announcement successfully updated.');
@@ -92,6 +91,7 @@ class AnnouncementController extends Controller
         try {
             $announcement->delete();
             return back()->with('success', 'Announcement successfully deleted.');
+
         } catch (\Exception $e) {
             return back()->with('success', 'Announcemant cannot be deleted.');
         }

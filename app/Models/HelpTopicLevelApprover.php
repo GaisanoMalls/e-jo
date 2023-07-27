@@ -14,7 +14,7 @@ class HelpTopicLevelApprover extends Model
         'approval_level_id',
         'approver_id'
     ];
-    
+
     public function helpTopic()
     {
         return $this->belongsTo(HelpTopic::class);

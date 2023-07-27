@@ -21,6 +21,7 @@ use App\Models\TicketFile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TicketsController extends Controller
@@ -176,6 +177,7 @@ class TicketsController extends Controller
 
     public function store(Request $request, Ticket $ticket)
     {
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -196,35 +198,42 @@ class TicketsController extends Controller
         if ($validator->fails())
             return back()->withErrors($validator, 'storeTicket')->withInput();
 
-        $ticket = Ticket::create([
-            'user_id' => Auth::user()->id,
-            'branch_id' => $request->input('branch') ?: Auth::user()->branch->id,
-            'service_department_id' => $request->input('service_department'),
-            'team_id' => $request->input('team'),
-            'help_topic_id' => $request->input('help_topic'),
-            'status_id' => Status::OPEN,
-            'priority_level_id' => $request->input('priority_level'),
-            'sla_id' => $request->input('sla'),
-            'ticket_number' => $this->generatedTicketNumber(),
-            'subject' => $request->input('subject'),
-            'description' => $request->input('description'),
-            'approval_status' => ApprovalStatus::FOR_APPROVAL
-        ]);
+        try {
+            DB::transaction(function () use ($request) {
+                $ticket = Ticket::create([
+                    'user_id' => Auth::user()->id,
+                    'branch_id' => $request->input('branch') ?: Auth::user()->branch->id,
+                    'service_department_id' => $request->input('service_department'),
+                    'team_id' => $request->input('team'),
+                    'help_topic_id' => $request->input('help_topic'),
+                    'status_id' => Status::OPEN,
+                    'priority_level_id' => $request->input('priority_level'),
+                    'sla_id' => $request->input('sla'),
+                    'ticket_number' => $this->generatedTicketNumber(),
+                    'subject' => $request->input('subject'),
+                    'description' => $request->input('description'),
+                    'approval_status' => ApprovalStatus::FOR_APPROVAL
+                ]);
 
-        if ($request->hasFile('file_attachments')) {
-            foreach ($request->file('file_attachments') as $uploadedFile) {
-                $fileName = $uploadedFile->getClientOriginalName();
-                $fileAttachment = $uploadedFile->storeAs('public/ticket/files', $fileName);
+                if ($request->hasFile('file_attachments')) {
+                    foreach ($request->file('file_attachments') as $uploadedFile) {
+                        $fileName = $uploadedFile->getClientOriginalName();
+                        $fileAttachment = $uploadedFile->storeAs('public/ticket/files', $fileName);
 
-                $ticketFile = new TicketFile();
-                $ticketFile->file_attachment = $fileAttachment;
-                $ticketFile->ticket_id = $ticket->id;
+                        $ticketFile = new TicketFile();
+                        $ticketFile->file_attachment = $fileAttachment;
+                        $ticketFile->ticket_id = $ticket->id;
 
-                $ticket->fileAttachments()->save($ticketFile);
-            }
+                        $ticket->fileAttachments()->save($ticketFile);
+                    }
+                }
+            });
+
+            return back()->with('success', 'Ticket successfully created.');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to send ticket. Please try again.');
         }
-
-        return back()->with('success', 'Ticket successfully created');
     }
 
     public function viewTicket(int $ticketId)
@@ -254,28 +263,35 @@ class TicketsController extends Controller
         if ($validator->fails())
             return back()->withErrors($validator, 'requesterStoreTicketReply')->withInput();
 
-        $ticket->update(['status_id' => Status::ON_PROCESS]);
+        try {
+            DB::transaction(function () use ($request, $ticket) {
+                $ticket->update(['status_id' => Status::ON_PROCESS]);
 
-        $reply = Reply::create([
-            'user_id' => auth()->user()->id,
-            'ticket_id' => $ticket->id,
-            'description' => $request->input('description')
-        ]);
+                $reply = Reply::create([
+                    'user_id' => auth()->user()->id,
+                    'ticket_idsdcsdc' => $ticket->id,
+                    'description' => $request->input('description')
+                ]);
 
-        if ($request->hasFile('replyFiles')) {
-            foreach ($request->file('replyFiles') as $uploadedReplyFile) {
-                $fileName = $uploadedReplyFile->getClientOriginalName();
-                $fileAttachment = $uploadedReplyFile->storeAs('public/ticket/reply/files', $fileName);
+                if ($request->hasFile('replyFiles')) {
+                    foreach ($request->file('replyFiles') as $uploadedReplyFile) {
+                        $fileName = $uploadedReplyFile->getClientOriginalName();
+                        $fileAttachment = $uploadedReplyFile->storeAs('public/ticket/reply/files', $fileName);
 
-                $replyFile = new ReplyFile();
-                $replyFile->file_attachment = $fileAttachment;
-                $replyFile->reply_id = $reply->id;
+                        $replyFile = new ReplyFile();
+                        $replyFile->file_attachment = $fileAttachment;
+                        $replyFile->reply_id = $reply->id;
 
-                $reply->fileAttachments()->save($replyFile);
-            }
+                        $reply->fileAttachments()->save($replyFile);
+                    }
+                }
+            });
+
+            return to_route('user.ticket.view_ticket', $ticket->id)->with('success', 'Your reply has been sent successfully.');
+
+        } catch (\Exception $e) {
+            return to_route('user.ticket.view_ticket', $ticket->id)->with('error', 'Failed to send your reply. Please try again.');
         }
-
-        return to_route('user.ticket.view_ticket', $ticket->id)->with('success', 'Your reply has been sent successfully.');
     }
 
     public function ticketClarifications(int $ticketId)
@@ -305,30 +321,35 @@ class TicketsController extends Controller
         if ($validator->fails())
             return back()->withErrors($validator, 'storeTicketReplyClarification')->withInput();
 
-        $clarification = Clarification::create([
-            'user_id' => auth()->user()->id,
-            'ticket_id' => $ticket->id,
-            'description' => $request->input('description')
-        ]);
+        try {
+            DB::transaction(function () use ($request, $ticket) {
+                $ticket->update(['status_id' => Status::ON_PROCESS]);
 
-        $ticket->update([
-            'status_id' => Status::ON_PROCESS
-        ]);
+                $clarification = Clarification::create([
+                    'user_id' => auth()->user()->id,
+                    'ticket_id' => $ticket->id,
+                    'description' => $request->input('description')
+                ]);
 
-        if ($request->hasFile('clarificationFiles')) {
-            foreach ($request->file('clarificationFiles') as $uploadedClarificationFile) {
-                $fileName = $uploadedClarificationFile->getClientOriginalName();
-                $fileAttachment = $uploadedClarificationFile->storeAs('public/ticket/clarification/files', $fileName);
+                if ($request->hasFile('clarificationFiles')) {
+                    foreach ($request->file('clarificationFiles') as $uploadedClarificationFile) {
+                        $fileName = $uploadedClarificationFile->getClientOriginalName();
+                        $fileAttachment = $uploadedClarificationFile->storeAs('public/ticket/clarification/files', $fileName);
 
-                $clarificationFile = new ClarificationFile();
-                $clarificationFile->file_attachment = $fileAttachment;
-                $clarificationFile->clarification_id = $clarification->id;
+                        $clarificationFile = new ClarificationFile();
+                        $clarificationFile->file_attachment = $fileAttachment;
+                        $clarificationFile->clarification_id = $clarification->id;
 
-                $clarification->fileAttachments()->save($clarificationFile);
-            }
+                        $clarification->fileAttachments()->save($clarificationFile);
+                    }
+                }
+            });
+
+            return to_route('user.ticket.ticket_clarifications', $ticket->id)->with('success', 'Your clarification has been sent successfully.');
+
+        } catch (\Exception $e) {
+            return to_route('user.ticket.ticket_clarifications', $ticket->id)->with('error', 'Failed to send ticket clarification. Please try again.');
         }
-
-        return to_route('user.ticket.ticket_clarifications', $ticket->id)->with('success', 'Your clarification has been sent successfully.');
     }
 
     public function loadBranches()

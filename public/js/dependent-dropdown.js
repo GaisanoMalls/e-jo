@@ -2683,7 +2683,7 @@ if (levelOfApproverDropdown) {
     selectApproverContainer.innerHTML = '';
     if (approverNumber) {
       var _loop = function _loop() {
-        var html = "\n                    <div class=\"col-md-12\">\n                        <div class=\"mb-2\">\n                            <label class=\"form-label form__field__label\">\n                                Level ".concat(i, " approver/s\n                            </label>\n                            <select select id=\"level").concat(i, "Approver\" name=\"approver\" placeholder=\"Choose an approver\" multiple>\n                            </select>\n                        </div>\n                    </div>\n                ");
+        var html = "\n                    <div class=\"col-md-12\">\n                        <div class=\"mb-2\">\n                            <label class=\"form-label form__field__label\">\n                                Level ".concat(i, " approver/s\n                            </label>\n                            <select select id=\"level").concat(i, "Approver\" name=\"approvers[").concat(i, "][]\" placeholder=\"Choose an approver\" multiple>\n                            </select>\n                        </div>\n                    </div>\n                ");
         selectApproverContainer.insertAdjacentHTML('beforeend', html);
         VirtualSelect.init({
           ele: "#level".concat(i, "Approver"),

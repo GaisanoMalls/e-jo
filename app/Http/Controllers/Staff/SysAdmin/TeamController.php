@@ -57,9 +57,9 @@ class TeamController extends Controller
             return back()->withErrors($validator, 'storeTeam')->withInput();
 
         $team->create([
-            'service_department_id' => (int) $request['service_department'],
+            'service_department_id' => (int) $request->input('service_department'),
             'name' => $request['name'],
-            'slug' => $this->slugify($request['name'])
+            'slug' => $this->slugify($request->input('name'))
         ]);
 
         return back()->with('success', 'Team successfully created.');

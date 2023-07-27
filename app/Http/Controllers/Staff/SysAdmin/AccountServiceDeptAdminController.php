@@ -9,6 +9,7 @@ use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AccountServiceDeptAdminController extends Controller
@@ -31,39 +32,49 @@ class AccountServiceDeptAdminController extends Controller
         if ($validator->fails())
             return back()->withErrors($validator, 'storeServiceDeptAdmin')->withInput();
 
-        $user = User::create([
-            'branch_id' => $request->input('branch'),
-            'department_id' => $request->input('bu_department'),
-            'service_department_id' => $request->input('service_department'),
-            'role_id' => Role::SERVICE_DEPARTMENT_ADMIN,
-            'email' => $request->input('email'),
-            'password' => \Hash::make('departmentadmin')
-        ]);
+        try {
+            DB::transaction(function () use ($request) {
+                $user = User::create([
+                    'branch_id' => $request->input('branch'),
+                    'department_id' => $request->input('bu_department'),
+                    'service_department_id' => $request->input('service_department'),
+                    'role_id' => Role::SERVICE_DEPARTMENT_ADMIN,
+                    'email' => $request->input('email'),
+                    'password' => \Hash::make('departmentadmin')
+                ]);
 
-        Profile::create([
-            'user_id' => $user->id,
-            'first_name' => $request->input('first_name'),
-            'middle_name' => $request->input('middle_name'),
-            'last_name' => $request->input('last_name'),
-            'suffix' => $request->input('suffix'),
-            'slug' => $this->slugify(implode(" ", [
-                $request->first_name,
-                $request->middle_name,
-                $request->last_name,
-                $request->suffix
-            ]))
-        ]);
+                Profile::create([
+                    'user_id' => $user->id,
+                    'first_name' => $request->input('first_name'),
+                    'middle_name' => $request->input('middle_name'),
+                    'last_name' => $request->input('last_name'),
+                    'suffix' => $request->input('suffix'),
+                    'slug' => $this->slugify(implode(" ", [
+                        $request->first_name,
+                        $request->middle_name,
+                        $request->last_name,
+                        $request->suffix
+                    ]))
+                ]);
+            });
 
-        return back()->with('success', 'You have successfully created a new department admin.');
+            return back()->with('success', 'You have successfully created a new department admin.');
+
+        } catch (\Exception $e) {
+            return back()->with('success', 'Failed to save a new service department admin.');
+        }
     }
 
     public function delete(User $departmentAdmin)
     {
         try {
             $departmentAdmin->delete();
-            return back()->with('success', `Department admin successfully deleted.`);
+            $departmentAdmin->profile()->delete();
+
+            return back()->with('success', 'Department admin successfully deleted.');
+
         } catch (\Exception $e) {
-            return back()->with('error', `Failed to delete the department admin.`);
+            return back()->with('error', 'Failed to delete the department admin.');
         }
     }
 

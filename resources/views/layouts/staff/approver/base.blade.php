@@ -19,7 +19,7 @@
 
 <body>
     @include('layouts.staff.approver.includes.navbar')
-    @include('layouts.staff.includes.toaster-message')
+    @include('layouts.includes.toaster-message')
     @include('layouts.staff.approver.includes.modal.confirm_logout')
     <div class="container mb-5 approver__section">
         @if (Route::is('approver.tickets.*'))
@@ -40,7 +40,7 @@
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
 
     @stack('offcanvas-error')
-
+    @stack('toastr-message-js')
     <script>
         var table = document.getElementById('approverTable');
         var options = {

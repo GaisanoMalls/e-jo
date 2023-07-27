@@ -37,8 +37,7 @@
                                             data-silent-initial-value-set="true">
                                             <option value="" selected disabled>Choose an SLA</option>
                                             @foreach ($slas as $sla)
-                                            <option value="{{ $sla->id }}"
-                                                {{ old('sla') == $sla->id ? 'selected' : '' }}>
+                                            <option value="{{ $sla->id }}" {{ old('sla')==$sla->id ? 'selected' : '' }}>
                                                 {{ $sla->time_unit }}
                                             </option>
                                             @endforeach
@@ -61,8 +60,8 @@
                                             id="helpTopicServiceDepartmentDropdown">
                                             <option value="" selected disabled>Choose a department</option>
                                             @foreach ($serviceDepartments as $serviceDepartment)
-                                            <option value="{{ $serviceDepartment->id }}"
-                                                {{ old('service_department') == $serviceDepartment->id ? 'selected' : '' }}>
+                                            <option value="{{ $serviceDepartment->id }}" {{
+                                                old('service_department')==$serviceDepartment->id ? 'selected' : '' }}>
                                                 {{ $serviceDepartment->name }}
                                             </option>
                                             @endforeach
@@ -101,13 +100,13 @@
                                         <label class="form-label form__field__label">
                                             Level of approval
                                         </label>
-                                        <select id="levelOfApproverDropdown" name="level_of_approver"
+                                        <select id="levelOfApproverDropdown" name="level_of_approval"
                                             placeholder="Choose level of approver" data-search="false"
                                             data-silent-initial-value-set="true">
                                             <option value="" selected disabled>Choose level of approver</option>
                                             @foreach ($levelOfApprovals as $level)
-                                            <option value="{{ $level->id }}"
-                                                {{ old('level_of_approver') == $level->id ? 'selected' : '' }}>
+                                            <option value="{{ $level->id }}" {{ old('level_of_approver')==$level->id ?
+                                                'selected' : '' }}>
                                                 {{ $level->description }}
                                             </option>
                                             @endforeach

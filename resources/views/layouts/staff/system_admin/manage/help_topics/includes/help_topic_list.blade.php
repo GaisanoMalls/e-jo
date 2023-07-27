@@ -47,10 +47,11 @@
                     <a href="" class="btn action__button mt-0">
                         <i class="bi bi-pencil-fill"></i>
                     </a>
-                    <form action="" method="post">
+                    <form action="{{ route('staff.manage.help_topics.delete', $helpTopic->id) }}" method="post">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-sm action__button mt-0"><i class="bi bi-trash-fill"></i></button>
+                        <button type="submit" class="btn btn-sm action__button mt-0"><i
+                                class="bi bi-trash-fill"></i></button>
                     </form>
                 </div>
             </td>

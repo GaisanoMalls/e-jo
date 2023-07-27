@@ -27,7 +27,7 @@ class TeamRequest extends FormRequest
         return [
             'department' => ['required'],
             'name' => [
-                'required', 
+                'required',
                 'unique:teams,name',
                 function ($attribute, $value, $fail) {
                     $departments = Department::pluck('name')->toArray();

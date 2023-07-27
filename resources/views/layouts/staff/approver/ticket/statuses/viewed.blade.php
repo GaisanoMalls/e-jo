@@ -56,7 +56,6 @@
                                 {{ $ticket->priorityLevel->name ?? '' }}</p>
                         </td>
                         <td class="custom__table__data py-0">
-                            @if ($ticket->approval_status === 'for_approval')
                             <div class="d-flex align-items-center justify-content-start gap-2">
                                 <form action="{{ route('approver.tickets.disapprove', $ticket->id) }}" method="post">
                                     @csrf
@@ -73,7 +72,6 @@
                                     </button>
                                 </form>
                             </div>
-                            @endif
                         </td>
                     </tr>
                     @endforeach

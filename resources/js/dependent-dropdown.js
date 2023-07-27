@@ -368,7 +368,7 @@ if (levelOfApproverDropdown) {
                             <label class="form-label form__field__label">
                                 Level ${i} approver/s
                             </label>
-                            <select select id="level${i}Approver" name="approver" placeholder="Choose an approver" multiple>
+                            <select select id="level${i}Approver" name="approvers[${i}][]" placeholder="Choose an approver" multiple>
                             </select>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\AuthUserAccount;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class UsersAccountController extends Controller
@@ -23,7 +24,7 @@ class UsersAccountController extends Controller
         ]);
 
         if ($validator->fails())
-            return back()->with('error', 'Failed to update your profile.')->withErrors($validator, 'updateProfile')->withInput();
+            return back()->with('error', 'Failed to update your profile. Please try again.')->withErrors($validator, 'updateProfile')->withInput();
 
         $this->authUserStoreProfilePicture($request, 'picture', 'profile_picture');
         return $this->authUserUpdateProfileInfo($request);
@@ -41,5 +42,6 @@ class UsersAccountController extends Controller
             return back()->with('error', 'Failed to update your password.')->withErrors($validator, 'updatePassword')->withInput();
 
         return $this->authUserUpdatePassword($request->current_password, $request->new_password);
+
     }
 }

@@ -114,7 +114,7 @@
                                 {{ $ticket->priorityLevel->name ?? '' }}</p>
                         </td>
                         <td class="custom__table__data py-0">
-                            @if($ticket->approval_status === 'approved')
+                            @if($ticket->approval_status === App\Models\ApprovalStatus::APPROVED)
                             <small class="rounded-5"
                                 style="background-color: #243C44; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
                                 <i class="fa-solid fa-check me-1"></i>
@@ -122,7 +122,7 @@
                             </small>
                             @endif
 
-                            @if ($ticket->approval_status === 'disapproved')
+                            @if ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
                             <small class="rounded-5"
                                 style="background-color: red; color: #FFFFFF; font-size: 11px; padding: 7px 12px;">
                                 <i class="fa-solid fa-xmark me-1"></i>

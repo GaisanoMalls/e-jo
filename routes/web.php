@@ -3,7 +3,6 @@
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Staff\Agent\AgentTicketController;
 use App\Http\Controllers\User\FeedbackController;
-use App\Http\Controllers\DependentsController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Staff\Approver\ApproverDashboardController;
 use App\Http\Controllers\Staff\Approver\ApproverTicketsController;
@@ -80,15 +79,13 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 // Route::get('/reopened', 'reopenedTickets')->name('reopened_tickets');
                 Route::get('/overdue', 'overdueTickets')->name('overdue_tickets');
                 Route::get('/closed', 'closedTickets')->name('closed_tickets');
-            });
-            // Endpoint for axios
-            Route::controller(DependentsController::class)->group(function () {
+                // Endpoint for axios
                 Route::get('/{department}/teams', 'ticketActionGetDepartmentServiceDepartments');
             });
         });
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
-                Route::get('/{ticketId}/view', 'viewTicket')->name('view_ticket');
+                Route::get('/{ticket}/view', 'viewTicket')->name('view_ticket');
                 Route::post('/{ticket}/reply/store', 'replyTicket')->name('storeTicketReply');
             });
             Route::controller(AgentTicketController::class)->group(function () {
@@ -196,9 +193,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::prefix('user')->name('user.')->group(function () {
                     Route::controller(AccountUserController::class)->group(function () {
                         Route::post('/store', 'store')->name('store');
-                    });
-                    // Endpoint for axios
-                    Route::controller(DependentsController::class)->group(function () {
+                        // Endpoint for axios
                         Route::get('/assign/department/{department}/branches', 'getBranches');
                         Route::get('/assign/department/{department}/service-departments', 'getServiceDepartments');
                     });
@@ -215,6 +210,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::controller(HelpTopicsController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::post('store', 'store')->name('store');
+                    Route::delete('{helpTopic}/delete', 'delete')->name('delete');
 
                     // Axios endpoints
                     Route::get('/approvers', 'loadApprovers');
@@ -281,7 +277,7 @@ Route::middleware(['auth', Role::approver()])->group(function () {
         });
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(ApproverTicketsController::class)->group(function () {
-                Route::get('/{ticketId}/view', 'viewTicketDetails')->name('view_ticket_details');
+                Route::get('/{ticket}/view', 'viewTicketDetails')->name('view_ticket_details');
                 Route::put('/{ticket}/approve', 'ticketDetialsApproveTicket')->name('approve_ticket');
                 Route::put('/{ticket}/disapprove', 'ticketDetialsDisapproveTicket')->name('disapprove_ticket');
                 Route::post('/{ticket}/clarification/send', 'sendClarification')->name('send_clarification');

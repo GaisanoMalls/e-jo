@@ -17,6 +17,7 @@
 
 <body class="{{ Route::is('feedback.index') ? 'bg-white' : '' }}">
     @include('layouts.feedback.includes.nav__and__banner')
+    @include('layouts.includes.toaster-message')
     @include('layouts.feedback.includes.tab')
     <div class="container feedback__container">
         @section('feedback-content')
@@ -28,12 +29,13 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/toaster-message.js') }}"></script>
     <script src="{{ asset('js/select/virtual-select.min.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
-    <script src="{{ asset('js/toaster-message.js') }}"></script>
-    @stack('toasts-js')
 
-    @if ($errors->any())
+    @stack('toastr-message-js')
+
+    @if ($errors->storeFeedback->any())
     <script>
         $(function () {
             $('#modalFeedback').modal('show');

@@ -11,6 +11,7 @@ use App\Models\ClarificationFile;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ApproverTicketsController extends Controller
@@ -145,11 +146,9 @@ class ApproverTicketsController extends Controller
         );
     }
 
-    public function viewTicketDetails(int $ticketId)
+    public function viewTicketDetails(Ticket $ticket)
     {
-        $ticket = Ticket::with(['clarifications', 'user', 'status'])->findOrFail($ticketId);
-
-        $latestClarification = Clarification::where('ticket_id', $ticketId)
+        $latestClarification = Clarification::where('ticket_id', $ticket->id)
             ->where('user_id', '!=', auth()->user()->id)
             ->orderBy('created_at', 'desc')
             ->first();
@@ -180,8 +179,9 @@ class ApproverTicketsController extends Controller
             'status_id' => Status::CLOSED,
             'approval_status' => ApprovalStatus::DISAPPROVED
         ]);
+        DB::commit();
 
-        return back()->with('info', 'Ticket is rejected.');
+        return back()->with('success', 'Ticket is rejected.');
     }
 
     public function ticketDetialsApproveTicket(Ticket $ticket)
@@ -215,29 +215,34 @@ class ApproverTicketsController extends Controller
         if ($validator->fails())
             return back()->withErrors($validator, 'storeTicketClarification')->withInput();
 
-        $clarification = Clarification::create([
-            'user_id' => auth()->user()->id,
-            'ticket_id' => $ticket->id,
-            'description' => $request->input('description')
-        ]);
+        try {
+            DB::transaction(function () use ($request, $ticket) {
+                $ticket->update(['status_id' => Status::ON_PROCESS]);
 
-        $ticket->update([
-            'status_id' => Status::ON_PROCESS
-        ]);
+                $clarification = Clarification::create([
+                    'user_id' => auth()->user()->id,
+                    'ticket_id' => $ticket->id,
+                    'description' => $request->input('description')
+                ]);
 
-        if ($request->hasFile('clarificationFiles')) {
-            foreach ($request->file('clarificationFiles') as $uploadedClarificationFile) {
-                $fileName = $uploadedClarificationFile->getClientOriginalName();
-                $fileAttachment = $uploadedClarificationFile->storeAs('public/ticket/clarification/files', $fileName);
+                if ($request->hasFile('clarificationFiles')) {
+                    foreach ($request->file('clarificationFiles') as $uploadedClarificationFile) {
+                        $fileName = $uploadedClarificationFile->getClientOriginalName();
+                        $fileAttachment = $uploadedClarificationFile->storeAs('public/ticket/clarification/files', $fileName);
 
-                $clarificationFile = new ClarificationFile();
-                $clarificationFile->file_attachment = $fileAttachment;
-                $clarificationFile->clarification_id = $clarification->id;
+                        $clarificationFile = new ClarificationFile();
+                        $clarificationFile->file_attachment = $fileAttachment;
+                        $clarificationFile->clarification_id = $clarification->id;
 
-                $clarification->fileAttachments()->save($clarificationFile);
-            }
+                        $clarification->fileAttachments()->save($clarificationFile);
+                    }
+                }
+            });
+
+            return to_route('approver.ticket.view_ticket_details', $ticket->id)->with('success', 'The message has been successfully sent.');
+
+        } catch (\Exception $e) {
+            return to_route('approver.ticket.view_ticket_details', $ticket->id)->with('error', 'Faild to send ticket clarification. Please try again.');
         }
-
-        return to_route('approver.ticket.view_ticket_details', $ticket->id)->with('success', 'The message has been successfully sent.');
     }
 }

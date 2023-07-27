@@ -59,9 +59,9 @@
                                 {{ $ticket->priorityLevel->name ?? '' }}</p>
                         </td>
                         <td class="custom__table__data">
-                            @if ($ticket->approval_status == 'for_approval')
+                            @if ($ticket->approval_status === App\Models\ApprovalStatus::FOR_APPROVAL)
                             <p class="mb-0">For approval</p>
-                            @elseif ($ticket->approval_status == 'approved')
+                            @elseif ($ticket->approval_status === App\Models\ApprovalStatus::APPROVED)
                             <p class="mb-0">Approved</p>
                             @endif
                         </td>

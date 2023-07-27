@@ -11,6 +11,7 @@ use App\Models\ServiceDepartment;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TicketController extends Controller
@@ -70,13 +71,12 @@ class TicketController extends Controller
         return view('layouts.staff.ticket.statuses.closed_tickets', compact('closedTickets'));
     }
 
-    public function viewTicket(int $ticketId)
+    public function viewTicket(Ticket $ticket)
     {
-        $ticket = Ticket::with('replies')->findOrFail($ticketId);
         $departments = Department::orderBy('name', 'asc')->get();
         $serviceDepartments = ServiceDepartment::orderBy('name', 'asc')->get();
 
-        $latestReply = Reply::where('ticket_id', $ticketId)
+        $latestReply = Reply::where('ticket_id', $ticket->id)
             ->where('user_id', '!=', auth()->user()->id)
             ->orderBy('created_at', 'desc')
             ->first();
@@ -102,27 +102,39 @@ class TicketController extends Controller
         if ($validator->fails())
             return back()->withErrors($validator, 'storeTicketReply')->withInput();
 
-        $ticket->update(['status_id' => Status::ON_PROCESS]);
+        try {
+            DB::transaction(function () use ($request, $ticket) {
+                $ticket->update(['status_id' => Status::ON_PROCESS]);
 
-        $reply = Reply::create([
-            'user_id' => auth()->user()->id,
-            'ticket_id' => $ticket->id,
-            'description' => $request->input('description')
-        ]);
+                $reply = Reply::create([
+                    'user_id' => auth()->user()->id,
+                    'ticket_id' => $ticket->id,
+                    'description' => $request->input('description')
+                ]);
 
-        if ($request->hasFile('replyFiles')) {
-            foreach ($request->file('replyFiles') as $uploadedReplyFile) {
-                $fileName = $uploadedReplyFile->getClientOriginalName();
-                $fileAttachment = $uploadedReplyFile->storeAs('public/ticket/reply/files', $fileName);
+                if ($request->hasFile('replyFiles')) {
+                    foreach ($request->file('replyFiles') as $uploadedReplyFile) {
+                        $fileName = $uploadedReplyFile->getClientOriginalName();
+                        $fileAttachment = $uploadedReplyFile->storeAs('public/ticket/reply/files', $fileName);
 
-                $replyFile = new ReplyFile();
-                $replyFile->file_attachment = $fileAttachment;
-                $replyFile->reply_id = $reply->id;
+                        $replyFile = new ReplyFile();
+                        $replyFile->file_attachment = $fileAttachment;
+                        $replyFile->reply_id = $reply->id;
 
-                $reply->fileAttachments()->save($replyFile);
-            }
+                        $reply->fileAttachments()->save($replyFile);
+                    }
+                }
+            });
+
+            return to_route('staff.ticket.view_ticket', $ticket->id)->with('success', 'Your reply has been sent successfully.');
+
+        } catch (\Exception $e) {
+            return to_route('staff.ticket.view_ticket', $ticket->id)->with('error', 'Faild to send a reply for this ticket. Please try again.');
         }
+    }
 
-        return to_route('staff.ticket.view_ticket', $ticket->id)->with('success', 'Your reply has been sent successfully.');
+    public function ticketActionGetDepartmentServiceDepartments(Department $department)
+    {
+        return response()->json($department->teams);
     }
 }

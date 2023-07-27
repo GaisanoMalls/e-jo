@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SlugGenerator;
+use App\Models\Department;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AccountUserController extends Controller
@@ -39,38 +41,58 @@ class AccountUserController extends Controller
         if ($validator->fails())
             return back()->withErrors($validator, 'storeUser')->withInput();
 
-        $user = User::create([
-            'department_id' => (int) $request->input('department'),
-            'branch_id' => (int) $request->input('branch'),
-            'role_id' => (int) Role::USER,
-            'email' => $request->input('email'),
-            'password' => \Hash::make('user')
-        ]);
+        try {
+            DB::transaction(function () use ($request) {
+                $user = User::create([
+                    'department_id' => (int) $request->input('department'),
+                    'branch_id' => (int) $request->input('branch'),
+                    'role_id' => (int) Role::USER,
+                    'email' => $request->input('email'),
+                    'password' => \Hash::make('user')
+                ]);
 
-        Profile::create([
-            'user_id' => $user->id,
-            'first_name' => $request->input('first_name'),
-            'middle_name' => $request->input('middle_name'),
-            'last_name' => $request->input('last_name'),
-            'suffix' => $request->input('suffix'),
-            'slug' => $this->slugify(implode(" ", [
-                $request->first_name,
-                $request->middle_name,
-                $request->last_name,
-                $request->suffix
-            ]))
-        ]);
+                Profile::create([
+                    'user_id' => $user->id,
+                    'first_name' => $request->input('first_name'),
+                    'middle_name' => $request->input('middle_name'),
+                    'last_name' => $request->input('last_name'),
+                    'suffix' => $request->input('suffix'),
+                    'slug' => $this->slugify(implode(" ", [
+                        $request->first_name,
+                        $request->middle_name,
+                        $request->last_name,
+                        $request->suffix
+                    ]))
+                ]);
+            });
 
-        return back()->with('success', 'You have successfully created a new user/requester');
+            return back()->with('success', 'You have successfully created a new user/requester');
+
+        } catch (\Exception $e) {
+            return back()->with('success', 'Failed to save a new user/requester');
+        }
     }
 
     public function delete(User $user)
     {
         try {
             $user->delete();
-            return back()->with('success', `User successfully deleted.`);
+            $user->profile()->delete();
+
+            return back()->with('success', 'User successfully deleted.');
+
         } catch (\Exception $e) {
-            return back()->with('error', `Failed to delete the user.`);
+            return back()->with('error', 'Failed to delete the user.');
         }
+    }
+
+    public function getBranches(Department $department)
+    {
+        return response()->json($department->branches);
+    }
+
+    public function getServiceDepartments(Department $department)
+    {
+        return response()->json($department->serviceDepartments);
     }
 }

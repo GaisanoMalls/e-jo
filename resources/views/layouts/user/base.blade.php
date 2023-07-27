@@ -19,6 +19,7 @@
 
 <body>
     @include('layouts.user.includes.navbar')
+    @include('layouts.includes.toaster-message')
     @include('layouts.user.account.includes.confirm_logout')
     @include('layouts.user.includes.modals.create_ticket_modal')
     <div class="container mb-5 requester__section">
@@ -36,20 +37,22 @@
         @endif
         @yield('main-content')
     </div>
+
     @yield('action-js')
-    @stack('toasts-js')
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{ asset('js/select/virtual-select.min.js') }}"></script>
     <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/toaster-message.js') }}"></script>
     <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/roles/user/user.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
-    <script src="{{ asset('js/toaster-message.js') }}"></script>
     <script src="{{ asset('js/dependent-dropdown.js') }}"></script>
 
     @stack('offcanvas-error')
+    @stack('toastr-message-js')
 
     @if ($errors->storeTicket->any())
     <script>

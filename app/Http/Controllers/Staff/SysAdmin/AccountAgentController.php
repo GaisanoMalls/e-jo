@@ -10,6 +10,7 @@ use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AccountAgentController extends Controller
@@ -33,37 +34,47 @@ class AccountAgentController extends Controller
         if ($validator->fails())
             return back()->withErrors($validator, 'storeAgent')->withInput();
 
-        $user = User::create([
-            'branch_id' => $request['branch'],
-            'department_id' => $request['bu_department'],
-            'team_id' => $request->input('team'),
-            'service_department_id' => $request->input('service_department'),
-            'role_id' => Role::AGENT,
-            'email' => $request['email'],
-            'password' => \Hash::make('agent'),
-        ]);
+        try {
+            DB::transaction(function () use ($request) {
+                $user = User::create([
+                    'branch_id' => $request['branch'],
+                    'department_id' => $request['bu_department'],
+                    'team_id' => $request->input('team'),
+                    'service_department_id' => $request->input('service_department'),
+                    'role_id' => Role::AGENT,
+                    'email' => $request['email'],
+                    'password' => \Hash::make('agent'),
+                ]);
 
-        $fullname = $request['first_name'] . $request['middl_name'] ?? "" . $request['last_name'];
+                $fullname = $request['first_name'] . $request['middl_name'] ?? "" . $request['last_name'];
 
-        Profile::create([
-            'user_id' => $user->id,
-            'first_name' => $request['first_name'],
-            'middle_name' => $request['middle_name'],
-            'last_name' => $request['last_name'],
-            'suffix' => $request['suffix'],
-            'slug' => $this->slugify($fullname)
-        ]);
+                Profile::create([
+                    'user_id' => $user->id,
+                    'first_name' => $request['first_name'],
+                    'middle_name' => $request['middle_name'],
+                    'last_name' => $request['last_name'],
+                    'suffix' => $request['suffix'],
+                    'slug' => $this->slugify($fullname)
+                ]);
+            });
 
-        return back()->with('success', 'You have successfully created a new agent');
+            return back()->with('success', 'You have successfully created a new agent');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to save a new agent. Please try again.');
+        }
     }
 
     public function delete(User $agent)
     {
         try {
             $agent->delete();
+            $agent->profile()->delete();
+
             return back()->with('success', 'Agent successfully deleted.');
+
         } catch (\Exception $e) {
-            return back()->with('error', `Failed to delete the agent.`);
+            return back()->with('error', 'Failed to delete the agent. Please try again.');
         }
     }
 

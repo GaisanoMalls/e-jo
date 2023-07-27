@@ -21,7 +21,7 @@
 
 <body>
     <div class="page__wrapper compact__wrapper">
-        @include('layouts.staff.includes.toaster-message')
+        @include('layouts.includes.toaster-message')
         @include('layouts.staff.includes.header')
         <div class="page__body__wrapper">
             @include('layouts.staff.includes.sidebar')
@@ -54,9 +54,8 @@
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
     <script src="{{ asset('js/dependent-dropdown.js') }}"></script>
 
-
     @stack('modal-with-error')
-    @stack('toasts-js')
+    @stack('toastr-message-js')
     <script>
         var table = document.getElementById('table');
         var options = {
