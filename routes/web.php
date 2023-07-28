@@ -90,6 +90,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
             });
             Route::controller(AgentTicketController::class)->group(function () {
                 Route::put('{ticket}/claim', 'claimTicket')->name('claim_ticket');
+                Route::put('{ticket}/claim', 'ticketDetialsClaimTicket')->name('ticket_details_claim_ticket');
+                Route::put('{ticket}/close', 'closeTicket')->name('close_ticket');
             });
         });
         Route::prefix('/announcement')->name('announcement.')->group(function () {

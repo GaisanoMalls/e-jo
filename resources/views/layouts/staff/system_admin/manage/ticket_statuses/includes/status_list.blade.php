@@ -25,8 +25,9 @@
                 </div>
             </td>
             <td>
-                <div class="d-flex align-items-center text-start td__content">
+                <div class="d-flex align-items-center text-start gap-2 td__content">
                     <span>{{ $status->tickets()->count() }}</span>
+                    <i class="fa-solid fa-envelope" style="font-size: 13px; color: #8d94a1;"></i>
                 </div>
             </td>
             <td>

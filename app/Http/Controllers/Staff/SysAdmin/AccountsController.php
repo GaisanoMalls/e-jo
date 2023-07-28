@@ -13,10 +13,10 @@ class AccountsController extends Controller
 {
     public function index()
     {
-        $approvers = User::with('branch')->where('role_id', Role::APPROVER)->take(7)->orderBy('created_at', 'desc')->get();
-        $serviceDepartmentAdmins = User::with(['department', 'branch'])->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN)->take(7)->orderBy('created_at', 'desc')->get();
-        $agents = User::with(['team', 'department', 'branch'])->where('role_id', Role::AGENT)->take(7)->orderBy('created_at', 'desc')->get();
-        $users = User::with(['department', 'branch'])->where('role_id', Role::USER)->take(7)->orderBy('created_at', 'desc')->get();
+        $approvers = User::with('branch')->where('role_id', Role::APPROVER)->take(50)->orderBy('created_at', 'desc')->get();
+        $serviceDepartmentAdmins = User::with(['department', 'branch'])->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN)->take(50)->orderBy('created_at', 'desc')->get();
+        $agents = User::with(['team', 'department', 'branch'])->where('role_id', Role::AGENT)->take(50)->orderBy('created_at', 'desc')->get();
+        $users = User::with(['department', 'branch'])->where('role_id', Role::USER)->take(50)->orderBy('created_at', 'desc')->get();
         $roles = Role::orderBy('name', 'asc')->get();
         $departments = Department::orderBy('name', 'asc')->get();
         $branches = Branch::orderBy('name', 'asc')->get();

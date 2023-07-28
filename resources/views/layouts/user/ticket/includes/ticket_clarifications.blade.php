@@ -10,8 +10,7 @@
 <div class="row align-items-center px-2 py-3 rounded-3 mx-1 mt-2 mb-4" style="background-color: #FFF3CD;">
     <div class="col-md-8">
         <p class="mb-0" style="font-size: 13px; line-height: 18px;">
-            Connect to the approver if you have any questions or clarifications, or any other matters with regards to
-            this ticket.
+            Connect to approver if you have any questions or clarifications with regards to this ticket.
         </p>
     </div>
     <div class="col-md-4">

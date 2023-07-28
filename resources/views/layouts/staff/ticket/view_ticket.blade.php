@@ -6,51 +6,58 @@
     <div class="row">
         <div class="col-xl-12 ticket__details__container">
             <div class="mb-3 ticket__details__top">
-                @if($ticket->status->id === App\Models\Status::APPROVED)
+                @if($ticket->status->id == App\Models\Status::APPROVED)
+                @if (auth()->user()->role_id == App\Models\Role::AGENT)
+                <a href="{{ route('staff.tickets.open_tickets') }}" type="button"
+                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                @else
                 <a href="{{ route('staff.tickets.approved_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @endif
-                @if($ticket->status->id === App\Models\Status::OPEN)
+                @endif
+                @if($ticket->status->id == App\Models\Status::OPEN)
                 <a href="{{ route('staff.tickets.open_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @endif
-                @if($ticket->status->id === App\Models\Status::CLAIMED)
+                @if($ticket->status->id == App\Models\Status::CLAIMED)
                 <a href="{{ route('staff.tickets.claimed_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @endif
-                @if($ticket->status->id === App\Models\Status::ON_PROCESS)
+                @if($ticket->status->id == App\Models\Status::ON_PROCESS)
                 <a href="{{ route('staff.tickets.on_process_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @endif
-                @if($ticket->status->id === App\Models\Status::VIEWED)
+                @if($ticket->status->id == App\Models\Status::VIEWED)
                 <a href="{{ route('staff.tickets.viewed_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @endif
-                @if($ticket->status->id === App\Models\Status::OVERDUE)
+                @if($ticket->status->id == App\Models\Status::OVERDUE)
                 <a href="{{ route('staff.tickets.overdue_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @endif
-                @if($ticket->status->id === App\Models\Status::CLOSED && $ticket->approval_status ===
+                @if($ticket->status->id == App\Models\Status::CLOSED && $ticket->approval_status ==
                 App\Models\ApprovalStatus::DISAPPROVED)
                 <a href="{{ route('staff.tickets.disapproved_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 @endif
-                @if($ticket->status->id === App\Models\Status::CLOSED || $ticket->approval_status ===
-                App\Models\ApprovalStatus::APPROVED && $ticket->approval_status ===
+                @if($ticket->status->id == App\Models\Status::CLOSED || $ticket->approval_status ==
+                App\Models\ApprovalStatus::APPROVED && $ticket->approval_status ==
                 App\Models\ApprovalStatus::DISAPPROVED)
                 <a href="{{ route('staff.tickets.closed_tickets') }}" type="button"
                     class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
@@ -70,33 +77,76 @@
                             {{ $ticket->created_at->format('D') }} @ {{ $ticket->created_at->format('g:i A') }}</small>
                     </div>
                     <div class="d-flex flex-wrap justify-content-center gap-3 gap-lg-4 gap-xl-4">
+
+                        @if (auth()->user()->role_id == App\Models\Role::AGENT)
+                        {{-- SHOW "Claim" BUTTON FOR AGENT USER ONLY --}}
+                        <div class="d-flex flex-column">
+                            @if ($ticket->status_id == App\Models\Status::CLAIMED)
+                            <button style="background-color: {{ $ticket->status->color }} !important;"
+                                class="btn btn-sm border-0 m-auto text-white ticket__detatails__btn__claim claimed d-flex  align-items-center justify-content-center">
+                                <i class="fa-solid fa-flag"></i>
+                            </button>
+                            <small class="ticket__details__topbuttons__label fw-bold">Claimed</small>
+                            @else
+                            @if ($ticket->agent_id == null)
+                            <form action="{{ route('staff.ticket.ticket_details_claim_ticket', $ticket->id) }}"
+                                method="post">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn bx-burst btn-sm border-0 m-auto ticket__detatails__btn__claim d-flex
+                                    align-items-center justify-content-center">
+                                    <i class='bx bxs-flag-alt' style="font-size: 17px;"></i>
+                                </button>
+                                <small class="ticket__details__topbuttons__label">Claim</small>
+                            </form>
+                            @else
+                            <button style="background-color: #FF8B8B !important;"
+                                class="btn btn-sm border-0 m-auto text-white ticket__detatails__btn__claim claimed d-flex  align-items-center justify-content-center">
+                                <i class="fa-solid fa-flag"></i>
+                            </button>
+                            <small class="ticket__details__topbuttons__label fw-bold">Claimed</small>
+                            @endif
+                            @endif
+                        </div>
+                        @elseif ($ticket->status_id == App\Models\Status::CLAIMED)
+                        <div class="d-flex flex-column">
+                            <button style="background-color: {{ $ticket->status->color }} !important;" class="btn btn-sm border-0 m-auto text-white ticket__detatails__btn__claim claimed d-flex
+                                align-items-center justify-content-center">
+                                <i class="fa-solid fa-flag"></i>
+                            </button>
+                            <small class="ticket__details__topbuttons__label fw-bold">Claimed</small>
+                        </div>
+                        @endif
+
+                        @if ($ticket->status_id == App\Models\Status::CLOSED)
+                        <div class="d-flex flex-column">
+                            <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__close closed d-flex text-white
+                                            align-items-center justify-content-center"
+                                style="background-color: {{ $ticket->status->color }} !important;">
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+                            <small class="ticket__details__topbuttons__label fw-bold">Closed</small>
+                        </div>
+                        @else
+                        <div class="d-flex flex-column">
+                            <form action="{{ route('staff.ticket.close_ticket', $ticket->id) }}" method="post">
+                                @csrf
+                                @method('PUT')
+                                <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex
+                                align-items-center justify-content-center" type="submit">
+                                    <i class="fa-solid fa-check"></i>
+                                </button>
+                            </form>
+                            <small class="ticket__details__topbuttons__label">Close</small>
+                        </div>
+
+                        @endif
                         <div class="d-flex flex-column">
                             <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__bookmark d-flex
                                             align-items-center justify-content-center" type="submit">
                                 <i class="fa-solid fa-bookmark"></i>
                             </button>
                             <small class="ticket__details__topbuttons__label">Bookmark</small>
-                        </div>
-                        <div class="d-flex flex-column">
-                            <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__markasresolved d-flex
-                                            align-items-center justify-content-center" type="submit">
-                                <i class="fa-solid fa-check"></i>
-                            </button>
-                            <small class="ticket__details__topbuttons__label">Close</small>
-                        </div>
-                        <div class="d-flex flex-column">
-                            <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__transfer d-flex
-                                            align-items-center justify-content-center" type="submit">
-                                <i class="fa-solid fa-flag"></i>
-                            </button>
-                            <small class="ticket__details__topbuttons__label">Claim</small>
-                        </div>
-                        <div class="d-flex flex-column">
-                            <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__transfer d-flex
-                                            align-items-center justify-content-center" type="submit">
-                                <i class="fa-solid fa-print"></i>
-                            </button>
-                            <small class="ticket__details__topbuttons__label">Print</small>
                         </div>
                     </div>
                 </div>
@@ -153,7 +203,7 @@
                     @include('layouts.staff.ticket.modal.preview_reply_ticket_files_modal')
                     <div class="card border-0 p-0 card__ticket__details"
                         style="width: fit-content; max-width: 70%;
-                        {{ $reply->user_id === auth()->user()->id ? 'background-color: #D0F0F7; margin-left: auto;' : 'background-color: #E9ECEF; margin-right: auto;' }}">
+                        {{ $reply->user_id == auth()->user()->id ? 'background-color: #D0F0F7; margin-left: auto;' : 'background-color: #E9ECEF; margin-right: auto;' }}">
                         <div
                             class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
                             <div class="d-flex align-items-center w-100">
@@ -172,7 +222,7 @@
                                     <small
                                         class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                                         {{ $reply->user->profile->getFullName() }}
-                                        @if ($reply->user->role_id === App\Models\Role::SYSTEM_ADMIN)
+                                        @if ($reply->user->role_id == App\Models\Role::SYSTEM_ADMIN)
                                         <i class="bi bi-person-fill-gear text-muted ms-1" title="System Admin"></i>
                                         @endif
                                     </small>
@@ -206,6 +256,8 @@
                         <small style="font-size: 14px;">No replies.</small>
                     </div>
                     @endif
+
+                    @if ($ticket->status_id != App\Models\Status::CLOSED)
                     <button type="button"
                         class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2"
                         data-bs-toggle="offcanvas" data-bs-target="#offcanvasReplyTicketForm"
@@ -213,6 +265,7 @@
                         <i class="fa-solid fa-pen"></i>
                         <span class="lbl__reply">Reply</span>
                     </button>
+                    @endif
                     {{-- End Replies/Comments --}}
                 </div>
                 <div class="col-md-4">
@@ -228,16 +281,16 @@
                                             Approval status:
                                         </small>
                                         <small class="ticket__details__info">
-                                            @if ($ticket->approval_status === App\Models\ApprovalStatus::APPROVED)
+                                            @if ($ticket->approval_status == App\Models\ApprovalStatus::APPROVED)
                                             <i class="fa-solid fa-circle-check me-1"
                                                 style="color: green; font-size: 11px;"></i>
                                             Approved
-                                            @elseif ($ticket->approval_status ===
+                                            @elseif ($ticket->approval_status ==
                                             App\Models\ApprovalStatus::FOR_APPROVAL)
                                             <i class="fa-solid fa-paper-plane me-1"
                                                 style="color: orange; font-size: 11px;"></i>
                                             For Approval
-                                            @elseif ($ticket->approval_status ===
+                                            @elseif ($ticket->approval_status ==
                                             App\Models\ApprovalStatus::DISAPPROVED)
                                             <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
                                             Disapproved

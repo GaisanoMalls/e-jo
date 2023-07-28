@@ -131,7 +131,7 @@
                     <div class="row align-items-center bg-light p-2 py-1 rounded-3 mx-1 mt-2 mb-4">
                         <div class="col-md-8">
                             <p class="mb-0" style="font-size: 13px; line-height: 19px;">
-                                If you have any questions or clarifications, or any other concerns with regards to this
+                                If you have any questions or clarifications with regards to this
                                 ticket, you can connect with {{ $ticket->user->profile->first_name }}.
                             </p>
                         </div>

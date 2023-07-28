@@ -123,7 +123,8 @@
                                     @if (auth()->user()->role_id === App\Models\Role::AGENT)
                                     <td>
                                         <div class="d-flex align-items-center justify-content-start td__content">
-                                            <form action="{{ route('staff.ticket.claim_ticket', $ticket->id) }}"
+                                            <form
+                                                action="{{ route('staff.ticket.ticket_details_claim_ticket', $ticket->id) }}"
                                                 method="post">
                                                 @csrf
                                                 @method('PUT')

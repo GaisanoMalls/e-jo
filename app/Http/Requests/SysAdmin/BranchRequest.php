@@ -27,12 +27,6 @@ class BranchRequest extends FormRequest
             'name' => [
                 'required',
                 'unique:branches,name',
-                'regex:/^[a-zA-Z\s]+$/u',
-                function ($attribute, $value, $fail) {
-                    if (preg_match('/[\'^£$%&*}{@#~?><>,|=_+¬-]/', $value)) {
-                        $fail('The name cannot contain special characters.');
-                    }
-                },
             ]
         ];
     }

@@ -1,6 +1,6 @@
 <div class="modal help__topic__modal" id="addNewHelpTopicModal" tabindex="-1"
     aria-labelledby="addNewHelpTopicModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">
                 <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">Add new help topic</h1>

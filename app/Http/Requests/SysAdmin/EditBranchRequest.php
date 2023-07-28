@@ -27,17 +27,11 @@ class EditBranchRequest extends FormRequest
             'name' => [
                 'required',
                 'unique:branches,name',
-                'regex:/^[a-zA-Z\s]+$/u',
-                function ($attribute, $value, $fail) {
-                    if (preg_match('/[\'^£$%&*}{@#~?><>,|=_+¬-]/', $value)) {
-                        $fail('The name cannot contain special characters.');
-                    }
-                },
             ]
         ];
     }
 
-     public function messages()
+    public function messages()
     {
         return [
             'name.unique' => 'The branch name already exists. Please try another name.'
