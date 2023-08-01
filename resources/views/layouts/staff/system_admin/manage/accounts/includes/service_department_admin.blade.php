@@ -114,14 +114,23 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $serviceDepartmentAdmin->dateUpdated() }}</span>
+                                                <span>
+                                                    @if ($serviceDepartmentAdmin->dateUpdated() >
+                                                    $serviceDepartmentAdmin->profile->dateUpdated())
+                                                    {{ $serviceDepartmentAdmin->dateUpdated() }}
+                                                    @else
+                                                    {{ $serviceDepartmentAdmin->profile->dateUpdated() }}
+                                                    @endif
+                                                </span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                                                <a href="" type="button" class="btn action__button">
+                                                <button
+                                                    onclick="window.location.href='{{ route('staff.manage.user_account.service_department_admin.details', $serviceDepartmentAdmin->id) }}'"
+                                                    type="button" class="btn action__button">
                                                     <i class="bi bi-pencil"></i>
-                                                </a>
+                                                </button>
                                                 <button type="button" href="" class="btn action__button"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#confirmDeleteServiceDeptAdmin{{ $serviceDepartmentAdmin->id }}">

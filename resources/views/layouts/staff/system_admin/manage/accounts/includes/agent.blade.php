@@ -118,7 +118,13 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $agent->dateUpdated() }}</span>
+                                                <span>
+                                                    @if ($agent->dateUpdated() > $agent->profile->dateUpdated())
+                                                    {{ $agent->dateUpdated() }}
+                                                    @else
+                                                    {{ $agent->profile->dateUpdated() }}
+                                                    @endif
+                                                </span>
                                             </div>
                                         </td>
                                         <td>

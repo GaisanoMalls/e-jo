@@ -12,7 +12,7 @@ class UpdatePasswordController extends Controller
 {
     use UserAccountConfig;
 
-    public function updatePassword(Request $request, User $approver)
+    public function updatePassword(Request $request, User $user)
     {
         $validator = Validator::make($request->all(), [
             'new_password' => ['required', 'min:5'],
@@ -27,6 +27,6 @@ class UpdatePasswordController extends Controller
         $newPassword = $request->input('new_password');
         $confirmPassword = $request->input('confirm_password');
 
-        return $this->updateUserPassword($approver, $newPassword, $confirmPassword);
+        return $this->updateUserPassword($user, $newPassword, $confirmPassword);
     }
 }

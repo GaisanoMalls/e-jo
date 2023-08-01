@@ -172,20 +172,28 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                         // (For create approver)
                         Route::get('/{branch}/departments', 'branchDepartments');
                         // (For Edit approver)
-                        Route::get('/edit/{branch}/departments', 'editBrancDepartments');
+                        Route::get('/edit/{branch}/departments', 'branchDepartments');
                     });
                     Route::controller(UpdatePasswordController::class)->group(function () {
-                        Route::put('/{approver}/update-password', 'updatePassword')->name('update_password');
+                        Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
                     });
                 });
                 // Department Admin Routes
                 Route::prefix('service-department-admin')->name('service_department_admin.')->group(function () {
                     Route::controller(AccountServiceDeptAdminController::class)->group(function () {
                         Route::post('/store', 'store')->name('store');
-                        Route::delete('/{departmentAdmin}/store', 'delete')->name('delete');
+                        Route::get('/{serviceDeptAdmin}/details', 'serviceDeptAdminDetails')->name('details');
+                        Route::get('/{serviceDeptAdmin}/update', 'update')->name('update');
+                        Route::delete('/{serviceDeptAdmin}/delete', 'delete')->name('delete');
 
                         // Axios endpoints
+                        // For create service department admin
                         Route::get('/{branch}/bu-departments', 'branchBUDepartments');
+                        // For edit service department admin
+                        Route::get('/edit/{branch}/bu-departments', 'branchBUDepartments');
+                    });
+                    Route::controller(UpdatePasswordController::class)->group(function () {
+                        Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
                     });
                 });
                 // Agent Routes

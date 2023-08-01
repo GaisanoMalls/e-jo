@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SlugGenerator;
-use App\Http\Traits\UserDetials;
+use App\Http\Traits\UserDetails;
 use App\Models\Branch;
 use App\Models\Profile;
 use App\Models\Role;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AccountApproverController extends Controller
 {
-    use SlugGenerator, UserDetials;
+    use SlugGenerator, UserDetails;
 
     public function store(Request $request)
     {
@@ -120,7 +120,6 @@ class AccountApproverController extends Controller
             return back()->with('success', "You have successfully updated the account for {$approver->profile->getFullName()}.");
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return back()->with('error', 'Failed to update the approver. Please try again.');
         }
     }
@@ -138,15 +137,10 @@ class AccountApproverController extends Controller
         }
     }
 
-    // For creation of the approver
+    // For creation and Edit of the approver
     public function branchDepartments(Branch $branch)
     {
         return response()->json($branch->departments);
     }
 
-    // For edit approver
-    public function editBrancDepartments(Branch $branch)
-    {
-        return response()->json($branch->departments);
-    }
 }

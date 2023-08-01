@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SlugGenerator;
+use App\Http\Traits\UserDetails;
 use App\Models\Branch;
 use App\Models\Profile;
 use App\Models\Role;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AccountServiceDeptAdminController extends Controller
 {
-    use SlugGenerator;
+    use SlugGenerator, UserDetails;
 
     public function store(Request $request)
     {
@@ -65,11 +66,73 @@ class AccountServiceDeptAdminController extends Controller
         }
     }
 
-    public function delete(User $departmentAdmin)
+    public function serviceDeptAdminDetails(User $serviceDeptAdmin)
+    {
+        $suffixes = $this->getSuffixes();
+        $branches = $this->getBranches();
+        $serviceDepartments = $this->getServiceDepartments();
+
+        return view(
+            'layouts.staff.system_admin.manage.accounts.edit.edit_service_dept_admin',
+            compact([
+                'serviceDeptAdmin',
+                'suffixes',
+                'branches',
+                'serviceDepartments'
+            ])
+        );
+    }
+
+
+    public function update(Request $request, User $serviceDeptAdmin)
+    {
+        $validator = Validator::make($request->all(), [
+            'branch' => ['required'],
+            'bu_department' => ['required'],
+            'first_name' => ['required', 'min:2', 'max:100'],
+            'middle_name' => ['nullable', 'min:2', 'max:100'],
+            'last_name' => ['required', 'min:2', 'max:100'],
+            'suffix' => ['nullable', 'min:1', 'max:4'],
+            'email' => ['required', 'max:80'],
+        ]);
+
+        if ($validator->fails())
+            return back()->withErrors($validator, 'editServiceDeptAdmin')->withInput();
+
+        try {
+            DB::transaction(function () use ($serviceDeptAdmin, $request) {
+                $serviceDeptAdmin->update([
+                    'branch_id' => $request->input('branch'),
+                    'department_id' => $request->input('bu_department'),
+                    'email' => $request->input('email')
+                ]);
+
+                $serviceDeptAdmin->profile()->update([
+                    'first_name' => $request->input('first_name'),
+                    'middle_name' => $request->input('middle_name'),
+                    'last_name' => $request->input('last_name'),
+                    'suffix' => $request->input('suffix'),
+                    'slug' => $this->slugify(implode(" ", [
+                        $request->first_name,
+                        $request->middle_name,
+                        $request->last_name,
+                        $request->suffix
+                    ]))
+                ]);
+            });
+
+            return back()->with('success', "You have successfully updated the account for {$serviceDeptAdmin->profile->getFullName()}.");
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update the approver. Please try again.');
+        }
+    }
+
+    public function delete(User $serviceDeptAdmin)
     {
         try {
-            $departmentAdmin->delete();
-            $departmentAdmin->profile()->delete();
+            $serviceDeptAdmin->delete();
+            $serviceDeptAdmin->profile()->delete();
 
             return back()->with('success', 'Department admin successfully deleted.');
 

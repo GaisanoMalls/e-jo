@@ -99,7 +99,13 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $approver->dateUpdated() }}</span>
+                                                <span>
+                                                    @if ($approver->dateUpdated() > $approver->profile->dateUpdated())
+                                                    {{ $approver->dateUpdated() }}
+                                                    @else
+                                                    {{ $approver->profile->dateUpdated() }}
+                                                    @endif
+                                                </span>
                                             </div>
                                         </td>
                                         <td>
