@@ -8260,6 +8260,58 @@ input[type=checkbox]:checked {
   border-color: transparent;
 }
 
+.edit__password__modal .modal__content {
+  padding: 2rem 2.3rem;
+  border: 0;
+  border-radius: 0.563rem;
+}
+.edit__password__modal .modal__content .modal__header .modal__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.edit__password__modal .modal__content .modal__body {
+  padding: 1.3rem 0 0.5rem 0;
+}
+.edit__password__modal .modal__content .form__field__label {
+  font-size: 0.875rem;
+}
+.edit__password__modal .modal__content .form__field {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 0.563rem;
+  border: 1px solid #e7e9eb;
+}
+.edit__password__modal .modal__content .form__field:focus {
+  box-shadow: none;
+  border-color: #d32839;
+}
+.edit__password__modal .btn__update__password {
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  min-width: 6rem;
+}
+.edit__password__modal .btn__update__password.btn__cancel {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  border: 1px solid #e7e9eb;
+  background-color: transparent;
+  color: #d32839;
+  font-weight: 500;
+}
+.edit__password__modal .btn__update__password.btn__send {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  background-color: #d32839;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+}
+
 .accounts__section .users__account__card {
   border: none;
   border-radius: 0.625rem;
@@ -8293,6 +8345,50 @@ input[type=checkbox]:checked {
 .accounts__section .users__account__card .table-striped > tbody > tr .td__content {
   padding: 9px 21px;
   height: 50px;
+}
+.accounts__section .users__account__card .user__details__container .card__title {
+  font-weight: 600;
+  color: #3d3d3d;
+}
+.accounts__section .users__account__card .user__details__container .btn__details {
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  width: 6rem;
+}
+.accounts__section .users__account__card .user__details__container .btn__details.btn__cancel {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  border: 1px solid #e7e9eb;
+  background-color: transparent;
+  color: #d32839;
+  font-weight: 500;
+}
+.accounts__section .users__account__card .user__details__container .btn__details.btn__send {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  background-color: #d32839;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+}
+.accounts__section .users__account__card .user__details__container .btn__details.btn__update__password {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  background-color: #d32839;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+  background-color: #1A2E35 !important;
+  padding: 6px 10px !important;
+  width: auto !important;
+  font-size: 12px;
 }
 .accounts__section .account__type__card {
   border: 1px solid #efefef;
@@ -8373,6 +8469,19 @@ input[type=checkbox]:checked {
   color: white;
   font-weight: 500;
   box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+}
+.accounts__section .user__details__container .form__field__label {
+  font-size: 0.875rem;
+}
+.accounts__section .user__details__container .form__field {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 0.563rem;
+  border: 1px solid #e7e9eb;
+}
+.accounts__section .user__details__container .form__field:focus {
+  box-shadow: none;
+  border-color: #d32839;
 }
 
 .user__account__media .user__picture {

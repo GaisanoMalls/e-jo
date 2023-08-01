@@ -42,6 +42,37 @@
   background: #999;
 }
 
+.btn__see__reason {
+  color: black;
+  text-decoration: underline !important;
+  font-weight: 500;
+  font-size: 13px;
+  padding-bottom: 4px;
+}
+.btn__see__reason:hover {
+  color: black;
+}
+
+.reason__modal {
+  border-radius: 0.625rem;
+  border: none;
+}
+
+.reason__modal .modal__content {
+  padding: 20px;
+}
+.reason__modal .modal__content .title {
+  font-size: 0.938rem;
+  font-weight: 600;
+  color: #212529;
+}
+.reason__modal .modal__content .reason__content {
+  font-size: 0.875rem;
+}
+.reason__modal .modal__content .reason__content p {
+  margin-bottom: 2px;
+}
+
 .error__message {
   font-size: 0.75rem;
   font-weight: 500;

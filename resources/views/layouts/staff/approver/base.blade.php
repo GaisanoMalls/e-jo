@@ -40,6 +40,7 @@
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
 
     @stack('offcanvas-error')
+    @stack('modal-with-error')
     @stack('toastr-message-js')
     <script>
         var table = document.getElementById('approverTable');

@@ -78,8 +78,8 @@
                                                     </div>
                                                     <div class="flex-grow-1 ms-3 w-100">
                                                         <a href="" class="d-flex flex-column gap-1 w-100">
-                                                            <span
-                                                                class="user__name">{{ $agent->profile->getFullName() }}</span>
+                                                            <span class="user__name">{{ $agent->profile->getFullName()
+                                                                }}</span>
                                                             <small>{{ $agent->email }}</small>
                                                         </a>
                                                     </div>
@@ -126,7 +126,7 @@
                                                 <button type="button" href="" class="btn action__button"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#confirmDeleteAgent{{ $agent->id }}">
-                                                    <i class="bi bi-trash-fill"></i>
+                                                    <i class="bi bi-trash"></i>
                                                 </button>
                                             </div>
                                         </td>

@@ -8,6 +8,7 @@ use App\Http\Traits\Approver\Tickets as ApproverTickets;
 use App\Models\ApprovalStatus;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
+use App\Models\Reason;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
@@ -153,11 +154,14 @@ class ApproverTicketsController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
 
+        $reason = $ticket->reasons()->where('ticket_id', $ticket->id)->first();
+
         return view(
             'layouts.staff.approver.ticket.view_ticket',
             compact([
                 'ticket',
-                'latestClarification'
+                'latestClarification',
+                'reason'
             ])
         );
     }
@@ -195,15 +199,36 @@ class ApproverTicketsController extends Controller
             ->with('success', 'The ticket has been approved.');
     }
 
-    public function ticketDetialsDisapproveTicket(Ticket $ticket)
+    public function ticketDetialsDisapproveTicket(Request $request, Ticket $ticket)
     {
-        $ticket->update([
-            'status_id' => Status::CLOSED,
-            'approval_status' => ApprovalStatus::DISAPPROVED
+        $validator = Validator::make($request->all(), [
+            'description' => ['required']
         ]);
 
-        return to_route('approver.ticket.view_ticket_details', [$ticket->id])
-            ->with('info', 'The ticket has been disapproved.');
+        if ($validator->fails())
+            return back()->withErrors($validator, 'disapproveTicket')->withInput();
+
+        try {
+            DB::transaction(function () use ($request, $ticket) {
+                $reason = Reason::create([
+                    'ticket_id' => $ticket->id,
+                    'description' => $request->input('description')
+                ]);
+
+                $reason->ticket()->where('id', $ticket->id)
+                    ->update([
+                        'status_id' => Status::CLOSED,
+                        'approval_status' => ApprovalStatus::DISAPPROVED
+                    ]);
+            });
+
+            return to_route('approver.ticket.view_ticket_details', [$ticket->id])
+                ->with('success', 'The ticket has been disapproved.');
+
+        } catch (\Exception $e) {
+            return to_route('approver.ticket.view_ticket_details', [$ticket->id])
+                ->with('error', 'Faild to disapprove the ticket. Please try again.');
+        }
     }
 
     // * Clarifications

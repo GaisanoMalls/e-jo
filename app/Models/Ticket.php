@@ -87,6 +87,11 @@ class Ticket extends Model
         return $this->hasMany(Reply::class);
     }
 
+    public function reasons()
+    {
+        return $this->hasMany(Reason::class);
+    }
+
     public function clarifications()
     {
         return $this->hasMany(Clarification::class);

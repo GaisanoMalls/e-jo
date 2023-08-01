@@ -14,13 +14,13 @@ trait AuthUserAccount
         $user = Auth::user();
         $profile = $user->profile;
 
-        $user->update(['email' => $request['email']]);
+        $user->update(['email' => $request->input('email')]);
         $profile->update([
-            'first_name' => $request['first_name'],
-            'middle_name' => $request['middle_name'],
-            'last_name' => $request['last_name'],
-            'suffix' => $request['suffix'],
-            'mobile_number' => $request['mobile_number'],
+            'first_name' => $request->input('first_name'),
+            'middle_name' => $request->input('middle_name'),
+            'last_name' => $request->input('last_name'),
+            'suffix' => $request->input('suffix'),
+            'mobile_number' => $request->input('mobile_number'),
         ]);
 
         return ($user->wasChanged('email')

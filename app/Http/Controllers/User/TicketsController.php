@@ -236,12 +236,11 @@ class TicketsController extends Controller
         }
     }
 
-    public function viewTicket(int $ticketId)
+    public function viewTicket(Ticket $ticket)
     {
-        $ticket = Ticket::with('replies')->findOrFail($ticketId);
-
-        $latestReply = $this->getLatestReply($ticketId);
-        $latestClarification = $this->getLatestClarification($ticketId);
+        $latestReply = $this->getLatestReply($ticket->id);
+        $latestClarification = $this->getLatestClarification($ticket->id);
+        $reason = $ticket->reasons()->where('ticket_id', $ticket->id)->first();
 
         return view(
             'layouts.user.ticket.view_ticket',
@@ -249,6 +248,7 @@ class TicketsController extends Controller
                 'ticket',
                 'latestReply',
                 'latestClarification',
+                'reason'
             ])
         );
     }
@@ -269,7 +269,7 @@ class TicketsController extends Controller
 
                 $reply = Reply::create([
                     'user_id' => auth()->user()->id,
-                    'ticket_idsdcsdc' => $ticket->id,
+                    'ticket_id' => $ticket->id,
                     'description' => $request->input('description')
                 ]);
 
@@ -294,19 +294,19 @@ class TicketsController extends Controller
         }
     }
 
-    public function ticketClarifications(int $ticketId)
+    public function ticketClarifications(Ticket $ticket)
     {
-        $ticket = Ticket::with(['clarifications'])->findOrFail($ticketId);
-
-        $latestReply = $this->getLatestReply($ticketId);
-        $latestClarification = $this->getLatestClarification($ticketId);
+        $latestReply = $this->getLatestReply($ticket->id);
+        $latestClarification = $this->getLatestClarification($ticket->id);
+        $reason = $ticket->reasons()->where('ticket_id', $ticket->id)->first();
 
         return view(
             'layouts.user.ticket.includes.ticket_clarifications',
             compact([
                 'ticket',
                 'latestReply',
-                'latestClarification'
+                'latestClarification',
+                'reason'
             ])
         );
     }

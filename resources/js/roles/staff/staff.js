@@ -37,7 +37,6 @@ if (btnSelectTicket) {
     });
 }
 
-
 const btnCloseModal = document.getElementById('btnCloseModal');
 const clearModalForm = () => {
     const modalForm = document.getElementById('modalForm');

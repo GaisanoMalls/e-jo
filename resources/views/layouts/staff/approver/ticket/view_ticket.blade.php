@@ -1,9 +1,22 @@
 @extends('layouts.staff.approver.base', ['title' => $ticket->subject])
 
 @section('main-content')
+@include('layouts.staff.approver.ticket.includes.modal.disapproval_reason')
+@if ($reason)
+@include('layouts.staff.approver.ticket.includes.modal.reason')
+@endif
 @if ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
-<div class="alert alert-warning p-3 rounded-3 mx-1 mt-2 mb-4" role="alert" style="font-size: 13px;">
-    This ticket has been disapproved.
+<div class="alert alert-warning p-3 rounded-3 mx-1 mt-2 mb-4 d-flex align-items-center justify-content-between"
+    role="alert" style="font-size: 13px;">
+    <span style="font-size: 13px;">
+        This ticket has been disapproved.
+    </span>
+    @if ($reason)
+    <button type="button" class="btn btn-sm p-0 d-flex align-items-center border-0 rounded-0 gap-1 btn__see__reason"
+        data-bs-toggle="modal" data-bs-target="#reasonModal">
+        See reason
+    </button>
+    @endif
 </div>
 @endif
 <div class="row mx-0">
@@ -58,13 +71,10 @@
                     @if ($ticket->status_id === App\Models\Status::OPEN || $ticket->approval_status ===
                     App\Models\ApprovalStatus::FOR_APPROVAL)
                     <div class="d-flex flex-wrap align-items-center justify-content-center gap-3">
-                        <form action="{{ route('approver.ticket.disapprove_ticket', $ticket->id) }}" method="post">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="btn btn-sm btn__disapprove__ticket">
-                                Disapprove
-                            </button>
-                        </form>
+                        <button type="button" class="btn btn-sm btn__disapprove__ticket" data-bs-toggle="modal"
+                            data-bs-target="#disapproveTicketModal" type="button">
+                            Disapprove
+                        </button>
                         <form action="{{ route('approver.ticket.approve_ticket', $ticket->id) }}" method="post">
                             @csrf
                             @method('PUT')
@@ -186,6 +196,17 @@
     $(function () {
         var offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasTicketClarificationForm'));
         offcanvas.show();
+    });
+
+</script>
+@endpush
+@endif
+
+@if ($errors->disapproveTicket->any())
+@push('modal-with-error')
+<script>
+    $(function () {
+        $('#disapproveTicketModal').modal('show');
     });
 
 </script>

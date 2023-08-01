@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Staff\Agent\AgentTicketController;
+use App\Http\Controllers\Staff\SysAdmin\UpdatePasswordController;
 use App\Http\Controllers\User\FeedbackController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Staff\Approver\ApproverDashboardController;
@@ -163,11 +164,18 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::prefix('approver')->name('approver.')->group(function () {
                     Route::controller(AccountApproverController::class)->group(function () {
                         Route::post('/store', 'store')->name('store');
-                        Route::put('/{approver}/edit', 'edit')->name('edit');
+                        Route::get('/{approver}/details', 'approverDetails')->name('details');
+                        Route::put('/{approver}/update', 'update')->name('update');
                         Route::delete('/{approver}/delete', 'delete')->name('delete');
 
                         // Axios endpoints
+                        // (For create approver)
                         Route::get('/{branch}/departments', 'branchDepartments');
+                        // (For Edit approver)
+                        Route::get('/edit/{branch}/departments', 'editBrancDepartments');
+                    });
+                    Route::controller(UpdatePasswordController::class)->group(function () {
+                        Route::put('/{approver}/update-password', 'updatePassword')->name('update_password');
                     });
                 });
                 // Department Admin Routes
@@ -306,8 +314,8 @@ Route::middleware(['auth', Role::user()])->group(function () {
             Route::controller(UserTicketsController::class)->group(function () {
                 Route::post('/store', 'store')->name('store');
                 Route::post('/{ticket}/reply/store', 'requesterReplyTicket')->name('store_reply_ticket');
-                Route::get('/{ticketId}/view', 'viewTicket')->name('view_ticket');
-                Route::get('/{ticketId}/view/clarifications', 'ticketClarifications')->name('ticket_clarifications');
+                Route::get('/{ticket}/view', 'viewTicket')->name('view_ticket');
+                Route::get('/{ticket}/view/clarifications', 'ticketClarifications')->name('ticket_clarifications');
                 Route::post('/{ticket}/view/clarification/send', 'sendClarification')->name('send_clarification');
 
                 // Axios endpoints

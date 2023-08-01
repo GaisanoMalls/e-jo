@@ -49,7 +49,6 @@
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/roles/user/user.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
-    <script src="{{ asset('js/dependent-dropdown.js') }}"></script>
 
     @stack('offcanvas-error')
     @stack('toastr-message-js')

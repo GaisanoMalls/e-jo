@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SlugGenerator;
+use App\Http\Traits\UserDetials;
 use App\Models\Branch;
 use App\Models\Profile;
 use App\Models\Role;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AccountApproverController extends Controller
 {
-    use SlugGenerator;
+    use SlugGenerator, UserDetials;
 
     public function store(Request $request)
     {
@@ -64,7 +65,22 @@ class AccountApproverController extends Controller
         }
     }
 
-    public function edit(Request $request, User $approver)
+    public function approverDetails(User $approver)
+    {
+        $suffixes = $this->getSuffixes();
+        $branches = $this->getBranches();
+
+        return view(
+            'layouts.staff.system_admin.manage.accounts.edit.edit_approver',
+            compact([
+                'approver',
+                'suffixes',
+                'branches',
+            ])
+        );
+    }
+
+    public function update(Request $request, User $approver)
     {
         $validator = Validator::make($request->all(), [
             'branch' => ['required'],
@@ -84,11 +100,10 @@ class AccountApproverController extends Controller
                 $approver->update([
                     'branch_id' => $request->input('branch'),
                     'department_id' => $request->input('bu_department'),
-                    'role_id' => $request->input('role'),
                     'email' => $request->input('email')
                 ]);
 
-                $approver->profile->update([
+                $approver->profile()->update([
                     'first_name' => $request->input('first_name'),
                     'middle_name' => $request->input('middle_name'),
                     'last_name' => $request->input('last_name'),
@@ -102,9 +117,10 @@ class AccountApproverController extends Controller
                 ]);
             });
 
-            return back()->with('success', `You have successfully updated the info for {$approver->profile->getFullName()}.`);
+            return back()->with('success', "You have successfully updated the account for {$approver->profile->getFullName()}.");
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to update the approver. Please try again.');
         }
     }
@@ -122,7 +138,14 @@ class AccountApproverController extends Controller
         }
     }
 
+    // For creation of the approver
     public function branchDepartments(Branch $branch)
+    {
+        return response()->json($branch->departments);
+    }
+
+    // For edit approver
+    public function editBrancDepartments(Branch $branch)
     {
         return response()->json($branch->departments);
     }

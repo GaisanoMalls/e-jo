@@ -28,13 +28,13 @@ class Profile extends Model
     }
 
     public function getFullName(): string
-    {   
+    {
         $middleInitial = $this->middle_name ? $this->middle_name[0] . '.' : '';
         $suffix = $this->suffix ?? '';
 
         return "{$this->first_name} {$middleInitial} {$this->last_name} {$suffix}";
     }
-    
+
     public function getNameInitial(): string
     {
         return $this->nameInitials();
@@ -45,5 +45,5 @@ class Profile extends Model
         return $this->first_name[0] . $this->last_name[0];
     }
 
-    
+
 }

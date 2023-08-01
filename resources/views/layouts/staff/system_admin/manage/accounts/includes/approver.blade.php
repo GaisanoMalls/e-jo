@@ -36,6 +36,9 @@
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Branch
                                         </th>
+                                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                            BU/Department
+                                        </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Status
                                         </th>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date
@@ -66,8 +69,8 @@
                                                     </div>
                                                     <div class="flex-grow-1 ms-3 w-100">
                                                         <a href="" class="d-flex flex-column gap-1 w-100">
-                                                            <span
-                                                                class="user__name">{{ $approver->profile->getFullName() }}</span>
+                                                            <span class="user__name">{{
+                                                                $approver->profile->getFullName() }}</span>
                                                             <small>{{ $approver->email }}</small>
                                                         </a>
                                                     </div>
@@ -77,6 +80,11 @@
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
                                                 <span>{{ $approver->branch->name }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center text-start td__content">
+                                                <span>{{ $approver->department->name }}</span>
                                             </div>
                                         </td>
                                         <td>
@@ -96,10 +104,15 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
+                                                <button
+                                                    onclick="window.location.href='{{ route('staff.manage.user_account.approver.details', $approver->id) }}'"
+                                                    type="button" class="btn action__button">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
                                                 <button type="button" href="" class="btn action__button"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#confirmDeleteApprover{{ $approver->id }}">
-                                                    <i class="bi bi-trash-fill"></i>
+                                                    <i class="bi bi-trash"></i>
                                                 </button>
                                             </div>
                                         </td>
@@ -110,8 +123,8 @@
                         </div>
                     </div>
                     {{-- <div class="d-flex align-items-center justify-content-center mt-2">
-                            <a href="" class="text-center m-auto" style="font-size: 13px;">View all</a>
-                        </div> --}}
+                        <a href="" class="text-center m-auto" style="font-size: 13px;">View all</a>
+                    </div> --}}
                     @else
                     <div class="alert text-center d-flex align-items-center justify-content-center gap-2" role="alert"
                         style="background-color: #F5F7F9; font-size: 14px;">

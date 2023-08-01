@@ -178,6 +178,17 @@ $color-1: #d32839;
     box-shadow: 0px 1px 4px 0px rgba(132, 132, 132, 0.25);
 }
 
+.btn__see__reason {
+    color: black;
+    text-decoration: underline !important;
+    font-weight: 500;
+    font-size: 13px;
+
+    &:hover {
+        color: black;
+    }
+}
+
 .error__message {
     @include generic.error-message;
 }
@@ -323,9 +334,54 @@ nav {
     }
 }
 
-.confirm__logout__modal {
+.confirm__logout__modal,
+.disapprove__reason__modal,
+.reason__modal {
     border-radius: $border-radius-10;
     border: none;
+}
+
+.reason__modal {
+    .modal__content {
+        padding: 20px;
+
+        .title {
+            font-size: $fs-15;
+            font-weight: $fw-600;
+            color: #212529;
+        }
+
+        .reason__content {
+            font-size: $fs-14;
+
+            p {
+                margin-bottom: 2px;
+            }
+        }
+    }
+}
+
+.disapprove__reason__modal {
+    .modal__content {
+        .title {
+            font-size: $fs-15;
+            font-weight: $fw-600;
+            color: #212529;
+        }
+    }
+}
+
+.btn__x {
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8d94a1;
+
+    &:focus {
+        border: none !important;
+    }
 }
 
 .btn__confirm__modal {

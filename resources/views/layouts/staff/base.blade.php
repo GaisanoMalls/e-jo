@@ -52,7 +52,7 @@
     <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
-    <script src="{{ asset('js/dependent-dropdown.js') }}"></script>
+    <script src="{{ asset('js/roles/staff/dependent-dropdown.js') }}"></script>
 
     @stack('modal-with-error')
     @stack('toastr-message-js')

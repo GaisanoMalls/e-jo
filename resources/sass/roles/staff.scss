@@ -1828,6 +1828,56 @@ input[type="checkbox"] {
     }
 }
 
+.edit__password__modal {
+    .modal__content {
+        padding: 2rem 2.3rem;
+        border: 0;
+        border-radius: $border-radius-9;
+
+        .modal__header {
+            .modal__title {
+                font-size: $fs-18;
+                font-weight: $fw-600;
+            }
+        }
+
+        .modal__body {
+            padding: 1.3rem 0 0.5rem 0;
+        }
+
+        .form__field__label {
+            font-size: $fs-14;
+        }
+
+        .form__field {
+            padding: 0.75rem 1rem;
+            font-size: $fs-14;
+            border-radius: $border-radius-9;
+            border: 1px solid #e7e9eb;
+
+            &:focus {
+                box-shadow: none;
+                border-color: $color-1;
+            }
+        }
+    }
+
+    .btn__update__password {
+        @include generic.button-config;
+        min-width: 6rem;
+
+        &.btn__cancel {
+            @include generic.form-button-cancel;
+        }
+
+        &.btn__send {
+            @include generic.form-button-submit;
+        }
+
+
+    }
+}
+
 .accounts__section {
     .users__account__card {
         border: none;
@@ -1872,6 +1922,34 @@ input[type="checkbox"] {
                         padding: 9px 21px;
                         height: 50px;
                     }
+                }
+            }
+        }
+
+        .user__details__container {
+            .card__title {
+                font-weight: $fw-600;
+                color: #3d3d3d;
+            }
+
+            .btn__details {
+                @include generic.button-config;
+                width: 6rem;
+
+                &.btn__cancel {
+                    @include generic.form-button-cancel;
+                }
+
+                &.btn__send {
+                    @include generic.form-button-submit;
+                }
+
+                &.btn__update__password {
+                    @include generic.form-button-submit;
+                    background-color: #1A2E35 !important;
+                    padding: 6px 10px !important;
+                    width: auto !important;
+                    font-size: 12px;
                 }
             }
         }
@@ -1942,6 +2020,24 @@ input[type="checkbox"] {
 
             &.btn__confirm__delete {
                 @include generic.form-button-submit;
+            }
+        }
+    }
+
+    .user__details__container {
+        .form__field__label {
+            font-size: $fs-14;
+        }
+
+        .form__field {
+            padding: 0.75rem 1rem;
+            font-size: $fs-14;
+            border-radius: $border-radius-9;
+            border: 1px solid #e7e9eb;
+
+            &:focus {
+                box-shadow: none;
+                border-color: $color-1;
             }
         }
     }

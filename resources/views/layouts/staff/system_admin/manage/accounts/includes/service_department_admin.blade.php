@@ -76,8 +76,9 @@
                                                     </div>
                                                     <div class="flex-grow-1 ms-3 w-100">
                                                         <a href="" class="d-flex flex-column gap-1 w-100">
-                                                            <span
-                                                                class="user__name">{{ $serviceDepartmentAdmin->profile->getFullName() }}</span>
+                                                            <span class="user__name">{{
+                                                                $serviceDepartmentAdmin->profile->getFullName()
+                                                                }}</span>
                                                             <small>{{ $serviceDepartmentAdmin->email }}</small>
                                                         </a>
                                                     </div>
@@ -86,7 +87,8 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $serviceDepartmentAdmin->serviceDepartment->name ?? '----' }}</span>
+                                                <span>{{ $serviceDepartmentAdmin->serviceDepartment->name ?? '----'
+                                                    }}</span>
                                             </div>
                                         </td>
                                         <td>
@@ -101,7 +103,8 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $serviceDepartmentAdmin->isActive() ? 'Active' : 'Inactive' }}</span>
+                                                <span>{{ $serviceDepartmentAdmin->isActive() ? 'Active' : 'Inactive'
+                                                    }}</span>
                                             </div>
                                         </td>
                                         <td>
@@ -116,10 +119,13 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
+                                                <a href="" type="button" class="btn action__button">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
                                                 <button type="button" href="" class="btn action__button"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#confirmDeleteServiceDeptAdmin{{ $serviceDepartmentAdmin->id }}">
-                                                    <i class="bi bi-trash-fill"></i>
+                                                    <i class="bi bi-trash"></i>
                                                 </button>
                                             </div>
                                         </td>
