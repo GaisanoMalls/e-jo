@@ -83,12 +83,12 @@ class AccountServiceDeptAdminController extends Controller
         );
     }
 
-
     public function update(Request $request, User $serviceDeptAdmin)
     {
         $validator = Validator::make($request->all(), [
             'branch' => ['required'],
             'bu_department' => ['required'],
+            'service_department' => ['required'],
             'first_name' => ['required', 'min:2', 'max:100'],
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],
@@ -104,6 +104,7 @@ class AccountServiceDeptAdminController extends Controller
                 $serviceDeptAdmin->update([
                     'branch_id' => $request->input('branch'),
                     'department_id' => $request->input('bu_department'),
+                    'service_department_id' => $request->input('service_department'),
                     'email' => $request->input('email')
                 ]);
 
@@ -124,7 +125,7 @@ class AccountServiceDeptAdminController extends Controller
             return back()->with('success', "You have successfully updated the account for {$serviceDeptAdmin->profile->getFullName()}.");
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to update the approver. Please try again.');
+            return back()->with('error', 'Failed to update the service department admin. Please try again.');
         }
     }
 

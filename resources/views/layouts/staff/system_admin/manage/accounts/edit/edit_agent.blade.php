@@ -1,8 +1,7 @@
-@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'Edit - ' .
-$serviceDeptAdmin->profile->getFullName()])
+@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'Edit - ' . $agent->profile->getFullName()])
 
 @section('manage-header-title')
-Edit Service Dept. Admin
+Edit Agent
 @endsection
 
 @section('manage-breadcrumbs')
@@ -14,27 +13,25 @@ Edit Service Dept. Admin
 @endsection
 
 @section('manage-content')
-@include('layouts.staff.system_admin.manage.accounts.edit.modal.edit_service_dept_password_modal')
+@include('layouts.staff.system_admin.manage.accounts.edit.modal.edit_agent_password_modal')
 <div class="row accounts__section justify-content-center">
     <div class="col-xxl-9 col-lg-12">
         <div class="card d-flex flex-column gap-2 users__account__card">
             <div class="user__details__container d-flex flex-wrap mb-4 justify-content-between">
-                <h6 class="card__title">Service Dept. Admin's Information</h6>
+                <h6 class="card__title">Agent's Information</h6>
                 <small class="text-muted" style="font-size: 12px;">
                     Last updated:
-                    @if ($serviceDeptAdmin->dateUpdated() > $serviceDeptAdmin->profile->dateUpdated())
-                    {{ $serviceDeptAdmin->dateUpdated() }}
+                    @if ($agent->dateUpdated() > $agent->profile->dateUpdated())
+                    {{ $agent->dateUpdated() }}
                     @else
-                    {{ $serviceDeptAdmin->profile->dateUpdated() }}
+                    {{ $agent->profile->dateUpdated() }}
                     @endif
                 </small>
             </div>
-            <form
-                action="{{ route('staff.manage.user_account.service_department_admin.update', $serviceDeptAdmin->id) }}"
-                method="post">
+            <form action="{{ route('staff.manage.user_account.agent.update', $agent->id) }}" method="post">
                 @csrf
                 @method('PUT')
-                <input type="hidden" id="serviceDeptAdminUserID" value="{{ $serviceDeptAdmin->id }}">
+                <input type="hidden" id="approverUserID" value="{{ $agent->id }}">
                 <div class="row gap-4 user__details__container">
                     <div class="col-12">
                         <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Profile</h6>
@@ -44,8 +41,8 @@ Edit Service Dept. Admin
                                     <label for="first_name" class="form-label form__field__label">First
                                         name</label>
                                     <input type="text" name="first_name" class="form-control form__field"
-                                        id="first_name" value="{{ $serviceDeptAdmin->profile->first_name }}">
-                                    @error('first_name', 'editServiceDeptAdmin')
+                                        id="first_name" value="{{ $agent->profile->first_name }}">
+                                    @error('first_name', 'editApprover')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -57,8 +54,8 @@ Edit Service Dept. Admin
                                 <div class="mb-3">
                                     <label for="middle_name" class="form-label form__field__label">Middle name</label>
                                     <input type="text" name="middle_name" class="form-control form__field"
-                                        id="middle_name" value="{{ $serviceDeptAdmin->profile->middle_name }}">
-                                    @error('middle_name', 'editServiceDeptAdmin')
+                                        id="middle_name" value="{{ $agent->profile->middle_name }}">
+                                    @error('middle_name', 'editApprover')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -70,8 +67,8 @@ Edit Service Dept. Admin
                                 <div class="mb-3">
                                     <label for="last_name" class="form-label form__field__label">Last name</label>
                                     <input type="text" name="last_name" class="form-control form__field" id="last_name"
-                                        value="{{ $serviceDeptAdmin->profile->last_name }}">
-                                    @error('last_name', 'editServiceDeptAdmin')
+                                        value="{{ $agent->profile->last_name }}">
+                                    @error('last_name', 'editApprover')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -86,13 +83,13 @@ Edit Service Dept. Admin
                                         <option value="" selected>N/A</option>
                                         @foreach ($suffixes as $suffix)
                                         <option value="{{ $suffix->name }}" {{ $suffix->name ==
-                                            $serviceDeptAdmin->profile->suffix ?
+                                            $agent->profile->suffix ?
                                             'selected' : '' }}>
                                             {{ $suffix->name }}
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('suffix', 'editServiceDeptAdmin')
+                                    @error('suffix', 'editApprover')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -109,8 +106,8 @@ Edit Service Dept. Admin
                                 <div class="mb-3">
                                     <label for="email" class="form-label form__field__label">Email</label>
                                     <input type="text" name="email" class="form-control form__field" id="email"
-                                        value="{{ $serviceDeptAdmin->email }}">
-                                    @error('email', 'editServiceDeptAdmin')
+                                        value="{{ $agent->email }}">
+                                    @error('email', 'editApprover')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -133,20 +130,20 @@ Edit Service Dept. Admin
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <input type="hidden" value="{{ $serviceDeptAdmin->branch_id }}"
-                                        id="serviceDeptAdminCurrentBranchId">
+                                    <input type="hidden" value="{{ $agent->branch_id }}" id="approverCurrentBranchId">
                                     <label class="form-label form__field__label">Branch</label>
                                     <select name="branch" data-search="true" data-silent-initial-value-set="true"
-                                        id="editServiceDeptAdminBranchDropdown">
+                                        id="editApproverBranchDropdown">
                                         <option value="" selected disabled>Choose a branch</option>
                                         @foreach ($branches as $branch)
-                                        <option value="{{ $branch->id }}" {{ $branch->id == $serviceDeptAdmin->branch_id
-                                            ? 'selected' : '' }}>
+                                        <option value="{{ $branch->id }}" {{ $branch->id == $agent->branch_id ?
+                                            'selected' : ''
+                                            }}>
                                             {{ $branch->name }}
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('branch', 'editServiceDeptAdmin')
+                                    @error('branch', 'editApprover')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -156,44 +153,19 @@ Edit Service Dept. Admin
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <input type="hidden" value="{{ $serviceDeptAdmin->department_id }}"
-                                        id="serviceDeptAdminCurrentBUDepartmentId">
+                                    <input type="hidden" value="{{ $agent->department_id }}"
+                                        id="approverCurrentDepartmentId">
                                     <label for="branch" class="form-label form__field__label">
                                         BU/Department
-                                        <span id="editServiceDeptAdminCountBUDepartments"
-                                            style="font-size: 13px;"></span>
+                                        <span id="editApproverCountBUDepartments" style="font-size: 13px;"></span>
                                         <br>
-                                        <span id="editServiceDeptAdminNoBUDepartmentMessage"
-                                            class="text-danger fw-normal" style="font-size: 12px;"></span>
+                                        <span id="editApproverNoBUDepartmentMessage" class="text-danger fw-normal"
+                                            style="font-size: 12px;"></span>
                                     </label>
                                     <select name="bu_department" data-search="true" data-silent-initial-value-set="true"
-                                        id="editServiceDeptAdminBUDepartmentDropdown">
+                                        id="editApproverBUDepartmentDropdown">
                                     </select>
-                                    @error('bu_department', 'editServiceDeptAdmin')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="branch" class="form-label form__field__label">
-                                        Service Department
-                                    </label>
-                                    <select name="service_department" data-search="true"
-                                        data-silent-initial-value-set="true"
-                                        id="editServiceDeptAdminServiceDepartmentDropdown">
-                                        @foreach ($serviceDepartments as $serviceDepartment)
-                                        <option value="{{ $serviceDepartment->id }}" {{ $serviceDepartment->id ==
-                                            $serviceDeptAdmin->service_department_id
-                                            ? 'selected' : '' }}>
-                                            {{ $serviceDepartment->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    @error('service_department', 'editServiceDeptAdmin')
+                                    @error('bu_department', 'editApprover')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}

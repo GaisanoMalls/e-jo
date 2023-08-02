@@ -1,6 +1,6 @@
 const axios = require('axios').default;
 
-// ------------------------------------------------------------------------------------------------------------------------
+// * START ------------------------------------------------------------------------------------------------------------------------
 // Create Approver - Assign a Branch and BU Department
 const approverBranchDropdown = document.getElementById('approverBranchDropdown');
 const approverBUDepartmentDropdown = document.getElementById('approverBUDepartmentDropdown');
@@ -22,7 +22,7 @@ if (approverBranchDropdown || approverBUDepartmentDropdown) {
         const branchId = this.value;
 
         if (branchId) {
-            axios.get(`/staff/manage/user-accounts/approver/${branchId}/departments`)
+            axios.get(`/staff/manage/user-accounts/approver/${branchId}/bu-departments`)
                 .then((response) => {
                     const departments = response.data;
                     const departmentsOption = [];
@@ -56,40 +56,54 @@ if (approverBranchDropdown || approverBUDepartmentDropdown) {
     });
 }
 
-// Edit Approver - Edit Branch and BU Department
+// Start - Edit Approver - Edit Branch and BU Department
 const editApproverBranchDropdown = document.getElementById('editApproverBranchDropdown');
 const editApproverBUDepartmentDropdown = document.getElementById('editApproverBUDepartmentDropdown');
-const currentBranchId = document.getElementById('currentBranchId');
-const currentDepartmentId = document.getElementById('currentDepartmentId');
+const editApproverCountBUDepartments = document.getElementById('editApproverCountBUDepartments');
+const editApproverNoBUDepartmentMessage = document.getElementById('editApproverNoBUDepartmentMessage');
+const approverCurrentBranchId = document.getElementById('approverCurrentBranchId');
+const approverCurrentDepartmentId = document.getElementById('approverCurrentDepartmentId');
+const approverUserID = document.getElementById('approverUserID');
 
-window.onload = function () {
-    axios.get(`/staff/manage/user-accounts/approver/edit/${currentBranchId.value}/departments`)
-        .then((response) => {
-            const departments = response.data;
-            const departmentsOption = [];
+if (approverUserID) {
+    const editApproverPath = `/staff/manage/user-accounts/approver/${approverUserID.value}/details`;
+    const approverPath = window.location.pathname;
 
-            if (departments && departments.length > 0) {
-                departments.forEach(function (department) {
-                    departmentsOption.push({
-                        value: department.id,
-                        label: department.name
-                    });
+    if (approverPath === editApproverPath) {
+        window.onload = function () {
+            axios.get(`/staff/manage/user-accounts/approver/edit/${approverCurrentBranchId.value}/bu-departments`)
+                .then((response) => {
+                    const departments = response.data;
+                    const departmentsOption = [];
+
+                    if (departments && departments.length > 0) {
+                        departments.forEach(function (department) {
+                            departmentsOption.push({
+                                value: department.id,
+                                label: department.name
+                            });
+                        });
+
+                        editApproverBUDepartmentDropdown.enable();
+                        editApproverBUDepartmentDropdown.setOptions(departmentsOption);
+                        editApproverBUDepartmentDropdown.setValue(approverCurrentDepartmentId.value);
+                        editApproverCountBUDepartments.textContent = `(${departments.length})`;
+                        editApproverNoBUDepartmentMessage.textContent = '';
+
+                    } else {
+                        editApproverBUDepartmentDropdown.reset();
+                        editApproverBUDepartmentDropdown.disable();
+                        editApproverCountBUDepartments.textContent = ``;
+                        editApproverNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.data);
                 });
-
-                editApproverBUDepartmentDropdown.enable();
-                editApproverBUDepartmentDropdown.setOptions(departmentsOption);
-                editApproverBUDepartmentDropdown.setValue(currentDepartmentId.value);
-                approverCountBUDepartments.textContent = `(${departments.length})`;
-                approverNoBUDepartmentMessage.textContent = '';
-
-            } else {
-                editApproverBUDepartmentDropdown.reset();
-                editApproverBUDepartmentDropdown.disable();
-                approverCountBUDepartments.textContent = ``;
-                approverNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
-            }
-        })
+        }
+    }
 }
+
 
 if (editApproverBranchDropdown || editApproverBUDepartmentDropdown) {
     editApproverBranchDropdown.addEventListener('change', function () {
@@ -97,12 +111,12 @@ if (editApproverBranchDropdown || editApproverBUDepartmentDropdown) {
 
         editApproverBranchDropdown.addEventListener('reset', function () {
             editApproverBUDepartmentDropdown.disable();
-            approverNoBUDepartmentMessage.textContent = "";
-            approverCountBUDepartments.textContent = "";
+            editApproverNoBUDepartmentMessage.textContent = "";
+            editApproverCountBUDepartments.textContent = "";
         });
 
         if (branchId) {
-            axios.get(`/staff/manage/user-accounts/approver/edit/${branchId}/departments`)
+            axios.get(`/staff/manage/user-accounts/approver/edit/${branchId}/bu-departments`)
                 .then((response) => {
                     const departments = response.data;
                     const departmentsOption = [];
@@ -116,29 +130,30 @@ if (editApproverBranchDropdown || editApproverBUDepartmentDropdown) {
                         });
 
                         editApproverBUDepartmentDropdown.enable();
-                        editApproverBUDepartmentDropdown.setValue(4)
                         editApproverBUDepartmentDropdown.setOptions(departmentsOption);
-                        approverCountBUDepartments.textContent = `(${departments.length})`;
-                        approverNoBUDepartmentMessage.textContent = '';
+                        editApproverCountBUDepartments.textContent = `(${departments.length})`;
+                        editApproverNoBUDepartmentMessage.textContent = '';
 
                     } else {
                         editApproverBUDepartmentDropdown.reset();
                         editApproverBUDepartmentDropdown.disable();
-                        approverCountBUDepartments.textContent = ``;
-                        approverNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
+                        editApproverCountBUDepartments.textContent = ``;
+                        editApproverNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log(error.data);
                 });
         } else {
             editApproverBUDepartmentDropdown.reset();
         }
-    })
+    });
 }
+// End - Edit for approver
+// * END ------------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------------------------------
-// Department Admin - Assign a Branch, BU/Department, and Service Department
+// * START ------------------------------------------------------------------------------------------------------------------------
+// Create Service Department Admin - Assign a Branch, BU/Department, and Service Department
 const deptAdminBranchesDropdown = document.getElementById('deptAdminBranchesDropdown');
 const deptAdminBUDepartmentsDropdown = document.getElementById('deptAdminBUDepartmentsDropdown');
 const deptAdminNoBUDepartmentsMessage = document.getElementById('deptAdminNoBUDepartmentsMessage');
@@ -186,13 +201,112 @@ if (deptAdminBranchesDropdown || deptAdminBUDepartmentsDropdown) {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log(error.data);
                 });
         } else {
             deptAdminBUDepartmentsDropdown.reset();
         }
     });
 }
+
+// Start - Edit for Service Department Admin - Edit Branch, BU/Department, and Service Department
+const editServiceDeptAdminBranchDropdown = document.getElementById('editServiceDeptAdminBranchDropdown');
+const editServiceDeptAdminBUDepartmentDropdown = document.getElementById('editServiceDeptAdminBUDepartmentDropdown');
+const editServiceDeptAdminCountBUDepartments = document.getElementById('editServiceDeptAdminCountBUDepartments');
+const editServiceDeptAdminNoBUDepartmentMessage = document.getElementById('editServiceDeptAdminNoBUDepartmentMessage');
+const serviceDeptAdminCurrentBranchId = document.getElementById('serviceDeptAdminCurrentBranchId');
+const serviceDeptAdminCurrentBUDepartmentId = document.getElementById('serviceDeptAdminCurrentBUDepartmentId');
+const serviceDeptAdminUserID = document.getElementById('serviceDeptAdminUserID');
+
+if (serviceDeptAdminUserID) {
+    const editServiceDeptAdminPath = `/staff/manage/user-accounts/service-department-admin/${serviceDeptAdminUserID.value}/details`;
+    const serviceDeptAdminPath = window.location.pathname;
+
+    if (serviceDeptAdminPath === editServiceDeptAdminPath) {
+        window.onload = function () {
+            axios.get(`/staff/manage/user-accounts/service-department-admin/edit/${serviceDeptAdminCurrentBranchId.value}/bu-departments`)
+                .then((response) => {
+                    const departments = response.data;
+                    const departmentsOption = [];
+
+                    if (departments && departments.length > 0) {
+                        departments.forEach(function (department) {
+                            departmentsOption.push({
+                                value: department.id,
+                                label: department.name
+                            });
+                        });
+
+                        editServiceDeptAdminBUDepartmentDropdown.enable();
+                        editServiceDeptAdminBUDepartmentDropdown.setOptions(departmentsOption);
+                        editServiceDeptAdminBUDepartmentDropdown.setValue(serviceDeptAdminCurrentBUDepartmentId.value);
+                        editServiceDeptAdminCountBUDepartments.textContent = `(${departments.length})`;
+                        editServiceDeptAdminNoBUDepartmentMessage.textContent = '';
+
+                    } else {
+                        editServiceDeptAdminBUDepartmentDropdown.reset();
+                        editServiceDeptAdminBUDepartmentDropdown.disable();
+                        editServiceDeptAdminCountBUDepartments.textContent = ``;
+                        editServiceDeptAdminNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.data);
+                });
+        }
+    }
+}
+
+if (editServiceDeptAdminBranchDropdown || editServiceDeptAdminBUDepartmentDropdown) {
+
+    editServiceDeptAdminBranchDropdown.addEventListener('reset', function () {
+        editServiceDeptAdminBUDepartmentDropdown.disable();
+        editServiceDeptAdminNoBUDepartmentMessage.textContent = '';
+        editServiceDeptAdminCountBUDepartments.textContent = '';
+    });
+
+    editServiceDeptAdminBranchDropdown.addEventListener('change', function () {
+        const branchId = this.value;
+
+        if (branchId) {
+            axios.get(`/staff/manage/user-accounts/service-department-admin/edit/${branchId}/bu-departments`)
+                .then((response) => {
+                    const buDepartments = response.data;
+                    const buDepartmentsOption = []
+
+                    if (buDepartments && buDepartments.length > 0) {
+                        buDepartments.forEach(function (buDepartment) {
+                            buDepartmentsOption.push({
+                                value: buDepartment.id,
+                                label: buDepartment.name
+                            });
+                        });
+
+                        editServiceDeptAdminBUDepartmentDropdown.enable();
+                        editServiceDeptAdminBUDepartmentDropdown.setOptions(buDepartmentsOption);
+                        editServiceDeptAdminCountBUDepartments.textContent = `(${buDepartments.length})`;
+                        editServiceDeptAdminNoBUDepartmentMessage.textContent = '';
+
+                    } else {
+                        editServiceDeptAdminBUDepartmentDropdown.reset();
+                        editServiceDeptAdminBUDepartmentDropdown.disable();
+                        editServiceDeptAdminCountBUDepartments.textContent = '';
+                        editServiceDeptAdminNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.data);
+                })
+        } else {
+            editServiceDeptAdminBUDepartmentDropdown.reset();
+        }
+
+    });
+}
+
+
+// End - Edit for Service Department Admin
+// * END ------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Agent - Assign a Branch, BU/Department, Service Department, and Team

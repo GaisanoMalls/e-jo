@@ -31,6 +31,7 @@ Edit Approver
             <form action="{{ route('staff.manage.user_account.approver.update', $approver->id) }}" method="post">
                 @csrf
                 @method('PUT')
+                <input type="hidden" id="approverUserID" value="{{ $approver->id }}">
                 <div class="row gap-4 user__details__container">
                     <div class="col-12">
                         <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Profile</h6>
@@ -129,7 +130,8 @@ Edit Approver
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <input type="hidden" value="{{ $approver->branch_id }}" id="currentBranchId">
+                                    <input type="hidden" value="{{ $approver->branch_id }}"
+                                        id="approverCurrentBranchId">
                                     <label class="form-label form__field__label">Branch</label>
                                     <select name="branch" data-search="true" data-silent-initial-value-set="true"
                                         id="editApproverBranchDropdown">
@@ -153,12 +155,12 @@ Edit Approver
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <input type="hidden" value="{{ $approver->department_id }}"
-                                        id="currentDepartmentId">
+                                        id="approverCurrentDepartmentId">
                                     <label for="branch" class="form-label form__field__label">
                                         BU/Department
-                                        <span id="approverCountBUDepartments" style="font-size: 13px;"></span>
+                                        <span id="editApproverCountBUDepartments" style="font-size: 13px;"></span>
                                         <br>
-                                        <span id="approverNoBUDepartmentMessage" class="text-danger fw-normal"
+                                        <span id="editApproverNoBUDepartmentMessage" class="text-danger fw-normal"
                                             style="font-size: 12px;"></span>
                                     </label>
                                     <select name="bu_department" data-search="true" data-silent-initial-value-set="true"

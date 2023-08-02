@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SlugGenerator;
+use App\Http\Traits\UserDetails;
 use App\Models\Branch;
 use App\Models\Profile;
 use App\Models\Role;
-use App\Models\ServiceDepartment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AccountAgentController extends Controller
 {
-    use SlugGenerator;
+    use SlugGenerator, UserDetails;
 
     public function store(Request $request)
     {
@@ -62,6 +62,69 @@ class AccountAgentController extends Controller
 
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to save a new agent. Please try again.');
+        }
+    }
+
+    public function agentDetails(User $agent)
+    {
+        $suffixes = $this->getSuffixes();
+        $branches = $this->getBranches();
+        $serviceDepartments = $this->getServiceDepartments();
+
+        return view(
+            'layouts.staff.system_admin.manage.accounts.edit.edit_agent',
+            compact([
+                'agent',
+                'suffixes',
+                'branches',
+                'serviceDepartments'
+            ])
+        );
+    }
+
+    public function update(Request $request, User $serviceDeptAdmin)
+    {
+        $validator = Validator::make($request->all(), [
+            'branch' => ['required'],
+            'bu_department' => ['required'],
+            'service_department' => ['required'],
+            'first_name' => ['required', 'min:2', 'max:100'],
+            'middle_name' => ['nullable', 'min:2', 'max:100'],
+            'last_name' => ['required', 'min:2', 'max:100'],
+            'suffix' => ['nullable', 'min:1', 'max:4'],
+            'email' => ['required', 'max:80'],
+        ]);
+
+        if ($validator->fails())
+            return back()->withErrors($validator, 'editServiceDeptAdmin')->withInput();
+
+        try {
+            DB::transaction(function () use ($serviceDeptAdmin, $request) {
+                $serviceDeptAdmin->update([
+                    'branch_id' => $request->input('branch'),
+                    'department_id' => $request->input('bu_department'),
+                    'service_department_id' => $request->input('service_department'),
+                    'email' => $request->input('email')
+                ]);
+
+                $serviceDeptAdmin->profile()->update([
+                    'first_name' => $request->input('first_name'),
+                    'middle_name' => $request->input('middle_name'),
+                    'last_name' => $request->input('last_name'),
+                    'suffix' => $request->input('suffix'),
+                    'slug' => $this->slugify(implode(" ", [
+                        $request->first_name,
+                        $request->middle_name,
+                        $request->last_name,
+                        $request->suffix
+                    ]))
+                ]);
+            });
+
+            return back()->with('success', "You have successfully updated the account for {$serviceDeptAdmin->profile->getFullName()}.");
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update the service department admin. Please try again.');
         }
     }
 

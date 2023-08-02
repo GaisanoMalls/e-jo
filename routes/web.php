@@ -170,9 +170,9 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
 
                         // Axios endpoints
                         // (For create approver)
-                        Route::get('/{branch}/departments', 'branchDepartments');
+                        Route::get('/{branch}/bu-departments', 'branchDepartments');
                         // (For Edit approver)
-                        Route::get('/edit/{branch}/departments', 'branchDepartments');
+                        Route::get('/edit/{branch}/bu-departments', 'branchDepartments');
                     });
                     Route::controller(UpdatePasswordController::class)->group(function () {
                         Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
@@ -183,7 +183,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                     Route::controller(AccountServiceDeptAdminController::class)->group(function () {
                         Route::post('/store', 'store')->name('store');
                         Route::get('/{serviceDeptAdmin}/details', 'serviceDeptAdminDetails')->name('details');
-                        Route::get('/{serviceDeptAdmin}/update', 'update')->name('update');
+                        Route::put('/{serviceDeptAdmin}/update', 'update')->name('update');
                         Route::delete('/{serviceDeptAdmin}/delete', 'delete')->name('delete');
 
                         // Axios endpoints
@@ -200,11 +200,20 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::prefix('agent')->name('agent.')->group(function () {
                     Route::controller(AccountAgentController::class)->group(function () {
                         Route::post('/store', 'store')->name('store');
+                        Route::get('/{agent}/details', 'agentDetails')->name('details');
+                        Route::get('/{agent}/update', 'update')->name('update');
                         Route::delete('/{agent}/store', 'delete')->name('delete');
 
                         // Axios endpoints
+                        // For create agent
                         Route::get('/{branch}/bu-departments', 'branchDepartments');
                         Route::get('/{branch}/teams', 'branchTeams');
+                        // For edit agent
+                        Route::get('edit/{branch}/bu-departments', 'branchDepartments');
+                        Route::get('edit/{branch}/teams', 'branchTeams');
+                    });
+                    Route::controller(UpdatePasswordController::class)->group(function () {
+                        Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
                     });
                 });
                 // User/Requester Routes
