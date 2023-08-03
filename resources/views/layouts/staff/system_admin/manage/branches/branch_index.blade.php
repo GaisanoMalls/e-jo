@@ -49,13 +49,25 @@ Branches
 </div>
 @endsection
 
-@if ($errors->any())
+@if ($errors->storeBranch->any())
 @push('modal-with-error')
 <script>
     $(function () {
         $('#addNewBranchModal').modal('show');
     });
+</script>
+@endpush
+@endif
 
+@if ($errors->editBranch->any())
+{{-- Show edit modal based on the selected record/data --}}
+<input type="hidden" id="branchId" value="{{ session('branchId') }}">
+@push('modal-with-error')
+<script>
+    const branchId = document.getElementById('branchId');
+    $(function () {
+        $(`#editBranchModal${branchId.value}`).modal('show');
+    });
 </script>
 @endpush
 @endif

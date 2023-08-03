@@ -48,7 +48,7 @@ if (approverBranchDropdown || approverBUDepartmentDropdown) {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log(error.response.data);
                 });
         } else {
             approverBUDepartmentDropdown.reset();
@@ -66,10 +66,10 @@ const approverCurrentDepartmentId = document.getElementById('approverCurrentDepa
 const approverUserID = document.getElementById('approverUserID');
 
 if (approverUserID) {
-    const editApproverPath = `/staff/manage/user-accounts/approver/${approverUserID.value}/details`;
+    const approverDetailsPath = `/staff/manage/user-accounts/approver/${approverUserID.value}/edit-details`;
     const approverPath = window.location.pathname;
 
-    if (approverPath === editApproverPath) {
+    if (approverPath === approverDetailsPath) {
         window.onload = function () {
             axios.get(`/staff/manage/user-accounts/approver/edit/${approverCurrentBranchId.value}/bu-departments`)
                 .then((response) => {
@@ -98,7 +98,7 @@ if (approverUserID) {
                     }
                 })
                 .catch((error) => {
-                    console.log(error.data);
+                    console.log(error.response.data);
                 });
         }
     }
@@ -142,7 +142,7 @@ if (editApproverBranchDropdown || editApproverBUDepartmentDropdown) {
                     }
                 })
                 .catch((error) => {
-                    console.log(error.data);
+                    console.log(error.response.data);
                 });
         } else {
             editApproverBUDepartmentDropdown.reset();
@@ -201,7 +201,7 @@ if (deptAdminBranchesDropdown || deptAdminBUDepartmentsDropdown) {
                     }
                 })
                 .catch((error) => {
-                    console.log(error.data);
+                    console.log(error.response.data);
                 });
         } else {
             deptAdminBUDepartmentsDropdown.reset();
@@ -219,10 +219,10 @@ const serviceDeptAdminCurrentBUDepartmentId = document.getElementById('serviceDe
 const serviceDeptAdminUserID = document.getElementById('serviceDeptAdminUserID');
 
 if (serviceDeptAdminUserID) {
-    const editServiceDeptAdminPath = `/staff/manage/user-accounts/service-department-admin/${serviceDeptAdminUserID.value}/details`;
+    const serviceDeptAdminDetailsPath = `/staff/manage/user-accounts/service-department-admin/${serviceDeptAdminUserID.value}/edit-details`;
     const serviceDeptAdminPath = window.location.pathname;
 
-    if (serviceDeptAdminPath === editServiceDeptAdminPath) {
+    if (serviceDeptAdminPath === serviceDeptAdminDetailsPath) {
         window.onload = function () {
             axios.get(`/staff/manage/user-accounts/service-department-admin/edit/${serviceDeptAdminCurrentBranchId.value}/bu-departments`)
                 .then((response) => {
@@ -251,7 +251,7 @@ if (serviceDeptAdminUserID) {
                     }
                 })
                 .catch((error) => {
-                    console.log(error.data);
+                    console.log(error.response.data);
                 });
         }
     }
@@ -295,7 +295,7 @@ if (editServiceDeptAdminBranchDropdown || editServiceDeptAdminBUDepartmentDropdo
                     }
                 })
                 .catch((error) => {
-                    console.log(error.data);
+                    console.log(error.response.data);
                 })
         } else {
             editServiceDeptAdminBUDepartmentDropdown.reset();
@@ -303,25 +303,23 @@ if (editServiceDeptAdminBranchDropdown || editServiceDeptAdminBUDepartmentDropdo
 
     });
 }
-
-
 // End - Edit for Service Department Admin
 // * END ------------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------------------------------
-// Agent - Assign a Branch, BU/Department, Service Department, and Team
+// * START ------------------------------------------------------------------------------------------------------------------------
+// Create Agent - Assign a Branch, BU/Department, Service Department, and Team
 const agentBranchesDropdown = document.getElementById('agentBranchesDropdown');
 
 const agentBUDepartmentsDropdown = document.getElementById('agentBUDepartmentsDropdown');
 const agentNoBUDepartmentsMessage = document.getElementById('agentNoBUDepartmentsMessage');
 const agentCountBUDepartment = document.getElementById('agentCountBUDepartment');
-
 const agentTeamsDropdown = document.getElementById('agentTeamsDropdown');
 const agentNoTeamMessage = document.getElementById('agentNoTeamMessage');
 const agentCountTeams = document.getElementById('agentCountTeams');
 
 function clearBUDeptServiceDeptAndTeamWhenResetBranch() {
     agentBUDepartmentsDropdown.disable();
+    agentTeamsDropdown.disable();
     agentNoBUDepartmentsMessage.textContent = '';
     agentCountBUDepartment.textContent = '';
     agentNoTeamMessage.textContent = '';
@@ -364,7 +362,7 @@ if (agentBranchesDropdown || agentBUDepartmentsDropdown || agentTeamsDropdown) {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log(error.response.data);
                 });
 
             axios.get(`/staff/manage/user-accounts/agent/${branchId}/teams`)
@@ -393,70 +391,333 @@ if (agentBranchesDropdown || agentBUDepartmentsDropdown || agentTeamsDropdown) {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log(error.response.data);
                 });
         } else {
             agentBUDepartmentsDropdown.reset();
-            agentServiceDepartmentsDropdown.reset();
             agentTeamsDropdown.reset();
             agentTeamsDropdown.reset();
         }
     });
 }
 
-// ------------------------------------------------------------------------------------------------------------------------
-// User/Requester - Assign BU/Department and Branch
-const userDepartmentsDropdown = document.getElementById('userDepartmentsDropdown');
-const userBranchesDropdown = document.getElementById('userBranchesDropdown');
-const userNoBranchMessage = document.getElementById('userNoBranchMessage');
-const userCountBranches = document.getElementById('userCountBranches');
+// Start - Edit for Agent - Edit Branch, BU/Department, Team, and Service Department
+const editAgentBranchDropdown = document.getElementById('editAgentBranchDropdown');
+const editAgentBUDepartmentDropdown = document.getElementById('editAgentBUDepartmentDropdown');
+const editAgentTeamsDropdown = document.getElementById('editAgentTeamsDropdown');
+const editAgentCountBUDepartments = document.getElementById('editAgentCountBUDepartments');
+const editAgentNoBUDepartmentMessage = document.getElementById('editAgentNoBUDepartmentMessage');
+const editAgentCountTeams = document.getElementById('editAgentCountTeams');
+const editAgentNoTeamsMessage = document.getElementById('editAgentNoTeamsMessage');
+const agentCurrentBranchId = document.getElementById('agentCurrentBranchId');
+const agentCurrentBUDepartmentId = document.getElementById('agentCurrentBUDepartmentId');
+const agentCurrentTeamId = document.getElementById('agentCurrentTeamId');
+const agentUserID = document.getElementById('agentUserID');
 
-function userClearBranchWhenResetDepartment() {
-    userBranchesDropdown.disable();
-    userNoBranchMessage.textContent = "";
-    userCountBranches.textContent = "";
-}
+if (agentUserID) {
+    const editAgentPath = `/staff/manage/user-accounts/agent/${agentUserID.value}/edit-details`;
+    const agentPath = window.location.pathname;
 
-if (userDepartmentsDropdown || userBranchesDropdown) {
-    userBranchesDropdown.disable();
-    userDepartmentsDropdown.addEventListener('reset', userClearBranchWhenResetDepartment);
-
-    userDepartmentsDropdown.addEventListener('change', function () {
-        const departmentId = this.value;
-
-        if (departmentId) {
-            axios.get(`/staff/manage/user-accounts/user/assign/department/${departmentId}/branches`)
+    if (agentPath === editAgentPath) {
+        window.onload = function () {
+            axios.get(`/staff/manage/user-accounts/agent/edit/${agentCurrentBranchId.value}/bu-departments`)
                 .then((response) => {
-                    const branches = response.data;
-                    const branchesOption = [];
+                    const departments = response.data;
+                    const departmentsOption = [];
 
-                    if (branches && branches.length > 0) {
-                        branches.forEach(function (branch) {
-                            branchesOption.push({
-                                value: branch.id,
-                                label: branch.name
+                    if (departments && departments.length > 0) {
+                        departments.forEach(function (department) {
+                            departmentsOption.push({
+                                value: department.id,
+                                label: department.name
                             });
                         });
 
-                        userBranchesDropdown.enable();
-                        userBranchesDropdown.setOptions(branchesOption);
-                        userCountBranches.textContent = `(${branchesOption.length})`;
-                        userNoBranchMessage.textContent = "";
+                        editAgentBUDepartmentDropdown.enable();
+                        editAgentBUDepartmentDropdown.setOptions(departmentsOption);
+                        editAgentBUDepartmentDropdown.setValue(agentCurrentBUDepartmentId.value);
+                        editAgentCountBUDepartments.textContent = `(${departments.length})`;
+                        editAgentNoBUDepartmentMessage.textContent = '';
+
                     } else {
-                        userBranchesDropdown.reset();
-                        userBranchesDropdown.disable();
-                        userCountBranches.textContent = "";
-                        userNoBranchMessage.textContent = "(No branch)";
+                        editAgentBUDepartmentDropdown.reset();
+                        editAgentBUDepartmentDropdown.disable();
+                        editAgentCountBUDepartments.textContent = ``;
+                        editAgentNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                });
+
+            axios.get(`/staff/manage/user-accounts/agent/edit/${agentCurrentBranchId.value}/teams`)
+                .then((response) => {
+                    const teams = response.data;
+                    const teamsOption = [];
+
+                    if (teams && teams.length > 0) {
+                        teams.forEach(function (team) {
+                            teamsOption.push({
+                                value: team.id,
+                                label: team.name
+                            });
+                        });
+
+                        editAgentTeamsDropdown.enable();
+                        editAgentTeamsDropdown.setOptions(teamsOption);
+                        editAgentTeamsDropdown.setValue(agentCurrentTeamId.value);
+                        editAgentCountTeams.textContent = `(${teams.length})`;
+                        editAgentNoTeamsMessage.textContent = '';
+
+                    } else {
+                        editAgentTeamsDropdown.reset();
+                        editAgentTeamsDropdown.disable();
+                        editAgentCountTeams.textContent = ``;
+                        editAgentNoTeamsMessage.textContent = 'No teams assigned on this branch.';
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                });
+        }
+    }
+}
+
+if (editAgentBranchDropdown || editAgentBUDepartmentDropdown || editAgentTeamsDropdown) {
+    editAgentBranchDropdown.addEventListener('reset', function () {
+        editAgentBUDepartmentDropdown.disable();
+        editAgentTeamsDropdown.disable();
+        editAgentBUDepartmentDropdown.reset();
+        editAgentTeamsDropdown.reset();
+        editAgentCountBUDepartments.textContent = '';
+        editAgentNoBUDepartmentMessage.textContent = '';
+        editAgentCountTeams.textContent = '';
+        editAgentNoTeamsMessage.textContent = '';
+    });
+
+    editAgentBranchDropdown.addEventListener('change', function () {
+        const branchId = this.value;
+
+        if (branchId) {
+            axios.get(`/staff/manage/user-accounts/agent/edit/${branchId}/bu-departments`)
+                .then((response) => {
+                    const departments = response.data;
+                    const departmentsOption = [];
+
+                    if (departments && departments.length > 0) {
+                        departments.forEach(function (department) {
+                            departmentsOption.push({
+                                value: department.id,
+                                label: department.name
+                            });
+                        });
+
+                        editAgentBUDepartmentDropdown.enable();
+                        editAgentBUDepartmentDropdown.setOptions(departmentsOption);
+                        editAgentCountBUDepartments.textContent = `(${departments.length})`;
+                        editAgentNoBUDepartmentMessage.textContent = '';
+
+                    } else {
+                        editAgentBUDepartmentDropdown.reset();
+                        editAgentBUDepartmentDropdown.disable();
+                        editAgentCountBUDepartments.textContent = ``;
+                        editAgentNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                });
+
+            axios.get(`/staff/manage/user-accounts/agent/edit/${branchId}/teams`)
+                .then((response) => {
+                    const teams = response.data;
+                    const teamsOption = [];
+
+                    if (teams && teams.length > 0) {
+                        teams.forEach(function (team) {
+                            teamsOption.push({
+                                value: team.id,
+                                label: team.name
+                            });
+                        });
+
+                        editAgentTeamsDropdown.enable();
+                        editAgentTeamsDropdown.setOptions(teamsOption);
+                        editAgentCountTeams.textContent = `(${teams.length})`;
+                        editAgentNoTeamsMessage.textContent = '';
+
+                    } else {
+                        editAgentTeamsDropdown.reset();
+                        editAgentTeamsDropdown.disable();
+                        editAgentCountTeams.textContent = ``;
+                        editAgentNoTeamsMessage.textContent = 'No teams assigned on this branch.';
                     }
                 })
                 .catch((error) => {
                     console.log(error.response.data);
                 });
         } else {
-            userBranchesDropdown.reset();
+            editAgentBUDepartmentDropdown.reset();
+            editAgentTeamsDropdown.reset();
         }
     });
 }
+// Start - Edit for Agent
+// * END --------------------------------------------------------------------------------------------------------------------------
+
+// * START ------------------------------------------------------------------------------------------------------------------------
+// User/Requester - Assign BU/Department and Branch
+const userDepartmentsDropdown = document.getElementById('userDepartmentsDropdown');
+const userBranchesDropdown = document.getElementById('userBranchesDropdown');
+const userNoBUDepartmentsMessage = document.getElementById('userNoBUDepartmentsMessage');
+const userCountBUDepartments = document.getElementById('userCountBUDepartments');
+
+function userClearBranchWhenResetDepartment() {
+    userDepartmentsDropdown.disable();
+    userNoBUDepartmentsMessage.textContent = "";
+    userCountBUDepartments.textContent = "";
+}
+
+if (userDepartmentsDropdown || userBranchesDropdown) {
+    userDepartmentsDropdown.disable();
+    userBranchesDropdown.addEventListener('reset', userClearBranchWhenResetDepartment);
+
+    userBranchesDropdown.addEventListener('change', function () {
+        const branchId = this.value;
+
+        if (branchId) {
+            axios.get(`/staff/manage/user-accounts/user/${branchId}/bu-departments`)
+                .then((response) => {
+                    const departments = response.data;
+                    const departmentsOption = [];
+
+                    if (departments && departments.length > 0) {
+                        departments.forEach(function (branch) {
+                            departmentsOption.push({
+                                value: branch.id,
+                                label: branch.name
+                            });
+                        });
+
+                        userDepartmentsDropdown.enable();
+                        userDepartmentsDropdown.setOptions(departmentsOption);
+                        userCountBUDepartments.textContent = `(${departmentsOption.length})`;
+                        userNoBUDepartmentsMessage.textContent = "";
+
+                    } else {
+                        userDepartmentsDropdown.reset();
+                        userDepartmentsDropdown.disable();
+                        userCountBUDepartments.textContent = "";
+                        userNoBUDepartmentsMessage.textContent = "(No branch)";
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                });
+        } else {
+            userDepartmentsDropdown.reset();
+        }
+    });
+}
+
+// Start - Edit User/Requester - Edit Branch and BU/Department
+const editUserBranchDropdown = document.getElementById('editUserBranchDropdown');
+const editUserBUDepartmentDropdown = document.getElementById('editUserBUDepartmentDropdown');
+const editUserCountBUDepartments = document.getElementById('editUserCountBUDepartments');
+const editUserNoBUDepartmentMessage = document.getElementById('editUserNoBUDepartmentMessage');
+const userCurrentBranchId = document.getElementById('userCurrentBranchId');
+const userCurrentBUDepartmentId = document.getElementById('userCurrentBUDepartmentId');
+const userID = document.getElementById('userID');
+
+if (userID) {
+    const editUserPath = `/staff/manage/user-accounts/user/${userID.value}/edit-details`;
+    const userPath = window.location.pathname;
+
+    if (userPath === editUserPath) {
+        window.onload = function () {
+            axios.get(`/staff/manage/user-accounts/user/edit/${userCurrentBranchId.value}/bu-departments`)
+                .then((response) => {
+                    const departments = response.data;
+                    console.log(departments);
+                    const departmentsOption = [];
+
+                    if (departments && departments.length > 0) {
+                        departments.forEach(function (branch) {
+                            departmentsOption.push({
+                                value: branch.id,
+                                label: branch.name
+                            });
+                        });
+
+                        editUserBUDepartmentDropdown.enable();
+                        editUserBUDepartmentDropdown.setOptions(departmentsOption);
+                        editUserBUDepartmentDropdown.setValue(userCurrentBUDepartmentId.value);
+                        editUserCountBUDepartments.textContent = `(${departmentsOption.length})`;
+                        editUserNoBUDepartmentMessage.textContent = "";
+
+                    } else {
+                        editUserBUDepartmentDropdown.reset();
+                        editUserBUDepartmentDropdown.disable();
+                        editUserCountBUDepartments.textContent = "";
+                        editUserNoBUDepartmentMessage.textContent = "(No branch)";
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                });
+        }
+    }
+}
+
+if (editUserBranchDropdown || editUserBUDepartmentDropdown) {
+    editUserBranchDropdown.addEventListener('reset', function () {
+        editUserBUDepartmentDropdown.disable();
+        editUserNoBUDepartmentMessage.textContent = "";
+        editUserCountBUDepartments.textContent = "";
+    });
+
+    editUserBranchDropdown.addEventListener('change', function () {
+        const branchId = this.value;
+
+        if (branchId) {
+            axios.get(`/staff/manage/user-accounts/user/edit/${branchId}/bu-departments`)
+                .then((response) => {
+                    const departments = response.data;
+                    const departmentsOption = [];
+
+                    if (departments && departments.length > 0) {
+                        departments.forEach(function (branch) {
+                            departmentsOption.push({
+                                value: branch.id,
+                                label: branch.name
+                            });
+                        });
+
+                        editUserBUDepartmentDropdown.enable();
+                        editUserBUDepartmentDropdown.setOptions(departmentsOption);
+                        editUserCountBUDepartments.textContent = `(${departmentsOption.length})`;
+                        editUserNoBUDepartmentMessage.textContent = "";
+
+                    } else {
+                        editUserBUDepartmentDropdown.reset();
+                        editUserBUDepartmentDropdown.disable();
+                        editUserCountBUDepartments.textContent = "";
+                        editUserNoBUDepartmentMessage.textContent = "(No branch)";
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                });
+        } else {
+            editUserBUDepartmentDropdown.reset();
+        }
+    });
+}
+
+
+
+// End - Edit for user/requester
+// * END ------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Team - Assign Branch
@@ -481,7 +742,7 @@ if (teamsDropdown) {
                     serviceDepartmentFieldContainer.style.display = 'block';
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log(error.response.data);
                 });
         } else {
             serviceDepartmentField.value = "";
@@ -600,7 +861,7 @@ if (levelOfApproverDropdown) {
                         }
                     })
                     .catch((error) => {
-                        console.log(error);
+                        console.log(error.response.data);
                     });
             }
         }
@@ -653,7 +914,7 @@ if (transferTicketDepartmentsDropdown || transferTicketTeamsDropdown) {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log(error.response.data);
                 });
         } else {
             transferTicketTeamsDropdown.reset();

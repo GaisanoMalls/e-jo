@@ -11,25 +11,25 @@ use Illuminate\Support\Facades\Auth;
 
 trait UserDetails
 {
-    public function getSuffixes()
+    public function suffixes()
     {
         $suffixes = Suffix::all();
         return $suffixes;
     }
 
-    public function getBranches()
+    public function branches()
     {
         $branches = Branch::orderBy('name', 'asc')->get();
         return $branches;
     }
 
-    public function getDepartments()
+    public function departments()
     {
         $departments = Department::orderBy('name', 'asc')->get();
         return $departments;
     }
 
-    public function getServiceDepartments()
+    public function serviceDepartments()
     {
         $serviceDepartments = ServiceDepartment::orderBy('name', 'asc')->get();
         return $serviceDepartments;

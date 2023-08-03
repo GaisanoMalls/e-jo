@@ -131,7 +131,7 @@ Edit Service Dept. Admin
                     <div class="col-12">
                         <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Work Details</h6>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <input type="hidden" value="{{ $serviceDeptAdmin->branch_id }}"
                                         id="serviceDeptAdminCurrentBranchId">
@@ -154,7 +154,7 @@ Edit Service Dept. Admin
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <input type="hidden" value="{{ $serviceDeptAdmin->department_id }}"
                                         id="serviceDeptAdminCurrentBUDepartmentId">
@@ -177,7 +177,7 @@ Edit Service Dept. Admin
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="branch" class="form-label form__field__label">
                                         Service Department
@@ -207,7 +207,7 @@ Edit Service Dept. Admin
                         <div class="d-flex align-items-center gap-2">
                             <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"
                                 data-bs-dismiss="modal"
-                                onclick="window.location.href='{{ route('staff.manage.user_account.index') }}'">Cancel</button>
+                                onclick="window.location.href='{{ route('staff.manage.user_account.service_department_admins') }}'">Cancel</button>
                             <button type="submit" class="btn m-0 btn__details btn__send">Save</button>
                         </div>
                     </div>

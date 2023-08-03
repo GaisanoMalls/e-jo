@@ -105,7 +105,8 @@
                                             data-silent-initial-value-set="true">
                                             <option value="" selected disabled>Choose level of approver</option>
                                             @foreach ($levelOfApprovals as $level)
-                                            <option value="{{ $level->id }}" {{ old('level_of_approver')==$level->id ?
+                                            <option value="{{ $level->value }}" {{ old('level_of_approver')==$level->id
+                                                ?
                                                 'selected' : '' }}>
                                                 {{ $level->description }}
                                             </option>

@@ -68,9 +68,9 @@ class AccountServiceDeptAdminController extends Controller
 
     public function serviceDeptAdminDetails(User $serviceDeptAdmin)
     {
-        $suffixes = $this->getSuffixes();
-        $branches = $this->getBranches();
-        $serviceDepartments = $this->getServiceDepartments();
+        $suffixes = $this->suffixes();
+        $branches = $this->branches();
+        $serviceDepartments = $this->serviceDepartments();
 
         return view(
             'layouts.staff.system_admin.manage.accounts.edit.edit_service_dept_admin',
@@ -93,7 +93,7 @@ class AccountServiceDeptAdminController extends Controller
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],
             'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => ['required', 'max:80'],
+            'email' => ['required', 'max:80']
         ]);
 
         if ($validator->fails())

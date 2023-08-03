@@ -13,7 +13,7 @@
                         Confirm Delete
                     </h5>
                     <p class="mb-1" style="font-weight: 500; font-size: 15px;">
-                        Approver -
+                        Service Dept. Admin -
                         {{ $serviceDepartmentAdmin->profile->getFullName() ?? '' }}
                     </p>
                 </div>

@@ -8,7 +8,8 @@ $fs-20: 1.25rem;
 $fw-500: 500;
 $fw-600: 600;
 $color-1: #d32839;
-$button-box-shadow: 0 0.25rem 0.375rem -0.0625rem rgb(20 20 20 / 12%), 0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
+$button-box-shadow: 0 0.25rem 0.375rem -0.0625rem rgb(20 20 20 / 12%),
+0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
 
 @mixin input-field-border {
     border: 1px solid #e7e9eb;
@@ -63,9 +64,9 @@ $button-box-shadow: 0 0.25rem 0.375rem -0.0625rem rgb(20 20 20 / 12%), 0 0.125re
 }
 
 @mixin error-message {
-    font-size: $fs-12;
-    font-weight: $fw-500;
-    color: red;
+    font-size: $fs-12 !important;
+    font-weight: $fw-500 !important;
+    color: red !important;
 }
 
 @mixin confirm-modal-padding {

@@ -36,7 +36,7 @@ class TeamController extends Controller
         );
     }
 
-    public function store(Request $request, Team $team)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'service_department' => ['required'],
@@ -56,7 +56,7 @@ class TeamController extends Controller
         if ($validator->fails())
             return back()->withErrors($validator, 'storeTeam')->withInput();
 
-        $team->create([
+        Team::create([
             'service_department_id' => (int) $request->input('service_department'),
             'name' => $request['name'],
             'slug' => $this->slugify($request->input('name'))

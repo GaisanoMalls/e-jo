@@ -19,7 +19,7 @@
     </div>
     <div class="roles__permissions__type__card">
         <div class="table-responsive custom__table">
-            @if ($users->count() > 0)
+            @if ($allUsers->count() > 0)
             <table class="table table-striped mb-0" id="table">
                 <thead>
                     <tr>
@@ -38,7 +38,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($allUsers as $user)
                     <tr>
                         <td>
                             <a href="">

@@ -4,7 +4,8 @@
             <div class="col-md-6">
                 <h6 class="card__title">Account with roles</h6>
                 <p class="card__description">
-                    Assigned to Users which defines the level of access (such as Approver, Department Admin,
+                    Assigned to Users which defines the level of access such as Approver,
+                    Department Admin,
                     Agent,
                     and User/Requeser), and the types of transactions and services that can be accessed by
                     the User.
@@ -18,16 +19,23 @@
                 <div class="card d-flex flex-column gap-3 roles__permission__type__card">
                     <div
                         class="d-flex align-items-center justify-content-between roles__permission__type__card__header">
-                        <h6 class="mb-0 account__number">4 Accounts</h6>
-                        <div class="d-flex flex-nowrap user__picture__container">
-                            <img src="https://samuelsabellano.pythonanywhere.com/media/profile/1_Sabellano_Samuel_Jr_C__DSC9469.JPG"
-                                class="picture" alt="">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww&w=1000&q=80"
-                                class="picture" alt="">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Pierre-Person.jpg/800px-Pierre-Person.jpg"
-                                class="picture" alt="">
-                            <img src="https://www.wilsoncenter.org/sites/default/files/styles/large/public/media/images/person/james-person-1.jpg"
-                                class="picture" alt="">
+                        <h6 class="mb-0 account__number">{{ $approvers->count() }} Accounts</h6>
+                        <div class="d-flex align-items-center flex-nowrap user__picture__container">
+                            @foreach ($approvers->take($profilePicLimit) as $approver)
+                            @if ($approver->profile->picture)
+                            <img src="{{ Storage::url($approver->profile->picture) }}" class="picture" alt="">
+                            @else
+                            <div class="picture initial__as__picture" style="background-color: #3B4053;">
+                                {{ $approver->profile->getNameInitial() }}
+                            </div>
+                            @endif
+                            @endforeach
+                            @php
+                            $restAccounts = $approvers->count() - $approvers->take($profilePicLimit)->count();
+                            @endphp
+                            @if ($restAccounts !== 0)
+                            <small class="count__rest">+{{ $restAccounts }}</small>
+                            @endif
                         </div>
                     </div>
                     <a href="" class="d-flex align-items-center gap-2 card__name">
@@ -40,20 +48,28 @@
                 <div class="card d-flex flex-column gap-3 roles__permission__type__card">
                     <div
                         class="d-flex align-items-center justify-content-between roles__permission__type__card__header">
-                        <h6 class="mb-0 account__number">14 Accounts</h6>
-                        <div class="d-flex flex-nowrap user__picture__container">
-                            <img src="https://samuelsabellano.pythonanywhere.com/media/profile/1_Sabellano_Samuel_Jr_C__DSC9469.JPG"
-                                class="picture" alt="">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww&w=1000&q=80"
-                                class="picture" alt="">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Pierre-Person.jpg/800px-Pierre-Person.jpg"
-                                class="picture" alt="">
-                            <img src="https://www.wilsoncenter.org/sites/default/files/styles/large/public/media/images/person/james-person-1.jpg"
-                                class="picture" alt="">
+                        <h6 class="mb-0 account__number">{{ $serviceDeptAdmins->count() }} Accounts</h6>
+                        <div class="d-flex align-items-center flex-nowrap user__picture__container">
+                            @foreach ($serviceDeptAdmins->take($profilePicLimit) as $serviceDeptAdmin)
+                            @if ($serviceDeptAdmin->profile->picture)
+                            <img src="{{ Storage::url($serviceDeptAdmin->profile->picture) }}" class="picture" alt="">
+                            @else
+                            <div class="picture initial__as__picture" style="background-color: #9DA85C;">
+                                {{ $serviceDeptAdmin->profile->getNameInitial() }}
+                            </div>
+                            @endif
+                            @endforeach
+                            @php
+                            $restAccounts = $serviceDeptAdmins->count() -
+                            $serviceDeptAdmins->take($profilePicLimit)->count();
+                            @endphp
+                            @if ($restAccounts !== 0)
+                            <small class="count__rest">+{{ $restAccounts }}</small>
+                            @endif
                         </div>
                     </div>
                     <a href="" class="d-flex align-items-center gap-2 card__name">
-                        Department Admin
+                        Service Department Admin
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
@@ -62,16 +78,23 @@
                 <div class="card d-flex flex-column gap-3 roles__permission__type__card">
                     <div
                         class="d-flex align-items-center justify-content-between roles__permission__type__card__header">
-                        <h6 class="mb-0 account__number">23 Accounts</h6>
-                        <div class="d-flex flex-nowrap user__picture__container">
-                            <img src="https://samuelsabellano.pythonanywhere.com/media/profile/1_Sabellano_Samuel_Jr_C__DSC9469.JPG"
-                                class="picture" alt="">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww&w=1000&q=80"
-                                class="picture" alt="">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Pierre-Person.jpg/800px-Pierre-Person.jpg"
-                                class="picture" alt="">
-                            <img src="https://www.wilsoncenter.org/sites/default/files/styles/large/public/media/images/person/james-person-1.jpg"
-                                class="picture" alt="">
+                        <h6 class="mb-0 account__number">{{ $agents->count() }} Accounts</h6>
+                        <div class="d-flex align-items-center flex-nowrap user__picture__container">
+                            @foreach ($agents->take($profilePicLimit) as $agent)
+                            @if ($agent->profile->picture)
+                            <img src="{{ Storage::url($agent->profile->picture) }}" class="picture" alt="">
+                            @else
+                            <div class="picture initial__as__picture" style="background-color: #196837;">
+                                {{ $agent->profile->getNameInitial() }}
+                            </div>
+                            @endif
+                            @endforeach
+                            @php
+                            $restAccounts = $agents->count() - $agents->take($profilePicLimit)->count();
+                            @endphp
+                            @if ($restAccounts !== 0)
+                            <small class="count__rest">+{{ $restAccounts }}</small>
+                            @endif
                         </div>
                     </div>
                     <a href="" class="d-flex align-items-center gap-2 card__name">
@@ -84,16 +107,23 @@
                 <div class="card d-flex flex-column gap-3 roles__permission__type__card">
                     <div
                         class="d-flex align-items-center justify-content-between roles__permission__type__card__header">
-                        <h6 class="mb-0 account__number">28 Accounts</h6>
-                        <div class="d-flex flex-nowrap user__picture__container">
-                            <img src="https://samuelsabellano.pythonanywhere.com/media/profile/1_Sabellano_Samuel_Jr_C__DSC9469.JPG"
-                                class="picture" alt="">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww&w=1000&q=80"
-                                class="picture" alt="">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Pierre-Person.jpg/800px-Pierre-Person.jpg"
-                                class="picture" alt="">
-                            <img src="https://www.wilsoncenter.org/sites/default/files/styles/large/public/media/images/person/james-person-1.jpg"
-                                class="picture" alt="">
+                        <h6 class="mb-0 account__number">{{ $users->count() }} Accounts</h6>
+                        <div class="d-flex align-items-center flex-nowrap user__picture__container">
+                            @foreach ($users->take($profilePicLimit) as $user)
+                            @if ($user->profile->picture)
+                            <img src="{{ Storage::url($user->profile->picture) }}" class="picture" alt="">
+                            @else
+                            <div class="picture initial__as__picture" style="background-color: #24695C;">
+                                {{ $user->profile->getNameInitial() }}
+                            </div>
+                            @endif
+                            @endforeach
+                            @php
+                            $restAccounts = $users->count() - $users->take($profilePicLimit)->count();
+                            @endphp
+                            @if ($restAccounts !== 0)
+                            <small class="count__rest">+{{ $restAccounts }}</small>
+                            @endif
                         </div>
                     </div>
                     <a href="" class="d-flex align-items-center gap-2 card__name">
@@ -102,7 +132,6 @@
                     </a>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

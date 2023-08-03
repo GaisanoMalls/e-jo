@@ -6870,9 +6870,9 @@
 }
 
 .error__message {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: red;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  color: red !important;
 }
 
 body {
@@ -6889,7 +6889,7 @@ body {
 }
 
 .card__rounded__and__no__border {
-  border: none;
+  border: none !important;
   border-radius: 0.625rem;
 }
 
@@ -8317,6 +8317,16 @@ input[type=checkbox]:checked {
   border-radius: 0.625rem;
   padding: 1.5rem;
 }
+.accounts__section .users__account__card .card__title {
+  font-weight: 600;
+  color: #3d3d3d;
+}
+.accounts__section .users__account__card .card__description {
+  color: #3e3d3d;
+  font-size: 0.813rem;
+  font-weight: 500;
+  margin-bottom: 0;
+}
 .accounts__section .users__account__card .users__account__card__header .users__account__card__name {
   font-size: 0.938rem;
   font-weight: 500;
@@ -8333,6 +8343,10 @@ input[type=checkbox]:checked {
   font-weight: 500;
   color: #777d87;
   font-size: 0.875rem;
+}
+.accounts__section .users__account__card .users__account__card__header.approver__list {
+  padding-left: 30px;
+  padding-right: 30px;
 }
 .accounts__section .users__account__card .user__role__description {
   font-size: 0.75rem;
@@ -9025,7 +9039,7 @@ input[type=checkbox]:checked {
   font-size: 0.813rem;
   font-weight: 500;
 }
-.roles__permissions__section .roles__permissions__card .roles__permissions__type__card .roles__permission__type__card .roles__permission__type__card__header .user__picture__container:not(:first-child) img {
+.roles__permissions__section .roles__permissions__card .roles__permissions__type__card .roles__permission__type__card .roles__permission__type__card__header .user__picture__container:not(:first-child) .picture {
   margin-left: -10px;
 }
 .roles__permissions__section .roles__permissions__card .roles__permissions__type__card .roles__permission__type__card .roles__permission__type__card__header .user__picture__container .picture {
@@ -9035,6 +9049,16 @@ input[type=checkbox]:checked {
      object-fit: cover;
   border-radius: 3.125rem;
   border: 2px solid white;
+}
+.roles__permissions__section .roles__permissions__card .roles__permissions__type__card .roles__permission__type__card .roles__permission__type__card__header .user__picture__container .picture.initial__as__picture {
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.roles__permissions__section .roles__permissions__card .roles__permissions__type__card .roles__permission__type__card .roles__permission__type__card__header .user__picture__container .count__rest {
+  font-size: 0.813rem;
 }
 .roles__permissions__section .roles__permissions__card .roles__permissions__type__card .roles__permission__type__card .card__name {
   color: #3d3d3d;

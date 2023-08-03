@@ -76,8 +76,8 @@
                                                 data-silent-initial-value-set="true">
                                                 <option value="" selected disabled>Choose a suffix</option>
                                                 @foreach ($suffixes as $suffix)
-                                                <option value="{{ $suffix->name }}"
-                                                    {{ old('suffix') == $suffix->name ? 'selected' : '' }}>
+                                                <option value="{{ $suffix->name }}" {{ old('suffix')==$suffix->name ?
+                                                    'selected' : '' }}>
                                                     {{ $suffix->name }}
                                                 </option>
                                                 @endforeach
@@ -124,8 +124,8 @@
                                                 data-silent-initial-value-set="true" id="agentBranchesDropdown">
                                                 <option value="" selected disabled>Choose a branch</option>
                                                 @foreach ($global_branches as $branch)
-                                                <option value="{{ $branch->id }}"
-                                                    {{ old('branch') == $branch->id ? 'selected' : '' }}>
+                                                <option value="{{ $branch->id }}" {{ old('branch')==$branch->id ?
+                                                    'selected' : '' }}>
                                                     {{ $branch->name }}
                                                 </option>
                                                 @endforeach
@@ -184,11 +184,13 @@
                                                 Service Department
                                             </label>
                                             <select name="service_department" data-search="true"
-                                                data-silent-initial-value-set="true">
+                                                data-silent-initial-value-set="true"
+                                                id="agentServiceDepartmentsDropdown">
                                                 <option value="" selected disabled>Choose a servic department</option>
                                                 @foreach ($global_service_departments as $service_department)
-                                                <option value="{{ $service_department->id }}"
-                                                    {{ old('service_department') == $service_department->id ? 'selected' : '' }}>
+                                                <option value="{{ $service_department->id }}" {{
+                                                    old('service_department')==$service_department->id ? 'selected' : ''
+                                                    }}>
                                                     {{ $service_department->name }}
                                                 </option>
                                                 @endforeach

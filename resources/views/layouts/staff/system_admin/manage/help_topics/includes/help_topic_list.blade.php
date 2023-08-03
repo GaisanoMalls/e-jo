@@ -45,13 +45,14 @@
             <td>
                 <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                     <a href="" class="btn action__button mt-0">
-                        <i class="bi bi-pencil-fill"></i>
+                        <i class="bi bi-pencil"></i>
                     </a>
                     <form action="{{ route('staff.manage.help_topics.delete', $helpTopic->id) }}" method="post">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-sm action__button mt-0"><i
-                                class="bi bi-trash-fill"></i></button>
+                        <button type="submit" class="btn btn-sm action__button mt-0">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </form>
                 </div>
             </td>

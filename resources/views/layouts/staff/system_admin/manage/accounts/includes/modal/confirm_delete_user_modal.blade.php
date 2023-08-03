@@ -11,7 +11,7 @@
                         Confirm Delete
                     </h5>
                     <p class="mb-1" style="font-weight: 500; font-size: 15px;">
-                        Approver -
+                        Requester -
                         {{ $user->profile->getFullName() }}
                     </p>
                 </div>

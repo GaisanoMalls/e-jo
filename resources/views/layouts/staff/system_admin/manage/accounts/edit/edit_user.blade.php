@@ -1,7 +1,7 @@
-@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'Edit - ' . $approver->profile->getFullName()])
+@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'Edit - ' . $user->profile->getFullName()])
 
 @section('manage-header-title')
-Edit Approver
+Edit Requester
 @endsection
 
 @section('manage-breadcrumbs')
@@ -13,25 +13,25 @@ Edit Approver
 @endsection
 
 @section('manage-content')
-@include('layouts.staff.system_admin.manage.accounts.edit.modal.edit_approver_password_modal')
+@include('layouts.staff.system_admin.manage.accounts.edit.modal.edit_user_password_modal')
 <div class="row accounts__section justify-content-center">
     <div class="col-xxl-9 col-lg-12">
         <div class="card d-flex flex-column gap-2 users__account__card">
             <div class="user__details__container d-flex flex-wrap mb-4 justify-content-between">
-                <h6 class="card__title">Approver's Information</h6>
+                <h6 class="card__title">Requester's Information</h6>
                 <small class="text-muted" style="font-size: 12px;">
                     Last updated:
-                    @if ($approver->dateUpdated() > $approver->profile->dateUpdated())
-                    {{ $approver->dateUpdated() }}
+                    @if ($user->dateUpdated() > $user->profile->dateUpdated())
+                    {{ $user->dateUpdated() }}
                     @else
-                    {{ $approver->profile->dateUpdated() }}
+                    {{ $user->profile->dateUpdated() }}
                     @endif
                 </small>
             </div>
-            <form action="{{ route('staff.manage.user_account.approver.update', $approver->id) }}" method="post">
+            <form action="{{ route('staff.manage.user_account.user.update', $user->id) }}" method="post">
                 @csrf
                 @method('PUT')
-                <input type="hidden" id="approverUserID" value="{{ $approver->id }}">
+                <input type="hidden" id="userID" value="{{ $user->id }}">
                 <div class="row gap-4 user__details__container">
                     <div class="col-12">
                         <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Profile</h6>
@@ -41,8 +41,8 @@ Edit Approver
                                     <label for="first_name" class="form-label form__field__label">First
                                         name</label>
                                     <input type="text" name="first_name" class="form-control form__field"
-                                        id="first_name" value="{{ $approver->profile->first_name }}">
-                                    @error('first_name', 'editApprover')
+                                        id="first_name" value="{{ $user->profile->first_name }}">
+                                    @error('first_name', 'editUser')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -54,8 +54,8 @@ Edit Approver
                                 <div class="mb-3">
                                     <label for="middle_name" class="form-label form__field__label">Middle name</label>
                                     <input type="text" name="middle_name" class="form-control form__field"
-                                        id="middle_name" value="{{ $approver->profile->middle_name }}">
-                                    @error('middle_name', 'editApprover')
+                                        id="middle_name" value="{{ $user->profile->middle_name }}">
+                                    @error('middle_name', 'editUser')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -67,8 +67,8 @@ Edit Approver
                                 <div class="mb-3">
                                     <label for="last_name" class="form-label form__field__label">Last name</label>
                                     <input type="text" name="last_name" class="form-control form__field" id="last_name"
-                                        value="{{ $approver->profile->last_name }}">
-                                    @error('last_name', 'editApprover')
+                                        value="{{ $user->profile->last_name }}">
+                                    @error('last_name', 'editUser')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -83,13 +83,13 @@ Edit Approver
                                         <option value="" selected>N/A</option>
                                         @foreach ($suffixes as $suffix)
                                         <option value="{{ $suffix->name }}" {{ $suffix->name ==
-                                            $approver->profile->suffix ?
+                                            $user->profile->suffix ?
                                             'selected' : '' }}>
                                             {{ $suffix->name }}
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('suffix', 'editApprover')
+                                    @error('suffix', 'editUser')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -106,8 +106,8 @@ Edit Approver
                                 <div class="mb-3">
                                     <label for="email" class="form-label form__field__label">Email</label>
                                     <input type="text" name="email" class="form-control form__field" id="email"
-                                        value="{{ $approver->email }}">
-                                    @error('email', 'editApprover')
+                                        value="{{ $user->email }}">
+                                    @error('email', 'editUser')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -130,21 +130,19 @@ Edit Approver
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <input type="hidden" value="{{ $approver->branch_id }}"
-                                        id="approverCurrentBranchId">
+                                    <input type="hidden" value="{{ $user->branch_id }}" id="userCurrentBranchId">
                                     <label class="form-label form__field__label">Branch</label>
                                     <select name="branch" data-search="true" data-silent-initial-value-set="true"
-                                        id="editApproverBranchDropdown">
+                                        id="editUserBranchDropdown">
                                         <option value="" selected disabled>Choose a branch</option>
                                         @foreach ($branches as $branch)
-                                        <option value="{{ $branch->id }}" {{ $branch->id == $approver->branch_id ?
-                                            'selected' : ''
-                                            }}>
+                                        <option value="{{ $branch->id }}" {{ $branch->id == $user->branch_id ?
+                                            'selected' : '' }}>
                                             {{ $branch->name }}
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('branch', 'editApprover')
+                                    @error('branch', 'editUser')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -154,19 +152,19 @@ Edit Approver
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <input type="hidden" value="{{ $approver->department_id }}"
-                                        id="approverCurrentDepartmentId">
+                                    <input type="hidden" value="{{ $user->department_id }}"
+                                        id="userCurrentBUDepartmentId">
                                     <label for="branch" class="form-label form__field__label">
                                         BU/Department
-                                        <span id="editApproverCountBUDepartments" style="font-size: 13px;"></span>
+                                        <span id="editUserCountBUDepartments" style="font-size: 13px;"></span>
                                         <br>
-                                        <span id="editApproverNoBUDepartmentMessage" class="text-danger fw-normal"
+                                        <span id="editUserNoBUDepartmentMessage" class="text-danger fw-normal"
                                             style="font-size: 12px;"></span>
                                     </label>
                                     <select name="bu_department" data-search="true" data-silent-initial-value-set="true"
-                                        id="editApproverBUDepartmentDropdown">
+                                        id="editUserBUDepartmentDropdown">
                                     </select>
-                                    @error('bu_department', 'editApprover')
+                                    @error('bu_department', 'editUser')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -180,7 +178,7 @@ Edit Approver
                         <div class="d-flex align-items-center gap-2">
                             <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"
                                 data-bs-dismiss="modal"
-                                onclick="window.location.href='{{ route('staff.manage.user_account.approvers') }}'">Cancel</button>
+                                onclick="window.location.href='{{ route('staff.manage.user_account.users') }}'">Cancel</button>
                             <button type="submit" class="btn m-0 btn__details btn__send">Save</button>
                         </div>
                     </div>

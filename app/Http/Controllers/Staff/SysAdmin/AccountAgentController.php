@@ -67,9 +67,9 @@ class AccountAgentController extends Controller
 
     public function agentDetails(User $agent)
     {
-        $suffixes = $this->getSuffixes();
-        $branches = $this->getBranches();
-        $serviceDepartments = $this->getServiceDepartments();
+        $suffixes = $this->suffixes();
+        $branches = $this->branches();
+        $serviceDepartments = $this->serviceDepartments();
 
         return view(
             'layouts.staff.system_admin.manage.accounts.edit.edit_agent',
@@ -82,32 +82,33 @@ class AccountAgentController extends Controller
         );
     }
 
-    public function update(Request $request, User $serviceDeptAdmin)
+    public function update(Request $request, User $agent)
     {
         $validator = Validator::make($request->all(), [
             'branch' => ['required'],
             'bu_department' => ['required'],
+            'team' => ['required'],
             'service_department' => ['required'],
             'first_name' => ['required', 'min:2', 'max:100'],
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],
             'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => ['required', 'max:80'],
+            'email' => ['required', 'max:80']
         ]);
 
         if ($validator->fails())
-            return back()->withErrors($validator, 'editServiceDeptAdmin')->withInput();
+            return back()->withErrors($validator, 'editAgent')->withInput();
 
         try {
-            DB::transaction(function () use ($serviceDeptAdmin, $request) {
-                $serviceDeptAdmin->update([
+            DB::transaction(function () use ($agent, $request) {
+                $agent->update([
                     'branch_id' => $request->input('branch'),
                     'department_id' => $request->input('bu_department'),
                     'service_department_id' => $request->input('service_department'),
                     'email' => $request->input('email')
                 ]);
 
-                $serviceDeptAdmin->profile()->update([
+                $agent->profile()->update([
                     'first_name' => $request->input('first_name'),
                     'middle_name' => $request->input('middle_name'),
                     'last_name' => $request->input('last_name'),
@@ -121,10 +122,10 @@ class AccountAgentController extends Controller
                 ]);
             });
 
-            return back()->with('success', "You have successfully updated the account for {$serviceDeptAdmin->profile->getFullName()}.");
+            return back()->with('success', "You have successfully updated the account for {$agent->profile->getFullName()}.");
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to update the service department admin. Please try again.');
+            return back()->with('error', 'Failed to update the agent. Please try again.');
         }
     }
 

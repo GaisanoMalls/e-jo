@@ -12,7 +12,7 @@
                         <i class="fa-solid fa-plus"></i>
                         <span class="label">New</span>
                     </button>
-                    <a href=""
+                    <a href="{{ route('staff.manage.user_account.service_department_admins') }}"
                         class="btn d-flex align-items-center justify-content-center gap-2 btn__view__user__accounts">
                         <i class="fa-solid fa-eye"></i>
                         <span class="label">View all</span>
@@ -126,13 +126,15 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                                                <button
+                                                <button data-tooltip="Edit" data-tooltip-position="top"
+                                                    data-tooltip-font-size="11px"
                                                     onclick="window.location.href='{{ route('staff.manage.user_account.service_department_admin.details', $serviceDepartmentAdmin->id) }}'"
                                                     type="button" class="btn action__button">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <button type="button" href="" class="btn action__button"
-                                                    data-bs-toggle="modal"
+                                                <button data-tooltip="Delete" data-tooltip-position="top"
+                                                    data-tooltip-font-size="11px" type="button"
+                                                    class="btn action__button" data-bs-toggle="modal"
                                                     data-bs-target="#confirmDeleteServiceDeptAdmin{{ $serviceDepartmentAdmin->id }}">
                                                     <i class="bi bi-trash"></i>
                                                 </button>

@@ -165,7 +165,7 @@ body {
 }
 
 .card__rounded__and__no__border {
-    border: none;
+    border: none !important;
     border-radius: $border-radius-10;
 }
 
@@ -1884,6 +1884,18 @@ input[type="checkbox"] {
         border-radius: $border-radius-10;
         padding: 1.5rem;
 
+        .card__title {
+            font-weight: $fw-600;
+            color: #3d3d3d;
+        }
+
+        .card__description {
+            color: #3e3d3d;
+            font-size: $fs-13;
+            font-weight: $fw-500;
+            margin-bottom: 0;
+        }
+
         .users__account__card__header {
             .users__account__card__name {
                 font-size: $fs-15;
@@ -1902,6 +1914,11 @@ input[type="checkbox"] {
                 font-weight: $fw-500;
                 color: #777d87;
                 font-size: $fs-14;
+            }
+
+            &.approver__list {
+                padding-left: 30px;
+                padding-right: 30px;
             }
         }
 
@@ -2618,7 +2635,7 @@ input[type="checkbox"] {
                     }
 
                     .user__picture__container {
-                        &:not(:first-child) img {
+                        &:not(:first-child) .picture {
                             margin-left: -10px;
                         }
 
@@ -2628,6 +2645,18 @@ input[type="checkbox"] {
                             object-fit: cover;
                             border-radius: $border-radius-50;
                             border: 2px solid white;
+
+                            &.initial__as__picture {
+                                font-size: 9px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                color: white;
+                            }
+                        }
+
+                        .count__rest {
+                            font-size: $fs-13;
                         }
                     }
                 }

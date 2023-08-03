@@ -56,6 +56,6 @@ class Profile extends Model
         $updated_at = Carbon::parse($this->updated_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         return $updated_at === $created_at
             ? "----"
-            : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
+            : Carbon::parse($this->updated_at)->format('M d, Y | h:i A');
     }
 }

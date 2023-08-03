@@ -19,7 +19,7 @@ class ApprovalLevel extends Model
     public function helpTopics()
     {
         return $this->belongsToMany(HelpTopic::class, 'help_topic_level_approvers', 'approval_level_id', 'help_topic_id')
-                    ->using(HelpTopicLevelApprover::class)
-                    ->withTimestamps();
+            ->using(HelpTopicLevelApprover::class)
+            ->withTimestamps();
     }
 }

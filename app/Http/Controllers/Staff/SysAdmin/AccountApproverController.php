@@ -67,8 +67,8 @@ class AccountApproverController extends Controller
 
     public function approverDetails(User $approver)
     {
-        $suffixes = $this->getSuffixes();
-        $branches = $this->getBranches();
+        $suffixes = $this->suffixes();
+        $branches = $this->branches();
 
         return view(
             'layouts.staff.system_admin.manage.accounts.edit.edit_approver',

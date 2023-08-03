@@ -74,9 +74,9 @@
 }
 
 .error__message {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: red;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  color: red !important;
 }
 
 .custom__field__message {

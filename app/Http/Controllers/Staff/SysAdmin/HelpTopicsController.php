@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ApprovalLevel;
 use App\Models\Department;
 use App\Models\HelpTopic;
+use App\Models\HelpTopicLevelApprover;
 use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\ServiceLevelAgreement;
@@ -42,7 +43,7 @@ class HelpTopicsController extends Controller
             'service_department' => ['required'],
             'team' => ['required'],
             'sla' => ['required'],
-            'name' => ['required', 'unique:help_topics,name'],
+            'name' => ['required'],
             'level_of_approver' => ['nullable'],
         ]);
 
@@ -64,7 +65,6 @@ class HelpTopicsController extends Controller
         $groupedApprovers = collect($approvers)->groupBy(function ($approver, $key) {
             return explode('[', explode(']', $key)[0]); // Extract the level number from the input name
         })->toArray();
-
         // $groupedApprovers is now an array with keys as level numbers and values as arrays of selected approvers for each level
         // For example, if level_of_approval is 2 and you selected 3 approvers for level 1 and 2 approvers for level 2,
         // $groupedApprovers will look like this:
@@ -75,19 +75,17 @@ class HelpTopicsController extends Controller
 
         // Now you can process and store the data as needed for each level
         foreach ($groupedApprovers as $level => $selectedApprovers) {
-            dd($level, $selectedApprovers);
             // $level will be the level number (e.g., 1, 2, etc.)
             // $selectedApprovers will be an array of selected approver IDs for that level
 
             // You can use these values to store the data in the database or perform any other processing as needed
             // For example:
             foreach ($selectedApprovers as $approver) {
-                dd($approver);
                 // Store the approver ID along with the level in the database
                 // You can use Eloquent models and relationships to do this efficiently
                 // For example:
                 ApprovalLevel::create([
-                    'value' => $approver,
+                    'value' => (int) $approver,
                     'description' => "Approver for Level $level",
                 ]);
             }

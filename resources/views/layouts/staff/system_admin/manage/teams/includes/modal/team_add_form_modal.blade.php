@@ -29,8 +29,8 @@
                                 data-silent-initial-value-set="true">
                                 <option value="" selected disabled>Choose a department</option>
                                 @foreach ($serviceDepartments as $department)
-                                <option value="{{ $department->id }}"
-                                    {{ old('service_department') == $department->id ? 'selected' : '' }}>
+                                <option value="{{ $department->id }}" {{ old('service_department')==$department->id ?
+                                    'selected' : '' }}>
                                     {{ $department->name }}
                                 </option>
                                 @endforeach

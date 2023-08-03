@@ -111,7 +111,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::controller(BranchController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::post('/store', 'store')->name('store');
-                    Route::put('{branch}/edit', 'edit')->name('edit');
+                    Route::put('{branch}/update', 'update')->name('update');
                     Route::delete('{branch}/delete', 'delete')->name('delete');
                 });
             });
@@ -159,14 +159,22 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
 
             // User Accounts
             Route::prefix('user-accounts')->name('user_account.')->group(function () {
-                Route::get('/', [AccountsController::class, 'index'])->name('index');
+                Route::controller(AccountsController::class)->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/approvers', 'approvers')->name('approvers');
+                    Route::get('/service-department-admins', 'serviceDepartmentAdmins')->name('service_department_admins');
+                    Route::get('/agents', 'agents')->name('agents');
+                    Route::get('/requesters', 'users')->name('users');
+
+                });
+
                 // Approver Routes
                 Route::prefix('approver')->name('approver.')->group(function () {
                     Route::controller(AccountApproverController::class)->group(function () {
                         Route::post('/store', 'store')->name('store');
-                        Route::get('/{approver}/details', 'approverDetails')->name('details');
-                        Route::put('/{approver}/update', 'update')->name('update');
                         Route::delete('/{approver}/delete', 'delete')->name('delete');
+                        Route::put('/{approver}/update', 'update')->name('update');
+                        Route::get('/{approver}/edit-details', 'approverDetails')->name('details');
 
                         // Axios endpoints
                         // (For create approver)
@@ -182,9 +190,9 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::prefix('service-department-admin')->name('service_department_admin.')->group(function () {
                     Route::controller(AccountServiceDeptAdminController::class)->group(function () {
                         Route::post('/store', 'store')->name('store');
-                        Route::get('/{serviceDeptAdmin}/details', 'serviceDeptAdminDetails')->name('details');
-                        Route::put('/{serviceDeptAdmin}/update', 'update')->name('update');
                         Route::delete('/{serviceDeptAdmin}/delete', 'delete')->name('delete');
+                        Route::put('/{serviceDeptAdmin}/update', 'update')->name('update');
+                        Route::get('/{serviceDeptAdmin}/edit-details', 'serviceDeptAdminDetails')->name('details');
 
                         // Axios endpoints
                         // For create service department admin
@@ -200,9 +208,9 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::prefix('agent')->name('agent.')->group(function () {
                     Route::controller(AccountAgentController::class)->group(function () {
                         Route::post('/store', 'store')->name('store');
-                        Route::get('/{agent}/details', 'agentDetails')->name('details');
-                        Route::get('/{agent}/update', 'update')->name('update');
                         Route::delete('/{agent}/store', 'delete')->name('delete');
+                        Route::put('/{agent}/update', 'update')->name('update');
+                        Route::get('/{agent}/edit-details', 'agentDetails')->name('details');
 
                         // Axios endpoints
                         // For create agent
@@ -220,9 +228,18 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::prefix('user')->name('user.')->group(function () {
                     Route::controller(AccountUserController::class)->group(function () {
                         Route::post('/store', 'store')->name('store');
+                        Route::put('/{user}/update', 'update')->name('update');
+
                         // Endpoint for axios
-                        Route::get('/assign/department/{department}/branches', 'getBranches');
-                        Route::get('/assign/department/{department}/service-departments', 'getServiceDepartments');
+                        // For create requester
+                        Route::get('/{branch}/bu-departments', 'getBUDepartments');
+                        // For edit requester
+                        Route::get('/{user}/edit-details', 'requesterDetails')->name('details');
+                        Route::get('/edit/{branch}/bu-departments', 'getBUDepartments');
+                        // Route::get('/assign/department/{department}/service-departments', 'getServiceDepartments');
+                    });
+                    Route::controller(UpdatePasswordController::class)->group(function () {
+                        Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
                     });
                 });
             });

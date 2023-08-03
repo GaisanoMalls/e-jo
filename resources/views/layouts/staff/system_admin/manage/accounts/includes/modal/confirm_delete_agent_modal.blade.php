@@ -10,7 +10,7 @@
                         Confirm Delete
                     </h5>
                     <p class="mb-1" style="font-weight: 500; font-size: 15px;">
-                        Approver -
+                        Agent -
                         {{ $agent->profile->getFullName() }}
                     </p>
                 </div>

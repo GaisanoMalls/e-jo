@@ -76,8 +76,8 @@
                                                 data-silent-initial-value-set="true">
                                                 <option value="" selected disabled>Choose a suffix</option>
                                                 @foreach ($suffixes as $suffix)
-                                                <option value="{{ $suffix->name }}"
-                                                    {{ old('suffix') == $suffix->name ? 'selected' : '' }}>
+                                                <option value="{{ $suffix->name }}" {{ old('suffix')==$suffix->name ?
+                                                    'selected' : '' }}>
                                                     {{ $suffix->name }}
                                                 </option>
                                                 @endforeach
@@ -117,39 +117,18 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="mb-2">
-                                            <label for="department"
-                                                class="form-label form__field__label">BU/Department</label>
-                                            <select name="department" data-search="true"
-                                                data-silent-initial-value-set="true" id="userDepartmentsDropdown">
-                                                <option value="" selected disabled>Choose a department</option>
-                                                @foreach ($departments as $department)
-                                                <option value="{{ $department->id }}"
-                                                    {{ old('department') == $department->id ? 'selected' : '' }}>
-                                                    {{ $department->name }}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                            @error('department', 'storeUser')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="mb-2">
                                             <label for="branch" class="form-label form__field__label">
                                                 Branch
-                                                <span id="userNoBranchMessage" class="text-danger fw-semibold"
-                                                    style="font-size: 13px;"></span>
-                                                <span id="userCountBranches" style="font-size: 13px;"></span>
                                             </label>
                                             <select name="branch" data-search="true"
                                                 data-silent-initial-value-set="true" id="userBranchesDropdown">
-                                                <option value="" {{ old('branch') ? 'selected' : '' }} selected
-                                                    disabled>
+                                                <option value="" selected disabled>Choose a branch</option>
+                                                @foreach ($branches as $branch)
+                                                <option value="{{ $branch->id }}" {{ old('branch')==$branch->id ?
+                                                    'selected' : '' }}>
+                                                    {{ $branch->name }}
                                                 </option>
+                                                @endforeach
                                             </select>
                                             @error('branch', 'storeUser')
                                             <span class="error__message">
@@ -159,6 +138,26 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-2">
+                                            <label for="department" class="form-label form__field__label">
+                                                BU/Department
+                                                <span id="userNoBUDepartmentsMessage" class="text-danger fw-semibold"
+                                                    style="font-size: 13px;"></span>
+                                                <span id="userCountBUDepartments" style="font-size: 13px;"></span>
+                                            </label>
+                                            <select name="department" data-search="true"
+                                                data-silent-initial-value-set="true" id="userDepartmentsDropdown">
+                                            </select>
+                                            @error('department', 'storeUser')
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="col-md-5 px-2 mt-3">
                                     <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">

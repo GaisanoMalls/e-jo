@@ -12,7 +12,7 @@
                         <i class="fa-solid fa-plus"></i>
                         <span class="label">New</span>
                     </button>
-                    <a href=""
+                    <a href="{{ route('staff.manage.user_account.users') }}"
                         class="btn d-flex align-items-center justify-content-center gap-2 btn__view__user__accounts">
                         <i class="fa-solid fa-eye"></i>
                         <span class="label">View all</span>
@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-xxl-2 col-lg-2 col-md-2">
                     <p class="mb-2 user__role__description">
-                        Reply to the requester's tickets and keeping track of them.
+                        The user who is asking for support through a ticket
                     </p>
                 </div>
                 <div class="col-xxl-10 col-lg-10 col-md-10 content__container">
@@ -113,8 +113,15 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                                                <button type="button" href="" class="btn action__button"
-                                                    data-bs-toggle="modal"
+                                                <button data-tooltip="Edit" data-tooltip-position="top"
+                                                    data-tooltip-font-size="11px"
+                                                    onclick="window.location.href='{{ route('staff.manage.user_account.user.details', $user->id) }}'"
+                                                    type="button" class="btn action__button">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button data-tooltip="Delete" data-tooltip-position="top"
+                                                    data-tooltip-font-size="11px" type="button"
+                                                    class="btn action__button" data-bs-toggle="modal"
                                                     data-bs-target="#confirmDeleteUser{{ $user->id }}">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
