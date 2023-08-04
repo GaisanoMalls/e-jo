@@ -48,7 +48,7 @@ SLA Plans
         <div class="col-12 content__container">
             <div class="card card__rounded__and__no__border pt-4">
                 <div class="table-responsive custom__table">
-                    @if ($slas->count() > 0)
+                    @if (!$slas->isEmpty())
                     @include('layouts.staff.system_admin.manage.sla.includes.sla_list')
                     @else
                     <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">

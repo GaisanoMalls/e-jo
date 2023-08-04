@@ -1,4 +1,4 @@
-@if ($ticket->replies->count() > 0)
+@if (!$ticket->replies->isEmpty())
 @foreach ($ticket->replies as $reply)
 @include('layouts.user.ticket.includes.modal.preview_reply_ticket_files_modal')
 <div class="card border-0 p-0 card__ticket__details"
@@ -35,7 +35,7 @@
         <div class="ticket__reply__content">
             <div class="ticket__description reply__ticket__description">{!! $reply->description !!}
             </div>
-            @if ($reply->fileAttachments->count() > 0)
+            @if (!$reply->fileAttachments->isEmpty())
             <div class="ticket__attachments d-inline-flex gap-1" data-bs-toggle="modal"
                 data-bs-target="#replyTicketFilesModalForm{{ $reply->id }}">
                 <i class="fa-solid fa-file-image"></i>

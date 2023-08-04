@@ -27,27 +27,29 @@ class BUDepartmentBranchController extends Controller
         );
     }
 
-    public function store(Request $request, DepartmentBranch $departmentBranch)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'bu_department' => ['required'],
-            'branch' => ['required']
+            'branches' => ['required']
         ]);
 
         if ($validator->fails())
             return back()->withErrors($validator, 'storeBUDepartmentBranch')->withInput();
 
-        $isExists = DepartmentBranch::where('department_id', $request['bu_department'])
-            ->where('branch_id', $request['branch'])
+        $isExists = DepartmentBranch::where('department_id', $request->input('bu_department'))
+            ->where('branch_id', $request->input('branch'))
             ->exists();
 
-        if ($isExists)
-            return back()->withErrors(['bu_department' => 'BU/department already assigned to this branch.'], 'storeBUDepartmentBranch')->withInput();
+        if ($isExists) {
+            return back()
+                ->withErrors(['bu_department' => 'BU/department already assigned to this branch.'], 'storeBUDepartmentBranch')
+                ->withInput();
+        }
 
-        $departmentBranch->create([
-            'department_id' => $request->input('bu_department'),
-            'branch_id' => $request->input('branch')
-        ]);
+        $department = Department::find($request->bu_department);
+        $selectedBranches = $request->input('branches');
+        $department->branches()->attach($selectedBranches);
 
         return back()->with('success', 'BU/department successfully assigned to a branch.');
     }

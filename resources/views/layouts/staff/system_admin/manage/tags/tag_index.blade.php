@@ -45,7 +45,7 @@ Tags
         <div class="col-12 content__container">
             <div class="card card__rounded__and__no__border pt-4">
                 <div class="table-responsive custom__table">
-                    @if ($tags->count() > 0)
+                    @if (!$tags->isEmpty())
                     @include('layouts.staff.system_admin.manage.tags.includes.tag_list')
                     @else
                     <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">

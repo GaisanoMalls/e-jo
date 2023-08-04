@@ -26,7 +26,7 @@
                     </p>
                 </div>
                 <div class="col-xxl-10 col-lg-10 col-md-10 content__container">
-                    @if ($users->count() > 0)
+                    @if (!$users->isEmpty())
                     <div class="card account__type__card">
                         <div class="table-responsive custom__table">
                             <table class="table table-striped mb-0">

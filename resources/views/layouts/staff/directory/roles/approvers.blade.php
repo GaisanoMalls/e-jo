@@ -23,7 +23,7 @@ Approvers Directory
             </div>
         </div>
     </div>
-    @if ($approvers->count() > 0)
+    @if (!$approvers->isEmpty())
     <div class="directory__type__card">
         <div class="table-responsive custom__table">
             <table class="table table-striped mb-0" id="table">

@@ -2,7 +2,7 @@
 
 @section('feedback-content')
 <div class="row my-5 gap-4">
-    @if ($closedTickets->count() > 0)
+    @if (!$closedTickets->isEmpty())
     @foreach ($closedTickets as $ticket)
     @include('layouts.feedback.includes.modal.create_feedback_modal_form')
     <div class="card border-0 feedback__card">

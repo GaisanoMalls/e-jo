@@ -1,16 +1,16 @@
 @extends('layouts.staff.base', ['title' => $title ?? 'Manage'])
 
 @section('page-header')
-    <div class="justify-content-between d-flex flex-wrap ticket__content__top">
-        <div class="w-100 d-flex flex-wrap justify-content-between">
-            <h3 class="page__header__title">
-                @yield('manage-header-title', 'Manage')
-            </h3>
+<div class="justify-content-between d-flex flex-wrap ticket__content__top">
+    <div class="w-100 d-flex flex-wrap justify-content-between">
+        <h3 class="page__header__title">
+            @yield('manage-header-title', 'Manage')
+        </h3>
         @section('manage-breadcrumbs')
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">Manage</li>
-                <li class="breadcrumb-item active">Home</li>
-            </ol>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Manage</li>
+            <li class="breadcrumb-item active">Home</li>
+        </ol>
         @show
     </div>
 </div>
@@ -24,7 +24,7 @@
                 <div class="col-12">
                     @include('layouts.staff.system_admin.manage.includes.manage_tab')
                     @section('manage-content')
-                        @include('layouts.staff.system_admin.manage.includes.manage_home')
+                    @include('layouts.staff.system_admin.manage.includes.manage_home')
                     @show
                 </div>
             </div>

@@ -42,7 +42,7 @@ Accounts
                 </div>
                 <div class="row">
                     <div class="col-12 content__container">
-                        @if ($serviceDepartmentAdmins->count() > 0)
+                        @if (!$serviceDepartmentAdmins->isEmpty())
                         <div class="card account__type__card card__rounded__and__no__border">
                             <div class="table-responsive custom__table">
                                 <table class="table table-striped mb-0" id="table">

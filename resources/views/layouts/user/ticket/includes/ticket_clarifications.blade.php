@@ -26,7 +26,7 @@
 </div>
 @endif
 
-@if ($ticket->clarifications->count() > 0)
+@if (!$ticket->clarifications->isEmpty())
 @foreach ($ticket->clarifications as $clarification)
 @include('layouts.user.ticket.includes.modal.preview_clarification_ticket_files_modal')
 <div class="card border-0 p-0 card__ticket__details"
@@ -61,7 +61,7 @@
         <div class="ticket__reply__content">
             <div class="ticket__description reply__ticket__description">{!! $clarification->description !!}
             </div>
-            @if ($clarification->fileAttachments->count() > 0)
+            @if (!$clarification->fileAttachments->isEmpty())
             <div class="ticket__attachments d-inline-flex gap-1" data-bs-toggle="modal"
                 data-bs-target="#replyTicketFilesModalForm{{ $clarification->id }}">
                 <i class="fa-solid fa-file-image"></i>

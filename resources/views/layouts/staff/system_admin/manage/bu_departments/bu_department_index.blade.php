@@ -35,7 +35,7 @@ BU/Departments
                         </div>
                     </div>
                     <div class="table-responsive custom__table">
-                        @if ($buDepartments->count() > 0)
+                        @if (!$buDepartments->isEmpty())
                         @include('layouts.staff.system_admin.manage.bu_departments.includes.bu_department_list')
                         @else
                         <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">

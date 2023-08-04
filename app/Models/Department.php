@@ -29,7 +29,7 @@ class Department extends Model
 
     public function branches()
     {
-        return $this->belongsToMany(Branch::class);
+        return $this->belongsToMany(Branch::class, 'branch_department');
     }
 
     public function getTeams()
@@ -72,7 +72,7 @@ class Department extends Model
         $created_at = Carbon::parse($this->created_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         $updated_at = Carbon::parse($this->updated_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         return $updated_at === $created_at
-        ? "----"
-        : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
+            ? "----"
+            : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
     }
 }

@@ -34,8 +34,8 @@ Manage Department
                                             data-search="true" data-silent-initial-value-set="true">
                                             <option value="" selected disabled>Choose a department</option>
                                             @foreach ($buDepartments as $buDepartment)
-                                            <option value="{{ $buDepartment->id }}"
-                                                {{ old('bu_department') == $buDepartment->id ? 'selected' : '' }}>
+                                            <option value="{{ $buDepartment->id }}" {{
+                                                old('bu_department')==$buDepartment->id ? 'selected' : '' }}>
                                                 {{ $buDepartment->name }}
                                             </option>
                                             @endforeach
@@ -51,12 +51,12 @@ Manage Department
                                         <label class="form-label form__field__label">
                                             <small>Assign to branch</small>
                                         </label>
-                                        <select name="branch" placeholder="Choose a branch" data-search="true"
-                                            data-silent-initial-value-set="true">
+                                        <select name="branches[]" placeholder="Choose a branch" data-search="true"
+                                            data-silent-initial-value-set="true" multiple>
                                             <option value="" selected disabled>Choose a branch</option>
                                             @foreach ($branches as $branch)
-                                            <option value="{{ $branch->id }}"
-                                                {{ old('branch') == $branch->id ? 'selected' : '' }}>
+                                            <option value="{{ $branch->id }}" {{ old('branch')==$branch->id
+                                                ? 'selected' : '' }}>
                                                 {{ $branch->name }}
                                             </option>
                                             @endforeach
@@ -86,9 +86,15 @@ Manage Department
                                 BU/department assigned to branches
                             </h6>
                         </div>
+                        @if(!$buDepartmentBranches->isEmpty())
                         <div class="table-responsive custom__table">
                             @include('layouts.staff.system_admin.manage.bu_departments.includes.bu_department_branch_list')
                         </div>
+                        @else
+                        <div class="alert alert-info mx-4 border-0 rounded-3" role="alert" style="font-size: 13px;">
+                            No BU/Departments were assigned to any of the branches.
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

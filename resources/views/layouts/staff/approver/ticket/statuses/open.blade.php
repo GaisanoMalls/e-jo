@@ -10,7 +10,7 @@
     </div>
 </div>
 <div class="row mx-0">
-    @if ($openTickets->count() > 0 || $forApprovalTickets->count() > 0)
+    @if (!$openTickets->isEmpty() || !$forApprovalTickets->isEmpty())
     <div class="card ticket__card" id="userTicketCard">
         <div class="table-responsive">
             <table class="table mb-0 custom__table" id="approverTable">

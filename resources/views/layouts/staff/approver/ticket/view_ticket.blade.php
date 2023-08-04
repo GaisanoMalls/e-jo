@@ -113,7 +113,7 @@
                         </div>
                         <div class="ticket__details__card__body">
                             <div class="ticket__description">{!! $ticket->description !!}</div>
-                            @if ($ticket->fileAttachments->count() > 0)
+                            @if (!$ticket->fileAttachments->isEmpty())
                             <div class="ticket__attachments d-inline-flex gap-1 mb-3" data-bs-toggle="modal"
                                 data-bs-target="#requesterTicketFilesModalForm">
                                 <i class="fa-solid fa-file-zipper"></i>

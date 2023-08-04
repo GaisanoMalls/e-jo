@@ -35,11 +35,11 @@ Branches
                     </div>
                 </div>
                 <div class="table-responsive custom__table">
-                    @if ($branches->count() > 0)
+                    @if (!$branches->isEmpty())
                     @include('layouts.staff.system_admin.manage.branches.includes.branch_list')
                     @else
                     <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                        <small style="font-size: 14px;">No help topics.</small>
+                        <small style="font-size: 14px;">No branches.</small>
                     </div>
                     @endif
                 </div>

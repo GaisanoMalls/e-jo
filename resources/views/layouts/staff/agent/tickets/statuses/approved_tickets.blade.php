@@ -37,7 +37,7 @@
                 </div>
                 <div class="tickets__table__card">
                     <div class="table-responsive custom__table">
-                        @if ($approvedTickets->count() > 0)
+                        @if (!$approvedTickets->isEmpty())
                         <table class="table table-striped mb-0" id="table">
                             <thead>
                                 <tr>
@@ -113,8 +113,8 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center text-start td__content">
-                                            <span
-                                                style="color: {{ $ticket->priorityLevel->color }};">{{ $ticket->priorityLevel->name }}</span>
+                                            <span style="color: {{ $ticket->priorityLevel->color }};">{{
+                                                $ticket->priorityLevel->name }}</span>
                                         </div>
                                     </td>
                                 </tr>

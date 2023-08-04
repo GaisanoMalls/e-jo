@@ -10,7 +10,7 @@
 
 @section('main-content')
 <div class="row mx-0">
-    @if ($openTickets->count() > 0)
+    @if (!$openTickets->isEmpty())
     <div class="card ticket__card" id="userTicketCard">
         <div class="table-responsive">
             <table class="table mb-0 custom__table" id="userTable">

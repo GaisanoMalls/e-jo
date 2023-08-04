@@ -23,11 +23,11 @@ Roles & Permissions
 @endsection
 
 {{-- @if ($errors->storeUser->any())
-    @push('modal-with-error')
-        <script>
-            $(function() {
+@push('modal-with-error')
+<script>
+    $(function() {
                 $('#addNewUserModal').modal('show');
             });
-        </script>
-    @endpush
+</script>
+@endpush
 @endif --}}

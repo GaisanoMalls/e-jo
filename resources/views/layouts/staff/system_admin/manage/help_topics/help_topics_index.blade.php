@@ -35,7 +35,7 @@ Help Topics
                     </div>
                 </div>
                 <div class="table-responsive custom__table">
-                    @if ($serviceDepartments->count() > 0)
+                    @if (!$serviceDepartments->isEmpty())
                     @include('layouts.staff.system_admin.manage.help_topics.includes.help_topic_list')
                     @else
                     <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">

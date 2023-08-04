@@ -37,7 +37,7 @@
                 </div>
                 <div class="tickets__table__card">
                     <div class="table-responsive custom__table">
-                        @if ($claimedTickets->count() > 0)
+                        @if (!$claimedTickets->isEmpty())
                         <table class="table table-striped mb-0" id="table">
                             <thead>
                                 <tr>

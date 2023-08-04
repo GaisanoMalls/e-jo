@@ -34,7 +34,7 @@ Teams
                     </div>
                 </div>
                 <div class="table-responsive custom__table">
-                    @if ($teams->count() > 0)
+                    @if (!$teams->isEmpty())
                     @include('layouts.staff.system_admin.manage.teams.includes.team_list')
                     @else
                     <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
