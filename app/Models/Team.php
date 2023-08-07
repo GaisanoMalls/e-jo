@@ -33,7 +33,7 @@ class Team extends Model
 
     public function branches()
     {
-        return $this->belongsToMany(Branch::class);
+        return $this->belongsToMany(Branch::class, 'team_branch');
     }
 
     public function serviceDepartment()

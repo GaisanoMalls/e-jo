@@ -10,6 +10,7 @@ class Branch extends Model
 {
     use HasFactory, TimeStamps;
 
+    protected $guarded = [];
     protected $fillable = ['name', 'slug'];
 
     public function users()
@@ -24,7 +25,7 @@ class Branch extends Model
 
     public function departments()
     {
-        return $this->belongsToMany(Department::class, 'branch_department');
+        return $this->belongsToMany(Department::class, 'department_branch');
     }
 
     public function serviceDepartments()
@@ -34,7 +35,7 @@ class Branch extends Model
 
     public function teams()
     {
-        return $this->belongsToMany(Team::class);
+        return $this->belongsToMany(Team::class, 'team_branch');
     }
 
     public function dateCreated()

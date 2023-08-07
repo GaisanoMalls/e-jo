@@ -55,13 +55,13 @@ Manage Department
                                             data-silent-initial-value-set="true" multiple>
                                             <option value="" selected disabled>Choose a branch</option>
                                             @foreach ($branches as $branch)
-                                            <option value="{{ $branch->id }}" {{ old('branch')==$branch->id
-                                                ? 'selected' : '' }}>
+                                            <option value="{{ $branch->id }}" {{ in_array($branch->id, old('branches',
+                                                [])) ? 'selected' : '' }}>
                                                 {{ $branch->name }}
                                             </option>
                                             @endforeach
                                         </select>
-                                        @error('branch', 'storeBUDepartmentBranch')
+                                        @error('branches', 'storeBUDepartmentBranch')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}

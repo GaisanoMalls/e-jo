@@ -48,7 +48,7 @@ Teams
 </div>
 @endsection
 
-@if ($errors->storeTeam->any())
+@if ($errors->storeTeam->any() || session()->has('empty_branch') || session()->has('invalid_branch'))
 @push('modal-with-error')
 <script>
     $(function () {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Department;
 use App\Models\DepartmentBranch;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -47,9 +48,18 @@ class BUDepartmentBranchController extends Controller
                 ->withInput();
         }
 
-        $department = Department::find($request->bu_department);
-        $selectedBranches = $request->input('branches');
-        $department->branches()->attach($selectedBranches);
+        DB::transaction(function () use ($request) {
+            $department = Department::find($request->input('bu_department'))->get();
+            $department->branches()->attach($request->input('branches'));
+
+            // foreach (collect($request->input('branches')) as $branch) {
+            //     $db = new DepartmentBranch;
+            //     $db->department_id = $department->id;
+            //     $db->branch_id = $branch;
+            //     $db->save();
+            // }
+        });
+
 
         return back()->with('success', 'BU/department successfully assigned to a branch.');
     }

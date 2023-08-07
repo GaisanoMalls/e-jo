@@ -10,6 +10,7 @@ class Department extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
     protected $fillable = ['name', 'slug'];
 
     public function users()
@@ -29,7 +30,7 @@ class Department extends Model
 
     public function branches()
     {
-        return $this->belongsToMany(Branch::class, 'branch_department');
+        return $this->belongsToMany(Branch::class, 'department_branch');
     }
 
     public function getTeams()

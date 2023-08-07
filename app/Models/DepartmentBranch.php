@@ -10,17 +10,18 @@ class DepartmentBranch extends Model
 {
     use HasFactory;
 
-    protected $table = 'branch_department';
+    protected $guarded = [];
+    protected $table = 'department_branch';
     protected $fillable = ['department_id', 'branch_id'];
-
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class);
-    }
 
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
     }
 
     public function dateCreated()

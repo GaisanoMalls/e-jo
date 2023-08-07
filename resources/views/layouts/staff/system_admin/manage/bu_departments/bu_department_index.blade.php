@@ -50,7 +50,7 @@ BU/Departments
 </div>
 @endsection
 
-@if ($errors->storeBUDepartment->any())
+@if ($errors->storeBUDepartment->any() || session()->has('empty_branch') || session()->has('invalid_branch'))
 @push('modal-with-error')
 <script>
     $(function () {

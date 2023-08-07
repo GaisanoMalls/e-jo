@@ -6,8 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -15,7 +14,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('branch_team', function (Blueprint $table) {
+        Schema::create('team_branch', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Team::class, 'team_id')->constrained();
             $table->foreignIdFor(Branch::class, 'branch_id')->constrained();
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('branch_team');
+        Schema::dropIfExists('team_branch');
     }
 };

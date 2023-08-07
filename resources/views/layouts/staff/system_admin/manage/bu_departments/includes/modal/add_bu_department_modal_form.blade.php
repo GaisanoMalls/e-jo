@@ -24,6 +24,29 @@
                             </span>
                             @enderror
                         </div>
+                        <div class="mb-2">
+                            <label class="form-label form__field__label">Assign to branch</label>
+                            <select name="branches[]" placeholder="Choose a branches" data-search="true" multiple>
+                                @foreach ($branches as $branch)
+                                <option value="{{ $branch->id }}" {{ in_array($branch->id, old('branches',
+                                    [])) ? 'selected' : '' }}>
+                                    {{ $branch->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            @if (session()->has('empty_branch'))
+                            <div class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ session()->get('empty_branch') }}
+                            </div>
+                            @endif
+                            @if (session()->has('invalid_branch'))
+                            <div class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ session()->get('invalid_branch') }}
+                            </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">

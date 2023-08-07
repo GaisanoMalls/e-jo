@@ -14,7 +14,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('branch_department', function (Blueprint $table) {
+        Schema::create('department_branch', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Department::class, 'department_id')->constrained();
             $table->foreignIdFor(Branch::class, 'branch_id')->constrained();
@@ -29,6 +29,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('branch_department');
+        Schema::dropIfExists('department_branch');
     }
 };

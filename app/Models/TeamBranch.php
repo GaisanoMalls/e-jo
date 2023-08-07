@@ -10,7 +10,7 @@ class TeamBranch extends Model
 {
     use HasFactory;
 
-    protected $table = 'branch_team';
+    protected $table = 'team_branch';
     protected $fillable = ['team_id', 'branch_id'];
 
     public function branch()
@@ -33,8 +33,8 @@ class TeamBranch extends Model
         $created_at = Carbon::parse($this->created_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         $updated_at = Carbon::parse($this->updated_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
         return $updated_at === $created_at
-        ? "----"
-        : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
+            ? "----"
+            : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
     }
 
 }

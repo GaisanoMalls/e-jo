@@ -3,21 +3,25 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\MultiSelect;
 use App\Http\Traits\SlugGenerator;
+use App\Models\Branch;
 use App\Models\Department;
 use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TeamController extends Controller
 {
-    use SlugGenerator;
+    use SlugGenerator, MultiSelect;
 
     public function index()
     {
         $serviceDepartments = ServiceDepartment::orderby('name', 'asc')->get();
+        $branches = Branch::orderBy('name', 'asc')->get();
         $teams = Team::with('serviceDepartment')
             ->with([
                 'users' => function ($query) {
@@ -31,6 +35,7 @@ class TeamController extends Controller
             'layouts.staff.system_admin.manage.teams.teams_index',
             compact([
                 'serviceDepartments',
+                'branches',
                 'teams'
             ])
         );
@@ -53,14 +58,33 @@ class TeamController extends Controller
             ]
         ]);
 
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeTeam')->withInput();
+        if ($validator->fails()) {
+            return back()->withErrors($validator, 'storeTeam')
+                ->withInput();
+        }
 
-        Team::create([
-            'service_department_id' => (int) $request->input('service_department'),
-            'name' => $request['name'],
-            'slug' => $this->slugify($request->input('name'))
-        ]);
+        if ($request->input('branches')[0] === null) {
+            return back()->with('empty_branch', 'Branch is required.')
+                ->withInput();
+        }
+
+        $selectedBranches = $this->getSelectedValue($request->input('branches'));
+
+        $existingBranches = Branch::whereIn('id', $selectedBranches)->pluck('id');
+        if (count($existingBranches) !== count($selectedBranches)) {
+            return back()->with('invalid_branch', 'Invalid branch selected.')
+                ->withInput();
+        }
+
+        DB::transaction(function () use ($request, $existingBranches) {
+            $team = Team::create([
+                'service_department_id' => $request->input('service_department'),
+                'name' => $request['name'],
+                'slug' => $this->slugify($request->input('name'))
+            ]);
+
+            $team->branches()->attach($existingBranches);
+        });
 
         return back()->with('success', 'Team successfully created.');
     }
