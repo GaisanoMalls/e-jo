@@ -43,7 +43,7 @@ class BranchController extends Controller
         ]);
 
         if ($validator->fails()) {
-            session()->put('branchId', $branch->id); // set a session containing th pk of branch so show modal based on the selected record.
+            session()->put('branchId', $branch->id); // set a session containing the pk of branch to show modal based on the selected record.
             return back()->withErrors($validator, 'editBranch')->withInput();
         }
 

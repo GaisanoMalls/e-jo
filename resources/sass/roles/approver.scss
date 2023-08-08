@@ -133,6 +133,11 @@ $color-1: #d32839;
     }
 }
 
+::selection {
+    color: white;
+    background: #D32839;
+}
+
 @mixin border-0 {
     border: 0;
 }

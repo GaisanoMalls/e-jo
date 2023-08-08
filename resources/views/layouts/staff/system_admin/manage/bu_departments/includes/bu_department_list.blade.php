@@ -32,9 +32,12 @@
             </td>
             <td>
                 <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                    <a href="" class="btn action__button mt-0">
+                    @include('layouts.staff.system_admin.manage.bu_departments.includes.modal.edit_bu_department_modal_form')
+                    <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px" type="button"
+                        class="btn action__button" data-bs-toggle="modal"
+                        data-bs-target="#editBUDepartment{{ $department->id }}" id="btnEdit">
                         <i class="bi bi-pencil"></i>
-                    </a>
+                    </button>
                     <form action="{{ route('staff.manage.bu_department.delete', $department->id) }}" method="post">
                         @csrf
                         @method('DELETE')

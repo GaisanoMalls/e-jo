@@ -176,3 +176,14 @@ Accounts
     </div>
 </div>
 @endsection
+
+@if ($errors->storeServiceDeptAdmin->any())
+@push('modal-with-error')
+<script>
+    $(function () {
+        $('#addNewServiceDeptAdminModal').modal('show');
+    });
+
+</script>
+@endpush
+@endif

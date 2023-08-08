@@ -42,6 +42,16 @@
   background: #999;
 }
 
+::-moz-selection {
+  color: white;
+  background: #D32839;
+}
+
+::selection {
+  color: white;
+  background: #D32839;
+}
+
 .btn__see__reason {
   color: black;
   text-decoration: underline !important;

@@ -10,14 +10,12 @@ use App\Http\Controllers\Staff\Approver\ApproverTicketsController;
 use App\Http\Controllers\Staff\DirectoryController;
 use App\Http\Controllers\Staff\AuthControllerStaff;
 use App\Http\Controllers\Staff\DashboardController;
-use App\Http\Controllers\Staff\SysAdmin\BUDepartmentBranchController;
 use App\Http\Controllers\Staff\SysAdmin\BUDepartmentController;
 use App\Http\Controllers\Staff\SysAdmin\TeamController;
 use App\Http\Controllers\Staff\SysAdmin\SLAController;
 use App\Http\Controllers\Staff\SysAdmin\TagController;
 use App\Http\Controllers\Staff\SysAdmin\BranchController;
 use App\Http\Controllers\Staff\SysAdmin\AccountsController;
-use App\Http\Controllers\Staff\SysAdmin\TeamBranchController;
 use App\Http\Controllers\Staff\SysAdmin\HelpTopicsController;
 use App\Http\Controllers\Staff\SysAdmin\ServiceDepartmentController;
 use App\Http\Controllers\Staff\SysAdmin\AccountUserController;
@@ -120,13 +118,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::post('/store', 'store')->name('store');
                     Route::delete('/{buDepartment}/delete', 'delete')->name('delete');
-                });
-                Route::prefix('assign-branch')->name('assign_branch.')->group(function () {
-                    Route::controller(BUDepartmentBranchController::class)->group(function () {
-                        Route::get('/', 'index')->name('index');
-                        Route::post('/store', 'store')->name('store');
-                        Route::delete('{departmentBranch}/delete', 'delete')->name('delete');
-                    });
+                    Route::put('/{buDepartment}/update', 'update')->name('update');
                 });
             });
             Route::prefix('service-department')->name('service_department.')->group(function () {
@@ -141,16 +133,6 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::post('/store', 'store')->name('store');
                     Route::delete('{team}/delete', 'delete')->name('delete');
-                });
-                Route::prefix('assign-branch')->name('assign_branch.')->group(function () {
-                    Route::controller(TeamBranchController::class)->group(function () {
-                        Route::get('/', 'index')->name('index');
-                        Route::post('/store', 'store')->name('store');
-                        Route::delete('/{teamBranch}/delete', 'delete')->name('delete');
-
-                        // Axios endpoints
-                        Route::get('/{team}/service-department', 'serviceDepartment');
-                    });
                 });
             });
 

@@ -27,11 +27,6 @@ BU/Departments
                                 <i class="fa-solid fa-plus"></i>
                                 <span class="button__name">Add new</span>
                             </button>
-                            <a type="button" href="{{ route('staff.manage.bu_department.assign_branch.index') }}"
-                                class="btn d-flex align-items-center justify-content-center gap-2 button__header">
-                                <span class="button__name">Manage BU/dept.</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
                         </div>
                     </div>
                     <div class="table-responsive custom__table">
@@ -55,6 +50,21 @@ BU/Departments
 <script>
     $(function () {
         $('#addNewBUDepartmentModal').modal('show');
+    });
+
+</script>
+@endpush
+@endif
+
+@if ($errors->editBUDepartment->any() || session()->has('empty_branch') || session()->has('invalid_branch') ||
+session()->has('duplicate_name_error'))
+{{-- Show edit modal based on the selected record/data --}}
+<input type="hidden" id="buDeptId" value="{{ session('buDepartmentId') }}">
+@push('modal-with-error')
+<script>
+    const buDeptId = document.getElementById('buDeptId');
+    $(function () {
+        $(`#editBUDepartment${buDeptId.value}`).modal('show');
     });
 
 </script>

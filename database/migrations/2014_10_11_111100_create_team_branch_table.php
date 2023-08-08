@@ -16,8 +16,8 @@ return new class extends Migration {
     {
         Schema::create('team_branch', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Team::class, 'team_id')->constrained();
-            $table->foreignIdFor(Branch::class, 'branch_id')->constrained();
+            $table->foreignIdFor(Team::class, 'team_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Branch::class, 'branch_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

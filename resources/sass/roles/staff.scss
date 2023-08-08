@@ -134,6 +134,16 @@ $color-1: #d32839;
     }
 }
 
+::selection {
+    color: white;
+    background: #D32839;
+}
+
+.select__all__branches {
+    border: 0 !important;
+    font-size: $fs-13;
+}
+
 .slideIn {
     -webkit-animation-name: slideIn;
     animation-name: slideIn;
@@ -1454,7 +1464,17 @@ a {
 }
 
 .form-check {
-    padding-left: 1.42rem;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.form-check-input {
+    margin-right: 13px;
+}
+
+.form-check-label {
+    font-size: $fs-14 !important;
+    margin-top: 5px;
 }
 
 input[type="checkbox"] {
@@ -1466,10 +1486,14 @@ input[type="checkbox"] {
     &:checked {
         background-color: $color-1 !important;
         border: 1px solid $color-1;
+
+        &+.form-check-label {
+            font-weight: $fw-600 !important;
+        }
     }
 
-    height: 17px;
-    width: 19px;
+    height: 16px;
+    width: 16px;
     border: 1px solid $color-1;
 }
 

@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\MultiSelect;
 use App\Models\Branch;
 use App\Models\Department;
-use App\Models\DepartmentBranch;
-use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
 class BUDepartmentController extends Controller
@@ -72,6 +72,38 @@ class BUDepartmentController extends Controller
         });
 
         return back()->with('success', 'BU/Department successfully added.');
+    }
+
+    public function update(Request $request, Department $buDepartment)
+    {
+        $validator = Validator::make($request->all(), [
+            'branch' => ['required'],
+            'name' => ['required']
+        ]);
+
+        if ($validator->fails()) {
+            session()->put('buDepartmentId', $buDepartment->id); // set a session containing the pk of department to show modal based on the selected record.
+            return back()->withErrors($validator, 'editBUDepartment')
+                ->withInput();
+        }
+
+        try {
+            DB::transaction(function () use ($request, $buDepartment) {
+                $buDepartment->update([
+                    'name' => $request->input('name'),
+                    'slug' => Str::slug($request->input('name'))
+                ]);
+
+                $buDepartment->branches()->sync($request->input('branch', []));
+            });
+
+            session()->forget('buDepartmentId'); // remove the buDepartmentId in the session when form is successful or no errors.
+            return back()->with('success', 'BU/Department successfully updated.');
+
+        } catch (\Exception $e) {
+            session()->put('buDepartmentId', $buDepartment->id); // set a session containing the pk of department to show modal based on the selected record.
+            return back()->with('duplicate_name_error', "BU/Department name {$request->name} already exists.");
+        }
     }
 
     public function delete(Department $buDepartment)

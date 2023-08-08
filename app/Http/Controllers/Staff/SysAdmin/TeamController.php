@@ -89,6 +89,11 @@ class TeamController extends Controller
         return back()->with('success', 'Team successfully created.');
     }
 
+    public function update(Request $request, Team $team)
+    {
+        //
+    }
+
     public function delete(Team $team)
     {
         try {

@@ -63,8 +63,7 @@ Accounts
                                                 Status
                                             </th>
                                             <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                                                Date
-                                                Added
+                                                Date Added
                                             </th>
                                             <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                                 Date Updated
@@ -175,3 +174,14 @@ Accounts
     </div>
 </div>
 @endsection
+
+@if ($errors->storeUser->any())
+@push('modal-with-error')
+<script>
+    $(function () {
+        $('#addNewUserModal').modal('show');
+    });
+
+</script>
+@endpush
+@endif

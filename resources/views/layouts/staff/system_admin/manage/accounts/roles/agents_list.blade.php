@@ -183,3 +183,14 @@ Accounts
     </div>
 </div>
 @endsection
+
+@if ($errors->storeAgent->any())
+@push('modal-with-error')
+<script>
+    $(function () {
+        $('#addNewAgentModal').modal('show');
+    });
+
+</script>
+@endpush
+@endif

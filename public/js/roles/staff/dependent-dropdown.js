@@ -2982,32 +2982,6 @@ if (editUserBranchDropdown || editUserBUDepartmentDropdown) {
 // * END ------------------------------------------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------------------------------------------
-// Team - Assign Branch
-var teamsDropdown = document.getElementById('teamsDropdown');
-var serviceDepartmentFieldContainer = document.getElementById('serviceDepartmentFieldContainer');
-var serviceDepartmentField = document.getElementById('serviceDepartmentField');
-if (serviceDepartmentFieldContainer || teamsDropdown) {
-  serviceDepartmentFieldContainer.style.display = 'none';
-}
-if (teamsDropdown) {
-  teamsDropdown.addEventListener('change', function () {
-    var teamId = this.value;
-    if (teamId) {
-      axios.get("/staff/manage/team/assign-branch/".concat(teamId, "/service-department")).then(function (response) {
-        var department = response.data;
-        serviceDepartmentField.value = department.name;
-        serviceDepartmentFieldContainer.style.display = 'block';
-      })["catch"](function (error) {
-        console.log(error.response.data);
-      });
-    } else {
-      serviceDepartmentField.value = "";
-      serviceDepartmentFieldContainer.style.display = 'none';
-    }
-  });
-}
-
-// ------------------------------------------------------------------------------------------------------------------------
 // Help Topic Section
 var helpTopicServiceDepartmentDropdown = document.getElementById('helpTopicServiceDepartmentDropdown');
 var helpTopicTeamsDropdown = document.getElementById('helpTopicTeamsDropdown');

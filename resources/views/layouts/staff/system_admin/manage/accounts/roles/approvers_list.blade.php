@@ -163,3 +163,14 @@ Accounts
     </div>
 </div>
 @endsection
+
+@if ($errors->storeApprover->any())
+@push('modal-with-error')
+<script>
+    $(function () {
+        $('#addNewApproverModal').modal('show');
+    });
+
+</script>
+@endpush
+@endif

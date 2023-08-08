@@ -6858,6 +6858,21 @@
   background: #999;
 }
 
+::-moz-selection {
+  color: white;
+  background: #D32839;
+}
+
+::selection {
+  color: white;
+  background: #D32839;
+}
+
+.select__all__branches {
+  border: 0 !important;
+  font-size: 0.813rem;
+}
+
 .slideIn {
   animation-name: slideIn;
 }
@@ -7952,12 +7967,22 @@ a:hover {
 }
 
 .form-check {
-  padding-left: 1.42rem;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.form-check-input {
+  margin-right: 13px;
+}
+
+.form-check-label {
+  font-size: 0.875rem !important;
+  margin-top: 5px;
 }
 
 input[type=checkbox] {
-  height: 17px;
-  width: 19px;
+  height: 16px;
+  width: 16px;
   border: 1px solid #d32839;
 }
 input[type=checkbox]:focus {
@@ -7967,6 +7992,9 @@ input[type=checkbox]:focus {
 input[type=checkbox]:checked {
   background-color: #d32839 !important;
   border: 1px solid #d32839;
+}
+input[type=checkbox]:checked + .form-check-label {
+  font-weight: 600 !important;
 }
 
 .custom__dropdown__menu__container__ticket__details {
