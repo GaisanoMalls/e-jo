@@ -43,7 +43,7 @@ class BranchController extends Controller
         ]);
 
         if ($validator->fails()) {
-            session()->put('branchId', $branch->id); // set a session containing the pk of branch to show modal based on the selected record.
+            $request->session()->put('branchId', $branch->id); // set a session containing the pk of branch to show modal based on the selected record.
             return back()->withErrors($validator, 'editBranch')->withInput();
         }
 
@@ -52,7 +52,7 @@ class BranchController extends Controller
             'slug' => Str::slug($request->input('name'))
         ]);
 
-        session()->forget('branchId'); // remove the branchId in the session when form is successful or no errors.
+        $request->session()->forget('branchId'); // remove the branchId in the session when form is successful or no errors.
         return back()->with('success', 'Branch successfully udpated.');
     }
 

@@ -6,14 +6,14 @@ use App\Models\Role;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 
-trait AuthStaffRedirect
+trait AuthRedirect
 {
     /**
      * Redirect authenticated staffs to a route based on their roles.
      *
      * @return void
      */
-    public function redirectAuthenticatedStaffWithRole()
+    public function redirectAuthenticatedWithRole()
     {
         if (Auth::check()) {
             switch (Auth::user()->role_id) {
@@ -25,6 +25,8 @@ trait AuthStaffRedirect
                     return redirect()->intended(RouteServiceProvider::DEPARTMENT_ADMIN_REDIRECT_URL);
                 case Role::AGENT:
                     return redirect()->intended(RouteServiceProvider::AGENT_REDIRECT_URL);
+                case Role::USER:
+                    return redirect()->intended(RouteServiceProvider::USER_REDIRECT_URL);
             }
         }
     }

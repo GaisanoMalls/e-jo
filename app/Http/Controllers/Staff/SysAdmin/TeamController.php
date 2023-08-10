@@ -10,6 +10,7 @@ use App\Models\Department;
 use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\Team;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -69,8 +70,8 @@ class TeamController extends Controller
         }
 
         $selectedBranches = $this->getSelectedValue($request->input('branches'));
-
         $existingBranches = Branch::whereIn('id', $selectedBranches)->pluck('id');
+
         if (count($existingBranches) !== count($selectedBranches)) {
             return back()->with('invalid_branch', 'Invalid branch selected.')
                 ->withInput();
@@ -91,7 +92,36 @@ class TeamController extends Controller
 
     public function update(Request $request, Team $team)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'service_department' => ['required'],
+            'name' => ['required'],
+            'branch' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            $request->session()->put('teamId', $team->id); // set a session containing the pk of department to show modal based on the selected record.
+            return back()->withErrors($validator, 'editTeam')
+                ->withInput();
+        }
+
+        try {
+            DB::transaction(function () use ($request, $team) {
+                $team->update([
+                    'service_department_id' => $request->input('service_department'),
+                    'name' => $request->input('name'),
+                    'slug' => Str::slug($request->input('name'))
+                ]);
+
+                $team->branches()->sync($request->input('branch', []));
+            });
+
+            $request->session()->forget('teamId'); // remove the buDepartmentId in the session when form is successful or no errors.
+            return back()->with('success', 'Team successfully updated.');
+
+        } catch (\Exception $e) {
+            $request->session()->put('teamId', $team->id); // set a session containing the pk of department to show modal based on the selected record.
+            return back()->with('duplicate_name_error', "Team name {$request->name} already exists.");
+        }
     }
 
     public function delete(Team $team)

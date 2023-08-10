@@ -66,7 +66,15 @@ class AccountServiceDeptAdminController extends Controller
         }
     }
 
-    public function serviceDeptAdminDetails(User $serviceDeptAdmin)
+    public function viewDetails(User $serviceDeptAdmin)
+    {
+        return view(
+            'layouts.staff.system_admin.manage.accounts.roles.details.service_department_admin_details',
+            compact('serviceDeptAdmin')
+        );
+    }
+
+    public function editDetails(User $serviceDeptAdmin)
     {
         $suffixes = $this->suffixes();
         $branches = $this->branches();

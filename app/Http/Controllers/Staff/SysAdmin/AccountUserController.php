@@ -65,8 +65,15 @@ class AccountUserController extends Controller
         }
     }
 
+    public function viewDetails(User $user)
+    {
+        return view(
+            'layouts.staff.system_admin.manage.accounts.roles.details.user_details',
+            compact('user')
+        );
+    }
 
-    public function requesterDetails(User $user)
+    public function editDetails(User $user)
     {
         $suffixes = $this->suffixes();
         $branches = $this->branches();

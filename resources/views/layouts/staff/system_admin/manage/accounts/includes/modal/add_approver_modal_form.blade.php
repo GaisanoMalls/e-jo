@@ -76,8 +76,8 @@
                                                 data-silent-initial-value-set="true">
                                                 <option value="" selected disabled>Choose a suffix</option>
                                                 @foreach ($suffixes as $suffix)
-                                                <option value="{{ $suffix->name }}"
-                                                    {{ old('suffix') == $suffix->name ? 'selected' : '' }}>
+                                                <option value="{{ $suffix->name }}" {{ old('suffix')==$suffix->name ?
+                                                    'selected' : '' }}>
                                                     {{ $suffix->name }}
                                                 </option>
                                                 @endforeach
@@ -122,8 +122,8 @@
                                                 data-silent-initial-value-set="true" id="approverBranchDropdown">
                                                 <option value="" selected disabled>Choose a branch</option>
                                                 @foreach ($branches as $branch)
-                                                <option value="{{ $branch->id }}"
-                                                    {{ old('branch') == $branch->id ? 'selected' : '' }}>
+                                                <option value="{{ $branch->id }}" {{ old('branch')==$branch->id ?
+                                                    'selected' : '' }}>
                                                     {{ $branch->name }}
                                                 </option>
                                                 @endforeach

@@ -12,6 +12,8 @@ use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class TicketController extends Controller
@@ -96,7 +98,12 @@ class TicketController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'description' => ['required'],
-            'replyFiles.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000']
+            'replyFiles.*' => [
+                'nullable',
+                File::types(['jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv'])
+                    ->min(1024)
+                    ->max(25 * 1024) //25600 (25 MB)
+            ]
         ]);
 
         if ($validator->fails())
@@ -115,7 +122,7 @@ class TicketController extends Controller
                 if ($request->hasFile('replyFiles')) {
                     foreach ($request->file('replyFiles') as $uploadedReplyFile) {
                         $fileName = $uploadedReplyFile->getClientOriginalName();
-                        $fileAttachment = $uploadedReplyFile->storeAs('public/ticket/reply/files', $fileName);
+                        $fileAttachment = Storage::putFileAs('public/ticket/reply/files', $uploadedReplyFile, $fileName);
 
                         $replyFile = new ReplyFile();
                         $replyFile->file_attachment = $fileAttachment;

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Staff\Agent;
 
 use App\Http\Controllers\Controller;
-use App\Models\ApprovalStatus;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Http\Request;

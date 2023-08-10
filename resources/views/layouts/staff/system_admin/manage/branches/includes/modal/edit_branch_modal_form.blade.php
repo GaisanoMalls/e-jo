@@ -1,5 +1,5 @@
-<div class="modal department__modal" data-bs-backdrop="static" data-bs-keyboard="false"
-    id="editBranchModal{{ $branch->id }}" tabindex="-1" aria-labelledby="addNewBranchModalLabel" aria-hidden="true">
+<div class="modal department__modal" data-bs-backdrop="static" data-bs-keyboard="false" id="editBranch{{ $branch->id }}"
+    tabindex="-1" aria-labelledby="addNewBranchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">

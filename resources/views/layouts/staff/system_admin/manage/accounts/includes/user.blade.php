@@ -57,7 +57,8 @@
                                     @include('layouts.staff.system_admin.manage.accounts.includes.modal.confirm_delete_user_modal')
                                     <tr>
                                         <td>
-                                            <a href="">
+                                            <a
+                                                href="{{ route('staff.manage.user_account.user.view_details', $user->id) }}">
                                                 <div class="media d-flex align-items-center user__account__media">
                                                     <div class="flex-shrink-0">
                                                         @if ($user->profile->picture)
@@ -70,12 +71,10 @@
                                                         </div>
                                                         @endif
                                                     </div>
-                                                    <div class="flex-grow-1 ms-3 w-100">
-                                                        <a href="" class="d-flex flex-column gap-1 w-100">
-                                                            <span class="user__name">{{ $user->profile->getFullName()
-                                                                }}</span>
-                                                            <small>{{ $user->email }}</small>
-                                                        </a>
+                                                    <div class="d-flex flex-column gap-1 ms-3 w-100">
+                                                        <span class="user__name">{{
+                                                            $user->profile->getFullName() }}</span>
+                                                        <small>{{ $user->email }}</small>
                                                     </div>
                                                 </div>
                                             </a>
@@ -115,7 +114,7 @@
                                             <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                                                 <button data-tooltip="Edit" data-tooltip-position="top"
                                                     data-tooltip-font-size="11px"
-                                                    onclick="window.location.href='{{ route('staff.manage.user_account.user.details', $user->id) }}'"
+                                                    onclick="window.location.href='{{ route('staff.manage.user_account.user.edit_details', $user->id) }}'"
                                                     type="button" class="btn action__button">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>

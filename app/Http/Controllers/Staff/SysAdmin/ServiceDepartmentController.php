@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SysAdmin\DepartmentRequest;
-use App\Models\Branch;
 use App\Models\Department;
 use App\Models\ServiceDepartment;
 use Illuminate\Http\Request;
@@ -13,12 +11,6 @@ use Illuminate\Support\Str;
 
 class ServiceDepartmentController extends Controller
 {
-
-    // public function __construct()
-    // {
-    //     $this->middleware(['auth', Role::systemAdmin()]);
-    // }
-
     public function index()
     {
         $serviceDepartments = ServiceDepartment::orderBy('created_at', 'desc')->get();
@@ -39,12 +31,6 @@ class ServiceDepartmentController extends Controller
             'name' => [
                 'required',
                 'unique:service_departments,name',
-                'regex:/^[a-zA-Z\s]+$/u',
-                function ($attribute, $value, $fail) {
-                    if (preg_match('/[\'^£$%&*}{@#~?><>,|=_+¬-]/', $value)) {
-                        $fail('The name cannot contain special characters.');
-                    }
-                },
             ]
         ]);
 
@@ -58,6 +44,26 @@ class ServiceDepartmentController extends Controller
         ]);
 
         return back()->with('success', 'Department successfully added.');
+    }
+
+    public function update(Request $request, ServiceDepartment $serviceDepartment)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'unique:service_departments,name']
+        ]);
+
+        if ($validator->fails()) {
+            $request->session()->put('serviceDepartmentId', $serviceDepartment->id); // set a session containing the pk of service department to show modal based on the selected record.
+            return back()->withErrors($validator, 'editServiceDepartment')
+                ->withInput();
+        }
+
+        $serviceDepartment->update([
+            'name' => $request->input('name')
+        ]);
+
+        $request->session()->forget('serviceDepartmentId'); // remove the serviceDepartmentId in the session when form is successful or no errors.
+        return back()->with('success', 'Service department successfully updated.');
     }
 
     public function delete(ServiceDepartment $serviceDepartment)

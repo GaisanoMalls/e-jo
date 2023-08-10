@@ -28,8 +28,8 @@
                 <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                     @include('layouts.staff.system_admin.manage.branches.includes.modal.edit_branch_modal_form')
                     <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px" type="button"
-                        class="btn action__button" data-bs-toggle="modal"
-                        data-bs-target="#editBranchModal{{ $branch->id }}" id="btnEdit">
+                        class="btn action__button" data-bs-toggle="modal" data-bs-target="#editBranch{{ $branch->id }}"
+                        id="btnEdit">
                         <i class="bi bi-pencil"></i>
                     </button>
                     <form action="{{ route('staff.manage.branch.delete', $branch->id) }}" method="post">

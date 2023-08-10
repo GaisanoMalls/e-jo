@@ -15,7 +15,7 @@ Accounts
 @section('manage-content')
 <div class="row gap-4">
     <div class="accounts__section">
-        @include('layouts.staff.system_admin.manage.accounts.includes.modal.add_agent_modal_form')
+        @include('layouts.staff.system_admin.manage.accounts.includes.modal.add_user_modal_form')
         <div class="col-12 content__container">
             <div class="card d-flex flex-column gap-2 users__account__card card__rounded__and__no__border p-0">
                 <div class="users__account__card__header approver__list pb-0 pt-4">
@@ -31,7 +31,7 @@ Accounts
                                 class="d-flex align-items-center justify-content-end justify-content-lg-end justify-content-md-end">
                                 <button type="button"
                                     class="btn d-flex align-items-center justify-content-center gap-2 btn__add__user__account"
-                                    data-bs-toggle="modal" data-bs-target="#addNewAgentModal">
+                                    data-bs-toggle="modal" data-bs-target="#addNewUserModal">
                                     <i class="fa-solid fa-plus"></i>
                                     <span class="label">New</span>
                                 </button>
@@ -49,9 +49,6 @@ Accounts
                                         <tr>
                                             <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                                 Name
-                                            </th>
-                                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                                                Service Department
                                             </th>
                                             <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                                 Branch
@@ -75,7 +72,8 @@ Accounts
                                         @include('layouts.staff.system_admin.manage.accounts.includes.modal.confirm_delete_user_modal')
                                         <tr>
                                             <td>
-                                                <a href="">
+                                                <a
+                                                    href="{{ route('staff.manage.user_account.user.view_details', $user->id) }}">
                                                     <div class="media d-flex align-items-center user__account__media">
                                                         <div class="flex-shrink-0">
                                                             @if ($user->profile->picture)
@@ -88,22 +86,14 @@ Accounts
                                                             </div>
                                                             @endif
                                                         </div>
-                                                        <div class="flex-grow-1 ms-3 w-100">
-                                                            <a href="" class="d-flex flex-column gap-1 w-100">
-                                                                <span class="user__name">{{
-                                                                    $user->profile->getFullName()
-                                                                    }}</span>
-                                                                <small>{{ $user->email }}</small>
-                                                            </a>
+                                                        <div class="d-flex flex-column gap-1 ms-3 w-100">
+                                                            <span class="user__name">{{
+                                                                $user->profile->getFullName()
+                                                                }}</span>
+                                                            <small>{{ $user->email }}</small>
                                                         </div>
                                                     </div>
                                                 </a>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center text-start td__content">
-                                                    <span>{{ $user->serviceDepartment->name ?? '----'
-                                                        }}</span>
-                                                </div>
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center text-start td__content">
@@ -142,7 +132,7 @@ Accounts
                                                 <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                                                     <button data-tooltip="Edit" data-tooltip-position="top"
                                                         data-tooltip-font-size="11px"
-                                                        onclick="window.location.href='{{ route('staff.manage.user_account.service_department_admin.details', $user->id) }}'"
+                                                        onclick="window.location.href='{{ route('staff.manage.user_account.user.edit_details', $user->id) }}'"
                                                         type="button" class="btn action__button">
                                                         <i class="bi bi-pencil"></i>
                                                     </button>

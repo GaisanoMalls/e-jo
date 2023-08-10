@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Traits\TimeStamps;
 use App\Models\Tag;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
-    use HasFactory;
+    use HasFactory, TimeStamps;
 
     protected $fillable = [
         'user_id',
@@ -99,6 +100,6 @@ class Ticket extends Model
 
     public function dateCreated()
     {
-        return Carbon::parse($this->created_at)->format('M d, Y');
+        return $this->createdAt($this->created_at);
     }
 }

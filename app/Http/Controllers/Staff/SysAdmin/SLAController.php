@@ -39,6 +39,14 @@ class SLAController extends Controller
         return back()->with('success', 'A new SLA is created.');
     }
 
+    public function edit(Request $request, ServiceLevelAgreement $sla)
+    {
+        $validator = Validator::make($request->all(), [
+            'countdown_approach' => ['required'],
+            'time_unit' => ['required']
+        ]);
+    }
+
     public function delete(ServiceLevelAgreement $sla)
     {
         try {

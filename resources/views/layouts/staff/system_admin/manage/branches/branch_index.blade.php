@@ -66,7 +66,7 @@ Branches
 <script>
     const branchId = document.getElementById('branchId');
     $(function () {
-        $(`#editBranchModal${branchId.value}`).modal('show');
+        $(`#editBranch${branchId.value}`).modal('show');
     });
 </script>
 @endpush

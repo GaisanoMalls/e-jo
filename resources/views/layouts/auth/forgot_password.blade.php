@@ -29,8 +29,7 @@
     <button type="submit" class="btn mt-3 w-100 btn-block login__button">
         Send Password Reset Link
     </button>
-    <span></span>
-    <a href="{{ route('login') }}" class="mt-2 link mt-4 d-flex align-items-center justify-content-center gap-2">
+    <a href="{{ route('login') }}" class="link mt-4 d-flex align-items-center justify-content-center gap-2">
         <i class="fa-solid fa-angle-left"></i>
         Back to sign in
     </a>

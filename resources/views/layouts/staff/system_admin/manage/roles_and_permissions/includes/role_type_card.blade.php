@@ -38,7 +38,8 @@
                             @endif
                         </div>
                     </div>
-                    <a href="" class="d-flex align-items-center gap-2 card__name">
+                    <a href="{{ route('staff.manage.user_account.approvers') }}"
+                        class="d-flex align-items-center gap-2 card__name">
                         Approver
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
@@ -68,7 +69,8 @@
                             @endif
                         </div>
                     </div>
-                    <a href="" class="d-flex align-items-center gap-2 card__name">
+                    <a href="{{ route('staff.manage.user_account.service_department_admins') }}"
+                        class="d-flex align-items-center gap-2 card__name">
                         Service Department Admin
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
@@ -97,7 +99,8 @@
                             @endif
                         </div>
                     </div>
-                    <a href="" class="d-flex align-items-center gap-2 card__name">
+                    <a href="{{ route('staff.manage.user_account.agents') }}"
+                        class="d-flex align-items-center gap-2 card__name">
                         Agent
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
@@ -126,7 +129,8 @@
                             @endif
                         </div>
                     </div>
-                    <a href="" class="d-flex align-items-center gap-2 card__name">
+                    <a href="{{ route('staff.manage.user_account.users') }}"
+                        class="d-flex align-items-center gap-2 card__name">
                         User/Requester
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>

@@ -18,12 +18,6 @@
                             <label for="name" class="form-label form__field__label">Name</label>
                             <input type="text" name="name" class="form-control form__field" id="name"
                                 value="{{ $department->name ?? old('name') }}" placeholder="Type here...">
-                            @error('name', 'editBUDepartment')
-                            <span class="error__message">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ $message }}
-                            </span>
-                            @enderror
                             @if (session()->has('duplicate_name_error'))
                             <div class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -31,27 +25,20 @@
                             </div>
                             @endif
                         </div>
-                        <div class="mb-2">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <label class="form-label form__field__label">
-                                    Assigned {{ $department->branches->count() > 1 ? 'branches' : 'branch' }}
+                        <div class="mb-2 mt-3">
+                            <label class="form-label form__field__label">
+                                Assigned {{ $department->branches->count() > 1 ? 'branches' : 'branch' }}
+                            </label>
+                            @foreach ($branches as $branch)
+                            <div class="form-check me-4">
+                                <input class="form-check-input" type="checkbox" value="{{ $branch->id }}"
+                                    name="branch[]" {{ in_array($branch->id,
+                                $department->branches->pluck('id')->toArray()) ? 'checked' : '' }}>
+                                <label class="form-check-label">
+                                    {{ $branch->name }}
                                 </label>
-                                <button type="button" class="btn btn-sm py-1 px-2 rounded-2 select__all__branches"
-                                    id="">Select
-                                    all</button>
                             </div>
-                            <div class="d-flex flex-wrap align-items-center">
-                                @foreach ($branches as $branch)
-                                <div class="form-check me-4 my-1">
-                                    <input class="form-check-input" type="checkbox" value="{{ $branch->id }}"
-                                        name="branch[]" {{ in_array($branch->id,
-                                    $department->branches->pluck('id')->toArray()) ? 'checked' : '' }}>
-                                    <label class="form-check-label">
-                                        {{ $branch->name }}
-                                    </label>
-                                </div>
-                                @endforeach
-                            </div>
+                            @endforeach
                             @error('branch', 'editBUDepartment')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -64,7 +51,7 @@
                 <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <button type="submit" class="btn m-0 btn__modal__footer btn__send">Save</button>
-                        @if ($errors->editBUDepartment->any())
+                        @if ($errors->editBUDepartment->any() || session()->has('duplicate_name_error'))
                         <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
                             data-bs-dismiss="modal"
                             onclick="window.location.href='{{ route('staff.manage.bu_department.index') }}'">Cancel</button>

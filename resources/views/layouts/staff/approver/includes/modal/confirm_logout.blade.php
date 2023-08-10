@@ -2,7 +2,7 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0">
-            <form action="{{ route('auth.requester.logout') }}" method="post">
+            <form action="{{ route('auth.logout') }}" method="post">
                 @csrf
                 <div class="modal-body border-0 text-center pt-4 pb-1">
                     <h5 class="fw-bold mb-4" style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">

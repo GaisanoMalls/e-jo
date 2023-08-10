@@ -7,29 +7,33 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($serviceDepartments as $department)
+        @foreach ($serviceDepartments as $serviceDepartment)
         <tr>
             <td>
                 <div class="d-flex align-items-center text-start td__content">
-                    <span>{{ $department->name }}</span>
+                    <span>{{ $serviceDepartment->name }}</span>
                 </div>
             </td>
             <td>
                 <div class="d-flex align-items-center text-start td__content">
-                    <span>{{ $department->dateCreated() }}</span>
+                    <span>{{ $serviceDepartment->dateCreated() }}</span>
                 </div>
             </td>
             <td>
                 <div class="d-flex align-items-center text-start td__content">
-                    <span>{{ $department->dateUpdated() }}</span>
+                    <span>{{ $serviceDepartment->dateUpdated() }}</span>
                 </div>
             </td>
             <td>
                 <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                    <a href="" class="btn action__button mt-0">
+                    @include('layouts.staff.system_admin.manage.service_departments.includes.modal.edit_service_department_modal_form')
+                    <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px" type="button"
+                        class="btn action__button" data-bs-toggle="modal"
+                        data-bs-target="#editServiceDepartment{{ $serviceDepartment->id }}" id="btnEdit">
                         <i class="bi bi-pencil"></i>
-                    </a>
-                    <form action="{{ route('staff.manage.service_department.delete', $department->id) }}" method="post">
+                    </button>
+                    <form action="{{ route('staff.manage.service_department.delete', $serviceDepartment->id) }}"
+                        method="post">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-sm action__button mt-0">

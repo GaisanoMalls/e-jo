@@ -9,19 +9,18 @@ use App\Models\ApprovalStatus;
 use App\Models\Branch;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
-use App\Models\Department;
 use App\Models\HelpTopic;
 use App\Models\Reply;
 use App\Models\ReplyFile;
 use App\Models\ServiceDepartment;
 use App\Models\Status;
-use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketFile;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class TicketsController extends Controller
@@ -187,7 +186,12 @@ class TicketsController extends Controller
                 'sla' => ['required'],
                 'subject' => ['required'],
                 'description' => ['required'],
-                'file_attachments.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000'],
+                'file_attachments.*' => [
+                    'nullable',
+                    File::types(['jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv'])
+                        ->min(1024)
+                        ->max(1 * 1024) //25600 (25 MB)
+                ],
             ],
             [
                 'team.required' => 'The team field is required. Please select a help topic.',
@@ -218,7 +222,7 @@ class TicketsController extends Controller
                 if ($request->hasFile('file_attachments')) {
                     foreach ($request->file('file_attachments') as $uploadedFile) {
                         $fileName = $uploadedFile->getClientOriginalName();
-                        $fileAttachment = $uploadedFile->storeAs('public/ticket/files', $fileName);
+                        $fileAttachment = Storage::putFileAs('public/ticket/files', $uploadedFile, $fileName);
 
                         $ticketFile = new TicketFile();
                         $ticketFile->file_attachment = $fileAttachment;
@@ -257,7 +261,12 @@ class TicketsController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'description' => ['required'],
-            'replyFiles.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000']
+            'replyFiles.*' => [
+                'nullable',
+                File::types(['jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv'])
+                    ->min(1024)
+                    ->max(25 * 1024) //25600 (25 MB)
+            ]
         ]);
 
         if ($validator->fails())
@@ -276,7 +285,7 @@ class TicketsController extends Controller
                 if ($request->hasFile('replyFiles')) {
                     foreach ($request->file('replyFiles') as $uploadedReplyFile) {
                         $fileName = $uploadedReplyFile->getClientOriginalName();
-                        $fileAttachment = $uploadedReplyFile->storeAs('public/ticket/reply/files', $fileName);
+                        $fileAttachment = Storage::putFileAs('public/ticket/reply/files', $uploadedReplyFile, $fileName);
 
                         $replyFile = new ReplyFile();
                         $replyFile->file_attachment = $fileAttachment;
@@ -315,7 +324,12 @@ class TicketsController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'description' => ['required'],
-            'clarificationFiles.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000']
+            'clarificationFiles.*' => [
+                'nullable',
+                File::types(['jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv'])
+                    ->min(1024)
+                    ->max(25 * 1024) //25600 (25 MB)
+            ]
         ]);
 
         if ($validator->fails())
@@ -334,7 +348,7 @@ class TicketsController extends Controller
                 if ($request->hasFile('clarificationFiles')) {
                     foreach ($request->file('clarificationFiles') as $uploadedClarificationFile) {
                         $fileName = $uploadedClarificationFile->getClientOriginalName();
-                        $fileAttachment = $uploadedClarificationFile->storeAs('public/ticket/clarification/files', $fileName);
+                        $fileAttachment = Storage::putFileAs('public/ticket/clarification/files', $uploadedClarificationFile, $fileName);
 
                         $clarificationFile = new ClarificationFile();
                         $clarificationFile->file_attachment = $fileAttachment;

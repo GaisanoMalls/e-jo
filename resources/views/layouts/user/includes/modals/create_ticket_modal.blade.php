@@ -2,7 +2,7 @@
     @csrf
     <div class="modal create__ticket__modal" id="createTicketModal" tabindex="-1"
         aria-labelledby="createtTicketModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-lg">
             <div class="modal-content modal__content">
                 <h1 class="modal-title modal__title fs-5 px-3">Create New Ticket</h1>
                 <div class="modal-body modal__body">

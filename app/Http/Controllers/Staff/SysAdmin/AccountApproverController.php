@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\MultiSelect;
 use App\Http\Traits\SlugGenerator;
 use App\Http\Traits\UserDetails;
 use App\Models\Branch;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AccountApproverController extends Controller
 {
-    use SlugGenerator, UserDetails;
+    use SlugGenerator, UserDetails, MultiSelect;
 
     public function store(Request $request)
     {
@@ -65,7 +66,15 @@ class AccountApproverController extends Controller
         }
     }
 
-    public function approverDetails(User $approver)
+    public function viewDetails(User $approver)
+    {
+        return view(
+            'layouts.staff.system_admin.manage.accounts.roles.details.approver_details',
+            compact('approver')
+        );
+    }
+
+    public function editDetails(User $approver)
     {
         $suffixes = $this->suffixes();
         $branches = $this->branches();

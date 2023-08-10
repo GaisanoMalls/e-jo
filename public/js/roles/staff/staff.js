@@ -60,18 +60,6 @@ document.addEventListener('DOMContentLoaded', function () {
       statusColorSelect.value = this.value;
     });
   }
-  var selectAllBranches = document.querySelector('.select__all__branches');
-  var checkboxes = document.querySelectorAll("input[type='checkbox']");
-  var checkAll;
-  selectAllBranches.addEventListener('click', function () {
-    var _this = this;
-    checkboxes.forEach(function (checkbox) {
-      checkbox.checked = checkAll ? false : true;
-      _this.textContent = checkAll ? "Select all" : "Unselect";
-      _this.style.background = checkAll ? "transparent" : "#F2F2F2";
-    });
-    checkAll = !checkAll;
-  });
 });
 /******/ })()
 ;

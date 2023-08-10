@@ -16,12 +16,12 @@ trait ActiveWithRole
      * @param  array|string  $role
      * @return mixed
      */
-    public static function activeAndHasRole($request, $next, $role)
+    public function activeAndHasRole($request, $next, $role)
     {
         $user = $request->user();
 
         return ($user && $user->isActive() && in_array($user->role_id, $role))
             ? $next($request)
-            : self::doLogout($request);
+            : $this->doLogout($request);
     }
 }

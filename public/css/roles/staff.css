@@ -6868,11 +6868,6 @@
   background: #D32839;
 }
 
-.select__all__branches {
-  border: 0 !important;
-  font-size: 0.813rem;
-}
-
 .slideIn {
   animation-name: slideIn;
 }
@@ -6925,6 +6920,21 @@ body {
 .form-check-input {
   margin-top: 6px;
   margin-right: 15px;
+}
+
+.radio__button {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d99595;
+  box-shadow: none !important;
+}
+.radio__button:checked {
+  background-color: #D32839;
+  border: 1px solid #D32839;
+}
+.radio__button:checked + .form-check-label {
+  color: #d32839;
+  font-weight: 600;
 }
 
 .btn__submit {
@@ -7981,20 +7991,22 @@ a:hover {
 }
 
 input[type=checkbox] {
+  border: 2px solid #d99595 !important;
   height: 16px;
   width: 16px;
   border: 1px solid #d32839;
 }
 input[type=checkbox]:focus {
   box-shadow: none !important;
-  border: 1px solid #d32839;
+  border: 2px solid #d99595 !important;
 }
 input[type=checkbox]:checked {
-  background-color: #d32839 !important;
-  border: 1px solid #d32839;
+  background-color: #D32839 !important;
+  border: 2px solid #D32839 !important;
 }
 input[type=checkbox]:checked + .form-check-label {
-  font-weight: 600 !important;
+  color: #d32839;
+  font-weight: 600;
 }
 
 .custom__dropdown__menu__container__ticket__details {

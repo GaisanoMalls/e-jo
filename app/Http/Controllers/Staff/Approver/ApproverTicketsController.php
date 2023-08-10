@@ -13,6 +13,8 @@ use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ApproverTicketsController extends Controller
@@ -236,7 +238,12 @@ class ApproverTicketsController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'description' => ['required'],
-            'clarificationFiles.*' => ['nullable', 'mimes:jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv', 'max:30000']
+            'clarificationFiles.*' => [
+                'nullable',
+                File::types(['jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv'])
+                    ->min(1024)
+                    ->max(25 * 1024) //25600 (25 MB)
+            ]
         ]);
 
         if ($validator->fails())
@@ -255,7 +262,7 @@ class ApproverTicketsController extends Controller
                 if ($request->hasFile('clarificationFiles')) {
                     foreach ($request->file('clarificationFiles') as $uploadedClarificationFile) {
                         $fileName = $uploadedClarificationFile->getClientOriginalName();
-                        $fileAttachment = $uploadedClarificationFile->storeAs('public/ticket/clarification/files', $fileName);
+                        $fileAttachment = Storage::putFileAs('public/ticket/clarification/files', $uploadedClarificationFile, $fileName);
 
                         $clarificationFile = new ClarificationFile();
                         $clarificationFile->file_attachment = $fileAttachment;

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Traits\TimeStamps;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
-    use HasFactory;
+    use HasFactory, TimeStamps;
 
     protected $fillable = ['name', 'slug'];
 
@@ -20,15 +21,11 @@ class Tag extends Model
 
     public function dateCreated()
     {
-        return Carbon::parse($this->created_at)->format('M d, Y');
+        return $this->createdAt($this->created_at);
     }
 
     public function dateUpdated()
     {
-        $created_at = Carbon::parse($this->created_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
-        $updated_at = Carbon::parse($this->updated_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
-        return $updated_at === $created_at
-            ? "----"
-            : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
+        return $this->updatedAt($this->created_at, $this->updated_at);
     }
 }

@@ -33,10 +33,13 @@
             </td>
             <td>
                 <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                    <a href="" class="btn action__button mt-0">
+                    @include('layouts.staff.system_admin.manage.tags.includes.modal.edit_tag_modal_form')
+                    <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px" type="button"
+                        class="btn action__button" data-bs-toggle="modal" data-bs-target="#editTag{{ $tag->id }}"
+                        id="btnEdit">
                         <i class="bi bi-pencil"></i>
-                    </a>
-                    <form action="{{ route('staff.manage.tags.delete', $tag->id) }}" method="post">
+                    </button>
+                    <form action="{{ route('staff.manage.tag.delete', $tag->id) }}" method="post">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-sm action__button mt-0">

@@ -14,7 +14,7 @@ Tags
 @section('manage-content')
 <div class="row gap-4">
     <div class="tags__section">
-        @include('layouts.staff.system_admin.manage.tags.includes.modal.add_tag_modal')
+        @include('layouts.staff.system_admin.manage.tags.includes.modal.add_tag_modal_form')
         <div class="col-12 content__container mb-4">
             <div class="card card__rounded__and__no__border">
                 <div class="table__header">
@@ -59,7 +59,6 @@ Tags
 </div>
 @endsection
 
-
 @if ($errors->storeTag->any())
 @push('modal-with-error')
 <script>
@@ -67,6 +66,19 @@ Tags
         $('#addNewTagModal').modal('show');
     });
 
+</script>
+@endpush
+@endif
+
+@if ($errors->editTag->any())
+{{-- Show edit modal based on the selected record/data --}}
+<input type="hidden" id="tagId" value="{{ session('tagId') }}">
+@push('modal-with-error')
+<script>
+    const tagId = document.getElementById('tagId');
+    $(function () {
+        $(`#editTag${tagId.value}`).modal('show');
+    });
 </script>
 @endpush
 @endif

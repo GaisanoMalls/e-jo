@@ -122,6 +122,14 @@
   color: #123831;
 }
 
+.dashboard__card {
+  transition: all 0.3s;
+}
+.dashboard__card:hover {
+  cursor: pointer;
+  transform: scale(1.02);
+}
+
 .custom__modal .custom__modal__content {
   padding: 1.5rem;
 }

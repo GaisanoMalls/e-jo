@@ -26,8 +26,9 @@ class TagController extends Controller
             'name' => ['required', 'unique:tags,name'],
         ]);
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             return back()->withErrors($validator, 'storeTag')->withInput();
+        }
 
         $tag->create([
             'name' => $request->input('name'),
@@ -36,6 +37,27 @@ class TagController extends Controller
 
         return back()->with('success', 'A new tag is successfully created.');
     }
+
+    public function update(Request $request, Tag $tag)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'unique:tags,name'],
+        ]);
+
+        if ($validator->fails()) {
+            $request->session()->put('tagId', $tag->id); // set a session containing the pk of tag to show modal based on the selected record.
+            return back()->withErrors($validator, 'editTag')->withInput();
+        }
+
+        $tag->update([
+            'name' => $request->input('name'),
+            'slug' => \Str::slug($request->input('name'))
+        ]);
+
+        $request->session()->forget('tagId'); // remove the tagId in the session when form is successful or no errors.
+        return back()->with('success', 'Tag successfully updated.');
+    }
+
 
     public function delete(Tag $tag)
     {

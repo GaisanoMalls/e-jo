@@ -55,3 +55,17 @@ Service Departments
 </script>
 @endpush
 @endif
+
+@if ($errors->editServiceDepartment->any())
+{{-- Show edit modal based on the selected record/data --}}
+<input type="hidden" id="serviceDeptId" value="{{ session('serviceDepartmentId') }}">
+@push('modal-with-error')
+<script>
+    const serviceDeptId = document.getElementById('serviceDeptId');
+    $(function () {
+        $(`#editServiceDepartment${serviceDeptId.value}`).modal('show');
+    });
+
+</script>
+@endpush
+@endif

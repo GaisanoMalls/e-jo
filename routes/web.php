@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\LandingController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Staff\Agent\AgentTicketController;
 use App\Http\Controllers\Staff\SysAdmin\UpdatePasswordController;
 use App\Http\Controllers\User\FeedbackController;
@@ -8,7 +8,6 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Staff\Approver\ApproverDashboardController;
 use App\Http\Controllers\Staff\Approver\ApproverTicketsController;
 use App\Http\Controllers\Staff\DirectoryController;
-use App\Http\Controllers\Staff\AuthControllerStaff;
 use App\Http\Controllers\Staff\DashboardController;
 use App\Http\Controllers\Staff\SysAdmin\BUDepartmentController;
 use App\Http\Controllers\Staff\SysAdmin\TeamController;
@@ -27,7 +26,6 @@ use App\Http\Controllers\Staff\SysAdmin\RolesAndPermissionsController;
 
 use App\Http\Controllers\Staff\SysAdmin\TicketStatusController;
 use App\Http\Controllers\Staff\TicketController as StaffTicketController;
-use App\Http\Controllers\User\AuthControllerUser;
 use App\Http\Controllers\User\Dashboard as UserDashboardController;
 use App\Http\Controllers\User\TicketsController as UserTicketsController;
 use App\Http\Controllers\User\AccountController as UserAccountSettingsController;
@@ -37,29 +35,16 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', [LandingController::class, 'landingPage'])->name('login');
 Route::prefix('/forgot-password')->name('forgot_password.')->group(function () {
     Route::get('/', [ForgotPasswordController::class, 'index'])->name('index');
 });
 
 // * Auth routes
-Route::prefix('auth')->name('auth.')->group(function () {
-    // * Staffs
-    Route::prefix('staff')->name('staff.')->group(function () {
-        Route::controller(AuthControllerStaff::class)->group(function () {
-            Route::get('/', 'login')->name('login');
-            Route::post('/authenticate', 'authenticate')->name('authenticate_staff');
-            Route::post('/logout', 'logout')->name('logout_staff');
-        });
-    });
-
-    // * Users
-    Route::prefix('requester')->name('requester.')->group(function () {
-        Route::controller(AuthControllerUser::class)->group(function () {
-            Route::get('/', 'login')->name('login');
-            Route::post('/authenticate', 'authenticate')->name('authenticate');
-            Route::post('/logout', 'logout')->name('logout');
-        });
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/', 'login')->name('login');
+    Route::prefix('/auth')->name('auth.')->group(function () {
+        Route::post('/authenticate', 'authenticate')->name('authenticate');
+        Route::post('/logout', 'logout')->name('logout');
     });
 });
 
@@ -125,6 +110,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::controller(ServiceDepartmentController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::post('/store', 'store')->name('store');
+                    Route::put('/{serviceDepartment}/update', 'update')->name('update');
                     Route::delete('/{serviceDepartment}/delete', 'delete')->name('delete');
                 });
             });
@@ -132,6 +118,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::controller(TeamController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::post('/store', 'store')->name('store');
+                    Route::put('/{team}/update', 'update')->name('update');
                     Route::delete('{team}/delete', 'delete')->name('delete');
                 });
             });
@@ -156,7 +143,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                         Route::post('/store', 'store')->name('store');
                         Route::delete('/{approver}/delete', 'delete')->name('delete');
                         Route::put('/{approver}/update', 'update')->name('update');
-                        Route::get('/{approver}/edit-details', 'approverDetails')->name('details');
+                        Route::get('/{approver}/view-details', 'viewDetails')->name('view_details');
+                        Route::get('/{approver}/edit-details', 'editDetails')->name('edit_details');
 
                         // Axios endpoints
                         // (For create approver)
@@ -174,7 +162,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                         Route::post('/store', 'store')->name('store');
                         Route::delete('/{serviceDeptAdmin}/delete', 'delete')->name('delete');
                         Route::put('/{serviceDeptAdmin}/update', 'update')->name('update');
-                        Route::get('/{serviceDeptAdmin}/edit-details', 'serviceDeptAdminDetails')->name('details');
+                        Route::get('/{serviceDeptAdmin}/view-details', 'viewDetails')->name('view_details');
+                        Route::get('/{serviceDeptAdmin}/edit-details', 'editDetails')->name('edit_details');
 
                         // Axios endpoints
                         // For create service department admin
@@ -192,7 +181,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                         Route::post('/store', 'store')->name('store');
                         Route::delete('/{agent}/store', 'delete')->name('delete');
                         Route::put('/{agent}/update', 'update')->name('update');
-                        Route::get('/{agent}/edit-details', 'agentDetails')->name('details');
+                        Route::get('/{agent}/view-details', 'viewDetails')->name('view_details');
+                        Route::get('/{agent}/edit-details', 'editDetails')->name('edit_details');
 
                         // Axios endpoints
                         // For create agent
@@ -211,12 +201,13 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                     Route::controller(AccountUserController::class)->group(function () {
                         Route::post('/store', 'store')->name('store');
                         Route::put('/{user}/update', 'update')->name('update');
+                        Route::get('/{user}/view-details', 'viewDetails')->name('view_details');
+                        Route::get('/{user}/edit-details', 'editDetails')->name('edit_details');
 
                         // Endpoint for axios
                         // For create requester
                         Route::get('/{branch}/bu-departments', 'getBUDepartments');
                         // For edit requester
-                        Route::get('/{user}/edit-details', 'requesterDetails')->name('details');
                         Route::get('/edit/{branch}/bu-departments', 'getBUDepartments');
                         // Route::get('/assign/department/{department}/service-departments', 'getServiceDepartments');
                     });
@@ -255,10 +246,11 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 });
             });
 
-            Route::prefix('tags')->name('tags.')->group(function () {
+            Route::prefix('tag')->name('tag.')->group(function () {
                 Route::controller(TagController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::post('/store', 'store')->name('store');
+                    Route::put('/{tag}/update', 'update')->name('update');
                     Route::delete('/{tag}/delete', 'delete')->name('delete');
                 });
             });

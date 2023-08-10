@@ -14,7 +14,7 @@ SLA Plans
 @section('manage-content')
 <div class="row gap-4">
     <div class="sla__section">
-        @include('layouts.staff.system_admin.manage.sla.includes.modal.add_sla_modal')
+        @include('layouts.staff.system_admin.manage.sla.includes.modal.add_sla_modal_form')
         <div class="col-12 content__container mb-4">
             <div class="card card__rounded__and__no__border">
                 <div class="table__header">

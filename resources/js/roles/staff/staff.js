@@ -61,19 +61,4 @@ document.addEventListener('DOMContentLoaded', function () {
             statusColorSelect.value = this.value;
         });
     }
-
-
-    const selectAllBranches = document.querySelector('.select__all__branches');
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
-    let checkAll;
-
-    selectAllBranches.addEventListener('click', function () {
-        checkboxes.forEach((checkbox) => {
-            checkbox.checked = checkAll ? false : true;
-            this.textContent = checkAll ? "Select all" : "Unselect";
-            this.style.background = checkAll ? "transparent" : "#F2F2F2";
-        });
-        checkAll = !checkAll;
-    });
-
 });

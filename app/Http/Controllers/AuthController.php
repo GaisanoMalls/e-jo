@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Staff;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\AuthStaffRedirect;
+use App\Http\Traits\AuthRedirect;
 use App\Http\Traits\Logout;
 use App\Http\Traits\ValidateLoginCredentials;
-use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthControllerStaff extends Controller
+class AuthController extends Controller
 {
-    use Logout, AuthStaffRedirect, ValidateLoginCredentials;
+    use Logout, AuthRedirect, ValidateLoginCredentials;
 
     public function login()
     {
-        return $this->redirectAuthenticatedStaffWithRole() ?: view('layouts.auth.user_type.staff.staff_login_form');
+        return $this->redirectAuthenticatedWithRole() ?: view('layouts.auth.base');
     }
 
     public function authenticate(Request $request)
@@ -24,14 +22,8 @@ class AuthControllerStaff extends Controller
         $this->validateLoginCrendentials($request, 'email', 'password');
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'is_active' => true])) {
-
-            if (Auth::user()->role_id === Role::USER) {
-                Auth::logout();
-                return back()->with('error', 'The account is not recognized as a staff.');
-            }
-
             $request->session()->regenerate();
-            return $this->redirectAuthenticatedStaffWithRole();
+            return $this->redirectAuthenticatedWithRole();
         }
 
         return back()->onlyInput('email')->with('error', 'Invalid email or password. Please try again.');
@@ -39,6 +31,6 @@ class AuthControllerStaff extends Controller
 
     public function logout(Request $request)
     {
-        return self::doLogout($request);
+        return $this->doLogout($request);
     }
 }

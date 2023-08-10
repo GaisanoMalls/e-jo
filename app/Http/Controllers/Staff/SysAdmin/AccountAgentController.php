@@ -65,7 +65,16 @@ class AccountAgentController extends Controller
         }
     }
 
-    public function agentDetails(User $agent)
+    public function viewDetails(User $agent)
+    {
+        return view(
+            'layouts.staff.system_admin.manage.accounts.roles.details.agent_details',
+            compact('agent')
+        );
+    }
+
+
+    public function editDetails(User $agent)
     {
         $suffixes = $this->suffixes();
         $branches = $this->branches();

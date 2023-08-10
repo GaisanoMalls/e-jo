@@ -38,9 +38,12 @@
             </td>
             <td>
                 <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                    <a href="" class="btn action__button mt-0">
+                    @include('layouts.staff.system_admin.manage.teams.includes.modal.edit_team_modal_form')
+                    <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px" type="button"
+                        class="btn action__button" data-bs-toggle="modal" data-bs-target="#editTeam{{ $team->id }}"
+                        id="btnEdit">
                         <i class="bi bi-pencil"></i>
-                    </a>
+                    </button>
                     <form action="{{ route('staff.manage.team.delete', $team->id) }}" method="post">
                         @csrf
                         @method('DELETE')

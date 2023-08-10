@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Http\Traits\TimeStamps;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    use HasFactory;
+    use HasFactory, TimeStamps;
 
     protected $fillable = ['ticket_id', 'user_id', 'description'];
 
@@ -22,8 +23,8 @@ class Reply extends Model
         return $this->belongsTo(User::class);
     }
 
-     public function dateCreated()
+    public function dateCreated()
     {
-        return Carbon::parse($this->created_at)->format('M d, Y');
+        return $this->createdAt($this->created_at);
     }
 }

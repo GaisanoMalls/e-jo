@@ -27,7 +27,7 @@
                 </a>
             </li>
             <li>
-                <form action="{{ route('auth.staff.logout_staff') }}" method="post">
+                <form action="{{ route('auth.logout') }}" method="post">
                     @csrf
                     <button class="btn dropdown-item dropdown__menu__items" type="submit">
                         <div class="d-flex d-flex align-items-center my-1">

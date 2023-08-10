@@ -32,7 +32,7 @@
                                 <input type="text" name="color" class="form-control form__field" value=""
                                     id="statusColorHexVal">
                             </div>
-                            @error('name', 'storeTicketStatus')
+                            @error('color', 'storeTicketStatus')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 {{ $message }}

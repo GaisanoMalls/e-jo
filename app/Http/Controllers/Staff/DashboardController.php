@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    use AuthStaffRedirect;
-
     public function dashboard()
     {
         return view('layouts.staff.system_admin.dashboard');

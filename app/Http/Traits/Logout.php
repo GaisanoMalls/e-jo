@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 trait Logout
 {
-    public static function doLogout($request)
+    public function doLogout($request)
     {
         Auth::logout();
         $request->session()->invalidate();

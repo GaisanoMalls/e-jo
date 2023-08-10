@@ -35,12 +35,6 @@ class BUDepartmentController extends Controller
             'name' => [
                 'required',
                 'unique:departments,name',
-                'regex:/^[a-zA-Z\s]+$/u',
-                function ($attribute, $value, $fail) {
-                    if (preg_match('/[\'^£$%&*}{@#~?><>,|=_+¬-]/', $value)) {
-                        $fail('The name cannot contain special characters.');
-                    }
-                },
             ]
         ]);
 
@@ -82,7 +76,7 @@ class BUDepartmentController extends Controller
         ]);
 
         if ($validator->fails()) {
-            session()->put('buDepartmentId', $buDepartment->id); // set a session containing the pk of department to show modal based on the selected record.
+            $request->session()->put('buDepartmentId', $buDepartment->id); // set a session containing the pk of department to show modal based on the selected record.
             return back()->withErrors($validator, 'editBUDepartment')
                 ->withInput();
         }
@@ -97,11 +91,11 @@ class BUDepartmentController extends Controller
                 $buDepartment->branches()->sync($request->input('branch', []));
             });
 
-            session()->forget('buDepartmentId'); // remove the buDepartmentId in the session when form is successful or no errors.
+            $request->session()->forget('buDepartmentId'); // remove the buDepartmentId in the session when form is successful or no errors.
             return back()->with('success', 'BU/Department successfully updated.');
 
         } catch (\Exception $e) {
-            session()->put('buDepartmentId', $buDepartment->id); // set a session containing the pk of department to show modal based on the selected record.
+            $request->session()->put('buDepartmentId', $buDepartment->id); // set a session containing the pk of department to show modal based on the selected record.
             return back()->with('duplicate_name_error', "BU/Department name {$request->name} already exists.");
         }
     }

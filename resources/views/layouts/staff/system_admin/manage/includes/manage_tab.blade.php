@@ -65,8 +65,8 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('staff.manage.tags.index') }}" class="btn d-flex align-items-center border-0 settings__tab__button
-                {{ Route::is('staff.manage.tags.*') ? 'settings__active__tab' : '' }}">
+            <a href="{{ route('staff.manage.tag.index') }}" class="btn d-flex align-items-center border-0 settings__tab__button
+                {{ Route::is('staff.manage.tag.*') ? 'settings__active__tab' : '' }}">
                 <i class="bi bi-tags-fill settings__icon__active__tab"></i>
                 Tags
             </a>

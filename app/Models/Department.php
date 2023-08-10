@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
+use App\Http\Traits\TimeStamps;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Department extends Model
 {
-    use HasFactory;
+    use HasFactory, TimeStamps;
 
-    protected $guarded = [];
     protected $fillable = ['name', 'slug'];
 
     public function users()
@@ -30,7 +30,8 @@ class Department extends Model
 
     public function branches()
     {
-        return $this->belongsToMany(Branch::class, 'department_branch');
+        return $this->belongsToMany(Branch::class, 'department_branch')
+            ->withTimestamps();
     }
 
     public function getTeams()
@@ -65,15 +66,11 @@ class Department extends Model
 
     public function dateCreated()
     {
-        return Carbon::parse($this->created_at)->format('M d, Y');
+        return $this->createdAt($this->created_at);
     }
 
     public function dateUpdated()
     {
-        $created_at = Carbon::parse($this->created_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
-        $updated_at = Carbon::parse($this->updated_at)->isoFormat('MMM DD, YYYY HH:mm:ss');
-        return $updated_at === $created_at
-            ? "----"
-            : Carbon::parse($this->updated_at)->format('M d, Y @ h:i A');
+        return $this->updatedAt($this->created_at, $this->updated_at);
     }
 }

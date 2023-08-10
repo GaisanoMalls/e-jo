@@ -61,7 +61,8 @@
                                     @include('layouts.staff.system_admin.manage.accounts.includes.modal.confirm_delete_deptadmin_modal')
                                     <tr>
                                         <td>
-                                            <a href="">
+                                            <a
+                                                href="{{ route('staff.manage.user_account.service_department_admin.view_details', $serviceDepartmentAdmin->id) }}">
                                                 <div class="media d-flex align-items-center user__account__media">
                                                     <div class="flex-shrink-0">
                                                         @if ($serviceDepartmentAdmin->profile->picture)
@@ -74,13 +75,10 @@
                                                         </div>
                                                         @endif
                                                     </div>
-                                                    <div class="flex-grow-1 ms-3 w-100">
-                                                        <a href="" class="d-flex flex-column gap-1 w-100">
-                                                            <span class="user__name">{{
-                                                                $serviceDepartmentAdmin->profile->getFullName()
-                                                                }}</span>
-                                                            <small>{{ $serviceDepartmentAdmin->email }}</small>
-                                                        </a>
+                                                    <div class="d-flex flex-column gap-1 ms-3 w-100">
+                                                        <span class="user__name">{{
+                                                            $serviceDepartmentAdmin->profile->getFullName() }}</span>
+                                                        <small>{{ $serviceDepartmentAdmin->email }}</small>
                                                     </div>
                                                 </div>
                                             </a>
@@ -128,7 +126,7 @@
                                             <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                                                 <button data-tooltip="Edit" data-tooltip-position="top"
                                                     data-tooltip-font-size="11px"
-                                                    onclick="window.location.href='{{ route('staff.manage.user_account.service_department_admin.details', $serviceDepartmentAdmin->id) }}'"
+                                                    onclick="window.location.href='{{ route('staff.manage.user_account.service_department_admin.edit_details', $serviceDepartmentAdmin->id) }}'"
                                                     type="button" class="btn action__button">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>

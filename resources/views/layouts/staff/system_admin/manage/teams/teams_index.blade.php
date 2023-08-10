@@ -14,7 +14,7 @@ Teams
 @section('manage-content')
 <div class="row">
     <div class="team__section">
-        @include('layouts.staff.system_admin.manage.teams.includes.modal.team_add_form_modal')
+        @include('layouts.staff.system_admin.manage.teams.includes.modal.add_team_modal_form')
         <div class="col-12 content__container">
             <div class="card card__rounded__and__no__border">
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-1 table__header">
@@ -48,6 +48,20 @@ Teams
 <script>
     $(function () {
         $('#addNewTeamModal').modal('show');
+    });
+
+</script>
+@endpush
+@endif
+
+@if ($errors->editTeam->any() || session()->has('duplicate_name_error'))
+{{-- Show edit modal based on the selected record/data --}}
+<input type="hidden" id="teamId" value="{{ session('teamId') }}">
+@push('modal-with-error')
+<script>
+    const teamId = document.getElementById('teamId');
+    $(function () {
+        $(`#editTeam${teamId.value}`).modal('show');
     });
 
 </script>

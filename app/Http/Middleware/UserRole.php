@@ -19,6 +19,6 @@ class UserRole
      */
     public function handle(Request $request, Closure $next, ...$role)
     {
-        return self::activeAndHasRole($request, $next, $role);
+        return $this->activeAndHasRole($request, $next, $role);
     }
 }
