@@ -1,13 +1,10 @@
 <?php
 
-use App\Models\HelpTopic;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -15,11 +12,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('approvers', function (Blueprint $table) {
+        Schema::create('approval_levels', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'user_id')->constrained();
-            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained();
-            $table->integer('approver_level');
+            $table->smallInteger('value');
+            $table->string('description');
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('approvers');
+        Schema::dropIfExists('approval_levels');
     }
 };

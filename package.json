@@ -22,7 +22,6 @@
     },
     "dependencies": {
         "bootstrap-icons": "^1.10.5",
-        "boxicons": "^2.1.4",
-        "filepond": "^4.30.4"
+        "boxicons": "^2.1.4"
     }
 }

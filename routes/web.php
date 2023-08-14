@@ -1,35 +1,33 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Staff\Agent\AgentTicketController;
-use App\Http\Controllers\Staff\SysAdmin\UpdatePasswordController;
-use App\Http\Controllers\User\FeedbackController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\Staff\Agent\AgentTicketController;
 use App\Http\Controllers\Staff\Approver\ApproverDashboardController;
 use App\Http\Controllers\Staff\Approver\ApproverTicketsController;
-use App\Http\Controllers\Staff\DirectoryController;
 use App\Http\Controllers\Staff\DashboardController;
-use App\Http\Controllers\Staff\SysAdmin\BUDepartmentController;
-use App\Http\Controllers\Staff\SysAdmin\TeamController;
-use App\Http\Controllers\Staff\SysAdmin\SLAController;
-use App\Http\Controllers\Staff\SysAdmin\TagController;
-use App\Http\Controllers\Staff\SysAdmin\BranchController;
-use App\Http\Controllers\Staff\SysAdmin\AccountsController;
-use App\Http\Controllers\Staff\SysAdmin\HelpTopicsController;
-use App\Http\Controllers\Staff\SysAdmin\ServiceDepartmentController;
-use App\Http\Controllers\Staff\SysAdmin\AccountUserController;
-use App\Http\Controllers\Staff\SysAdmin\AnnouncementController;
+use App\Http\Controllers\Staff\DirectoryController;
 use App\Http\Controllers\Staff\SysAdmin\AccountAgentController;
 use App\Http\Controllers\Staff\SysAdmin\AccountApproverController;
+use App\Http\Controllers\Staff\SysAdmin\AccountsController;
 use App\Http\Controllers\Staff\SysAdmin\AccountServiceDeptAdminController;
+use App\Http\Controllers\Staff\SysAdmin\AccountUserController;
+use App\Http\Controllers\Staff\SysAdmin\AnnouncementController;
+use App\Http\Controllers\Staff\SysAdmin\BranchController;
+use App\Http\Controllers\Staff\SysAdmin\BUDepartmentController;
+use App\Http\Controllers\Staff\SysAdmin\HelpTopicsController;
 use App\Http\Controllers\Staff\SysAdmin\RolesAndPermissionsController;
-
+use App\Http\Controllers\Staff\SysAdmin\ServiceDepartmentController;
+use App\Http\Controllers\Staff\SysAdmin\SLAController;
+use App\Http\Controllers\Staff\SysAdmin\TagController;
+use App\Http\Controllers\Staff\SysAdmin\TeamController;
 use App\Http\Controllers\Staff\SysAdmin\TicketStatusController;
+use App\Http\Controllers\Staff\SysAdmin\UpdatePasswordController;
 use App\Http\Controllers\Staff\TicketController as StaffTicketController;
-use App\Http\Controllers\User\Dashboard as UserDashboardController;
-use App\Http\Controllers\User\TicketsController as UserTicketsController;
 use App\Http\Controllers\User\AccountController as UserAccountSettingsController;
-
+use App\Http\Controllers\User\Dashboard as UserDashboardController;
+use App\Http\Controllers\User\FeedbackController;
+use App\Http\Controllers\User\TicketsController as UserTicketsController;
 use App\Http\Controllers\UsersAccountController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;

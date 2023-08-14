@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Staff\Approver;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Approver\Tickets as ApproverTickets;
-use Illuminate\Http\Request;
 
 class ApproverDashboardController extends Controller
 {

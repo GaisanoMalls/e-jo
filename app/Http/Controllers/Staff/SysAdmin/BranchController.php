@@ -39,7 +39,7 @@ class BranchController extends Controller
     public function update(Request $request, Branch $branch)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'unique:branches,name']
+            'name' => ['required']
         ]);
 
         if ($validator->fails()) {

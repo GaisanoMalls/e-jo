@@ -105,7 +105,7 @@ Edit Approver
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="email" class="form-label form__field__label">Email</label>
-                                    <input type="text" name="email" class="form-control form__field" id="email"
+                                    <input type="email" name="email" class="form-control form__field" id="email"
                                         value="{{ $approver->email }}">
                                     @error('email', 'editApprover')
                                     <span class="error__message">

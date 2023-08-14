@@ -16,9 +16,11 @@ use App\Models\ServiceDepartment;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketFile;
+use App\Notifications\TicketCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -231,12 +233,16 @@ class TicketsController extends Controller
                         $ticket->fileAttachments()->save($ticketFile);
                     }
                 }
+
+                Notification::send(auth()->user(), new TicketCreated($ticket));
+
             });
 
             return back()->with('success', 'Ticket successfully created.');
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to send ticket. Please try again.');
+            dd($e->getMessage());
+            return back()->with('error', "Failed to send ticket. Please try again");
         }
     }
 

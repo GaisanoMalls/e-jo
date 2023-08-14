@@ -21,7 +21,7 @@
                     <hr class="dropdown-divider">
                 </li>
                 <li>
-                    <form action="{{ route('auth.staff.logout_staff') }}" method="post">
+                    <form action="{{ route('auth.logout') }}" method="post">
                         @csrf
                         <button type="submit" class="dropdown-item dropdown__item">Logout</button>
                 </li>

@@ -6,8 +6,6 @@ use App\Models\Branch;
 use App\Models\Department;
 use App\Models\ServiceDepartment;
 use App\Models\Suffix;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Auth;
 
 trait UserDetails
 {

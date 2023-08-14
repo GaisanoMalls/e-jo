@@ -11,15 +11,8 @@ class ApprovalLevel extends Model
 
     protected $fillable = ['value', 'description'];
 
-    public function helpTopicLevelApprovers()
+    public function approvers()
     {
-        return $this->hasMany(HelpTopicLevelApprover::class);
-    }
-
-    public function helpTopics()
-    {
-        return $this->belongsToMany(HelpTopic::class, 'help_topic_level_approvers', 'approval_level_id', 'help_topic_id')
-            ->using(HelpTopicLevelApprover::class)
-            ->withTimestamps();
+        return $this->belongsToMany(User::class)->where('role_id', Role::APPROVER);
     }
 }

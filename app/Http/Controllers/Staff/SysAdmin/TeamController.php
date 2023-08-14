@@ -10,10 +10,10 @@ use App\Models\Department;
 use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\Team;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class TeamController extends Controller
 {

@@ -81,6 +81,11 @@ class User extends Authenticatable
         return $this->belongsTo(Team::class);
     }
 
+    public function levels()
+    {
+        return $this->belongsToMany(Level::class, 'level_approver')->wherePivot('user_id', Role::APPROVER);
+    }
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
@@ -89,11 +94,6 @@ class User extends Authenticatable
     public function feedbacks()
     {
         return $this->hasMany(Feedback::class);
-    }
-
-    public function levels()
-    {
-        return $this->hasMany(Level::class);
     }
 
     /**
@@ -180,11 +180,6 @@ class User extends Authenticatable
     public function requesters()
     {
         return self::where('role_id', Role::USER)->get();
-    }
-
-    public function helpTopicLevelApprovers()
-    {
-        return $this->hasMany(HelpTopicLevelApprover::class);
     }
 
     public function helpTopics()

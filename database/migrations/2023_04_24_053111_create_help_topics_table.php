@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ApprovalLevel;
 use App\Models\Department;
 use App\Models\ServiceDepartment;
 use App\Models\ServiceLevelAgreement;
@@ -22,7 +23,6 @@ return new class extends Migration {
             $table->foreignIdFor(Team::class, 'team_id')->constrained()->cascadeOnDelete();
             $table->foreignIdFor(ServiceLevelAgreement::class, 'sla_id');
             $table->string('name');
-            $table->integer('level_of_approver')->nullable();
             $table->string('slug');
             $table->timestamps();
         });

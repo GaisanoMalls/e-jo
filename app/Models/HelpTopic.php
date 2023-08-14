@@ -16,7 +16,6 @@ class HelpTopic extends Model
         'team_id',
         'sla_id',
         'name',
-        'level_of_approver',
         'slug'
     ];
 
@@ -45,23 +44,9 @@ class HelpTopic extends Model
         return $this->hasMany(Ticket::class);
     }
 
-    public function helpTopicLevelApprovers()
+    public function levels()
     {
-        return $this->hasMany(HelpTopicLevelApprover::class);
-    }
-
-    public function approvalLevels()
-    {
-        return $this->belongsToMany(ApprovalLevel::class, 'help_topic_level_approvers', 'help_topic_id', 'approval_level_id')
-            ->using(HelpTopicLevelApprover::class)
-            ->withTimestamps();
-    }
-
-    public function approvers()
-    {
-        return $this->belongsToMany(User::class, 'help_topic_level_approvers', 'help_topic_id', 'approver_id')
-            ->using(HelpTopicLevelApprover::class)
-            ->withTimestamps();
+        return $this->belongsToMany(Level::class, 'help_topic_level');
     }
 
     public function dateCreated()

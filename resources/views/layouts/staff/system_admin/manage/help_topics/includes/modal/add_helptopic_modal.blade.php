@@ -105,14 +105,13 @@
                                             data-silent-initial-value-set="true">
                                             <option value="" selected disabled>Choose level of approver</option>
                                             @foreach ($levelOfApprovals as $level)
-                                            <option value="{{ $level->value }}" {{ old('level_of_approver')==$level->id
-                                                ?
-                                                'selected' : '' }}>
+                                            <option value="{{ $level->id }}" {{ old('level_of_approval')==$level->id
+                                                ? 'selected' : '' }}>
                                                 {{ $level->description }}
                                             </option>
                                             @endforeach
                                         </select>
-                                        @error('level_of_approver', 'storeHelpTopic')
+                                        @error('level_of_approval', 'storeHelpTopic')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}

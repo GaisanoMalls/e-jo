@@ -49,7 +49,7 @@ class ServiceDepartmentController extends Controller
     public function update(Request $request, ServiceDepartment $serviceDepartment)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'unique:service_departments,name']
+            'name' => ['required']
         ]);
 
         if ($validator->fails()) {

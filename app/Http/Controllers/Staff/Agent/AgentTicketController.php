@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Staff\Agent;
 use App\Http\Controllers\Controller;
 use App\Models\Status;
 use App\Models\Ticket;
-use Illuminate\Http\Request;
 
 class AgentTicketController extends Controller
 {

@@ -6,9 +6,6 @@ use App\Http\Traits\Agent\Tickets as AgentTickets;
 use App\Http\Traits\ServiceDepartmentAdmin\Tickets as ServiceDepartmentAdminTickets;
 use App\Http\Traits\SysAdmin\Tickets as SysAdminTickets;
 use App\Models\Role;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Hash;
 
 trait TicketsByStaffWithSameTemplates
 {

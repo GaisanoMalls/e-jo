@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class DirectoryController extends Controller
 {

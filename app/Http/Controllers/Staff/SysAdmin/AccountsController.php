@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\UserDetails;
 use App\Models\Branch;
-use App\Models\Department;
+use App\Models\Level;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class AccountsController extends Controller
 {
@@ -31,7 +30,7 @@ class AccountsController extends Controller
                 'agents',
                 'users',
                 'roles',
-                'branches'
+                'branches',
             ])
         );
     }

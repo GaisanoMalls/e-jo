@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             ProfileSeeder::class,
             SuffixesSeeder::class,
             ApprovalLevelSeeder::class,
+            LevelSeeder::class,
         ]);
     }
 }

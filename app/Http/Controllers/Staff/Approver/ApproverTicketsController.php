@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Staff\Approver;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\Approver\CountTicketsForTabUse;
 use App\Http\Traits\Approver\Tickets as ApproverTickets;
 use App\Models\ApprovalStatus;
 use App\Models\Clarification;
@@ -13,9 +12,9 @@ use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
 
 class ApproverTicketsController extends Controller
 {

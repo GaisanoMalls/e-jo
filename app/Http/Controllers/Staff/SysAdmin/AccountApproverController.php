@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AccountApproverController extends Controller
 {
@@ -27,7 +28,7 @@ class AccountApproverController extends Controller
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],
             'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => ['required', 'max:80'],
+            'email' => ['required', 'max:80', 'email', 'unique:users,email'],
         ]);
 
         if ($validator->fails())
@@ -35,7 +36,7 @@ class AccountApproverController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
-                $user = User::create([
+                $approver = User::create([
                     'branch_id' => $request->input('branch'),
                     'department_id' => $request->input('bu_department'),
                     'service_department_id' => $request->input('service_department'),
@@ -45,7 +46,7 @@ class AccountApproverController extends Controller
                 ]);
 
                 Profile::create([
-                    'user_id' => $user->id,
+                    'user_id' => $approver->id,
                     'first_name' => $request->input('first_name'),
                     'middle_name' => $request->input('middle_name'),
                     'last_name' => $request->input('last_name'),
@@ -62,6 +63,7 @@ class AccountApproverController extends Controller
             return back()->with('success', 'You have successfully created a new approver.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to save a new approver.');
         }
     }
@@ -98,7 +100,12 @@ class AccountApproverController extends Controller
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],
             'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => ['required', 'max:80'],
+            'email' => [
+                'required',
+                'max:80',
+                'email',
+                Rule::unique('users')->ignore($approver)
+            ],
         ]);
 
         if ($validator->fails())

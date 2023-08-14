@@ -1,11 +1,12 @@
 <?php
 
+use App\Models\Level;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,10 +14,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('approval_levels', function (Blueprint $table) {
+        Schema::create('level_approver', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('value');
-            $table->string('description');
+            $table->foreignIdFor(Level::class, 'level_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('approval_levels');
+        Schema::dropIfExists('level_approver');
     }
 };

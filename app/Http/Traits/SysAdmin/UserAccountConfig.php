@@ -3,7 +3,6 @@
 namespace App\Http\Traits\SysAdmin;
 
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 trait UserAccountConfig
 {

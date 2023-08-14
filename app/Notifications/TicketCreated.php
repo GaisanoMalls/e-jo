@@ -8,11 +8,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TicketCreatedNotification extends Notification
+class TicketCreated extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    private $ticket;
+    public $ticket;
     /**
      * Create a new notification instance.
      *
@@ -31,7 +31,7 @@ class TicketCreatedNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -43,9 +43,10 @@ class TicketCreatedNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+            ->from($this->ticket->user->email)
+            ->greeting('New Ticket Created')
+            ->line("{$this->ticket->user->profile->getFullName()} has created a ticket.")
+            ->action("View Ticket: {$this->ticket->ticket_number}", url('/'));
     }
 
     /**
@@ -57,9 +58,9 @@ class TicketCreatedNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'ticket_id' => $this->ticket->id,
+            'requester' => $this->ticket->user->profile->getFullName(),
+            'ticket_number' => $this->ticket->ticket_number,
             'subject' => $this->ticket->subject,
-            'description' => $this->ticket->description
         ];
     }
 }

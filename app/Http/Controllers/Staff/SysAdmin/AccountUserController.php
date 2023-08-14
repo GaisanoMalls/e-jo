@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AccountUserController extends Controller
 {
@@ -27,7 +28,7 @@ class AccountUserController extends Controller
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],
             'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => ['required', 'max:80']
+            'email' => ['required', 'max:80', 'email']
         ]);
 
         if ($validator->fails())
@@ -97,7 +98,12 @@ class AccountUserController extends Controller
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],
             'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => ['required', 'max:80']
+            'email' => [
+                'required',
+                'max:80',
+                'email',
+                Rule::unique('users')->ignore($user)
+            ]
         ]);
 
         if ($validator->fails())
