@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SysAdmin\Manage\Account\StoreUserRequest;
+use App\Http\Requests\SysAdmin\Manage\Account\UpdateUserRequest;
 use App\Http\Traits\SlugGenerator;
 use App\Http\Traits\UserDetails;
 use App\Models\Branch;
@@ -10,46 +12,30 @@ use App\Models\Department;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class AccountUserController extends Controller
 {
     use SlugGenerator, UserDetails;
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'department' => ['required'],
-            'branch' => ['required'],
-            'first_name' => ['required', 'min:2', 'max:100'],
-            'middle_name' => ['nullable', 'min:2', 'max:100'],
-            'last_name' => ['required', 'min:2', 'max:100'],
-            'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => ['required', 'max:80', 'email']
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeUser')->withInput();
-
         try {
             DB::transaction(function () use ($request) {
                 $user = User::create([
-                    'department_id' => (int) $request->input('department'),
-                    'branch_id' => (int) $request->input('branch'),
-                    'role_id' => (int) Role::USER,
-                    'email' => $request->input('email'),
-                    'password' => \Hash::make('user')
+                    'department_id' => $request->department,
+                    'branch_id' => $request->branch,
+                    'role_id' => Role::USER,
+                    'email' => $request->email,
+                    'password' => \Hash::make('requester')
                 ]);
 
                 Profile::create([
                     'user_id' => $user->id,
-                    'first_name' => $request->input('first_name'),
-                    'middle_name' => $request->input('middle_name'),
-                    'last_name' => $request->input('last_name'),
-                    'suffix' => $request->input('suffix'),
+                    'first_name' => $request->first_name,
+                    'middle_name' => $request->middle_name,
+                    'last_name' => $request->last_name,
+                    'suffix' => $request->suffix,
                     'slug' => $this->slugify(implode(" ", [
                         $request->first_name,
                         $request->middle_name,
@@ -89,39 +75,21 @@ class AccountUserController extends Controller
         );
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $validator = Validator::make($request->all(), [
-            'bu_department' => ['required'],
-            'branch' => ['required'],
-            'first_name' => ['required', 'min:2', 'max:100'],
-            'middle_name' => ['nullable', 'min:2', 'max:100'],
-            'last_name' => ['required', 'min:2', 'max:100'],
-            'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => [
-                'required',
-                'max:80',
-                'email',
-                Rule::unique('users')->ignore($user)
-            ]
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'editUser')->withInput();
-
         try {
             DB::transaction(function () use ($user, $request) {
                 $user->update([
-                    'branch_id' => $request->input('branch'),
-                    'department_id' => $request->input('bu_department'),
-                    'email' => $request->input('email')
+                    'branch_id' => $request->branch,
+                    'department_id' => $request->bu_department,
+                    'email' => $request->email
                 ]);
 
                 $user->profile()->update([
-                    'first_name' => $request->input('first_name'),
-                    'middle_name' => $request->input('middle_name'),
-                    'last_name' => $request->input('last_name'),
-                    'suffix' => $request->input('suffix'),
+                    'first_name' => $request->first_name,
+                    'middle_name' => $request->middle_name,
+                    'last_name' => $request->last_name,
+                    'suffix' => $request->suffix,
                     'slug' => $this->slugify(implode(" ", [
                         $request->first_name,
                         $request->middle_name,

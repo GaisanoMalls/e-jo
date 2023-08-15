@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\UserDetails;
 use App\Models\Branch;
-use App\Models\Level;
 use App\Models\Role;
 use App\Models\User;
 

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SysAdmin\Manage\Team\StoreTeamRequest;
 use App\Http\Traits\MultiSelect;
 use App\Http\Traits\SlugGenerator;
 use App\Models\Branch;
-use App\Models\Department;
 use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\Team;
@@ -42,34 +42,14 @@ class TeamController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(StoreTeamRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'service_department' => ['required'],
-            'name' => [
-                'required',
-                'unique:teams,name',
-                function ($attribute, $value, $fail) {
-                    $departments = Department::pluck('name')->toArray();
-
-                    if (in_array($value, $departments)) {
-                        $fail("The team name cannot be the same as any of the department names.");
-                    }
-                }
-            ]
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator, 'storeTeam')
-                ->withInput();
-        }
-
-        if ($request->input('branches')[0] === null) {
+        if ($request->branches[0] === null) {
             return back()->with('empty_branch', 'Branch is required.')
                 ->withInput();
         }
 
-        $selectedBranches = $this->getSelectedValue($request->input('branches'));
+        $selectedBranches = $this->getSelectedValue($request->branches);
         $existingBranches = Branch::whereIn('id', $selectedBranches)->pluck('id');
 
         if (count($existingBranches) !== count($selectedBranches)) {
@@ -79,9 +59,9 @@ class TeamController extends Controller
 
         DB::transaction(function () use ($request, $existingBranches) {
             $team = Team::create([
-                'service_department_id' => $request->input('service_department'),
-                'name' => $request['name'],
-                'slug' => $this->slugify($request->input('name'))
+                'service_department_id' => $request->service_department,
+                'name' => $request->name,
+                'slug' => $this->slugify($request->name)
             ]);
 
             $team->branches()->attach($existingBranches);
@@ -107,12 +87,12 @@ class TeamController extends Controller
         try {
             DB::transaction(function () use ($request, $team) {
                 $team->update([
-                    'service_department_id' => $request->input('service_department'),
-                    'name' => $request->input('name'),
-                    'slug' => Str::slug($request->input('name'))
+                    'service_department_id' => $request->service_department,
+                    'name' => $request->name,
+                    'slug' => Str::slug($request->name)
                 ]);
 
-                $team->branches()->sync($request->input('branch', []));
+                $team->branches()->sync($request->branch);
             });
 
             $request->session()->forget('teamId'); // remove the buDepartmentId in the session when form is successful or no errors.

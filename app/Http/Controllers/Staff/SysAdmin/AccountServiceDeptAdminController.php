@@ -3,54 +3,39 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SysAdmin\Manage\Account\StoreServiceDeptAdminRequest;
+use App\Http\Requests\SysAdmin\Manage\Account\UpdateServiceDeptAdminRequest;
 use App\Http\Traits\SlugGenerator;
 use App\Http\Traits\UserDetails;
 use App\Models\Branch;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class AccountServiceDeptAdminController extends Controller
 {
     use SlugGenerator, UserDetails;
 
-    public function store(Request $request)
+    public function store(StoreServiceDeptAdminRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'branch' => ['required'],
-            'bu_department' => ['required'],
-            'service_department' => ['required'],
-            'first_name' => ['required', 'min:2', 'max:100'],
-            'middle_name' => ['nullable', 'min:2', 'max:100'],
-            'last_name' => ['required', 'min:2', 'max:100'],
-            'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => ['required', 'max:80', 'email', 'unique:users,email']
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeServiceDeptAdmin')->withInput();
-
         try {
             DB::transaction(function () use ($request) {
                 $user = User::create([
-                    'branch_id' => $request->input('branch'),
-                    'department_id' => $request->input('bu_department'),
-                    'service_department_id' => $request->input('service_department'),
+                    'branch_id' => $request->branch,
+                    'department_id' => $request->bu_department,
+                    'service_department_id' => $request->service_department,
                     'role_id' => Role::SERVICE_DEPARTMENT_ADMIN,
-                    'email' => $request->input('email'),
+                    'email' => $request->email,
                     'password' => \Hash::make('departmentadmin')
                 ]);
 
                 Profile::create([
                     'user_id' => $user->id,
-                    'first_name' => $request->input('first_name'),
-                    'middle_name' => $request->input('middle_name'),
-                    'last_name' => $request->input('last_name'),
-                    'suffix' => $request->input('suffix'),
+                    'first_name' => $request->first_name,
+                    'middle_name' => $request->middle_name,
+                    'last_name' => $request->last_name,
+                    'suffix' => $request->suffix,
                     'slug' => $this->slugify(implode(" ", [
                         $request->first_name,
                         $request->middle_name,
@@ -92,41 +77,22 @@ class AccountServiceDeptAdminController extends Controller
         );
     }
 
-    public function update(Request $request, User $serviceDeptAdmin)
+    public function update(UpdateServiceDeptAdminRequest $request, User $serviceDeptAdmin)
     {
-        $validator = Validator::make($request->all(), [
-            'branch' => ['required'],
-            'bu_department' => ['required'],
-            'service_department' => ['required'],
-            'first_name' => ['required', 'min:2', 'max:100'],
-            'middle_name' => ['nullable', 'min:2', 'max:100'],
-            'last_name' => ['required', 'min:2', 'max:100'],
-            'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => [
-                'required',
-                'max:80',
-                'email',
-                Rule::unique('users')->ignore($serviceDeptAdmin)
-            ]
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'editServiceDeptAdmin')->withInput();
-
         try {
             DB::transaction(function () use ($serviceDeptAdmin, $request) {
                 $serviceDeptAdmin->update([
-                    'branch_id' => $request->input('branch'),
-                    'department_id' => $request->input('bu_department'),
-                    'service_department_id' => $request->input('service_department'),
-                    'email' => $request->input('email')
+                    'branch_id' => $request->branch,
+                    'department_id' => $request->bu_department,
+                    'service_department_id' => $request->service_department,
+                    'email' => $request->email
                 ]);
 
                 $serviceDeptAdmin->profile()->update([
-                    'first_name' => $request->input('first_name'),
-                    'middle_name' => $request->input('middle_name'),
-                    'last_name' => $request->input('last_name'),
-                    'suffix' => $request->input('suffix'),
+                    'first_name' => $request->first_name,
+                    'middle_name' => $request->middle_name,
+                    'last_name' => $request->last_name,
+                    'suffix' => $request->suffix,
                     'slug' => $this->slugify(implode(" ", [
                         $request->first_name,
                         $request->middle_name,

@@ -3,58 +3,42 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SysAdmin\Manage\Account\StoreAgenRequest;
+use App\Http\Requests\SysAdmin\Manage\Account\UpdateAgenRequest;
 use App\Http\Traits\SlugGenerator;
 use App\Http\Traits\UserDetails;
 use App\Models\Branch;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class AccountAgentController extends Controller
 {
     use SlugGenerator, UserDetails;
 
-    public function store(Request $request)
+    public function store(StoreAgenRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'branch' => ['required'],
-            'bu_department' => ['required'],
-            'team' => ['required'],
-            'service_department' => ['required'],
-            'first_name' => ['required', 'min:2', 'max:100'],
-            'middle_name' => ['nullable', 'min:2', 'max:100'],
-            'last_name' => ['required', 'min:2', 'max:100'],
-            'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => ['required', 'max:80', 'email', 'unique:users,email']
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeAgent')->withInput();
-
         try {
             DB::transaction(function () use ($request) {
                 $user = User::create([
-                    'branch_id' => $request['branch'],
-                    'department_id' => $request['bu_department'],
-                    'team_id' => $request->input('team'),
-                    'service_department_id' => $request->input('service_department'),
+                    'branch_id' => $request->branch,
+                    'department_id' => $request->bu_department,
+                    'team_id' => $request->team,
+                    'service_department_id' => $request->service_department,
                     'role_id' => Role::AGENT,
-                    'email' => $request['email'],
+                    'email' => $request->email,
                     'password' => \Hash::make('agent'),
                 ]);
 
-                $fullname = $request['first_name'] . $request['middl_name'] ?? "" . $request['last_name'];
+                $fullname = $request->first_name . $request->middl_name ?? "" . $request->last_name;
 
                 Profile::create([
                     'user_id' => $user->id,
-                    'first_name' => $request['first_name'],
-                    'middle_name' => $request['middle_name'],
-                    'last_name' => $request['last_name'],
-                    'suffix' => $request['suffix'],
+                    'first_name' => $request->first_name,
+                    'middle_name' => $request->middle_name,
+                    'last_name' => $request->last_name,
+                    'suffix' => $request->suffix,
                     'slug' => $this->slugify($fullname)
                 ]);
             });
@@ -74,7 +58,6 @@ class AccountAgentController extends Controller
         );
     }
 
-
     public function editDetails(User $agent)
     {
         $suffixes = $this->suffixes();
@@ -92,42 +75,22 @@ class AccountAgentController extends Controller
         );
     }
 
-    public function update(Request $request, User $agent)
+    public function update(UpdateAgenRequest $request, User $agent)
     {
-        $validator = Validator::make($request->all(), [
-            'branch' => ['required'],
-            'bu_department' => ['required'],
-            'team' => ['required'],
-            'service_department' => ['required'],
-            'first_name' => ['required', 'min:2', 'max:100'],
-            'middle_name' => ['nullable', 'min:2', 'max:100'],
-            'last_name' => ['required', 'min:2', 'max:100'],
-            'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => [
-                'required',
-                'max:80',
-                'email',
-                Rule::unique('users')->ignore($agent)
-            ]
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'editAgent')->withInput();
-
         try {
             DB::transaction(function () use ($agent, $request) {
                 $agent->update([
-                    'branch_id' => $request->input('branch'),
-                    'department_id' => $request->input('bu_department'),
-                    'service_department_id' => $request->input('service_department'),
-                    'email' => $request->input('email')
+                    'branch_id' => $request->branch,
+                    'department_id' => $request->bu_department,
+                    'service_department_id' => $request->service_department,
+                    'email' => $request->email
                 ]);
 
                 $agent->profile()->update([
-                    'first_name' => $request->input('first_name'),
-                    'middle_name' => $request->input('middle_name'),
-                    'last_name' => $request->input('last_name'),
-                    'suffix' => $request->input('suffix'),
+                    'first_name' => $request->first_name,
+                    'middle_name' => $request->middle_name,
+                    'last_name' => $request->last_name,
+                    'suffix' => $request->suffix,
                     'slug' => $this->slugify(implode(" ", [
                         $request->first_name,
                         $request->middle_name,
