@@ -42,7 +42,7 @@ Edit Requester
                                         name</label>
                                     <input type="text" name="first_name" class="form-control form__field"
                                         id="first_name" value="{{ $user->profile->first_name }}">
-                                    @error('first_name', 'editUser')
+                                    @error('first_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -55,7 +55,7 @@ Edit Requester
                                     <label for="middle_name" class="form-label form__field__label">Middle name</label>
                                     <input type="text" name="middle_name" class="form-control form__field"
                                         id="middle_name" value="{{ $user->profile->middle_name }}">
-                                    @error('middle_name', 'editUser')
+                                    @error('middle_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -68,7 +68,7 @@ Edit Requester
                                     <label for="last_name" class="form-label form__field__label">Last name</label>
                                     <input type="text" name="last_name" class="form-control form__field" id="last_name"
                                         value="{{ $user->profile->last_name }}">
-                                    @error('last_name', 'editUser')
+                                    @error('last_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -89,7 +89,7 @@ Edit Requester
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('suffix', 'editUser')
+                                    @error('suffix')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -107,7 +107,7 @@ Edit Requester
                                     <label for="email" class="form-label form__field__label">Email</label>
                                     <input type="email" name="email" class="form-control form__field" id="email"
                                         value="{{ $user->email }}">
-                                    @error('email', 'editUser')
+                                    @error('email')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -142,7 +142,7 @@ Edit Requester
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('branch', 'editUser')
+                                    @error('branch')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -164,7 +164,7 @@ Edit Requester
                                     <select name="bu_department" data-search="true" data-silent-initial-value-set="true"
                                         id="editUserBUDepartmentDropdown">
                                     </select>
-                                    @error('bu_department', 'editUser')
+                                    @error('bu_department')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}

@@ -12,7 +12,7 @@ use App\Http\Controllers\Staff\SysAdmin\AccountApproverController;
 use App\Http\Controllers\Staff\SysAdmin\AccountsController;
 use App\Http\Controllers\Staff\SysAdmin\AccountServiceDeptAdminController;
 use App\Http\Controllers\Staff\SysAdmin\AccountUserController;
-use App\Http\Controllers\Staff\SysAdmin\AnnouncementController;
+use App\Http\Controllers\Staff\ServiceDeptAdmin\AnnouncementController;
 use App\Http\Controllers\Staff\SysAdmin\BranchController;
 use App\Http\Controllers\Staff\SysAdmin\BUDepartmentController;
 use App\Http\Controllers\Staff\SysAdmin\HelpTopicsController;

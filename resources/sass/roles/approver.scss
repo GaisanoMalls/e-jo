@@ -194,6 +194,19 @@ $color-1: #d32839;
     }
 }
 
+.dashboard__card {
+    transition: all 0.3s;
+
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.02);
+    }
+}
+
+.custom__card {
+    margin-bottom: 20px;
+}
+
 .error__message {
     @include generic.error-message;
 }

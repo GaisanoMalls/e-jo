@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SysAdmin\Manage\Statuses\StoreStatusRequest;
 use App\Models\Status;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class TicketStatusController extends Controller
 {
@@ -15,17 +14,13 @@ class TicketStatusController extends Controller
         return view('layouts.staff.system_admin.manage.ticket_statuses.status_index', compact('statuses'));
     }
 
-    public function store(Request $request, Status $status)
+    public function store(StoreStatusRequest $request, Status $status)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'unique:statuses,name'],
-            'color' => ['required', 'unique:statuses,color']
+        $status->create([
+            'name' => $request->name,
+            'color' => $request->color,
+            'slug' => \Str::slug($request->name)
         ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeTicketStatus')->withInput();
-
-        $status->create($request->all());
 
         return back()->with('success', 'A new ticket status is created successfully.');
     }

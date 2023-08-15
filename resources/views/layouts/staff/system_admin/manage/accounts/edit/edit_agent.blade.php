@@ -42,7 +42,7 @@ Edit Agent
                                         name</label>
                                     <input type="text" name="first_name" class="form-control form__field"
                                         id="first_name" value="{{ $agent->profile->first_name }}">
-                                    @error('first_name', 'editAgent')
+                                    @error('first_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -55,7 +55,7 @@ Edit Agent
                                     <label for="middle_name" class="form-label form__field__label">Middle name</label>
                                     <input type="text" name="middle_name" class="form-control form__field"
                                         id="middle_name" value="{{ $agent->profile->middle_name }}">
-                                    @error('middle_name', 'editAgent')
+                                    @error('middle_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -68,7 +68,7 @@ Edit Agent
                                     <label for="last_name" class="form-label form__field__label">Last name</label>
                                     <input type="text" name="last_name" class="form-control form__field" id="last_name"
                                         value="{{ $agent->profile->last_name }}">
-                                    @error('last_name', 'editAgent')
+                                    @error('last_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -89,7 +89,7 @@ Edit Agent
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('suffix', 'editAgent')
+                                    @error('suffix')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -107,7 +107,7 @@ Edit Agent
                                     <label for="email" class="form-label form__field__label">Email</label>
                                     <input type="email" name="email" class="form-control form__field" id="email"
                                         value="{{ $agent->email }}">
-                                    @error('email', 'editAgent')
+                                    @error('email')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -143,7 +143,7 @@ Edit Agent
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('branch', 'editAgent')
+                                    @error('branch')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -165,7 +165,7 @@ Edit Agent
                                     <select name="bu_department" data-search="true" data-silent-initial-value-set="true"
                                         id="editAgentBUDepartmentDropdown">
                                     </select>
-                                    @error('bu_department', 'editAgent')
+                                    @error('bu_department')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -186,7 +186,7 @@ Edit Agent
                                     <select name="team" data-search="true" data-silent-initial-value-set="true"
                                         id="editAgentTeamsDropdown">
                                     </select>
-                                    @error('team', 'editAgent')
+                                    @error('team')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\AuthUserAccount;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class UsersAccountController extends Controller

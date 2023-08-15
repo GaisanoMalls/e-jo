@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SysAdmin\Manage\ServiceDepartment\StoreServiceDepartmentRequest;
 use App\Models\Department;
 use App\Models\ServiceDepartment;
 use Illuminate\Http\Request;
@@ -25,22 +26,12 @@ class ServiceDepartmentController extends Controller
         );
     }
 
-    public function store(Request $request, ServiceDepartment $serviceDepartment)
+    public function store(StoreServiceDepartmentRequest $request, ServiceDepartment $serviceDepartment)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => [
-                'required',
-                'unique:service_departments,name',
-            ]
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeServiceDepartment')->withInput();
-
         $serviceDepartment->create([
-            'department_id' => $request->input('bu_department'),
-            'name' => $request->input('name'),
-            'slug' => Str::slug($request['name'])
+            'department_id' => $request->bu_department,
+            'name' => $request->name,
+            'slug' => Str::slug($request->name)
         ]);
 
         return back()->with('success', 'Department successfully added.');
@@ -48,9 +39,7 @@ class ServiceDepartmentController extends Controller
 
     public function update(Request $request, ServiceDepartment $serviceDepartment)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required']
-        ]);
+        $validator = Validator::make($request->all(), ['name' => ['required']]);
 
         if ($validator->fails()) {
             $request->session()->put('serviceDepartmentId', $serviceDepartment->id); // set a session containing the pk of service department to show modal based on the selected record.
@@ -58,12 +47,16 @@ class ServiceDepartmentController extends Controller
                 ->withInput();
         }
 
-        $serviceDepartment->update([
-            'name' => $request->input('name')
-        ]);
+        try {
+            $serviceDepartment->update(['name' => $request->name]);
 
-        $request->session()->forget('serviceDepartmentId'); // remove the serviceDepartmentId in the session when form is successful or no errors.
-        return back()->with('success', 'Service department successfully updated.');
+            $request->session()->forget('serviceDepartmentId'); // remove the serviceDepartmentId in the session when form is successful or no errors.
+            return back()->with('success', 'Service department successfully updated.');
+
+        } catch (\Exception $e) {
+            $request->session()->put('serviceDepartmentId', $serviceDepartment->id); // set a session containing the pk of service department to show modal based on the selected record.
+            return back()->with('duplicate_name_error', "Service department name {$request->name} already exists.");
+        }
     }
 
     public function delete(ServiceDepartment $serviceDepartment)

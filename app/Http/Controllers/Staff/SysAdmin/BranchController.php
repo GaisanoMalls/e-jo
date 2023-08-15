@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SysAdmin\Manage\Branch\StoreBranchRequest;
 use App\Http\Traits\SlugGenerator;
 use App\Models\Branch;
 use Illuminate\Http\Request;
@@ -19,18 +20,11 @@ class BranchController extends Controller
         return view('layouts.staff.system_admin.manage.branches.branch_index', compact('branches'));
     }
 
-    public function store(Request $request, Branch $branch)
+    public function store(StoreBranchRequest $request, Branch $branch)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'unique:branches,name']
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeBranch')->withInput();
-
         $branch->create([
-            'name' => $request->input('name'),
-            'slug' => Str::slug($request->input('name'))
+            'name' => $request->name,
+            'slug' => Str::slug($request->name)
         ]);
 
         return back()->with('success', 'Branch successfully created.');
@@ -38,22 +32,26 @@ class BranchController extends Controller
 
     public function update(Request $request, Branch $branch)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required']
-        ]);
+        $validator = Validator::make($request->all(), ['name' => ['required']]);
 
         if ($validator->fails()) {
             $request->session()->put('branchId', $branch->id); // set a session containing the pk of branch to show modal based on the selected record.
             return back()->withErrors($validator, 'editBranch')->withInput();
         }
 
-        $branch->update([
-            'name' => $request->input('name'),
-            'slug' => Str::slug($request->input('name'))
-        ]);
+        try {
+            $branch->update([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name)
+            ]);
 
-        $request->session()->forget('branchId'); // remove the branchId in the session when form is successful or no errors.
-        return back()->with('success', 'Branch successfully udpated.');
+            $request->session()->forget('branchId'); // remove the branchId in the session when form is successful or no errors.
+            return back()->with('success', 'Branch successfully udpated.');
+
+        } catch (\Exception $e) {
+            $request->session()->put('branchId', $branch->id); // set a session containing the pk of branch to show modal based on the selected record.
+            return back()->with('duplicate_name_error', "Branch name {$request->name} already exists.");
+        }
     }
 
     public function delete(Branch $branch)

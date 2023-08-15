@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SysAdmin\Manage\Tag\StoreTagRequest;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -20,22 +21,14 @@ class TagController extends Controller
         );
     }
 
-    public function store(Request $request, Tag $tag)
+    public function store(StoreTagRequest $request, Tag $tag)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'unique:tags,name'],
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator, 'storeTag')->withInput();
-        }
-
         $tag->create([
-            'name' => $request->input('name'),
-            'slug' => \Str::slug($request->input('name'))
+            'name' => $request->name,
+            'slug' => \Str::slug($request->name)
         ]);
 
-        return back()->with('success', 'A new tag is successfully created.');
+        return back()->with('success', 'Tag successfully created.');
     }
 
     public function update(Request $request, Tag $tag)
@@ -50,8 +43,8 @@ class TagController extends Controller
         }
 
         $tag->update([
-            'name' => $request->input('name'),
-            'slug' => \Str::slug($request->input('name'))
+            'name' => $request->name,
+            'slug' => \Str::slug($request->name)
         ]);
 
         $request->session()->forget('tagId'); // remove the tagId in the session when form is successful or no errors.

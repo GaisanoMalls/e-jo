@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Staff\Approver;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Approver\StoreClarificationRequest;
+use App\Http\Requests\Approver\StoreDisapproveTicketRequest;
 use App\Http\Traits\Approver\Tickets as ApproverTickets;
 use App\Models\ApprovalStatus;
 use App\Models\Clarification;
@@ -10,11 +12,8 @@ use App\Models\ClarificationFile;
 use App\Models\Reason;
 use App\Models\Status;
 use App\Models\Ticket;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\File;
 
 class ApproverTicketsController extends Controller
 {
@@ -22,9 +21,7 @@ class ApproverTicketsController extends Controller
 
     public function ticketStatusToViewed(Ticket $ticket)
     {
-        $ticket->update([
-            'status_id' => Status::VIEWED
-        ]);
+        $ticket->update(['status_id' => Status::VIEWED]);
 
         return response()->json(['message' => 'Ticket viewed']);
     }
@@ -196,24 +193,16 @@ class ApproverTicketsController extends Controller
             'approval_status' => ApprovalStatus::APPROVED
         ]);
 
-        return to_route('approver.ticket.view_ticket_details', [$ticket->id])
-            ->with('success', 'The ticket has been approved.');
+        return back()->with('success', 'The ticket has been approved.');
     }
 
-    public function ticketDetialsDisapproveTicket(Request $request, Ticket $ticket)
+    public function ticketDetialsDisapproveTicket(StoreDisapproveTicketRequest $request, Ticket $ticket)
     {
-        $validator = Validator::make($request->all(), [
-            'description' => ['required']
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'disapproveTicket')->withInput();
-
         try {
             DB::transaction(function () use ($request, $ticket) {
                 $reason = Reason::create([
                     'ticket_id' => $ticket->id,
-                    'description' => $request->input('description')
+                    'description' => $request->description
                 ]);
 
                 $reason->ticket()->where('id', $ticket->id)
@@ -223,31 +212,16 @@ class ApproverTicketsController extends Controller
                     ]);
             });
 
-            return to_route('approver.ticket.view_ticket_details', [$ticket->id])
-                ->with('success', 'The ticket has been disapproved.');
+            return back()->with('success', 'The ticket has been disapproved.');
 
         } catch (\Exception $e) {
-            return to_route('approver.ticket.view_ticket_details', [$ticket->id])
-                ->with('error', 'Faild to disapprove the ticket. Please try again.');
+            return back()->with('error', 'Faild to disapprove the ticket. Please try again.');
         }
     }
 
     // * Clarifications
-    public function sendClarification(Request $request, Ticket $ticket)
+    public function sendClarification(StoreClarificationRequest $request, Ticket $ticket)
     {
-        $validator = Validator::make($request->all(), [
-            'description' => ['required'],
-            'clarificationFiles.*' => [
-                'nullable',
-                File::types(['jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv'])
-                    ->min(1024)
-                    ->max(25 * 1024) //25600 (25 MB)
-            ]
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeTicketClarification')->withInput();
-
         try {
             DB::transaction(function () use ($request, $ticket) {
                 $ticket->update(['status_id' => Status::ON_PROCESS]);
@@ -255,7 +229,7 @@ class ApproverTicketsController extends Controller
                 $clarification = Clarification::create([
                     'user_id' => auth()->user()->id,
                     'ticket_id' => $ticket->id,
-                    'description' => $request->input('description')
+                    'description' => $request->description
                 ]);
 
                 if ($request->hasFile('clarificationFiles')) {
@@ -272,12 +246,10 @@ class ApproverTicketsController extends Controller
                 }
             });
 
-            return to_route('approver.ticket.view_ticket_details', [$ticket->id])
-                ->with('success', 'The message has been successfully sent.');
+            return back()->with('success', 'The message has been successfully sent.');
 
         } catch (\Exception $e) {
-            return to_route('approver.ticket.view_ticket_details', [$ticket->id])
-                ->with('error', 'Faild to send ticket clarification. Please try again.');
+            return back()->with('error', 'Faild to send ticket clarification. Please try again.');
         }
     }
 }

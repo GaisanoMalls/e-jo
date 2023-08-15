@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Requester\ReplyTicketRequest;
+use App\Http\Requests\Requester\StoreTicketClarificationRequest;
+use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\Requester\Tickets;
 use App\Http\Traits\TicketNumberGenerator;
 use App\Models\ApprovalStatus;
@@ -21,9 +24,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
 
 class TicketsController extends Controller
 {
@@ -176,48 +179,22 @@ class TicketsController extends Controller
         );
     }
 
-    public function store(Request $request, Ticket $ticket)
+    public function store(StoreTicketRequest $request, Ticket $ticket)
     {
-
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'service_department' => ['required'],
-                'help_topic' => ['required'],
-                'team' => ['required'],
-                'sla' => ['required'],
-                'subject' => ['required'],
-                'description' => ['required'],
-                'file_attachments.*' => [
-                    'nullable',
-                    File::types(['jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv'])
-                        ->min(1024)
-                        ->max(1 * 1024) //25600 (25 MB)
-                ],
-            ],
-            [
-                'team.required' => 'The team field is required. Please select a help topic.',
-                'sla.required' => 'The SLA field is required. Please select a help topic.'
-            ]
-        );
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeTicket')->withInput();
-
         try {
             DB::transaction(function () use ($request) {
                 $ticket = Ticket::create([
                     'user_id' => Auth::user()->id,
-                    'branch_id' => $request->input('branch') ?: Auth::user()->branch->id,
-                    'service_department_id' => $request->input('service_department'),
-                    'team_id' => $request->input('team'),
-                    'help_topic_id' => $request->input('help_topic'),
+                    'branch_id' => $request->branch ?: Auth::user()->branch->id,
+                    'service_department_id' => $request->service_department,
+                    'team_id' => $request->team,
+                    'help_topic_id' => $request->help_topic,
                     'status_id' => Status::OPEN,
-                    'priority_level_id' => $request->input('priority_level'),
-                    'sla_id' => $request->input('sla'),
+                    'priority_level_id' => $request->priority_level,
+                    'sla_id' => $request->sla,
                     'ticket_number' => $this->generatedTicketNumber(),
-                    'subject' => $request->input('subject'),
-                    'description' => $request->input('description'),
+                    'subject' => $request->subject,
+                    'description' => $request->description,
                     'approval_status' => ApprovalStatus::FOR_APPROVAL
                 ]);
 
@@ -263,21 +240,8 @@ class TicketsController extends Controller
         );
     }
 
-    public function requesterReplyTicket(Request $request, Ticket $ticket)
+    public function requesterReplyTicket(ReplyTicketRequest $request, Ticket $ticket)
     {
-        $validator = Validator::make($request->all(), [
-            'description' => ['required'],
-            'replyFiles.*' => [
-                'nullable',
-                File::types(['jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv'])
-                    ->min(1024)
-                    ->max(25 * 1024) //25600 (25 MB)
-            ]
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'requesterStoreTicketReply')->withInput();
-
         try {
             DB::transaction(function () use ($request, $ticket) {
                 $ticket->update(['status_id' => Status::ON_PROCESS]);
@@ -285,7 +249,7 @@ class TicketsController extends Controller
                 $reply = Reply::create([
                     'user_id' => auth()->user()->id,
                     'ticket_id' => $ticket->id,
-                    'description' => $request->input('description')
+                    'description' => $request->description
                 ]);
 
                 if ($request->hasFile('replyFiles')) {
@@ -302,10 +266,10 @@ class TicketsController extends Controller
                 }
             });
 
-            return to_route('user.ticket.view_ticket', $ticket->id)->with('success', 'Your reply has been sent successfully.');
+            return back()->with('success', 'Your reply has been sent successfully.');
 
         } catch (\Exception $e) {
-            return to_route('user.ticket.view_ticket', $ticket->id)->with('error', 'Failed to send your reply. Please try again.');
+            return back()->with('error', 'Failed to send your reply. Please try again.');
         }
     }
 
@@ -326,21 +290,8 @@ class TicketsController extends Controller
         );
     }
 
-    public function sendClarification(Request $request, Ticket $ticket)
+    public function sendClarification(StoreTicketClarificationRequest $request, Ticket $ticket)
     {
-        $validator = Validator::make($request->all(), [
-            'description' => ['required'],
-            'clarificationFiles.*' => [
-                'nullable',
-                File::types(['jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv'])
-                    ->min(1024)
-                    ->max(25 * 1024) //25600 (25 MB)
-            ]
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeTicketReplyClarification')->withInput();
-
         try {
             DB::transaction(function () use ($request, $ticket) {
                 $ticket->update(['status_id' => Status::ON_PROCESS]);
@@ -348,7 +299,7 @@ class TicketsController extends Controller
                 $clarification = Clarification::create([
                     'user_id' => auth()->user()->id,
                     'ticket_id' => $ticket->id,
-                    'description' => $request->input('description')
+                    'description' => $request->description
                 ]);
 
                 if ($request->hasFile('clarificationFiles')) {
@@ -365,7 +316,7 @@ class TicketsController extends Controller
                 }
             });
 
-            return to_route('user.ticket.ticket_clarifications', $ticket->id)->with('success', 'Your clarification has been sent successfully.');
+            return back()->with('success', 'Your clarification has been sent successfully.');
 
         } catch (\Exception $e) {
             return to_route('user.ticket.ticket_clarifications', $ticket->id)->with('error', 'Failed to send ticket clarification. Please try again.');

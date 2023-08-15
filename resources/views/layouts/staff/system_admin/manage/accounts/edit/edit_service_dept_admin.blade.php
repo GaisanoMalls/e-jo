@@ -45,7 +45,7 @@ Edit Service Dept. Admin
                                         name</label>
                                     <input type="text" name="first_name" class="form-control form__field"
                                         id="first_name" value="{{ $serviceDeptAdmin->profile->first_name }}">
-                                    @error('first_name', 'editServiceDeptAdmin')
+                                    @error('first_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -58,7 +58,7 @@ Edit Service Dept. Admin
                                     <label for="middle_name" class="form-label form__field__label">Middle name</label>
                                     <input type="text" name="middle_name" class="form-control form__field"
                                         id="middle_name" value="{{ $serviceDeptAdmin->profile->middle_name }}">
-                                    @error('middle_name', 'editServiceDeptAdmin')
+                                    @error('middle_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -71,7 +71,7 @@ Edit Service Dept. Admin
                                     <label for="last_name" class="form-label form__field__label">Last name</label>
                                     <input type="text" name="last_name" class="form-control form__field" id="last_name"
                                         value="{{ $serviceDeptAdmin->profile->last_name }}">
-                                    @error('last_name', 'editServiceDeptAdmin')
+                                    @error('last_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -92,7 +92,7 @@ Edit Service Dept. Admin
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('suffix', 'editServiceDeptAdmin')
+                                    @error('suffix')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -110,7 +110,7 @@ Edit Service Dept. Admin
                                     <label for="email" class="form-label form__field__label">Email</label>
                                     <input type="email" name="email" class="form-control form__field" id="email"
                                         value="{{ $serviceDeptAdmin->email }}">
-                                    @error('email', 'editServiceDeptAdmin')
+                                    @error('email')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -146,7 +146,7 @@ Edit Service Dept. Admin
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('branch', 'editServiceDeptAdmin')
+                                    @error('branch')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -169,7 +169,7 @@ Edit Service Dept. Admin
                                     <select name="bu_department" data-search="true" data-silent-initial-value-set="true"
                                         id="editServiceDeptAdminBUDepartmentDropdown">
                                     </select>
-                                    @error('bu_department', 'editServiceDeptAdmin')
+                                    @error('bu_department')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -193,7 +193,7 @@ Edit Service Dept. Admin
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('service_department', 'editServiceDeptAdmin')
+                                    @error('service_department')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}

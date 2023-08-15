@@ -34,7 +34,7 @@ Service Departments
                         @include('layouts.staff.system_admin.manage.service_departments.includes.service_department_list')
                         @else
                         <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                            <small style="font-size: 14px;">No departments.</small>
+                            <small style="font-size: 14px;">No records for departments.</small>
                         </div>
                         @endif
                     </div>
@@ -56,7 +56,7 @@ Service Departments
 @endpush
 @endif
 
-@if ($errors->editServiceDepartment->any())
+@if ($errors->editServiceDepartment->any() || session()->has('duplicate_name_error'))
 {{-- Show edit modal based on the selected record/data --}}
 <input type="hidden" id="serviceDeptId" value="{{ session('serviceDepartmentId') }}">
 @push('modal-with-error')

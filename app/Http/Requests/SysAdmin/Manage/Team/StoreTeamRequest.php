@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Requests\SysAdmin;
+namespace App\Http\Requests\SysAdmin\Manage\Team;
 
 use App\Models\Department;
 use Illuminate\Foundation\Http\FormRequest;
 
-class TeamRequest extends FormRequest
+class StoreTeamRequest extends FormRequest
 {
+    protected $errorBag = 'storeTeam';
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,7 +26,7 @@ class TeamRequest extends FormRequest
     public function rules()
     {
         return [
-            'department' => ['required'],
+            'service_department' => ['required'],
             'name' => [
                 'required',
                 'unique:teams,name',
@@ -37,15 +38,6 @@ class TeamRequest extends FormRequest
                     }
                 }
             ]
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'name.unique' => 'Team name already exists. Try other team name.',
-            'name.required' => 'Please provide a team name',
-            'department.required' => 'Please select a department'
         ];
     }
 }

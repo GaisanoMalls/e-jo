@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\SysAdmin\Manage\HelpTopic;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePasswordRequest extends FormRequest
+class StoreHelpTopicRequest extends FormRequest
 {
+    protected $errorBag = 'storeHelpTopic';
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,9 +25,11 @@ class UpdatePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'current_password' => ['required'],
-            'new_password' => ['required', 'different:current_password'],
-            'confirm_password' => ['required', 'same:new_password'],
+            'service_department' => ['required'],
+            'team' => ['required'],
+            'sla' => ['required'],
+            'name' => ['required'],
+            'level_of_approval' => ['required'],
         ];
     }
 }

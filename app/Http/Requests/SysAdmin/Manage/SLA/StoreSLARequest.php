@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\SysAdmin;
+namespace App\Http\Requests\SysAdmin\Manage\SLA;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DepartmentRequest extends FormRequest
+class StoreSLARequest extends FormRequest
 {
+    protected $errorBag = 'storeSLA';
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,18 +25,8 @@ class DepartmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
-                'required',
-                'unique:departments,name',
-            ],
+            'countdown_approach' => ['required', 'unique:service_level_agreements,countdown_approach'],
+            'time_unit' => ['required', 'unique:service_level_agreements,time_unit']
         ];
     }
-
-    public function messages()
-    {
-        return [
-            'name.unique' => 'The department name already exists. Please try another name.'
-        ];
-    }
-
 }

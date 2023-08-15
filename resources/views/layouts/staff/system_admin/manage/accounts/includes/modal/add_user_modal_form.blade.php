@@ -90,6 +90,8 @@
                                             @enderror
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="col-md-12">
                                         <div class="mb-2">
                                             <label for="email" class="form-label form__field__label">Email
@@ -104,8 +106,6 @@
                                             @enderror
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
                                     <div class="col-md-12">
                                         <div class="mb-2">
                                             <label for="role" class="form-label form__field__label">User

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SysAdmin\Manage\BUDepartment\StoreBUDepartmentRequest;
 use App\Http\Traits\MultiSelect;
 use App\Models\Branch;
 use App\Models\Department;
@@ -28,27 +29,14 @@ class BUDepartmentController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(StoreBUDepartmentRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'branches' => ['array'],
-            'name' => [
-                'required',
-                'unique:departments,name',
-            ]
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator, 'storeBUDepartment')
-                ->withInput();
-        }
-
-        if ($request->input('branches')[0] === null) {
+        if ($request->branches[0] === null) {
             return back()->with('empty_branch', 'Branch is required.')
                 ->withInput();
         }
 
-        $selectedBranches = $this->getSelectedValue($request->input('branches'));
+        $selectedBranches = $this->getSelectedValue($request->branches);
 
         $existingBranches = Branch::whereIn('id', $selectedBranches)->pluck('id');
         if (count($existingBranches) !== count($selectedBranches)) {
@@ -58,8 +46,8 @@ class BUDepartmentController extends Controller
 
         DB::transaction(function () use ($request, $existingBranches) {
             $department = Department::create([
-                'name' => $request->input('name'),
-                'slug' => \Str::slug($request->input('name'))
+                'name' => $request->name,
+                'slug' => \Str::slug($request->name)
             ]);
 
             $department->branches()->attach($existingBranches);
@@ -84,11 +72,11 @@ class BUDepartmentController extends Controller
         try {
             DB::transaction(function () use ($request, $buDepartment) {
                 $buDepartment->update([
-                    'name' => $request->input('name'),
-                    'slug' => Str::slug($request->input('name'))
+                    'name' => $request->name,
+                    'slug' => Str::slug($request->name)
                 ]);
 
-                $buDepartment->branches()->sync($request->input('branch', []));
+                $buDepartment->branches()->sync($request->branch);
             });
 
             $request->session()->forget('buDepartmentId'); // remove the buDepartmentId in the session when form is successful or no errors.

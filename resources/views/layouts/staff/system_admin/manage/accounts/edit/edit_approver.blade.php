@@ -42,7 +42,7 @@ Edit Approver
                                         name</label>
                                     <input type="text" name="first_name" class="form-control form__field"
                                         id="first_name" value="{{ $approver->profile->first_name }}">
-                                    @error('first_name', 'editApprover')
+                                    @error('first_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -55,7 +55,7 @@ Edit Approver
                                     <label for="middle_name" class="form-label form__field__label">Middle name</label>
                                     <input type="text" name="middle_name" class="form-control form__field"
                                         id="middle_name" value="{{ $approver->profile->middle_name }}">
-                                    @error('middle_name', 'editApprover')
+                                    @error('middle_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -68,7 +68,7 @@ Edit Approver
                                     <label for="last_name" class="form-label form__field__label">Last name</label>
                                     <input type="text" name="last_name" class="form-control form__field" id="last_name"
                                         value="{{ $approver->profile->last_name }}">
-                                    @error('last_name', 'editApprover')
+                                    @error('last_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -89,7 +89,7 @@ Edit Approver
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('suffix', 'editApprover')
+                                    @error('suffix')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -107,7 +107,7 @@ Edit Approver
                                     <label for="email" class="form-label form__field__label">Email</label>
                                     <input type="email" name="email" class="form-control form__field" id="email"
                                         value="{{ $approver->email }}">
-                                    @error('email', 'editApprover')
+                                    @error('email')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -144,7 +144,7 @@ Edit Approver
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('branch', 'editApprover')
+                                    @error('branch')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -166,7 +166,7 @@ Edit Approver
                                     <select name="bu_department" data-search="true" data-silent-initial-value-set="true"
                                         id="editApproverBUDepartmentDropdown">
                                     </select>
-                                    @error('bu_department', 'editApprover')
+                                    @error('bu_department')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}

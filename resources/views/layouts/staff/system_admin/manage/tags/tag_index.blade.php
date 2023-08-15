@@ -49,7 +49,7 @@ Tags
                     @include('layouts.staff.system_admin.manage.tags.includes.tag_list')
                     @else
                     <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                        <small style="font-size: 14px;">No departments.</small>
+                        <small style="font-size: 14px;">No records for departments.</small>
                     </div>
                     @endif
                 </div>

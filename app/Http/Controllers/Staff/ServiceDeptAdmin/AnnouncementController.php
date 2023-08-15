@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Staff\SysAdmin;
+namespace App\Http\Controllers\Staff\ServiceDeptAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ServiceDeptAdmin\StoreAnnouncementRequest;
+use App\Http\Requests\ServiceDeptAdmin\UpdateAnnouncementRequest;
 use App\Models\Announcement;
 use App\Models\Department;
 use App\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class AnnouncementController extends Controller
 {
@@ -20,7 +21,7 @@ class AnnouncementController extends Controller
     public function index()
     {
         $departments = Department::orderBy('name', 'asc')->get();
-        $annnouncements = new Announcement();
+        $annnouncements = new Announcement;
 
         $today_announcements = $annnouncements->whereDate('created_at', Carbon::today()->toDateString())->orderBy('created_at', 'desc')->get();
         $yesterday_announcements = $annnouncements->whereDate('created_at', Carbon::yesterday()->toDateString())->orderBy('created_at', 'desc')->get();
@@ -40,47 +41,25 @@ class AnnouncementController extends Controller
         );
     }
 
-    public function store(Request $request, Announcement $announcement)
+    public function store(StoreAnnouncementRequest $request, Announcement $announcement)
     {
-
-        $validator = Validator::make($request->all(), [
-            'title' => ['required'],
-            'department' => ['required'],
-            'description' => ['required'],
-            'is_important' => ['boolean'],
-            'is_draft' => ['boolean']
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeAnnouncement')->withInput();
-
         $announcement->create([
-            'title' => $request->input('title'),
-            'department_id' => (int) $request->input('department'),
-            'description' => $request->input('description'),
-            'is_important' => (bool) $request->input('is_important')
+            'title' => $request->title,
+            'department_id' => $request->department,
+            'description' => $request->description,
+            'is_important' => (bool) $request->is_important
         ]);
 
         return back()->with('success', 'Announcement successfully created.');
     }
 
-    public function edit(Request $request, Announcement $announcement)
+    public function edit(UpdateAnnouncementRequest $request, Announcement $announcement)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => ['required'],
-            'department' => ['required'],
-            'description' => ['required'],
-            'is_draft' => ['boolean']
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'editAnnouncement')->withInput()->with('error', 'Failed to update. There was an error while updating the announcement.');
-
         $announcement->update([
-            'title' => $request->input('title'),
-            'department_id' => (int) $request->input('department'),
-            'description' => $request->input('description'),
-            'is_important' => (bool) $request->input('is_important')
+            'title' => $request->title,
+            'department_id' => $request->department,
+            'description' => $request->description,
+            'is_important' => (bool) $request->is_important
         ]);
 
         return back()->with('success', 'Announcement successfully updated.');

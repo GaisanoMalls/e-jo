@@ -81,6 +81,18 @@
   color: black;
 }
 
+.dashboard__card {
+  transition: all 0.3s;
+}
+.dashboard__card:hover {
+  cursor: pointer;
+  transform: scale(1.02);
+}
+
+.custom__card {
+  margin-bottom: 20px;
+}
+
 .error__message {
   font-size: 0.75rem !important;
   font-weight: 500 !important;

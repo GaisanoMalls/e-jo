@@ -10,8 +10,10 @@ trait Tickets
 {
     public function getForApprovalTickets()
     {
-        $forApprovalTickets = Ticket::where('status_id', Status::OPEN)
-            ->where('approval_status', ApprovalStatus::FOR_APPROVAL)
+        $forApprovalTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::OPEN)
+                ->where('approval_status', ApprovalStatus::FOR_APPROVAL);
+        })
             ->where('branch_id', auth()->user()->branch_id)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -21,8 +23,10 @@ trait Tickets
 
     public function getDisapprovedTickets()
     {
-        $disapprovedTickets = Ticket::where('status_id', Status::CLOSED)
-            ->where('approval_status', ApprovalStatus::DISAPPROVED)
+        $disapprovedTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::CLOSED)
+                ->where('approval_status', ApprovalStatus::DISAPPROVED);
+        })
             ->where('branch_id', auth()->user()->branch_id)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -32,8 +36,10 @@ trait Tickets
 
     public function getOpenTickets()
     {
-        $openTickets = Ticket::where('status_id', Status::OPEN)
-            ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL])
+        $openTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::OPEN)
+                ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
+        })
             ->where('branch_id', auth()->user()->branch_id)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -43,8 +49,10 @@ trait Tickets
 
     public function getViewedTickets()
     {
-        $viewedTickets = Ticket::where('status_id', Status::VIEWED)
-            ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL])
+        $viewedTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::VIEWED)
+                ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
+        })
             ->where('branch_id', auth()->user()->branch_id)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -54,8 +62,10 @@ trait Tickets
 
     public function getApprovedTickets()
     {
-        $approvedTickets = Ticket::where('status_id', Status::APPROVED)
-            ->where('approval_status', ApprovalStatus::APPROVED)
+        $approvedTickets = Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::APPROVED)
+                ->where('approval_status', ApprovalStatus::APPROVED);
+        })
             ->where('branch_id', auth()->user()->branch_id)
             ->orderBy('created_at', 'desc')
             ->get();

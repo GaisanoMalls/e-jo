@@ -1,5 +1,5 @@
-<div class="modal department__modal" data-bs-backdrop="static" data-bs-keyboard="false" id="editBranch{{ $branch->id }}"
-    tabindex="-1" aria-labelledby="addNewBranchModalLabel" aria-hidden="true">
+<div class="modal department__modal" id="editBranch{{ $branch->id }}" tabindex="-1"
+    aria-labelledby="addNewBranchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">
@@ -21,13 +21,19 @@
                                 {{ $message }}
                             </span>
                             @enderror
+                            @if (session()->has('duplicate_name_error'))
+                            <div class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ session()->get('duplicate_name_error') }}
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <button type="submit" class="btn m-0 btn__modal__footer btn__send">Save</button>
-                        @if ($errors->editBranch->any())
+                        @if ($errors->editBranch->any() || session()->has('duplicate_name_error'))
                         <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
                             data-bs-dismiss="modal"
                             onclick="window.location.href='{{ route('staff.manage.branch.index') }}'">Cancel</button>

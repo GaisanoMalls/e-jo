@@ -50,7 +50,7 @@ Ticket Statuses
                     @include('layouts.staff.system_admin.manage.ticket_statuses.includes.status_list')
                     @else
                     <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                        <small style="font-size: 14px;">No ticket statuses.</small>
+                        <small style="font-size: 14px;">No records for statuses.</small>
                     </div>
                     @endif
                 </div>

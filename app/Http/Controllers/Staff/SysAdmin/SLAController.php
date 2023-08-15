@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SysAdmin\Manage\SLA\StoreSLARequest;
 use App\Models\ServiceLevelAgreement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -20,19 +21,11 @@ class SLAController extends Controller
         );
     }
 
-    public function store(Request $request, ServiceLevelAgreement $sla)
+    public function store(StoreSLARequest $request, ServiceLevelAgreement $sla)
     {
-        $validator = Validator::make($request->all(), [
-            'countdown_approach' => ['required', 'unique:service_level_agreements,countdown_approach'],
-            'time_unit' => ['required', 'unique:service_level_agreements,time_unit']
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeSLA')->withInput();
-
         $sla->create([
-            'countdown_approach' => $request->input('countdown_approach'),
-            'time_unit' => $request->input('time_unit')
+            'countdown_approach' => $request->countdown_approach,
+            'time_unit' => $request->time_unit
         ]);
 
         return back()->with('success', 'A new SLA is created.');
@@ -44,6 +37,8 @@ class SLAController extends Controller
             'countdown_approach' => ['required'],
             'time_unit' => ['required']
         ]);
+
+        // * TODO
     }
 
     public function delete(ServiceLevelAgreement $sla)

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\SysAdmin;
+namespace App\Http\Requests\SysAdmin\Manage\BUDepartment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AnnouncementEditRequest extends FormRequest
+class StoreBUDepartmentRequest extends FormRequest
 {
+    protected $errorBag = 'storeBUDepartment';
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,9 +25,8 @@ class AnnouncementEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'edit_title' => ['required'],
-            'edit_department' => ['required'],
-            'edit_description' => ['required'],
+            'branches' => ['array'],
+            'name' => ['required', 'unique:departments,name']
         ];
     }
 }

@@ -116,7 +116,7 @@ class TicketController extends Controller
                 $reply = Reply::create([
                     'user_id' => auth()->user()->id,
                     'ticket_id' => $ticket->id,
-                    'description' => $request->input('description')
+                    'description' => $request->description
                 ]);
 
                 if ($request->hasFile('replyFiles')) {
