@@ -54,7 +54,7 @@ class HelpTopicsController extends Controller
 
                 for ($level = 1; $level <= $levelOfApproval; $level++) {
                     $helpTopic->levels()->attach($level);
-                    $approvers = $this->getSelectedValue($request->approvers . $level);
+                    $approvers = $this->getSelectedValue($request->input("approvers{$level}"));
 
                     foreach ($approvers as $approver) {
                         LevelApprover::create([

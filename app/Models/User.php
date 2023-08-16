@@ -4,8 +4,6 @@ namespace App\Models;
 
 use App\Http\Traits\TimeStamps;
 use App\Models\Role;
-use Carbon\Carbon;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -83,7 +81,8 @@ class User extends Authenticatable
 
     public function levels()
     {
-        return $this->belongsToMany(Level::class, 'level_approver')->wherePivot('user_id', Role::APPROVER);
+        return $this->belongsToMany(Level::class, 'level_approver')
+            ->wherePivot('user_id', Role::APPROVER);
     }
 
     public function tickets()
@@ -180,13 +179,6 @@ class User extends Authenticatable
     public function requesters()
     {
         return self::where('role_id', Role::USER)->get();
-    }
-
-    public function helpTopics()
-    {
-        return $this->belongsToMany(HelpTopic::class, 'help_topic_level_approvers', 'approver_id', 'help_topic_id')
-            ->using(HelpTopicLevelApprover::class)
-            ->withTimestamps();
     }
 
     public function dateCreated()

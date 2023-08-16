@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TicketCreated extends Notification implements ShouldQueue
+class TicketCreatedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -43,7 +43,8 @@ class TicketCreated extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->from($this->ticket->user->email)
+            ->from($this->ticket->user->email, $this->ticket->user->profile->getFullName())
+            ->subject("New Ticket - {$this->ticket->ticket_number}")
             ->greeting('New Ticket Created')
             ->line("{$this->ticket->user->profile->getFullName()} has created a ticket.")
             ->action("View Ticket: {$this->ticket->ticket_number}", url('/'));

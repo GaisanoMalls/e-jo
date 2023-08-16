@@ -8,6 +8,7 @@ use App\Http\Requests\Requester\StoreTicketClarificationRequest;
 use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\Requester\Tickets;
 use App\Http\Traits\TicketNumberGenerator;
+use App\Mail\TicketCreatedMail;
 use App\Models\ApprovalStatus;
 use App\Models\Branch;
 use App\Models\Clarification;
@@ -19,14 +20,13 @@ use App\Models\ServiceDepartment;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketFile;
-use App\Notifications\TicketCreated;
-use Illuminate\Http\Request;
+use App\Models\User;
+use App\Notifications\TicketCreatedNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\File;
 
 class TicketsController extends Controller
 {
@@ -211,14 +211,18 @@ class TicketsController extends Controller
                     }
                 }
 
-                Notification::send(auth()->user(), new TicketCreated($ticket));
+                // Notify approvers through email and app based notification.
+                foreach ($ticket->helpTopic->levels as $level) {
+                    foreach ($level->approvers->unique('id') as $approver) {
+                        Notification::send($approver, new TicketCreatedNotification($ticket));
+                    }
+                }
 
             });
 
             return back()->with('success', 'Ticket successfully created.');
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return back()->with('error', "Failed to send ticket. Please try again");
         }
     }

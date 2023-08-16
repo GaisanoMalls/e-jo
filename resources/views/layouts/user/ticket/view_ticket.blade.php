@@ -152,6 +152,7 @@
                     <div class="container__ticket__details__right">
                         @include('layouts.user.ticket.includes.ticket_details')
                         @include('layouts.user.ticket.includes.ticket_assigned_agent')
+                        @include('layouts.user.ticket.includes.approvals')
                     </div>
                 </div>
             </div>
