@@ -5,7 +5,7 @@
             <img src="{{ asset('images/gmall.png') }}" class="company__logo" alt="GMall Ticketing System">
             <h5 class="mb-0 company__app__name position-relative">
                 E-JO
-                <span class="position-absolute lbl__system">Ticketing System</span>
+                <span class="position-absolute lbl__system">System</span>
             </h5>
         </a>
         <button class="navbar-toggler border-0 p-0 custom__navbar__toggler" type="button" data-bs-toggle="collapse"
@@ -92,7 +92,7 @@
                 <li class="nav-item my-auto dropdown">
                     <a class="nav-link mx-1" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         @if (auth()->user()->profile->picture)
-                        <img src="{{ asset('storage/' . auth()->user()->profile->picture) }}" class="nav__user__picture"
+                        <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="nav__user__picture"
                             alt="">
                         @else
                         <div class="nav__user__picture d-flex align-items-center p-2 justify-content-center text-white"

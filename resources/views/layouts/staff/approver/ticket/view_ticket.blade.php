@@ -108,8 +108,9 @@
                                     </small>
                                 </div>
                             </div>
-                            <small class="ticket__details__time mt-2">{{ $ticket->created_at->diffForHumans(null, true)
-                                }}</small>
+                            <small class="ticket__details__time mt-2">
+                                {{ $ticket->created_at->diffForHumans(null, true) }}
+                            </small>
                         </div>
                         <div class="ticket__details__card__body">
                             <div class="ticket__description">{!! $ticket->description !!}</div>

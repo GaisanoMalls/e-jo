@@ -34,9 +34,8 @@ class StoreTicketRequest extends FormRequest
             'description' => ['required'],
             'file_attachments.*' => [
                 'nullable',
-                File::types(['jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv'])
-                    ->min(1024)
-                    ->max(1 * 1024) //25600 (25 MB)
+                File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv'])
+                    ->max(25 * 1024) //25600 (25 MB)
             ],
         ];
     }
@@ -45,7 +44,10 @@ class StoreTicketRequest extends FormRequest
     {
         return [
             'team.required' => 'The team field is required. Please select a help topic.',
-            'sla.required' => 'The SLA field is required. Please select a help topic.'
+            'sla.required' => 'The SLA field is required. Please select a help topic.',
+            'file_attachments.*.file' => 'The uploaded file is not valid.',
+            'file_attachments.*.mimes' => 'Invalid file type. File must be of type: jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv',
+            'file_attachments.*.max' => 'The file size must not exceed 25 MB.'
         ];
     }
 }

@@ -34,7 +34,9 @@
         <form action="{{ route('user.ticket.store_reply_ticket', $ticket->id) }}" method="post"
             enctype="multipart/form-data">
             @csrf
-            <textarea id="myeditorinstance" name="description" placeholder="Type here..."></textarea>
+            <textarea id="myeditorinstance" name="description" placeholder="Type here...">
+                {{ old('description') }}
+            </textarea>
             @error('description', 'requesterStoreTicketReply')
             <span class="error__message">
                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -45,7 +47,7 @@
                 <div class="d-flex flex-column gap-1">
                     <input class="form-control ticket__file__input w-auto my-3" type="file" name="replyFiles[]"
                         id="ticketFile" multiple>
-                    @error('replyFiles', 'requesterStoreTicketReply')
+                    @error('replyFiles.*', 'requesterStoreTicketReply')
                     <span class="error__message">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         {{ $message }}

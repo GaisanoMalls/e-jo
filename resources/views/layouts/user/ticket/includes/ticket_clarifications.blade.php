@@ -66,7 +66,12 @@
                 data-bs-target="#replyTicketFilesModalForm{{ $clarification->id }}">
                 <i class="fa-solid fa-file-image"></i>
                 <small class="attachment__count">{{ $clarification->fileAttachments->count() }}</small>
-                <small class="attachment__label">Attachments</small>
+                <small class="attachment__label">
+                    {{ $clarification->fileAttachments->count() > 1
+                    ? 'file attachments'
+                    : 'file attachment'
+                    }}
+                </small>
             </div>
             @endif
             <i class="fa-solid fa-circle-check ticket__reply__content__check__icon"></i>

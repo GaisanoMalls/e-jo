@@ -2449,17 +2449,14 @@ document.addEventListener("DOMContentLoaded", function () {
   clickableTableRowCells.forEach(function (tdCells) {
     tdCells.addEventListener('click', function () {
       var ticketId = this.getAttribute('data-ticket-id');
-      markTicketAsViewed(ticketId);
+      axios.put("/approver/tickets/".concat(ticketId, "/update-status-as-viewed")).then(function (response) {
+        console.log(response.data);
+      })["catch"](function (error) {
+        console.error(error.response.data);
+      });
     });
   });
 });
-var markTicketAsViewed = function markTicketAsViewed(ticketId) {
-  axios.put("/approver/tickets/".concat(ticketId, "/update-status-as-viewed")).then(function (response) {
-    //
-  })["catch"](function (error) {
-    console.error(error.response.data.error);
-  });
-};
 })();
 
 /******/ })()

@@ -7901,6 +7901,23 @@ a:hover {
   border: none !important;
 }
 
+.log__container .log__icon {
+  color: #d32839;
+  font-size: 23px;
+}
+.log__container .log__description {
+  font-size: 0.813rem !important;
+  color: #212529;
+  font-weight: 500;
+}
+.log__container .log__description .causer__details {
+  font-weight: 600 !important;
+}
+.log__container .log__date,
+.log__container .log__time {
+  font-size: 0.688rem;
+}
+
 .btn__claim__ticket {
   color: #FFFFFF;
   background-color: #9DA85C;

@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StaffReplyTicketRequest;
+use App\Http\Traits\FileUploadDir;
 use App\Http\Traits\TicketsByStaffWithSameTemplates;
+use App\Models\ActivityLog;
 use App\Models\Department;
 use App\Models\Reply;
 use App\Models\ReplyFile;
 use App\Models\ServiceDepartment;
 use App\Models\Status;
 use App\Models\Ticket;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\File;
 
 class TicketController extends Controller
 {
-    use TicketsByStaffWithSameTemplates;
+    use TicketsByStaffWithSameTemplates, FileUploadDir;
 
     public function approvedTickets()
     {
@@ -94,21 +94,8 @@ class TicketController extends Controller
         );
     }
 
-    public function replyTicket(Request $request, Ticket $ticket)
+    public function replyTicket(StaffReplyTicketRequest $request, Ticket $ticket)
     {
-        $validator = Validator::make($request->all(), [
-            'description' => ['required'],
-            'replyFiles.*' => [
-                'nullable',
-                File::types(['jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv'])
-                    ->min(1024)
-                    ->max(25 * 1024) //25600 (25 MB)
-            ]
-        ]);
-
-        if ($validator->fails())
-            return back()->withErrors($validator, 'storeTicketReply')->withInput();
-
         try {
             DB::transaction(function () use ($request, $ticket) {
                 $ticket->update(['status_id' => Status::ON_PROCESS]);
@@ -122,7 +109,11 @@ class TicketController extends Controller
                 if ($request->hasFile('replyFiles')) {
                     foreach ($request->file('replyFiles') as $uploadedReplyFile) {
                         $fileName = $uploadedReplyFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs('public/ticket/reply/files', $uploadedReplyFile, $fileName);
+                        $fileAttachment = Storage::putFileAs(
+                            "public/ticket/{$ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(),
+                            $uploadedReplyFile,
+                            $fileName
+                        );
 
                         $replyFile = new ReplyFile();
                         $replyFile->file_attachment = $fileAttachment;
@@ -131,12 +122,14 @@ class TicketController extends Controller
                         $reply->fileAttachments()->save($replyFile);
                     }
                 }
+
+                ActivityLog::make($ticket->id, auth()->user()->id, "replied to {$ticket->user->profile->getFullName()}");
             });
 
-            return to_route('staff.ticket.view_ticket', $ticket->id)->with('success', 'Your reply has been sent successfully.');
+            return back()->with('success', 'Your reply has been sent successfully.');
 
         } catch (\Exception $e) {
-            return to_route('staff.ticket.view_ticket', $ticket->id)->with('error', 'Faild to send a reply for this ticket. Please try again.');
+            return back()->with('error', 'Faild to send a reply for this ticket. Please try again.');
         }
     }
 

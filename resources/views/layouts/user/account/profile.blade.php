@@ -5,7 +5,7 @@
     <div class="card d-flex flex-column gap-4 account__info__fields__container">
         <div class="d-flex flex-wrap align-items-center gap-3">
             <div class="mr-2">
-                <img src="{{ asset('storage/' . auth()->user()->profile->picture) }}" class="upload__new__photo"
+                <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="upload__new__photo"
                     id="uploadedNewPhoto" alt="">
             </div>
             <div class="d-flex flex-wrap flex-column">

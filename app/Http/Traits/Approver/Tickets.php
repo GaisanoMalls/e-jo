@@ -25,10 +25,10 @@ trait Tickets
             $statusQuery->where('status_id', Status::OPEN)
                 ->where('approval_status', ApprovalStatus::FOR_APPROVAL);
         })
-            ->where('branch_id', auth()->user()->branch_id)
             ->whereHas('helpTopic.levels.approvers', function ($approverQuery) {
-                $approverQuery->orWhere('user_id', auth()->user()->id);
+                $approverQuery->where('user_id', auth()->user()->id);
             })
+            ->where('branch_id', auth()->user()->branch_id)
             ->orderBy('created_at', 'desc')
             ->get();
 

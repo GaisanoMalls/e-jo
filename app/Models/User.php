@@ -95,6 +95,11 @@ class User extends Authenticatable
         return $this->hasMany(Feedback::class);
     }
 
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
     /**
      * Check if the user is Superuser.
      *

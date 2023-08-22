@@ -114,7 +114,9 @@
                                 <i class="fa-solid fa-file-zipper"></i>
                                 <small class="attachment__count">{{ $ticket->fileAttachments->count() }}</small>
                                 <small class="attachment__label">
-                                    {{ $ticket->fileAttachments->count() > 1 ? 'file attachments' : 'file attachement'
+                                    {{ $ticket->fileAttachments->count() > 1
+                                    ? 'file attachments'
+                                    : 'file attachment'
                                     }}
                                 </small>
                             </div>

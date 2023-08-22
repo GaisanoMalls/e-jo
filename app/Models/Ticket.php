@@ -97,6 +97,11 @@ class Ticket extends Model
         return $this->hasMany(Clarification::class);
     }
 
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class)->orderBy('created_at', 'desc');
+    }
+
     public function dateCreated()
     {
         return $this->createdAt($this->created_at);

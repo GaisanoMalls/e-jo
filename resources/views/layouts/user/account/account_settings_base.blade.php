@@ -11,7 +11,7 @@ auth()->user()->profile->getFullName(),
         <div class="card custom__card">
             <div class="d-flex flex-column justify-content-center align-items-center py-3">
                 @if (auth()->user()->profile->picture)
-                <img src="{{ asset('storage/' . auth()->user()->profile->picture) ?: asset('images/default-user.jpg') }}"
+                <img src="{{ Storage::url(auth()->user()->profile->picture) ?: asset('images/default-user.jpg') }}"
                     alt="" class="user__picture">
                 @else
                 <div class="user__picture d-flex align-items-center p-2 justify-content-center text-white"

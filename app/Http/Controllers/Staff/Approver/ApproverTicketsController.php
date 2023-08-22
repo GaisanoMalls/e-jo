@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Approver\StoreClarificationRequest;
 use App\Http\Requests\Approver\StoreDisapproveTicketRequest;
 use App\Http\Traits\Approver\Tickets as ApproverTickets;
+use App\Http\Traits\FileUploadDir;
+use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
 use App\Models\Reason;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
@@ -17,11 +20,12 @@ use Illuminate\Support\Facades\Storage;
 
 class ApproverTicketsController extends Controller
 {
-    use ApproverTickets;
+    use ApproverTickets, FileUploadDir;
 
     public function ticketStatusToViewed(Ticket $ticket)
     {
         $ticket->update(['status_id' => Status::VIEWED]);
+        ActivityLog::make($ticket->id, auth()->user()->id, 'seen the ticket');
 
         return response()->json(['message' => 'Ticket viewed']);
     }
@@ -172,6 +176,8 @@ class ApproverTicketsController extends Controller
             'approval_status' => ApprovalStatus::APPROVED
         ]);
 
+        ActivityLog::make($ticket->id, auth()->user()->id, 'approved the ticket');
+
         return back()->with('success', 'Ticket was successfully approved.');
     }
 
@@ -181,7 +187,8 @@ class ApproverTicketsController extends Controller
             'status_id' => Status::CLOSED,
             'approval_status' => ApprovalStatus::DISAPPROVED
         ]);
-        DB::commit();
+
+        ActivityLog::make($ticket->id, auth()->user()->id, 'disapproved the ticket');
 
         return back()->with('success', 'Ticket is rejected.');
     }
@@ -192,6 +199,8 @@ class ApproverTicketsController extends Controller
             'status_id' => Status::APPROVED,
             'approval_status' => ApprovalStatus::APPROVED
         ]);
+
+        ActivityLog::make($ticket->id, auth()->user()->id, 'approved the ticket');
 
         return back()->with('success', 'The ticket has been approved.');
     }
@@ -210,6 +219,8 @@ class ApproverTicketsController extends Controller
                         'status_id' => Status::CLOSED,
                         'approval_status' => ApprovalStatus::DISAPPROVED
                     ]);
+
+                ActivityLog::make($ticket->id, auth()->user()->id, 'disapproved the ticket');
             });
 
             return back()->with('success', 'The ticket has been disapproved.');
@@ -235,7 +246,11 @@ class ApproverTicketsController extends Controller
                 if ($request->hasFile('clarificationFiles')) {
                     foreach ($request->file('clarificationFiles') as $uploadedClarificationFile) {
                         $fileName = $uploadedClarificationFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs('public/ticket/clarification/files', $uploadedClarificationFile, $fileName);
+                        $fileAttachment = Storage::putFileAs(
+                            "public/ticket/{$ticket->ticket_number}/clarification_attachments/" . $this->fileDirByUserType(),
+                            $uploadedClarificationFile,
+                            $fileName
+                        );
 
                         $clarificationFile = new ClarificationFile();
                         $clarificationFile->file_attachment = $fileAttachment;
@@ -244,11 +259,28 @@ class ApproverTicketsController extends Controller
                         $clarification->fileAttachments()->save($clarificationFile);
                     }
                 }
+
+                // * GET THE REQUESTER
+                $requester = $clarification->whereHas('user', function ($user) {
+                    $user->where('id', '!=', auth()->user()->id);
+                })
+                    ->where('ticket_id', $ticket->id)
+                    ->latest('created_at')
+                    ->first();
+
+                // * CONSTRUCT A LOG DESCRIPTION
+                $logDescription = $ticket->clarifications()
+                    ->where('user_id', '!=', auth()->user()->id)->count() == 0
+                    ? 'sent a clarrification'
+                    : 'replied a clarification to ' . $requester->user->profile->getFullName();
+
+                ActivityLog::make($ticket->id, auth()->user()->id, $logDescription);
             });
 
             return back()->with('success', 'The message has been successfully sent.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Faild to send ticket clarification. Please try again.');
         }
     }

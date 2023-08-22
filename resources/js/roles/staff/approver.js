@@ -67,8 +67,6 @@ document.addEventListener('DOMContentLoaded', function () {
     ticketCheckBoxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', handleCheckboxChange);
     });
-
-
 });
 
 // Mark ticket as Viewed when clicked.
@@ -78,17 +76,13 @@ document.addEventListener("DOMContentLoaded", function () {
     clickableTableRowCells.forEach(tdCells => {
         tdCells.addEventListener('click', function () {
             const ticketId = this.getAttribute('data-ticket-id');
-            markTicketAsViewed(ticketId);
+            axios.put(`/approver/tickets/${ticketId}/update-status-as-viewed`)
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    console.error(error.response.data);
+                });
         });
     });
 });
-
-const markTicketAsViewed = (ticketId) => {
-    axios.put(`/approver/tickets/${ticketId}/update-status-as-viewed`)
-        .then((response) => {
-            //
-        })
-        .catch((error) => {
-            console.error(error.response.data.error);
-        });
-};

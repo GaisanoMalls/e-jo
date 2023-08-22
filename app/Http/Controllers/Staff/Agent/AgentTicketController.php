@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff\Agent;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Status;
 use App\Models\Ticket;
 
@@ -22,6 +23,8 @@ class AgentTicketController extends Controller
                 'status_id' => Status::CLAIMED
             ]);
 
+            ActivityLog::make($ticket->id, auth()->user()->id, 'claimed the ticket');
+
             return back()->with('success', 'You have claimed the ticket.');
 
         } catch (\Exception $e) {
@@ -35,8 +38,7 @@ class AgentTicketController extends Controller
             $existingAgentId = Ticket::where('id', $ticket->id)->value('agent_id');
 
             if (!is_null($existingAgentId)) {
-                return to_route('staff.ticket.view_ticket', [$ticket->id])
-                    ->with('error', 'Ticket already claimed. Select another ticket to claim.');
+                return back()->with('error', 'Ticket already claimed. Select another ticket to claim.');
             }
 
             $ticket->update([
@@ -44,12 +46,12 @@ class AgentTicketController extends Controller
                 'status_id' => Status::CLAIMED
             ]);
 
-            return to_route('staff.ticket.view_ticket', [$ticket->id])
-                ->with('success', 'The have successfully claimed the ticket.');
+            ActivityLog::make($ticket->id, auth()->user()->id, 'claimed the ticket');
+
+            return back()->with('success', 'The have successfully claimed the ticket.');
 
         } catch (\Exception $e) {
-            return to_route('staff.ticket.view_ticket', [$ticket->id])
-                ->with('info', 'Failed to claim the ticket. Please try again.');
+            return back()->with('info', 'Failed to claim the ticket. Please try again.');
         }
     }
 
@@ -60,12 +62,12 @@ class AgentTicketController extends Controller
                 'status_id' => Status::CLOSED
             ]);
 
-            return to_route('staff.ticket.view_ticket', [$ticket->id])
-                ->with('success', 'The have successfully closed the ticket.');
+            ActivityLog::make($ticket->id, auth()->user()->id, 'closed the ticket');
+
+            return back()->with('success', 'The have successfully closed the ticket.');
 
         } catch (\Exception $e) {
-            return to_route('staff.ticket.view_ticket', [$ticket->id])
-                ->with('info', 'Failed to close the ticket. Please try again.');
+            return back()->with('info', 'Failed to close the ticket. Please try again.');
         }
     }
 }

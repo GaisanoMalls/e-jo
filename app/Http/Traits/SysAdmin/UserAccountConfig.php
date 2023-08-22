@@ -12,9 +12,7 @@ trait UserAccountConfig
             return back()->with('error', 'Current password not matched. Please try again.');
         }
 
-        $user->update([
-            'password' => Hash::make($newPassword)
-        ]);
+        $user->update(['password' => Hash::make($newPassword)]);
 
         return back()->with('success', 'Password successfully updated.');
     }

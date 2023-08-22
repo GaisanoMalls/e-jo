@@ -31,5 +31,5 @@
     <button type="submit" class="btn mt-3 w-100 btn-block login__button">
         Sign In
     </button>
-    <a href="{{ route('forgot_password.index') }}" class="mt-4 link">Forgot password?</a>
+    <a href="{{ route('forgot_password') }}" class="mt-4 link">Forgot password?</a>
 </form>

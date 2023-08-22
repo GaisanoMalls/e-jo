@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Approver;
+namespace App\Http\Requests;
 
-use Illuminate\Validation\Rules\File;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File;
 
-class StoreClarificationRequest extends FormRequest
+class StaffReplyTicketRequest extends FormRequest
 {
-    protected $errorBag = 'storeTicketClarification';
+    protected $errorBag = 'storeTicketReply';
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -27,7 +27,7 @@ class StoreClarificationRequest extends FormRequest
     {
         return [
             'description' => ['required'],
-            'clarificationFiles.*' => [
+            'replyFiles.*' => [
                 'nullable',
                 File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv'])
                     ->max(25 * 1024) //25600 (25 MB)
@@ -38,9 +38,9 @@ class StoreClarificationRequest extends FormRequest
     public function messages()
     {
         return [
-            'clarificationFiles.*.file' => 'The uploaded file is not valid.',
-            'clarificationFiles.*.mimes' => 'Invalid file type. File must be of type: jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv',
-            'clarificationFiles.*.max' => 'The file size must not exceed 25 MB.'
+            'replyFiles.*.file' => 'The uploaded file is not valid.',
+            'replyFiles.*.mimes' => 'Invalid file type. File must be of type: jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv',
+            'replyFiles.*.max' => 'The file size must not exceed 25 MB.'
         ];
     }
 }

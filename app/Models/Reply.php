@@ -18,6 +18,11 @@ class Reply extends Model
         return $this->hasMany(ReplyFile::class);
     }
 
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

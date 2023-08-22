@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 
 trait AuthUserAccount
 {
+    use FileUploadDir;
+
     public function authUserUpdateProfileInfo($request)
     {
         $user = Auth::user();
@@ -42,10 +44,14 @@ trait AuthUserAccount
 
         if ($request->hasFile($fileField)) {
             $picture = $request->file($fileField);
-            $fileName = time() . "_" . $picture->getClientOriginalName();
-            $picturePath = $picture->storeAs($path, $fileName, 'public');
+            $fileName = $this->generateNewProfilePictureName($picture);
+            $picturePath = Storage::putFileAs(
+                "public/profile_picture/" . $this->fileDirByUserType(),
+                $picture,
+                $fileName
+            );
 
-            $profile->picture ? Storage::delete('public/' . $profile->picture) : null;
+            $profile->picture ? Storage::delete($profile->picture) : null;
             $profile->picture = $picturePath;
         }
     }

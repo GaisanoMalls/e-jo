@@ -7,12 +7,12 @@ use App\Http\Controllers\Staff\Approver\ApproverDashboardController;
 use App\Http\Controllers\Staff\Approver\ApproverTicketsController;
 use App\Http\Controllers\Staff\DashboardController;
 use App\Http\Controllers\Staff\DirectoryController;
+use App\Http\Controllers\Staff\ServiceDeptAdmin\AnnouncementController;
 use App\Http\Controllers\Staff\SysAdmin\AccountAgentController;
 use App\Http\Controllers\Staff\SysAdmin\AccountApproverController;
 use App\Http\Controllers\Staff\SysAdmin\AccountsController;
 use App\Http\Controllers\Staff\SysAdmin\AccountServiceDeptAdminController;
 use App\Http\Controllers\Staff\SysAdmin\AccountUserController;
-use App\Http\Controllers\Staff\ServiceDeptAdmin\AnnouncementController;
 use App\Http\Controllers\Staff\SysAdmin\BranchController;
 use App\Http\Controllers\Staff\SysAdmin\BUDepartmentController;
 use App\Http\Controllers\Staff\SysAdmin\HelpTopicsController;
@@ -33,9 +33,7 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('/forgot-password')->name('forgot_password.')->group(function () {
-    Route::get('/', [ForgotPasswordController::class, 'index'])->name('index');
-});
+Route::get('/forgot-password', ForgotPasswordController::class)->name('forgot_password');
 
 // * Auth routes
 Route::controller(AuthController::class)->group(function () {
