@@ -645,6 +645,27 @@ body {
   font-weight: 500;
 }
 
+.log__container .log__icon {
+  color: #d32839;
+  font-size: 23px;
+  margin-top: -2px;
+}
+.log__container .log__description {
+  font-size: 0.813rem !important;
+  color: #212529;
+  font-weight: 500;
+}
+.log__container .log__description .causer__details {
+  font-weight: 600 !important;
+}
+.log__container .log__date,
+.log__container .log__time {
+  font-size: 0.688rem;
+}
+.log__container .log__list:last-child {
+  border-bottom: 0 !important;
+}
+
 .btn__reply__ticket {
   border-radius: 0.563rem;
   font-size: 0.875rem;

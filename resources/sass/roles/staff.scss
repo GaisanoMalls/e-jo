@@ -1385,6 +1385,7 @@ a {
     .log__icon {
         color: $color-1;
         font-size: 23px;
+        margin-top: -2px;
     }
 
     .log__description {
@@ -1401,6 +1402,10 @@ a {
     .log__date,
     .log__time {
         font-size: $fs-11;
+    }
+
+    .log__list:last-child {
+        border-bottom: 0 !important;
     }
 }
 

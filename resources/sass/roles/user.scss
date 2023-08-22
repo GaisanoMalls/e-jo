@@ -881,6 +881,34 @@ body {
     }
 }
 
+.log__container {
+    .log__icon {
+        color: $color-1;
+        font-size: 23px;
+        margin-top: -2px;
+    }
+
+    .log__description {
+        font-size: $fs-13 !important;
+        color: #212529;
+        font-weight: $fw-500;
+
+
+        .causer__details {
+            font-weight: $fw-600 !important;
+        }
+    }
+
+    .log__date,
+    .log__time {
+        font-size: $fs-11;
+    }
+
+    .log__list:last-child {
+        border-bottom: 0 !important;
+    }
+}
+
 .btn__reply__ticket {
     border-radius: $border-radius-9;
     font-size: $fs-14;

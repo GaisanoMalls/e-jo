@@ -181,6 +181,7 @@
                 <div class="col-md-4">
                     <div class="container__ticket__details__right">
                         @include('layouts.staff.approver.ticket.includes.ticket_details')
+                        @include('layouts.staff.approver.ticket.includes.ticket_activity_logs')
                     </div>
                 </div>
             </div>

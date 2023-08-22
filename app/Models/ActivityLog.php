@@ -30,8 +30,11 @@ class ActivityLog extends Model
 
     public function causerDetails()
     {
-        $me = $this->user_id === auth()->user()->id ? ' (You)' : '';
-        return $this->causer->profile->getFullName() . $me;
+        $details = $this->user_id != auth()->user()->id
+            ? $this->causer->profile->getFullName()
+            : 'You';
+
+        return $details;
     }
 
     public static function make(int $ticket, int $causer, string $description, string $logName = null)
