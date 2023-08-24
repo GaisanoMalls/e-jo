@@ -41,7 +41,8 @@ Edit Agent
                                     <label for="first_name" class="form-label form__field__label">First
                                         name</label>
                                     <input type="text" name="first_name" class="form-control form__field"
-                                        id="first_name" value="{{ $agent->profile->first_name }}">
+                                        id="first_name" value="{{ $agent->profile->first_name }}"
+                                        placeholder="Enter first name (required)">
                                     @error('first_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -54,7 +55,8 @@ Edit Agent
                                 <div class="mb-3">
                                     <label for="middle_name" class="form-label form__field__label">Middle name</label>
                                     <input type="text" name="middle_name" class="form-control form__field"
-                                        id="middle_name" value="{{ $agent->profile->middle_name }}">
+                                        id="middle_name" value="{{ $agent->profile->middle_name }}"
+                                        placeholder="Enter middle name (optional)">
                                     @error('middle_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -67,7 +69,8 @@ Edit Agent
                                 <div class="mb-3">
                                     <label for="last_name" class="form-label form__field__label">Last name</label>
                                     <input type="text" name="last_name" class="form-control form__field" id="last_name"
-                                        value="{{ $agent->profile->last_name }}">
+                                        value="{{ $agent->profile->last_name }}"
+                                        placeholder="Enter last name (required)">
                                     @error('last_name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -79,7 +82,8 @@ Edit Agent
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label class="form-label form__field__label">Suffix</label>
-                                    <select name="suffix" data-search="false" data-silent-initial-value-set="true">
+                                    <select name="suffix" data-search="false" data-silent-initial-value-set="true"
+                                        placeholder="Select (optional)">
                                         <option value="" selected>N/A</option>
                                         @foreach ($suffixes as $suffix)
                                         <option value="{{ $suffix->name }}" {{ $suffix->name ==
@@ -106,7 +110,7 @@ Edit Agent
                                 <div class="mb-3">
                                     <label for="email" class="form-label form__field__label">Email</label>
                                     <input type="email" name="email" class="form-control form__field" id="email"
-                                        value="{{ $agent->email }}">
+                                        value="{{ $agent->email }}" placeholder="Enter email (required)">
                                     @error('email')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -133,7 +137,7 @@ Edit Agent
                                     <input type="hidden" value="{{ $agent->branch_id }}" id="agentCurrentBranchId">
                                     <label class="form-label form__field__label">Branch</label>
                                     <select name="branch" data-search="true" data-silent-initial-value-set="true"
-                                        id="editAgentBranchDropdown">
+                                        id="editAgentBranchDropdown" placeholder="Select (required)">
                                         <option value="" selected disabled>Choose a branch</option>
                                         @foreach ($branches as $branch)
                                         <option value="{{ $branch->id }}" {{ $branch->id == $agent->branch_id ?
@@ -163,7 +167,7 @@ Edit Agent
                                             style="font-size: 12px;"></span>
                                     </label>
                                     <select name="bu_department" data-search="true" data-silent-initial-value-set="true"
-                                        id="editAgentBUDepartmentDropdown">
+                                        id="editAgentBUDepartmentDropdown" placeholder="Select (required)">
                                     </select>
                                     @error('bu_department')
                                     <span class="error__message">
@@ -184,7 +188,7 @@ Edit Agent
                                             style="font-size: 12px;"></span>
                                     </label>
                                     <select name="team" data-search="true" data-silent-initial-value-set="true"
-                                        id="editAgentTeamsDropdown">
+                                        id="editAgentTeamsDropdown" placeholder="Select (required)">
                                     </select>
                                     @error('team')
                                     <span class="error__message">
@@ -200,7 +204,8 @@ Edit Agent
                                         Service Department
                                     </label>
                                     <select name="service_department" data-search="true"
-                                        data-silent-initial-value-set="true" id="editAgentServiceDepartmentDropdown">
+                                        data-silent-initial-value-set="true" id="editAgentServiceDepartmentDropdown"
+                                        placeholder="Select (required)">
                                         @foreach ($serviceDepartments as $serviceDepartment)
                                         <option value="{{ $serviceDepartment->id }}" {{ $serviceDepartment->id ==
                                             $agent->service_department_id

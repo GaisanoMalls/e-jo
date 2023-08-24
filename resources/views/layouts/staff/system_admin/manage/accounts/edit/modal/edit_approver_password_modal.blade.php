@@ -17,7 +17,7 @@
                         <div class="mb-2">
                             <label for="new_password" class="form-label form__field__label">New password</label>
                             <input type="password" name="new_password" class="form-control form__field"
-                                id="new_password" value="">
+                                id="new_password" value="" placeholder="Enter the new password">
                             @error('new_password', 'updatePassword')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -29,7 +29,7 @@
                             <label for="confirm_password" class="form-label form__field__label">Confirm
                                 password</label>
                             <input type="password" name="confirm_password" class="form-control form__field"
-                                id="confirm_password" value="">
+                                id="confirm_password" value="" placeholder="Re-type the new password to confirm">
                             @error('confirm_password', 'updatePassword')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>

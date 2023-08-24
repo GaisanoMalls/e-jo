@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Traits\TimeStamps;
+use App\Http\Traits\Utils;
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, TimeStamps;
+    use HasApiTokens, HasFactory, Notifiable, Utils;
 
     /**
      * The attributes that are mass assignable.
@@ -79,12 +79,6 @@ class User extends Authenticatable
         return $this->belongsTo(Team::class);
     }
 
-    public function levels()
-    {
-        return $this->belongsToMany(Level::class, 'level_approver')
-            ->wherePivot('user_id', Role::APPROVER);
-    }
-
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
@@ -98,6 +92,31 @@ class User extends Authenticatable
     public function activityLogs()
     {
         return $this->hasMany(ActivityLog::class);
+    }
+
+    public function levels()
+    {
+        return $this->belongsToMany(Level::class, 'level_approver');
+    }
+
+    public function serviceDepartments()
+    {
+        return $this->belongsToMany(ServiceDepartment::class, 'user_service_department');
+    }
+
+    public function getServiceDepartments()
+    {
+        $serviceDepartmentNames = [];
+
+        foreach ($this->serviceDepartments as $serviceDepartment) {
+            array_push($serviceDepartmentNames, $serviceDepartment->name);
+        }
+
+        if (!empty($serviceDepartmentNames)) {
+            return implode(', ', $serviceDepartmentNames);
+        }
+
+        return '----';
     }
 
     /**
@@ -161,29 +180,44 @@ class User extends Authenticatable
     }
 
     // Filter user types by roles
-    public function systemAdmins()
+    public static function systemAdmins()
     {
-        return self::where('role_id', Role::SYSTEM_ADMIN)->get();
+        return self::with(['profile', 'branch'])
+            ->whereHas('role', fn($systemAdmin) => $systemAdmin->where('role_id', Role::SYSTEM_ADMIN))
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
-    public function serviceDepartmentAdmins()
+    public static function serviceDepartmentAdmins()
     {
-        return self::where('role_id', Role::SERVICE_DEPARTMENT_ADMIN)->get();
+        return self::with('profile')
+            ->whereHas('role', fn($serviceDepartmentAdmin) => $serviceDepartmentAdmin->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     public static function approvers()
     {
-        return self::where('role_id', Role::APPROVER)->get();
+        return self::with(['profile', 'branch'])
+            ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
-    public function agents()
+    public static function agents()
     {
-        return self::where('role_id', Role::AGENT)->get();
+        return self::with(['profile', 'branch'])
+            ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
-    public function requesters()
+    public static function requesters()
     {
-        return self::where('role_id', Role::USER)->get();
+        return self::with('profile')
+            ->whereHas('role', fn($requester) => $requester->where('role_id', Role::USER))
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     public function dateCreated()

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SysAdmin\Manage\BUDepartment\StoreBUDepartmentRequest;
-use App\Http\Traits\MultiSelect;
+use App\Http\Traits\Utils;
 use App\Models\Branch;
 use App\Models\Department;
 use Illuminate\Http\Request;
@@ -14,12 +14,13 @@ use Illuminate\Support\Str;
 
 class BUDepartmentController extends Controller
 {
-    use MultiSelect;
+    use Utils;
 
     public function index()
     {
         $buDepartments = Department::with('branches')->orderBy('created_at', 'desc')->get();
         $branches = Branch::orderBy('name', 'asc')->get();
+
         return view(
             'layouts.staff.system_admin.manage.bu_departments.bu_department_index',
             compact([
@@ -65,8 +66,7 @@ class BUDepartmentController extends Controller
 
         if ($validator->fails()) {
             $request->session()->put('buDepartmentId', $buDepartment->id); // set a session containing the pk of department to show modal based on the selected record.
-            return back()->withErrors($validator, 'editBUDepartment')
-                ->withInput();
+            return back()->withErrors($validator, 'editBUDepartment')->withInput();
         }
 
         try {

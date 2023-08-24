@@ -30,6 +30,27 @@ input[type="password"] {
     }
 }
 
+::placeholder {
+    font-size: $fs-14;
+    color: #B5B5B5 !important;
+    font-weight: 300;
+}
+
+input {
+    &:focus {
+        &::placeholder {
+            transition: all 0.4s;
+            padding-left: 5px !important;
+        }
+    }
+
+    &:not(:focus) {
+        &::placeholder {
+            transition: all 0.4s;
+        }
+    }
+}
+
 .form-control.is-invalid {
     box-shadow: none !important;
     border: 0.09rem solid #dc3545 !important;

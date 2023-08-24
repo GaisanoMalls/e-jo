@@ -1,6 +1,6 @@
 <div class="modal help__topic__modal" id="addNewHelpTopicModal" tabindex="-1"
     aria-labelledby="addNewHelpTopicModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">
                 <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">Add new help topic</h1>
@@ -15,11 +15,11 @@
                     <div class="row mb-2">
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-8">
                                     <div class="mb-2">
                                         <label for="name" class="form-label form__field__label">Name</label>
                                         <input type="text" name="name" class="form-control form__field" id="name"
-                                            value="{{ old('name') }}" placeholder="Type here...">
+                                            value="{{ old('name') }}" placeholder="Enter help topic name">
                                         @error('name', 'storeHelpTopic')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
@@ -28,12 +28,12 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-4">
                                     <div class="mb-2">
                                         <label for="sla" class="form-label form__field__label">
                                             Serice Level Agreement (SLA)
                                         </label>
-                                        <select name="sla" placeholder="Choose an SLA" data-search="true"
+                                        <select name="sla" placeholder="Select (required)" data-search="true"
                                             data-silent-initial-value-set="true">
                                             <option value="" selected disabled>Choose an SLA</option>
                                             @foreach ($slas as $sla)
@@ -55,7 +55,7 @@
                                         <label for="department" class="form-label form__field__label">
                                             Service Department
                                         </label>
-                                        <select name="service_department" placeholder="Choose a department"
+                                        <select name="service_department" placeholder="Select (required)"
                                             data-search="true" data-silent-initial-value-set="true"
                                             id="helpTopicServiceDepartmentDropdown">
                                             <option value="" selected disabled>Choose a department</option>
@@ -83,7 +83,7 @@
                                             <small id="helpTopicNoTeamsMessage" class="text-danger fw-normal"
                                                 style="font-size: 12px;"></small>
                                         </label>
-                                        <select name="team" placeholder="Choose a team" data-search="true"
+                                        <select name="team" placeholder="Select (required)" data-search="true"
                                             data-silent-initial-value-set="true" id="helpTopicTeamsDropdown">
                                         </select>
                                         @error('service_department', 'storeHelpTopic')
@@ -95,13 +95,13 @@
                                     </div>
                                 </div>
                                 <small class="fw-bold my-3">Approvals</small>
-                                <div class="col-md-12">
+                                <div class="col-md-4">
                                     <div class="mb-2">
                                         <label class="form-label form__field__label">
                                             Level of approval
                                         </label>
                                         <select id="levelOfApproverDropdown" name="level_of_approval"
-                                            placeholder="Choose level of approver" data-search="false"
+                                            placeholder="Select (required)" data-search="false"
                                             data-silent-initial-value-set="true">
                                             <option value="" selected disabled>Choose level of approver</option>
                                             @foreach ($levelOfApprovals as $level)
@@ -121,7 +121,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-2">
-                                        <div id="selectApproverContainer">
+                                        <div class="row" id="selectApproverContainer">
                                         </div>
                                     </div>
                                 </div>

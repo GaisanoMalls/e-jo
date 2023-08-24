@@ -21,9 +21,9 @@ class TagController extends Controller
         );
     }
 
-    public function store(StoreTagRequest $request, Tag $tag)
+    public function store(StoreTagRequest $request)
     {
-        $tag->create([
+        Tag::create([
             'name' => $request->name,
             'slug' => \Str::slug($request->name)
         ]);
@@ -42,15 +42,20 @@ class TagController extends Controller
             return back()->withErrors($validator, 'editTag')->withInput();
         }
 
-        $tag->update([
-            'name' => $request->name,
-            'slug' => \Str::slug($request->name)
-        ]);
+        try {
+            $tag->update([
+                'name' => $request->name,
+                'slug' => \Str::slug($request->name)
+            ]);
 
-        $request->session()->forget('tagId'); // remove the tagId in the session when form is successful or no errors.
-        return back()->with('success', 'Tag successfully updated.');
+            $request->session()->forget('tagId'); // remove the tagId in the session when form is successful or no errors.
+            return back()->with('success', 'Tag successfully updated.');
+
+        } catch (\Exception $e) {
+            $request->session()->put('tagId', $tag->id); // set a session containing the pk of branch to show modal based on the selected record.
+            return back()->with('duplicate_name_error', "Tag name {$request->name} already exists.");
+        }
     }
-
 
     public function delete(Tag $tag)
     {

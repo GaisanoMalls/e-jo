@@ -21,7 +21,7 @@ class AnnouncementController extends Controller
     public function index()
     {
         $departments = Department::orderBy('name', 'asc')->get();
-        $annnouncements = new Announcement;
+        $annnouncements = Announcement::query();
 
         $today_announcements = $annnouncements->whereDate('created_at', Carbon::today()->toDateString())->orderBy('created_at', 'desc')->get();
         $yesterday_announcements = $annnouncements->whereDate('created_at', Carbon::yesterday()->toDateString())->orderBy('created_at', 'desc')->get();
@@ -41,9 +41,9 @@ class AnnouncementController extends Controller
         );
     }
 
-    public function store(StoreAnnouncementRequest $request, Announcement $announcement)
+    public function store(StoreAnnouncementRequest $request)
     {
-        $announcement->create([
+        Announcement::create([
             'title' => $request->title,
             'department_id' => $request->department,
             'description' => $request->description,

@@ -37,10 +37,13 @@
             </td>
             <td>
                 <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                    <a href="" class="btn action__button mt-0">
+                    @include('layouts.staff.system_admin.manage.ticket_statuses.includes.modal.edit_status_modal')
+                    <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px" type="button"
+                        class="btn action__button" data-bs-toggle="modal" data-bs-target="#editStatus{{ $status->id }}"
+                        id="btnEdit">
                         <i class="bi bi-pencil"></i>
-                    </a>
-                    <form action="" method="post">
+                    </button>
+                    <form action="{{ route('staff.manage.ticket_statuses.delete', $status->id) }}" method="post">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-sm action__button mt-0">

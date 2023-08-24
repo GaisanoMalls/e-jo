@@ -16,7 +16,7 @@
                         <div class="mb-2">
                             <label for="name" class="form-label form__field__label">Name</label>
                             <input type="text" name="name" class="form-control form__field" id="name"
-                                value="{{ old('name') }}" placeholder="Type here...">
+                                value="{{ old('name') }}" placeholder="Enter status name">
                             @error('name', 'storeTicketStatus')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -28,9 +28,9 @@
                             <label for="color" class="form-label form__field__label">Color</label>
                             <div class="d-flex align-items-center gap-2">
                                 <input type="color" name="colorSelect" class="form-control-color form__field p-1"
-                                    id="statusColorSelect" value="{{ old('name') }}" placeholder="Type here...">
+                                    id="statusColorSelect" value="{{ old('name') }}">
                                 <input type="text" name="color" class="form-control form__field" value=""
-                                    id="statusColorHexVal">
+                                    placeholder="Enter status color" id="statusColorHexVal">
                             </div>
                             @error('color', 'storeTicketStatus')
                             <span class="error__message">

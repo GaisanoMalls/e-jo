@@ -108,7 +108,7 @@ $sidebar-gradient-background: linear-gradient(310deg, #2c287f 0%, #9079ce 100%);
 $box-shadow-global: 0 20px 27px 0 rgb(0 0 0 / 5%);
 $hover-background: #eceff4;
 $sidebar-badge-background: #31316a;
-$dropdown-icon-color: #67799f;
+$dropdown-icon-color: #777d87;
 $sidebar-badge-color: #ffffff;
 $dark-background: #1f2937;
 $extra-button-background: #564aa0;
@@ -371,6 +371,27 @@ body {
 .form-control.is-invalid {
     box-shadow: none !important;
     border: 0.09rem solid #dc3545 !important;
+}
+
+::placeholder {
+    font-size: $fs-14;
+    color: #B5B5B5 !important;
+    font-weight: 300;
+}
+
+input {
+    &:focus {
+        &::placeholder {
+            transition: all 0.4s;
+            padding-left: 5px !important;
+        }
+    }
+
+    &:not(:focus) {
+        &::placeholder {
+            transition: all 0.4s;
+        }
+    }
 }
 
 .invalid-feedback {
@@ -665,7 +686,7 @@ a {
     background-color: $white;
 
     i {
-        color: #00695b;
+        color: $dropdown-icon-color;
     }
 }
 

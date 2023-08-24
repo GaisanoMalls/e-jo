@@ -1,6 +1,6 @@
 <div class="modal department__modal" id="addNewServiceDepartmentModal" tabindex="-1"
     aria-labelledby="addNewServiceDepartmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">
                 <h1 class="modal-title modal__title" id="addNewDepartmentModalLabel">Add new service department</h1>
@@ -16,7 +16,7 @@
                         <div class="mb-2">
                             <label for="name" class="form-label form__field__label">Name</label>
                             <input type="text" name="name" class="form-control form__field" id="name"
-                                value="{{ old('name') }}" placeholder="Type here...">
+                                value="{{ old('name') }}" placeholder="Enter service department name">
                             @error('name', 'storeServiceDepartment')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>

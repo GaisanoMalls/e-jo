@@ -70,7 +70,7 @@ Tags
 @endpush
 @endif
 
-@if ($errors->editTag->any())
+@if ($errors->editTag->any() || session()->has('duplicate_name_error'))
 {{-- Show edit modal based on the selected record/data --}}
 <input type="hidden" id="tagId" value="{{ session('tagId') }}">
 @push('modal-with-error')

@@ -186,6 +186,27 @@ $color-1: #d32839;
     font-weight: $fw-500;
 }
 
+::placeholder {
+    font-size: $fs-14;
+    color: #B5B5B5 !important;
+    font-weight: 300;
+}
+
+input {
+    &:focus {
+        &::placeholder {
+            transition: all 0.4s;
+            padding-left: 5px !important;
+        }
+    }
+
+    &:not(:focus) {
+        &::placeholder {
+            transition: all 0.4s;
+        }
+    }
+}
+
 .slideIn {
     -webkit-animation-name: slideIn;
     animation-name: slideIn;

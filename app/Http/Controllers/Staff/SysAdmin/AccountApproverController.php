@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SysAdmin\Manage\Account\StoreApproverRequest;
 use App\Http\Requests\SysAdmin\Manage\Account\UpdateApproverRequest;
-use App\Http\Traits\MultiSelect;
-use App\Http\Traits\SlugGenerator;
-use App\Http\Traits\UserDetails;
+use App\Http\Traits\BasicModelQueries;
+use App\Http\Traits\Utils;
 use App\Models\Branch;
 use App\Models\Profile;
 use App\Models\Role;
@@ -16,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class AccountApproverController extends Controller
 {
-    use SlugGenerator, UserDetails, MultiSelect;
+    use Utils, BasicModelQueries;
 
     public function store(StoreApproverRequest $request)
     {
@@ -63,8 +62,8 @@ class AccountApproverController extends Controller
 
     public function editDetails(User $approver)
     {
-        $suffixes = $this->suffixes();
-        $branches = $this->branches();
+        $suffixes = $this->querySuffixes();
+        $branches = $this->queryBranches();
 
         return view(
             'layouts.staff.system_admin.manage.accounts.edit.edit_approver',

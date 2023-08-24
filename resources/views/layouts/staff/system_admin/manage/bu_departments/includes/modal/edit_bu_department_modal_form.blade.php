@@ -1,6 +1,6 @@
 <div class="modal department__modal" id="editBUDepartment{{ $department->id }}" tabindex="-1"
     aria-labelledby="editBUDepartmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">
                 <h1 class="modal-title modal__title" id="addNewDepartmentModalLabel">Edit BU/Department</h1>
@@ -17,7 +17,7 @@
                         <div class="mb-2">
                             <label for="name" class="form-label form__field__label">Name</label>
                             <input type="text" name="name" class="form-control form__field" id="name"
-                                value="{{ $department->name ?? old('name') }}" placeholder="Type here...">
+                                value="{{ $department->name ?? old('name') }}" placeholder="Enter BU/department name">
                             @if (session()->has('duplicate_name_error'))
                             <div class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>

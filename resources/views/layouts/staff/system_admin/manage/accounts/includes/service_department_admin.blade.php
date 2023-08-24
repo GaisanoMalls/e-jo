@@ -85,8 +85,7 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $serviceDepartmentAdmin->serviceDepartment->name ?? '----'
-                                                    }}</span>
+                                                <span>{{ $serviceDepartmentAdmin->getServiceDepartments() }}</span>
                                             </div>
                                         </td>
                                         <td>

@@ -27,7 +27,7 @@ class UpdateServiceDeptAdminRequest extends FormRequest
         return [
             'branch' => ['required'],
             'bu_department' => ['required'],
-            'service_department' => ['required'],
+            'service_departments' => ['required'],
             'first_name' => ['required', 'min:2', 'max:100'],
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],

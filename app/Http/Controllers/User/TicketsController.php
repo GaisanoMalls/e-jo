@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Requester\ReplyTicketRequest;
 use App\Http\Requests\Requester\StoreTicketClarificationRequest;
 use App\Http\Requests\Requester\StoreTicketRequest;
-use App\Http\Traits\FileUploadDir;
 use App\Http\Traits\Requester\Tickets;
-use App\Http\Traits\TicketNumberGenerator;
+use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
 use App\Models\Branch;
@@ -30,7 +29,7 @@ use Illuminate\Support\Facades\Storage;
 
 class TicketsController extends Controller
 {
-    use TicketNumberGenerator, Tickets, FileUploadDir;
+    use Utils, Tickets;
 
     public function openTickets()
     {
@@ -178,7 +177,7 @@ class TicketsController extends Controller
         );
     }
 
-    public function store(StoreTicketRequest $request, Ticket $ticket)
+    public function store(StoreTicketRequest $request)
     {
         try {
             DB::transaction(function () use ($request) {

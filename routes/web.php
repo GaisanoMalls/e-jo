@@ -235,10 +235,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::controller(SLAController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::post('/store', 'store')->name('store');
+                    Route::put('/{sla}/edit', 'update')->name('update');
                     Route::delete('/{sla}/delete', 'delete')->name('delete');
-
-                    // Endpoint for axios
-                    Route::get('/approvers', 'getLevelApprovers');
                 });
             });
 
@@ -255,6 +253,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::controller(TicketStatusController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::post('/store', 'store')->name('store');
+                    Route::put('/{status}/edit', 'update')->name('update');
+                    Route::delete('/{status}/delete', 'delete')->name('delete');
                 });
             });
         });

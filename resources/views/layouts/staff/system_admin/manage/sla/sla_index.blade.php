@@ -72,3 +72,16 @@ SLA Plans
 </script>
 @endpush
 @endif
+
+@if ($errors->editSLA->any() || session()->has('duplicate_name_error') )
+{{-- Show edit modal based on the selected record/data --}}
+<input type="hidden" id="slaId" value="{{ session('slaId') }}">
+@push('modal-with-error')
+<script>
+    const slaId = document.getElementById('slaId');
+    $(function () {
+        $(`#editSLA${slaId.value}`).modal('show');
+    });
+</script>
+@endpush
+@endif

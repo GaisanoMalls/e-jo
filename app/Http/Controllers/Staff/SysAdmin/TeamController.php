@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SysAdmin\Manage\Team\StoreTeamRequest;
-use App\Http\Traits\MultiSelect;
-use App\Http\Traits\SlugGenerator;
+use App\Http\Traits\Utils;
 use App\Models\Branch;
 use App\Models\Role;
 use App\Models\ServiceDepartment;
@@ -17,7 +16,7 @@ use Illuminate\Support\Str;
 
 class TeamController extends Controller
 {
-    use SlugGenerator, MultiSelect;
+    use Utils;
 
     public function index()
     {

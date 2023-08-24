@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Http\Traits\TimeStamps;
-use Carbon\Carbon;
+use App\Http\Traits\Utils;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    use HasFactory, TimeStamps;
+    use HasFactory, Utils;
 
     protected $fillable = ['ticket_id', 'user_id', 'description'];
 

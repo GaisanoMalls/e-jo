@@ -20,7 +20,8 @@ Accounts
 </div>
 @endsection
 
-@if ($errors->storeServiceDeptAdmin->any())
+@if ($errors->storeServiceDeptAdmin->any() || session()->has('empty_service_departments') ||
+session()->has('invalid_service_departments'))
 @push('modal-with-error')
 <script>
     $(function () {

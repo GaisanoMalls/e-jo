@@ -23,6 +23,36 @@ input[type=password]::placeholder {
   font-weight: normal;
 }
 
+::-moz-placeholder {
+  font-size: 0.875rem;
+  color: #B5B5B5 !important;
+  font-weight: 300;
+}
+
+::placeholder {
+  font-size: 0.875rem;
+  color: #B5B5B5 !important;
+  font-weight: 300;
+}
+
+input:focus::-moz-placeholder {
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+  padding-left: 5px !important;
+}
+
+input:focus::placeholder {
+  transition: all 0.4s;
+  padding-left: 5px !important;
+}
+input:not(:focus)::-moz-placeholder {
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+input:not(:focus)::placeholder {
+  transition: all 0.4s;
+}
+
 .form-control.is-invalid {
   box-shadow: none !important;
   border: 0.09rem solid #dc3545 !important;

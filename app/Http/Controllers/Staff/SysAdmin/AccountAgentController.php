@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SysAdmin\Manage\Account\StoreAgenRequest;
 use App\Http\Requests\SysAdmin\Manage\Account\UpdateAgenRequest;
-use App\Http\Traits\SlugGenerator;
-use App\Http\Traits\UserDetails;
+use App\Http\Traits\BasicModelQueries;
+use App\Http\Traits\Utils;
 use App\Models\Branch;
 use App\Models\Profile;
 use App\Models\Role;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class AccountAgentController extends Controller
 {
-    use SlugGenerator, UserDetails;
+    use Utils, BasicModelQueries;
 
     public function store(StoreAgenRequest $request)
     {
@@ -60,9 +60,9 @@ class AccountAgentController extends Controller
 
     public function editDetails(User $agent)
     {
-        $suffixes = $this->suffixes();
-        $branches = $this->branches();
-        $serviceDepartments = $this->serviceDepartments();
+        $suffixes = $this->querySuffixes();
+        $branches = $this->queryBranches();
+        $serviceDepartments = $this->queryServiceDepartments();
 
         return view(
             'layouts.staff.system_admin.manage.accounts.edit.edit_agent',

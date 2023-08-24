@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\ServiceDepartment;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,10 +14,10 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('service_level_agreements', function (Blueprint $table) {
+        Schema::create('user_service_department', function (Blueprint $table) {
             $table->id();
-            $table->integer('countdown_approach');
-            $table->string('time_unit');
+            $table->foreignIdFor(User::class, 'user_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(ServiceDepartment::class, 'service_department_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('service_level_agreements');
+        Schema::dropIfExists('user_service_department');
     }
 };

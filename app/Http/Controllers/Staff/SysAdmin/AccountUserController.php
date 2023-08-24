@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SysAdmin\Manage\Account\StoreUserRequest;
 use App\Http\Requests\SysAdmin\Manage\Account\UpdateUserRequest;
-use App\Http\Traits\SlugGenerator;
-use App\Http\Traits\UserDetails;
+use App\Http\Traits\BasicModelQueries;
+use App\Http\Traits\Utils;
 use App\Models\Branch;
 use App\Models\Department;
 use App\Models\Profile;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class AccountUserController extends Controller
 {
-    use SlugGenerator, UserDetails;
+    use Utils, BasicModelQueries;
 
     public function store(StoreUserRequest $request)
     {
@@ -62,8 +62,8 @@ class AccountUserController extends Controller
 
     public function editDetails(User $user)
     {
-        $suffixes = $this->suffixes();
-        $branches = $this->branches();
+        $suffixes = $this->querySuffixes();
+        $branches = $this->queryBranches();
 
         return view(
             'layouts.staff.system_admin.manage.accounts.edit.edit_user',

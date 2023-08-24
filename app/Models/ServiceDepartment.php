@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Http\Traits\TimeStamps;
-use Carbon\Carbon;
+use App\Http\Traits\Utils;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ServiceDepartment extends Model
 {
-    use HasFactory, TimeStamps;
+    use HasFactory, Utils;
 
     protected $fillable = [
         'name',
@@ -34,6 +33,13 @@ class ServiceDepartment extends Model
     public function helpTopics()
     {
         return $this->hasMany(HelpTopic::class);
+    }
+
+    public function serviceDepartmentAdmins()
+    {
+        return $this->belongsToMany(User::class, 'user_service_department')->whereHas('role', function ($query) {
+            $query->where('role_id', Role::APPROVER);
+        });
     }
 
     public function dateCreated()

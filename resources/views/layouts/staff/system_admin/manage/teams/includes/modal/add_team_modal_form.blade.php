@@ -1,6 +1,6 @@
 <div class="modal service__department__modal" id="addNewTeamModal" tabindex="-1" aria-labelledby="addNewTeamModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">
                 <h1 class="modal-title modal__title" id="addNewTeamModalLabel">Add new team</h1>
@@ -15,7 +15,7 @@
                         <div class="mb-2">
                             <label for="name" class="form-label form__field__label">Name</label>
                             <input type="text" name="name" class="form-control form__field" id="name"
-                                value="{{ old('name') }}" placeholder="Type here...">
+                                value="{{ old('name') }}" placeholder="Enter team name">
                             @error('name', 'storeTeam')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -25,7 +25,7 @@
                         </div>
                         <div class="mb-2">
                             <label for="department" class="form-label form__field__label">Service Department</label>
-                            <select name="service_department" placeholder="Choose a department" data-search="true"
+                            <select name="service_department" placeholder="Select (required)" data-search="true"
                                 data-silent-initial-value-set="true">
                                 <option value="" selected disabled>Choose a department</option>
                                 @foreach ($serviceDepartments as $department)
@@ -42,9 +42,9 @@
                             </span>
                             @enderror
                         </div>
-                        <div class="mb-2">
+                        <div class="mb-2 col-md-6">
                             <label class="form-label form__field__label">Assign to branch</label>
-                            <select name="branches[]" placeholder="Choose a branches" data-search="true" multiple>
+                            <select name="branches[]" placeholder="Select (required)" data-search="true" multiple>
                                 @foreach ($branches as $branch)
                                 <option value="{{ $branch->id }}" {{ in_array($branch->id, old('branches',
                                     [])) ? 'selected' : '' }}>

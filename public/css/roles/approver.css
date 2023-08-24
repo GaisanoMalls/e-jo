@@ -110,6 +110,36 @@
   -webkit-animation-fill-mode: both;
 }
 
+::-moz-placeholder {
+  font-size: 0.875rem;
+  color: #B5B5B5 !important;
+  font-weight: 300;
+}
+
+::placeholder {
+  font-size: 0.875rem;
+  color: #B5B5B5 !important;
+  font-weight: 300;
+}
+
+input:focus::-moz-placeholder {
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+  padding-left: 5px !important;
+}
+
+input:focus::placeholder {
+  transition: all 0.4s;
+  padding-left: 5px !important;
+}
+input:not(:focus)::-moz-placeholder {
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+input:not(:focus)::placeholder {
+  transition: all 0.4s;
+}
+
 nav {
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.13);
 }

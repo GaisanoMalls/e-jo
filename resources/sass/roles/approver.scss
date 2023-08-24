@@ -223,6 +223,27 @@ $color-1: #d32839;
     -webkit-animation-fill-mode: both;
 }
 
+::placeholder {
+    font-size: $fs-14;
+    color: #B5B5B5 !important;
+    font-weight: 300;
+}
+
+input {
+    &:focus {
+        &::placeholder {
+            transition: all 0.4s;
+            padding-left: 5px !important;
+        }
+    }
+
+    &:not(:focus) {
+        &::placeholder {
+            transition: all 0.4s;
+        }
+    }
+}
+
 nav {
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.13);
 

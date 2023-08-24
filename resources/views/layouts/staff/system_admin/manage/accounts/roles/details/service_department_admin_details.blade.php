@@ -94,13 +94,13 @@ Service Dept. Admin Details
                                     value="{{ $serviceDeptAdmin->department->name }}" readonly disabled>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="mb-3">
                                 <label for="branch" class="form-label form__field__label">
                                     Service Department
                                 </label>
                                 <input type="text" name="email" class="form-control form__field" id="email"
-                                    value="{{ $serviceDeptAdmin->serviceDepartment->name }}" readonly disabled>
+                                    value="{{ $serviceDeptAdmin->getServiceDepartments() }}" readonly disabled>
                             </div>
                         </div>
                     </div>

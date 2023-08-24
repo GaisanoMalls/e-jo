@@ -18,13 +18,19 @@
                             <div class="mb-2">
                                 <label for="name" class="form-label form__field__label">Name</label>
                                 <input type="text" name="name" class="form-control form__field" id="name"
-                                    value="{{ $tag->name ?? old('name') }}" placeholder="Type here...">
+                                    value="{{ $tag->name ?? old('name') }}" placeholder="Enter tag name">
                                 @error('name', 'editTag')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}
                                 </span>
                                 @enderror
+                                @if (session()->has('duplicate_name_error'))
+                                <div class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ session()->get('duplicate_name_error') }}
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -32,7 +38,7 @@
                 <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <button type="submit" class="btn m-0 btn__modal__footer btn__send">Save</button>
-                        @if ($errors->editTag->any())
+                        @if ($errors->editTag->any() || session()->has('duplicate_name_error'))
                         <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
                             data-bs-dismiss="modal"
                             onclick="window.location.href='{{ route('staff.manage.tag.index') }}'">Cancel</button>

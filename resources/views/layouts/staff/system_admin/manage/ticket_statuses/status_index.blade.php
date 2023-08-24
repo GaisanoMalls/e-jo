@@ -70,3 +70,16 @@ Ticket Statuses
 </script>
 @endpush
 @endif
+
+@if ($errors->editStatus->any() || session()->has('duplicate_name_error'))
+{{-- Show edit modal based on the selected record/data --}}
+<input type="hidden" id="statusId" value="{{ session('statusId') }}">
+@push('modal-with-error')
+<script>
+    const statusId = document.getElementById('statusId');
+    $(function () {
+        $(`#editStatus${statusId.value}`).modal('show');
+    });
+</script>
+@endpush
+@endif

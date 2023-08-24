@@ -6,13 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Approver\StoreClarificationRequest;
 use App\Http\Requests\Approver\StoreDisapproveTicketRequest;
 use App\Http\Traits\Approver\Tickets as ApproverTickets;
-use App\Http\Traits\FileUploadDir;
+use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
 use App\Models\Reason;
-use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ApproverTicketsController extends Controller
 {
-    use ApproverTickets, FileUploadDir;
+    use ApproverTickets, Utils;
 
     public function ticketStatusToViewed(Ticket $ticket)
     {
@@ -151,8 +150,8 @@ class ApproverTicketsController extends Controller
 
     public function viewTicketDetails(Ticket $ticket)
     {
-        $latestClarification = Clarification::where('ticket_id', $ticket->id)
-            ->where('user_id', '!=', auth()->user()->id)
+        $latestClarification = Clarification::whereHas('ticket', fn($query) => $query->where('ticket_id', $ticket->id))
+            ->whereHas('user', fn($user) => $user->where('user_id', '!=', auth()->user()->id))
             ->orderBy('created_at', 'desc')
             ->first();
 

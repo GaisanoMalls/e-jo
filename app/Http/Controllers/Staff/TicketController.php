@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StaffReplyTicketRequest;
-use App\Http\Traits\FileUploadDir;
 use App\Http\Traits\TicketsByStaffWithSameTemplates;
+use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Department;
 use App\Models\Reply;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
-    use TicketsByStaffWithSameTemplates, FileUploadDir;
+    use TicketsByStaffWithSameTemplates, Utils;
 
     public function approvedTickets()
     {

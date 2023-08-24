@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Http\Traits\TimeStamps;
+use App\Http\Traits\Utils;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ActivityLog extends Model
 {
-    use HasFactory, TimeStamps;
+    use HasFactory, Utils;
 
     protected $fillable = [
         'ticket_id',

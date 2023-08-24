@@ -7,8 +7,6 @@ use App\Http\Requests\Requester\StoreFeedbackRequest;
 use App\Models\Feedback;
 use App\Models\Status;
 use App\Models\Ticket;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class FeedbackController extends Controller
 {

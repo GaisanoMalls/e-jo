@@ -10,6 +10,7 @@ class TicketTag extends Model
     use HasFactory;
 
     protected $fillable = ['ticket_id', 'tag_id'];
+    protected $table = 'ticket_tag';
     public $timestamps = false;
 
     public function tag()

@@ -786,7 +786,7 @@ if (levelOfApproverDropdown) {
         if (approverNumber) {
             for (let i = 1; i <= approverNumber; i++) {
                 const html = `
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="mb-2">
                             <label class="form-label form__field__label">
                                 Level ${i} approver/s

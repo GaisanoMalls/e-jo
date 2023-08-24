@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SysAdmin\Manage\Branch\StoreBranchRequest;
-use App\Http\Traits\SlugGenerator;
+use App\Http\Traits\Utils;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class BranchController extends Controller
 {
-    use SlugGenerator;
+    use Utils;
 
     public function index()
     {

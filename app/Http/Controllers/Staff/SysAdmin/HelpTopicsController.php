@@ -4,26 +4,24 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SysAdmin\Manage\HelpTopic\StoreHelpTopicRequest;
-use App\Http\Traits\MultiSelect;
-use App\Models\ApprovalLevel;
+use App\Http\Requests\SysAdmin\Manage\HelpTopic\UpdateHelpTopicRequest;
+use App\Http\Traits\BasicModelQueries;
+use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
 use App\Models\LevelApprover;
-use App\Models\Role;
 use App\Models\ServiceDepartment;
-use App\Models\ServiceLevelAgreement;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class HelpTopicsController extends Controller
 {
-    use MultiSelect;
+    use Utils, BasicModelQueries;
 
     public function index()
     {
-        $serviceDepartments = ServiceDepartment::orderBy('name', 'asc')->get();
-        $levelOfApprovals = ApprovalLevel::orderBy('description', 'asc')->get();
-        $approvers = User::where('role_id', Role::APPROVER)->get();
-        $slas = ServiceLevelAgreement::orderBy('time_unit', 'asc')->get();
+        $serviceDepartments = $this->queryServiceDepartments();
+        $levelOfApprovals = $this->queryLevelOfApprovals();
+        $approvers = $this->queryApprovers();
+        $slas = $this->queryServiceLevelAgreements();
         $helpTopics = HelpTopic::with(['serviceDepartment', 'department', 'sla'])->orderBy('created_at', 'desc')->get();
 
         return view(
@@ -73,6 +71,31 @@ class HelpTopicsController extends Controller
 
     }
 
+    public function viewDetails()
+    {
+        //
+    }
+
+    public function editDetails(HelpTopic $helpTopic)
+    {
+        //
+    }
+
+    public function update(UpdateHelpTopicRequest $request, HelpTopic $helpTopic)
+    {
+        try {
+            DB::transaction(function () use ($request, $helpTopic) {
+                $helpTopic->update([
+
+                ]);
+            });
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return back()->with('error', 'Failed to update the help topic.');
+        }
+    }
+
     public function delete(HelpTopic $helpTopic)
     {
         try {
@@ -83,12 +106,6 @@ class HelpTopicsController extends Controller
         }
     }
 
-    public function getLevelApprovers()
-    {
-        $sla = User::approvers();
-        return response()->json($sla);
-    }
-
     public function teams(ServiceDepartment $serviceDepartment)
     {
         return response()->json($serviceDepartment->teams);
@@ -96,7 +113,7 @@ class HelpTopicsController extends Controller
 
     public function loadApprovers()
     {
-        $approvers = User::with('profile')->where('role_id', Role::APPROVER)->get();
+        $approvers = $this->queryApprovers();
         return response()->json($approvers);
     }
 }

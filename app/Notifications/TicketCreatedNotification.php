@@ -47,7 +47,7 @@ class TicketCreatedNotification extends Notification implements ShouldQueue
             ->subject("New Ticket - {$this->ticket->ticket_number}")
             ->greeting('New Ticket Created')
             ->line("{$this->ticket->user->profile->getFullName()} has created a ticket.")
-            ->action("View Ticket: {$this->ticket->ticket_number}", url('/'));
+            ->action($this->ticket->ticket_number, url('/'));
     }
 
     /**

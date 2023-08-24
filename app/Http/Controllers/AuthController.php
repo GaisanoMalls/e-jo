@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\AuthRedirect;
 use App\Http\Traits\Logout;
-use App\Http\Traits\ValidateLoginCredentials;
+use App\Http\Traits\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    use Logout, AuthRedirect, ValidateLoginCredentials;
+    use Logout, AuthRedirect, Utils;
 
     public function login()
     {

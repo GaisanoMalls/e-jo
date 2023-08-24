@@ -5,22 +5,36 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SysAdmin\Manage\Account\StoreServiceDeptAdminRequest;
 use App\Http\Requests\SysAdmin\Manage\Account\UpdateServiceDeptAdminRequest;
-use App\Http\Traits\SlugGenerator;
-use App\Http\Traits\UserDetails;
+use App\Http\Traits\BasicModelQueries;
+use App\Http\Traits\Utils;
 use App\Models\Branch;
 use App\Models\Profile;
 use App\Models\Role;
+use App\Models\ServiceDepartment;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class AccountServiceDeptAdminController extends Controller
 {
-    use SlugGenerator, UserDetails;
+    use Utils, BasicModelQueries;
 
     public function store(StoreServiceDeptAdminRequest $request)
     {
+        if ($request->service_departments[0] === null) {
+            return back()->with('empty_service_departments', 'Service department field is required.')
+                ->withInput();
+        }
+
+        $selectedServiceDepartments = $this->getSelectedValue($request->service_departments);
+        $existingServiceDepartments = ServiceDepartment::whereIn('id', $selectedServiceDepartments)->pluck('id');
+
+        if (count($existingServiceDepartments) !== count($selectedServiceDepartments)) {
+            return back()->with('invalid_service_departments', 'Invalid service department.')
+                ->withInput();
+        }
+
         try {
-            DB::transaction(function () use ($request) {
+            DB::transaction(function () use ($request, $existingServiceDepartments) {
                 $user = User::create([
                     'branch_id' => $request->branch,
                     'department_id' => $request->bu_department,
@@ -43,12 +57,15 @@ class AccountServiceDeptAdminController extends Controller
                         $request->suffix
                     ]))
                 ]);
+
+                $user->serviceDepartments()->attach($existingServiceDepartments);
             });
 
             return back()->with('success', 'You have successfully created a new department admin.');
 
         } catch (\Exception $e) {
-            return back()->with('success', 'Failed to save a new service department admin.');
+            dd($e->getMessage());
+            return back()->with('error', 'Failed to save a new service department admin.');
         }
     }
 
@@ -62,8 +79,8 @@ class AccountServiceDeptAdminController extends Controller
 
     public function editDetails(User $serviceDeptAdmin)
     {
-        $suffixes = $this->suffixes();
-        $branches = $this->branches();
+        $suffixes = $this->querySuffixes();
+        $branches = $this->queryBranches();
         $serviceDepartments = $this->serviceDepartments();
 
         return view(
@@ -100,6 +117,10 @@ class AccountServiceDeptAdminController extends Controller
                         $request->suffix
                     ]))
                 ]);
+
+                $serviceDeptAdmin->serviceDepartments()->sync(
+                    $this->getSelectedValue($request->service_departments)
+                );
             });
 
             return back()->with('success', "You have successfully updated the account for {$serviceDeptAdmin->profile->getFullName()}.");

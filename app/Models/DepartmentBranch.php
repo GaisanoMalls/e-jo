@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Http\Traits\TimeStamps;
-use Carbon\Carbon;
+use App\Http\Traits\Utils;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DepartmentBranch extends Model
 {
-    use HasFactory, TimeStamps;
+    use HasFactory, Utils;
 
     protected $guarded = [];
     protected $table = 'department_branch';

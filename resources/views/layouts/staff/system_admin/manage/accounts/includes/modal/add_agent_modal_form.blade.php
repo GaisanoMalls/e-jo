@@ -21,13 +21,15 @@
                         </div>
                         <div class="col-md-7">
                             <div class="row">
+                                <h5 class="mb-4">Fill in the information</h5>
                                 <div class="col-md-6">
                                     <div class="col-md-12">
                                         <div class="mb-2">
                                             <label for="first_name" class="form-label form__field__label">First
                                                 name</label>
                                             <input type="text" name="first_name" class="form-control form__field"
-                                                id="first_name" value="{{ old('first_name') }}">
+                                                id="first_name" value="{{ old('first_name') }}"
+                                                placeholder="Enter first name (required)">
                                             @error('first_name', 'storeAgent')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -40,10 +42,10 @@
                                         <div class="mb-2">
                                             <label for="middle_name" class="form-label form__field__label">
                                                 Middle name
-                                                <span><small>(Optional)</small></span>
                                             </label>
                                             <input type="text" name="middle_name" class="form-control form__field"
-                                                id="middle_name" value="{{ old('middle_name') }}">
+                                                id="middle_name" value="{{ old('middle_name') }}"
+                                                placeholder="Enter middle name (optional)">
                                             @error('middle_name', 'storeAgent')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -57,7 +59,8 @@
                                             <label for="last_name" class="form-label form__field__label">Last
                                                 name</label>
                                             <input type="text" name="last_name" class="form-control form__field"
-                                                id="last_name" value="{{ old('last_name') }}">
+                                                id="last_name" value="{{ old('last_name') }}"
+                                                placeholder="Enter last name (required)">
                                             @error('last_name', 'storeAgent')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -66,14 +69,13 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <div class="mb-2">
                                             <label for="suffix" class="form-label form__field__label">
                                                 Suffix
-                                                <span><small>(Optional)</small></span>
                                             </label>
                                             <select name="suffix" data-search="true"
-                                                data-silent-initial-value-set="true">
+                                                data-silent-initial-value-set="true" placeholder="Select (optional)">
                                                 <option value="" selected disabled>Choose a suffix</option>
                                                 @foreach ($suffixes as $suffix)
                                                 <option value="{{ $suffix->name }}" {{ old('suffix')==$suffix->name ?
@@ -95,7 +97,7 @@
                                             <label for="email" class="form-label form__field__label">Email
                                                 address</label>
                                             <input type="email" name="email" class="form-control form__field" id="email"
-                                                value="{{ old('email') }}">
+                                                value="{{ old('email') }}" placeholder="Enter email (required)">
                                             @error('email', 'storeAgent')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -121,7 +123,8 @@
                                                 Branch
                                             </label>
                                             <select name="branch" data-search="true"
-                                                data-silent-initial-value-set="true" id="agentBranchesDropdown">
+                                                data-silent-initial-value-set="true" placeholder="Select (required)"
+                                                id="agentBranchesDropdown">
                                                 <option value="" selected disabled>Choose a branch</option>
                                                 @foreach ($global_branches as $branch)
                                                 <option value="{{ $branch->id }}" {{ old('branch')==$branch->id ?
@@ -148,7 +151,8 @@
                                                     style="font-size: 12px;"></span>
                                             </label>
                                             <select name="bu_department" data-search="true"
-                                                data-silent-initial-value-set="true" id="agentBUDepartmentsDropdown">
+                                                data-silent-initial-value-set="true" placeholder="Select (required)"
+                                                id="agentBUDepartmentsDropdown">
                                             </select>
                                             @error('bu_department', 'storeAgent')
                                             <span class="error__message">
@@ -168,7 +172,7 @@
                                                     style="font-size: 12px;"></span>
                                             </label>
                                             <select name="team" data-search="true" data-silent-initial-value-set="true"
-                                                id="agentTeamsDropdown">
+                                                placeholder="Select (required)" id="agentTeamsDropdown">
                                             </select>
                                             @error('team', 'storeAgent')
                                             <span class="error__message">
@@ -184,7 +188,7 @@
                                                 Service Department
                                             </label>
                                             <select name="service_department" data-search="true"
-                                                data-silent-initial-value-set="true"
+                                                data-silent-initial-value-set="true" placeholder="Select (required)"
                                                 id="agentServiceDepartmentsDropdown">
                                                 <option value="" selected disabled>Choose a servic department</option>
                                                 @foreach ($global_service_departments as $service_department)

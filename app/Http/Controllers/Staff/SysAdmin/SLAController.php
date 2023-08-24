@@ -7,6 +7,7 @@ use App\Http\Requests\SysAdmin\Manage\SLA\StoreSLARequest;
 use App\Models\ServiceLevelAgreement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class SLAController extends Controller
 {
@@ -21,9 +22,9 @@ class SLAController extends Controller
         );
     }
 
-    public function store(StoreSLARequest $request, ServiceLevelAgreement $sla)
+    public function store(StoreSLARequest $request)
     {
-        $sla->create([
+        ServiceLevelAgreement::create([
             'countdown_approach' => $request->countdown_approach,
             'time_unit' => $request->time_unit
         ]);
@@ -31,14 +32,37 @@ class SLAController extends Controller
         return back()->with('success', 'A new SLA is created.');
     }
 
-    public function edit(Request $request, ServiceLevelAgreement $sla)
+    public function update(Request $request, ServiceLevelAgreement $sla)
     {
         $validator = Validator::make($request->all(), [
-            'countdown_approach' => ['required'],
-            'time_unit' => ['required']
+            'countdown_approach' => [
+                'required',
+                Rule::unique('service_level_agreements')->ignore($sla)
+            ],
+            'time_unit' => [
+                'required',
+                Rule::unique('service_level_agreements')->ignore($sla)
+            ]
         ]);
 
-        // * TODO
+        if ($validator->fails()) {
+            $request->session()->put('slaId', $sla->id); // set a session containing the pk of the SLA to show modal based on the selected record.
+            return back()->withErrors($validator, 'editSLA')->withInput();
+        }
+
+        try {
+            $sla->update([
+                'countdown_approach' => $request->countdown_approach,
+                'time_unit' => $request->time_unit
+            ]);
+
+            $request->session()->forget('slaId'); // remove the slaId in the session when form is successful or no errors.
+            return back()->with('success', 'SLA successfully updated.');
+
+        } catch (\Exception $e) {
+            $request->session()->put('slaId', $sla->id); // set a session containing the pk of branch to show modal based on the selected record.
+            return back()->with('duplicate_name_error', "SLA name {$request->name} already exists.");
+        }
     }
 
     public function delete(ServiceLevelAgreement $sla)
