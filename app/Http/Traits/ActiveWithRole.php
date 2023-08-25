@@ -22,6 +22,7 @@ trait ActiveWithRole
 
         return ($user && $user->isActive() && in_array($user->role_id, $role))
             ? $next($request)
-            : $this->doLogout($request);
+            : $this->doLogout($request)
+                ->with('error', 'Invalid permission. Please try again.');
     }
 }

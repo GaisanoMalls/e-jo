@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 trait AuthUserAccount
 {
-    use FileUploadDir;
+    use Utils;
 
     public function authUserUpdateProfileInfo($request)
     {
