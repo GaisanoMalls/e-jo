@@ -8,12 +8,14 @@ use App\Http\Requests\Requester\StoreTicketClarificationRequest;
 use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\Requester\Tickets;
 use App\Http\Traits\Utils;
+use App\Mail\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
 use App\Models\Branch;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
 use App\Models\HelpTopic;
+use App\Models\LevelApprover;
 use App\Models\Reply;
 use App\Models\ReplyFile;
 use App\Models\Role;
@@ -21,9 +23,11 @@ use App\Models\ServiceDepartment;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketFile;
-use App\Notifications\TicketCreatedNotification;
+use App\Models\User;
+use App\Notifications\TicketNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
@@ -214,9 +218,19 @@ class TicketsController extends Controller
                 }
 
                 // Notify approvers through email and app based notification.
+                $levelApprovers = LevelApprover::where('help_topic_id', $ticket->helpTopic->id)->get();
+                $approvers = User::approvers();
+
                 foreach ($ticket->helpTopic->levels as $level) {
-                    foreach ($level->approvers->unique('id') as $approver) {
-                        Notification::send($approver, new TicketCreatedNotification($ticket));
+                    foreach ($levelApprovers as $levelApprover) {
+                        foreach ($approvers as $approver) {
+                            if ($approver->id === $levelApprover->user_id) {
+                                if ($levelApprover->level_id === $level->id) {
+                                    Notification::send($approver, new TicketNotification($ticket, 'New ticket created.'));
+                                    Mail::to($approver)->send(new TicketCreatedMail($ticket));
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -237,13 +251,18 @@ class TicketsController extends Controller
         $latestClarification = $this->getLatestClarification($ticket->id);
         $reason = $ticket->reasons()->where('ticket_id', $ticket->id)->first();
 
+        $levelApprovers = LevelApprover::where('help_topic_id', $ticket->helpTopic->id)->get();
+        $approvers = User::approvers();
+
         return view(
             'layouts.user.ticket.view_ticket',
             compact([
                 'ticket',
                 'latestReply',
                 'latestClarification',
-                'reason'
+                'reason',
+                'levelApprovers',
+                'approvers'
             ])
         );
     }
@@ -304,13 +323,18 @@ class TicketsController extends Controller
         $latestClarification = $this->getLatestClarification($ticket->id);
         $reason = $ticket->reasons()->where('ticket_id', $ticket->id)->first();
 
+        $levelApprovers = LevelApprover::where('help_topic_id', $ticket->helpTopic->id)->get();
+        $approvers = User::approvers();
+
         return view(
             'layouts.user.ticket.includes.ticket_clarifications',
             compact([
                 'ticket',
                 'latestReply',
                 'latestClarification',
-                'reason'
+                'reason',
+                'levelApprovers',
+                'approvers'
             ])
         );
     }

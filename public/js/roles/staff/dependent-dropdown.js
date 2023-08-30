@@ -2850,7 +2850,7 @@ if (editAgentBranchDropdown || editAgentBUDepartmentDropdown || editAgentTeamsDr
     }
   });
 }
-// Start - Edit for Agent
+// End - Edit for Agent
 // * END --------------------------------------------------------------------------------------------------------------------------
 
 // * START ------------------------------------------------------------------------------------------------------------------------
@@ -2914,7 +2914,6 @@ if (userID) {
     window.onload = function () {
       axios.get("/staff/manage/user-accounts/user/edit/".concat(userCurrentBranchId.value, "/bu-departments")).then(function (response) {
         var departments = response.data;
-        console.log(departments);
         var departmentsOption = [];
         if (departments && departments.length > 0) {
           departments.forEach(function (branch) {
@@ -2977,12 +2976,11 @@ if (editUserBranchDropdown || editUserBUDepartmentDropdown) {
     }
   });
 }
-
 // End - Edit for user/requester
 // * END ------------------------------------------------------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------------------------------------------------------
-// Help Topic Section
+// * START ------------------------------------------------------------------------------------------------------------------------
+// Add Help Topic
 var helpTopicServiceDepartmentDropdown = document.getElementById('helpTopicServiceDepartmentDropdown');
 var helpTopicTeamsDropdown = document.getElementById('helpTopicTeamsDropdown');
 var helpTopicNoTeamsMessage = document.getElementById('helpTopicNoTeamsMessage');
@@ -3027,15 +3025,200 @@ if (helpTopicServiceDepartmentDropdown || helpTopicTeamsDropdown) {
   });
 }
 
+// Start - Edit for help topic
+var helpTopicCurrentTeamId = document.getElementById('helpTopicCurrentTeamId');
+var helpTopicCurrentServiceDepartmentId = document.getElementById('helpTopicCurrentServiceDepartmentId');
+var editHelpTopicCountTeams = document.getElementById('editHelpTopicCountTeams');
+var editHelpTopicNoTeamsMessage = document.getElementById('editHelpTopicNoTeamsMessage');
+var editHelpTopicServiceDepartmentsDropdown = document.getElementById('editHelpTopicServiceDepartmentsDropdown');
+var editHelpTopicTeamsDropdown = document.getElementById('editHelpTopicTeamsDropdown');
+var editHelpTopicLevelOfApprovalDropdown = document.getElementById('editHelpTopicLevelOfApprovalDropdown');
+var editSelectApproverContainer = document.getElementById('editSelectApproverContainer');
+var helpTopicID = document.getElementById('helpTopicID');
+if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
+  editHelpTopicServiceDepartmentsDropdown.addEventListener('reset', function () {
+    editHelpTopicTeamsDropdown.disable();
+    editHelpTopicTeamsDropdown.reset();
+    editHelpTopicCountTeams.textContent = '';
+    editHelpTopicNoTeamsMessage.textContent = '';
+  });
+  if (helpTopicID) {
+    var editHelpTopicPath = "/staff/manage/help-topics/".concat(helpTopicID.value, "/edit-details");
+    var helpTopicPath = window.location.pathname;
+    if (helpTopicPath === editHelpTopicPath) {
+      window.onload = function () {
+        axios.get("/staff/manage/help-topics/assign/service-department/".concat(helpTopicCurrentServiceDepartmentId.value, "/teams")).then(function (response) {
+          var teams = response.data;
+          var teamsOption = [];
+          if (teams && teams.length > 0) {
+            teams.forEach(function (team) {
+              teamsOption.push({
+                value: team.id,
+                label: team.name
+              });
+            });
+            editHelpTopicTeamsDropdown.enable();
+            editHelpTopicTeamsDropdown.setOptions(teamsOption);
+            editHelpTopicTeamsDropdown.setValue(helpTopicCurrentTeamId.value);
+            editHelpTopicCountTeams.textContent = "(".concat(teams.length, ")");
+            editHelpTopicNoTeamsMessage.textContent = '';
+          } else {
+            editHelpTopicTeamsDropdown.reset();
+            editHelpTopicTeamsDropdown.disable();
+            editHelpTopicCountTeams.textContent = '';
+            editHelpTopicNoTeamsMessage.textContent = 'No teams assigned on this service department.';
+          }
+        })["catch"](function (error) {
+          console.log(error.response.data);
+        });
+
+        // Load current approvers.
+        var levelOfApproval = parseInt(editHelpTopicLevelOfApprovalDropdown.value);
+        if (levelOfApproval) {
+          var _loop = function _loop(i) {
+            var html = "\n                            <div class=\"col-md-6\">\n                                <div class=\"mb-2\">\n                                    <label class=\"form-label form__field__label\">\n                                        Level ".concat(i, " approver/s\n                                    </label>\n                                    <select select id=\"editLevel").concat(i, "Approver\" name=\"approvers").concat(i, "[]\" placeholder=\"Choose an approver\" multiple>\n                                    </select>\n                                </div>\n                            </div>");
+            editSelectApproverContainer.insertAdjacentHTML('beforeend', html);
+            VirtualSelect.init({
+              ele: "#editLevel".concat(i, "Approver"),
+              showValueAsTags: true,
+              markSearchResults: true
+            });
+            var editLevelOfApproverSelect = document.getElementById("editLevel".concat(i, "Approver"));
+            axios.get('/staff/manage/help-topics/approvers').then(function (response) {
+              var approvers = response.data;
+              var approversOption = [];
+              if (approvers && approvers.length > 0) {
+                approvers.forEach(function (approver) {
+                  var _approver$profile$mid;
+                  var middleName = "".concat((_approver$profile$mid = approver.profile.middle_name) !== null && _approver$profile$mid !== void 0 ? _approver$profile$mid : '');
+                  var firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+                  approversOption.push({
+                    value: approver.id,
+                    label: "".concat(approver.profile.first_name, " ").concat(firstLetter, " ").concat(approver.profile.last_name)
+                  });
+                });
+                var selectedCurrentApprovers = [];
+                axios.get("/staff/manage/help-topics/".concat(helpTopicID.value, "/level-approvers")).then(function (response) {
+                  var currentApprovers = response.data;
+                  approversOption.forEach(function (approver) {
+                    currentApprovers.forEach(function (currentApprover) {
+                      if (approver.value == currentApprover.id && currentApprover.level == i) {
+                        selectedCurrentApprovers.push(currentApprover.id);
+                      }
+                    });
+                  });
+                })["catch"](function (error) {
+                  console.log(error.response.data);
+                });
+                editLevelOfApproverSelect.setOptions(approversOption);
+              }
+            })["catch"](function (error) {
+              console.log(error.response.data);
+            });
+
+            // axios.get(`/staff/manage/help-topics/${helpTopicID.value}/level-approvers`)
+            //     .then((response) => {
+            //         const currentApprovers = response.data;
+            //         console.log(currentApprovers);
+            //     })
+            //     .catch((error) => {
+            //         console.log(error.response.data);
+            //     });
+          };
+          for (var i = 1; i <= levelOfApproval; i++) {
+            _loop(i);
+          }
+        }
+      };
+    } else {
+      editHelpTopicServiceDepartmentsDropdown.reset();
+      editHelpTopicTeamsDropdown.reset();
+    }
+  }
+  editHelpTopicServiceDepartmentsDropdown.addEventListener('change', function () {
+    var serviceDepartmentId = this.value;
+    if (serviceDepartmentId) {
+      axios.get("/staff/manage/help-topics/assign/service-department/".concat(serviceDepartmentId, "/teams")).then(function (response) {
+        var teams = response.data;
+        var teamsOption = [];
+        if (teams && teams.length > 0) {
+          teams.forEach(function (team) {
+            teamsOption.push({
+              value: team.id,
+              label: team.name
+            });
+          });
+          editHelpTopicTeamsDropdown.enable();
+          editHelpTopicTeamsDropdown.setOptions(teamsOption);
+          editHelpTopicCountTeams.textContent = "(".concat(teams.length, ")");
+          editHelpTopicNoTeamsMessage.textContent = '';
+        } else {
+          editHelpTopicTeamsDropdown.reset();
+          editHelpTopicTeamsDropdown.disable();
+          editHelpTopicCountTeams.textContent = '';
+          editHelpTopicNoTeamsMessage.textContent = 'No teams assigned on this service department.';
+        }
+      })["catch"](function (error) {
+        console.log(error.response.data);
+      });
+    } else {
+      editHelpTopicServiceDepartmentsDropdown.reset();
+      editHelpTopicTeamsDropdown.reset();
+    }
+  });
+  if (editHelpTopicLevelOfApprovalDropdown) {
+    editHelpTopicLevelOfApprovalDropdown.addEventListener('change', function () {
+      var levelOfApproval = parseInt(this.value);
+      editSelectApproverContainer.innerHTML = '';
+      if (levelOfApproval) {
+        var _loop2 = function _loop2() {
+          var html = "\n                    <div class=\"col-md-6\">\n                        <div class=\"mb-2\">\n                            <label class=\"form-label form__field__label\">\n                                Level ".concat(i, " approver/s\n                            </label>\n                            <select select id=\"editLevel").concat(i, "Approver\" name=\"approvers").concat(i, "[]\" placeholder=\"Choose an approver\" multiple>\n                            </select>\n                        </div>\n                    </div>");
+          editSelectApproverContainer.insertAdjacentHTML('beforeend', html);
+          VirtualSelect.init({
+            ele: "#editLevel".concat(i, "Approver"),
+            showValueAsTags: true,
+            markSearchResults: true
+          });
+          var editLevelOfApproverSelect = document.getElementById("editLevel".concat(i, "Approver"));
+          axios.get('/staff/manage/help-topics/approvers').then(function (response) {
+            var approvers = response.data;
+            var editApproversOption = [];
+            if (approvers && approvers.length > 0) {
+              approvers.forEach(function (approver) {
+                var _approver$profile$mid2;
+                var middleName = "".concat((_approver$profile$mid2 = approver.profile.middle_name) !== null && _approver$profile$mid2 !== void 0 ? _approver$profile$mid2 : '');
+                var firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+                editApproversOption.push({
+                  value: approver.id,
+                  label: "".concat(approver.profile.first_name, " ").concat(firstLetter, " ").concat(approver.profile.last_name)
+                });
+              });
+              editLevelOfApproverSelect.setOptions(editApproversOption);
+            }
+          })["catch"](function (error) {
+            console.log(error.response.data);
+          });
+        };
+        for (var i = 1; i <= levelOfApproval; i++) {
+          _loop2();
+        }
+      }
+    });
+  }
+}
+
+// End - Edit for help topic
+// * END ------------------------------------------------------------------------------------------------------------------------
+
 // Assign approvers for help topic
 var levelOfApproverDropdown = document.getElementById('levelOfApproverDropdown');
 var selectApproverContainer = document.getElementById('selectApproverContainer');
 if (levelOfApproverDropdown) {
   levelOfApproverDropdown.addEventListener('change', function () {
-    var approverNumber = parseInt(this.value);
+    var levelOfApproval = parseInt(this.value);
     selectApproverContainer.innerHTML = '';
-    if (approverNumber) {
-      var _loop = function _loop() {
+    if (levelOfApproval) {
+      var _loop3 = function _loop3() {
         var html = "\n                    <div class=\"col-md-6\">\n                        <div class=\"mb-2\">\n                            <label class=\"form-label form__field__label\">\n                                Level ".concat(i, " approver/s\n                            </label>\n                            <select select id=\"level").concat(i, "Approver\" name=\"approvers").concat(i, "[]\" placeholder=\"Choose an approver\" multiple>\n                            </select>\n                        </div>\n                    </div>");
         selectApproverContainer.insertAdjacentHTML('beforeend', html);
         VirtualSelect.init({
@@ -3049,8 +3232,8 @@ if (levelOfApproverDropdown) {
           var approversOption = [];
           if (approvers && approvers.length > 0) {
             approvers.forEach(function (approver) {
-              var _approver$profile$mid;
-              var middleName = "".concat((_approver$profile$mid = approver.profile.middle_name) !== null && _approver$profile$mid !== void 0 ? _approver$profile$mid : '');
+              var _approver$profile$mid3;
+              var middleName = "".concat((_approver$profile$mid3 = approver.profile.middle_name) !== null && _approver$profile$mid3 !== void 0 ? _approver$profile$mid3 : '');
               var firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
               approversOption.push({
                 value: approver.id,
@@ -3063,8 +3246,8 @@ if (levelOfApproverDropdown) {
           console.log(error.response.data);
         });
       };
-      for (var i = 1; i <= approverNumber; i++) {
-        _loop();
+      for (var i = 1; i <= levelOfApproval; i++) {
+        _loop3();
       }
     }
   });

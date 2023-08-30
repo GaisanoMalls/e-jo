@@ -69,11 +69,14 @@
                                 </button>
                             </form>
                         </div>
+                        @foreach (auth()->user()->notifications() as $notification)
                         <li>
                             <a class="btn dropdown-item dropdown__menu__items" href="">
+                                {{ $notification->requester }}
                                 Notifications
                             </a>
                         </li>
+                        @endforeach
                     </ul>
                 </li>
                 <li class="nav-item my-auto dropdown">

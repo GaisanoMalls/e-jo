@@ -8,8 +8,7 @@
                     <i class="fa-sharp fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form action="{{ route('staff.manage.help_topics.store') }}" method="post" autocomplete="off"
-                id="modalForm">
+            <form action="{{ route('staff.manage.help_topic.store') }}" method="post" autocomplete="off" id="modalForm">
                 @csrf
                 <div class="modal-body modal__body">
                     <div class="row mb-2">

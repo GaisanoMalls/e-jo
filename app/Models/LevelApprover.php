@@ -10,7 +10,7 @@ class LevelApprover extends Model
     use HasFactory;
 
     protected $table = 'level_approver';
-    protected $fillable = ['level_id', 'user_id'];
+    protected $fillable = ['level_id', 'user_id', 'help_topic_id'];
 
     public function level()
     {
@@ -20,5 +20,10 @@ class LevelApprover extends Model
     public function approver()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function helpTopic()
+    {
+        return $this->belongsTo(HelpTopic::class);
     }
 }

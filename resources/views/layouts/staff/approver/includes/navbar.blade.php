@@ -30,11 +30,14 @@
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-4">
                 <li class="nav-item my-auto dropdown">
-                    <a class="nav-link icon__nav__link" href="" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                    <a class="nav-link icon__nav__link position-relative" href="">
                         <i class="bi bi-bell-fill"></i>
+                        @if (!auth()->user()->notifications->isEmpty())
+                        <i class='bx bxs-circle bx-burst position-absolute'
+                            style="top: 8px; right: 6px; color: #D32839; font-size: 11px;"></i>
+                        @endif
                     </a>
-                    <ul
+                    {{-- <ul
                         class="dropdown-menu dropdown-menu-end slideIn animate custom__dropdown__menu notification__dropdown__menu">
                         <div class="d-flex align-items-center justify-content-between notification__header">
                             <h6 class="mb-0 title">Notifications</h6>
@@ -46,12 +49,14 @@
                                 </button>
                             </form>
                         </div>
+                        @foreach (auth()->user()->notifications as $notification)
                         <li>
                             <a class="btn dropdown-item dropdown__menu__items" href="">
-                                Notifications
+                                {{ $notification->data['message'] }}
                             </a>
                         </li>
-                    </ul>
+                        @endforeach
+                    </ul> --}}
                 </li>
                 <li class="nav-item my-auto dropdown">
                     <a class="nav-link icon__nav__link" href="" role="button" data-bs-toggle="dropdown"

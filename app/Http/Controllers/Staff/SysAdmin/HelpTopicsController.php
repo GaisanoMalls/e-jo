@@ -10,6 +10,7 @@ use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
 use App\Models\LevelApprover;
 use App\Models\ServiceDepartment;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class HelpTopicsController extends Controller
@@ -57,7 +58,8 @@ class HelpTopicsController extends Controller
                     foreach ($approvers as $approver) {
                         LevelApprover::create([
                             'level_id' => $level,
-                            'user_id' => $approver
+                            'user_id' => $approver,
+                            'help_topic_id' => $helpTopic->id
                         ]);
                     }
                 }
@@ -78,7 +80,24 @@ class HelpTopicsController extends Controller
 
     public function editDetails(HelpTopic $helpTopic)
     {
-        //
+        $levelOfApprovals = $this->queryLevelOfApprovals();
+        $serviceDepartments = $this->queryServiceDepartments();
+        $serviceLevelAgreements = $this->queryServiceLevelAgreements();
+
+        $levelApprovers = LevelApprover::where('help_topic_id', $helpTopic->id)->get();
+        $approvers = $this->queryApprovers();
+
+        return view(
+            'layouts.staff.system_admin.manage.help_topics.edit_help_topic',
+            compact([
+                'helpTopic',
+                'levelOfApprovals',
+                'serviceDepartments',
+                'serviceLevelAgreements',
+                'levelApprovers',
+                'approvers'
+            ])
+        );
     }
 
     public function update(UpdateHelpTopicRequest $request, HelpTopic $helpTopic)
@@ -86,9 +105,27 @@ class HelpTopicsController extends Controller
         try {
             DB::transaction(function () use ($request, $helpTopic) {
                 $helpTopic->update([
-
+                    'service_department_id' => $request->service_department,
+                    'team_id' => $request->team,
+                    'sla_id' => $request->sla,
+                    'name' => $request->name,
+                    'slug' => \Str::slug($request->name)
                 ]);
+
+                $levelOfApproval = (int) $request->level_of_approval;
+
+                for ($level = 1; $level <= $levelOfApproval; $level++) {
+                    $helpTopic->levels()->sync([$level]);
+                    $approvers = $this->getSelectedValue($request->input("approvers{$level}"));
+
+                    foreach ($approvers as $approver) {
+                        LevelApprover::where('help_topic_id', $helpTopic->id)
+                            ->update(['level_id' => $level, 'user_id' => $approver]);
+                    }
+                }
             });
+
+            return back()->with('success', 'Help topic successfully updated.');
 
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -115,5 +152,43 @@ class HelpTopicsController extends Controller
     {
         $approvers = $this->queryApprovers();
         return response()->json($approvers);
+    }
+
+    // For update help topic. Get the approvers based on the level of approval.
+    public function levels(HelpTopic $helpTopic)
+    {
+        return response()->json($helpTopic->levels);
+    }
+
+    public function approvers()
+    {
+        return response()->json($this->queryApprovers());
+    }
+
+    public function levelApprovers(HelpTopic $helpTopic)
+    {
+        return response()->json(LevelApprover::where('help_topic_id', $helpTopic->id)->get());
+    }
+
+    public function helpTopicApprovers(HelpTopic $helpTopic)
+    {
+        $levelApprovers = LevelApprover::where('help_topic_id', $helpTopic->id)->get();
+        $approvers = $this->queryApprovers();
+        $currentApprovers = [];
+
+        foreach ($helpTopic->levels as $level) {
+            foreach ($levelApprovers as $levelApprover) {
+                foreach ($approvers as $approver) {
+                    if ($levelApprover->user_id == $approver->id && $levelApprover->level_id == $level->id) {
+                        array_push($currentApprovers, [
+                            'id' => $approver->id,
+                            'level' => (int) $level->value
+                        ]);
+                    }
+                }
+            }
+        }
+
+        return response()->json($currentApprovers);
     }
 }

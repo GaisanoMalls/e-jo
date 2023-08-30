@@ -16,7 +16,7 @@ class Level extends Model
         return $this->belongsToMany(User::class, 'level_approver', 'level_id', 'user_id')
             ->whereHas('role', function ($query) {
                 $query->where('role_id', Role::APPROVER);
-            });
+            })->withTimestamps();
     }
 
     public function helpTopics()

@@ -50,10 +50,12 @@
             </td>
             <td>
                 <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                    <a href="" class="btn action__button mt-0">
+                    <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
+                        onclick="window.location.href='{{ route('staff.manage.help_topic.edit_details', $helpTopic->id) }}'"
+                        type="button" class="btn action__button">
                         <i class="bi bi-pencil"></i>
-                    </a>
-                    <form action="{{ route('staff.manage.help_topics.delete', $helpTopic->id) }}" method="post">
+                    </button>
+                    <form action="{{ route('staff.manage.help_topic.delete', $helpTopic->id) }}" method="post">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm action__button mt-0">

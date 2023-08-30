@@ -219,15 +219,18 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 });
             });
 
-            Route::prefix('help-topics')->name('help_topics.')->group(function () {
+            Route::prefix('help-topics')->name('help_topic.')->group(function () {
                 Route::controller(HelpTopicsController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
-                    Route::post('store', 'store')->name('store');
-                    Route::delete('{helpTopic}/delete', 'delete')->name('delete');
+                    Route::post('/store', 'store')->name('store');
+                    Route::get('/{helpTopic}/edit-details', 'editDetails')->name('edit_details');
+                    Route::put('/{helpTopic}/update', 'update')->name('update');
+                    Route::delete('/{helpTopic}/delete', 'delete')->name('delete');
 
                     // Axios endpoints
                     Route::get('/approvers', 'loadApprovers');
                     Route::get('/assign/service-department/{serviceDepartment}/teams', 'teams');
+                    Route::get('/{helpTopic}/level-approvers', 'helpTopicApprovers');
                 });
             });
 

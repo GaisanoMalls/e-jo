@@ -51,8 +51,8 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('staff.manage.help_topics.index') }}" class="btn d-flex align-items-center border-0 settings__tab__button
-                {{ Route::is('staff.manage.help_topics.*') ? 'settings__active__tab' : '' }}">
+            <a href="{{ route('staff.manage.help_topic.index') }}" class="btn d-flex align-items-center border-0 settings__tab__button
+                {{ Route::is('staff.manage.help_topic.*') ? 'settings__active__tab' : '' }}">
                 <i class="bi bi-question-circle-fill settings__icon__active__tab"></i>
                 Help Topics
             </a>

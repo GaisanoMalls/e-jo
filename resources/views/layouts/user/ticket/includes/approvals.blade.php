@@ -10,8 +10,14 @@
         Level: {{ $level->value }}
         Approvers:
         <ul>
-            @foreach ($level->approvers->unique('id') as $approver)
+            @foreach ($levelApprovers as $levelApprover)
+            @foreach ($approvers as $approver)
+            @if ($levelApprover->user_id === $approver->id)
+            @if ($levelApprover->level_id === $level->id)
             <li>{{ $approver->profile->getFullName() }}</li>
+            @endif
+            @endif
+            @endforeach
             @endforeach
         </ul>
         @endforeach

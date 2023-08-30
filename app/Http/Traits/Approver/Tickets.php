@@ -10,29 +10,28 @@ trait Tickets
 {
     public function getForApprovalTickets()
     {
-        // $forApprovalTickets = Ticket::where(function ($statusQuery) {
-        //     $statusQuery->where('status_id', Status::OPEN)
-        //         ->where('approval_status', ApprovalStatus::FOR_APPROVAL);
-        // })
-        //     ->where('branch_id', auth()->user()->branch_id)
-        //     ->orderBy('created_at', 'desc')
-        //     ->get();
-
-        // return $forApprovalTickets;
-
-        // * PARTIAL
         $forApprovalTickets = Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OPEN)
                 ->where('approval_status', ApprovalStatus::FOR_APPROVAL);
         })
-            ->whereHas('helpTopic.levels.approvers', function ($approverQuery) {
-                $approverQuery->where('user_id', auth()->user()->id);
-            })
             ->where('branch_id', auth()->user()->branch_id)
             ->orderBy('created_at', 'desc')
             ->get();
 
         return $forApprovalTickets;
+
+        // * PARTIAL
+        // $forApprovalTickets = Ticket::where(function ($statusQuery) {
+        //     $statusQuery->where('status_id', Status::OPEN)
+        //         ->where('approval_status', ApprovalStatus::FOR_APPROVAL);
+        // })
+        //     ->whereHas('helpTopic.levels.approvers', function ($approverQuery) {
+        //         $approverQuery->whereIn('user_id', [auth()->user()->id]);
+        //     })
+        //     ->orderBy('created_at', 'desc')
+        //     ->get();
+
+        // return $forApprovalTickets;
     }
 
     public function getDisapprovedTickets()

@@ -81,7 +81,7 @@ class AccountServiceDeptAdminController extends Controller
     {
         $suffixes = $this->querySuffixes();
         $branches = $this->queryBranches();
-        $serviceDepartments = $this->serviceDepartments();
+        $serviceDepartments = $this->queryServiceDepartments();
 
         return view(
             'layouts.staff.system_admin.manage.accounts.edit.edit_service_dept_admin',

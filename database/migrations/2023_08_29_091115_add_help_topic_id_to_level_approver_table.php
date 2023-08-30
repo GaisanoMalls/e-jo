@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Ticket;
+use App\Models\HelpTopic;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,12 +13,8 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('logs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained()->cascadeOnDelete();
-            $table->string('log_name')->nullable();
-
-            $table->timestamps();
+        Schema::table('level_approver', function (Blueprint $table) {
+            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->after('user_id');
         });
     }
 
@@ -29,6 +25,8 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('logs');
+        Schema::table('level_approver', function (Blueprint $table) {
+            $table->dropColumn('help_topic_id');
+        });
     }
 };

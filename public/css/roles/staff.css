@@ -9305,6 +9305,82 @@ input[type=checkbox]:checked + .form-check-label {
   box-shadow: none;
   border-color: #d32839;
 }
+.help__topics__section .help__topic__details__card {
+  border: none;
+  border-radius: 0.625rem;
+  padding: 1.5rem;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .card__title {
+  font-weight: 600;
+  color: #3d3d3d;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .form__field {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 0.563rem;
+  border: 1px solid #e7e9eb;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .form__field:focus {
+  box-shadow: none;
+  border-color: #d32839;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .form__field__label {
+  font-size: 0.875rem;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .btn__details {
+  font-weight: 500;
+  font-size: 0.875rem;
+  width: 6rem;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .btn__details.btn__send {
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  background-color: #d32839;
+  color: white;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .btn__details.btn__cancel {
+  border: 1px solid #e7e9eb;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  border: 1px solid #e7e9eb;
+  background-color: transparent;
+  color: #d32839;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .level__label {
+  position: absolute;
+  top: -14px;
+  color: white;
+  font-size: 0.875rem;
+  padding: 0.3rem 0.6rem;
+  background-color: #9DA85C;
+  border-radius: 5px;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .approver__image {
+  height: 35px;
+  width: 35px;
+  border: 2px solid #d9ddd9;
+  border-radius: 0.563rem;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .approver__image.approver__picture {
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .approver__image.approver__initial__as__picture {
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: #3B4053;
+  color: white;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .approver__name {
+  font-size: 0.813rem;
+  font-weight: 600;
+  color: #1a3c40;
+}
+.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .approver__email {
+  font-size: 0.75rem;
+  font-weight: 400;
+}
 
 .sla__section .table__header {
   padding: 20px 30px !important;

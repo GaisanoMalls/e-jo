@@ -6,8 +6,7 @@ var __webpack_exports__ = {};
 VirtualSelect.init({
   ele: 'select',
   search: true,
-  markSearchResults: true,
-  showSelectedOptionsFirst: true
+  markSearchResults: true
 });
 /******/ })()
 ;

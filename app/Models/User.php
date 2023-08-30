@@ -96,7 +96,8 @@ class User extends Authenticatable
 
     public function levels()
     {
-        return $this->belongsToMany(Level::class, 'level_approver');
+        return $this->belongsToMany(Level::class, 'level_approver')
+            ->withTimestamps();
     }
 
     public function serviceDepartments()
