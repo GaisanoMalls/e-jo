@@ -27,7 +27,7 @@ class StoreAgenRequest extends FormRequest
         return [
             'branch' => ['required'],
             'bu_department' => ['required'],
-            'team' => ['required'],
+            'teams' => ['required'],
             'service_department' => ['required'],
             'first_name' => ['required', 'min:2', 'max:100'],
             'middle_name' => ['nullable', 'min:2', 'max:100'],

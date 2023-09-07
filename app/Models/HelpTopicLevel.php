@@ -13,11 +13,11 @@ class HelpTopicLevel extends Model
 
     public function helpTopic()
     {
-        return $this->belongsTo(HelpTopic::class);
+        return $this->belongsTo(HelpTopic::class, 'help_topic_id');
     }
 
     public function level()
     {
-        return $this->belongsTo(Level::class);
+        return $this->belongsTo(Level::class, 'level_id');
     }
 }

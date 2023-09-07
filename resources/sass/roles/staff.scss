@@ -185,6 +185,23 @@ body {
     }
 }
 
+input[type="radio"] {
+    height: 17px;
+    width: 17px;
+    border: 2px solid #ced4da;
+}
+
+input[type="radio"]:checked {
+    background-color: $color-1;
+    box-shadow: none;
+    border: 0;
+}
+
+.radio__button__label {
+    font-size: $fs-14;
+    font-weight: $fw-500;
+}
+
 .form-check-label {
     font-size: $fs-14;
 }
@@ -235,17 +252,19 @@ body {
 }
 
 .modal__btnsubmit__bottom {
+    min-width: 90px;
+
     &:focus {
-        background-color: $dark-background !important;
+        background-color: $color-1;
         color: $white !important;
     }
 
-    background-color: $dark-background;
+    background-color: $color-1;
     box-shadow: $button-box-shadow;
     color: $white;
 
     &:hover {
-        background-color: $dark-background;
+        background-color: $color-1;
         box-shadow: $button-box-shadow;
         color: $white;
     }
@@ -1678,16 +1697,6 @@ input[type="checkbox"] {
     &:hover {
         color: $white;
         background-color: $color-1;
-    }
-}
-
-#btnSaveAssignTicketToAnotherAgent {
-    &:disabled {
-        opacity: 2;
-        background-color: #e9ecef;
-        color: #212529;
-        border: 1px solid #ced4da;
-        box-shadow: none !important;
     }
 }
 

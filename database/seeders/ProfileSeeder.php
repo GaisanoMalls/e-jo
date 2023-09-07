@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Http\Traits\SlugGenerator;
+use App\Http\Traits\Utils;
 use App\Models\Profile;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProfileSeeder extends Seeder
 {
-    use SlugGenerator;
+    use Utils;
     /**
      * Run the database seeds.
      *

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StaffReplyTicketRequest;
+use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\TicketsByStaffWithSameTemplates;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
@@ -13,12 +14,13 @@ use App\Models\ReplyFile;
 use App\Models\ServiceDepartment;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
-    use TicketsByStaffWithSameTemplates, Utils;
+    use TicketsByStaffWithSameTemplates, Utils, BasicModelQueries;
 
     public function approvedTickets()
     {
@@ -75,8 +77,17 @@ class TicketController extends Controller
 
     public function viewTicket(Ticket $ticket)
     {
-        $departments = Department::orderBy('name', 'asc')->get();
-        $serviceDepartments = ServiceDepartment::orderBy('name', 'asc')->get();
+        $teams = $this->queryTeams();
+        $departments = $this->queryBUDepartments();
+        $priorityLevels = $this->queryPriorityLevels();
+        $serviceDepartments = $this->queryServiceDepartments();
+        $approvers = User::whereHas('teams', function ($query) use ($ticket) {
+            $query->where('teams.id', $ticket->team_id);
+        })
+            ->where('users.branch_id', $ticket->branch_id)
+            ->where('users.service_department_id', $ticket->service_department_id)
+            ->where('id', '!=', $ticket->agent_id)
+            ->get();
 
         $latestReply = Reply::where('ticket_id', $ticket->id)
             ->where('user_id', '!=', auth()->user()->id)
@@ -89,7 +100,10 @@ class TicketController extends Controller
                 'ticket',
                 'departments',
                 'serviceDepartments',
-                'latestReply'
+                'latestReply',
+                'priorityLevels',
+                'teams',
+                'approvers'
             ])
         );
     }
@@ -109,11 +123,7 @@ class TicketController extends Controller
                 if ($request->hasFile('replyFiles')) {
                     foreach ($request->file('replyFiles') as $uploadedReplyFile) {
                         $fileName = $uploadedReplyFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs(
-                            "public/ticket/{$ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(),
-                            $uploadedReplyFile,
-                            $fileName
-                        );
+                        $fileAttachment = Storage::putFileAs("public/ticket/{$ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(), $uploadedReplyFile, $fileName);
 
                         $replyFile = new ReplyFile();
                         $replyFile->file_attachment = $fileAttachment;
@@ -123,7 +133,7 @@ class TicketController extends Controller
                     }
                 }
 
-                ActivityLog::make($ticket->id, auth()->user()->id, "replied to {$ticket->user->profile->getFullName()}");
+                ActivityLog::make($ticket->id, "replied to {$ticket->user->profile->getFullName()}");
             });
 
             return back()->with('success', 'Your reply has been sent successfully.');

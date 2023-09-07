@@ -78,12 +78,12 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $approver->branch->name }}</span>
+                                                <span>{{ $approver->getBranches() }}</span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $approver->department->name }}</span>
+                                                <span>{{ $approver->getBUDepartments() }}</span>
                                             </div>
                                         </td>
                                         <td>

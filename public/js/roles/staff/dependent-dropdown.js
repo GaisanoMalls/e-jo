@@ -2386,129 +2386,154 @@ var __webpack_exports__ = {};
 var axios = (__webpack_require__(/*! axios */ "./node_modules/axios/index.js")["default"]);
 
 // * START ------------------------------------------------------------------------------------------------------------------------
-// Create Approver - Assign a Branch and BU Department
-var approverBranchDropdown = document.getElementById('approverBranchDropdown');
-var approverBUDepartmentDropdown = document.getElementById('approverBUDepartmentDropdown');
-var approverNoBUDepartmentMessage = document.getElementById('approverNoBUDepartmentMessage');
-var approverCountBUDepartments = document.getElementById('approverCountBUDepartments');
-function approverClearDepartmentsWhenResetBranch() {
-  approverBUDepartmentDropdown.disable();
-  approverNoBUDepartmentMessage.textContent = "";
-  approverCountBUDepartments.textContent = "";
-}
-if (approverBranchDropdown || approverBUDepartmentDropdown) {
-  approverBUDepartmentDropdown.disable();
-  approverBranchDropdown.addEventListener('reset', approverClearDepartmentsWhenResetBranch);
-  approverBranchDropdown.addEventListener('change', function () {
-    var branchId = this.value;
-    if (branchId) {
-      axios.get("/staff/manage/user-accounts/approver/".concat(branchId, "/bu-departments")).then(function (response) {
-        var departments = response.data;
-        var departmentsOption = [];
-        if (departments && departments.length > 0) {
-          departments.forEach(function (department) {
-            departmentsOption.push({
-              value: department.id,
-              label: department.name
-            });
-          });
-          approverBUDepartmentDropdown.enable();
-          approverBUDepartmentDropdown.setOptions(departmentsOption);
-          approverCountBUDepartments.textContent = "(".concat(departments.length, ")");
-          approverNoBUDepartmentMessage.textContent = '';
-        } else {
-          approverBUDepartmentDropdown.reset();
-          approverBUDepartmentDropdown.disable();
-          approverCountBUDepartments.textContent = "";
-          approverNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
-        }
-      })["catch"](function (error) {
-        console.log(error.response.data);
-      });
-    } else {
-      approverBUDepartmentDropdown.reset();
-    }
-  });
-}
+// // Create Approver - Assign a Branch and BU Department
+// const approverBranchDropdown = document.getElementById('approverBranchDropdown');
+// const approverBUDepartmentDropdown = document.getElementById('approverBUDepartmentDropdown');
+// const approverNoBUDepartmentMessage = document.getElementById('approverNoBUDepartmentMessage');
+// const approverCountBUDepartments = document.getElementById('approverCountBUDepartments');
 
-// Start - Edit Approver - Edit Branch and BU Department
-var editApproverBranchDropdown = document.getElementById('editApproverBranchDropdown');
-var editApproverBUDepartmentDropdown = document.getElementById('editApproverBUDepartmentDropdown');
-var editApproverCountBUDepartments = document.getElementById('editApproverCountBUDepartments');
-var editApproverNoBUDepartmentMessage = document.getElementById('editApproverNoBUDepartmentMessage');
-var approverCurrentBranchId = document.getElementById('approverCurrentBranchId');
-var approverCurrentDepartmentId = document.getElementById('approverCurrentDepartmentId');
-var approverUserID = document.getElementById('approverUserID');
-if (approverUserID) {
-  var approverDetailsPath = "/staff/manage/user-accounts/approver/".concat(approverUserID.value, "/edit-details");
-  var approverPath = window.location.pathname;
-  if (approverPath === approverDetailsPath) {
-    window.onload = function () {
-      axios.get("/staff/manage/user-accounts/approver/edit/".concat(approverCurrentBranchId.value, "/bu-departments")).then(function (response) {
-        var departments = response.data;
-        var departmentsOption = [];
-        if (departments && departments.length > 0) {
-          departments.forEach(function (department) {
-            departmentsOption.push({
-              value: department.id,
-              label: department.name
-            });
-          });
-          editApproverBUDepartmentDropdown.enable();
-          editApproverBUDepartmentDropdown.setOptions(departmentsOption);
-          editApproverBUDepartmentDropdown.setValue(approverCurrentDepartmentId.value);
-          editApproverCountBUDepartments.textContent = "(".concat(departments.length, ")");
-          editApproverNoBUDepartmentMessage.textContent = '';
-        } else {
-          editApproverBUDepartmentDropdown.reset();
-          editApproverBUDepartmentDropdown.disable();
-          editApproverCountBUDepartments.textContent = "";
-          editApproverNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
-        }
-      })["catch"](function (error) {
-        console.log(error.response.data);
-      });
-    };
-  }
-}
-if (editApproverBranchDropdown || editApproverBUDepartmentDropdown) {
-  editApproverBranchDropdown.addEventListener('change', function () {
-    var branchId = this.value;
-    editApproverBranchDropdown.addEventListener('reset', function () {
-      editApproverBUDepartmentDropdown.disable();
-      editApproverNoBUDepartmentMessage.textContent = "";
-      editApproverCountBUDepartments.textContent = "";
-    });
-    if (branchId) {
-      axios.get("/staff/manage/user-accounts/approver/edit/".concat(branchId, "/bu-departments")).then(function (response) {
-        var departments = response.data;
-        var departmentsOption = [];
-        if (departments && departments.length > 0) {
-          departments.forEach(function (department) {
-            departmentsOption.push({
-              value: department.id,
-              label: department.name
-            });
-          });
-          editApproverBUDepartmentDropdown.enable();
-          editApproverBUDepartmentDropdown.setOptions(departmentsOption);
-          editApproverCountBUDepartments.textContent = "(".concat(departments.length, ")");
-          editApproverNoBUDepartmentMessage.textContent = '';
-        } else {
-          editApproverBUDepartmentDropdown.reset();
-          editApproverBUDepartmentDropdown.disable();
-          editApproverCountBUDepartments.textContent = "";
-          editApproverNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
-        }
-      })["catch"](function (error) {
-        console.log(error.response.data);
-      });
-    } else {
-      editApproverBUDepartmentDropdown.reset();
-    }
-  });
-}
-// End - Edit for approver
+// function approverClearDepartmentsWhenResetBranch() {
+//     approverBUDepartmentDropdown.disable();
+//     approverNoBUDepartmentMessage.textContent = "";
+//     approverCountBUDepartments.textContent = "";
+// }
+
+// if (approverBranchDropdown || approverBUDepartmentDropdown) {
+//     approverBUDepartmentDropdown.disable();
+
+//     approverBranchDropdown.addEventListener('reset', approverClearDepartmentsWhenResetBranch);
+
+//     approverBranchDropdown.addEventListener('change', function () {
+//         const branchId = this.value;
+
+//         if (branchId) {
+//             axios.get(`/staff/manage/user-accounts/approver/${branchId}/bu-departments`)
+//                 .then((response) => {
+//                     const departments = response.data;
+//                     const departmentsOption = [];
+
+//                     if (departments && departments.length > 0) {
+//                         departments.forEach(function (department) {
+//                             departmentsOption.push({
+//                                 value: department.id,
+//                                 label: department.name
+//                             });
+//                         });
+
+//                         approverBUDepartmentDropdown.enable();
+//                         approverBUDepartmentDropdown.setOptions(departmentsOption);
+//                         approverCountBUDepartments.textContent = `(${departments.length})`;
+//                         approverNoBUDepartmentMessage.textContent = '';
+
+//                     } else {
+//                         approverBUDepartmentDropdown.reset();
+//                         approverBUDepartmentDropdown.disable();
+//                         approverCountBUDepartments.textContent = ``;
+//                         approverNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
+//                     }
+//                 })
+//                 .catch((error) => {
+//                     console.log(error.response.data);
+//                 });
+//         } else {
+//             approverBUDepartmentDropdown.reset();
+//         }
+//     });
+// }
+
+// // Start - Edit Approver - Edit Branch and BU Department
+// const editApproverBranchDropdown = document.getElementById('editApproverBranchDropdown');
+// const editApproverBUDepartmentDropdown = document.getElementById('editApproverBUDepartmentDropdown');
+// const editApproverCountBUDepartments = document.getElementById('editApproverCountBUDepartments');
+// const editApproverNoBUDepartmentMessage = document.getElementById('editApproverNoBUDepartmentMessage');
+// const approverCurrentBranchId = document.getElementById('approverCurrentBranchId');
+// const approverCurrentDepartmentId = document.getElementById('approverCurrentDepartmentId');
+// const approverUserID = document.getElementById('approverUserID');
+
+// if (approverUserID) {
+//     const approverDetailsPath = `/staff/manage/user-accounts/approver/${approverUserID.value}/edit-details`;
+//     const approverPath = window.location.pathname;
+
+//     if (approverPath === approverDetailsPath) {
+//         window.onload = function () {
+//             axios.get(`/staff/manage/user-accounts/approver/edit/${approverCurrentBranchId.value}/bu-departments`)
+//                 .then((response) => {
+//                     const departments = response.data;
+//                     const departmentsOption = [];
+
+//                     if (departments && departments.length > 0) {
+//                         departments.forEach(function (department) {
+//                             departmentsOption.push({
+//                                 value: department.id,
+//                                 label: department.name
+//                             });
+//                         });
+
+//                         editApproverBUDepartmentDropdown.enable();
+//                         editApproverBUDepartmentDropdown.setOptions(departmentsOption);
+//                         editApproverBUDepartmentDropdown.setValue(approverCurrentDepartmentId.value);
+//                         editApproverCountBUDepartments.textContent = `(${departments.length})`;
+//                         editApproverNoBUDepartmentMessage.textContent = '';
+
+//                     } else {
+//                         editApproverBUDepartmentDropdown.reset();
+//                         editApproverBUDepartmentDropdown.disable();
+//                         editApproverCountBUDepartments.textContent = ``;
+//                         editApproverNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
+//                     }
+//                 })
+//                 .catch((error) => {
+//                     console.log(error.response.data);
+//                 });
+//         }
+//     }
+// }
+
+// if (editApproverBranchDropdown || editApproverBUDepartmentDropdown) {
+//     editApproverBranchDropdown.addEventListener('change', function () {
+//         const branchId = this.value;
+
+//         editApproverBranchDropdown.addEventListener('reset', function () {
+//             editApproverBUDepartmentDropdown.disable();
+//             editApproverNoBUDepartmentMessage.textContent = "";
+//             editApproverCountBUDepartments.textContent = "";
+//         });
+
+//         if (branchId) {
+//             axios.get(`/staff/manage/user-accounts/approver/edit/${branchId}/bu-departments`)
+//                 .then((response) => {
+//                     const departments = response.data;
+//                     const departmentsOption = [];
+
+//                     if (departments && departments.length > 0) {
+//                         departments.forEach(function (department) {
+//                             departmentsOption.push({
+//                                 value: department.id,
+//                                 label: department.name,
+//                             });
+//                         });
+
+//                         editApproverBUDepartmentDropdown.enable();
+//                         editApproverBUDepartmentDropdown.setOptions(departmentsOption);
+//                         editApproverCountBUDepartments.textContent = `(${departments.length})`;
+//                         editApproverNoBUDepartmentMessage.textContent = '';
+
+//                     } else {
+//                         editApproverBUDepartmentDropdown.reset();
+//                         editApproverBUDepartmentDropdown.disable();
+//                         editApproverCountBUDepartments.textContent = ``;
+//                         editApproverNoBUDepartmentMessage.textContent = '(No BU/departments assigned on this branch)';
+//                     }
+//                 })
+//                 .catch((error) => {
+//                     console.log(error.response.data);
+//                 });
+//         } else {
+//             editApproverBUDepartmentDropdown.reset();
+//         }
+//     });
+// }
+// // End - Edit for approver
 // * END ------------------------------------------------------------------------------------------------------------------------
 
 // * START ------------------------------------------------------------------------------------------------------------------------
@@ -2778,6 +2803,12 @@ if (agentUserID) {
           editAgentCountTeams.textContent = "";
           editAgentNoTeamsMessage.textContent = 'No teams assigned on this branch.';
         }
+      })["catch"](function (error) {
+        console.log(error.response.data);
+      });
+      axios.get("/staff/manage/user-accounts/agent/".concat(agentUserID.value, "/agent-teams")).then(function (response) {
+        var teamIds = response.data;
+        editAgentTeamsDropdown.setValue(teamIds);
       })["catch"](function (error) {
         console.log(error.response.data);
       });
@@ -3097,20 +3128,27 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
                     label: "".concat(approver.profile.first_name, " ").concat(firstLetter, " ").concat(approver.profile.last_name)
                   });
                 });
-                var selectedCurrentApprovers = [];
+                editLevelOfApproverSelect.setOptions(approversOption);
                 axios.get("/staff/manage/help-topics/".concat(helpTopicID.value, "/level-approvers")).then(function (response) {
                   var currentApprovers = response.data;
+                  var selectedCurrentApprovers = [];
+
+                  // Find the current approvers from the approver's list assigned on this help topic.
                   approversOption.forEach(function (approver) {
                     currentApprovers.forEach(function (currentApprover) {
                       if (approver.value == currentApprover.id && currentApprover.level == i) {
-                        selectedCurrentApprovers.push(currentApprover.id);
+                        // Put the approvers into the array with its level number where they belong.
+                        selectedCurrentApprovers.push({
+                          id: currentApprover.id,
+                          level: currentApprover.level
+                        });
+                        editLevelOfApproverSelect.setValue(currentApprover.id);
                       }
                     });
                   });
                 })["catch"](function (error) {
                   console.log(error.response.data);
                 });
-                editLevelOfApproverSelect.setOptions(approversOption);
               }
             })["catch"](function (error) {
               console.log(error.response.data);

@@ -9,10 +9,10 @@
             @if ($clarification->user->role_id === App\Models\Role::USER)
             @if ($clarification->user->profile->picture)
             <img src="{{ Storage::url($clarification->user->profile->picture) }}" alt="" class="image-fluid ticket__details__user__picture
-                                         reply__ticket__details__user__picture">
+                reply__ticket__details__user__picture">
             @else
             <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center
-                                     text-white" style="background-color: #24695C;">
+                text-white" style="background-color: #24695C;">
                 {{ $clarification->user->profile->getNameInitial() }}</div>
             @endif
             @endif
@@ -24,7 +24,10 @@
                 @else
                 <small class="pe-3 text-muted" style="font-size: 12px;">Sent</small>
                 @endif
-                <small class="ticket__details__time">{{ $clarification->created_at->diffForHumans(null, true) }}</small>
+                <small class="ticket__details__time">
+                    {{ $clarification->created_at->diffForHumans(null, true) }}
+                    ago
+                </small>
             </div>
         </div>
     </div>

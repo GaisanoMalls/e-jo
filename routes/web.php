@@ -5,9 +5,11 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Staff\Agent\AgentTicketController;
 use App\Http\Controllers\Staff\Approver\ApproverDashboardController;
 use App\Http\Controllers\Staff\Approver\ApproverTicketsController;
+use App\Http\Controllers\Staff\Approver\NotificationController as ApproverNotificationController;
 use App\Http\Controllers\Staff\DashboardController;
 use App\Http\Controllers\Staff\DirectoryController;
 use App\Http\Controllers\Staff\ServiceDeptAdmin\AnnouncementController;
+use App\Http\Controllers\Staff\ServiceDeptAdmin\TicketLevel1ApprovalController;
 use App\Http\Controllers\Staff\SysAdmin\AccountAgentController;
 use App\Http\Controllers\Staff\SysAdmin\AccountApproverController;
 use App\Http\Controllers\Staff\SysAdmin\AccountsController;
@@ -74,6 +76,18 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::put('{ticket}/close', 'closeTicket')->name('close_ticket');
             });
         });
+
+        // TODO - Disable this route for now until processflow from FPM is applied.
+        // Route::prefix('service-dept-head')->name('service_dept_head.')->group(function () {
+        //     Route::controller(TicketLevel1ApprovalController::class)->group(function () {
+        //         Route::prefix('level-1-approval')->name('level_1_approval.')->group(function () {
+        //             Route::get('/', 'index')->name('index');
+        //             Route::get('/{ticket}', 'show')->name('show');
+        //             Route::post('/{ticket}/send-clarification', 'sendClarification')->name('send_clarification');
+        //         });
+        //     });
+        // });
+
         Route::prefix('/announcement')->name('announcement.')->group(function () {
             Route::controller(AnnouncementController::class)->group(function () {
                 Route::get('/', 'index')->name('home');
@@ -187,6 +201,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                         // For edit agent
                         Route::get('edit/{branch}/bu-departments', 'branchDepartments');
                         Route::get('edit/{branch}/teams', 'branchTeams');
+                        Route::get('/{agent}/agent-teams', 'agenTeams');
                     });
                     Route::controller(UpdatePasswordController::class)->group(function () {
                         Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
@@ -292,12 +307,21 @@ Route::middleware(['auth', Role::approver()])->group(function () {
                 Route::put('{ticket}/update-status-as-viewed', 'ticketStatusToViewed');
             });
         });
+
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(ApproverTicketsController::class)->group(function () {
                 Route::get('/{ticket}/view', 'viewTicketDetails')->name('view_ticket_details');
                 Route::put('/{ticket}/approve', 'ticketDetialsApproveTicket')->name('approve_ticket');
                 Route::put('/{ticket}/disapprove', 'ticketDetialsDisapproveTicket')->name('disapprove_ticket');
                 Route::post('/{ticket}/clarification/send', 'sendClarification')->name('send_clarification');
+            });
+        });
+
+        Route::prefix('notifications')->name('notification.')->group(function () {
+            Route::controller(ApproverNotificationController::class)->group(function () {
+                Route::post('/mark-all-as-read', 'markAllAsRead')->name('mark_all_as_read');
+                Route::delete('/clear-notifications', 'clearNotifications')->name('clear');
+                Route::put('/{notificaion}/read', 'readNotification')->name('read');
             });
         });
     });

@@ -28,6 +28,7 @@
                 <small class="pe-3 text-muted" style="font-size: 12px;">Sent</small>
                 @endif
                 <small class="ticket__details__time">{{ $reply->created_at->diffForHumans(null, true) }}</small>
+                ago
             </div>
         </div>
     </div>

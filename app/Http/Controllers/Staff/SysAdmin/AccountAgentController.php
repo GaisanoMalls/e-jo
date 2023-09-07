@@ -10,6 +10,7 @@ use App\Http\Traits\Utils;
 use App\Models\Branch;
 use App\Models\Profile;
 use App\Models\Role;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -19,12 +20,24 @@ class AccountAgentController extends Controller
 
     public function store(StoreAgenRequest $request)
     {
+        if ($request->teams[0] === null) {
+            return back()->with('empty_teams', 'Team field is required.')
+                ->withInput();
+        }
+
+        $selectedTeams = $this->getSelectedValue($request->teams);
+        $existingTeams = Team::whereIn('id', $selectedTeams)->pluck('id');
+
+        if (count($existingTeams) !== count($selectedTeams)) {
+            return back()->with('invalid_teams', 'Invalid team.')
+                ->withInput();
+        }
+
         try {
-            DB::transaction(function () use ($request) {
-                $user = User::create([
+            DB::transaction(function () use ($request, $existingTeams) {
+                $agent = User::create([
                     'branch_id' => $request->branch,
                     'department_id' => $request->bu_department,
-                    'team_id' => $request->team,
                     'service_department_id' => $request->service_department,
                     'role_id' => Role::AGENT,
                     'email' => $request->email,
@@ -34,13 +47,15 @@ class AccountAgentController extends Controller
                 $fullname = $request->first_name . $request->middl_name ?? "" . $request->last_name;
 
                 Profile::create([
-                    'user_id' => $user->id,
+                    'user_id' => $agent->id,
                     'first_name' => $request->first_name,
                     'middle_name' => $request->middle_name,
                     'last_name' => $request->last_name,
                     'suffix' => $request->suffix,
                     'slug' => $this->slugify($fullname)
                 ]);
+
+                $agent->teams()->attach($existingTeams);
             });
 
             return back()->with('success', 'You have successfully created a new agent');
@@ -70,13 +85,18 @@ class AccountAgentController extends Controller
                 'agent',
                 'suffixes',
                 'branches',
-                'serviceDepartments'
+                'serviceDepartments',
             ])
         );
     }
 
     public function update(UpdateAgenRequest $request, User $agent)
     {
+        if ($request->teams[0] === null) {
+            return back()->with('empty_teams', 'Team field is required.')
+                ->withInput();
+        }
+
         try {
             DB::transaction(function () use ($agent, $request) {
                 $agent->update([
@@ -98,6 +118,10 @@ class AccountAgentController extends Controller
                         $request->suffix
                     ]))
                 ]);
+
+                $agent->teams()->sync(
+                    $this->getSelectedValue($request->teams)
+                );
             });
 
             return back()->with('success', "You have successfully updated the account for {$agent->profile->getFullName()}.");
@@ -128,5 +152,12 @@ class AccountAgentController extends Controller
     public function branchTeams(Branch $branch)
     {
         return response()->json($branch->teams);
+    }
+
+    public function agenTeams(User $agent)
+    {
+        return response()->json(
+            $agent->teams->pluck('id')->toArray()
+        );
     }
 }

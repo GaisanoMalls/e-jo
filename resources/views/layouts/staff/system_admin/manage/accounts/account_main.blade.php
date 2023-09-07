@@ -32,7 +32,7 @@ session()->has('invalid_service_departments'))
 @endpush
 @endif
 
-@if ($errors->storeAgent->any())
+@if ($errors->storeAgent->any() || session()->has('empty_teams'))
 @push('modal-with-error')
 <script>
     $(function () {
@@ -43,7 +43,8 @@ session()->has('invalid_service_departments'))
 @endpush
 @endif
 
-@if ($errors->storeApprover->any())
+@if ($errors->storeApprover->any() || session()->has('empty_branches') || session()->has('empty_bu_departments') ||
+session()->has('invalid_branches') || session()->has('invalid_bu_departments'))
 @push('modal-with-error')
 <script>
     $(function () {

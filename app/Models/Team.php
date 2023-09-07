@@ -3,6 +3,12 @@
 namespace App\Models;
 
 use App\Http\Traits\Utils;
+use App\Models\Branch;
+use App\Models\HelpTopic;
+use App\Models\Role;
+use App\Models\ServiceDepartment;
+use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,9 +22,9 @@ class Team extends Model
         'slug'
     ];
 
-    public function users()
+    public function serviceDepartment()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(ServiceDepartment::class);
     }
 
     public function tickets()
@@ -36,9 +42,12 @@ class Team extends Model
         return $this->belongsToMany(Branch::class, 'team_branch');
     }
 
-    public function serviceDepartment()
+    public function agents()
     {
-        return $this->belongsTo(ServiceDepartment::class);
+        return $this->belongsToMany(User::class, 'user_team')
+            ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
+            ->wherePivot(['user_id', 'team_id'])
+            ->withTimestamps();
     }
 
     public function getBranches()

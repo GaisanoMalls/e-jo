@@ -100,7 +100,7 @@ Agent Details
                                     Team
                                 </label>
                                 <input type="text" name="email" class="form-control form__field" id="email"
-                                    value="{{ $agent->team->name }}" readonly disabled>
+                                    value="{{ $agent->getTeams() }}" readonly disabled>
                             </div>
                         </div>
                         <div class="col-md-6">

@@ -2446,17 +2446,35 @@ document.addEventListener('DOMContentLoaded', function () {
 // Mark ticket as Viewed when clicked.
 document.addEventListener("DOMContentLoaded", function () {
   var clickableTableRowCells = document.querySelectorAll('.clickable_tr');
-  clickableTableRowCells.forEach(function (tdCells) {
-    tdCells.addEventListener('click', function () {
-      var ticketId = this.getAttribute('data-ticket-id');
-      axios.put("/approver/tickets/".concat(ticketId, "/update-status-as-viewed")).then(function (response) {
-        console.log(response.data);
-      })["catch"](function (error) {
-        console.error(error.response.data);
+  if (clickableTableRowCells) {
+    clickableTableRowCells.forEach(function (tdCells) {
+      tdCells.addEventListener('click', function () {
+        var ticketId = this.getAttribute('data-ticket-id');
+        axios.put("/approver/tickets/".concat(ticketId, "/update-status-as-viewed")).then(function (response) {
+          // console.log(response.data);
+        })["catch"](function (error) {
+          console.error(error.response.data);
+        });
       });
     });
-  });
+  }
 });
+var notificationCard = document.querySelectorAll('.notification__card');
+if (notificationCard) {
+  notificationCard.forEach(function (cardCells) {
+    cardCells.addEventListener('click', function () {
+      var notifId = this.getAttribute('data-notification-id');
+      if (notifId) {
+        axios.put("/approver/notifications/".concat(notifId, "/read")).then(function () {
+          var notifTitle = document.querySelector('.notification__message');
+          notifTitle.style.fontWeight = '500';
+        })["catch"](function (error) {
+          console.error(error.response.data);
+        });
+      }
+    });
+  });
+}
 })();
 
 /******/ })()

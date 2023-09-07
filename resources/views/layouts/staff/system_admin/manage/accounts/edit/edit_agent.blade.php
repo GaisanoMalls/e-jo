@@ -82,8 +82,7 @@ Edit Agent
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label class="form-label form__field__label">Suffix</label>
-                                    <select name="suffix" data-search="false" data-silent-initial-value-set="true"
-                                        placeholder="Select (optional)">
+                                    <select name="suffix" data-search="false" placeholder="Select (optional)">
                                         <option value="" selected>N/A</option>
                                         @foreach ($suffixes as $suffix)
                                         <option value="{{ $suffix->name }}" {{ $suffix->name ==
@@ -136,13 +135,13 @@ Edit Agent
                                 <div class="mb-3">
                                     <input type="hidden" value="{{ $agent->branch_id }}" id="agentCurrentBranchId">
                                     <label class="form-label form__field__label">Branch</label>
-                                    <select name="branch" data-search="true" data-silent-initial-value-set="true"
-                                        id="editAgentBranchDropdown" placeholder="Select (required)">
+                                    <select name="branch" data-search="true" id="editAgentBranchDropdown"
+                                        placeholder="Select (required)">
                                         <option value="" selected disabled>Choose a branch</option>
                                         @foreach ($branches as $branch)
-                                        <option value="{{ $branch->id }}" {{ $branch->id == $agent->branch_id ?
-                                            'selected' : ''
-                                            }}>
+                                        <option value="{{ $branch->id }}" {{ $branch->id == $agent->branch_id
+                                            ? 'selected'
+                                            : '' }}>
                                             {{ $branch->name }}
                                         </option>
                                         @endforeach
@@ -166,8 +165,8 @@ Edit Agent
                                         <span id="editAgentNoBUDepartmentMessage" class="text-danger fw-normal"
                                             style="font-size: 12px;"></span>
                                     </label>
-                                    <select name="bu_department" data-search="true" data-silent-initial-value-set="true"
-                                        id="editAgentBUDepartmentDropdown" placeholder="Select (required)">
+                                    <select name="bu_department" data-search="true" id="editAgentBUDepartmentDropdown"
+                                        placeholder="Select (required)">
                                     </select>
                                     @error('bu_department')
                                     <span class="error__message">
@@ -187,15 +186,15 @@ Edit Agent
                                         <span id="editAgentNoTeamsMessage" class="text-danger fw-normal"
                                             style="font-size: 12px;"></span>
                                     </label>
-                                    <select name="team" data-search="true" data-silent-initial-value-set="true"
-                                        id="editAgentTeamsDropdown" placeholder="Select (required)">
+                                    <select name="teams[]" data-search="true" id="editAgentTeamsDropdown"
+                                        placeholder="Select (required)" multiple>
                                     </select>
-                                    @error('team')
-                                    <span class="error__message">
+                                    @if (session()->has('empty_teams'))
+                                    <div class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                    @enderror
+                                        {{ session()->get('empty_teams') }}
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -204,8 +203,7 @@ Edit Agent
                                         Service Department
                                     </label>
                                     <select name="service_department" data-search="true"
-                                        data-silent-initial-value-set="true" id="editAgentServiceDepartmentDropdown"
-                                        placeholder="Select (required)">
+                                        id="editAgentServiceDepartmentDropdown" placeholder="Select (required)">
                                         @foreach ($serviceDepartments as $serviceDepartment)
                                         <option value="{{ $serviceDepartment->id }}" {{ $serviceDepartment->id ==
                                             $agent->service_department_id

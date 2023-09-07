@@ -35,7 +35,7 @@ class AccountServiceDeptAdminController extends Controller
 
         try {
             DB::transaction(function () use ($request, $existingServiceDepartments) {
-                $user = User::create([
+                $serviceDeptAdmin = User::create([
                     'branch_id' => $request->branch,
                     'department_id' => $request->bu_department,
                     'service_department_id' => $request->service_department,
@@ -45,7 +45,7 @@ class AccountServiceDeptAdminController extends Controller
                 ]);
 
                 Profile::create([
-                    'user_id' => $user->id,
+                    'user_id' => $serviceDeptAdmin->id,
                     'first_name' => $request->first_name,
                     'middle_name' => $request->middle_name,
                     'last_name' => $request->last_name,
@@ -58,7 +58,7 @@ class AccountServiceDeptAdminController extends Controller
                     ]))
                 ]);
 
-                $user->serviceDepartments()->attach($existingServiceDepartments);
+                $serviceDeptAdmin->serviceDepartments()->attach($existingServiceDepartments);
             });
 
             return back()->with('success', 'You have successfully created a new department admin.');
@@ -96,6 +96,11 @@ class AccountServiceDeptAdminController extends Controller
 
     public function update(UpdateServiceDeptAdminRequest $request, User $serviceDeptAdmin)
     {
+        if ($request->service_departments[0] === null) {
+            return back()->with('empty_service_departments', 'Service department field is required.')
+                ->withInput();
+        }
+
         try {
             DB::transaction(function () use ($serviceDeptAdmin, $request) {
                 $serviceDeptAdmin->update([
@@ -136,7 +141,7 @@ class AccountServiceDeptAdminController extends Controller
             $serviceDeptAdmin->delete();
             $serviceDeptAdmin->profile()->delete();
 
-            return back()->with('success', 'Department admin successfully deleted.');
+            return back()->with('success', 'Department admin has been deleted.');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to delete the department admin.');

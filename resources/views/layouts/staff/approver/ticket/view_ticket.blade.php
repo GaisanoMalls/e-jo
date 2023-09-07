@@ -87,7 +87,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8 position-relative mb-3">
+                <div class="col-md-7 position-relative mb-3">
                     <div class="card border-0 p-0 card__ticket__details">
                         <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                             <div class="d-flex align-items-center user__account__media">
@@ -110,6 +110,7 @@
                             </div>
                             <small class="ticket__details__time mt-2">
                                 {{ $ticket->created_at->diffForHumans(null, true) }}
+                                ago
                             </small>
                         </div>
                         <div class="ticket__details__card__body">
@@ -140,17 +141,17 @@
                     @include('layouts.staff.approver.ticket.includes.ticket_clarifications')
                     @if ($ticket->clarifications->count() === 0)
                     <div class="row align-items-center bg-light p-2 py-1 rounded-3 mx-1 mt-2 mb-4">
-                        <div class="col-md-8">
+                        <div class="col-lg-6 col-md-12">
                             <p class="mb-0" style="font-size: 13px; line-height: 19px;">
                                 If you have any questions or clarifications with regards to this
                                 ticket, you can connect with {{ $ticket->user->profile->first_name }}.
                             </p>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-lg-6 col-md-12">
                             <div
-                                class="d-flex align-items-center justify-content-start justify-content-lg-end justify-content-md-end">
+                                class="d-flex align-items-center justify-content-start justify-content-lg-end justify-content-md-start">
                                 <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center
-                                justify-content-center gap-2" data-bs-toggle="offcanvas"
+                                    justify-content-center gap-2" data-bs-toggle="offcanvas"
                                     data-bs-target="#offcanvasTicketClarificationForm" aria-controls="offcanvasBottom">
                                     <i class="fa-solid fa-pen"></i>
                                     <span class="lbl__reply">Connect with {{ $ticket->user->profile->first_name
@@ -160,9 +161,10 @@
                         </div>
                     </div>
                     @else
-                    <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center
-                                                    justify-content-center gap-2" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasTicketClarificationForm" aria-controls="offcanvasBottom">
+                    <button type="button"
+                        class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center justify-content-center gap-2"
+                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasTicketClarificationForm"
+                        aria-controls="offcanvasBottom">
                         <i class="fa-solid fa-pen"></i>
                         <span class="lbl__reply">Reply</span>
                     </button>
@@ -178,7 +180,7 @@
                     @endif
                     {{-- End Replies/Comments --}}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="container__ticket__details__right">
                         @include('layouts.staff.approver.ticket.includes.ticket_details')
                         @include('layouts.staff.approver.ticket.includes.ticket_activity_logs')

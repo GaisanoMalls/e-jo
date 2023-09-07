@@ -10,12 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
   var assignToAgentSection = document.getElementById('assignToAgentSection');
   var ticketPrioritySection = document.getElementById('ticketPrioritySection');
   var btnSaveTransferTicket = document.getElementById('btnSaveTransferTicket');
-  var btnSaveAssignTicketToAnotherAgent = document.getElementById('btnSaveAssignTicketToAnotherAgent');
   if (checkBoxTransferTicket) {
     checkBoxTransferTicket.addEventListener('change', function (event) {
       if (event.target.checked) {
         selectAssignToAgent.setAttribute('disabled', '');
-        btnSaveAssignTicketToAnotherAgent.setAttribute('disabled', '');
         btnSaveTransferTicket.removeAttribute('disabled');
         transferDepartmentSection.style.display = 'block';
         assignToAgentSection.style.display = 'none';
@@ -23,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         selectAssignToAgent.removeAttribute('disabled');
         btnSaveTransferTicket.setAttribute('disabled', '');
-        btnSaveAssignTicketToAnotherAgent.removeAttribute('disabled');
         transferDepartmentSection.style.display = 'none';
         assignToAgentSection.style.display = 'block';
         ticketPrioritySection.style.display = 'block';

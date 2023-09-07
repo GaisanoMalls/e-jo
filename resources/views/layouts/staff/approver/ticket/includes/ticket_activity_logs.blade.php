@@ -23,6 +23,7 @@
                 </div>
                 <small class="log__time">
                     {{ $log->created_at->diffForHumans(null, true) }}
+                    ago
                 </small>
             </div>
             @endforeach

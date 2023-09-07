@@ -6913,6 +6913,23 @@ body {
   box-shadow: none;
 }
 
+input[type=radio] {
+  height: 17px;
+  width: 17px;
+  border: 2px solid #ced4da;
+}
+
+input[type=radio]:checked {
+  background-color: #d32839;
+  box-shadow: none;
+  border: 0;
+}
+
+.radio__button__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
 .form-check-label {
   font-size: 0.875rem;
 }
@@ -6959,16 +6976,17 @@ body {
 }
 
 .modal__btnsubmit__bottom {
-  background-color: #1f2937;
+  min-width: 90px;
+  background-color: #d32839;
   box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
   color: #ffffff;
 }
 .modal__btnsubmit__bottom:focus {
-  background-color: #1f2937 !important;
+  background-color: #d32839;
   color: #ffffff !important;
 }
 .modal__btnsubmit__bottom:hover {
-  background-color: #1f2937;
+  background-color: #d32839;
   box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
   color: #ffffff;
 }
@@ -8166,14 +8184,6 @@ input[type=checkbox]:checked + .form-check-label {
 .btn__send__ticket__reply:hover {
   color: #ffffff;
   background-color: #d32839;
-}
-
-#btnSaveAssignTicketToAnotherAgent:disabled {
-  opacity: 2;
-  background-color: #e9ecef;
-  color: #212529;
-  border: 1px solid #ced4da;
-  box-shadow: none !important;
 }
 
 #btnSaveTransferTicket:disabled {

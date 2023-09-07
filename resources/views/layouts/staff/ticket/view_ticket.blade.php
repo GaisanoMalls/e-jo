@@ -121,7 +121,7 @@
                         @if ($ticket->status_id == App\Models\Status::CLOSED)
                         <div class="d-flex flex-column">
                             <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__close closed d-flex text-white
-                                            align-items-center justify-content-center"
+                                align-items-center justify-content-center"
                                 style="background-color: {{ $ticket->status->color }} !important;">
                                 <i class="fa-solid fa-check"></i>
                             </button>
@@ -133,7 +133,7 @@
                                 @csrf
                                 @method('PUT')
                                 <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex
-                                align-items-center justify-content-center" type="submit">
+                                    align-items-center justify-content-center" type="submit">
                                     <i class="fa-solid fa-check"></i>
                                 </button>
                             </form>
@@ -143,7 +143,7 @@
                         @endif
                         <div class="d-flex flex-column">
                             <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__bookmark d-flex
-                                            align-items-center justify-content-center" type="submit">
+                                align-items-center justify-content-center" type="submit">
                                 <i class="fa-solid fa-bookmark"></i>
                             </button>
                             <small class="ticket__details__topbuttons__label">Bookmark</small>
@@ -173,8 +173,9 @@
                                     </small>
                                 </div>
                             </div>
-                            <small class="ticket__details__time mt-2">{{ $ticket->created_at->diffForHumans(null, true)
-                                }}</small>
+                            <small class="ticket__details__time mt-2">
+                                {{ $ticket->created_at->diffForHumans(null, true) }} ago
+                            </small>
                         </div>
                         <div class="ticket__details__card__body">
                             <div class="ticket__description">{!! $ticket->description !!}</div>
@@ -229,14 +230,16 @@
                                     @else
                                     <small class="pe-3 text-muted" style="font-size: 12px;">Sent</small>
                                     @endif
-                                    <small class="ticket__details__time">{{ $reply->created_at->diffForHumans(null,
-                                        true) }}</small>
+                                    <small class="ticket__details__time">
+                                        {{ $reply->created_at->diffForHumans(null, true) }} ago
+                                    </small>
                                 </div>
                             </div>
                         </div>
                         <div class="ticket__details__card__body pb-3">
                             <div class="ticket__reply__content">
-                                <div class="ticket__description reply__ticket__description">{!! $reply->description !!}
+                                <div class="ticket__description reply__ticket__description">
+                                    {!! $reply->description !!}
                                 </div>
                                 @if ($reply->fileAttachments->count() > 0)
                                 <div class="ticket__attachments d-inline-flex gap-1" data-bs-toggle="modal"
@@ -343,11 +346,9 @@
                                             class="ticket__details__info {{ $ticket->agent_id !== null ? '' : 'not__set'}}">
                                             <i class="fa-solid fa-user-check me-1 text-muted"
                                                 style="font-size: 11px;"></i>
-                                            @if ($ticket->agent)
-                                            {{ $ticket->agent->profile->getFullName() }}
-                                            @else
-                                            ----
-                                            @endif
+                                            {{ $ticket->agent_id !== null
+                                            ? $ticket->agent->profile->getFullName()
+                                            : '----' }}
                                         </small>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between">
@@ -360,6 +361,7 @@
                                 </div>
                             </div>
                         </div>
+                        @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
                         <div class="card border-0 p-0 card__ticket__details">
                             <div class="ticket__details__card__body__right">
                                 <div class="mb-3">
@@ -382,11 +384,6 @@
                                                 Assign this ticket to other agent.
                                             </small>
                                         </li>
-                                        <li>
-                                            <small>
-                                                Transfer this ticket to other department.
-                                            </small>
-                                        </li>
                                     </ul>
                                 </div>
                                 <button class="btn btn-block bg-dark btn__ticket__set__action" data-bs-toggle="modal"
@@ -395,6 +392,7 @@
                                 </button>
                             </div>
                         </div>
+                        @endif
                         <div class="card border-0 p-0 card__ticket__details card__ticket__details__right">
                             <div class="ticket__details__card__body__right">
                                 <div class="mb-3 d-flex justify-content-between">
@@ -434,6 +432,7 @@
                                         </div>
                                         <small class="log__time">
                                             {{ $log->created_at->diffForHumans(null, true) }}
+                                            ago
                                         </small>
                                     </div>
                                     @endforeach
@@ -445,9 +444,11 @@
             </div>
         </div>
     </div>
+    @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+    @include('layouts.staff.ticket.modal.ticket_actions_modal')
+    @endif
 </div>
-{{-- @include('layouts.staff.ticket.modal.ticket_actions_modal')
-@include('layouts.staff.ticket.modal.reply_ticket_modal')--}}
+{{-- @include('layouts.staff.ticket.modal.reply_ticket_modal')--}}
 @include('layouts.staff.ticket.modal.ticket_tag_modal')
 @include('layouts.staff.ticket.modal.preview_ticket_files_modal')
 @include('layouts.staff.ticket.offcanvas.reply_ticket_offcanvas')

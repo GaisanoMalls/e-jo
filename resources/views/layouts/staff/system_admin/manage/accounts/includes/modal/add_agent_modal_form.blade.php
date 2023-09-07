@@ -74,8 +74,7 @@
                                             <label for="suffix" class="form-label form__field__label">
                                                 Suffix
                                             </label>
-                                            <select name="suffix" data-search="true"
-                                                data-silent-initial-value-set="true" placeholder="Select (optional)">
+                                            <select name="suffix" data-search="true" placeholder="Select (optional)">
                                                 <option value="" selected disabled>Choose a suffix</option>
                                                 @foreach ($suffixes as $suffix)
                                                 <option value="{{ $suffix->name }}" {{ old('suffix')==$suffix->name ?
@@ -122,8 +121,7 @@
                                             <label for="branch" class="form-label form__field__label">
                                                 Branch
                                             </label>
-                                            <select name="branch" data-search="true"
-                                                data-silent-initial-value-set="true" placeholder="Select (required)"
+                                            <select name="branch" data-search="true" placeholder="Select (required)"
                                                 id="agentBranchesDropdown">
                                                 <option value="" selected disabled>Choose a branch</option>
                                                 @foreach ($global_branches as $branch)
@@ -151,8 +149,7 @@
                                                     style="font-size: 12px;"></span>
                                             </label>
                                             <select name="bu_department" data-search="true"
-                                                data-silent-initial-value-set="true" placeholder="Select (required)"
-                                                id="agentBUDepartmentsDropdown">
+                                                placeholder="Select (required)" id="agentBUDepartmentsDropdown">
                                             </select>
                                             @error('bu_department', 'storeAgent')
                                             <span class="error__message">
@@ -171,15 +168,21 @@
                                                 <span id="agentNoTeamMessage" class="text-danger fw-normal"
                                                     style="font-size: 12px;"></span>
                                             </label>
-                                            <select name="team" data-search="true" data-silent-initial-value-set="true"
-                                                placeholder="Select (required)" id="agentTeamsDropdown">
+                                            <select name="teams[]" data-search="true" placeholder="Select (required)"
+                                                id="agentTeamsDropdown" multiple>
                                             </select>
-                                            @error('team', 'storeAgent')
-                                            <span class="error__message">
+                                            @if (session()->has('empty_teams'))
+                                            <div class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                            @enderror
+                                                {{ session()->get('empty_teams') }}
+                                            </div>
+                                            @endif
+                                            @if (session()->has('invalid_teams'))
+                                            <div class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ session()->get('invalid_teams') }}
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -188,8 +191,7 @@
                                                 Service Department
                                             </label>
                                             <select name="service_department" data-search="true"
-                                                data-silent-initial-value-set="true" placeholder="Select (required)"
-                                                id="agentServiceDepartmentsDropdown">
+                                                placeholder="Select (required)" id="agentServiceDepartmentsDropdown">
                                                 <option value="" selected disabled>Choose a servic department</option>
                                                 @foreach ($global_service_departments as $service_department)
                                                 <option value="{{ $service_department->id }}" {{

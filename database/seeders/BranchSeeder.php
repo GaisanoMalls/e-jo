@@ -15,7 +15,7 @@ class BranchSeeder extends Seeder
      */
     public function run()
     {
-        $branch_names = ['Bajada', 'Digos', 'Toril'];
+        $branch_names = ['Bajada', 'Digos'];
 
         foreach ($branch_names as $branch_name) {
             Branch::firstOrCreate([

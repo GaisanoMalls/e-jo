@@ -23,7 +23,7 @@ class AgentTicketController extends Controller
                 'status_id' => Status::CLAIMED
             ]);
 
-            ActivityLog::make($ticket->id, auth()->user()->id, 'claimed the ticket');
+            ActivityLog::make($ticket->id, 'claimed the ticket');
 
             return back()->with('success', 'You have claimed the ticket.');
 
@@ -46,7 +46,7 @@ class AgentTicketController extends Controller
                 'status_id' => Status::CLAIMED
             ]);
 
-            ActivityLog::make($ticket->id, auth()->user()->id, 'claimed the ticket');
+            ActivityLog::make($ticket->id, 'claimed the ticket');
 
             return back()->with('success', 'The have successfully claimed the ticket.');
 
@@ -62,7 +62,7 @@ class AgentTicketController extends Controller
                 'status_id' => Status::CLOSED
             ]);
 
-            ActivityLog::make($ticket->id, auth()->user()->id, 'closed the ticket');
+            ActivityLog::make($ticket->id, 'closed the ticket');
 
             return back()->with('success', 'The have successfully closed the ticket.');
 

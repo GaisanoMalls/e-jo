@@ -82,7 +82,7 @@
                                             <small id="helpTopicNoTeamsMessage" class="text-danger fw-normal"
                                                 style="font-size: 12px;"></small>
                                         </label>
-                                        <select name="team" placeholder="Select (required)" data-search="true"
+                                        <select name="team" placeholder="Select (optional)" data-search="true"
                                             data-silent-initial-value-set="true" id="helpTopicTeamsDropdown">
                                         </select>
                                         @error('service_department', 'storeHelpTopic')

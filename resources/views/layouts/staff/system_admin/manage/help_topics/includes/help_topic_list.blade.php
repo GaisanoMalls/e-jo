@@ -25,7 +25,7 @@
             </td>
             <td>
                 <div class="d-flex align-items-center text-start td__content">
-                    <span>{{ $helpTopic->team->name }}</span>
+                    <span>{{ $helpTopic->team->name ?? '----' }}</span>
                 </div>
             </td>
             <td>

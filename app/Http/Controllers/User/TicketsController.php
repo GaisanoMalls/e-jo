@@ -24,6 +24,7 @@ use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketFile;
 use App\Models\User;
+use App\Models\UserServiceDepartment;
 use App\Notifications\TicketNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -197,17 +198,17 @@ class TicketsController extends Controller
                     'ticket_number' => $this->generatedTicketNumber(),
                     'subject' => $request->subject,
                     'description' => $request->description,
-                    'approval_status' => ApprovalStatus::FOR_APPROVAL
+                    'approval_status' => ApprovalStatus::FOR_APPROVAL,
+                    'service_department_head_approver' => [
+                        'id' => UserServiceDepartment::where('service_department_id', $request->service_department)->pluck('user_id')->first(),
+                        'is_approved' => false
+                    ]
                 ]);
 
                 if ($request->hasFile('file_attachments')) {
                     foreach ($request->file('file_attachments') as $uploadedFile) {
                         $fileName = $uploadedFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs(
-                            "public/ticket/{$ticket->ticket_number}/creation_attachments",
-                            $uploadedFile,
-                            $fileName
-                        );
+                        $fileAttachment = Storage::putFileAs("public/ticket/{$ticket->ticket_number}/creation_attachments", $uploadedFile, $fileName);
 
                         $ticketFile = new TicketFile();
                         $ticketFile->file_attachment = $fileAttachment;
@@ -226,22 +227,22 @@ class TicketsController extends Controller
                         foreach ($approvers as $approver) {
                             if ($approver->id === $levelApprover->user_id) {
                                 if ($levelApprover->level_id === $level->id) {
-                                    Notification::send($approver, new TicketNotification($ticket, 'New ticket created.'));
-                                    Mail::to($approver)->send(new TicketCreatedMail($ticket));
+                                    Notification::send($approver, new TicketNotification($ticket, 'New ticket created', 'created a ticket'));
+                                    // Mail::to($approver)->send(new TicketCreatedMail($ticket));
                                 }
                             }
                         }
                     }
                 }
 
-                ActivityLog::make($ticket->id, auth()->user()->id, 'created a ticket');
+                ActivityLog::make($ticket->id, 'created a ticket');
             });
 
             return back()->with('success', 'Ticket successfully created.');
 
         } catch (\Exception $e) {
             dd($e->getMessage());
-            return back()->with('error', "Failed to send ticket. Please try again");
+            return back()->with('error', "Failed to send the ticket. Please try again.");
         }
     }
 
@@ -282,11 +283,7 @@ class TicketsController extends Controller
                 if ($request->hasFile('replyFiles')) {
                     foreach ($request->file('replyFiles') as $uploadedReplyFile) {
                         $fileName = $uploadedReplyFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs(
-                            "public/ticket/{$ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(),
-                            $uploadedReplyFile,
-                            $fileName
-                        );
+                        $fileAttachment = Storage::putFileAs("public/ticket/{$ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(), $uploadedReplyFile, $fileName);
 
                         $replyFile = new ReplyFile();
                         $replyFile->file_attachment = $fileAttachment;
@@ -305,7 +302,6 @@ class TicketsController extends Controller
 
                 ActivityLog::make(
                     $ticket->id,
-                    auth()->user()->id,
                     'replied to ' . $latestReply->user->profile->getFullName()
                 );
             });
@@ -354,11 +350,7 @@ class TicketsController extends Controller
                 if ($request->hasFile('clarificationFiles')) {
                     foreach ($request->file('clarificationFiles') as $uploadedClarificationFile) {
                         $fileName = $uploadedClarificationFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs(
-                            "public/ticket/{$ticket->ticket_number}/clarification_attachments/" . $this->fileDirByUserType(),
-                            $uploadedClarificationFile,
-                            $fileName
-                        );
+                        $fileAttachment = Storage::putFileAs("public/ticket/{$ticket->ticket_number}/clarification_attachments/" . $this->fileDirByUserType(), $uploadedClarificationFile, $fileName);
 
                         $clarificationFile = new ClarificationFile();
                         $clarificationFile->file_attachment = $fileAttachment;
@@ -382,7 +374,7 @@ class TicketsController extends Controller
                     ? 'sent a clarification'
                     : 'replied a clarification to ' . $latestStaff->user->profile->getFullName();
 
-                ActivityLog::make($ticket->id, auth()->user()->id, $logClarificationDescription);
+                ActivityLog::make($ticket->id, $logClarificationDescription);
 
             });
 

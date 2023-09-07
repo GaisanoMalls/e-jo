@@ -13,13 +13,13 @@ trait Tickets
         $openTickets = Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::APPROVED)
                 ->where('approval_status', ApprovalStatus::APPROVED)
-                ->where('status_id', '!=', Status::CLAIMED);
+                ->orWhere('status_id', '!=', Status::CLAIMED);
         })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id)
-                    ->where('team_id', auth()->user()->team_id);
+                    ->where('service_department_id', auth()->user()->service_department_id);
             })
+            ->whereIn('team_id', auth()->user()->teams->pluck('id'))
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -35,8 +35,7 @@ trait Tickets
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('agent_id', auth()->user()->id)
                     ->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id)
-                    ->where('team_id', auth()->user()->team_id);
+                    ->where('service_department_id', auth()->user()->service_department_id);
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -53,8 +52,7 @@ trait Tickets
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('agent_id', auth()->user()->id)
                     ->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id)
-                    ->where('team_id', auth()->user()->team_id);
+                    ->where('service_department_id', auth()->user()->service_department_id);
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -71,8 +69,7 @@ trait Tickets
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('agent_id', auth()->user()->id)
                     ->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id)
-                    ->where('team_id', auth()->user()->team_id);
+                    ->where('service_department_id', auth()->user()->service_department_id);
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -89,8 +86,7 @@ trait Tickets
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('agent_id', auth()->user()->id)
                     ->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id)
-                    ->where('team_id', auth()->user()->team_id);
+                    ->where('service_department_id', auth()->user()->service_department_id);
             })
             ->orderBy('created_at', 'desc')
             ->get();

@@ -73,16 +73,40 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener("DOMContentLoaded", function () {
     const clickableTableRowCells = document.querySelectorAll('.clickable_tr');
 
-    clickableTableRowCells.forEach(tdCells => {
-        tdCells.addEventListener('click', function () {
-            const ticketId = this.getAttribute('data-ticket-id');
-            axios.put(`/approver/tickets/${ticketId}/update-status-as-viewed`)
-                .then((response) => {
-                    console.log(response.data);
-                })
-                .catch((error) => {
-                    console.error(error.response.data);
-                });
+    if (clickableTableRowCells) {
+        clickableTableRowCells.forEach(tdCells => {
+            tdCells.addEventListener('click', function () {
+                const ticketId = this.getAttribute('data-ticket-id');
+                axios.put(`/approver/tickets/${ticketId}/update-status-as-viewed`)
+                    .then((response) => {
+                        // console.log(response.data);
+                    })
+                    .catch((error) => {
+                        console.error(error.response.data);
+                    });
+            });
         });
-    });
+    }
 });
+
+
+const notificationCard = document.querySelectorAll('.notification__card');
+
+if (notificationCard) {
+    notificationCard.forEach(cardCells => {
+        cardCells.addEventListener('click', function () {
+            const notifId = this.getAttribute('data-notification-id');
+            if (notifId) {
+                axios.put(`/approver/notifications/${notifId}/read`)
+                    .then(() => {
+                        const notifTitle = document.querySelector('.notification__message');
+                        notifTitle.style.fontWeight = '500';
+                    })
+                    .catch((error) => {
+                        console.error(error.response.data);
+                    });
+            }
+
+        });
+    })
+}

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Http\Traits\Utils;
+use App\Models\Branch;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

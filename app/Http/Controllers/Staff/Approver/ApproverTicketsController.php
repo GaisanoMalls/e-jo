@@ -24,14 +24,11 @@ class ApproverTicketsController extends Controller
     public function ticketStatusToViewed(Ticket $ticket)
     {
         $ticket->update(['status_id' => Status::VIEWED]);
-        ActivityLog::make($ticket->id, auth()->user()->id, 'seen the ticket');
-
-        return response()->json(['message' => 'Ticket viewed']);
+        ActivityLog::make($ticket->id, 'seen the ticket');
     }
 
     public function openTickets()
     {
-        $forApprovalTickets = $this->getForApprovalTickets();
         $openTickets = $this->getOpenTickets();
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
@@ -44,7 +41,6 @@ class ApproverTicketsController extends Controller
             'layouts.staff.approver.ticket.statuses.open',
             compact(
                 [
-                    'forApprovalTickets',
                     'openTickets',
                     'viewedTickets',
                     'approvedTickets',
@@ -175,7 +171,7 @@ class ApproverTicketsController extends Controller
             'approval_status' => ApprovalStatus::APPROVED
         ]);
 
-        ActivityLog::make($ticket->id, auth()->user()->id, 'approved the ticket');
+        ActivityLog::make($ticket->id, 'approved the ticket');
 
         return back()->with('success', 'Ticket was successfully approved.');
     }
@@ -187,7 +183,7 @@ class ApproverTicketsController extends Controller
             'approval_status' => ApprovalStatus::DISAPPROVED
         ]);
 
-        ActivityLog::make($ticket->id, auth()->user()->id, 'disapproved the ticket');
+        ActivityLog::make($ticket->id, 'disapproved the ticket');
 
         return back()->with('success', 'Ticket is rejected.');
     }
@@ -199,7 +195,7 @@ class ApproverTicketsController extends Controller
             'approval_status' => ApprovalStatus::APPROVED
         ]);
 
-        ActivityLog::make($ticket->id, auth()->user()->id, 'approved the ticket');
+        ActivityLog::make($ticket->id, 'approved the ticket');
 
         return back()->with('success', 'The ticket has been approved.');
     }
@@ -219,7 +215,7 @@ class ApproverTicketsController extends Controller
                         'approval_status' => ApprovalStatus::DISAPPROVED
                     ]);
 
-                ActivityLog::make($ticket->id, auth()->user()->id, 'disapproved the ticket');
+                ActivityLog::make($ticket->id, 'disapproved the ticket');
             });
 
             return back()->with('success', 'The ticket has been disapproved.');
@@ -245,11 +241,7 @@ class ApproverTicketsController extends Controller
                 if ($request->hasFile('clarificationFiles')) {
                     foreach ($request->file('clarificationFiles') as $uploadedClarificationFile) {
                         $fileName = $uploadedClarificationFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs(
-                            "public/ticket/{$ticket->ticket_number}/clarification_attachments/" . $this->fileDirByUserType(),
-                            $uploadedClarificationFile,
-                            $fileName
-                        );
+                        $fileAttachment = Storage::putFileAs("public/ticket/{$ticket->ticket_number}/clarification_attachments/" . $this->fileDirByUserType(), $uploadedClarificationFile, $fileName);
 
                         $clarificationFile = new ClarificationFile();
                         $clarificationFile->file_attachment = $fileAttachment;
@@ -268,12 +260,11 @@ class ApproverTicketsController extends Controller
                     ->first();
 
                 // * CONSTRUCT A LOG DESCRIPTION
-                $logDescription = $ticket->clarifications()
-                    ->where('user_id', '!=', auth()->user()->id)->count() == 0
+                $logDescription = $ticket->clarifications()->where('user_id', '!=', auth()->user()->id)->count() == 0
                     ? 'sent a clarrification'
                     : 'replied a clarification to ' . $requester->user->profile->getFullName();
 
-                ActivityLog::make($ticket->id, auth()->user()->id, $logDescription);
+                ActivityLog::make($ticket->id, $logDescription);
             });
 
             return back()->with('success', 'The message has been successfully sent.');

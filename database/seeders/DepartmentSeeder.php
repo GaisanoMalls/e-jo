@@ -16,7 +16,6 @@ class DepartmentSeeder extends Seeder
     {
         $departments = [
             'ICT',
-            'Human Resource',
             'Accounting',
             'Supermarket',
             'Department Store',

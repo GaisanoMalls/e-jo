@@ -100,7 +100,7 @@ Approvers Directory
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $approver->branch->name }}</span>
+                                <span>{{ $approver->getBranches() }}</span>
                             </div>
                         </td>
                         <td>

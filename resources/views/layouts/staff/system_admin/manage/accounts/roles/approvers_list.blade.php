@@ -93,12 +93,12 @@ Accounts
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center text-start td__content">
-                                                    <span>{{ $approver->branch->name }}</span>
+                                                    <span>{{ $approver->getBranches() }}</span>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center text-start td__content">
-                                                    <span>{{ $approver->department->name }}</span>
+                                                    <span>{{ $approver->getBUDepartments() }}</span>
                                                 </div>
                                             </td>
                                             <td>
@@ -163,7 +163,8 @@ Accounts
 </div>
 @endsection
 
-@if ($errors->storeApprover->any())
+@if ($errors->storeApprover->any() || session()->has('empty_branches') || session()->has('empty_bu_departments') ||
+session()->has('invalid_branches') || session()->has('invalid_bu_departments'))
 @push('modal-with-error')
 <script>
     $(function () {

@@ -48,6 +48,10 @@ class TicketCreatedMail extends Mailable implements ShouldQueue
     {
         return new Content(
             markdown: 'mail.ticket-created-mail',
+            with: [
+                'newTicketMessage' => "New Ticket - {$this->ticket->ticket_number}",
+                'message' => "A new ticket has been created by {$this->ticket->user->profile->getFullName()}"
+            ]
         );
     }
 

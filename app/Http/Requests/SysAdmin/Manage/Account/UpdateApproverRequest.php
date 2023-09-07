@@ -25,8 +25,8 @@ class UpdateApproverRequest extends FormRequest
     public function rules()
     {
         return [
-            'branch' => ['required'],
-            'bu_department' => ['required'],
+            'branches' => ['required'],
+            'bu_departments' => ['required'],
             'first_name' => ['required', 'min:2', 'max:100'],
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],

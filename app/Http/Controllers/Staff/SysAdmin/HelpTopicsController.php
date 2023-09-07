@@ -10,7 +10,6 @@ use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
 use App\Models\LevelApprover;
 use App\Models\ServiceDepartment;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class HelpTopicsController extends Controller
@@ -71,11 +70,6 @@ class HelpTopicsController extends Controller
             return back()->with('error', 'Failed to save the help topic');
         }
 
-    }
-
-    public function viewDetails()
-    {
-        //
     }
 
     public function editDetails(HelpTopic $helpTopic)

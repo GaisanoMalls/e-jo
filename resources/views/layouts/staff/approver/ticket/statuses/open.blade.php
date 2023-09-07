@@ -60,13 +60,6 @@
                         <td class="custom__table__data py-0">
                             @if ($ticket->approval_status === 'for_approval')
                             <div class="d-flex align-items-center justify-content-start gap-2">
-                                <form action="{{ route('approver.tickets.disapprove', $ticket->id) }}" method="post">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-sm btn__disapprove__ticket">
-                                        Disapprove
-                                    </button>
-                                </form>
                                 <form action="{{ route('approver.tickets.approve', $ticket->id) }}" method="post">
                                     @csrf
                                     @method('PUT')

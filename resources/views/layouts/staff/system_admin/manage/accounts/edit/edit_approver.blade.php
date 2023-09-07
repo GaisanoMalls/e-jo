@@ -82,8 +82,7 @@ Edit Approver
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label class="form-label form__field__label">Suffix</label>
-                                    <select name="suffix" data-search="false" data-silent-initial-value-set="true"
-                                        placeholder="Select (optional)">
+                                    <select name="suffix" data-search="false" placeholder="Select (optional)">
                                         <option value="" selected>N/A</option>
                                         @foreach ($suffixes as $suffix)
                                         <option value="{{ $suffix->name }}" {{ $suffix->name ==
@@ -137,23 +136,30 @@ Edit Approver
                                     <input type="hidden" value="{{ $approver->branch_id }}"
                                         id="approverCurrentBranchId">
                                     <label class="form-label form__field__label">Branch</label>
-                                    <select name="branch" data-search="true" data-silent-initial-value-set="true"
-                                        id="editApproverBranchDropdown" placeholder="Select (required)">
+                                    <select name="branches[]" data-search="true" id="editApproverBranchDropdown"
+                                        placeholder="Select (required)" multiple>
                                         <option value="" selected disabled>Choose a branch</option>
                                         @foreach ($branches as $branch)
-                                        <option value="{{ $branch->id }}" {{ $branch->id == $approver->branch_id ?
-                                            'selected' : ''
-                                            }}>
+                                        <option value="{{ $branch->id }}" {{ in_array($branch->id,
+                                            $approver->branches->pluck('id')->toArray())
+                                            ? 'selected'
+                                            : '' }}>
                                             {{ $branch->name }}
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('branch')
-                                    <span class="error__message">
+                                    @if (session()->has('empty_branches'))
+                                    <div class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                    @enderror
+                                        {{ session()->get('empty_branches') }}
+                                    </div>
+                                    @endif
+                                    @if (session()->has('invalid_branches'))
+                                    <div class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ session()->get('invalid_branches') }}
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -167,15 +173,30 @@ Edit Approver
                                         <span id="editApproverNoBUDepartmentMessage" class="text-danger fw-normal"
                                             style="font-size: 12px;"></span>
                                     </label>
-                                    <select name="bu_department" data-search="true" data-silent-initial-value-set="true"
-                                        id="editApproverBUDepartmentDropdown" placeholder="Select (required)">
+                                    <select name="bu_departments[]" data-search="true"
+                                        id="editApproverBUDepartmentDropdown" placeholder="Select (required)" multiple>
+                                        <option value="" selected disabled>Choose BU/Department</option>
+                                        @foreach ($buDepartments as $buDepartment)
+                                        <option value="{{ $buDepartment->id }}" {{ in_array($buDepartment->id,
+                                            $approver->buDepartments->pluck('id')->toArray())
+                                            ? 'selected'
+                                            : '' }}>
+                                            {{ $buDepartment->name }}
+                                        </option>
+                                        @endforeach
                                     </select>
-                                    @error('bu_department')
-                                    <span class="error__message">
+                                    @if (session()->has('empty_bu_departments'))
+                                    <div class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                    @enderror
+                                        {{ session()->get('empty_bu_departments') }}
+                                    </div>
+                                    @endif
+                                    @if (session()->has('invalid_bu_departments'))
+                                    <div class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ session()->get('invalid_bu_departments') }}
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

@@ -1,4 +1,4 @@
-<div class="my-3">
+<div class="my-2">
     <div class="d-flex align-items-center gap-1">
         <input class="cb__transfer__ticket__to__department" id="checkBoxTransferTicket" type="checkbox">
         <label class="ticket__actions__label" for="checkBoxTransferTicket">
@@ -35,9 +35,11 @@
                 <div class="input-group">
                     <select class="form-select p-0 border-0 ticket__dropdown__select" data-search="true"
                         id="transferTicketDepartmentsDropdown">
-                        <option value="{{ $ticket->department->id }}" selected>{{ $ticket->department->name }}</option>
+                        <option value="{{ $ticket->service_department_id }}" selected>{{
+                            $ticket->serviceDepartment->name }}
+                        </option>
                         @foreach ($departments as $department)
-                        @if ($department->id !== $ticket->department->id)
+                        @if ($department->id !== $ticket->service_department_id)
                         <option value="{{ $department->id }}">{{ $department->name }}</option>
                         @endif
                         @endforeach

@@ -8,6 +8,7 @@ use App\Http\Requests\SysAdmin\Manage\Account\UpdateApproverRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\Branch;
+use App\Models\Department;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
@@ -19,11 +20,37 @@ class AccountApproverController extends Controller
 
     public function store(StoreApproverRequest $request)
     {
+        // Branches
+        if ($request->branches[0] === null) {
+            return back()->with('empty_branches', 'Branch field is required.')
+                ->withInput();
+        }
+
+        $selectedBranches = $this->getSelectedValue($request->branches);
+        $existingBranches = Branch::whereIn('id', $selectedBranches)->pluck('id');
+
+        if (count($existingBranches) !== count($selectedBranches)) {
+            return back()->with('invalid_branches', 'Invalid branch.')
+                ->withInput();
+        }
+
+        // BU/Departments
+        if ($request->bu_departments[0] === null) {
+            return back()->with('empty_bu_departments', 'BU/Department field is required.')
+                ->withInput();
+        }
+
+        $selectedBUDepartments = $this->getSelectedValue($request->bu_departments);
+        $existingBUDepartments = Department::whereIn('id', $selectedBUDepartments)->pluck('id');
+
+        if (count($existingBUDepartments) !== count($selectedBUDepartments)) {
+            return back()->with('invalid_bu_departments', 'Invalid branch.')
+                ->withInput();
+        }
+
         try {
-            DB::transaction(function () use ($request) {
+            DB::transaction(function () use ($request, $existingBranches, $existingBUDepartments) {
                 $approver = User::create([
-                    'branch_id' => $request->branch,
-                    'department_id' => $request->bu_department,
                     'role_id' => Role::APPROVER,
                     'email' => $request->email,
                     'password' => \Hash::make('approver'),
@@ -42,6 +69,9 @@ class AccountApproverController extends Controller
                         $request->suffix
                     ]))
                 ]);
+
+                $approver->branches()->attach($existingBranches);
+                $approver->buDepartments()->attach($existingBUDepartments);
             });
 
             return back()->with('success', 'You have successfully created a new approver.');
@@ -64,6 +94,7 @@ class AccountApproverController extends Controller
     {
         $suffixes = $this->querySuffixes();
         $branches = $this->queryBranches();
+        $buDepartments = $this->queryBUDepartments();
 
         return view(
             'layouts.staff.system_admin.manage.accounts.edit.edit_approver',
@@ -71,14 +102,43 @@ class AccountApproverController extends Controller
                 'approver',
                 'suffixes',
                 'branches',
+                'buDepartments'
             ])
         );
     }
 
     public function update(UpdateApproverRequest $request, User $approver)
     {
+        // Branches
+        if ($request->branches[0] === null) {
+            return back()->with('empty_branches', 'Branch field is required.')
+                ->withInput();
+        }
+
+        $selectedBranches = $this->getSelectedValue($request->branches);
+        $existingBranches = Branch::whereIn('id', $selectedBranches)->pluck('id');
+
+        if (count($existingBranches) !== count($selectedBranches)) {
+            return back()->with('invalid_branches', 'Invalid branch.')
+                ->withInput();
+        }
+
+        // BU/Departments
+        if ($request->bu_departments[0] === null) {
+            return back()->with('empty_bu_departments', 'BU/Department field is required.')
+                ->withInput();
+        }
+
+        $selectedBUDepartments = $this->getSelectedValue($request->bu_departments);
+        $existingBUDepartments = Department::whereIn('id', $selectedBUDepartments)->pluck('id');
+
+        if (count($existingBUDepartments) !== count($selectedBUDepartments)) {
+            return back()->with('invalid_bu_departments', 'Invalid branch.')
+                ->withInput();
+        }
+
         try {
-            DB::transaction(function () use ($approver, $request) {
+            DB::transaction(function () use ($approver, $request, $existingBranches, $existingBUDepartments) {
                 $approver->update([
                     'branch_id' => $request->branch,
                     'department_id' => $request->bu_department,
@@ -97,6 +157,9 @@ class AccountApproverController extends Controller
                         $request->suffix
                     ]))
                 ]);
+
+                $approver->branches()->sync($existingBranches);
+                $approver->buDepartments()->sync($existingBUDepartments);
             });
 
             return back()->with('success', "You have successfully updated the account for {$approver->profile->getFullName()}.");

@@ -102,7 +102,7 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start td__content">
-                                                <span>{{ $agent->team->name ?? '----' }}</span>
+                                                <span>{{ $agent->getTeams() }}</span>
                                             </div>
                                         </td>
                                         <td>

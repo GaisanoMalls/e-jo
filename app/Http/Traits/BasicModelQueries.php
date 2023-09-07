@@ -6,6 +6,7 @@ use App\Models\ApprovalLevel;
 use App\Models\Branch;
 use App\Models\Department;
 use App\Models\HelpTopic;
+use App\Models\PriorityLevel;
 use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\ServiceLevelAgreement;
@@ -48,6 +49,11 @@ trait BasicModelQueries
     public function queryBUDepartments()
     {
         return Department::orderBy('name', 'asc')->get();
+    }
+
+    public function queryPriorityLevels()
+    {
+        return PriorityLevel::orderBy('id', 'asc')->get();
     }
 
     public function queryTeams()

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Http\Traits\Utils;
+use App\Models\Ticket;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,13 +16,12 @@ class ActivityLog extends Model
     protected $fillable = [
         'ticket_id',
         'user_id',
-        'log_name',
-        'description'
+        'description',
     ];
 
     public function ticket()
     {
-        return $this->belongsTo(Ticket::class);
+        return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 
     public function causer()
@@ -37,13 +38,12 @@ class ActivityLog extends Model
         return $details;
     }
 
-    public static function make(int $ticket, int $causer, string $description, string $logName = null)
+    public static function make(int $ticket, string $description)
     {
-        self::create([
+        self::firstOrCreate([
             'ticket_id' => $ticket,
-            'user_id' => $causer,
-            'log_name' => $logName,
-            'description' => $description
+            'user_id' => auth()->user()->id,
+            'description' => $description,
         ]);
     }
 

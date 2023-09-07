@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'user_id')->constrained()->cascadeOnDelete();
-            $table->string('log_name')->nullable();
             $table->text('description');
             $table->timestamps();
         });

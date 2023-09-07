@@ -3,7 +3,20 @@
 namespace App\Models;
 
 use App\Http\Traits\Utils;
+use App\Models\ActivityLog;
+use App\Models\Branch;
+use App\Models\HelpTopic;
+use App\Models\PriorityLevel;
+use App\Models\Reason;
+use App\Models\Reply;
+use App\Models\ServiceDepartment;
+use App\Models\ServiceLevelAgreement;
+use App\Models\Status;
 use App\Models\Tag;
+use App\Models\Team;
+use App\Models\TicketApproverHead;
+use App\Models\TicketFile;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,57 +37,67 @@ class Ticket extends Model
         'ticket_number',
         'subject',
         'description',
-        'approval_status'
+        'approval_status',
+        'service_department_head_approver',
+        'bu_head_approver',
+        'head_approval_completed'
+    ];
+
+    protected $casts = [
+        'service_department_head_approver' => 'array',
+        'bu_head_approver' => 'array',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')
+            ->whereHas('role', fn($requester) => $requester->where('role_id', Role::USER));
     }
 
     public function agent()
     {
-        return $this->belongsTo(User::class, 'agent_id');
+        return $this->belongsTo(User::class, 'agent_id')
+            ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT));
     }
 
     public function branch()
     {
-        return $this->belongsTo(Branch::class);
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
     public function serviceDepartment()
     {
-        return $this->belongsTo(ServiceDepartment::class);
+        return $this->belongsTo(ServiceDepartment::class, 'service_department_id');
     }
 
     public function team()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Team::class, 'team_id');
     }
 
     public function helpTopic()
     {
-        return $this->belongsTo(HelpTopic::class);
+        return $this->belongsTo(HelpTopic::class, 'help_topic_id');
     }
 
     public function status()
     {
-        return $this->belongsTo(Status::class);
+        return $this->belongsTo(Status::class, 'status_id');
     }
 
     public function priorityLevel()
     {
-        return $this->belongsTo(PriorityLevel::class);
+        return $this->belongsTo(PriorityLevel::class, 'priority_level_id');
     }
 
     public function sla()
     {
-        return $this->belongsTo(ServiceLevelAgreement::class);
+        return $this->belongsTo(ServiceLevelAgreement::class, 'sla_id');
     }
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class, 'ticket_tag');
     }
 
     public function fileAttachments()

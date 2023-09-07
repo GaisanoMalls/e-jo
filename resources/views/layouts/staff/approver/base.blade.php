@@ -19,6 +19,7 @@
 
 <body>
     @include('layouts.staff.approver.includes.navbar')
+    @include('layouts.staff.approver.includes.notification_canvas')
     @include('layouts.includes.toaster-message')
     @include('layouts.staff.approver.includes.modal.confirm_logout')
     <div class="container mb-5 approver__section">

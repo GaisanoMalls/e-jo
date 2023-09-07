@@ -1,13 +1,14 @@
-<form action="" id="ticketPrioritySection">
-    @csrf
-    <div class="my-3">
-        <label class="ticket__actions__label">Priority</label>
-        <div class="input-group">
-            <select class="form-select p-0 border-0 ticket__dropdown__select">
-                <option selected>{{ $ticket->priorityLevel->name }}</option>
-                <option value="1">Low Priority</option>
-            </select>
-            <button class="btn modal__footer__button modal__btnsubmit__bottom" type="submit">Save</button>
+<div class="my-3">
+    <label class="ticket__actions__label">Priority</label>
+    <div class="d-flex gap-2">
+        @foreach ($priorityLevels as $priorityLevel)
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="priority_level" id="rbnt{{ $priorityLevel->name }}"
+                value="1" {{ $ticket->priority_level_id === $priorityLevel->id ? 'checked' : '' }}>
+            <label class="form-check-label radio__button__label" for="rbnt{{ $priorityLevel->name }}">
+                {{ $priorityLevel->name }}
+            </label>
         </div>
+        @endforeach
     </div>
-</form>
+</div>

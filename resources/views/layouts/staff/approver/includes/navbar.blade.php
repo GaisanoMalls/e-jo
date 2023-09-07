@@ -30,33 +30,14 @@
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-4">
                 <li class="nav-item my-auto dropdown">
-                    <a class="nav-link icon__nav__link position-relative" href="">
+                    <a class="nav-link icon__nav__link position-relative" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#notificationCanvas">
                         <i class="bi bi-bell-fill"></i>
-                        @if (!auth()->user()->notifications->isEmpty())
+                        @if (!auth()->user()->unreadNotifications->isEmpty())
                         <i class='bx bxs-circle bx-burst position-absolute'
                             style="top: 8px; right: 6px; color: #D32839; font-size: 11px;"></i>
                         @endif
                     </a>
-                    {{-- <ul
-                        class="dropdown-menu dropdown-menu-end slideIn animate custom__dropdown__menu notification__dropdown__menu">
-                        <div class="d-flex align-items-center justify-content-between notification__header">
-                            <h6 class="mb-0 title">Notifications</h6>
-                            <form action="" method="">
-                                <button type="submit"
-                                    class="btn btn-sm p-0 d-flex align-items-center gap-2 btn__mark__all__as__read">
-                                    <i class="fa-solid fa-check-double"></i>
-                                    Mark all as read
-                                </button>
-                            </form>
-                        </div>
-                        @foreach (auth()->user()->notifications as $notification)
-                        <li>
-                            <a class="btn dropdown-item dropdown__menu__items" href="">
-                                {{ $notification->data['message'] }}
-                            </a>
-                        </li>
-                        @endforeach
-                    </ul> --}}
                 </li>
                 <li class="nav-item my-auto dropdown">
                     <a class="nav-link icon__nav__link" href="" role="button" data-bs-toggle="dropdown"

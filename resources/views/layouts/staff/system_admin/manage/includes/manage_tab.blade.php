@@ -23,6 +23,14 @@
             </a>
         </li>
         <li>
+            <a href="{{ route('staff.manage.service_level_agreements.index') }}"
+                class="btn d-flex align-items-center border-0 settings__tab__button
+                            {{ Route::is('staff.manage.service_level_agreements.index') ? 'settings__active__tab' : '' }}">
+                <i class="fa-solid fa-handshake settings__icon__active__tab"></i>
+                SLA Plans
+            </a>
+        </li>
+        <li>
             <a href="{{ route('staff.manage.branch.index') }}" class="btn d-flex align-items-center border-0 settings__tab__button
                 {{ Route::is('staff.manage.branch.*') ? 'settings__active__tab' : '' }}">
                 <i class="bi bi-geo-alt-fill settings__icon__active__tab"></i>
@@ -55,13 +63,6 @@
                 {{ Route::is('staff.manage.help_topic.*') ? 'settings__active__tab' : '' }}">
                 <i class="bi bi-question-circle-fill settings__icon__active__tab"></i>
                 Help Topics
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('staff.manage.service_level_agreements.index') }}" class="btn d-flex align-items-center border-0 settings__tab__button
-                {{ Route::is('staff.manage.service_level_agreements.index') ? 'settings__active__tab' : '' }}">
-                <i class="fa-solid fa-handshake settings__icon__active__tab"></i>
-                SLA Plans
             </a>
         </li>
         <li>

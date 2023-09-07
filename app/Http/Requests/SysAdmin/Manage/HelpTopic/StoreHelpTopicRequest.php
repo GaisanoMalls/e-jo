@@ -26,7 +26,7 @@ class StoreHelpTopicRequest extends FormRequest
     {
         return [
             'service_department' => ['required'],
-            'team' => ['required'],
+            'team' => ['nullable'],
             'sla' => ['required'],
             'name' => ['required'],
             'level_of_approval' => ['required'],

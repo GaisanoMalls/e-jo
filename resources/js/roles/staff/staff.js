@@ -5,13 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const assignToAgentSection = document.getElementById('assignToAgentSection');
     const ticketPrioritySection = document.getElementById('ticketPrioritySection');
     const btnSaveTransferTicket = document.getElementById('btnSaveTransferTicket');
-    const btnSaveAssignTicketToAnotherAgent = document.getElementById('btnSaveAssignTicketToAnotherAgent');
 
     if (checkBoxTransferTicket) {
         checkBoxTransferTicket.addEventListener('change', (event) => {
             if (event.target.checked) {
                 selectAssignToAgent.setAttribute('disabled', '')
-                btnSaveAssignTicketToAnotherAgent.setAttribute('disabled', '');
                 btnSaveTransferTicket.removeAttribute('disabled');
                 transferDepartmentSection.style.display = 'block';
                 assignToAgentSection.style.display = 'none';
@@ -19,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 selectAssignToAgent.removeAttribute('disabled');
                 btnSaveTransferTicket.setAttribute('disabled', '');
-                btnSaveAssignTicketToAnotherAgent.removeAttribute('disabled');
                 transferDepartmentSection.style.display = 'none';
                 assignToAgentSection.style.display = 'block';
                 ticketPrioritySection.style.display = 'block';

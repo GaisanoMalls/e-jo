@@ -3,6 +3,11 @@
 namespace App\Models;
 
 use App\Http\Traits\Utils;
+use App\Models\Department;
+use App\Models\Team;
+use App\Models\Ticket;
+use App\Models\User;
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,7 +39,8 @@ class Branch extends Model
 
     public function approvers()
     {
-        return $this->belongsToMany(User::class)->where('role_id', Role::APPROVER);
+        return $this->belongsToMany(User::class, 'user_branch')
+            ->whereHas('role', fn($query) => $query->where('role_id', Role::APPROVER));
     }
 
     public function dateCreated()

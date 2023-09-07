@@ -19,10 +19,6 @@ class TeamSeeder extends Seeder
     {
         $teams = [
             [
-                'id' => 1,
-                'name' => 'Help Desk'
-            ],
-            [
                 'id' => 2,
                 'name' => 'ICT Support'
             ],
@@ -31,36 +27,16 @@ class TeamSeeder extends Seeder
                 'name' => 'System Development'
             ],
             [
-                'id' => 4,
-                'name' => 'Price Mngt.'
-            ],
-            [
                 'id' => 5,
                 'name' => 'Sales Audit'
-            ],
-            [
-                'id' => 6,
-                'name' => 'Inventory and Adjustment'
-            ],
-            [
-                'id' => 7,
-                'name' => 'Rewards'
-            ],
-            [
-                'id' => 8,
-                'name' => 'Pricing'
             ],
         ];
 
         foreach ($teams as $team) {
-            // $department = Department::where('id', $team['id'])->first();
-            // if ($department) {
             Team::firstOrCreate([
-                // 'service_department_id' => 1,
                 'name' => $team['name'],
                 'slug' => \Str::slug($team['name'])
             ]);
-            // }
         }
     }
 }

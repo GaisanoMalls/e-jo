@@ -15,6 +15,7 @@ class AccountsController extends Controller
     {
         $roles = $this->queryRoles();
         $branches = $this->queryBranches();
+        $buDepartments = $this->queryBUDepartments();
 
         $approvers = User::with('branch')
             ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
@@ -24,7 +25,7 @@ class AccountsController extends Controller
             ->whereHas('role', fn($serviceDepartmentAdmin) => $serviceDepartmentAdmin->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
             ->take(5)->orderBy('created_at', 'desc')->get();
 
-        $agents = User::with(['team', 'department', 'branch'])
+        $agents = User::with(['department', 'branch'])
             ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
             ->take(5)->orderBy('created_at', 'desc')->get();
 
@@ -41,6 +42,7 @@ class AccountsController extends Controller
                 'users',
                 'roles',
                 'branches',
+                'buDepartments'
             ])
         );
     }
@@ -49,12 +51,14 @@ class AccountsController extends Controller
     {
         $approvers = $this->queryApprovers();
         $branches = $this->queryBranches();
+        $buDepartments = $this->queryBUDepartments();
 
         return view(
             'layouts.staff.system_admin.manage.accounts.roles.approvers_list',
             compact([
                 'approvers',
-                'branches'
+                'branches',
+                'buDepartments'
             ])
         );
     }

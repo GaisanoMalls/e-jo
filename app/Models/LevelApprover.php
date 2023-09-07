@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\HelpTopic;
+use App\Models\Level;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,16 +17,16 @@ class LevelApprover extends Model
 
     public function level()
     {
-        return $this->belongsTo(Level::class);
+        return $this->belongsTo(Level::class, 'level_id');
     }
 
     public function approver()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function helpTopic()
     {
-        return $this->belongsTo(HelpTopic::class);
+        return $this->belongsTo(HelpTopic::class, 'help_topic_id');
     }
 }

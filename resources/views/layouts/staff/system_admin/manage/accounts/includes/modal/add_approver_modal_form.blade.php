@@ -74,8 +74,7 @@
                                             <label for="suffix" class="form-label form__field__label">
                                                 Suffix
                                             </label>
-                                            <select name="suffix" data-search="false"
-                                                data-silent-initial-value-set="true" placeholder="Select (optional)">
+                                            <select name="suffix" data-search="false" placeholder="Select (optional)">
                                                 <option value="" selected disabled>Choose a suffix</option>
                                                 @foreach ($suffixes as $suffix)
                                                 <option value="{{ $suffix->name }}" {{ old('suffix')==$suffix->name ?
@@ -120,9 +119,8 @@
                                     <div class="col-md-12">
                                         <div class="mb-2">
                                             <label for="branch" class="form-label form__field__label">Branch</label>
-                                            <select name="branch" data-search="true"
-                                                data-silent-initial-value-set="true" placeholder="Select (required)"
-                                                id="approverBranchDropdown">
+                                            <select name="branches[]" data-search="true" placeholder="Select (required)"
+                                                id="approverBranchDropdown" multiple>
                                                 <option value="" selected disabled>Choose a branch</option>
                                                 @foreach ($branches as $branch)
                                                 <option value="{{ $branch->id }}" {{ old('branch')==$branch->id ?
@@ -131,12 +129,18 @@
                                                 </option>
                                                 @endforeach
                                             </select>
-                                            @error('branch', 'storeApprover')
-                                            <span class="error__message">
+                                            @if (session()->has('empty_branches'))
+                                            <div class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                            @enderror
+                                                {{ session()->get('empty_branches') }}
+                                            </div>
+                                            @endif
+                                            @if (session()->has('invalid_branches'))
+                                            <div class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ session()->get('invalid_branches') }}
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -148,16 +152,30 @@
                                                 <span id="approverNoBUDepartmentMessage" class="text-danger fw-normal"
                                                     style="font-size: 12px;"></span>
                                             </label>
-                                            <select name="bu_department" data-search="true"
-                                                data-silent-initial-value-set="true" placeholder="Select (required)"
-                                                id="approverBUDepartmentDropdown">
+                                            <select name="bu_departments[]" data-search="true"
+                                                placeholder="Select (required)" id="approverBUDepartmentDropdown"
+                                                multiple>
+                                                <option value="" selected disabled>Choose a branch</option>
+                                                @foreach ($buDepartments as $department)
+                                                <option value="{{ $department->id }}" {{
+                                                    old('department')==$department->id ?
+                                                    'selected' : '' }}>
+                                                    {{ $department->name }}
+                                                </option>
+                                                @endforeach
                                             </select>
-                                            @error('bu_department', 'storeApprover')
-                                            <span class="error__message">
+                                            @if (session()->has('empty_bu_departments'))
+                                            <div class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                            @enderror
+                                                {{ session()->get('empty_bu_departments') }}
+                                            </div>
+                                            @endif
+                                            @if (session()->has('invalid_bu_departments'))
+                                            <div class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ session()->get('invalid_bu_departments') }}
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

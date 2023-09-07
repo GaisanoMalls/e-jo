@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\ClarificationFile;
+use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

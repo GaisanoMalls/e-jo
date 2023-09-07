@@ -16,7 +16,7 @@ trait Tickets
         })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id);
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -32,7 +32,7 @@ trait Tickets
         })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id);
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -49,7 +49,7 @@ trait Tickets
         })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id);
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -65,7 +65,7 @@ trait Tickets
         })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id);
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -81,7 +81,7 @@ trait Tickets
         })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id);
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -97,7 +97,7 @@ trait Tickets
         })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id);
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -113,7 +113,7 @@ trait Tickets
         })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                    ->where('service_department_id', auth()->user()->service_department_id);
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -127,7 +127,7 @@ trait Tickets
             $query->where('status_id', Status::CLOSED)
                 ->where(function ($byUserQuery) {
                     $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                        ->where('service_department_id', auth()->user()->service_department_id);
+                        ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
                 });
         })
             ->orWhere(function ($statusQuery) {

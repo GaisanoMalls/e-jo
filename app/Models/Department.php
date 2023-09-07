@@ -3,7 +3,11 @@
 namespace App\Models;
 
 use App\Http\Traits\Utils;
-use Carbon\Carbon;
+use App\Models\Branch;
+use App\Models\HelpTopic;
+use App\Models\Ticket;
+use App\Models\User;
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,6 +36,12 @@ class Department extends Model
     {
         return $this->belongsToMany(Branch::class, 'department_branch')
             ->withTimestamps();
+    }
+
+    public function approvers()
+    {
+        return $this->belongsToMany(User::class, 'user_department')
+            ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER));
     }
 
     public function getTeams()

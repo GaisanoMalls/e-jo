@@ -41,13 +41,5 @@ class AppServiceProvider extends ServiceProvider
             'global_branches' => $global_branches,
             'suffixes' => $suffixes,
         ]);
-
-        // foreach (Ticket::all() as $ticket) {
-        //     if ($ticket->replies()->count() !== 0) {
-        //         $ticket->update([
-        //             'status_id' => Status::ON_PROCESS
-        //         ]);
-        //     }
-        // }
     }
 }

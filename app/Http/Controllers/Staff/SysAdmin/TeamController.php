@@ -22,14 +22,7 @@ class TeamController extends Controller
     {
         $serviceDepartments = ServiceDepartment::orderby('name', 'asc')->get();
         $branches = Branch::orderBy('name', 'asc')->get();
-        $teams = Team::with('serviceDepartment')
-            ->with([
-                'users' => function ($query) {
-                    $query->whereHas('role', function ($roleQuery) {
-                        $roleQuery->where('id', Role::AGENT);
-                    });
-                }
-            ])->orderBy('created_at', 'desc')->get();
+        $teams = Team::with('serviceDepartment')->orderBy('created_at', 'desc')->get();
 
         return view(
             'layouts.staff.system_admin.manage.teams.teams_index',

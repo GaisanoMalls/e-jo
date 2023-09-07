@@ -81,7 +81,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8 position-relative">
+                <div class="col-md-7 position-relative">
                     <div class="card border-0 p-0 card__ticket__details">
                         <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                             <div class="d-flex align-items-center user__account__media">
@@ -104,6 +104,7 @@
                             </div>
                             <small class="ticket__details__time mt-2">
                                 {{ $ticket->created_at->diffForHumans(null, true) }}
+                                ago
                             </small>
                         </div>
                         <div class="ticket__details__card__body">
@@ -150,7 +151,7 @@
                     @show
                     {{-- End Replies/Comments --}}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="container__ticket__details__right">
                         @include('layouts.user.ticket.includes.ticket_details')
                         @include('layouts.user.ticket.includes.ticket_assigned_agent')

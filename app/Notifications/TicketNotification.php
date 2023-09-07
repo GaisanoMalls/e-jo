@@ -5,23 +5,25 @@ namespace App\Notifications;
 use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class TicketNotification extends Notification
 {
     use Queueable;
 
     public $ticket;
+    public $title;
     public $message;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket, string $message)
+    public function __construct(Ticket $ticket, string $title, string $message)
     {
         $this->ticket = $ticket;
+        $this->title = $title;
         $this->message = $message;
     }
 
@@ -46,7 +48,13 @@ class TicketNotification extends Notification
     {
         return [
             'ticket' => $this->ticket,
+            'title' => $this->title,
             'message' => $this->message,
+            'sender' => [
+                'profilePicture' => Storage::url($this->ticket->user->profile->picture) ?? null,
+                'nameInitial' => $this->ticket->user->profile->getNameInitial(),
+                'fullName' => $this->ticket->user->profile->getFullName()
+            ]
         ];
     }
 }

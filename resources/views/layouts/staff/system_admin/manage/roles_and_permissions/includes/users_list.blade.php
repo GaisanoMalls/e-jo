@@ -97,12 +97,22 @@
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->department->name ?? '----' }}</span>
+                                <span>
+                                    {{ $user->role_id == App\Models\Role::APPROVER
+                                    ? $user->getBUDepartments()
+                                    : ($user->department->name ?? '----')
+                                    }}
+                                </span>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->branch->name }}</span>
+                                <span>
+                                    {{ $user->role_id == App\Models\Role::APPROVER
+                                    ? $user->getBranches()
+                                    : ($user->branch->name ?? '----')
+                                    }}
+                                </span>
                             </div>
                         </td>
                         <td>

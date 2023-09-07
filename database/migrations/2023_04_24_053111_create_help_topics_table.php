@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\ApprovalLevel;
-use App\Models\Department;
 use App\Models\ServiceDepartment;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Team;
@@ -20,7 +18,7 @@ return new class extends Migration {
         Schema::create('help_topics', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(ServiceDepartment::class, 'service_department_id')->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Team::class, 'team_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Team::class, 'team_id')->nullable()->constrained();
             $table->foreignIdFor(ServiceLevelAgreement::class, 'sla_id');
             $table->string('name');
             $table->string('slug');

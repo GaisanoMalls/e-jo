@@ -199,12 +199,12 @@ Edit Service Dept. Admin
                                         </option>
                                         @endforeach
                                     </select>
-                                    @error('service_department')
-                                    <span class="error__message">
+                                    @if (session()->has('empty_service_departments'))
+                                    <div class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                    @enderror
+                                        {{ session()->get('empty_service_departments') }}
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

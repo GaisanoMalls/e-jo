@@ -38,7 +38,7 @@
                             {{ $ticket->serviceDepartment->name }}
                         </option>
                         @foreach ($departments as $department)
-                        @if ($department->id !== $ticket->department->id)
+                        @if ($department->id !== $ticket->service_department_id)
                         <option value="{{ $department->id }}">{{ $department->name }}</option>
                         @endif
                         @endforeach

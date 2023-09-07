@@ -46,8 +46,7 @@ Edit Help Topic
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label form__field__label">Service Level Agreements (SLA)</label>
-                                    <select name="sla" data-search="false" data-silent-initial-value-set="true"
-                                        placeholder="Select (required)">
+                                    <select name="sla" data-search="false" placeholder="Select (required)">
                                         @foreach ($serviceLevelAgreements as $sla)
                                         <option value="{{ $sla->id }}" {{ $sla->id === $helpTopic->sla_id
                                             ? 'selected' : '' }}>
@@ -69,7 +68,6 @@ Edit Help Topic
                                         id="helpTopicCurrentServiceDepartmentId">
                                     <label class="form-label form__field__label">Service Department</label>
                                     <select name="service_department" data-search="false"
-                                        data-silent-initial-value-set="true"
                                         id="editHelpTopicServiceDepartmentsDropdown" placeholder="Select (required)">
                                         @foreach ($serviceDepartments as $serviceDepartment)
                                         <option value="{{ $serviceDepartment->id }}" {{ $serviceDepartment->id ===
@@ -97,8 +95,8 @@ Edit Help Topic
                                         <span id="editHelpTopicNoTeamsMessage" class="text-danger fw-normal"
                                             style="font-size: 12px;"></span>
                                     </label>
-                                    <select name="team" data-search="true" data-silent-initial-value-set="true"
-                                        id="editHelpTopicTeamsDropdown" placeholder="Select (required)">
+                                    <select name="team" data-search="true" id="editHelpTopicTeamsDropdown"
+                                        placeholder="Select (required)">
                                     </select>
                                     @error('team')
                                     <span class="error__message">
@@ -113,8 +111,7 @@ Edit Help Topic
                                 <div class="mb-3">
                                     <label class="form-label form__field__label">Level of Approval</label>
                                     <select name="level_of_approval" data-search="false"
-                                        data-silent-initial-value-set="true" id="editHelpTopicLevelOfApprovalDropdown"
-                                        placeholder="Select (required)">
+                                        id="editHelpTopicLevelOfApprovalDropdown" placeholder="Select (required)">
                                         @foreach ($levelOfApprovals as $level)
                                         <option value="{{ $level->id }}" {{ in_array($level->id,
                                             $helpTopic->levels->pluck('id')->toArray())

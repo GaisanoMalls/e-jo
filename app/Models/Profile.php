@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Traits\Utils;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

@@ -7,7 +7,7 @@
                 @method('PUT')
                 <div class="modal-body border-0 px-4 pt-4 pb-1 mb-3">
                     <h6 class="mb-3 title">
-                        Reason why you disapprove this ticket.
+                        Reason why you disapprove this ticket
                     </h6>
                     <textarea id="myeditorinstance" name="description" placeholder="Type here..."></textarea>
                     @error('description', 'disapproveTicket')

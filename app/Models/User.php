@@ -3,7 +3,16 @@
 namespace App\Models;
 
 use App\Http\Traits\Utils;
+use App\Models\ActivityLog;
+use App\Models\Branch;
+use App\Models\Department;
+use App\Models\Feedback;
+use App\Models\Level;
+use App\Models\Profile;
 use App\Models\Role;
+use App\Models\ServiceDepartment;
+use App\Models\Team;
+use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -74,11 +83,6 @@ class User extends Authenticatable
         return $this->belongsTo(Department::class);
     }
 
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
-
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
@@ -96,13 +100,29 @@ class User extends Authenticatable
 
     public function levels()
     {
-        return $this->belongsToMany(Level::class, 'level_approver')
+        return $this->belongsToMany(Level::class, 'level_approver', 'user_id', 'level_id')
             ->withTimestamps();
     }
 
     public function serviceDepartments()
     {
         return $this->belongsToMany(ServiceDepartment::class, 'user_service_department');
+    }
+
+    public function branches()
+    {
+        return $this->belongsToMany(Branch::class, 'user_branch');
+    }
+
+    public function buDepartments()
+    {
+        return $this->belongsToMany(Department::class, 'user_department');
+    }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'user_team')
+            ->withPivot(['user_id', 'team_id']);
     }
 
     public function getServiceDepartments()
@@ -115,6 +135,53 @@ class User extends Authenticatable
 
         if (!empty($serviceDepartmentNames)) {
             return implode(', ', $serviceDepartmentNames);
+        }
+
+        return '----';
+    }
+
+    public function getTeams()
+    {
+        $teams = [];
+
+        foreach ($this->teams as $team) {
+            array_push($teams, $team->name);
+        }
+
+        if (!empty($teams)) {
+            return implode(', ', $teams);
+        }
+
+        return '----';
+    }
+
+    // Get the branches assiged to approver.
+    public function getBranches()
+    {
+        $branchNames = [];
+
+        foreach ($this->branches as $branch) {
+            array_push($branchNames, $branch->name);
+        }
+
+        if (!empty($branchNames)) {
+            return implode(', ', $branchNames);
+        }
+
+        return '----';
+    }
+
+    // Get the branches assiged to approver.
+    public function getBUDepartments()
+    {
+        $buDepartmentNames = [];
+
+        foreach ($this->buDepartments as $buDepartment) {
+            array_push($buDepartmentNames, $buDepartment->name);
+        }
+
+        if (!empty($buDepartmentNames)) {
+            return implode(', ', $buDepartmentNames);
         }
 
         return '----';
