@@ -814,7 +814,7 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
                             teams.forEach(function (team) {
                                 teamsOption.push({
                                     value: team.id,
-                                    label: team.name
+                                    label: team.name,
                                 });
                             });
 
@@ -856,6 +856,7 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
                             ele: `#editLevel${i}Approver`,
                             showValueAsTags: true,
                             markSearchResults: true,
+                            hasOptionDescription: true
                         });
 
                         const editLevelOfApproverSelect = document.getElementById(`editLevel${i}Approver`);
@@ -872,7 +873,8 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
 
                                         approversOption.push({
                                             value: approver.id,
-                                            label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`
+                                            label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                                            description: approver.email
                                         });
                                     });
 
@@ -987,6 +989,7 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
                         ele: `#editLevel${i}Approver`,
                         showValueAsTags: true,
                         markSearchResults: true,
+                        hasOptionDescription: true
                     });
 
                     const editLevelOfApproverSelect = document.getElementById(`editLevel${i}Approver`);
@@ -1003,7 +1006,8 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
 
                                     editApproversOption.push({
                                         value: approver.id,
-                                        label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`
+                                        label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                                        description: approver.email
                                     });
                                 });
 
@@ -1050,6 +1054,7 @@ if (levelOfApproverDropdown) {
                     ele: `#level${i}Approver`,
                     showValueAsTags: true,
                     markSearchResults: true,
+                    hasOptionDescription: true
                 });
 
                 const levelOfApproverSelect = document.getElementById(`level${i}Approver`);
@@ -1066,7 +1071,8 @@ if (levelOfApproverDropdown) {
 
                                 approversOption.push({
                                     value: approver.id,
-                                    label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`
+                                    label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                                    description: approver.email
                                 });
                             });
 

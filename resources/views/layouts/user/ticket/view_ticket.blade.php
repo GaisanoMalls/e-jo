@@ -146,8 +146,7 @@
                     </div>
                     {{-- Replies/Comments --}}
                     @section('ticket-reply-clarifications')
-                    @include('layouts.user.ticket.includes.ticket_replies')
-
+                    @livewire('requester.ticket-replies', ['ticket' => $ticket])
                     @show
                     {{-- End Replies/Comments --}}
                 </div>
@@ -155,7 +154,7 @@
                     <div class="container__ticket__details__right">
                         @include('layouts.user.ticket.includes.ticket_details')
                         @include('layouts.user.ticket.includes.ticket_assigned_agent')
-                        @include('layouts.user.ticket.includes.approvals')
+                        {{-- @include('layouts.user.ticket.includes.approvals') --}}
                         @include('layouts.user.ticket.includes.ticket_activity_logs')
                     </div>
                 </div>

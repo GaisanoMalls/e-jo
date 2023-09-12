@@ -138,7 +138,7 @@
                         </small>
                     </div>
                     {{-- Replies/Comments --}}
-                    @include('layouts.staff.approver.ticket.includes.ticket_clarifications')
+                    @livewire('approver.ticket-clarifications', ['ticket' => $ticket])
                     @if ($ticket->clarifications->count() === 0)
                     <div class="row align-items-center bg-light p-2 py-1 rounded-3 mx-1 mt-2 mb-4">
                         <div class="col-lg-6 col-md-12">

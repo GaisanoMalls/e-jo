@@ -27,7 +27,7 @@ class CreateTicketsTable extends Migration
             $table->foreignIdFor(User::class, 'agent_id')->nullable();
             $table->foreignIdFor(Branch::class, 'branch_id')->constrained()->cascadeOnDelete();
             $table->foreignIdFor(ServiceDepartment::class, 'service_department_id')->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Team::class, 'team_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Team::class, 'team_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(HelpTopic::class, 'help_topic_id');
             $table->foreignIdFor(Status::class, 'status_id');
             $table->foreignIdFor(PriorityLevel::class, 'priority_level_id');

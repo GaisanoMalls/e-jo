@@ -45,7 +45,7 @@ class HelpTopic extends Model
 
     public function levels()
     {
-        return $this->belongsToMany(Level::class, 'help_topic_level');
+        return $this->belongsToMany(Level::class, 'help_topic_level', 'help_topic_id', 'level_id');
     }
 
     public function dateCreated()

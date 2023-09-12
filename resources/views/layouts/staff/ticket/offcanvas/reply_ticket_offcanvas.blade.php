@@ -13,7 +13,8 @@
             <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
                     @if ($latestReply->user->profile->picture)
-                    <img src="{{ Storage::url($reply->user->profile->picture) }}" class="me-2 sender__profile" alt="">
+                    <img src="{{ Storage::url($latestReply->user->profile->picture) }}" class="me-2 sender__profile"
+                        alt="">
                     @else
                     <div class="user__name__initial d-flex align-items-center p-2 me-2 rounded-3 justify-content-center
                                     text-white"

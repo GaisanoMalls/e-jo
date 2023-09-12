@@ -34,7 +34,7 @@
                         data-bs-target="#notificationCanvas">
                         <i class="bi bi-bell-fill"></i>
                         @if (!auth()->user()->unreadNotifications->isEmpty())
-                        <i class='bx bxs-circle bx-burst position-absolute'
+                        <i class='bx bxs-circle position-absolute'
                             style="top: 8px; right: 6px; color: #D32839; font-size: 11px;"></i>
                         @endif
                     </a>

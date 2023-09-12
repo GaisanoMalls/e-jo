@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('css/roles/staff.css') }}">
     <link rel="stylesheet" href="{{ asset('css/vanilla-dataTables.css') }}">
     <title>{{ $title }}</title>
+    @livewireStyles
 </head>
 
 <body>
@@ -24,6 +25,7 @@
         <div class="page__body__wrapper">
             @include('layouts.staff.includes.sidebar')
             <div class="page__body">
+                <livewire:offline />
                 <div class="container-fluid">
                     <div class="page__header">
                         <div class="row">
@@ -32,13 +34,13 @@
                     </div>
                 </div>
                 <div class="container-fluid">
-                    <div id="sample-select"></div>
                     @yield('main-content')
                 </div>
             </div>
         </div>
     </div>
 
+    @livewireScripts
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{ asset('js/select/virtual-select.min.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>

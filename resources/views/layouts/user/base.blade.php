@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('css/vanilla-dataTables.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roles/user.css') }}">
     <title>{{ $title ?? 'Dashboard' }}</title>
+    @livewireStyles
 </head>
 
 <body>
@@ -23,6 +24,7 @@
     @include('layouts.user.account.includes.confirm_logout')
     @include('layouts.user.includes.modals.create_ticket_modal')
     <div class="container mb-5 requester__section">
+        <livewire:offline />
         @if (Route::is('user.tickets.*'))
         {{-- Show this section if the route matches the given pattern --}}
         @include('layouts.user.includes.ticket_tab')
@@ -38,8 +40,8 @@
         @yield('main-content')
     </div>
 
+    @livewireScripts
     @yield('action-js')
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{ asset('js/select/virtual-select.min.js') }}"></script>
     <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>

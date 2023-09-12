@@ -15,7 +15,7 @@ class ApprovalLevel extends Model
 
     public function approvers()
     {
-        return $this->belongsToMany(User::class)
+        return $this->belongsToMany(User::class, 'user_id')
             ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER));
     }
 }

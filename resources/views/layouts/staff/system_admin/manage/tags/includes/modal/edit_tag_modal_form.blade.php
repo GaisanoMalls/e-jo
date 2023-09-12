@@ -18,7 +18,7 @@
                             <div class="mb-2">
                                 <label for="name" class="form-label form__field__label">Name</label>
                                 <input type="text" name="name" class="form-control form__field" id="name"
-                                    value="{{ $tag->name ?? old('name') }}" placeholder="Enter tag name">
+                                    value="{{ old('name', $tag->name) }}" placeholder="Enter tag name">
                                 @error('name', 'editTag')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>

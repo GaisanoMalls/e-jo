@@ -29,6 +29,13 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="{{ route('user.tickets.claimed_tickets') }}" class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
+                {{ Route::is('user.tickets.claimed_tickets') ? 'active' : '' }}">
+                <span class="ticket__count__tab">{{ $claimedTickets->count() }}</span>
+                Claimed
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ route('user.tickets.on_process_tickets') }}" class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
                 {{ Route::is('user.tickets.on_process_tickets') ? 'active' : '' }}">
                 <span class="ticket__count__tab">{{ $onProcessTickets->count() }}</span>

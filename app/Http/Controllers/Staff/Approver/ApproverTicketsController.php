@@ -7,6 +7,7 @@ use App\Http\Requests\Approver\StoreClarificationRequest;
 use App\Http\Requests\Approver\StoreDisapproveTicketRequest;
 use App\Http\Traits\Approver\Tickets as ApproverTickets;
 use App\Http\Traits\Utils;
+use App\Mail\FromApproverClarificationMail;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
 use App\Models\Clarification;
@@ -15,6 +16,7 @@ use App\Models\Reason;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class ApproverTicketsController extends Controller
@@ -261,10 +263,11 @@ class ApproverTicketsController extends Controller
 
                 // * CONSTRUCT A LOG DESCRIPTION
                 $logDescription = $ticket->clarifications()->where('user_id', '!=', auth()->user()->id)->count() == 0
-                    ? 'sent a clarrification'
+                    ? 'sent a clarification'
                     : 'replied a clarification to ' . $requester->user->profile->getFullName();
 
                 ActivityLog::make($ticket->id, $logDescription);
+                // Mail::to($ticket->user)->send(new FromApproverClarificationMail($ticket, $request->description));
             });
 
             return back()->with('success', 'The message has been successfully sent.');

@@ -10,7 +10,7 @@ trait Tickets
 {
     public function serviceDeptAdminGetApprovedTickets()
     {
-        $approvedTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::APPROVED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
@@ -20,13 +20,11 @@ trait Tickets
             })
             ->orderBy('created_at', 'desc')
             ->get();
-
-        return $approvedTickets;
     }
 
     public function serviceDeptAdminGetDisapprovedTickets()
     {
-        $approvedTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLOSED)
                 ->where('approval_status', ApprovalStatus::DISAPPROVED);
         })
@@ -36,13 +34,11 @@ trait Tickets
             })
             ->orderBy('created_at', 'desc')
             ->get();
-
-        return $approvedTickets;
     }
 
     public function serviceDeptAdminGetOpentTickets()
     {
-        $openTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OPEN)
                 ->where('approval_status', ApprovalStatus::APPROVED)
                 ->where('status_id', '!=', Status::CLAIMED);
@@ -53,13 +49,11 @@ trait Tickets
             })
             ->orderBy('created_at', 'desc')
             ->get();
-
-        return $openTickets;
     }
 
     public function serviceDeptAdminGetClaimedTickets()
     {
-        $claimedTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLAIMED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
@@ -69,13 +63,11 @@ trait Tickets
             })
             ->orderBy('created_at', 'desc')
             ->get();
-
-        return $claimedTickets;
     }
 
     public function serviceDeptAdminGetOnProcessTickets()
     {
-        $onProcessTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::ON_PROCESS)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
@@ -85,13 +77,11 @@ trait Tickets
             })
             ->orderBy('created_at', 'desc')
             ->get();
-
-        return $onProcessTickets;
     }
 
     public function serviceDeptAdminGetViewedTickets()
     {
-        $viewedTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::VIEWED)
                 ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
         })
@@ -101,13 +91,11 @@ trait Tickets
             })
             ->orderBy('created_at', 'desc')
             ->get();
-
-        return $viewedTickets;
     }
 
     public function serviceDeptAdminGetOverdueTickets()
     {
-        $overdueTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OVERDUE)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
@@ -117,13 +105,11 @@ trait Tickets
             })
             ->orderBy('created_at', 'desc')
             ->get();
-
-        return $overdueTickets;
     }
 
     public function serviceDeptAdminGetClosedTickets()
     {
-        $closedTickets = Ticket::where(function ($query) {
+        return Ticket::where(function ($query) {
             $query->where('status_id', Status::CLOSED)
                 ->where(function ($byUserQuery) {
                     $byUserQuery->where('branch_id', auth()->user()->branch_id)
@@ -136,7 +122,5 @@ trait Tickets
             })
             ->orderBy('created_at', 'desc')
             ->get();
-
-        return $closedTickets;
     }
 }

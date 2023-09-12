@@ -170,7 +170,7 @@
                                 <input class="form-control form-control-sm border-0 ticket__file" id="uploadNewPhoto"
                                     type="file" name="file_attachments[]" multiple>
                                 @error('file_attachments.*', 'storeTicket')
-                                <span class="error__message">
+                                <span class=" error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}
                                 </span>

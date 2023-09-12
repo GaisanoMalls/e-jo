@@ -3112,7 +3112,8 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
             VirtualSelect.init({
               ele: "#editLevel".concat(i, "Approver"),
               showValueAsTags: true,
-              markSearchResults: true
+              markSearchResults: true,
+              hasOptionDescription: true
             });
             var editLevelOfApproverSelect = document.getElementById("editLevel".concat(i, "Approver"));
             axios.get('/staff/manage/help-topics/approvers').then(function (response) {
@@ -3125,7 +3126,8 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
                   var firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
                   approversOption.push({
                     value: approver.id,
-                    label: "".concat(approver.profile.first_name, " ").concat(firstLetter, " ").concat(approver.profile.last_name)
+                    label: "".concat(approver.profile.first_name, " ").concat(firstLetter, " ").concat(approver.profile.last_name),
+                    description: approver.email
                   });
                 });
                 editLevelOfApproverSelect.setOptions(approversOption);
@@ -3215,7 +3217,8 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
           VirtualSelect.init({
             ele: "#editLevel".concat(i, "Approver"),
             showValueAsTags: true,
-            markSearchResults: true
+            markSearchResults: true,
+            hasOptionDescription: true
           });
           var editLevelOfApproverSelect = document.getElementById("editLevel".concat(i, "Approver"));
           axios.get('/staff/manage/help-topics/approvers').then(function (response) {
@@ -3228,7 +3231,8 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
                 var firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
                 editApproversOption.push({
                   value: approver.id,
-                  label: "".concat(approver.profile.first_name, " ").concat(firstLetter, " ").concat(approver.profile.last_name)
+                  label: "".concat(approver.profile.first_name, " ").concat(firstLetter, " ").concat(approver.profile.last_name),
+                  description: approver.email
                 });
               });
               editLevelOfApproverSelect.setOptions(editApproversOption);
@@ -3262,7 +3266,8 @@ if (levelOfApproverDropdown) {
         VirtualSelect.init({
           ele: "#level".concat(i, "Approver"),
           showValueAsTags: true,
-          markSearchResults: true
+          markSearchResults: true,
+          hasOptionDescription: true
         });
         var levelOfApproverSelect = document.getElementById("level".concat(i, "Approver"));
         axios.get('/staff/manage/help-topics/approvers').then(function (response) {
@@ -3275,7 +3280,8 @@ if (levelOfApproverDropdown) {
               var firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
               approversOption.push({
                 value: approver.id,
-                label: "".concat(approver.profile.first_name, " ").concat(firstLetter, " ").concat(approver.profile.last_name)
+                label: "".concat(approver.profile.first_name, " ").concat(firstLetter, " ").concat(approver.profile.last_name),
+                description: approver.email
               });
             });
             levelOfApproverSelect.setOptions(approversOption);

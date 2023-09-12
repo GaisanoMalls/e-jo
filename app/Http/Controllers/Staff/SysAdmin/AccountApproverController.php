@@ -74,7 +74,7 @@ class AccountApproverController extends Controller
                 $approver->buDepartments()->attach($existingBUDepartments);
             });
 
-            return back()->with('success', 'You have successfully created a new approver.');
+            return back()->with('success', 'Added');
 
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -175,7 +175,7 @@ class AccountApproverController extends Controller
             $approver->delete();
             $approver->profile()->delete();
 
-            return back()->with('success', 'Approver successfully deleted.');
+            return back()->with('success', 'Deleted');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to delete the approver. Please try again.');

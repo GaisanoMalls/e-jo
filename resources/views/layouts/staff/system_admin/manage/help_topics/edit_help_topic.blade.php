@@ -34,7 +34,7 @@ Edit Help Topic
                                 <div class="mb-3">
                                     <label for="name" class="form-label form__field__label">Name</label>
                                     <input type="text" name="name" class="form-control form__field" id="name"
-                                        value="{{ $helpTopic->name }}" placeholder="Enter name (required)">
+                                        value="{{ old('name', $helpTopic->name) }}" placeholder="Enter name (required)">
                                     @error('name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>

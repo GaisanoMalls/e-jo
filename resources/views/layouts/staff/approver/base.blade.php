@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('css/roles/approver.css') }}">
     <link rel="stylesheet" href="{{ asset('css/vanilla-dataTables.css') }}">
     <title>{{ $title ?? '' }}</title>
+    @livewireStyles
 </head>
 
 <body>
@@ -23,12 +24,14 @@
     @include('layouts.includes.toaster-message')
     @include('layouts.staff.approver.includes.modal.confirm_logout')
     <div class="container mb-5 approver__section">
+        <livewire:offline />
         @if (Route::is('approver.tickets.*'))
         @include('layouts.staff.approver.includes.ticket_tab')
         @endif
         @yield('main-content')
     </div>
 
+    @livewireScripts
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{ asset('js/select/virtual-select.min.js') }}"></script>
     <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>

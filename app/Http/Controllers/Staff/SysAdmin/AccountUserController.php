@@ -45,7 +45,7 @@ class AccountUserController extends Controller
                 ]);
             });
 
-            return back()->with('success', 'You have successfully created a new user/requester');
+            return back()->with('success', 'Added');
 
         } catch (\Exception $e) {
             return back()->with('success', 'Failed to save a new user/requester');
@@ -112,7 +112,7 @@ class AccountUserController extends Controller
             $user->delete();
             $user->profile()->delete();
 
-            return back()->with('success', 'User successfully deleted.');
+            return back()->with('success', 'Deleted');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to delete the user.');

@@ -28,7 +28,7 @@ class StoreTicketRequest extends FormRequest
         return [
             'service_department' => ['required'],
             'help_topic' => ['required'],
-            'team' => ['required'],
+            'team' => ['nullable'],
             'sla' => ['required'],
             'subject' => ['required'],
             'description' => ['required'],

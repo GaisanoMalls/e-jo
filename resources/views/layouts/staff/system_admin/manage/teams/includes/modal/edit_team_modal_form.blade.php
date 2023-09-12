@@ -17,13 +17,19 @@
                         <div class="mb-2">
                             <label for="name" class="form-label form__field__label">Name</label>
                             <input type="text" name="name" class="form-control form__field" id="name"
-                                value="{{ $team->name ?? old('name') }}" placeholder="Enter BU/department name">
+                                value="{{ old('name', $team->name) }}" placeholder="Enter BU/department name">
                             @if (session()->has('duplicate_name_error'))
                             <div class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 {{ session()->get('duplicate_name_error') }}
                             </div>
                             @endif
+                            @error('name', 'editTeam')
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ $message }}
+                            </span>
+                            @enderror
                         </div>
                         <div class="mb-2 mt-3">
                             <label class="form-label form__field__label">

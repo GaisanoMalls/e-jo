@@ -20,7 +20,7 @@ Update Password
                         <label for="currentPassword" class="form-label input__field__label">Current Password</label>
                         <input type="password" name="current_password"
                             class="form-control input__field @error('current_password') is-invalid @enderror"
-                            id="currentPassword">
+                            id="currentPassword" value="{{ old('current_password') }}">
                         @error('current_password', 'updatePassword')
                         <span class="text-danger custom__field__message">{{ $message }}</span>
                         @enderror

@@ -16,7 +16,7 @@ class Dashboard extends Controller
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
         $disapprovedTickets = $this->getDisapprovedTickets();
-        // $reopenedTickets = $this->getReopenedTickets();
+        $claimedTickets = $this->getClaimedTickets();
         $closedTickets = $this->getClosedTickets();
 
         return view(
@@ -27,7 +27,7 @@ class Dashboard extends Controller
                 'viewedTickets',
                 'approvedTickets',
                 'disapprovedTickets',
-                // 'reopenedTickets',
+                'claimedTickets',
                 'closedTickets'
             ])
         );

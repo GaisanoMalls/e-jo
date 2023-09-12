@@ -31,6 +31,7 @@ use App\Http\Controllers\User\Dashboard as UserDashboardController;
 use App\Http\Controllers\User\FeedbackController;
 use App\Http\Controllers\User\TicketsController as UserTicketsController;
 use App\Http\Controllers\UsersAccountController;
+use App\Http\Livewire\Staff\TicketReplies;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
@@ -337,6 +338,7 @@ Route::middleware(['auth', Role::user()])->group(function () {
                 Route::get('/on-process', 'onProcessTickets')->name('on_process_tickets');
                 Route::get('/viewed', 'viewedTickets')->name('viewed_tickets');
                 Route::get('/approved', 'approvedTickets')->name('approved_tickets');
+                Route::get('/claimed', 'claimedTickets')->name('claimed_tickets');
                 Route::get('/disapproved', 'disapprovedTickets')->name('disapproved_tickets');
                 Route::get('/closed', 'closedTickets')->name('closed_tickets');
             });

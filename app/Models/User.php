@@ -116,7 +116,7 @@ class User extends Authenticatable
 
     public function buDepartments()
     {
-        return $this->belongsToMany(Department::class, 'user_department');
+        return $this->belongsToMany(Department::class, 'user_department', 'user_id', 'department_id');
     }
 
     public function teams()

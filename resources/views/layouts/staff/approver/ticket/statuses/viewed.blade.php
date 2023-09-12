@@ -7,6 +7,9 @@
             <h5 class="page__header__title">Viewed</h5>
             <small class="fw-semibold mb-1" id="countSelectedChbx" style="color: #d32839;"></small>
         </div>
+        <div class="d-flex align-items-center justify-content-center">
+            <small class="count-item">{{ $viewedTickets->count() }} items</small>
+        </div>
     </div>
 </div>
 <div class="row mx-0">

@@ -17,7 +17,7 @@
                         <div class="mb-2">
                             <label for="name" class="form-label form__field__label">Name</label>
                             <input type="text" name="name" class="form-control form__field" id="name"
-                                value="{{ $serviceDepartment->name ?? old('name') }}"
+                                value="{{ old('name', $serviceDepartment->name) }}"
                                 placeholder="Enter service department name">
                             @error('name', 'editServiceDepartment')
                             <span class="error__message">

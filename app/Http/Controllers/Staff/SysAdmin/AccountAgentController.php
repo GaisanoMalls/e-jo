@@ -58,7 +58,7 @@ class AccountAgentController extends Controller
                 $agent->teams()->attach($existingTeams);
             });
 
-            return back()->with('success', 'You have successfully created a new agent');
+            return back()->with('success', 'Added');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to save a new agent. Please try again.');
@@ -137,7 +137,7 @@ class AccountAgentController extends Controller
             $agent->delete();
             $agent->profile()->delete();
 
-            return back()->with('success', 'Agent successfully deleted.');
+            return back()->with('success', 'Deleted');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to delete the agent. Please try again.');

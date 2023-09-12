@@ -49,7 +49,6 @@ class HelpTopicsController extends Controller
                 ]);
 
                 $levelOfApproval = (int) $request->level_of_approval;
-
                 for ($level = 1; $level <= $levelOfApproval; $level++) {
                     $helpTopic->levels()->attach($level);
                     $approvers = $this->getSelectedValue($request->input("approvers{$level}"));
@@ -107,14 +106,15 @@ class HelpTopicsController extends Controller
                 ]);
 
                 $levelOfApproval = (int) $request->level_of_approval;
-
                 for ($level = 1; $level <= $levelOfApproval; $level++) {
                     $helpTopic->levels()->sync([$level]);
                     $approvers = $this->getSelectedValue($request->input("approvers{$level}"));
 
                     foreach ($approvers as $approver) {
-                        LevelApprover::where('help_topic_id', $helpTopic->id)
-                            ->update(['level_id' => $level, 'user_id' => $approver]);
+                        LevelApprover::where('help_topic_id', $helpTopic->id)->update([
+                            'level_id' => $level,
+                            'user_id' => $approver
+                        ]);
                     }
                 }
             });
@@ -122,7 +122,6 @@ class HelpTopicsController extends Controller
             return back()->with('success', 'Help topic successfully updated.');
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return back()->with('error', 'Failed to update the help topic.');
         }
     }

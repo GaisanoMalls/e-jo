@@ -26,7 +26,7 @@ class AuthController extends Controller
             return $this->redirectAuthenticatedWithRole();
         }
 
-        return back()->onlyInput('email')->with('error', 'Invalid email or password. Please try again.');
+        return back()->with('error', 'Invalid email or password. Please try again.')->withInput();
     }
 
     public function logout(Request $request)

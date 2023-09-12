@@ -8,6 +8,7 @@ use App\Http\Requests\Requester\StoreTicketClarificationRequest;
 use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\Requester\Tickets;
 use App\Http\Traits\Utils;
+use App\Mail\FromRequesterClarificationMail;
 use App\Mail\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
@@ -43,10 +44,10 @@ class TicketsController extends Controller
         $closedTickets = $this->getClosedTickets();
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
+        $claimedTickets = $this->getClaimedTickets();
         $disapprovedTickets = $this->getDisapprovedTickets();
 
         $openTickets = $this->getOpenTickets();
-
 
         return view(
             'layouts.user.ticket.statuses.open_tickets',
@@ -55,6 +56,7 @@ class TicketsController extends Controller
                 'closedTickets',
                 'viewedTickets',
                 'approvedTickets',
+                'claimedTickets',
                 'disapprovedTickets',
                 'openTickets',
             ])
@@ -68,6 +70,7 @@ class TicketsController extends Controller
         $closedTickets = $this->getClosedTickets();
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
+        $claimedTickets = $this->getClaimedTickets();
         $disapprovedTickets = $this->getDisapprovedTickets();
 
         $onProcessTickets = $this->getOnProcessTickets();
@@ -79,6 +82,7 @@ class TicketsController extends Controller
                 'closedTickets',
                 'viewedTickets',
                 'approvedTickets',
+                'claimedTickets',
                 'disapprovedTickets',
                 'onProcessTickets',
             ])
@@ -92,6 +96,7 @@ class TicketsController extends Controller
         $onProcessTickets = $this->getOnProcessTickets();
         $closedTickets = $this->getClosedTickets();
         $approvedTickets = $this->getApprovedTickets();
+        $claimedTickets = $this->getClaimedTickets();
         $disapprovedTickets = $this->getDisapprovedTickets();
 
         $viewedTickets = $this->getViewedTickets();
@@ -103,6 +108,7 @@ class TicketsController extends Controller
                 'onProcessTickets',
                 'closedTickets',
                 'approvedTickets',
+                'claimedTickets',
                 'disapprovedTickets',
                 'viewedTickets',
             ])
@@ -116,10 +122,10 @@ class TicketsController extends Controller
         $onProcessTickets = $this->getOnProcessTickets();
         $closedTickets = $this->getClosedTickets();
         $viewedTickets = $this->getViewedTickets();
+        $claimedTickets = $this->getClaimedTickets();
         $disapprovedTickets = $this->getDisapprovedTickets();
 
         $approvedTickets = $this->getApprovedTickets();
-
 
         return view(
             'layouts.user.ticket.statuses.approved_tickets',
@@ -128,11 +134,40 @@ class TicketsController extends Controller
                 'onProcessTickets',
                 'closedTickets',
                 'viewedTickets',
+                'claimedTickets',
                 'disapprovedTickets',
                 'approvedTickets',
             ])
         );
     }
+
+    public function claimedTickets()
+    {
+        // For ticket count purpose
+        $openTickets = $this->getOpenTickets();
+        $onProcessTickets = $this->getOnProcessTickets();
+        $closedTickets = $this->getClosedTickets();
+        $viewedTickets = $this->getViewedTickets();
+        $approvedTickets = $this->getApprovedTickets();
+        $disapprovedTickets = $this->getDisapprovedTickets();
+
+        $claimedTickets = $this->getClaimedTickets();
+
+        return view(
+            'layouts.user.ticket.statuses.claimed_tickets',
+            compact([
+                'openTickets',
+                'onProcessTickets',
+                'closedTickets',
+                'viewedTickets',
+                'claimedTickets',
+                'disapprovedTickets',
+                'approvedTickets',
+            ])
+        );
+    }
+
+
 
     public function disapprovedTickets()
     {
@@ -142,6 +177,7 @@ class TicketsController extends Controller
         $closedTickets = $this->getClosedTickets();
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
+        $claimedTickets = $this->getClaimedTickets();
 
         $disapprovedTickets = $this->getDisapprovedTickets();
 
@@ -153,6 +189,7 @@ class TicketsController extends Controller
                 'closedTickets',
                 'viewedTickets',
                 'approvedTickets',
+                'claimedTickets',
                 'disapprovedTickets',
             ])
         );
@@ -165,6 +202,7 @@ class TicketsController extends Controller
         $onProcessTickets = $this->getOnProcessTickets();
         $viewedTickets = $this->getViewedTickets();
         $approvedTickets = $this->getApprovedTickets();
+        $claimedTickets = $this->getClaimedTickets();
         $disapprovedTickets = $this->getDisapprovedTickets();
 
         $closedTickets = $this->getClosedTickets();
@@ -176,6 +214,7 @@ class TicketsController extends Controller
                 'onProcessTickets',
                 'viewedTickets',
                 'approvedTickets',
+                'claimedTickets',
                 'disapprovedTickets',
                 'closedTickets',
             ])
@@ -190,7 +229,7 @@ class TicketsController extends Controller
                     'user_id' => Auth::user()->id,
                     'branch_id' => $request->branch ?: Auth::user()->branch->id,
                     'service_department_id' => $request->service_department,
-                    'team_id' => $request->team,
+                    'team_id' => $request->team != 'undefined' ? $request->team : null,
                     'help_topic_id' => $request->help_topic,
                     'status_id' => Status::OPEN,
                     'priority_level_id' => $request->priority_level,
@@ -227,7 +266,7 @@ class TicketsController extends Controller
                         foreach ($approvers as $approver) {
                             if ($approver->id === $levelApprover->user_id) {
                                 if ($levelApprover->level_id === $level->id) {
-                                    Notification::send($approver, new TicketNotification($ticket, 'New ticket created', 'created a ticket'));
+                                    Notification::send($approver, new TicketNotification($ticket, "New ticket created - $ticket->ticket_number", 'created a ticket'));
                                     // Mail::to($approver)->send(new TicketCreatedMail($ticket));
                                 }
                             }
@@ -375,7 +414,7 @@ class TicketsController extends Controller
                     : 'replied a clarification to ' . $latestStaff->user->profile->getFullName();
 
                 ActivityLog::make($ticket->id, $logClarificationDescription);
-
+                // Mail::to($latestStaff->user->email)->send(new FromRequesterClarificationMail($ticket, $request->description));
             });
 
             return back()->with('success', 'Your clarification has been sent successfully.');

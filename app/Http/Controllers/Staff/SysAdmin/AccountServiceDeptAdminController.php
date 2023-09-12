@@ -61,7 +61,7 @@ class AccountServiceDeptAdminController extends Controller
                 $serviceDeptAdmin->serviceDepartments()->attach($existingServiceDepartments);
             });
 
-            return back()->with('success', 'You have successfully created a new department admin.');
+            return back()->with('success', 'Added');
 
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -141,10 +141,10 @@ class AccountServiceDeptAdminController extends Controller
             $serviceDeptAdmin->delete();
             $serviceDeptAdmin->profile()->delete();
 
-            return back()->with('success', 'Department admin has been deleted.');
+            return back()->with('success', 'Deleted');
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to delete the department admin.');
+            return back()->with('error', 'Failed to delete the service department admin.');
         }
     }
 

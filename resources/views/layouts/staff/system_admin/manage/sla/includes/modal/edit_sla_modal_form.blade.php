@@ -18,7 +18,8 @@
                             <div class="mb-2">
                                 <label for="countdown_approach" class="form-label form__field__label">Hours</label>
                                 <input type="text" name="countdown_approach" class="form-control form__field"
-                                    id="countdown_approach" value="{{ $sla->countdown_approach }}"
+                                    id="countdown_approach"
+                                    value="{{ old('countdown_approach', $sla->countdown_approach) }}"
                                     placeholder="e.g. 24">
                                 @error('countdown_approach', 'editSLA')
                                 <span class="error__message">
@@ -40,7 +41,7 @@
                                     Time unit
                                 </label>
                                 <input type="text" name="time_unit" class="form-control form__field" id="time_unit"
-                                    value="{{ $sla->time_unit }}" placeholder="e.g. 1 Day">
+                                    value="{{ old('time_unit', $sla->time_unit) }}" placeholder="e.g. 1 Day">
                                 @error('time_unit', 'editSLA')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
