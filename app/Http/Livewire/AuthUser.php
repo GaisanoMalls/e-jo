@@ -24,6 +24,11 @@ class AuthUser extends Component
         return (new AuthRequest())->messages();
     }
 
+    public function resetFields()
+    {
+        $this->password = '';
+    }
+
     public function login()
     {
         $this->validate();
@@ -33,7 +38,7 @@ class AuthUser extends Component
             return $this->redirectAuthenticatedWithRole();
         }
 
-        $this->password = '';
+        $this->resetFields();
         session()->flash('error', 'Invalid email or password. Please try again.');
 
     }

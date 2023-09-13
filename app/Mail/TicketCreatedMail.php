@@ -15,7 +15,7 @@ class TicketCreatedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $ticket;
+    public Ticket $ticket;
     /**
      * Create a new message instance.
      *

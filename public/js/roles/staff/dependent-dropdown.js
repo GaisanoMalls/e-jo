@@ -3148,6 +3148,7 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
                       }
                     });
                   });
+                  console.log(selectedCurrentApprovers);
                 })["catch"](function (error) {
                   console.log(error.response.data);
                 });

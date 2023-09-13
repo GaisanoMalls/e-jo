@@ -15,8 +15,8 @@ class FromApproverClarificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $ticket;
-    public $clarificationDescription;
+    public Ticket $ticket;
+    public string $clarificationDescription;
     /**
      * Create a new message instance.
      *

@@ -900,6 +900,8 @@ if (editHelpTopicServiceDepartmentsDropdown || editHelpTopicTeamsDropdown) {
                                                 });
                                             });
 
+                                            console.log(selectedCurrentApprovers);
+
                                         })
                                         .catch((error) => {
                                             console.log(error.response.data);

@@ -12,9 +12,9 @@ class TicketNotification extends Notification
 {
     use Queueable;
 
-    public $ticket;
-    public $title;
-    public $message;
+    public Ticket $ticket;
+    public string $title;
+    public string $message;
     /**
      * Create a new notification instance.
      *

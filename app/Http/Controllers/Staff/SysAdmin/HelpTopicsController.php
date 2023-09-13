@@ -109,7 +109,6 @@ class HelpTopicsController extends Controller
                 for ($level = 1; $level <= $levelOfApproval; $level++) {
                     $helpTopic->levels()->sync([$level]);
                     $approvers = $this->getSelectedValue($request->input("approvers{$level}"));
-
                     foreach ($approvers as $approver) {
                         LevelApprover::where('help_topic_id', $helpTopic->id)->update([
                             'level_id' => $level,
@@ -177,6 +176,8 @@ class HelpTopicsController extends Controller
                             'id' => $approver->id,
                             'level' => (int) $level->value
                         ]);
+
+                        dd($currentApprovers);
                     }
                 }
             }
