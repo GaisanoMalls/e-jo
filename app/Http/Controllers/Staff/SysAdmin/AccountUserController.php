@@ -13,6 +13,7 @@ use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AccountUserController extends Controller
 {
@@ -45,7 +46,7 @@ class AccountUserController extends Controller
                 ]);
             });
 
-            return back()->with('success', 'Added');
+            return back()->with('success', 'Account successfully created');
 
         } catch (\Exception $e) {
             return back()->with('success', 'Failed to save a new user/requester');
@@ -102,20 +103,24 @@ class AccountUserController extends Controller
             return back()->with('success', "You have successfully updated the account for {$user->profile->getFullName()}.");
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to update the user. Please try again.');
+            return back()->with('error', 'Failed to update the account.');
         }
     }
 
     public function delete(User $user)
     {
         try {
+            (!is_null($user->profile->picture))
+                ? Storage::delete($user->profile->picture)
+                : '';
+
             $user->delete();
             $user->profile()->delete();
 
-            return back()->with('success', 'Deleted');
+            return back()->with('success', 'Account successfully deleted.');
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to delete the user.');
+            return back()->with('error', 'Failed to delete the account.');
         }
     }
 

@@ -13,6 +13,7 @@ use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AccountAgentController extends Controller
 {
@@ -58,10 +59,10 @@ class AccountAgentController extends Controller
                 $agent->teams()->attach($existingTeams);
             });
 
-            return back()->with('success', 'Added');
+            return back()->with('success', 'Account successfully created.');
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to save a new agent. Please try again.');
+            return back()->with('error', 'Failed to save a new agent.');
         }
     }
 
@@ -127,20 +128,24 @@ class AccountAgentController extends Controller
             return back()->with('success', "You have successfully updated the account for {$agent->profile->getFullName()}.");
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to update the agent. Please try again.');
+            return back()->with('error', 'Failed to update the agent.');
         }
     }
 
     public function delete(User $agent)
     {
         try {
+            (!is_null($agent->profile->picture))
+                ? Storage::delete($agent->profile->picture)
+                : '';
+
             $agent->delete();
             $agent->profile()->delete();
 
-            return back()->with('success', 'Deleted');
+            return back()->with('success', 'Account successfully deleted.');
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to delete the agent. Please try again.');
+            return back()->with('error', 'Failed to delete the agent.');
         }
     }
 

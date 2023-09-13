@@ -175,7 +175,7 @@ class ApproverTicketsController extends Controller
 
         ActivityLog::make($ticket->id, 'approved the ticket');
 
-        return back()->with('success', 'Ticket was successfully approved.');
+        return back()->with('success', 'Approved');
     }
 
     public function disapproveTicket(Ticket $ticket)
@@ -187,7 +187,7 @@ class ApproverTicketsController extends Controller
 
         ActivityLog::make($ticket->id, 'disapproved the ticket');
 
-        return back()->with('success', 'Ticket is rejected.');
+        return back()->with('info', 'Ticket has been rejected.');
     }
 
     public function ticketDetialsApproveTicket(Ticket $ticket)
@@ -199,7 +199,7 @@ class ApproverTicketsController extends Controller
 
         ActivityLog::make($ticket->id, 'approved the ticket');
 
-        return back()->with('success', 'The ticket has been approved.');
+        return back()->with('success', 'Approved');
     }
 
     public function ticketDetialsDisapproveTicket(StoreDisapproveTicketRequest $request, Ticket $ticket)
@@ -223,7 +223,7 @@ class ApproverTicketsController extends Controller
             return back()->with('success', 'The ticket has been disapproved.');
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Faild to disapprove the ticket. Please try again.');
+            return back()->with('error', 'Faild to disapprove the ticket.');
         }
     }
 
@@ -270,11 +270,10 @@ class ApproverTicketsController extends Controller
                 // Mail::to($ticket->user)->send(new FromApproverClarificationMail($ticket, $request->description));
             });
 
-            return back()->with('success', 'The message has been successfully sent.');
+            return back()->with('success', 'Ticket clarification has been sent.');
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
-            return back()->with('error', 'Faild to send ticket clarification. Please try again.');
+            return back()->with('error', 'Faild to send the ticket clarification.');
         }
     }
 }

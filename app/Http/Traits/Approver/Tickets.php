@@ -60,7 +60,7 @@ trait Tickets
                 ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
         })->whereHas('helpTopic.levels', function ($query) {
             $query->whereIn('level_id', auth()->user()->levels->pluck('id'));
-        })->orWhereHas('user.department', function ($department) {
+        })->whereHas('user.department', function ($department) {
             $department->whereIn('id', auth()->user()->buDepartments->pluck('id'));
         })
             ->orderBy('created_at', 'desc')

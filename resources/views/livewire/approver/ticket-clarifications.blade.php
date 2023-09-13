@@ -1,8 +1,8 @@
 <div wire:init="loadClarifications">
     @if (!is_null($clarifications))
     <div wire:poll.visible.7s>
-        @if ($ticketClarifications->count() > 0)
-        @foreach ($ticketClarifications as $clarification)
+        @if ($ticket->clarifications->count() > 0)
+        @foreach ($ticket->clarifications as $clarification)
         @include('layouts.staff.approver.ticket.includes.modal.preview_clarification_ticket_files_modal')
         <div class="card border-0 p-0 shadow-none card__ticket__details"
             style="width: fit-content; max-width: 70%;
@@ -53,6 +53,37 @@
             </div>
         </div>
         @endforeach
+        @endif
+
+        @if ($ticket->clarifications->count() === 0)
+        <div class="row align-items-center bg-light p-2 py-1 rounded-3 mx-1 mt-2 mb-4">
+            <div class="col-lg-6 col-md-12">
+                <p class="mb-0" style="font-size: 13px; line-height: 19px;">
+                    If you have any questions or clarifications with regards to this
+                    ticket, you can connect with {{ $ticket->user->profile->first_name }}.
+                </p>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div
+                    class="d-flex align-items-center justify-content-start justify-content-lg-end justify-content-md-start">
+                    <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center
+                                            justify-content-center gap-2" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasTicketClarificationForm" aria-controls="offcanvasBottom">
+                        <i class="fa-solid fa-pen"></i>
+                        <span class="lbl__reply">Connect with {{ $ticket->user->profile->first_name
+                            }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        @else
+        <button type="button"
+            class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center justify-content-center gap-2"
+            data-bs-toggle="offcanvas" data-bs-target="#offcanvasTicketClarificationForm"
+            aria-controls="offcanvasBottom">
+            <i class="fa-solid fa-pen"></i>
+            <span class="lbl__reply">Reply</span>
+        </button>
         @endif
     </div>
     @else

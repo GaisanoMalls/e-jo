@@ -14,6 +14,7 @@
     <title>
         {{ $title ?? '' }} Sign in | E-JO System
     </title>
+    @livewireStyles
 </head>
 
 <body>
@@ -39,7 +40,7 @@
                             @include('layouts.auth.includes.app_name')
                             @yield('form-title')
                             @section('form-section')
-                            @include('layouts.auth.includes.auth_form')
+                            @livewire('auth-user')
                             @show
                         </div>
                     </div>
@@ -47,6 +48,8 @@
             </div>
         </div>
     </section>
+
+    @livewireScripts
 </body>
 
 </html>

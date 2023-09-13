@@ -17,18 +17,6 @@ class AuthController extends Controller
         return $this->redirectAuthenticatedWithRole() ?: view('layouts.auth.base');
     }
 
-    public function authenticate(Request $request)
-    {
-        $this->validateLoginCrendentials($request, 'email', 'password');
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'is_active' => true])) {
-            $request->session()->regenerate();
-            return $this->redirectAuthenticatedWithRole();
-        }
-
-        return back()->with('error', 'Invalid email or password. Please try again.')->withInput();
-    }
-
     public function logout(Request $request)
     {
         return $this->doLogout($request);

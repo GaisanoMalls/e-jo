@@ -277,11 +277,10 @@ class TicketsController extends Controller
                 ActivityLog::make($ticket->id, 'created a ticket');
             });
 
-            return back()->with('success', 'Ticket successfully created.');
+            return back()->with('success', 'A new ticket has been created');
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
-            return back()->with('error', "Failed to send the ticket. Please try again.");
+            return back()->with('error', "Failed to create the ticket. Please try again.");
         }
     }
 
@@ -345,7 +344,7 @@ class TicketsController extends Controller
                 );
             });
 
-            return back()->with('success', 'Your reply has been sent successfully.');
+            return back()->with('success', 'Ticket reply has been sent.');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to send your reply. Please try again.');
@@ -417,10 +416,10 @@ class TicketsController extends Controller
                 // Mail::to($latestStaff->user->email)->send(new FromRequesterClarificationMail($ticket, $request->description));
             });
 
-            return back()->with('success', 'Your clarification has been sent successfully.');
+
+            return back()->with('success', 'Ticket clarification has been sent.');
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return back()->with('error', 'Failed to send ticket clarification. Please try again.');
         }
     }

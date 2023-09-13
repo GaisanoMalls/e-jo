@@ -1,8 +1,8 @@
 <div wire:init="loadReplies">
     @if (!is_null($replies))
     <div wire:poll.visible.7s>
-        @if (!$ticketReplies->isEmpty())
-        @foreach ($ticketReplies as $reply)
+        @if (!$ticket->replies->isEmpty())
+        @foreach ($ticket->replies as $reply)
         @include('layouts.staff.ticket.modal.preview_reply_ticket_files_modal')
         <div class="card border-0 p-0 card__ticket__details"
             style="width: fit-content; max-width: 70%;

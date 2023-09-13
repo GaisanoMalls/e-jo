@@ -13,6 +13,7 @@ use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AccountApproverController extends Controller
 {
@@ -74,7 +75,7 @@ class AccountApproverController extends Controller
                 $approver->buDepartments()->attach($existingBUDepartments);
             });
 
-            return back()->with('success', 'Added');
+            return back()->with('success', 'Account successfully created');
 
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -165,20 +166,24 @@ class AccountApproverController extends Controller
             return back()->with('success', "You have successfully updated the account for {$approver->profile->getFullName()}.");
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to update the approver. Please try again.');
+            return back()->with('error', 'Failed to update the account.');
         }
     }
 
     public function delete(User $approver)
     {
         try {
+            (!is_null($approver->profile->picture))
+                ? Storage::delete($approver->profile->picture)
+                : '';
+
             $approver->delete();
             $approver->profile()->delete();
 
-            return back()->with('success', 'Deleted');
+            return back()->with('success', 'Account successfully deleted.');
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to delete the approver. Please try again.');
+            return back()->with('error', 'Failed to delete the approver.');
         }
     }
 

@@ -42,7 +42,6 @@ Route::get('/forgot-password', ForgotPasswordController::class)->name('forgot_pa
 Route::controller(AuthController::class)->group(function () {
     Route::get('/', 'login')->name('login');
     Route::prefix('/auth')->name('auth.')->group(function () {
-        Route::post('/authenticate', 'authenticate')->name('authenticate');
         Route::post('/logout', 'logout')->name('logout');
     });
 });
@@ -215,6 +214,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                         Route::put('/{user}/update', 'update')->name('update');
                         Route::get('/{user}/view-details', 'viewDetails')->name('view_details');
                         Route::get('/{user}/edit-details', 'editDetails')->name('edit_details');
+                        Route::delete('/{user}/delete', 'delete')->name('delete');
 
                         // Endpoint for axios
                         // For create requester

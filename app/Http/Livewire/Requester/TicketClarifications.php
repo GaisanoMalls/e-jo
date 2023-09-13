@@ -22,8 +22,6 @@ class TicketClarifications extends Component
 
     public function render()
     {
-        return view('livewire.requester.ticket-clarifications', [
-            'ticketClarifications' => $this->ticket->clarifications
-        ]);
+        return view('livewire.requester.ticket-clarifications');
     }
 }

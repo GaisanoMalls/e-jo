@@ -25,7 +25,7 @@ class TicketStatusController extends Controller
             'slug' => \Str::slug($request->name)
         ]);
 
-        return back()->with('success', 'A new ticket status is created successfully.');
+        return back()->with('success', 'New status has been created.');
     }
 
     public function update(Request $request, Status $status)

@@ -136,7 +136,7 @@ class TicketController extends Controller
                 ActivityLog::make($ticket->id, "replied to {$ticket->user->profile->getFullName()}");
             });
 
-            return back()->with('success', 'Your reply has been sent successfully.');
+            return back()->with('success', 'Ticket reply has been sent.');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Faild to send a reply for this ticket. Please try again.');

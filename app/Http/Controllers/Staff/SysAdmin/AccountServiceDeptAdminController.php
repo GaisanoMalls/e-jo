@@ -13,6 +13,7 @@ use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AccountServiceDeptAdminController extends Controller
 {
@@ -61,7 +62,7 @@ class AccountServiceDeptAdminController extends Controller
                 $serviceDeptAdmin->serviceDepartments()->attach($existingServiceDepartments);
             });
 
-            return back()->with('success', 'Added');
+            return back()->with('success', 'Account successfully created');
 
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -131,17 +132,21 @@ class AccountServiceDeptAdminController extends Controller
             return back()->with('success', "You have successfully updated the account for {$serviceDeptAdmin->profile->getFullName()}.");
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to update the service department admin. Please try again.');
+            return back()->with('error', 'Failed to update the account.');
         }
     }
 
     public function delete(User $serviceDeptAdmin)
     {
         try {
+            (!is_null($serviceDeptAdmin->profile->picture))
+                ? Storage::delete($serviceDeptAdmin->profile->picture)
+                : '';
+
             $serviceDeptAdmin->delete();
             $serviceDeptAdmin->profile()->delete();
 
-            return back()->with('success', 'Deleted');
+            return back()->with('success', 'Account successfully deleted.');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to delete the service department admin.');

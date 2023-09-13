@@ -15,7 +15,7 @@ class AgentTicketController extends Controller
             $existingAgentId = Ticket::where('id', $ticket->id)->value('agent_id');
 
             if (!is_null($existingAgentId)) {
-                return back()->with('error', 'Ticket already claimed by another agent. Select another ticket to claim.');
+                return back()->with('error', 'Ticket has already been claimed by another agent. Select another ticket to claim.');
             }
 
             $ticket->update([
@@ -25,10 +25,10 @@ class AgentTicketController extends Controller
 
             ActivityLog::make($ticket->id, 'claimed the ticket');
 
-            return back()->with('success', 'You have claimed the ticket.');
+            return back()->with('success', "You have claimed the ticket - {$ticket->ticket_number}.");
 
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to claim the ticket. Please try again.');
+            return back()->with('error', 'Failed to claim the ticket.');
         }
     }
 
@@ -38,7 +38,7 @@ class AgentTicketController extends Controller
             $existingAgentId = Ticket::where('id', $ticket->id)->value('agent_id');
 
             if (!is_null($existingAgentId)) {
-                return back()->with('error', 'Ticket already claimed. Select another ticket to claim.');
+                return back()->with('error', 'Ticket has already been claimed. Select another ticket to claim.');
             }
 
             $ticket->update([
@@ -48,26 +48,24 @@ class AgentTicketController extends Controller
 
             ActivityLog::make($ticket->id, 'claimed the ticket');
 
-            return back()->with('success', 'The have successfully claimed the ticket.');
+            return back()->with('success', "You have claimed the ticket - {$ticket->ticket_number}.");
 
         } catch (\Exception $e) {
-            return back()->with('info', 'Failed to claim the ticket. Please try again.');
+            return back()->with('info', 'Failed to claim the ticket.');
         }
     }
 
     public function closeTicket(Ticket $ticket)
     {
         try {
-            $ticket->update([
-                'status_id' => Status::CLOSED
-            ]);
+            $ticket->update(['status_id' => Status::CLOSED]);
 
             ActivityLog::make($ticket->id, 'closed the ticket');
 
-            return back()->with('success', 'The have successfully closed the ticket.');
+            return back()->with('success', 'Ticket closed');
 
         } catch (\Exception $e) {
-            return back()->with('info', 'Failed to close the ticket. Please try again.');
+            return back()->with('info', 'Failed to close the ticket.');
         }
     }
 }

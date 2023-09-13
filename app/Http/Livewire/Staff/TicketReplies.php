@@ -22,8 +22,6 @@ class TicketReplies extends Component
 
     public function render()
     {
-        return view('livewire.staff.ticket-replies', [
-            'ticketReplies' => $this->ticket->replies
-        ]);
+        return view('livewire.staff.ticket-replies');
     }
 }
