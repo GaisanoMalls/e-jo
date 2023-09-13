@@ -52,7 +52,7 @@ trait Utils
      * - currentMonth()
      * - alphaNum()
      */
-    public static function generatedTicketNumber()
+    public static function generatedTicketNumber(): string
     {
         return self::alphaNum() . "-" . self::currentMonth();
     }
@@ -97,7 +97,7 @@ trait Utils
      * Method:
      * - getSelectedValue()
      */
-    public function getSelectedValue($field)
+    public function getSelectedValue($field): array
     {
         return array_map('intval', explode(',', $field[0]));
     }
@@ -108,7 +108,7 @@ trait Utils
      * - fileDirByUserType()
      * - generateNewProfilePictureName()
      */
-    public function fileDirByUserType()
+    public function fileDirByUserType(): string
     {
         $staffRolePath = '';
         switch (auth()->user()->role_id) {
@@ -134,7 +134,7 @@ trait Utils
         return $staffRolePath;
     }
 
-    public function generateNewProfilePictureName($picture)
+    public function generateNewProfilePictureName($picture): string
     {
         return time() . "_" . \Str::slug(auth()->user()->profile->getFullName()) . "." . $picture->getClientOriginalExtension();
     }
