@@ -260,12 +260,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
             });
 
             Route::prefix('tag')->name('tag.')->group(function () {
-                Route::controller(TagController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::put('/{tag}/update', 'update')->name('update');
-                    Route::delete('/{tag}/delete', 'delete')->name('delete');
-                });
+                Route::get('/', TagController::class)->name('index');
             });
 
             Route::prefix('ticket-statuses')->name('ticket_statuses.')->group(function () {

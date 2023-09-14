@@ -14,7 +14,7 @@ Tags
 @section('manage-content')
 <div class="row gap-4">
     <div class="tags__section">
-        @include('layouts.staff.system_admin.manage.tags.includes.modal.add_tag_modal_form')
+        @livewire('tags.create-tag')
         <div class="col-12 content__container mb-4">
             <div class="card card__rounded__and__no__border">
                 <div class="table__header">
@@ -44,41 +44,9 @@ Tags
         </div>
         <div class="col-12 content__container">
             <div class="card card__rounded__and__no__border pt-4">
-                <div class="table-responsive custom__table">
-                    @if (!$tags->isEmpty())
-                    @include('layouts.staff.system_admin.manage.tags.includes.tag_list')
-                    @else
-                    <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                        <small style="font-size: 14px;">No records for departments.</small>
-                    </div>
-                    @endif
-                </div>
+                @livewire('tags.show-tags')
             </div>
         </div>
     </div>
 </div>
 @endsection
-
-@if ($errors->storeTag->any())
-@push('modal-with-error')
-<script>
-    $(function () {
-        $('#addNewTagModal').modal('show');
-    });
-
-</script>
-@endpush
-@endif
-
-@if ($errors->editTag->any() || session()->has('duplicate_name_error'))
-{{-- Show edit modal based on the selected record/data --}}
-<input type="hidden" id="tagId" value="{{ session('tagId') }}">
-@push('modal-with-error')
-<script>
-    const tagId = document.getElementById('tagId');
-    $(function () {
-        $(`#editTag${tagId.value}`).modal('show');
-    });
-</script>
-@endpush
-@endif

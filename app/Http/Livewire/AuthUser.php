@@ -24,6 +24,11 @@ class AuthUser extends Component
         return (new AuthRequest())->messages();
     }
 
+    public function updated($fields)
+    {
+        $this->validateOnly($fields);
+    }
+
     public function resetFields()
     {
         $this->password = '';

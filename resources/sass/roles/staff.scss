@@ -3208,6 +3208,20 @@ input[type="checkbox"] {
             @include generic.button-config;
         }
     }
+
+    .modal__confirm__delete__tag {
+        .btn__confirm__modal {
+            @include generic.button-config;
+
+            &.btn__cancel__delete {
+                @include generic.form-button-cancel;
+            }
+
+            &.btn__confirm__delete {
+                @include generic.form-button-submit;
+            }
+        }
+    }
 }
 
 .ticket__statuses__section {

@@ -4,7 +4,7 @@
         <h6 class="mb-0 form__name">Sign in</h6>
     </div>
 
-    <form wire:submit.prevent="login">
+    <form wire:submit.prevent="login" novalidate>
         @if (session()->has('error'))
         <ul class='form__errors mb-2 text-center'>
             <li>{{ session('error') }}</li>
@@ -13,7 +13,7 @@
         <div class="my-2">
             <label class="form-label input__login__label" for="email">Email address</label>
             <input type="email" id="email" class="form-control login__input__field @error('email') is-invalid @enderror"
-                placeholder="Enter your email" wire:model="email">
+                placeholder="Enter your email" wire:model.debounce.500ms="email">
             @error('email')
             <span class="text-danger custom__field__message">{{ $message }}</span>
             @enderror
@@ -22,7 +22,7 @@
             <label class="form-label input__login__label" for="password">Password</label>
             <input type="password" id="password"
                 class="form-control login__input__field @error('password') is-invalid @enderror"
-                placeholder="Enter your password" wire:model="password">
+                placeholder="Enter your password" wire:model.debounce.500ms="password">
             @error('password')
             <span class="text-danger custom__field__message">{{ $message }}</span>
             @enderror
