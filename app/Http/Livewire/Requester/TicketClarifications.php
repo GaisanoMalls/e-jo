@@ -10,11 +10,6 @@ class TicketClarifications extends Component
     public Ticket $ticket;
     public $clarifications = null;
 
-    public function mount(Ticket $ticket)
-    {
-        $this->ticket = $ticket;
-    }
-
     public function loadClarifications()
     {
         $this->clarifications = $this->ticket->clarifications;

@@ -39,28 +39,12 @@ class TicketsController extends Controller
 
     public function openTickets()
     {
-        // For ticket count purpose
-        $onProcessTickets = $this->getOnProcessTickets();
-        $closedTickets = $this->getClosedTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $claimedTickets = $this->getClaimedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
+        return view('layouts.user.ticket.statuses.open_tickets');
+    }
 
-        $openTickets = $this->getOpenTickets();
-
-        return view(
-            'layouts.user.ticket.statuses.open_tickets',
-            compact([
-                'onProcessTickets',
-                'closedTickets',
-                'viewedTickets',
-                'approvedTickets',
-                'claimedTickets',
-                'disapprovedTickets',
-                'openTickets',
-            ])
-        );
+    public function viewedTickets()
+    {
+        return view('layouts.user.ticket.statuses.viewed_tickets');
     }
 
     public function onProcessTickets()
@@ -85,32 +69,6 @@ class TicketsController extends Controller
                 'claimedTickets',
                 'disapprovedTickets',
                 'onProcessTickets',
-            ])
-        );
-    }
-
-    public function viewedTickets()
-    {
-        // For ticket count purpose
-        $openTickets = $this->getOpenTickets();
-        $onProcessTickets = $this->getOnProcessTickets();
-        $closedTickets = $this->getClosedTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $claimedTickets = $this->getClaimedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
-
-        $viewedTickets = $this->getViewedTickets();
-
-        return view(
-            'layouts.user.ticket.statuses.viewed_tickets',
-            compact([
-                'openTickets',
-                'onProcessTickets',
-                'closedTickets',
-                'approvedTickets',
-                'claimedTickets',
-                'disapprovedTickets',
-                'viewedTickets',
             ])
         );
     }

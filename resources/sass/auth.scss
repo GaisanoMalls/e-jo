@@ -229,6 +229,10 @@ input {
             background-color: #d32839;
             color: $white !important;
         }
+
+        &:disabled {
+            background-color: #d32839;
+        }
     }
 
     .login__back__button {

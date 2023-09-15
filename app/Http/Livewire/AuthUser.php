@@ -11,8 +11,9 @@ class AuthUser extends Component
 {
     use AuthRedirect;
 
-    public string $email;
-    public string $password;
+    public string $email = "";
+    public string $password = "";
+    public $hasEmptyFields = false;
 
     protected function rules()
     {
@@ -29,9 +30,12 @@ class AuthUser extends Component
         $this->validateOnly($fields);
     }
 
-    public function resetFields()
+
+    public function checkEmptyFields()
     {
-        $this->password = '';
+        (empty($this->email) || empty($this->password))
+            ? $this->hasEmptyFields = true
+            : $this->hasEmptyFields = false;
     }
 
     public function login()
@@ -43,13 +47,14 @@ class AuthUser extends Component
             return $this->redirectAuthenticatedWithRole();
         }
 
-        $this->resetFields();
+        $this->reset('password');
         session()->flash('error', 'Invalid email or password. Please try again.');
 
     }
 
     public function render()
     {
+        $this->checkEmptyFields();
         return view('livewire.auth-user');
     }
 }

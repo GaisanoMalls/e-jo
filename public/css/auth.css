@@ -205,6 +205,9 @@ input:not(:focus)::placeholder {
   background-color: #d32839;
   color: #ffffff !important;
 }
+.login__form__container .login__button:disabled {
+  background-color: #d32839;
+}
 .login__form__container .login__back__button {
   padding: 0.8rem 1rem;
   font-size: 0.938rem;

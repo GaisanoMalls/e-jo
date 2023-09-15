@@ -11,7 +11,6 @@ use App\Models\ActivityLog;
 use App\Models\Department;
 use App\Models\Reply;
 use App\Models\ReplyFile;
-use App\Models\ServiceDepartment;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;

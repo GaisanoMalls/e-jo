@@ -47,7 +47,8 @@ trait AuthUserAccount
             $fileName = $this->generateNewProfilePictureName($picture);
             $picturePath = Storage::putFileAs("public/profile_picture/" . $this->fileDirByUserType(), $picture, $fileName);
 
-            $profile->picture ? Storage::delete($profile->picture) : null;
+            // $profile->picture ? Storage::delete($profile->picture) : null;
+            $profile->picture || Storage::delete($profile->picture);
             $profile->picture = $picturePath;
         }
     }

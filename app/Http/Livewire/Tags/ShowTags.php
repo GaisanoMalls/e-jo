@@ -7,8 +7,8 @@ use Livewire\Component;
 
 class ShowTags extends Component
 {
-    public $tags, $name, $tagDeleteId, $tagUpdateId;
     public Tag $tag;
+    public $tags, $name, $tagDeleteId, $tagUpdateId;
 
     protected $listeners = ["loadTags" => "render"];
 
@@ -44,14 +44,22 @@ class ShowTags extends Component
 
     public function updateTag()
     {
-        Tag::where('id', $this->tagUpdateId)
-            ->update(array_merge($this->validate(), [
-                'slug' => \Str::slug($this->name)
-            ]));
+        $this->validate();
 
-        $this->fetchTags();
-        $this->dispatchBrowserEvent('close-modal');
-        flash()->addSuccess('Tag updated');
+        try {
+            Tag::where('id', $this->tagUpdateId)
+                ->update([
+                    'name' => $this->name,
+                    'slug' => \Str::slug($this->name)
+                ]);
+
+            $this->fetchTags();
+            $this->dispatchBrowserEvent('close-modal');
+            flash()->addSuccess('Tag updated');
+
+        } catch (\Exception $e) {
+            flash()->addError('Oops, something went wrong');
+        }
     }
 
     public function showDeleteTagModal(Tag $tag)
@@ -63,11 +71,16 @@ class ShowTags extends Component
 
     public function delete()
     {
-        Tag::find($this->tagDeleteId)->delete();
-        $this->fetchTags();
-        $this->dispatchBrowserEvent('close-modal');
-        $this->tagDeleteId = '';
-        flash()->addSuccess('Tag deleted');
+        try {
+            Tag::find($this->tagDeleteId)->delete();
+            $this->tagDeleteId = '';
+            $this->fetchTags();
+            $this->dispatchBrowserEvent('close-modal');
+            flash()->addSuccess('Tag deleted');
+
+        } catch (\Exception $e) {
+            flash()->addError('Oops, something went wrong');
+        }
     }
 
     public function render()

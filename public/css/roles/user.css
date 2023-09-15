@@ -338,14 +338,6 @@ body {
   font-weight: 600;
   color: #d32839;
 }
-.ticket__content .count-item {
-  font-size: 0.75rem;
-  font-weight: 500;
-  background-color: #7BA504;
-  padding: 0.27rem 0.67rem;
-  border-radius: 20px;
-  color: #FFFFFF;
-}
 .ticket__content .btn__filter__ticket {
   font-size: 0.875rem;
   padding: 0.4rem 0.7rem;

@@ -326,7 +326,7 @@ Route::middleware(['auth', Role::approver()])->group(function () {
 // * User Routes
 Route::middleware(['auth', Role::user()])->group(function () {
     Route::prefix('user')->name('user.')->group(function () {
-        Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', UserDashboardController::class)->name('dashboard');
         Route::prefix('tickets')->name('tickets.')->group(function () {
             Route::controller(UserTicketsController::class)->group(function () {
                 Route::get('/open', 'openTickets')->name('open_tickets');
@@ -356,10 +356,6 @@ Route::middleware(['auth', Role::user()])->group(function () {
             Route::controller(UserAccountSettingsController::class)->group(function () {
                 Route::get('/profile', 'profile')->name('profile');
                 Route::get('/password', 'password')->name('password');
-            });
-            Route::controller(UsersAccountController::class)->group(function () {
-                Route::put('/profile/update', 'updateProfile')->name('updateProfile');
-                Route::put('/password/update', 'updatePassword')->name('updatePassword');
             });
         });
     });

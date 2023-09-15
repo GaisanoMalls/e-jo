@@ -24,16 +24,16 @@
     @include('layouts.user.account.includes.confirm_logout')
     @include('layouts.user.includes.modals.create_ticket_modal')
     <div class="container mb-5 requester__section">
-        <livewire:offline />
+        @livewire('offline')
         @if (Route::is('user.tickets.*'))
         {{-- Show this section if the route matches the given pattern --}}
-        @include('layouts.user.includes.ticket_tab')
+        {{-- @include('layouts.user.includes.ticket_tab') --}}
+        @livewire('requester.ticket-tab')
         <div class="row mx-0 ticket__content header user">
             <div class="d-flex flex-wrap px-0 align-items-center justify-content-between">
                 @section('ticket-list-header')
                 <h5 class="mb-0 content__title">All Tickets</h5>
                 @show
-                @yield('count-items')
             </div>
         </div>
         @endif

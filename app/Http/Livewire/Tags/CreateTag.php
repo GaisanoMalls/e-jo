@@ -33,10 +33,20 @@ class CreateTag extends Component
 
     public function saveTag()
     {
-        Tag::create(array_merge($this->validate(), ['slug' => $this->name]));
-        $this->emit('loadTags');
-        $this->clearFormField();
-        flash()->addSuccess('success', 'Tag created');
+        $this->validate();
+        try {
+            Tag::create([
+                'name' => $this->name,
+                'slug' => $this->name
+            ]);
+
+            $this->emit('loadTags');
+            $this->clearFormField();
+            flash()->addSuccess('Tag created');
+
+        } catch (\Exception $e) {
+            flash()->addError('Oops, something went wrong');
+        }
     }
 
     public function render()

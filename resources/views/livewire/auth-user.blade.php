@@ -13,7 +13,7 @@
         <div class="my-2">
             <label class="form-label input__login__label" for="email">Email address</label>
             <input type="email" id="email" class="form-control login__input__field @error('email') is-invalid @enderror"
-                placeholder="Enter your email" wire:model.debounce.500ms="email">
+                placeholder="Enter your email" wire:model.debounce="email">
             @error('email')
             <span class="text-danger custom__field__message">{{ $message }}</span>
             @enderror
@@ -22,12 +22,12 @@
             <label class="form-label input__login__label" for="password">Password</label>
             <input type="password" id="password"
                 class="form-control login__input__field @error('password') is-invalid @enderror"
-                placeholder="Enter your password" wire:model.debounce.500ms="password">
+                placeholder="Enter your password" wire:model.debounce="password">
             @error('password')
             <span class="text-danger custom__field__message">{{ $message }}</span>
             @enderror
         </div>
-        <button type="submit" class="btn mt-3 w-100 btn-block login__button">
+        <button type="submit" class="btn mt-3 w-100 btn-block login__button" {{ $hasEmptyFields ? 'disabled' : '' }}>
             Sign In
         </button>
         <a href="{{ route('forgot_password') }}" class="mt-4 link">Forgot password?</a>
