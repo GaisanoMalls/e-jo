@@ -78,15 +78,14 @@ class Profile extends Component
                         : $user->profile->picture
                 ]);
 
-                ($user->wasChanged('email')
-                    || $user->profile->wasChanged([
-                        'first_name',
-                        'middle_name',
-                        'last_name',
-                        'suffix',
-                        'mobile_number',
-                        'picture'
-                    ]))
+                ($user->wasChanged('email') || $user->profile->wasChanged([
+                    'first_name',
+                    'middle_name',
+                    'last_name',
+                    'suffix',
+                    'mobile_number',
+                    'picture'
+                ]))
                     ? flash()->addSuccess('Profile successfully updated.')
                     : flash()->addInfo('No changes have been made in your profile.');
 
