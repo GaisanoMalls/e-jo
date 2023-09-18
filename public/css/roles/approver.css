@@ -7538,7 +7538,7 @@ nav .nav__user__picture {
 }
 .approver__section .btn__disapprove__ticket {
   background-color: #E4EEED;
-  color: #353535;
+  color: red;
 }
 .approver__section .btn__approve__ticket,
 .approver__section .btn__disapprove__ticket {

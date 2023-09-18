@@ -11,7 +11,7 @@ class OnProcess extends Component
 
     public function render()
     {
-        $onProcessTickets = $this->getClaimedTickets();
+        $onProcessTickets = $this->getOnProcessTickets();
         return view('livewire.requester.ticket-status.on-process', compact('onProcessTickets'));
     }
 }

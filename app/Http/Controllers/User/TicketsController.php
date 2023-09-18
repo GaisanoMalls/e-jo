@@ -49,134 +49,27 @@ class TicketsController extends Controller
 
     public function onProcessTickets()
     {
-        // For ticket count purpose
-        $openTickets = $this->getOpenTickets();
-        $closedTickets = $this->getClosedTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $claimedTickets = $this->getClaimedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
-
-        $onProcessTickets = $this->getOnProcessTickets();
-
-        return view(
-            'layouts.user.ticket.statuses.on_process_tickets',
-            compact([
-                'openTickets',
-                'closedTickets',
-                'viewedTickets',
-                'approvedTickets',
-                'claimedTickets',
-                'disapprovedTickets',
-                'onProcessTickets',
-            ])
-        );
+        return view('layouts.user.ticket.statuses.on_process_tickets');
     }
 
     public function approvedTickets()
     {
-        // For ticket count purpose
-        $openTickets = $this->getOpenTickets();
-        $onProcessTickets = $this->getOnProcessTickets();
-        $closedTickets = $this->getClosedTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $claimedTickets = $this->getClaimedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
-
-        $approvedTickets = $this->getApprovedTickets();
-
-        return view(
-            'layouts.user.ticket.statuses.approved_tickets',
-            compact([
-                'openTickets',
-                'onProcessTickets',
-                'closedTickets',
-                'viewedTickets',
-                'claimedTickets',
-                'disapprovedTickets',
-                'approvedTickets',
-            ])
-        );
+        return view('layouts.user.ticket.statuses.approved_tickets');
     }
 
     public function claimedTickets()
     {
-        // For ticket count purpose
-        $openTickets = $this->getOpenTickets();
-        $onProcessTickets = $this->getOnProcessTickets();
-        $closedTickets = $this->getClosedTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
-
-        $claimedTickets = $this->getClaimedTickets();
-
-        return view(
-            'layouts.user.ticket.statuses.claimed_tickets',
-            compact([
-                'openTickets',
-                'onProcessTickets',
-                'closedTickets',
-                'viewedTickets',
-                'claimedTickets',
-                'disapprovedTickets',
-                'approvedTickets',
-            ])
-        );
+        return view('layouts.user.ticket.statuses.claimed_tickets');
     }
-
-
 
     public function disapprovedTickets()
     {
-        // For ticket count purpose
-        $openTickets = $this->getOpenTickets();
-        $onProcessTickets = $this->getOnProcessTickets();
-        $closedTickets = $this->getClosedTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $claimedTickets = $this->getClaimedTickets();
-
-        $disapprovedTickets = $this->getDisapprovedTickets();
-
-        return view(
-            'layouts.user.ticket.statuses.disapproved_tickets',
-            compact([
-                'openTickets',
-                'onProcessTickets',
-                'closedTickets',
-                'viewedTickets',
-                'approvedTickets',
-                'claimedTickets',
-                'disapprovedTickets',
-            ])
-        );
+        return view('layouts.user.ticket.statuses.disapproved_tickets');
     }
 
     public function closedTickets()
     {
-        // For ticket count purpose
-        $openTickets = $this->getOpenTickets();
-        $onProcessTickets = $this->getOnProcessTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $claimedTickets = $this->getClaimedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
-
-        $closedTickets = $this->getClosedTickets();
-
-        return view(
-            'layouts.user.ticket.statuses.closed_tickets',
-            compact([
-                'openTickets',
-                'onProcessTickets',
-                'viewedTickets',
-                'approvedTickets',
-                'claimedTickets',
-                'disapprovedTickets',
-                'closedTickets',
-            ])
-        );
+        return view('layouts.user.ticket.statuses.closed_tickets');
     }
 
     public function store(StoreTicketRequest $request)
@@ -224,8 +117,10 @@ class TicketsController extends Controller
                         foreach ($approvers as $approver) {
                             if ($approver->id === $levelApprover->user_id) {
                                 if ($levelApprover->level_id === $level->id) {
-                                    Notification::send($approver, new TicketNotification($ticket, "New ticket created - $ticket->ticket_number", 'created a ticket'));
-                                    // Mail::to($approver)->send(new TicketCreatedMail($ticket));
+                                    if ($approver->buDepartments->pluck('id')->first() === $ticket->user->department_id) {
+                                        Notification::send($approver, new TicketNotification($ticket, "New ticket created - $ticket->ticket_number", 'created a ticket'));
+                                        // Mail::to($approver)->send(new TicketCreatedMail($ticket));
+                                    }
                                 }
                             }
                         }

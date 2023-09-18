@@ -1,6 +1,12 @@
 <div wire:init="loadClarifications">
     @if (!is_null($clarifications))
     <div wire:poll.visible.7s>
+        <div class="mb-2 mt-4">
+            <small class="ticket__discussions text-muted">
+                {{ $ticket->clarifications->count() > 1 ? 'Discussions' : 'Discussion' }}
+                ({{ $ticket->clarifications->count() }})
+            </small>
+        </div>
         @if ($ticket->clarifications->count() > 0)
         @foreach ($ticket->clarifications as $clarification)
         @include('layouts.staff.approver.ticket.includes.modal.preview_clarification_ticket_files_modal')

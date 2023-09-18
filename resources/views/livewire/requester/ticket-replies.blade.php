@@ -10,8 +10,8 @@
                 <div class="d-flex align-items-center w-100">
                     @if ($reply->user->role_id !== App\Models\Role::USER)
                     @if ($reply->user->profile->picture)
-                    <img src="{{ Storage::url($reply->user->profile->picture) }}" alt="" class="image-fluid ticket__details__user__picture
-                                             reply__ticket__details__user__picture">
+                    <img src="{{ Storage::url($reply->user->profile->picture) }}" alt=""
+                        class="image-fluid ticket__details__user__picture reply__ticket__details__user__picture">
                     @else
                     <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center
                                          text-white" style="background-color: #24695C;">

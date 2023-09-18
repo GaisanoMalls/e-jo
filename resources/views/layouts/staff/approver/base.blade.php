@@ -24,9 +24,10 @@
     @include('layouts.includes.toaster-message')
     @include('layouts.staff.approver.includes.modal.confirm_logout')
     <div class="container mb-5 approver__section">
-        <livewire:offline />
+        @livewire('offline')
         @if (Route::is('approver.tickets.*'))
-        @include('layouts.staff.approver.includes.ticket_tab')
+        {{-- @include('layouts.staff.approver.includes.ticket_tab') --}}
+        @livewire('approver.ticket-tab')
         @endif
         @yield('main-content')
     </div>

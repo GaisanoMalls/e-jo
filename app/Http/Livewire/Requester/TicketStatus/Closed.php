@@ -11,7 +11,7 @@ class Closed extends Component
 
     public function render()
     {
-        $closedTickets = $this->getClaimedTickets();
+        $closedTickets = $this->getClosedTickets();
         return view('livewire.requester.ticket-status.closed', compact('closedTickets'));
     }
 }

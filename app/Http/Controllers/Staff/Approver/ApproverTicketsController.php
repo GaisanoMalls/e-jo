@@ -31,119 +31,29 @@ class ApproverTicketsController extends Controller
 
     public function openTickets()
     {
-        $openTickets = $this->getOpenTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
-        $onProcessTickets = $this->getOnProcessTickets();
-
-        $forApprovalTickets = $this->getForApprovalTickets();
-
-        return view(
-            'layouts.staff.approver.ticket.statuses.open',
-            compact(
-                [
-                    'openTickets',
-                    'viewedTickets',
-                    'approvedTickets',
-                    'disapprovedTickets',
-                    'onProcessTickets',
-                    'forApprovalTickets',
-                ]
-            )
-        );
+        return view('layouts.staff.approver.ticket.statuses.open');
     }
 
     public function viewedTickets()
     {
-        $openTickets = $this->getOpenTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
-        $onProcessTickets = $this->getOnProcessTickets();
-
-        $viewedTickets = $this->getViewedTickets();
-
-        return view(
-            'layouts.staff.approver.ticket.statuses.viewed',
-            compact(
-                [
-                    'openTickets',
-                    'approvedTickets',
-                    'disapprovedTickets',
-                    'onProcessTickets',
-                    'viewedTickets',
-                ]
-            )
-        );
+        return view('layouts.staff.approver.ticket.statuses.viewed');
     }
 
     public function approvedTickets()
     {
-        $openTickets = $this->getOpenTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
-        $onProcessTickets = $this->getOnProcessTickets();
-
-        $approvedTickets = $this->getApprovedTickets();
-
-        return view(
-            'layouts.staff.approver.ticket.statuses.approved',
-            compact(
-                [
-                    'openTickets',
-                    'viewedTickets',
-                    'disapprovedTickets',
-                    'onProcessTickets',
-                    'approvedTickets',
-                ]
-            )
-        );
+        return view('layouts.staff.approver.ticket.statuses.approved');
     }
 
     public function disapprovedTickets()
     {
-        $openTickets = $this->getOpenTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $onProcessTickets = $this->getOnProcessTickets();
-
-        $disapprovedTickets = $this->getDisapprovedTickets();
-
         return view(
-            'layouts.staff.approver.ticket.statuses.disapproved',
-            compact(
-                [
-                    'openTickets',
-                    'viewedTickets',
-                    'approvedTickets',
-                    'onProcessTickets',
-                    'disapprovedTickets'
-                ]
-            )
+            'layouts.staff.approver.ticket.statuses.disapproved'
         );
     }
 
     public function onProcessTickets()
     {
-        $openTickets = $this->getOpenTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
-
-        $onProcessTickets = $this->getOnProcessTickets();
-
-        return view(
-            'layouts.staff.approver.ticket.statuses.on_process',
-            compact(
-                [
-                    'openTickets',
-                    'viewedTickets',
-                    'approvedTickets',
-                    'disapprovedTickets',
-                    'onProcessTickets'
-                ]
-            )
-        );
+        return view('layouts.staff.approver.ticket.statuses.on_process');
     }
 
     public function viewTicketDetails(Ticket $ticket)

@@ -31,10 +31,7 @@ class UpdateProfileRequest extends FormRequest
             'suffix' => ['nullable', 'min:2', 'max:3'],
             'email' => ['required', 'email'],
             'mobile_number' => ['nullable', 'min:11', 'max:11'],
-            'picture' => [
-                'nullable',
-                File::image()
-            ],
+            'picture' => ['nullable', File::image()],
         ];
     }
 

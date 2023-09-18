@@ -7410,12 +7410,21 @@ a:hover {
   background-color: #f5f7f9;
 }
 .sidebar__collapse__btnlink .sidebar__btn__link__name {
-  color: #24695c;
   font-size: 0.813rem;
 }
 
 .sidebar__collapse__btnlink__active {
   font-weight: 600;
+}
+.sidebar__collapse__btnlink__active > .d-flex > .sidebar__active__dot {
+  background-color: #d32839 !important;
+}
+.sidebar__collapse__btnlink__active > .d-flex > .sidebar__btn__link__name {
+  color: #d32839 !important;
+}
+.sidebar__collapse__btnlink__active > .sidebar__btn__link__badge {
+  font-weight: 600 !important;
+  color: #d32839;
 }
 
 .sidebar__active__dot {
@@ -7429,12 +7438,12 @@ a:hover {
 }
 
 .sidebar__btn__link__badge {
-  font-size: 0.688rem;
-  color: #ffffff;
-  background-color: #1d5c63;
+  font-size: 0.813rem;
+  color: #24695c;
+  background-color: #F5F7F9;
   padding: 5px 6px;
   min-width: 25px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .sidebar {

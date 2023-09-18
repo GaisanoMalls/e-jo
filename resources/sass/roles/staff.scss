@@ -109,7 +109,6 @@ $box-shadow-global: 0 20px 27px 0 rgb(0 0 0 / 5%);
 $hover-background: #eceff4;
 $sidebar-badge-background: #31316a;
 $dropdown-icon-color: #777d87;
-$sidebar-badge-color: #ffffff;
 $dark-background: #1f2937;
 $extra-button-background: #564aa0;
 $bg-dark-green: #1d5c63;
@@ -743,13 +742,25 @@ a {
     }
 
     .sidebar__btn__link__name {
-        color: $link-font-color;
         font-size: $fs-13;
     }
 }
 
 .sidebar__collapse__btnlink__active {
     font-weight: 600;
+
+    &>.d-flex>.sidebar__active__dot {
+        background-color: $color-1 !important;
+    }
+
+    &>.d-flex>.sidebar__btn__link__name {
+        color: $color-1 !important;
+    }
+
+    &>.sidebar__btn__link__badge {
+        font-weight: $fw-600 !important;
+        color: $color-1;
+    }
 }
 
 .sidebar__active__dot {
@@ -763,12 +774,12 @@ a {
 }
 
 .sidebar__btn__link__badge {
-    font-size: $fs-11;
-    color: $sidebar-badge-color;
-    background-color: $bg-dark-green;
+    font-size: $fs-13;
+    color: #24695c;
+    background-color: #F5F7F9;
     padding: 5px 6px;
     min-width: 25px;
-    font-weight: 500;
+    font-weight: $fw-400;
 }
 
 .sidebar {

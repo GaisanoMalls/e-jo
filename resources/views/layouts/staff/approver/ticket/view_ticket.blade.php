@@ -131,15 +131,8 @@
                     </div>
                     @if ($ticket->status_id !== App\Models\Status::CLOSED || $ticket->approval_status !==
                     App\Models\ApprovalStatus::DISAPPROVED && $ticket->clarifications->count() !== 0)
-                    <div class="mb-2 mt-4">
-                        <small class="ticket__discussions text-muted">
-                            {{ $ticket->clarifications->count() > 1 ? 'Discussions' : 'Discussion' }}
-                            ({{ $ticket->clarifications->count() }})
-                        </small>
-                    </div>
                     {{-- Replies/Comments --}}
                     @livewire('approver.ticket-clarifications', ['ticket' => $ticket])
-                    
                     @else
                     <div class="row align-items-center bg-light p-2 py-3 rounded-3 mx-1 mt-2 mb-4">
                         <div class="col-md-12">
