@@ -8,9 +8,9 @@ trait UserAccountConfig
 {
     public function updateUserPassword($user, string $newPassword, string $confirmPassword)
     {
-        if ($newPassword !== $confirmPassword) {
-            return back()->with('error', 'Current password not matched. Please try again.');
-        }
+        // if ($newPassword !== $confirmPassword) {
+        //     return back()->with('error', 'Current password not matched. Please try again.');
+        // }
 
         $user->update(['password' => Hash::make($newPassword)]);
 

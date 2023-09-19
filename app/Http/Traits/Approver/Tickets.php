@@ -16,10 +16,13 @@ trait Tickets
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OPEN)
                 ->where('approval_status', ApprovalStatus::FOR_APPROVAL);
-        })->whereHas('helpTopic.levels', function ($query) {
-            $query->whereIn('level_id', auth()->user()->levels->pluck('id'));
-        })->whereHas('user.department', function ($department) {
-            $department->whereIn('id', auth()->user()->buDepartments->pluck('id'));
+        })->withWhereHas('helpTopic.levels', function ($query) {
+            $query->whereIn('level_id', auth()->user()->levels->pluck('id'))
+                ->withWhereHas('approvers', function ($approver) {
+                    $approver->where('users.id', auth()->user()->id);
+                });
+        })->withWhereHas('user.department', function ($department) {
+            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -30,10 +33,13 @@ trait Tickets
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLOSED)
                 ->where('approval_status', ApprovalStatus::DISAPPROVED);
-        })->whereHas('helpTopic.levels', function ($query) {
-            $query->whereIn('level_id', auth()->user()->levels->pluck('id'));
-        })->whereHas('user.department', function ($department) {
-            $department->whereIn('id', auth()->user()->buDepartments->pluck('id'));
+        })->withWhereHas('helpTopic.levels', function ($query) {
+            $query->whereIn('level_id', auth()->user()->levels->pluck('id'))
+                ->withWhereHas('approvers', function ($approver) {
+                    $approver->where('users.id', auth()->user()->id);
+                });
+        })->withWhereHas('user.department', function ($department) {
+            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -44,10 +50,13 @@ trait Tickets
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OPEN)
                 ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
-        })->whereHas('helpTopic.levels', function ($query) {
-            $query->whereIn('level_id', auth()->user()->levels->pluck('id'));
-        })->whereHas('user.department', function ($department) {
-            $department->whereIn('id', auth()->user()->buDepartments->pluck('id'));
+        })->withWhereHas('helpTopic.levels', function ($query) {
+            $query->whereIn('level_id', auth()->user()->levels->pluck('id'))
+                ->withWhereHas('approvers', function ($approver) {
+                    $approver->where('users.id', auth()->user()->id);
+                });
+        })->withWhereHas('user.department', function ($department) {
+            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -58,10 +67,13 @@ trait Tickets
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::VIEWED)
                 ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
-        })->whereHas('helpTopic.levels', function ($query) {
-            $query->whereIn('level_id', auth()->user()->levels->pluck('id'));
-        })->whereHas('user.department', function ($department) {
-            $department->whereIn('id', auth()->user()->buDepartments->pluck('id'));
+        })->withWhereHas('helpTopic.levels', function ($query) {
+            $query->whereIn('level_id', auth()->user()->levels->pluck('id'))
+                ->withWhereHas('approvers', function ($approver) {
+                    $approver->where('users.id', auth()->user()->id);
+                });
+        })->withWhereHas('user.department', function ($department) {
+            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -72,10 +84,13 @@ trait Tickets
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::APPROVED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
-        })->whereHas('helpTopic.levels', function ($query) {
-            $query->whereIn('level_id', auth()->user()->levels->pluck('id'));
-        })->whereHas('user.department', function ($department) {
-            $department->whereIn('id', auth()->user()->buDepartments->pluck('id'));
+        })->withWhereHas('helpTopic.levels', function ($query) {
+            $query->whereIn('level_id', auth()->user()->levels->pluck('id'))
+                ->withWhereHas('approvers', function ($approver) {
+                    $approver->where('users.id', auth()->user()->id);
+                });
+        })->withWhereHas('user.department', function ($department) {
+            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderBy('created_at', 'desc')
             ->get();
@@ -86,10 +101,13 @@ trait Tickets
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::ON_PROCESS)
                 ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
-        })->whereHas('helpTopic.levels', function ($query) {
-            $query->whereIn('level_id', auth()->user()->levels->pluck('id'));
-        })->whereHas('user.department', function ($department) {
-            $department->whereIn('id', auth()->user()->buDepartments->pluck('id'));
+        })->withWhereHas('helpTopic.levels', function ($query) {
+            $query->whereIn('level_id', auth()->user()->levels->pluck('id'))
+                ->withWhereHas('approvers', function ($approver) {
+                    $approver->where('users.id', auth()->user()->id);
+                });
+        })->withWhereHas('user.department', function ($department) {
+            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderBy('created_at', 'desc')
             ->get();

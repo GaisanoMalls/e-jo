@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Http\Livewire\Tags;
+namespace App\Http\Livewire\Staff\Tags;
 
 use App\Http\Requests\SysAdmin\Manage\Tag\StoreTagRequest;
+use App\Http\Traits\Utils;
 use App\Models\Tag;
 use Livewire\Component;
 
 class CreateTag extends Component
 {
-    public ?string $name = null;
+    use Utils;
+
+    public $name;
 
     public function rules()
     {
@@ -37,7 +40,7 @@ class CreateTag extends Component
         try {
             Tag::create([
                 'name' => $this->name,
-                'slug' => $this->name
+                'slug' => \Str::slug($this->name)
             ]);
 
             $this->emit('loadTags');
@@ -51,6 +54,6 @@ class CreateTag extends Component
 
     public function render()
     {
-        return view('livewire.tags.create-tag');
+        return view('livewire.staff.tags.create-tag');
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Staff\Approver;
+namespace App\Http\Livewire\Approver;
 
-use App\Http\Controllers\Controller;
+use Livewire\Component;
 use App\Http\Traits\Approver\Tickets as ApproverTickets;
 
-class ApproverDashboardController extends Controller
+class Dashboard extends Component
 {
     use ApproverTickets;
 
-    public function index()
+    public function render()
     {
         $openTickets = $this->getOpenTickets();
         $viewedTickets = $this->getViewedTickets();
@@ -18,7 +18,7 @@ class ApproverDashboardController extends Controller
         $onProcessTickets = $this->getOnProcessTickets();
 
         return view(
-            'layouts.staff.approver.includes.dashboard',
+            'livewire.approver.dashboard',
             compact([
                 'openTickets',
                 'viewedTickets',

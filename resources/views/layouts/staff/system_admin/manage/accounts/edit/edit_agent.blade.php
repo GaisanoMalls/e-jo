@@ -13,7 +13,7 @@ Edit Agent
 @endsection
 
 @section('manage-content')
-@include('layouts.staff.system_admin.manage.accounts.edit.modal.edit_agent_password_modal')
+@livewire('staff.accounts.agent-update-password', ['agent' => $agent])
 <div class="row accounts__section justify-content-center">
     <div class="col-xxl-9 col-lg-12">
         <div class="card d-flex flex-column gap-2 users__account__card">
@@ -237,13 +237,11 @@ Edit Agent
 </div>
 @endsection
 
-@if ($errors->updatePassword->any())
-@push('modal-with-error')
+{{-- Modal Scripts --}}
+@push('livewire-modal')
 <script>
-    $(function () {
-        $('#editPasswordModal').modal('show');
+    window.addEventListener('close-modal', event =>{
+        $('#editPasswordModal').modal('hide');
     });
-
 </script>
 @endpush
-@endif

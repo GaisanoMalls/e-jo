@@ -14,7 +14,7 @@ SLA Plans
 @section('manage-content')
 <div class="row gap-4">
     <div class="sla__section">
-        @include('layouts.staff.system_admin.manage.sla.includes.modal.add_sla_modal_form')
+        @livewire('staff.sla-plan.create-sla')
         <div class="col-12 content__container mb-4">
             <div class="card card__rounded__and__no__border">
                 <div class="table__header">
@@ -47,41 +47,9 @@ SLA Plans
         </div>
         <div class="col-12 content__container">
             <div class="card card__rounded__and__no__border pt-4">
-                <div class="table-responsive custom__table">
-                    @if (!$slas->isEmpty())
-                    @include('layouts.staff.system_admin.manage.sla.includes.sla_list')
-                    @else
-                    <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                        <small style="font-size: 14px;">No SLA records.</small>
-                    </div>
-                    @endif
-                </div>
+                @livewire('staff.sla-plan.sla-list')
             </div>
         </div>
     </div>
 </div>
 @endsection
-
-@if ($errors->storeSLA->any())
-@push('modal-with-error')
-<script>
-    $(function () {
-        $('#addNewSLAModal').modal('show');
-    });
-
-</script>
-@endpush
-@endif
-
-@if ($errors->editSLA->any() || session()->has('duplicate_name_error') )
-{{-- Show edit modal based on the selected record/data --}}
-<input type="hidden" id="slaId" value="{{ session('slaId') }}">
-@push('modal-with-error')
-<script>
-    const slaId = document.getElementById('slaId');
-    $(function () {
-        $(`#editSLA${slaId.value}`).modal('show');
-    });
-</script>
-@endpush
-@endif

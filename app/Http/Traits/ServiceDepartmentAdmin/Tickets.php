@@ -8,6 +8,23 @@ use App\Models\Ticket;
 
 trait Tickets
 {
+    public function serviceDeptAdminGetTicketsToAssign()
+    {
+        return Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::OPEN)
+                ->where('approval_status', ApprovalStatus::APPROVED)
+                ->where('status_id', '!=', Status::CLAIMED);
+        })
+            ->where(function ($byUserQuery) {
+                $byUserQuery->where('branch_id', auth()->user()->branch_id)
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
+            })
+            ->whereNull('team_id')
+            ->orWhereNull('team_id')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
     public function serviceDeptAdminGetApprovedTickets()
     {
         return Ticket::where(function ($statusQuery) {

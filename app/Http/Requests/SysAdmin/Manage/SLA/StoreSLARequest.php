@@ -3,6 +3,7 @@
 namespace App\Http\Requests\SysAdmin\Manage\SLA;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreSLARequest extends FormRequest
 {
@@ -25,8 +26,15 @@ class StoreSLARequest extends FormRequest
     public function rules()
     {
         return [
-            'countdown_approach' => ['required', 'unique:service_level_agreements,countdown_approach'],
-            'time_unit' => ['required', 'unique:service_level_agreements,time_unit']
+            'countdown_approach' => [
+                'required',
+                'numeric',
+                Rule::unique('service_level_agreements', 'countdown_approach')
+            ],
+            'time_unit' => [
+                'required',
+                Rule::unique('service_level_agreements', 'time_unit')
+            ]
         ];
     }
 }

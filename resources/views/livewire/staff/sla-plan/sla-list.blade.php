@@ -1,48 +1,47 @@
 <div>
-    <div class="table-responsive custom__table" wire:poll.visible.5s>
-        @if (!$tags->isEmpty())
+    <div wire:poll.visible.5s class="table-responsive custom__table">
+        @if (!$serviceLevelAgreements->isEmpty())
         <table class="table table-striped mb-0" id="table">
             <thead>
                 <tr>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Name</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Tickets</th>
+                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Hours</th>
+                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Time Unit</th>
                     <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                     <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($tags as $tag)
-                <tr wire:key="{{ $tag->id }}">
+                @foreach ($serviceLevelAgreements as $sla)
+                <tr>
                     <td>
                         <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $tag->name }}</span>
+                            <span>{{ $sla->countdown_approach }}</span>
                         </div>
                     </td>
                     <td>
                         <div class="d-flex align-items-center text-start td__content">
-                            {{-- <span>{{ $tag->tickets->count() }}</span> --}}
-                            <span>----</span>
+                            <span>{{ $sla->time_unit }}</span>
                         </div>
                     </td>
                     <td>
                         <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $tag->dateCreated() }}</span>
+                            <span>{{ $sla->dateCreated() }}</span>
                         </div>
                     </td>
                     <td>
                         <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $tag->dateUpdated() }}</span>
+                            <span>{{ $sla->dateUpdated() }}</span>
                         </div>
                     </td>
                     <td>
                         <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                             <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
                                 type="button" class="btn action__button" data-bs-toggle="modal"
-                                data-bs-target="#updateTagModal" wire:click="showEditTagModal({{ $tag->id }})">
+                                data-bs-target="#editSLAModal" wire:click="editSLA({{ $sla->id }})">
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <button data-bs-toggle="modal" data-bs-target="#deleteTagModal"
-                                class="btn btn-sm action__button mt-0" wire:click="showDeleteTagModal({{ $tag->id }})">
+                            <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
+                                data-bs-target="#deleteSLAModal">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -53,31 +52,54 @@
         </table>
         @else
         <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-            <small style="font-size: 14px;">No records for departments.</small>
+            <small style="font-size: 14px;">No SLA records.</small>
         </div>
         @endif
     </div>
 
-    {{-- Edit Tag Modal --}}
-    <div wire:ignore.self class="modal tag__modal" id="updateTagModal" tabindex="-1"
-        aria-labelledby="addNewTagModalLabel" aria-hidden="true">
+    {{-- Edit SLA Modal --}}
+    <div wire:ignore.self class="modal sla__modal" id="editSLAModal" tabindex="-1" aria-labelledby="editSLAModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0">
-                    <h1 class="modal-title modal__title" id="addNewTagModalLabel">Edit tag</h1>
+                    <h1 class="modal-title modal__title" id="addNewSLAModalLabel">Edit Service Level Agreement</h1>
                     <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
                         <i class="fa-sharp fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <form wire:submit.prevent="updateTag">
+                <form wire:submit.prevent="updateSLA">
                     <div class="modal-body modal__body">
                         <div class="row mb-2">
                             <div class="col-md-12">
                                 <div class="mb-2">
-                                    <label for="name" class="form-label form__field__label">Name</label>
-                                    <input type="text" class="form-control form__field" id="name"
-                                        placeholder="Enter tag name" wire:model.debounce.500ms="name">
-                                    @error('name')
+                                    <label for="countdown_approach" class="form-label form__field__label">Hours</label>
+                                    <input type="text" wire:model.debounce.500ms="countdown_approach" class="form-control form__field
+                                        @error('countdown_approach') is-invalid @enderror" id="countdown_approach"
+                                        placeholder="e.g. 24">
+                                    @error('countdown_approach')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                    @enderror
+                                    @if (session()->has('duplicate_name_error'))
+                                    <div class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ session()->get('duplicate_name_error') }}
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-2">
+                                    <label for="time_unit" class="form-label form__field__label">
+                                        Time unit
+                                    </label>
+                                    <input type="text" wire:model.debounce.500ms="time_unit" class="form-control form__field
+                                        @error('time_unit') is-invalid @enderror" id="time_unit"
+                                        placeholder="e.g. 1 Day">
+                                    @error('time_unit')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -89,13 +111,9 @@
                     </div>
                     <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
                         <div class="d-flex align-items-center gap-2">
-                            <button type="submit"
-                                class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
-                                wire:click="$emit('loadTags')">
-                                Save
-                            </button>
-                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
-                                data-bs-dismiss="modal" wire:click="clearFormField">Cancel</button>
+                            <button type="submit" class="btn m-0 btn__modal__footer btn__send">Save</button>
+                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" data-bs-dismiss="modal"
+                                wire:click="clearFormFields">Cancel</button>
                         </div>
                     </div>
                 </form>
@@ -103,8 +121,8 @@
         </div>
     </div>
 
-    {{-- Delete Tag Modal --}}
-    <div wire:ignore.self class="modal modal__confirm__delete__tag" id="deleteTagModal" tabindex="-1"
+    {{-- Delete SLA Modal --}}
+    <div wire:ignore.self class="modal modal__confirm__delete__tag" id="deleteSLAModal" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
@@ -113,8 +131,10 @@
                         Confirm Delete
                     </h6>
                     <p class="mb-1" style="font-weight: 500; font-size: 15px;">
-                        Are you sure you want to delete the tag
-                        <strong>{{ $name }}</strong>?
+                        Delete SLA
+                        <strong>
+                            {{ $countdown_approach }} - {{ $time_unit }}
+                        </strong>?
                     </p>
                 </div>
                 <hr>
@@ -136,18 +156,12 @@
 @push('livewire-modal')
 <script>
     window.addEventListener('close-modal', event =>{
-        $('#updateTagModal').modal('hide');
-        $('#deleteTagModal').modal('hide');
+        $('#editSLAModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-tag-modal', event =>{
-        $('#updateTagModal').modal('show');
+    window.addEventListener('show-edit-sla-modal', event =>{
+        $('#editSLAModal').modal('show');
     });
-
-    window.addEventListener('show-delete-tag-modal', event =>{
-        $('#deleteTagModal').modal('show');
-    });
-
 
 </script>
 @endpush

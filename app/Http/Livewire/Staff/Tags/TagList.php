@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Livewire\Tags;
+namespace App\Http\Livewire\Staff\Tags;
 
 use App\Models\Tag;
 use Livewire\Component;
 
-class ShowTags extends Component
+class TagList extends Component
 {
-    public Tag $tag;
-    public $tags, $name, $tagDeleteId, $tagUpdateId;
+    public $tags = [];
+    public $name, $tagDeleteId, $tagUpdateId;
 
-    protected $listeners = ["loadTags" => "render"];
+    protected $listeners = ["loadTags" => "fetchTags"];
 
     public function fetchTags()
     {
@@ -85,7 +85,7 @@ class ShowTags extends Component
 
     public function render()
     {
-        return view('livewire.tags.show-tags', [
+        return view('livewire.staff.tags.tag-list', [
             'tags' => $this->fetchTags(),
         ]);
     }

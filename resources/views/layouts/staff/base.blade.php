@@ -62,7 +62,7 @@
         var options = {
             // how many rows per page
             perPage: 10,
-            perPageSelect: [5, 10, 15, 20, 25],
+            perPageSelect: [5, 10, 15, 20, 25, 50, 100],
             fixedColumns: true,
             fixedHeight: false,
             // Pagination

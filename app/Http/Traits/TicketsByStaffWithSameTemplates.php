@@ -11,6 +11,13 @@ trait TicketsByStaffWithSameTemplates
 {
     use ServiceDepartmentAdminTickets, SysAdminTickets, AgentTickets;
 
+    public function getTicketsToAssign()
+    {
+        return (auth()->user()->role_id === Role::SERVICE_DEPARTMENT_ADMIN)
+            ? $this->serviceDeptAdminGetTicketsToAssign()
+            : [];
+    }
+
     public function getApprovedTickets()
     {
         switch (auth()->user()->role_id) {
@@ -21,7 +28,7 @@ trait TicketsByStaffWithSameTemplates
                 $approvedTickets = $this->serviceDeptAdminGetApprovedTickets();
                 break;
             default:
-                $approvedTickets = null;
+                $approvedTickets = [];
         }
 
         return $approvedTickets;
@@ -37,7 +44,7 @@ trait TicketsByStaffWithSameTemplates
                 $approvedTickets = $this->serviceDeptAdminGetDisapprovedTickets();
                 break;
             default:
-                $approvedTickets = null;
+                $approvedTickets = [];
         }
 
         return $approvedTickets;
@@ -56,7 +63,7 @@ trait TicketsByStaffWithSameTemplates
                 $openTickets = $this->agentGetOpenTickets();
                 break;
             default:
-                $openTickets = null;
+                $openTickets = [];
         }
 
         return $openTickets;
@@ -75,7 +82,7 @@ trait TicketsByStaffWithSameTemplates
                 $claimedTickets = $this->agentGetClaimedTickets();
                 break;
             default:
-                $claimedTickets = null;
+                $claimedTickets = [];
         }
 
         return $claimedTickets;
@@ -94,7 +101,7 @@ trait TicketsByStaffWithSameTemplates
                 $onProcessTickets = $this->agentGetOnProcessTickets();
                 break;
             default:
-                $onProcessTickets = null;
+                $onProcessTickets = [];
         }
 
         return $onProcessTickets;
@@ -110,7 +117,7 @@ trait TicketsByStaffWithSameTemplates
                 $viewedTickets = $this->serviceDeptAdminGetViewedTickets();
                 break;
             default:
-                $viewedTickets = null;
+                $viewedTickets = [];
         }
 
         return $viewedTickets;
@@ -129,7 +136,7 @@ trait TicketsByStaffWithSameTemplates
                 $overdueTickets = $this->agentGetOverdueTickets();
                 break;
             default:
-                $overdueTickets = null;
+                $overdueTickets = [];
         }
 
         return $overdueTickets;
@@ -148,7 +155,7 @@ trait TicketsByStaffWithSameTemplates
                 $closedTickets = $this->agentGetClosedTickets();
                 break;
             default:
-                $closedTickets = null;
+                $closedTickets = [];
         }
 
         return $closedTickets;

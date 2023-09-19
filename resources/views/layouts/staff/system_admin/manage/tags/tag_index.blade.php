@@ -14,7 +14,7 @@ Tags
 @section('manage-content')
 <div class="row gap-4">
     <div class="tags__section">
-        @livewire('tags.create-tag')
+        @livewire('staff.tags.create-tag')
         <div class="col-12 content__container mb-4">
             <div class="card card__rounded__and__no__border">
                 <div class="table__header">
@@ -44,7 +44,7 @@ Tags
         </div>
         <div class="col-12 content__container">
             <div class="card card__rounded__and__no__border pt-4">
-                @livewire('tags.show-tags')
+                @livewire('staff.tags.tag-list')
             </div>
         </div>
     </div>

@@ -13,7 +13,7 @@ Edit Approver
 @endsection
 
 @section('manage-content')
-@include('layouts.staff.system_admin.manage.accounts.edit.modal.edit_approver_password_modal')
+@livewire('staff.accounts.approver-update-password', ['approver' => $approver])
 <div class="row justify-content-center accounts__section">
     <div class="col-xxl-9 col-lg-12">
         <div class="card d-flex flex-column gap-2 users__account__card">
@@ -218,13 +218,11 @@ Edit Approver
 </div>
 @endsection
 
-@if ($errors->updatePassword->any())
-@push('modal-with-error')
+{{-- Modal Scripts --}}
+@push('livewire-modal')
 <script>
-    $(function () {
-        $('#editPasswordModal').modal('show');
+    window.addEventListener('close-modal', event =>{
+        $('#editPasswordModal').modal('hide');
     });
-
 </script>
 @endpush
-@endif

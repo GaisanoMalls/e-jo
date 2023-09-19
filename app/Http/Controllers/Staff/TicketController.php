@@ -21,6 +21,12 @@ class TicketController extends Controller
 {
     use TicketsByStaffWithSameTemplates, Utils, BasicModelQueries;
 
+    public function ticketsToAssign()
+    {
+        return view('layouts.staff.ticket.tickets_to_assign');
+
+    }
+
     public function approvedTickets()
     {
         $approvedTickets = $this->getApprovedTickets();

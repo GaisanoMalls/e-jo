@@ -28,7 +28,18 @@
                     </a>
                 </li>
                 @endif --}}
-
+                @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+                <li class="mb-1">
+                    <a href="{{ route('staff.manual_ticket_assign.to_assign') }}" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons -bottom-3
+                    {{ Route::is('staff.manual_ticket_assign.*') ? 'sidebar__btn__active active' : '' }}">
+                        <div class=" d-flex align-items-center justify-content-center sidebar__button__icon__container
+                    fade__in__sidebar__icon__container">
+                            <i class="bi bi-person-fill-check"></i>
+                        </div>
+                        Assign Ticket
+                    </a>
+                </li>
+                @endif
                 <li class="mb-1">
                     @livewire('staff.collapse-ticket-status')
                 </li>

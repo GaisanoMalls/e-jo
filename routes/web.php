@@ -50,6 +50,11 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
     Route::prefix('staff')->name('staff.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+        Route::prefix('manual-ticket-assign')->name('manual_ticket_assign.')->group(function () {
+            Route::controller(StaffTicketController::class)->group(function () {
+                Route::get('/', 'ticketsToAssign')->name('to_assign');
+            });
+        });
         Route::prefix('tickets')->name('tickets.')->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
                 Route::get('/approved', 'approvedTickets')->name('approved_tickets');
@@ -181,9 +186,6 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                         // For edit service department admin
                         Route::get('/edit/{branch}/bu-departments', 'branchBUDepartments');
                     });
-                    Route::controller(UpdatePasswordController::class)->group(function () {
-                        Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
-                    });
                 });
                 // Agent Routes
                 Route::prefix('agent')->name('agent.')->group(function () {
@@ -223,9 +225,6 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                         Route::get('/edit/{branch}/bu-departments', 'getBUDepartments');
                         // Route::get('/assign/department/{department}/service-departments', 'getServiceDepartments');
                     });
-                    Route::controller(UpdatePasswordController::class)->group(function () {
-                        Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
-                    });
                 });
             });
 
@@ -251,12 +250,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
             });
 
             Route::prefix('service-level-agreements')->name('service_level_agreements.')->group(function () {
-                Route::controller(SLAController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::put('/{sla}/edit', 'update')->name('update');
-                    Route::delete('/{sla}/delete', 'delete')->name('delete');
-                });
+                Route::get('/', SLAController::class)->name('index');
             });
 
             Route::prefix('tag')->name('tag.')->group(function () {

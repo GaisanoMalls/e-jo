@@ -1,5 +1,5 @@
-<div class="modal edit__password__modal" id="editPasswordModal" aria-labelledby="editPasswordModalLabel"
-    aria-hidden="true">
+<div wire:ignore.self class="modal edit__password__modal" id="editPasswordModal"
+    aria-labelledby="editPasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">
@@ -8,17 +8,15 @@
                     <i class="fa-sharp fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form action="{{ route('staff.manage.user_account.approver.update_password', $approver->id) }}"
-                method="post">
-                @csrf
-                @method('PUT')
+            <form wire:submit.prevent="updatePassword({{ $serviceDeptAdmin->id }})">
                 <div class="modal-body modal__body">
                     <div class="row mb-2">
                         <div class="mb-2">
                             <label for="new_password" class="form-label form__field__label">New password</label>
-                            <input type="password" name="new_password" class="form-control form__field"
-                                id="new_password" value="" placeholder="Enter the new password">
-                            @error('new_password', 'updatePassword')
+                            <input type="password" wire:model.debounce.500ms="new_password"
+                                class="form-control form__field @error('new_password') is-invalid @enderror"
+                                id="new_password" placeholder="Enter the new password">
+                            @error('new_password')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 {{ $message }}
@@ -28,9 +26,10 @@
                         <div class="mb-2">
                             <label for="confirm_password" class="form-label form__field__label">Confirm
                                 password</label>
-                            <input type="password" name="confirm_password" class="form-control form__field"
-                                id="confirm_password" value="" placeholder="Re-type the new password to confirm">
-                            @error('confirm_password', 'updatePassword')
+                            <input type="password" wire:model.debounce.500ms="confirm_password"
+                                class="form-control form__field @error('confirm_password') is-invalid @enderror"
+                                id="confirm_password" placeholder="Re-type the new password to confirm">
+                            @error('confirm_password')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 {{ $message }}
@@ -41,9 +40,10 @@
                 </div>
                 <div class="col-12">
                     <div class="d-flex align-items-center gap-2">
-                        <button type="button" class="btn m-0 btn__update__password btn__cancel" id="btnCloseModal"
-                            data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn m-0 btn__update__password btn__send">Save new password</button>
+                        <button type="button" class="btn m-0 btn__update__password btn__cancel" data-bs-dismiss="modal"
+                            wire:click="clearFormFields">Cancel</button>
+                        <button type="submit" class="btn m-0 btn__update__password btn__send">Save new
+                            password</button>
                     </div>
                 </div>
             </form>

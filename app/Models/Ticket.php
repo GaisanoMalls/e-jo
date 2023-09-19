@@ -14,7 +14,6 @@ use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
 use App\Models\Tag;
 use App\Models\Team;
-use App\Models\TicketApproverHead;
 use App\Models\TicketFile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="mb-4 d-flex flex-wrap justify-content-between">
             <div class="d-flex align-items-center gap-4">
-                <h5 class="page__header__title">Viewed</h5>
+                <h5 class="page__header__title">Viewed Tickets</h5>
                 <small class="fw-semibold mb-1" id="countSelectedChbx" style="color: #d32839;"></small>
             </div>
             <div class="d-flex align-items-center justify-content-center">
@@ -58,7 +58,7 @@
                                     {{ $ticket->priorityLevel->name ?? '' }}</p>
                             </td>
                             <td class="custom__table__data py-0">
-                                @if ($ticket->approval_status === 'for_approval')
+                                @if ($ticket->approval_status === App\Models\ApprovalStatus::FOR_APPROVAL)
                                 <small class="rounded-5 my-auto"
                                     style="background-color: #9DA85C; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
                                     For Approval

@@ -58,9 +58,9 @@
                                 <p class="mb-0" style="color: {{ $ticket->priorityLevel->color }};">
                                     {{ $ticket->priorityLevel->name ?? '' }}</p>
                             </td>
-                            <td class="custom__table__data py-0">
-                                @if ($ticket->approval_status === 'for_approval')
-                                <small class="rounded-5 my-auto"
+                            <td class="custom__table__data">
+                                @if ($ticket->approval_status === App\Models\ApprovalStatus::FOR_APPROVAL)
+                                <small class="rounded-5"
                                     style="background-color: #9DA85C; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
                                     For Approval
                                 </small>

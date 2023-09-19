@@ -199,7 +199,7 @@
                     </div>
                     {{-- Replies/Comments --}}
                     @livewire('staff.ticket-replies', ['ticket' => $ticket])
-                    
+
                     @if ($ticket->status_id != App\Models\Status::CLOSED)
                     <button type="button"
                         class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2"

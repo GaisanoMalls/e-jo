@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePasswordRequest extends FormRequest
 {
-    protected $errorBag = 'updatePassword';
     /**
      * Determine if the user is authorized to make this request.
      *
