@@ -25,11 +25,11 @@ class UpdatePriorityLevel extends Component
             $this->ticket->update(['priority_level_id' => $this->priority_level]);
             $this->ticket->refresh();
             $newLevel = $this->ticket->priorityLevel->name;
+            ActivityLog::make($this->ticket->id, "changed the priority level from {$currentLevel} to {$newLevel}");
 
             $this->emit('loadPriorityLevel');
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Priority level has been changed');
-            ActivityLog::make($this->ticket->id, "changed the priority level from {$currentLevel} to {$newLevel}");
 
         } catch (\Exception $e) {
             dd($e->getMessage());
