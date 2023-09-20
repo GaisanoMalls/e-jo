@@ -14,14 +14,9 @@ class UserUpdatePassword extends Component
     public User $user;
     public $new_password, $confirm_password;
 
-    public function rules()
+    protected function rules()
     {
         return (new UpdatePasswordRequest())->rules();
-    }
-
-    public function messages()
-    {
-        return (new UpdatePasswordRequest())->messages();
     }
 
     public function updated($fields)
@@ -37,10 +32,10 @@ class UserUpdatePassword extends Component
 
     public function updatePassword(User $user)
     {
-        $this->validate();
+        $validatedData = $this->validate();
 
         try {
-            $this->updateUserPassword($user, $this->new_password, $this->confirm_password);
+            $this->updateUserPassword($user, $validatedData['new_password'], $validatedData['confirm_password']);
             $this->clearFormFields();
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Password has been updated.');

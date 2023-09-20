@@ -254,7 +254,7 @@ input[type="radio"]:checked {
     min-width: 90px;
 
     &:focus {
-        background-color: $color-1;
+        background-color: $color-1 !important;
         color: $white !important;
     }
 
@@ -1099,8 +1099,11 @@ a {
 
         .ticket__details__priority {
             font-weight: $fw-600;
-            color: red;
             font-size: $fs-13;
+        }
+
+        .btn__change__priority__level {
+            border: 0 !important;
         }
 
         .ticket__details__header {
@@ -2603,6 +2606,163 @@ input[type="checkbox"] {
             border: 1px solid $color-1;
         }
     }
+
+    .modal__confirm__delete__department {
+        .btn__confirm__modal {
+            @include generic.button-config;
+
+            &.btn__cancel__delete {
+                @include generic.form-button-cancel;
+            }
+
+            &.btn__confirm__delete {
+                @include generic.form-button-submit;
+            }
+        }
+    }
+}
+
+.branch__section {
+    .table__header {
+        padding: 20px 30px !important;
+
+        .table__name {
+            font-size: 0.938rem;
+            font-weight: 500;
+            padding: 0.6rem 1.8rem;
+            margin-left: -30px;
+            border-radius: 0 2px 2px 0;
+            color: #ffffff;
+            background-color: #9da85c;
+        }
+    }
+
+    .td__content {
+        padding: 9px 20px;
+        height: 50px;
+    }
+
+    .custom__table {
+        .department__admin__picture {
+            height: 35px;
+            width: 35px;
+            border-radius: $border-radius-9;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+            border: 2px solid #d9ddd9;
+            object-fit: cover;
+        }
+
+        .dept__admin__name {
+            font-weight: $fw-600;
+            font-size: $fs-13;
+            color: #212529;
+        }
+
+        .department__agent__picture {
+            height: 30px;
+            width: 30px;
+            object-fit: cover;
+            border: 3px solid $white;
+            margin-left: -13px;
+            border-radius: $border-radius-50-percent;
+        }
+    }
+
+    .branch__modal {
+        .modal__content {
+            padding: 2rem 2.3rem;
+            border: 0;
+            border-radius: $border-radius-9;
+
+            .modal__header {
+                .modal__title {
+                    font-size: $fs-18;
+                    font-weight: $fw-600;
+                }
+            }
+
+            .modal__body {
+                padding: 1.3rem 0 0.5rem 0;
+            }
+
+            .modal__footer {
+                .btn__modal__footer {
+                    @include generic.button-config;
+                    width: 6rem;
+
+                    &.btn__cancel {
+                        @include generic.form-button-cancel;
+                    }
+
+                    &.btn__send {
+                        @include generic.form-button-submit;
+                    }
+                }
+
+                .is__urgent__check {
+                    margin-left: -25px !important;
+                    margin-right: 9px;
+                }
+
+                .is__urgent__check__label {
+                    margin-top: 3px;
+                }
+            }
+
+            .form__field__label {
+                font-size: $fs-14;
+            }
+
+            .form__field {
+                padding: 0.75rem 1rem;
+                font-size: $fs-14;
+                border-radius: $border-radius-9;
+                border: 1px solid #e7e9eb;
+
+                &:focus {
+                    box-shadow: none;
+                    border-color: $color-1;
+                }
+            }
+        }
+    }
+
+    .assign__form__container {
+        .btn__branch__department__save {
+            @include generic.form-button-submit;
+        }
+
+        .btn__branch__department__cancel {
+            @include generic.form-button-cancel;
+        }
+    }
+
+    .department__button__tab {
+        color: $color-1;
+        font-weight: $fw-500;
+        padding: 0.7rem 1.6rem;
+        color: #686868;
+        font-size: $fs-14;
+        border-radius: $border-radius-10;
+
+        &:focus {
+            border: 1px solid $color-1;
+        }
+    }
+
+    .modal__confirm__delete__branch {
+        .btn__confirm__modal {
+            @include generic.button-config;
+
+            &.btn__cancel__delete {
+                @include generic.form-button-cancel;
+            }
+
+            &.btn__confirm__delete {
+                @include generic.form-button-submit;
+            }
+        }
+    }
 }
 
 .button__header {
@@ -3122,6 +3282,20 @@ input[type="checkbox"] {
             font-size: $fs-14;
             height: 39px;
             @include generic.button-config;
+        }
+    }
+
+    .modal__confirm__delete__sla {
+        .btn__confirm__modal {
+            @include generic.button-config;
+
+            &.btn__cancel__delete {
+                @include generic.form-button-cancel;
+            }
+
+            &.btn__confirm__delete {
+                @include generic.form-button-submit;
+            }
         }
     }
 }

@@ -38,10 +38,10 @@ class ActivityLog extends Model
         return $details;
     }
 
-    public static function make(int $ticket, string $description)
+    public static function make(int $ticket_id, string $description)
     {
         self::firstOrCreate([
-            'ticket_id' => $ticket,
+            'ticket_id' => $ticket_id,
             'user_id' => auth()->user()->id,
             'description' => $description,
         ]);

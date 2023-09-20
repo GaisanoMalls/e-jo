@@ -14,14 +14,9 @@ class ServiceDeptAdminUpdatePassword extends Component
     public User $serviceDeptAdmin;
     public $new_password, $confirm_password;
 
-    public function rules()
+    protected function rules()
     {
         return (new UpdatePasswordRequest())->rules();
-    }
-
-    public function messages()
-    {
-        return (new UpdatePasswordRequest())->messages();
     }
 
     public function updated($fields)
@@ -37,10 +32,10 @@ class ServiceDeptAdminUpdatePassword extends Component
 
     public function updatePassword(User $serviceDeptAdmin)
     {
-        $this->validate();
+        $validatedData = $this->validate();
 
         try {
-            $this->updateUserPassword($serviceDeptAdmin, $this->new_password, $this->confirm_password);
+            $this->updateUserPassword($serviceDeptAdmin, $validatedData['new_password'], $validatedData['confirm_password']);
             $this->clearFormFields();
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Password has been updated.');

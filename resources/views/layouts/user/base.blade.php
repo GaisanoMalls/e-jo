@@ -20,7 +20,6 @@
 
 <body>
     @include('layouts.user.includes.navbar')
-    @include('layouts.includes.toaster-message')
     @include('layouts.user.account.includes.confirm_logout')
     @include('layouts.user.includes.modals.create_ticket_modal')
     <div class="container mb-5 requester__section">

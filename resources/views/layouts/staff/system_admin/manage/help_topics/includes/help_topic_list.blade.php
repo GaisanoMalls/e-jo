@@ -30,7 +30,7 @@
             </td>
             <td>
                 <div class="d-flex align-items-center text-start td__content">
-                    <span>{{ $helpTopic->sla->time_unit }}</span>
+                    <span>{{ $helpTopic->sla->time_unit ?? '----' }}</span>
                 </div>
             </td>
             <td>

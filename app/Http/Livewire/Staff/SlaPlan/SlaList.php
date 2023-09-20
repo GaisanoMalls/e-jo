@@ -3,13 +3,16 @@
 namespace App\Http\Livewire\Staff\SlaPlan;
 
 use App\Http\Requests\SysAdmin\Manage\SLA\UpdateSLARequest;
+use App\Http\Traits\BasicModelQueries;
 use App\Models\ServiceLevelAgreement;
 use Livewire\Component;
 
 class SlaList extends Component
 {
+    use BasicModelQueries;
+
     public $serviceLevelAgreements = [];
-    public $slaEditId, $countdown_approach, $time_unit;
+    public $slaEditId, $slaDeleteId, $countdown_approach, $time_unit;
 
     protected $listeners = ['loadServiceLevelAgreements' => 'fetchServiceLevelAgreements'];
 
@@ -26,15 +29,15 @@ class SlaList extends Component
         $this->validateOnly($fields);
     }
 
+    public function fetchServiceLevelAgreements()
+    {
+        $this->serviceLevelAgreements = $this->queryServiceLevelAgreements();
+    }
+
     public function clearFormFields()
     {
         $this->reset();
         $this->resetValidation();
-    }
-
-    public function fetchServiceLevelAgreements()
-    {
-        $this->serviceLevelAgreements = ServiceLevelAgreement::orderBy('created_at', 'desc')->get();
     }
 
     public function editSLA(ServiceLevelAgreement $serviceLevelAgreement)
@@ -42,7 +45,8 @@ class SlaList extends Component
         $this->slaEditId = $serviceLevelAgreement->id;
         $this->countdown_approach = $serviceLevelAgreement->countdown_approach;
         $this->time_unit = $serviceLevelAgreement->time_unit;
-        $this->dispatchBrowserEvent("show-edit-sla-modal");
+        $this->dispatchBrowserEvent('show-edit-sla-modal');
+        $this->resetValidation();
     }
 
     public function updateSLA()
@@ -50,13 +54,33 @@ class SlaList extends Component
         $validatedData = $this->validate();
 
         try {
-            ServiceLevelAgreement::where('id', $this->slaEditId)
-                ->update($validatedData);
-
-            $this->reset();
+            ServiceLevelAgreement::find($this->slaEditId)->update($validatedData);
+            $this->clearFormFields();
             $this->fetchServiceLevelAgreements();
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('SLA successfully updated');
+
+        } catch (\Exception $e) {
+            flash()->addError('Oops, something went wrong');
+        }
+    }
+
+    public function deleteSLA(ServiceLevelAgreement $serviceLevelAgreement)
+    {
+        $this->slaDeleteId = $serviceLevelAgreement->id;
+        $this->countdown_approach = $serviceLevelAgreement->countdown_approach;
+        $this->time_unit = $serviceLevelAgreement->time_unit;
+        $this->dispatchBrowserEvent('show-delete-sla-modal');
+    }
+
+    public function delete()
+    {
+        try {
+            ServiceLevelAgreement::find($this->slaDeleteId)->delete();
+            $this->slaDeleteId = null;
+            $this->fetchServiceLevelAgreements();
+            $this->dispatchBrowserEvent('close-modal');
+            flash()->addSuccess('SLA successfully deleted');
 
         } catch (\Exception $e) {
             flash()->addError('Oops, something went wrong');

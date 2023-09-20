@@ -41,7 +41,7 @@
                                 <i class="bi bi-pencil"></i>
                             </button>
                             <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
-                                data-bs-target="#deleteSLAModal">
+                                data-bs-target="#deleteSLAModal" wire:click="deleteSLA({{ $sla->id }})">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -122,7 +122,7 @@
     </div>
 
     {{-- Delete SLA Modal --}}
-    <div wire:ignore.self class="modal modal__confirm__delete__tag" id="deleteSLAModal" tabindex="-1"
+    <div wire:ignore.self class="modal modal__confirm__delete__sla" id="deleteSLAModal" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
@@ -131,11 +131,9 @@
                         Confirm Delete
                     </h6>
                     <p class="mb-1" style="font-weight: 500; font-size: 15px;">
-                        Delete SLA
-                        <strong>
-                            {{ $countdown_approach }} - {{ $time_unit }}
-                        </strong>?
+                        Are you sure you want to delete this SLA?
                     </p>
+                    <strong>{{ $countdown_approach }} - {{ $time_unit }}</strong>
                 </div>
                 <hr>
                 <div class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
@@ -157,10 +155,15 @@
 <script>
     window.addEventListener('close-modal', event =>{
         $('#editSLAModal').modal('hide');
+        $('#deleteSLAModal').modal('hide');
     });
 
     window.addEventListener('show-edit-sla-modal', event =>{
         $('#editSLAModal').modal('show');
+    });
+
+    window.addEventListener('show-delete-sla-modal', event =>{
+        $('#deleteSLAModal').modal('show');
     });
 
 </script>

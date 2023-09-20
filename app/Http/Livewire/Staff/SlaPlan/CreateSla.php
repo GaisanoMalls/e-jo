@@ -15,19 +15,9 @@ class CreateSla extends Component
         return (new StoreSLARequest())->rules();
     }
 
-    public function messages()
-    {
-        return (new StoreSLARequest())->messages();
-    }
-
     public function updated($fields)
     {
         $this->validateOnly($fields);
-    }
-
-    public function render()
-    {
-        return view('livewire.staff.sla-plan.create-sla');
     }
 
     public function clearFormFields()
@@ -49,5 +39,10 @@ class CreateSla extends Component
         } catch (\Exception $e) {
             flash()->addError('Oops, something went wrong');
         }
+    }
+
+    public function render()
+    {
+        return view('livewire.staff.sla-plan.create-sla');
     }
 }

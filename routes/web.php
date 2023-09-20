@@ -9,7 +9,6 @@ use App\Http\Controllers\Staff\Approver\NotificationController as ApproverNotifi
 use App\Http\Controllers\Staff\DashboardController;
 use App\Http\Controllers\Staff\DirectoryController;
 use App\Http\Controllers\Staff\ServiceDeptAdmin\AnnouncementController;
-use App\Http\Controllers\Staff\ServiceDeptAdmin\TicketLevel1ApprovalController;
 use App\Http\Controllers\Staff\SysAdmin\AccountAgentController;
 use App\Http\Controllers\Staff\SysAdmin\AccountApproverController;
 use App\Http\Controllers\Staff\SysAdmin\AccountsController;
@@ -30,8 +29,6 @@ use App\Http\Controllers\User\AccountController as UserAccountSettingsController
 use App\Http\Controllers\User\Dashboard as UserDashboardController;
 use App\Http\Controllers\User\FeedbackController;
 use App\Http\Controllers\User\TicketsController as UserTicketsController;
-use App\Http\Controllers\UsersAccountController;
-use App\Http\Livewire\Staff\TicketReplies;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
@@ -105,42 +102,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
         // Manage (Admin Role)
         Route::prefix('manage')->name('manage.')->group(function () {
             Route::view('/', 'layouts.staff.system_admin.manage.manage_main')->name('home');
-            Route::prefix('branch')->name('branch.')->group(function () {
-                Route::controller(BranchController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::put('{branch}/update', 'update')->name('update');
-                    Route::delete('{branch}/delete', 'delete')->name('delete');
-                });
-            });
-            Route::prefix('bu-department')->name('bu_department.')->group(function () {
-                Route::controller(BUDepartmentController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::delete('/{buDepartment}/delete', 'delete')->name('delete');
-                    Route::put('/{buDepartment}/update', 'update')->name('update');
-                });
-            });
-            Route::prefix('service-department')->name('service_department.')->group(function () {
-                Route::controller(ServiceDepartmentController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::put('/{serviceDepartment}/update', 'update')->name('update');
-                    Route::delete('/{serviceDepartment}/delete', 'delete')->name('delete');
-                });
-            });
-            Route::prefix('team')->name('team.')->group(function () {
-                Route::controller(TeamController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::put('/{team}/update', 'update')->name('update');
-                    Route::delete('{team}/delete', 'delete')->name('delete');
-                });
-            });
-
             // Agents
             Route::view('/agent', 'layouts.staff.system_admin.manage.agents.agent_list')->name('agents');
-
             // User Accounts
             Route::prefix('user-accounts')->name('user_account.')->group(function () {
                 Route::controller(AccountsController::class)->group(function () {
@@ -151,7 +114,6 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                     Route::get('/requesters', 'users')->name('users');
 
                 });
-
                 // Approver Routes
                 Route::prefix('approver')->name('approver.')->group(function () {
                     Route::controller(AccountApproverController::class)->group(function () {
@@ -227,13 +189,36 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                     });
                 });
             });
-
             Route::prefix('roles-and-permissions')->name('roles_and_permissions.')->group(function () {
                 Route::controller(RolesAndPermissionsController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
                 });
             });
-
+            Route::prefix('service-level-agreements')->name('service_level_agreements.')->group(function () {
+                Route::get('/', SLAController::class)->name('index');
+            });
+            Route::prefix('branch')->name('branch.')->group(function () {
+                Route::get('/', BranchController::class)->name('index');
+            });
+            Route::prefix('bu-department')->name('bu_department.')->group(function () {
+                Route::controller(BUDepartmentController::class)->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/store', 'store')->name('store');
+                    Route::delete('/{buDepartment}/delete', 'delete')->name('delete');
+                    Route::put('/{buDepartment}/update', 'update')->name('update');
+                });
+            });
+            Route::prefix('service-department')->name('service_department.')->group(function () {
+                Route::get('/', ServiceDepartmentController::class)->name('index');
+            });
+            Route::prefix('team')->name('team.')->group(function () {
+                Route::controller(TeamController::class)->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/store', 'store')->name('store');
+                    Route::put('/{team}/update', 'update')->name('update');
+                    Route::delete('{team}/delete', 'delete')->name('delete');
+                });
+            });
             Route::prefix('help-topics')->name('help_topic.')->group(function () {
                 Route::controller(HelpTopicsController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
@@ -248,15 +233,9 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                     Route::get('/{helpTopic}/level-approvers', 'helpTopicApprovers');
                 });
             });
-
-            Route::prefix('service-level-agreements')->name('service_level_agreements.')->group(function () {
-                Route::get('/', SLAController::class)->name('index');
-            });
-
             Route::prefix('tag')->name('tag.')->group(function () {
                 Route::get('/', TagController::class)->name('index');
             });
-
             Route::prefix('ticket-statuses')->name('ticket_statuses.')->group(function () {
                 Route::controller(TicketStatusController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
@@ -266,7 +245,6 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 });
             });
         });
-
         // Directory Routes
         Route::prefix('directory')->name('directory.')->group(function () {
             Route::controller(DirectoryController::class)->group(function () {
@@ -294,7 +272,6 @@ Route::middleware(['auth', Role::approver()])->group(function () {
                 Route::put('{ticket}/update-status-as-viewed', 'ticketStatusToViewed');
             });
         });
-
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(ApproverTicketsController::class)->group(function () {
                 Route::get('/{ticket}/view', 'viewTicketDetails')->name('view_ticket_details');
@@ -303,7 +280,6 @@ Route::middleware(['auth', Role::approver()])->group(function () {
                 Route::post('/{ticket}/clarification/send', 'sendClarification')->name('send_clarification');
             });
         });
-
         Route::prefix('notifications')->name('notification.')->group(function () {
             Route::controller(ApproverNotificationController::class)->group(function () {
                 Route::post('/mark-all-as-read', 'markAllAsRead')->name('mark_all_as_read');

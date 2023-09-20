@@ -40,9 +40,15 @@ class AuthUser extends Component
 
     public function login()
     {
-        $this->validate();
+        $validatedData = $this->validate();
 
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password, 'is_active' => true])) {
+        if (
+            Auth::attempt([
+                'email' => $validatedData['email'],
+                'password' => $validatedData['password'],
+                'is_active' => true
+            ])
+        ) {
             session()->regenerate();
             return $this->redirectAuthenticatedWithRole();
         }

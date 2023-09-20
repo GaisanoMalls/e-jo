@@ -14,25 +14,31 @@ class Password extends Component
 
     public $current_password, $new_password, $confirm_password;
 
+    protected function rules()
+    {
+        return (new UpdatePasswordRequest())->rules();
+    }
+
     public function updated($fields)
     {
         $this->validateOnly($fields);
     }
 
-    public function rules()
+    public function clearFormFields()
     {
-        return (new UpdatePasswordRequest())->rules();
+        $this->reset();
+        $this->resetValidation();
     }
 
     public function savePassword()
     {
-        $this->validate();
+        $validatedData = $this->validate();
 
         User::where('id', auth()->user()->id)->update([
-            'password' => Hash::make($this->new_password)
+            'password' => Hash::make($validatedData['new_password'])
         ]);
 
-        $this->reset();
+        $this->clearFormFields();
         flash()->addSuccess('Your password has been updated.');
 
     }

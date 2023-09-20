@@ -65,10 +65,12 @@
                 </a>
                 @endif
 
-                <div class="d-flex align-items-center gap-3 mb-4">
-                    <p class="mb-0 ticket__details__status">{{ $ticket->status->name }}</p>
-                    <p class="mb-0 ticket__details__priority">{{ $ticket->priorityLevel->name }}</p>
-                    <h6 class="ticket__details__ticketnumber mb-0">Ticket: {{ $ticket->ticket_number }}</h6>
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <p class="mb-0 ticket__details__status">{{ $ticket->status->name }}</p>
+                        <h6 class="ticket__details__ticketnumber mb-0">Ticket: {{ $ticket->ticket_number }}</h6>
+                    </div>
+                    @livewire('staff.ticket.priority-level', ['ticket' => $ticket])
                 </div>
                 <div class="d-flex flex-wrap justify-content-between ticket__details__header">
                     <div class="mb-2">
@@ -387,6 +389,7 @@
     @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
     @include('layouts.staff.ticket.modal.ticket_actions_modal')
     @endif
+    @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])
 </div>
 {{-- @include('layouts.staff.ticket.modal.reply_ticket_modal')--}}
 @include('layouts.staff.ticket.modal.ticket_tag_modal')

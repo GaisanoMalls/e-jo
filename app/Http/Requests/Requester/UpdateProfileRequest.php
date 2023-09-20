@@ -34,11 +34,4 @@ class UpdateProfileRequest extends FormRequest
             'picture' => ['nullable', File::image()],
         ];
     }
-
-    public function messages()
-    {
-        return [
-            'picture.mimes' => 'This field only accepts an image.'
-        ];
-    }
 }

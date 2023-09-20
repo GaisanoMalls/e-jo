@@ -2,19 +2,34 @@
 
 namespace App\Http\Livewire\Staff\Tags;
 
+use App\Http\Traits\BasicModelQueries;
 use App\Models\Tag;
 use Livewire\Component;
 
 class TagList extends Component
 {
+    use BasicModelQueries;
+
     public $tags = [];
     public $name, $tagDeleteId, $tagUpdateId;
 
     protected $listeners = ["loadTags" => "fetchTags"];
 
+    protected function rules()
+    {
+        return [
+            'name' => 'required|unique:tags,name,' . $this->tagUpdateId,
+        ];
+    }
+
+    public function updated($field)
+    {
+        $this->validateOnly($field);
+    }
+
     public function fetchTags()
     {
-        $this->tags = Tag::orderBy('created_at', 'desc')->get();
+        $this->tags = $this->queryTags();
     }
 
     public function clearFormField()
@@ -23,37 +38,27 @@ class TagList extends Component
         $this->resetValidation();
     }
 
-    public function updated($field)
-    {
-        $this->validateOnly($field);
-    }
-
-    public function rules()
-    {
-        return [
-            'name' => 'required|unique:tags,name,' . $this->tagUpdateId,
-        ];
-    }
-
-    public function showEditTagModal(Tag $tag)
+    public function editTag(Tag $tag)
     {
         $this->tagUpdateId = $tag->id;
         $this->name = $tag->name;
         $this->dispatchBrowserEvent('show-edit-tag-modal');
+        $this->resetValidation();
     }
 
     public function updateTag()
     {
-        $this->validate();
+        $validatedData = $this->validate();
 
         try {
-            Tag::where('id', $this->tagUpdateId)
+            Tag::find($this->tagUpdateId)
                 ->update([
-                    'name' => $this->name,
-                    'slug' => \Str::slug($this->name)
+                    'name' => $validatedData['name'],
+                    'slug' => \Str::slug($validatedData['name'])
                 ]);
 
             $this->fetchTags();
+            $this->clearFormField();
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Tag updated');
 
@@ -62,7 +67,7 @@ class TagList extends Component
         }
     }
 
-    public function showDeleteTagModal(Tag $tag)
+    public function deleteTag(Tag $tag)
     {
         $this->tagDeleteId = $tag->id;
         $this->name = $tag->name;
@@ -73,10 +78,10 @@ class TagList extends Component
     {
         try {
             Tag::find($this->tagDeleteId)->delete();
-            $this->tagDeleteId = '';
+            $this->tagDeleteId = null;
             $this->fetchTags();
             $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('Tag deleted');
+            flash()->addSuccess('Tag successfully deleted');
 
         } catch (\Exception $e) {
             flash()->addError('Oops, something went wrong');

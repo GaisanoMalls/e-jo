@@ -11,14 +11,21 @@
                 </button>
             </div>
             <div class="modal__body">
-                @include('layouts.staff.ticket.forms.ticket_priority_forn')
-                @include('layouts.staff.ticket.forms.assign_ticket_to_another_agent_form')
+                <div class="my-2">
+                    <label class="ticket__actions__label mb-2">Assign to agent</label>
+                    <div class="input-group">
+                        <select class="form-select p-0 border-0 ticket__dropdown__select" id="selectAssignToAgent">
+                            <option value="" selected disabled>Choose an agent</option>
+                            @foreach ($approvers as $approver)
+                            <option value="{{ $approver->id }}">
+                                {{ $approver->profile->getFullName() }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 <button type="submit" class="btn mt-2 modal__footer__button modal__btnsubmit__bottom"
                     id="btnSaveAssignTicketToAnotherAgent">Save</button>
-                {{-- <div class="mt-4">
-                    @include('layouts.staff.ticket.forms.transfer_ticket_to_other_department_form')
-                    @include('layouts.staff.ticket.forms.transfer_ticket_to_other_branch_form')
-                </div> --}}
             </div>
         </div>
     </div>

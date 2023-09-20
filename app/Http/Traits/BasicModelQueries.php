@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Suffix;
+use App\Models\Tag;
 use App\Models\Team;
 use App\Models\User;
 
@@ -18,7 +19,7 @@ trait BasicModelQueries
 {
     public function queryServiceDepartments()
     {
-        return ServiceDepartment::orderBy('name', 'asc')->get();
+        return ServiceDepartment::orderBy('created_at', 'desc')->get();
     }
 
     public function queryLevelOfApprovals()
@@ -28,7 +29,7 @@ trait BasicModelQueries
 
     public function queryServiceLevelAgreements()
     {
-        return ServiceLevelAgreement::orderBy('time_unit', 'asc')->get();
+        return ServiceLevelAgreement::orderBy('created_at', 'desc')->get();
     }
 
     public function queryRoles()
@@ -43,7 +44,7 @@ trait BasicModelQueries
 
     public function queryBranches()
     {
-        return Branch::orderBy('name', 'asc')->get();
+        return Branch::orderBy('created_at', 'desc')->get();
     }
 
     public function queryBUDepartments()
@@ -79,6 +80,11 @@ trait BasicModelQueries
     public function queryUsers()
     {
         return User::requesters();
+    }
+
+    public function queryTags()
+    {
+        return Tag::orderBy('created_at', 'desc')->get();
     }
 
 }

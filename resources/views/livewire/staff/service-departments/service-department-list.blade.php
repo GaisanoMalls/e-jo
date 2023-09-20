@@ -1,48 +1,43 @@
 <div>
     <div wire:poll.visible.5s class="table-responsive custom__table">
-        @if (!$tags->isEmpty())
+        @if (!$serviceDepartments->isEmpty())
         <table class="table table-striped mb-0" id="table">
             <thead>
                 <tr>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Name</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Tickets</th>
+                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
                     <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                     <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($tags as $tag)
-                <tr wire:key="{{ $tag->id }}">
+                @foreach ($serviceDepartments as $serviceDepartment)
+                <tr>
                     <td>
                         <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $tag->name }}</span>
+                            <span>{{ $serviceDepartment->name }}</span>
                         </div>
                     </td>
                     <td>
                         <div class="d-flex align-items-center text-start td__content">
-                            {{-- <span>{{ $tag->tickets->count() }}</span> --}}
-                            <span>----</span>
+                            <span>{{ $serviceDepartment->dateCreated() }}</span>
                         </div>
                     </td>
                     <td>
                         <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $tag->dateCreated() }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $tag->dateUpdated() }}</span>
+                            <span>{{ $serviceDepartment->dateUpdated() }}</span>
                         </div>
                     </td>
                     <td>
                         <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                             <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
                                 type="button" class="btn action__button" data-bs-toggle="modal"
-                                data-bs-target="#updateTagModal" wire:click="editTag({{ $tag->id }})">
+                                data-bs-target="#editServiceDepartmentModal"
+                                wire:click="editServiceDepartment({{ $serviceDepartment->id }})">
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <button data-bs-toggle="modal" data-bs-target="#deleteTagModal"
-                                class="btn btn-sm action__button mt-0" wire:click="deleteTag({{ $tag->id }})">
+                            <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
+                                data-bs-target="#deleteServiceDepartmentModal"
+                                wire:click="deleteServiceDepartment({{ $serviceDepartment->id }})">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -58,42 +53,37 @@
         @endif
     </div>
 
-    {{-- Edit Tag Modal --}}
-    <div wire:ignore.self class="modal tag__modal" id="updateTagModal" tabindex="-1"
-        aria-labelledby="addNewTagModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+    {{-- Edit Service Department Modal --}}
+    <div wire:ignore.self class="modal department__modal" id="editServiceDepartmentModal" tabindex="-1"
+        aria-labelledby="editServiceDepartmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0">
-                    <h1 class="modal-title modal__title" id="addNewTagModalLabel">Edit tag</h1>
+                    <h1 class="modal-title modal__title" id="addNewDepartmentModalLabel">Edit service department</h1>
                     <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
                         <i class="fa-sharp fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <form wire:submit.prevent="updateTag">
+                <form wire:submit.prevent="updateServiceDepartment">
                     <div class="modal-body modal__body">
                         <div class="row mb-2">
-                            <div class="col-md-12">
-                                <div class="mb-2">
-                                    <label for="name" class="form-label form__field__label">Name</label>
-                                    <input type="text" class="form-control form__field" id="name"
-                                        placeholder="Enter tag name" wire:model.debounce.500ms="name">
-                                    @error('name')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                    @enderror
-                                </div>
+                            <div class="mb-2">
+                                <label for="name" class="form-label form__field__label">Name</label>
+                                <input type="text" wire:model="name"
+                                    class="form-control form__field @error('name') is-invalid @enderror" id="name"
+                                    placeholder="Enter service department name">
+                                @error('name')
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                                @enderror
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
                         <div class="d-flex align-items-center gap-2">
-                            <button type="submit"
-                                class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
-                                wire:click="$emit('loadTags')">
-                                Save
-                            </button>
+                            <button type="submit" class="btn m-0 btn__modal__footer btn__send">Save</button>
                             <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
                                 data-bs-dismiss="modal" wire:click="clearFormField">Cancel</button>
                         </div>
@@ -103,9 +93,9 @@
         </div>
     </div>
 
-    {{-- Delete Tag Modal --}}
-    <div wire:ignore.self class="modal modal__confirm__delete__tag" id="deleteTagModal" tabindex="-1"
-        aria-hidden="true">
+    {{-- Delete Service Department Modal --}}
+    <div wire:ignore.self class="modal modal__confirm__delete__department" id="deleteServiceDepartmentModal"
+        tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-body border-0 text-center pt-4 pb-1">
@@ -113,7 +103,7 @@
                         Confirm Delete
                     </h6>
                     <p class="mb-1" style="font-weight: 500; font-size: 15px;">
-                        Are you sure you want to delete the tag?
+                        Are you sure you want to delete this service department?
                     </p>
                     <strong>{{ $name }}</strong>
                 </div>
@@ -136,16 +126,17 @@
 @push('livewire-modal')
 <script>
     window.addEventListener('close-modal', event =>{
-        $('#updateTagModal').modal('hide');
-        $('#deleteTagModal').modal('hide');
+        $('#editServiceDepartmentModal').modal('hide');
+        $('#deleteServiceDepartmentModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-tag-modal', event =>{
-        $('#updateTagModal').modal('show');
+    window.addEventListener('show-edit-service-department-modal', event =>{
+        $('#editServiceDepartmentModal').modal('show');
     });
 
-    window.addEventListener('show-delete-tag-modal', event =>{
-        $('#deleteTagModal').modal('show');
+    window.addEventListener('show-delete-service-department-modal', event =>{
+        $('#deleteServiceDepartmentModal').modal('show');
     });
+
 </script>
 @endpush

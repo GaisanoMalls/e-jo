@@ -1,21 +1,18 @@
 <?php
 
-namespace App\Http\Livewire\Staff\Tags;
+namespace App\Http\Livewire\Staff\Branches;
 
-use App\Http\Requests\SysAdmin\Manage\Tag\StoreTagRequest;
-use App\Http\Traits\Utils;
-use App\Models\Tag;
+use App\Http\Requests\SysAdmin\Manage\Branch\StoreBranchRequest;
+use App\Models\Branch;
 use Livewire\Component;
 
-class CreateTag extends Component
+class CreateBranch extends Component
 {
-    use Utils;
-
     public $name;
 
     protected function rules()
     {
-        return (new StoreTagRequest())->rules();
+        return (new StoreBranchRequest())->rules();
     }
 
     public function updated($field)
@@ -29,19 +26,19 @@ class CreateTag extends Component
         $this->resetValidation();
     }
 
-    public function saveTag()
+    public function saveBranch()
     {
         $validatedData = $this->validate();
 
         try {
-            Tag::create([
+            Branch::create([
                 'name' => $validatedData['name'],
-                'slug' => \Str::slug($validatedData['name'])
+                'slug' => \Str::slug($validatedData['name']),
             ]);
 
-            $this->emit('loadTags');
             $this->clearFormField();
-            flash()->addSuccess('Tag created');
+            $this->emit('loadBranches');
+            flash()->addSuccess('New branch has been created.');
 
         } catch (\Exception $e) {
             flash()->addError('Oops, something went wrong');
@@ -50,6 +47,6 @@ class CreateTag extends Component
 
     public function render()
     {
-        return view('livewire.staff.tags.create-tag');
+        return view('livewire.staff.branches.create-branch');
     }
 }

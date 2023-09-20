@@ -20,12 +20,11 @@
 
 <body>
     <div class="page__wrapper compact__wrapper">
-        @include('layouts.includes.toaster-message')
         @include('layouts.staff.includes.header')
         <div class="page__body__wrapper">
             @include('layouts.staff.includes.sidebar')
             <div class="page__body">
-                <livewire:offline />
+                @livewire('offline')
                 <div class="container-fluid">
                     <div class="page__header">
                         <div class="row">
@@ -53,7 +52,7 @@
     <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
     <script src="{{ asset('js/roles/staff/dependent-dropdown.js') }}"></script>
-
+    @stack('sample')
     @stack('livewire-modal')
     @stack('modal-with-error')
     @stack('toastr-message-js')
