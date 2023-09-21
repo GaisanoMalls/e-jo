@@ -52,7 +52,7 @@
     <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
     <script src="{{ asset('js/roles/staff/dependent-dropdown.js') }}"></script>
-    @stack('sample')
+    @stack('livewire-select')
     @stack('livewire-modal')
     @stack('modal-with-error')
     @stack('toastr-message-js')

@@ -215,184 +215,43 @@
                 </div>
                 <div class="col-md-4">
                     <div class="container__ticket__details__right">
+                        @livewire('staff.ticket.ticket-details', ['ticket' => $ticket])
+                        @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN && $ticket->status_id
+                        != App\Models\Status::CLOSED)
                         <div class="card border-0 p-0 card__ticket__details">
-                            <div class="ticket__details__card__body__right">
-                                <div class="mb-3">
-                                    <label class="ticket__actions__label">Ticket Details</label>
-                                </div>
-                                <div class="d-flex flex-column gap-2">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <small class="ticket__details__info__label" style="font-weight: 500;">
-                                            Approval status:
-                                        </small>
-                                        <small class="ticket__details__info">
-                                            @if ($ticket->approval_status == App\Models\ApprovalStatus::APPROVED)
-                                            <i class="fa-solid fa-circle-check me-1"
-                                                style="color: green; font-size: 11px;"></i>
-                                            Approved
-                                            @elseif ($ticket->approval_status ==
-                                            App\Models\ApprovalStatus::FOR_APPROVAL)
-                                            <i class="fa-solid fa-paper-plane me-1"
-                                                style="color: orange; font-size: 11px;"></i>
-                                            For Approval
-                                            @elseif ($ticket->approval_status ==
-                                            App\Models\ApprovalStatus::DISAPPROVED)
-                                            <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
-                                            Disapproved
-                                            @else
-                                            ----
-                                            @endif
-                                        </small>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <small class="ticket__details__info__label"
-                                            style="font-weight: 500;">Branch:</small>
-                                        <small class="ticket__details__info">
-                                            <i class="fa-solid fa-location-dot me-1 text-muted"
-                                                style="font-size: 11px;"></i>
-                                            {{ $ticket->branch->name }}
-                                        </small>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <small class="ticket__details__info__label" style="font-weight: 500;">
-                                            Service department:</small>
-                                        <small class="ticket__details__info">
-                                            <i class="fa-solid fa-gears me-1 text-muted" style="font-size: 11px;"></i>
-                                            {{ $ticket->serviceDepartment->name }}
-                                        </small>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <small class="ticket__details__info__label"
-                                            style="font-weight: 500;">Team:</small>
-                                        <small class="ticket__details__info">
-                                            <i class="fa-solid fa-people-group me-1 text-muted"
-                                                style="font-size: 11px;"></i>
-                                            {{ $ticket->team->name ?? '----' }}
-                                        </small>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <small class="ticket__details__info__label" style="font-weight: 500;">
-                                            Help topic:
-                                        </small>
-                                        <small class="ticket__details__info">
-                                            <i class="bi bi-question-circle-fill me-1 text-muted"
-                                                style="font-size: 11px;"></i>
-                                            {{ $ticket->helpTopic->name }}
-                                        </small>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <small class="ticket__details__info__label" style="font-weight: 500;">
-                                            Assigned agent:
-                                        </small>
-                                        <small
-                                            class="ticket__details__info {{ $ticket->agent_id !== null ? '' : 'not__set'}}">
-                                            <i class="fa-solid fa-user-check me-1 text-muted"
-                                                style="font-size: 11px;"></i>
-                                            {{ $ticket->agent_id !== null
-                                            ? $ticket->agent->profile->getFullName()
-                                            : '----' }}
-                                        </small>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <small class="ticket__details__info__label" style="font-weight: 500;">
-                                            SLA:</small>
-                                        <small class="ticket__details__info">
-                                            <i class="fa-solid fa-clock me-1 text-muted" style="font-size: 11px;"></i>
-                                            {{ $ticket->sla->time_unit ?? '----' }}</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
-                        <div class="card border-0 p-0 card__ticket__details">
-                            <div class="ticket__details__card__body__right">
-                                <div class="mb-3">
-                                    <label class="ticket__actions__label">Ticket Actions</label>
-                                    <ul class="ticket__actions">
+                            <div class="d-flex flex-column gap-3 ticket__details__card__body__right">
+                                <label class="ticket__actions__label">Ticket Actions</label>
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                    <ul class="mb-0 ticket__actions" style="padding-left: 1.1rem;">
                                         <li>
-                                            <small>
-                                                Set ticket priority:
-                                                <span class="fw-semi-bold">
-                                                    <span class="priority__name">Low,</span>
-                                                    <span class="priority__name">Medium,</span>
-                                                    <span class="priority__name">High</span>
-                                                    <span>and</span>
-                                                    <span class="priority__name">Urgent</span>
-                                                </span>
-                                            </small>
+                                            <small>Move this ticket to other team.</small>
                                         </li>
                                         <li>
-                                            <small>
-                                                Assign this ticket to other agent.
-                                            </small>
+                                            <small>Assign this ticket to other agent.</small>
                                         </li>
                                     </ul>
+                                    <button class="btn btn-block bg-dark btn__ticket__set__action"
+                                        data-bs-toggle="modal" data-bs-target="#assignTicketModal">
+                                        Set Action
+                                    </button>
                                 </div>
-                                <button class="btn btn-block bg-dark btn__ticket__set__action" data-bs-toggle="modal"
-                                    data-bs-target="#ticketActionModalForm">
-                                    Set Action
-                                </button>
                             </div>
                         </div>
                         @endif
-                        <div class="card border-0 p-0 card__ticket__details card__ticket__details__right">
-                            <div class="ticket__details__card__body__right">
-                                <div class="mb-3 d-flex justify-content-between">
-                                    <small class="ticket__actions__label">Tags</small>
-                                    <a type="button" class="btn__add__tags" data-bs-toggle="modal"
-                                        data-bs-target="#ticketTagModalForm">
-                                        <i class="fa-solid fa-plus"></i>
-                                        Add
-                                    </a>
-                                </div>
-                                <a href="" class="btn btn-sm ticket__tag">System Issue</a>
-                                <a href="" class="btn btn-sm ticket__tag">BBLMS Account</a>
-                            </div>
-                        </div>
-                        <div class="card border-0 p-0 card__ticket__details card__ticket__details__right">
-                            <div class="ticket__details__card__body__right log__container">
-                                <div class="mb-3 d-flex justify-content-between">
-                                    <small class="ticket__actions__label">Ticket Activity Logs</small>
-                                </div>
-                                <div class="d-flex flex-column">
-                                    @foreach ( $ticket->activityLogs as $log)
-                                    <div class="d-flex justify-content-between py-3 log__list
-                                        {{ $ticket->activityLogs->count() > 1 ? 'border-bottom' : '' }}">
-                                        <div class="d-flex gap-3">
-                                            <i class="bi bi-clock-history log__icon"></i>
-                                            <div class="d-flex align-items-start flex-column">
-                                                <h6 class="mb-1 log__description">
-                                                    <strong class="causer__details">
-                                                        {{ $log->causerDetails() }}
-                                                    </strong>
-                                                    {{ $log->description }}
-                                                </h6>
-                                                <small class="log__date">
-                                                    {{ $log->dateCreated() }}
-                                                </small>
-                                            </div>
-                                        </div>
-                                        <small class="log__time">
-                                            {{ $log->created_at->diffForHumans(null, true) }}
-                                            ago
-                                        </small>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
+                        @livewire('staff.ticket.ticket-tag', ['ticket' => $ticket])
+                        @livewire('ticket-activity-logs', ['ticket' => $ticket])
                     </div>
                 </div>
             </div>
         </div>
     </div>
     @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
-    @include('layouts.staff.ticket.modal.ticket_actions_modal')
+    @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
     @endif
     @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])
 </div>
 {{-- @include('layouts.staff.ticket.modal.reply_ticket_modal')--}}
-@include('layouts.staff.ticket.modal.ticket_tag_modal')
+@livewire('staff.ticket.assign-tag', ['ticket' => $ticket])
 @include('layouts.staff.ticket.modal.preview_ticket_files_modal')
 @include('layouts.staff.ticket.offcanvas.reply_ticket_offcanvas')
 @endif

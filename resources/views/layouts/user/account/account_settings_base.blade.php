@@ -40,5 +40,3 @@ auth()->user()->profile->getFullName(),
     </div>
 </div>
 @endsection
-
-@include('layouts.includes.toaster-message')

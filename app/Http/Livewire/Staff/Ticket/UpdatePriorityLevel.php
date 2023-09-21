@@ -12,6 +12,7 @@ class UpdatePriorityLevel extends Component
     use BasicModelQueries;
 
     public Ticket $ticket;
+    public $priority_level;
 
     public function mount()
     {
@@ -21,27 +22,27 @@ class UpdatePriorityLevel extends Component
     public function updatePriorityLevel()
     {
         try {
-            $currentLevel = $this->ticket->priorityLevel->name;
-            $this->ticket->update(['priority_level_id' => $this->priority_level]);
-            $this->ticket->refresh();
-            $newLevel = $this->ticket->priorityLevel->name;
-            ActivityLog::make($this->ticket->id, "changed the priority level from {$currentLevel} to {$newLevel}");
+            if ($this->priority_level != $this->ticket->priority_level_id) {
+                $currentLevel = $this->ticket->priorityLevel->name;
+                $this->ticket->update(['priority_level_id' => $this->priority_level]);
+                $this->ticket->refresh();
+                $newLevel = $this->ticket->priorityLevel->name;
 
-            $this->emit('loadPriorityLevel');
-            $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('Priority level has been changed');
+                ActivityLog::make($this->ticket->id, "changed the priority level from {$currentLevel} to {$newLevel}");
 
+                $this->emit('loadPriorityLevel');
+                $this->emit('loadTicketActivityLogs');
+                $this->dispatchBrowserEvent('close-modal');
+            }
         } catch (\Exception $e) {
-            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
     public function render()
     {
-        $priorityLevels = $this->queryPriorityLevels();
         return view('livewire.staff.ticket.update-priority-level', [
-            'priorityLevels' => $priorityLevels
+            'priorityLevels' => $this->queryPriorityLevels(),
         ]);
     }
 }

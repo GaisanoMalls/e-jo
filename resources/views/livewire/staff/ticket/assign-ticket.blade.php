@@ -1,0 +1,112 @@
+<div>
+    <div wire:ignore.self class="modal ticket__actions__modal" id="assignTicketModal" tabindex="-1"
+        aria-labelledby="modalFormLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered custom__modal">
+            <div class="modal-content d-flex flex-column custom__modal__content">
+                <div class="modal__header d-flex justify-content-between align-items-center">
+                    <h6 class="modal__title">Ticket Assigning</h6>
+                    <button class="btn d-flex align-items-center justify-content-center modal__close__button"
+                        data-bs-dismiss="modal" id="btnCloseModal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="modal__body">
+                    <form wire:submit.prevent="saveAssignTicket">
+                        <div class="my-2">
+                            <label class="ticket__actions__label mb-2">Assign to team</label>
+                            <div>
+                                <div id="select-team" wire:ignore></div>
+                            </div>
+                            @error('team')
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ $message }}
+                            </span>
+                            @enderror
+                            <input type="hidden" value="{{ $currentTeam }}" id="current-team">
+                        </div>
+                        <div class="my-2">
+                            <label class="ticket__actions__label mb-2">Assign to agent</label>
+                            <div>
+                                <div id="select-agent" wire:ignore></div>
+                            </div>
+                            @error('agent')
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ $message }}
+                            </span>
+                            @enderror
+                            <input type="hidden" value="{{ $currentAgent }}" id="current-agent">
+                        </div>
+                        <button type="submit"
+                            class="btn mt-2 modal__footer__button modal__btnsubmit__bottom">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('livewire-select')
+<script>
+    let teamOption = [
+        @foreach ($teams as $team)
+            {
+                label: "{{ $team->name }}",
+                value: "{{ $team->id }}"
+            },
+        @endforeach
+    ];
+
+    VirtualSelect.init({
+        ele: '#select-team',
+        options: teamOption,
+        search: true,
+        markSearchResults: true,
+        hasOptionDescription: true
+    });
+
+    let teamSelect = document.querySelector('#select-team')
+    let currentTeam = document.querySelector('#current-team');
+
+    teamSelect.setValue(parseInt(currentTeam.value));
+
+    teamSelect.addEventListener('change', () => {
+        let teamId = parseInt(teamSelect.value);
+        @this.set('team', teamId);
+    });
+
+</script>
+
+<script>
+    let agentOption = [
+        @foreach($agents as $agent)
+            {
+                label: "{{ $agent->profile->getFullName() }}",
+                value:  "{{ $agent->id }}",
+                // description: '<i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>'
+                //                 + "{{ $agent->getTeams() }}"
+            },
+        @endforeach
+    ];
+
+    VirtualSelect.init({
+        ele: '#select-agent',
+        options: agentOption,
+        search: true,
+        markSearchResults: true,
+        hasOptionDescription: true
+    });
+
+    let agentSelect = document.querySelector('#select-agent')
+    let currentAgent = document.querySelector('#current-agent')
+
+    agentSelect.setValue(parseInt(currentAgent.value));
+
+    agentSelect.addEventListener('change', () => {
+        let agentId = parseInt(agentSelect.value);
+        @this.set('agent', agentId);
+    });
+
+</script>
+@endpush

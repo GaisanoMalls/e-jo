@@ -6916,7 +6916,7 @@ body {
 input[type=radio] {
   height: 17px;
   width: 17px;
-  border: 2px solid #ced4da;
+  border: 1px solid #ced4da;
 }
 
 input[type=radio]:checked {
@@ -7905,9 +7905,6 @@ a:hover {
   list-style-type: square !important;
   font-size: 0.938rem;
 }
-.ticket__section .card__ticket__details .ticket__details__card__body__right .ticket__actions .priority__name {
-  font-weight: 500;
-}
 .ticket__section .card__ticket__details .ticket__details__card__body__right .ticket__details__info__label {
   font-size: 0.813rem;
 }
@@ -8096,9 +8093,7 @@ input[type=checkbox]:checked + .form-check-label {
 
 .ticket__actions__label {
   font-size: 0.875rem;
-  font-weight: 600;
   margin-bottom: 3px;
-  color: #131313;
 }
 
 .ticket__actions__modal .ticket__dropdown__select {
@@ -8641,7 +8636,7 @@ input[type=checkbox]:checked + .form-check-label {
   color: rgb(41, 41, 41);
   padding: 6px 12px;
   white-space: nowrap;
-  margin-bottom: 7px;
+  margin-bottom: 5px;
 }
 .ticket__tag:hover {
   background-color: rgb(230, 230, 230);

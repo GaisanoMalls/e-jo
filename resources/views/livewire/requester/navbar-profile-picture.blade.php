@@ -1,4 +1,4 @@
-<a wire:poll.visible.7s class="nav-link mx-1" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<a class="nav-link mx-1" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     @if (auth()->user()->profile->picture)
     <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="nav__user__picture" alt="">
     @else

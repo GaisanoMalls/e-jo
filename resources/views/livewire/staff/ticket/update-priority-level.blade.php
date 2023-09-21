@@ -29,10 +29,12 @@
                             </div>
                         </div>
                         <button type="submit" class="btn mt-2 modal__footer__button modal__btnsubmit__bottom"
-                            wire:click="$emit('loadPriorityLevel')">Save</button>
+                            wire:click="$emit('loadPriorityLevel')"
+                            wire:click="$emit('loadTicketActivityLogs')">Save</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
