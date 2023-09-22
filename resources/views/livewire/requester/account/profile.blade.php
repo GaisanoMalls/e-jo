@@ -96,8 +96,7 @@
                         </div>
                     </div>
                     <div class="col-12 mt-3">
-                        <button wire:click="$emit('loadProfilePreview')" wire:click="$emit('loadNavProfilePic')"
-                            type="submit" class="btn w-auto btn__save__account">Save Profile</button>
+                        <button type="submit" class="btn w-auto btn__save__account">Save Profile</button>
                     </div>
                 </div>
             </div>

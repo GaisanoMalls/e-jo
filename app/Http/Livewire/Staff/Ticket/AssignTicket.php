@@ -14,15 +14,12 @@ class AssignTicket extends Component
     use BasicModelQueries;
 
     public Ticket $ticket;
-    public $agents, $teams, $agent, $team;
-    public $currentTeam, $currentAgent;
+    public $teams, $team, $agents, $agent;
 
     public function mount()
     {
         $this->agents = $this->fetchAgents();
         $this->teams = $this->fetchTeams();
-        $this->currentTeam = $this->ticket->team_id;
-        $this->currentAgent = $this->ticket->agent_id;
     }
 
     public function fetchAgents()
@@ -38,19 +35,21 @@ class AssignTicket extends Component
             ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))->get();
     }
 
+
     public function saveAssignTicket()
     {
         try {
             $this->ticket->update([
-                'team_id' => $this->team,
-                'agent_id' => $this->agent
+                'team_id' => $this->team ?? $this->ticket->team_id,
+                'agent_id' => $this->agent ?? $this->ticket->agent_id,
             ]);
 
-            $this->resetValidation();
             $this->emit('loadTicketDetails');
             $this->dispatchBrowserEvent('close-modal');
+            sleep(1);
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

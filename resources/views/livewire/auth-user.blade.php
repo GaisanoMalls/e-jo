@@ -27,7 +27,12 @@
             <span class="text-danger custom__field__message">{{ $message }}</span>
             @enderror
         </div>
-        <button type="submit" class="btn mt-3 w-100 btn-block login__button" {{ $hasEmptyFields ? 'disabled' : '' }}>
+        <button type="submit"
+            class="btn mt-3 w-100 btn-block d-flex align-items-center justify-content-center gap-2 login__button" {{
+            $hasEmptyFields ? 'disabled' : '' }}>
+            <span wire:loading wire:target="login" class="spinner-border spinner-border-sm" role="status"
+                aria-hidden="true">
+            </span>
             Sign In
         </button>
         <a href="{{ route('forgot_password') }}" class="mt-4 link">Forgot password?</a>

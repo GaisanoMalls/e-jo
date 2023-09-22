@@ -28,13 +28,16 @@
                                 @endforeach
                             </div>
                         </div>
-                        <button type="submit" class="btn mt-2 modal__footer__button modal__btnsubmit__bottom"
-                            wire:click="$emit('loadPriorityLevel')"
-                            wire:click="$emit('loadTicketActivityLogs')">Save</button>
+                        <button type="submit"
+                            class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
+                            <span wire:loading wire:target="updatePriorityLevel"
+                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                            </span>
+                            Save
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-

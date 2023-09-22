@@ -12,6 +12,7 @@ class AssignTag extends Component
 
     public Ticket $ticket;
     public $selectedTags = [];
+    protected $listeners = ['loadAssignTicketForm' => 'render'];
 
     public function saveAssignTicketTag()
     {
@@ -19,6 +20,8 @@ class AssignTag extends Component
             $this->ticket->tags()->sync($this->selectedTags);
             $this->emit('loadTicketTags');
             $this->dispatchBrowserEvent('close-modal');
+            sleep(1);
+
         } catch (\Exception $e) {
             flash()->addError('Oops, something went wrong');
         }

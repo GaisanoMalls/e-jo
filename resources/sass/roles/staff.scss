@@ -1372,7 +1372,7 @@ a {
 
             .ticket__details__info {
                 font-size: $fs-12;
-                padding: 2px 8px;
+                padding: 4px 10px;
                 border-radius: 5px;
                 background-color: #F3F3F3;
 
@@ -1427,6 +1427,21 @@ a {
             height: 2.3rem;
             width: 2.3rem;
             border: none !important;
+        }
+    }
+
+}
+
+.modal__confirm__close__ticket {
+    .btn__confirm__modal {
+        @include generic.button-config;
+
+        &.btn__cancel__delete {
+            @include generic.form-button-cancel;
+        }
+
+        &.btn__confirm__delete {
+            @include generic.form-button-submit;
         }
     }
 }
@@ -1595,9 +1610,15 @@ input[type="checkbox"] {
     margin-right: 20px !important;
 }
 
+.loading__spinner {
+    height: 12px;
+    width: 12px;
+}
+
 .ticket__actions__label {
     font-size: $fs-14;
-    margin-bottom: 3px;
+    color: #131313;
+    font-weight: 600;
 }
 
 .ticket__actions__modal {
@@ -1631,17 +1652,6 @@ input[type="checkbox"] {
     }
 }
 
-.offcanvas__close__button {
-    height: 30px;
-    width: 30px;
-    font-size: $fs-15;
-    border-radius: $border-radius-50 !important;
-
-    &:focus {
-        border: none;
-    }
-}
-
 .btn__reply__ticket {
     border-radius: $border-radius-9;
     font-size: $fs-14;
@@ -1659,18 +1669,6 @@ input[type="checkbox"] {
     i {
         font-size: $fs-12;
     }
-}
-
-.custom__reply__ticket__offcanvas {
-    border-radius: $border-radius-9 $border-radius-9 0 0;
-    transition: width 0.3s;
-    height: 80% !important;
-    width: 60% !important;
-}
-
-.custom__offcanvas__title {
-    font-size: $fs-16;
-    text-transform: capitalize;
 }
 
 .ticket__file__input {
@@ -2192,11 +2190,11 @@ input[type="checkbox"] {
 }
 
 .ticket__tag {
-    background-color: rgba(242, 242, 242, 1);
+    background-color: #9DA85C;
     border-radius: $border-radius-50;
     font-size: $fs-12;
-    color: rgba(41, 41, 41, 1);
-    padding: 6px 12px;
+    color: $white;
+    padding: 4px 12px;
     white-space: nowrap;
     margin-bottom: 5px;
 
@@ -3706,10 +3704,5 @@ input[type="checkbox"] {
                 margin-left: 0 !important;
             }
         }
-    }
-
-    .custom__reply__ticket__offcanvas {
-        width: 100% !important;
-        height: 100% !important;
     }
 }

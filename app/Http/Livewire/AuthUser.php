@@ -50,6 +50,7 @@ class AuthUser extends Component
             ])
         ) {
             session()->regenerate();
+            sleep(3);
             return $this->redirectAuthenticatedWithRole();
         }
 

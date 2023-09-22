@@ -33,6 +33,7 @@ class UpdatePriorityLevel extends Component
                 $this->emit('loadPriorityLevel');
                 $this->emit('loadTicketActivityLogs');
                 $this->dispatchBrowserEvent('close-modal');
+                sleep(1);
             }
         } catch (\Exception $e) {
             flash()->addError('Oops, something went wrong');

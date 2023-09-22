@@ -23,7 +23,6 @@
                                 {{ $message }}
                             </span>
                             @enderror
-                            <input type="hidden" value="{{ $currentTeam }}" id="current-team">
                         </div>
                         <div class="my-2">
                             <label class="ticket__actions__label mb-2">Assign to agent</label>
@@ -36,10 +35,15 @@
                                 {{ $message }}
                             </span>
                             @enderror
-                            <input type="hidden" value="{{ $currentAgent }}" id="current-agent">
                         </div>
                         <button type="submit"
-                            class="btn mt-2 modal__footer__button modal__btnsubmit__bottom">Save</button>
+                            class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom"
+                            id="saveAssignTicketButton">
+                            <span wire:loading wire:target="saveAssignTicket" class="spinner-border spinner-border-sm"
+                                role="status" aria-hidden="true">
+                            </span>
+                            Save
+                        </button>
                     </form>
                 </div>
             </div>
@@ -63,22 +67,17 @@
         options: teamOption,
         search: true,
         markSearchResults: true,
-        hasOptionDescription: true
+        hasOptionDescription: true,
     });
 
-    let teamSelect = document.querySelector('#select-team')
-    let currentTeam = document.querySelector('#current-team');
-
-    teamSelect.setValue(parseInt(currentTeam.value));
+    let teamSelect = document.querySelector('#select-team');
 
     teamSelect.addEventListener('change', () => {
         let teamId = parseInt(teamSelect.value);
         @this.set('team', teamId);
     });
 
-</script>
 
-<script>
     let agentOption = [
         @foreach($agents as $agent)
             {
@@ -98,15 +97,17 @@
         hasOptionDescription: true
     });
 
-    let agentSelect = document.querySelector('#select-agent')
-    let currentAgent = document.querySelector('#current-agent')
-
-    agentSelect.setValue(parseInt(currentAgent.value));
+    let agentSelect = document.querySelector('#select-agent');
 
     agentSelect.addEventListener('change', () => {
         let agentId = parseInt(agentSelect.value);
         @this.set('agent', agentId);
     });
 
+    const saveAssignTicketButton = document.querySelector('#saveAssignTicketButton');
+    saveAssignTicketButton.addEventListener('click', function () {
+        teamSelect.reset();
+        agentSelect.reset();
+    })
 </script>
 @endpush

@@ -3,9 +3,6 @@
         <div class="d-flex align-items-center gap-2" style="color: {{ $ticket->priorityLevel->color }};">
             <i class="bi bi-flag-fill"></i>
             <p class="mb-0 ticket__details__priority">{{ $ticket->priorityLevel->name }}</p>
-            <div wire:loading>
-                <i class='bx bx-loader bx-spin text-dark'></i>
-            </div>
         </div>
         @if ($ticket->status_id != App\Models\Status::CLOSED && $ticket->approval_status !=
         App\Models\ApprovalStatus::DISAPPROVED )

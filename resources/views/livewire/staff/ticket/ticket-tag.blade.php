@@ -2,16 +2,23 @@
     <div class="card border-0 p-0 card__ticket__details card__ticket__details__right">
         <div class="ticket__details__card__body__right">
             <div class="mb-3 d-flex justify-content-between">
-                <small class="ticket__actions__label">Tags</small>
+                <div class="d-flex align-items-center gap-2 mb-">
+                    <small class="ticket__actions__label">Tags</small>
+                    <div wire:loading class="spinner-border spinner-border-sm loading__spinner" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                @if ($ticket->status_id != \App\Models\Status::CLOSED)
                 <button type="button" class="btn__add__tags" data-bs-toggle="modal" data-bs-target="#ticketTagModal">
                     <i class="fa-solid fa-plus"></i>
                     Add
                 </button>
+                @endif
             </div>
             @if (!$ticket->tags->isEmpty())
             <div class="d-flex flex-wrap align-items-center gap-2">
                 @foreach ($ticket->tags as $tag)
-                <a href="" class="btn btn-sm ticket__tag">{{ $tag->name }}</a>
+                <a href="" class="btn btn-sm shadow-sm ticket__tag">{{ $tag->name }}</a>
                 @endforeach
             </div>
             @else

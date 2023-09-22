@@ -32,7 +32,7 @@
                         <div class="d-flex align-items-center gap-2">
                             <button type="submit"
                                 class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__modal__footer btn__send"
-                                wire:click="$emit('loadTags')" wire:loading.attr="disabled">
+                                wire:loading.attr="disabled">
                                 Save
                             </button>
                             <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"

@@ -67,7 +67,7 @@
 
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
                     <div class="d-flex align-items-center gap-3">
-                        <p class="mb-0 ticket__details__status">{{ $ticket->status->name }}</p>
+                        @livewire('staff.ticket.load-close-ticket-status-header-text', ['ticket' => $ticket])
                         <h6 class="ticket__details__ticketnumber mb-0">Ticket: {{ $ticket->ticket_number }}</h6>
                     </div>
                     @livewire('staff.ticket.priority-level', ['ticket' => $ticket])
@@ -79,8 +79,17 @@
                             {{ $ticket->created_at->format('D') }} @ {{ $ticket->created_at->format('g:i A') }}</small>
                     </div>
                     <div class="d-flex flex-wrap justify-content-center gap-3 gap-lg-4 gap-xl-4">
-
-                        @if (auth()->user()->role_id == App\Models\Role::AGENT)
+                        @livewire('staff.ticket.load-reply-button-header', ['ticket' => $ticket])
+                        <div class="d-flex flex-column">
+                            <button
+                                class="btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
+                                data-bs-toggle="modal" data-bs-target="#" type="submit">
+                                <i class="bi bi-star"></i>
+                            </button>
+                            <small class="ticket__details__topbuttons__label">Bookmark</small>
+                        </div>
+                        @if (auth()->user()->role_id == App\Models\Role::AGENT && $ticket->status_id !=
+                        App\Models\Status::CLOSED)
                         {{-- SHOW "Claim" BUTTON FOR AGENT USER ONLY --}}
                         <div class="d-flex flex-column">
                             @if ($ticket->status_id == App\Models\Status::CLAIMED)
@@ -120,35 +129,7 @@
                         </div>
                         @endif
 
-                        @if ($ticket->status_id == App\Models\Status::CLOSED)
-                        <div class="d-flex flex-column">
-                            <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__close closed d-flex text-white
-                                align-items-center justify-content-center"
-                                style="background-color: {{ $ticket->status->color }} !important;">
-                                <i class="fa-solid fa-check"></i>
-                            </button>
-                            <small class="ticket__details__topbuttons__label fw-bold">Closed</small>
-                        </div>
-                        @else
-                        <div class="d-flex flex-column">
-                            <form action="{{ route('staff.ticket.close_ticket', $ticket->id) }}" method="post">
-                                @csrf
-                                @method('PUT')
-                                <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex
-                                    align-items-center justify-content-center" type="submit">
-                                    <i class="fa-solid fa-check"></i>
-                                </button>
-                            </form>
-                            <small class="ticket__details__topbuttons__label">Close</small>
-                        </div>
-                        @endif
-                        {{-- <div class="d-flex flex-column">
-                            <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__bookmark d-flex
-                                align-items-center justify-content-center" type="submit">
-                                <i class="fa-solid fa-bookmark"></i>
-                            </button>
-                            <small class="ticket__details__topbuttons__label">Bookmark</small>
-                        </div> --}}
+                        @livewire('staff.ticket.load-close-status-button-header', ['ticket' => $ticket])
                     </div>
                 </div>
             </div>
@@ -245,19 +226,23 @@
             </div>
         </div>
     </div>
+
     @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
     @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
     @endif
     @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])
+
 </div>
-{{-- @include('layouts.staff.ticket.modal.reply_ticket_modal')--}}
+
+@livewire('staff.ticket.reply-ticket', ['ticket' => $ticket])
 @livewire('staff.ticket.assign-tag', ['ticket' => $ticket])
+@livewire('staff.ticket.close-ticket', ['ticket' => $ticket])
 @include('layouts.staff.ticket.modal.preview_ticket_files_modal')
-@include('layouts.staff.ticket.offcanvas.reply_ticket_offcanvas')
+
 @endif
 @endsection
 
-@if ($errors->storeTicketReply->any())
+{{-- @if ($errors->storeTicketReply->any())
 @push('modal-with-error')
 <script>
     $(function () {
@@ -267,4 +252,4 @@
 
 </script>
 @endpush
-@endif
+@endif --}}

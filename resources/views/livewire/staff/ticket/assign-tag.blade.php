@@ -5,6 +5,10 @@
             <div class="modal-content custom__modal__content">
                 <div class="modal__header d-flex justify-content-between align-items-center">
                     <h6 class="modal__title">Ticket Tagging</h6>
+                    <button class="btn d-flex align-items-center justify-content-center modal__close__button"
+                        data-bs-dismiss="modal" id="btnCloseModal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
                 <div class="modal__body">
                     <form wire:submit.prevent="saveAssignTicketTag">
@@ -19,10 +23,14 @@
                                 {{ $message }}
                             </span>
                             @enderror
-                            <input type="hidden" value="{{ $ticket->tags->pluck('id') }}" id="current-tags">
                         </div>
-                        <button type="submit" class="btn mt-2 modal__footer__button modal__btnsubmit__bottom"
-                            wire:click="$emit('loadTicketTags')">Save</button>
+                        <button type="submit"
+                            class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
+                            <span wire:loading wire:target="saveAssignTicketTag"
+                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                            </span>
+                            Save
+                        </button>
                     </form>
                 </div>
             </div>
@@ -48,14 +56,12 @@
         multiple: true,
         showValueAsTags: true,
         markSearchResults: true,
-        hasOptionDescription: true
+        hasOptionDescription: true,
+        popupDropboxBreakpoint: '3000px',
     });
 
     let tagSelect = document.querySelector('#select-tag')
-    let currentTags = document.querySelector('#current-tags');
-
-    //TODO - Not yet solved.
-    tagSelect.selectedValue([currentTags.value]);
+    tagSelect.setValue({{ $ticket->tags->pluck('id') }});
 
     tagSelect.addEventListener('change', () => {
         let tagId = tagSelect.value;

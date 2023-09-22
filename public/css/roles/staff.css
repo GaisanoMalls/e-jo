@@ -7910,7 +7910,7 @@ a:hover {
 }
 .ticket__section .card__ticket__details .ticket__details__card__body__right .ticket__details__info {
   font-size: 0.75rem;
-  padding: 2px 8px;
+  padding: 4px 10px;
   border-radius: 5px;
   background-color: #F3F3F3;
 }
@@ -7955,6 +7955,32 @@ a:hover {
   height: 2.3rem;
   width: 2.3rem;
   border: none !important;
+}
+
+.modal__confirm__close__ticket .btn__confirm__modal {
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+}
+.modal__confirm__close__ticket .btn__confirm__modal.btn__cancel__delete {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  border: 1px solid #e7e9eb;
+  background-color: transparent;
+  color: #d32839;
+  font-weight: 500;
+}
+.modal__confirm__close__ticket .btn__confirm__modal.btn__confirm__delete {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  background-color: #d32839;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
 }
 
 .log__container .log__icon {
@@ -8091,9 +8117,15 @@ input[type=checkbox]:checked + .form-check-label {
   margin-right: 20px !important;
 }
 
+.loading__spinner {
+  height: 12px;
+  width: 12px;
+}
+
 .ticket__actions__label {
   font-size: 0.875rem;
-  margin-bottom: 3px;
+  color: #131313;
+  font-weight: 600;
 }
 
 .ticket__actions__modal .ticket__dropdown__select {
@@ -8123,16 +8155,6 @@ input[type=checkbox]:checked + .form-check-label {
   border: none;
 }
 
-.offcanvas__close__button {
-  height: 30px;
-  width: 30px;
-  font-size: 0.938rem;
-  border-radius: 3.125rem !important;
-}
-.offcanvas__close__button:focus {
-  border: none;
-}
-
 .btn__reply__ticket {
   border-radius: 0.563rem;
   font-size: 0.875rem;
@@ -8148,18 +8170,6 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .btn__reply__ticket i {
   font-size: 0.75rem;
-}
-
-.custom__reply__ticket__offcanvas {
-  border-radius: 0.563rem 0.563rem 0 0;
-  transition: width 0.3s;
-  height: 80% !important;
-  width: 60% !important;
-}
-
-.custom__offcanvas__title {
-  font-size: 1rem;
-  text-transform: capitalize;
 }
 
 .ticket__file__input {
@@ -8630,11 +8640,11 @@ input[type=checkbox]:checked + .form-check-label {
 }
 
 .ticket__tag {
-  background-color: rgb(242, 242, 242);
+  background-color: #9DA85C;
   border-radius: 3.125rem;
   font-size: 0.75rem;
-  color: rgb(41, 41, 41);
-  padding: 6px 12px;
+  color: #ffffff;
+  padding: 4px 12px;
   white-space: nowrap;
   margin-bottom: 5px;
 }
@@ -10046,9 +10056,5 @@ input[type=checkbox]:checked + .form-check-label {
   .page__wrapper .page__body__wrapper .page__body {
     width: 100% !important;
     margin-left: 0 !important;
-  }
-  .custom__reply__ticket__offcanvas {
-    width: 100% !important;
-    height: 100% !important;
   }
 }

@@ -11,6 +11,18 @@ class TicketDetails extends Component
 
     protected $listeners = ['loadTicketDetails' => 'render'];
 
+    public function removeAssingedTeam()
+    {
+        $this->ticket->update(['team_id' => null]);
+        $this->emit('loadTicketDetails');
+    }
+
+    public function removeAssignedAgent()
+    {
+        $this->ticket->update(['agent_id' => null]);
+        $this->emit('loadTicketDetails');
+    }
+
     public function render()
     {
         return view('livewire.staff.ticket.ticket-details');

@@ -54,8 +54,8 @@
     <script src="{{ asset('js/roles/staff/dependent-dropdown.js') }}"></script>
     @stack('livewire-select')
     @stack('livewire-modal')
+    @stack('livewire-textarea')
     @stack('modal-with-error')
-    @stack('toastr-message-js')
     <script>
         var table = document.getElementById('table');
         var options = {

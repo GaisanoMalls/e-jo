@@ -1,10 +1,13 @@
 <div>
     <div class="card border-0 p-0 card__ticket__details">
         <div class="ticket__details__card__body__right">
-            <div class="mb-3">
-                <label class="ticket__actions__label">Ticket Details</label>
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <small class="ticket__actions__label">Ticket Details</small>
+                <div wire:loading class="spinner-border spinner-border-sm loading__spinner" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
-            <div class="d-flex flex-column gap-2">
+            <div wire:loading.class="text-muted" class="d-flex flex-column gap-2">
                 <div class="d-flex align-items-center justify-content-between">
                     <small class="ticket__details__info__label" style="font-weight: 500;">
                         Approval status:
@@ -43,9 +46,13 @@
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                     <small class="ticket__details__info__label" style="font-weight: 500;">Team:</small>
-                    <small class="ticket__details__info">
+                    <small class="position-relative ticket__details__info">
                         <i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->team->name ?? '----' }}
+                        @if ($ticket->team_id)
+                        <i wire:click="removeAssingedTeam" class="bi bi-x ms-2 text-danger position-absolute"
+                            style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
+                        @endif
                     </small>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
@@ -61,11 +68,16 @@
                     <small class="ticket__details__info__label" style="font-weight: 500;">
                         Assigned agent:
                     </small>
-                    <small class="ticket__details__info {{ $ticket->agent_id != null ? '' : 'not__set'}}">
+                    <small
+                        class="position-relative ticket__details__info {{ $ticket->agent_id != null ? '' : 'not__set'}}">
                         <i class="fa-solid fa-user-check me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->agent_id != null
                         ? $ticket->agent->profile->getFullName()
                         : '----' }}
+                        @if ($ticket->agent_id)
+                        <i wire:click="removeAssignedAgent" class="bi bi-x ms-2 text-danger position-absolute"
+                            style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
+                        @endif
                     </small>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
