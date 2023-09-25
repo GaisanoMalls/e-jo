@@ -44,8 +44,8 @@ class ReplyTicket extends Component
                 'description' => $validatedData['description']
             ]);
 
-            if ($this->replyFiles) {
-                foreach ($this->replyFiles as $uploadedReplyFile) {
+            if ($validatedData['replyFiles']) {
+                foreach ($validatedData['replyFiles'] as $uploadedReplyFile) {
                     $fileName = $uploadedReplyFile->getClientOriginalName();
                     $fileAttachment = Storage::putFileAs("public/ticket/{$this->ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(), $uploadedReplyFile, $fileName);
 
