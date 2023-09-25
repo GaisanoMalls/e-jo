@@ -13,7 +13,6 @@ class AuthUser extends Component
 
     public string $email = "";
     public string $password = "";
-    public $hasEmptyFields = false;
 
     protected function rules()
     {
@@ -30,14 +29,6 @@ class AuthUser extends Component
         $this->validateOnly($fields);
     }
 
-
-    public function checkEmptyFields()
-    {
-        (empty($this->email) || empty($this->password))
-            ? $this->hasEmptyFields = true
-            : $this->hasEmptyFields = false;
-    }
-
     public function login()
     {
         $validatedData = $this->validate();
@@ -50,7 +41,7 @@ class AuthUser extends Component
             ])
         ) {
             session()->regenerate();
-            sleep(3);
+            sleep(1);
             return $this->redirectAuthenticatedWithRole();
         }
 
@@ -61,7 +52,6 @@ class AuthUser extends Component
 
     public function render()
     {
-        $this->checkEmptyFields();
         return view('livewire.auth-user');
     }
 }

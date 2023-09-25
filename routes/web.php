@@ -70,12 +70,10 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
                 Route::get('/{ticket}/view', 'viewTicket')->name('view_ticket');
-                Route::post('/{ticket}/reply/store', 'replyTicket')->name('storeTicketReply');
             });
             Route::controller(AgentTicketController::class)->group(function () {
                 Route::put('{ticket}/claim', 'claimTicket')->name('claim_ticket');
                 Route::put('{ticket}/claim', 'ticketDetialsClaimTicket')->name('ticket_details_claim_ticket');
-                Route::put('{ticket}/close', 'closeTicket')->name('close_ticket');
             });
         });
 
@@ -269,14 +267,11 @@ Route::middleware(['auth', Role::approver()])->group(function () {
                 Route::get('/approved', 'approvedTickets')->name('approved');
                 Route::get('/disapproved', 'disapprovedTickets')->name('disapproved');
                 Route::get('/on-process', 'onProcessTickets')->name('on_process');
-                Route::put('{ticket}/update-status-as-viewed', 'ticketStatusToViewed');
             });
         });
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(ApproverTicketsController::class)->group(function () {
                 Route::get('/{ticket}/view', 'viewTicketDetails')->name('view_ticket_details');
-                Route::put('/{ticket}/approve', 'ticketDetialsApproveTicket')->name('approve_ticket');
-                Route::put('/{ticket}/disapprove', 'ticketDetialsDisapproveTicket')->name('disapprove_ticket');
                 Route::post('/{ticket}/clarification/send', 'sendClarification')->name('send_clarification');
             });
         });

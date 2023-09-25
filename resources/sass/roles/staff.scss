@@ -1208,10 +1208,21 @@ a {
         }
 
         .card__ticket__details__right {
-            .btn__add__tags {
+
+            .btn__add__tags,
+            .btn__clear__tags {
                 font-size: $fs-12;
                 border: none;
                 background-color: transparent;
+                font-weight: $fw-500;
+            }
+
+            .btn__add__tags {
+                color: $color-1;
+            }
+
+            .btn__clear__tags {
+                color: #FF0808;
             }
         }
     }
@@ -1649,25 +1660,6 @@ input[type="checkbox"] {
 
     &:focus {
         border: none;
-    }
-}
-
-.btn__reply__ticket {
-    border-radius: $border-radius-9;
-    font-size: $fs-14;
-    padding: 0.45rem 0.8rem;
-    font-weight: $fw-500;
-    box-shadow: $button-box-shadow;
-    background-color: #00695b;
-    color: $white;
-
-    &:hover {
-        background-color: #00695b;
-        color: $white;
-    }
-
-    i {
-        font-size: $fs-12;
     }
 }
 
@@ -2190,16 +2182,46 @@ input[type="checkbox"] {
 }
 
 .ticket__tag {
-    background-color: #9DA85C;
+    background-color: #1f723f;
     border-radius: $border-radius-50;
     font-size: $fs-12;
     color: $white;
-    padding: 4px 12px;
+    padding: 3px 3px 3px 12px;
     white-space: nowrap;
     margin-bottom: 5px;
 
     &:hover {
-        background-color: rgba(230, 230, 230, 1);
+        background-color: #196837 !important;
+
+        &>.tag__link {
+
+            color: white !important;
+        }
+
+        &>.remove__tag i {
+            color: #39925b;
+        }
+
+        &>.remove__tag {
+            background-color: #39925b;
+
+            i {
+                color: white !important;
+            }
+        }
+    }
+
+    .remove__tag {
+        background-color: #39925b;
+        border-radius: 50%;
+        height: 17px;
+        width: 17px;
+        color: white;
+        font-size: 16px;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 }
 
@@ -3656,23 +3678,6 @@ input[type="checkbox"] {
         -webkit-animation-duration: 0.3s;
         animation-fill-mode: both;
         -webkit-animation-fill-mode: both;
-    }
-
-    .btn__reply__ticket {
-        .lbl__reply {
-            display: none !important;
-        }
-    }
-
-    .btn__reply__ticket.btn__reply__ticket__mobile {
-        position: fixed !important;
-        bottom: 11px;
-        right: 30px;
-        z-index: 1;
-        border-radius: $border-radius-50 !important;
-        height: 3rem;
-        width: 3rem;
-        opacity: 0.8;
     }
 
     .page__body {

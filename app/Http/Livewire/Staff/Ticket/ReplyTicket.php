@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Requests\StaffReplyTicketRequest;
+use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Reply;
 use App\Models\ReplyFile;
@@ -15,7 +16,7 @@ use Livewire\WithFileUploads;
 
 class ReplyTicket extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, Utils;
 
     public Ticket $ticket;
     public $description, $replyFiles = [];
@@ -60,6 +61,7 @@ class ReplyTicket extends Component
             $this->emit('loadTicketReplies');
             $this->emit('loadTicketStatusTextHeader');
             $this->dispatchBrowserEvent('close-modal');
+
             ActivityLog::make($this->ticket->id, "replied to {$this->ticket->user->profile->getFullName()}");
         });
     }

@@ -29,8 +29,7 @@
                     <tbody>
                         @foreach ($forApprovalTickets as $ticket)
                         @if ($ticket->approval_status === App\Models\ApprovalStatus::FOR_APPROVAL)
-                        <tr class="clickable_tr" data-ticket-id="{{ $ticket->id }}"
-                            onclick="window.location.href='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
+                        <tr wire:key="seen-ticket-{{ $ticket->id }}" wire:click="seenTicket({{ $ticket->id }})">
                             <td class="custom__table__data">
                                 <div class="ticket__list__status__line"
                                     style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>

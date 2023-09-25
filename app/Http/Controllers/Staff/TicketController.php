@@ -113,41 +113,6 @@ class TicketController extends Controller
         );
     }
 
-    public function replyTicket(StaffReplyTicketRequest $request, Ticket $ticket)
-    {
-        try {
-            DB::transaction(function () use ($request, $ticket) {
-                $ticket->update(['status_id' => Status::ON_PROCESS]);
-
-                $reply = Reply::create([
-                    'user_id' => auth()->user()->id,
-                    'ticket_id' => $ticket->id,
-                    'description' => $request->description
-                ]);
-
-                if ($request->hasFile('replyFiles')) {
-                    foreach ($request->file('replyFiles') as $uploadedReplyFile) {
-                        $fileName = $uploadedReplyFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs("public/ticket/{$ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(), $uploadedReplyFile, $fileName);
-
-                        $replyFile = new ReplyFile();
-                        $replyFile->file_attachment = $fileAttachment;
-                        $replyFile->reply_id = $reply->id;
-
-                        $reply->fileAttachments()->save($replyFile);
-                    }
-                }
-
-                ActivityLog::make($ticket->id, "replied to {$ticket->user->profile->getFullName()}");
-            });
-
-            return back()->with('success', 'Ticket reply has been sent.');
-
-        } catch (\Exception $e) {
-            return back()->with('error', 'Faild to send a reply for this ticket. Please try again.');
-        }
-    }
-
     public function ticketActionGetDepartmentServiceDepartments(Department $department)
     {
         return response()->json($department->teams);

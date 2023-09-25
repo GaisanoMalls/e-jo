@@ -43,6 +43,8 @@
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
 
+    @stack('livewire-textarea')
+    @stack('livewire-modal')
     @stack('offcanvas-error')
     @stack('modal-with-error')
     @stack('toastr-message-js')

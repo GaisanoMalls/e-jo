@@ -28,8 +28,7 @@
             @enderror
         </div>
         <button type="submit"
-            class="btn mt-3 w-100 btn-block d-flex align-items-center justify-content-center gap-2 login__button" {{
-            $hasEmptyFields ? 'disabled' : '' }}>
+            class="btn mt-3 w-100 btn-block d-flex align-items-center justify-content-center gap-2 login__button">
             <span wire:loading wire:target="login" class="spinner-border spinner-border-sm" role="status"
                 aria-hidden="true">
             </span>

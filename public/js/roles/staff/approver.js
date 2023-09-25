@@ -2442,23 +2442,6 @@ document.addEventListener('DOMContentLoaded', function () {
     checkbox.addEventListener('change', handleCheckboxChange);
   });
 });
-
-// Mark ticket as Viewed when clicked.
-document.addEventListener("DOMContentLoaded", function () {
-  var clickableTableRowCells = document.querySelectorAll('.clickable_tr');
-  if (clickableTableRowCells) {
-    clickableTableRowCells.forEach(function (tdCells) {
-      tdCells.addEventListener('click', function () {
-        var ticketId = this.getAttribute('data-ticket-id');
-        axios.put("/approver/tickets/".concat(ticketId, "/update-status-as-viewed")).then(function (response) {
-          // console.log(response.data);
-        })["catch"](function (error) {
-          console.error(error.response.data);
-        });
-      });
-    });
-  }
-});
 var notificationCard = document.querySelectorAll('.notification__card');
 if (notificationCard) {
   notificationCard.forEach(function (cardCells) {

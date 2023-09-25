@@ -69,26 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Mark ticket as Viewed when clicked.
-document.addEventListener("DOMContentLoaded", function () {
-    const clickableTableRowCells = document.querySelectorAll('.clickable_tr');
-
-    if (clickableTableRowCells) {
-        clickableTableRowCells.forEach(tdCells => {
-            tdCells.addEventListener('click', function () {
-                const ticketId = this.getAttribute('data-ticket-id');
-                axios.put(`/approver/tickets/${ticketId}/update-status-as-viewed`)
-                    .then((response) => {
-                        // console.log(response.data);
-                    })
-                    .catch((error) => {
-                        console.error(error.response.data);
-                    });
-            });
-        });
-    }
-});
-
 
 const notificationCard = document.querySelectorAll('.notification__card');
 

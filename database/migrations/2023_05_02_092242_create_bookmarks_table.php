@@ -17,7 +17,6 @@ class CreateBookmarksTable extends Migration
         Schema::create('bookmarks', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained();
-            $table->string('title');
             $table->timestamps();
         });
     }

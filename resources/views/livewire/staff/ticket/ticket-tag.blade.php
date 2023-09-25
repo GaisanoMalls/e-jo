@@ -8,17 +8,37 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                @if ($ticket->status_id != \App\Models\Status::CLOSED)
-                <button type="button" class="btn__add__tags" data-bs-toggle="modal" data-bs-target="#ticketTagModal">
-                    <i class="fa-solid fa-plus"></i>
-                    Add
-                </button>
-                @endif
+                <div class="d-flex align-items-center gap-3">
+                    @if ($ticket->status_id != \App\Models\Status::CLOSED)
+                    @if (!$ticket->tags->isEmpty())
+                    <button type="button" class="btn__clear__tags" wire:click="clearTags">
+                        <i class="bi bi-trash"></i>
+                        Clear
+                    </button>
+                    @endif
+                    <button type="button" class="btn__add__tags" data-bs-toggle="modal"
+                        data-bs-target="#ticketTagModal">
+                        <i class="bi bi-plus-lg"></i>
+                        Add/Remove
+                    </button>
+                    @endif
+                </div>
             </div>
             @if (!$ticket->tags->isEmpty())
             <div class="d-flex flex-wrap align-items-center gap-2">
                 @foreach ($ticket->tags as $tag)
-                <a href="" class="btn btn-sm shadow-sm ticket__tag">{{ $tag->name }}</a>
+                <div class="d-flex align-items-center shadow-sm gap-2 ticket__tag">
+                    <a href=""
+                        class="text-white tag__link {{ $ticket->status_id == \App\Models\Status::CLOSED ? 'me-2' : '' }}">
+                        {{ $tag->name }}
+                    </a>
+                    @if ($ticket->status_id != \App\Models\Status::CLOSED)
+                    <div wire:key="ticket-tag-{{ $tag->id }}" wire:click="removeTag({{ $tag->id }})"
+                        class="d-flex align-items-center justify-content-center remove__tag">
+                        <i class="bi bi-x"></i>
+                    </div>
+                    @endif
+                </div>
                 @endforeach
             </div>
             @else

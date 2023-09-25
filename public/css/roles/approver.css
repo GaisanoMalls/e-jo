@@ -7052,6 +7052,37 @@ nav .nav__user__picture {
   border: none;
 }
 
+.loading__spinner {
+  height: 12px;
+  width: 12px;
+}
+
+.modal__confirm__approve__ticket .btn__confirm__modal {
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+}
+.modal__confirm__approve__ticket .btn__confirm__modal.btn__cancel__delete {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  border: 1px solid #e7e9eb;
+  background-color: transparent;
+  color: #d32839;
+  font-weight: 500;
+}
+.modal__confirm__approve__ticket .btn__confirm__modal.btn__confirm__delete {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  background-color: #d32839;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+}
+
 .reason__modal .modal__content {
   padding: 20px;
 }
@@ -7278,7 +7309,6 @@ nav .nav__user__picture {
 }
 .approver__section .ticket__card .ticket__details__section .details__card__top .ticket__details__priority {
   font-weight: 600;
-  color: red;
   font-size: 0.813rem;
 }
 .approver__section .ticket__card .ticket__details__section .details__card__top .ticket__details__ticketnumber {

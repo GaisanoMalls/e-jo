@@ -68,5 +68,14 @@
         @this.set('selectedTags', tagId);
     });
 
+    // Clear all selected tags in the select option when clear button is clicked.
+    window.addEventListener('clear-tag-select-option', event =>{
+        tagSelect.reset();
+    });
+
+    // Update the selected tags after removing of tags.
+    window.addEventListener('update-tag-select-option', event =>{
+        tagSelect.setValue(event.detail.tagIds);
+    });
 </script>
 @endpush

@@ -3,6 +3,9 @@
 namespace App\Http\Livewire\Approver\TicketStatus;
 
 use App\Http\Traits\Approver\Tickets;
+use App\Models\ActivityLog;
+use App\Models\Status;
+use App\Models\Ticket;
 use Livewire\Component;
 
 class Open extends Component
@@ -18,5 +21,13 @@ class Open extends Component
             'openTickets' => $openTickets,
             'forApprovalTickets' => $forApprovalTickets
         ]);
+    }
+
+    public function seenTicket($id)
+    {
+        Ticket::findOrFail($id)->update(['status_id' => Status::VIEWED]);
+        ActivityLog::make($id, 'seen the ticket');
+
+        return redirect()->route('approver.ticket.view_ticket_details', $id);
     }
 }

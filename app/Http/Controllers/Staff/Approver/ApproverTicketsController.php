@@ -4,30 +4,20 @@ namespace App\Http\Controllers\Staff\Approver;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Approver\StoreClarificationRequest;
-use App\Http\Requests\Approver\StoreDisapproveTicketRequest;
 use App\Http\Traits\Approver\Tickets as ApproverTickets;
 use App\Http\Traits\Utils;
-use App\Mail\FromApproverClarificationMail;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
-use App\Models\Reason;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class ApproverTicketsController extends Controller
 {
     use ApproverTickets, Utils;
-
-    public function ticketStatusToViewed(Ticket $ticket)
-    {
-        $ticket->update(['status_id' => Status::VIEWED]);
-        ActivityLog::make($ticket->id, 'seen the ticket');
-    }
 
     public function openTickets()
     {
@@ -46,9 +36,7 @@ class ApproverTicketsController extends Controller
 
     public function disapprovedTickets()
     {
-        return view(
-            'layouts.staff.approver.ticket.statuses.disapproved'
-        );
+        return view('layouts.staff.approver.ticket.statuses.disapproved');
     }
 
     public function onProcessTickets()
@@ -63,78 +51,13 @@ class ApproverTicketsController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
 
-        $reason = $ticket->reasons()->where('ticket_id', $ticket->id)->first();
-
         return view(
             'layouts.staff.approver.ticket.view_ticket',
             compact([
                 'ticket',
                 'latestClarification',
-                'reason'
             ])
         );
-    }
-
-    // * Ticket Actions
-    public function approveTicket(Ticket $ticket)
-    {
-        $ticket->update([
-            'status_id' => Status::APPROVED,
-            'approval_status' => ApprovalStatus::APPROVED
-        ]);
-
-        ActivityLog::make($ticket->id, 'approved the ticket');
-
-        return back()->with('success', 'Approved');
-    }
-
-    public function disapproveTicket(Ticket $ticket)
-    {
-        $ticket->update([
-            'status_id' => Status::CLOSED,
-            'approval_status' => ApprovalStatus::DISAPPROVED
-        ]);
-
-        ActivityLog::make($ticket->id, 'disapproved the ticket');
-
-        return back()->with('info', 'Ticket has been rejected.');
-    }
-
-    public function ticketDetialsApproveTicket(Ticket $ticket)
-    {
-        $ticket->update([
-            'status_id' => Status::APPROVED,
-            'approval_status' => ApprovalStatus::APPROVED
-        ]);
-
-        ActivityLog::make($ticket->id, 'approved the ticket');
-
-        return back()->with('success', 'Approved');
-    }
-
-    public function ticketDetialsDisapproveTicket(StoreDisapproveTicketRequest $request, Ticket $ticket)
-    {
-        try {
-            DB::transaction(function () use ($request, $ticket) {
-                $reason = Reason::create([
-                    'ticket_id' => $ticket->id,
-                    'description' => $request->description
-                ]);
-
-                $reason->ticket()->where('id', $ticket->id)
-                    ->update([
-                        'status_id' => Status::CLOSED,
-                        'approval_status' => ApprovalStatus::DISAPPROVED
-                    ]);
-
-                ActivityLog::make($ticket->id, 'disapproved the ticket');
-            });
-
-            return back()->with('success', 'The ticket has been disapproved.');
-
-        } catch (\Exception $e) {
-            return back()->with('error', 'Faild to disapprove the ticket.');
-        }
     }
 
     // * Clarifications

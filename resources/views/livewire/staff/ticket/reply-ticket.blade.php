@@ -23,8 +23,12 @@
                                 style="background-color: #24695C; height: 30px; width: 30px; border: 2px solid #d9ddd9; font-size: 12px;">
                                 {{ $latestReply->user->profile->getNameInitial() }}</div>
                             @endif
-                            <p class="mb-0" style="font-size: 0.813rem; font-weight: 500;">
-                                Latest reply from {{ $latestReply->user->profile->first_name }}</p>
+                            <p class="mb-0" style="font-size: 14px; font-weight: 500;">
+                                {{ $latestReply->user->profile->first_name }}
+                                <em>
+                                    <small class="text-muted" style="font-size: 12px;">(Latest reply)</small>
+                                </em>
+                            </p>
                         </div>
                         <p class="mb-0 time__sent">{{ $latestReply->created_at->diffForHumans(null, true) }} ago</p>
                     </div>
@@ -45,10 +49,20 @@
                             @enderror
                         </div>
                         <div class="mt-4">
-                            <label class="ticket__actions__label mb-0">Attach file</label>
+                            <div class="d-flex align-items-center gap-3">
+                                <label class="ticket__actions__label">Attach file</label>
+                                <div wire:loading wire:target="replyFiles">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="spinner-border text-info" style="height: 15px; width: 15px;"
+                                            role="status">
+                                        </div>
+                                        <small style="fot-size: 12px;">Uploading...</small>
+                                    </div>
+                                </div>
+                            </div>
                             <input class="form-control ticket__file__input w-auto my-3" type="file"
-                                wire:model="replyFiles[]" multiple>
-                            @error('replyFiles.*', 'storeTicketReply')
+                                wire:model="replyFiles" multiple>
+                            @error('replyFiles.*')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 {{ $message }}
@@ -61,6 +75,9 @@
                                 role="status" aria-hidden="true">
                             </span>
                             Send
+                            <div wire:loading.remove>
+                                <i class="bi bi-send-fill"></i>
+                            </div>
                         </button>
                     </form>
                 </div>

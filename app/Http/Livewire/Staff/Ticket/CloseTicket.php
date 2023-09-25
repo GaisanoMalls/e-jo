@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Models\ActivityLog;
 use App\Models\Status;
 use App\Models\Ticket;
 use Livewire\Component;
@@ -21,6 +22,8 @@ class CloseTicket extends Component
 
         sleep(1);
         flash()->addSuccess('Ticket has been closed');
+        ActivityLog::make($this->ticket->id, 'closed the ticket');
+
     }
 
     public function render()

@@ -54,18 +54,4 @@ class AgentTicketController extends Controller
             return back()->with('info', 'Failed to claim the ticket.');
         }
     }
-
-    public function closeTicket(Ticket $ticket)
-    {
-        try {
-            $ticket->update(['status_id' => Status::CLOSED]);
-
-            ActivityLog::make($ticket->id, 'closed the ticket');
-
-            return back()->with('success', 'Ticket closed');
-
-        } catch (\Exception $e) {
-            return back()->with('info', 'Failed to close the ticket.');
-        }
-    }
 }

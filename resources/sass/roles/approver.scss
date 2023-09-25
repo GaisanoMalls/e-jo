@@ -381,6 +381,25 @@ nav {
     border: none;
 }
 
+.loading__spinner {
+    height: 12px;
+    width: 12px;
+}
+
+.modal__confirm__approve__ticket {
+    .btn__confirm__modal {
+        @include generic.button-config;
+
+        &.btn__cancel__delete {
+            @include generic.form-button-cancel;
+        }
+
+        &.btn__confirm__delete {
+            @include generic.form-button-submit;
+        }
+    }
+}
+
 .reason__modal {
     .modal__content {
         padding: 20px;
@@ -649,7 +668,6 @@ nav {
 
                 .ticket__details__priority {
                     font-weight: $fw-600;
-                    color: red;
                     font-size: $fs-13;
                 }
 

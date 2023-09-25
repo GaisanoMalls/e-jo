@@ -80,14 +80,7 @@
                     </div>
                     <div class="d-flex flex-wrap justify-content-center gap-3 gap-lg-4 gap-xl-4">
                         @livewire('staff.ticket.load-reply-button-header', ['ticket' => $ticket])
-                        <div class="d-flex flex-column">
-                            <button
-                                class="btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
-                                data-bs-toggle="modal" data-bs-target="#" type="submit">
-                                <i class="bi bi-star"></i>
-                            </button>
-                            <small class="ticket__details__topbuttons__label">Bookmark</small>
-                        </div>
+                        @livewire('staff.ticket.bookmark-ticket', ['ticket' => $ticket])
                         @if (auth()->user()->role_id == App\Models\Role::AGENT && $ticket->status_id !=
                         App\Models\Status::CLOSED)
                         {{-- SHOW "Claim" BUTTON FOR AGENT USER ONLY --}}
@@ -182,16 +175,6 @@
                     </div>
                     {{-- Replies/Comments --}}
                     @livewire('staff.ticket-replies', ['ticket' => $ticket])
-
-                    @if ($ticket->status_id != App\Models\Status::CLOSED)
-                    <button type="button"
-                        class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2"
-                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasReplyTicketForm"
-                        aria-controls="offcanvasBottom">
-                        <i class="fa-solid fa-pen"></i>
-                        <span class="lbl__reply">Reply</span>
-                    </button>
-                    @endif
                     {{-- End Replies/Comments --}}
                 </div>
                 <div class="col-md-4">
