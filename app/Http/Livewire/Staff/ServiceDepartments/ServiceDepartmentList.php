@@ -48,13 +48,13 @@ class ServiceDepartmentList extends Component
 
     public function updateServiceDepartment()
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         try {
             ServiceDepartment::find($this->serviceDepartmentEditId)
                 ->update([
-                    'name' => $validatedData['name'],
-                    'slug' => \Str::slug($validatedData['name'])
+                    'name' => $this->name,
+                    'slug' => \Str::slug($this->name)
                 ]);
 
             $this->clearFormField();

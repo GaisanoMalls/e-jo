@@ -48,13 +48,13 @@ class TagList extends Component
 
     public function updateTag()
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         try {
             Tag::find($this->tagUpdateId)
                 ->update([
-                    'name' => $validatedData['name'],
-                    'slug' => \Str::slug($validatedData['name'])
+                    'name' => $this->name,
+                    'slug' => \Str::slug($this->name)
                 ]);
 
             $this->fetchTags();

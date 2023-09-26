@@ -60,7 +60,6 @@
         </div>
         @endforeach
         @endif
-
         @if ($ticket->clarifications->count() === 0)
         <div class="row align-items-center bg-light p-2 py-1 rounded-3 mx-1 mt-2 mb-4">
             <div class="col-lg-6 col-md-12">
@@ -72,21 +71,21 @@
             <div class="col-lg-6 col-md-12">
                 <div
                     class="d-flex align-items-center justify-content-start justify-content-lg-end justify-content-md-start">
-                    <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center
-                                            justify-content-center gap-2" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasTicketClarificationForm" aria-controls="offcanvasBottom">
+                    <button type="button"
+                        class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center justify-content-center gap-2"
+                        data-bs-toggle="modal" data-bs-target="#ticketClarificationModal">
                         <i class="fa-solid fa-pen"></i>
-                        <span class="lbl__reply">Connect with {{ $ticket->user->profile->first_name
-                            }}</span>
+                        <span class="lbl__reply">Connect with
+                            {{ $ticket->user->profile->first_name }}
+                        </span>
                     </button>
                 </div>
             </div>
         </div>
         @else
         <button type="button"
-            class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center justify-content-center gap-2"
-            data-bs-toggle="offcanvas" data-bs-target="#offcanvasTicketClarificationForm"
-            aria-controls="offcanvasBottom">
+            class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center justify-content-center gap-2 float-end"
+            wire:click="getLatestClarification" data-bs-toggle="modal" data-bs-target="#ticketClarificationModal">
             <i class="fa-solid fa-pen"></i>
             <span class="lbl__reply">Reply</span>
         </button>

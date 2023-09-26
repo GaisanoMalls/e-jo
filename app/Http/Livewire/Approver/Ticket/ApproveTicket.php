@@ -12,6 +12,15 @@ class ApproveTicket extends Component
 {
     public Ticket $ticket;
 
+    public function actionOnSubmit()
+    {
+        sleep(1);
+        $this->emit('loadTicketLogs');
+        $this->emit('loadApprovalButtonHeader');
+        $this->emit('loadTicketStatusHeaderText');
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
     public function approveTicket()
     {
         $this->ticket->update([
@@ -19,13 +28,10 @@ class ApproveTicket extends Component
             'approval_status' => ApprovalStatus::APPROVED
         ]);
 
-        sleep(1);
-        $this->emit('loadTicketLogs');
-        $this->emit('loadApprovalButtonHeader');
-        $this->emit('loadTicketStatusHeaderText');
-        $this->dispatchBrowserEvent('close-modal');
-        flash()->addSuccess('Ticket has been approved');
         ActivityLog::make($this->ticket->id, 'approved the ticket');
+
+        $this->actionOnSubmit();
+        flash()->addSuccess('Ticket has been approved');
     }
 
     public function render()

@@ -35,6 +35,12 @@ class AssignTicket extends Component
             ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))->get();
     }
 
+    public function actionOnSubmit()
+    {
+        sleep(1);
+        $this->emit('loadTicketDetails');
+        $this->dispatchBrowserEvent('close-modal');
+    }
 
     public function saveAssignTicket()
     {
@@ -43,13 +49,9 @@ class AssignTicket extends Component
                 'team_id' => $this->team ?? $this->ticket->team_id,
                 'agent_id' => $this->agent ?? $this->ticket->agent_id,
             ]);
-
-            $this->emit('loadTicketDetails');
-            $this->dispatchBrowserEvent('close-modal');
-            sleep(1);
+            $this->actionOnSubmit();
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

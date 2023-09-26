@@ -47,12 +47,12 @@ class BranchList extends Component
 
     public function update()
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         try {
             Branch::find($this->branchEditId)->update([
-                'name' => $validatedData['name'],
-                'slug' => \Str::slug($validatedData['name'])
+                'name' => $this->name,
+                'slug' => \Str::slug($this->name)
             ]);
 
             $this->clearFormField();

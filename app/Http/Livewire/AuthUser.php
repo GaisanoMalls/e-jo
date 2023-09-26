@@ -31,12 +31,12 @@ class AuthUser extends Component
 
     public function login()
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         if (
             Auth::attempt([
-                'email' => $validatedData['email'],
-                'password' => $validatedData['password'],
+                'email' => $this->email,
+                'password' => $this->password,
                 'is_active' => true
             ])
         ) {

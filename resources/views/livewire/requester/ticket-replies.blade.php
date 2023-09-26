@@ -128,9 +128,10 @@
 
         @endforeach
         @if ($ticket->status_id !== App\Models\Status::CLOSED )
-        <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
-                        justify-content-center gap-2" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasRequesterReplyTicketForm" aria-controls="offcanvasBottom">
+        <button type="button"
+            class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2 float-end"
+            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRequesterReplyTicketForm"
+            aria-controls="offcanvasBottom">
             <i class="fa-solid fa-pen"></i>
             <span class="lbl__reply">Reply</span>
         </button>

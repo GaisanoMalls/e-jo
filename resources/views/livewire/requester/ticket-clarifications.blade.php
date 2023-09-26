@@ -10,9 +10,9 @@
         <div class="col-lg-6 col-md-12">
             <div
                 class="d-flex align-items-center justify-content-start justify-content-lg-end justify-content-md-start">
-                <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center
-                                        justify-content-center gap-2" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasRequesterReplyTicketClarificationForm" aria-controls="offcanvasBottom">
+                <button type="button"
+                    class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center justify-content-center gap-2"
+                    data-bs-toggle="modal" data-bs-target="#ticketClarificationModal">
                     <i class="fa-solid fa-pen"></i>
                     <span class="lbl__reply">Connect with approver</span>
                 </button>
@@ -79,8 +79,8 @@
         @endforeach
         @if ($ticket->clarifications->count() !== 0 && $ticket->status_id !== App\Models\Status::CLOSED)
         <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
-            justify-content-center gap-2" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasRequesterReplyTicketClarificationForm" aria-controls="offcanvasBottom">
+            justify-content-center gap-2 float-end" data-bs-toggle="modal" data-bs-target="#ticketClarificationModal"
+            wire:click="getLatestClarification">
             <i class="fa-solid fa-pen"></i>
             <span class="lbl__reply">Reply</span>
         </button>

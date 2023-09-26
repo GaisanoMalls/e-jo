@@ -26,14 +26,19 @@ class CreateSla extends Component
         $this->resetValidation();
     }
 
+    public function actionOnSubmit()
+    {
+        $this->clearFormFields();
+        $this->emit('loadServiceLevelAgreements');
+    }
+
     public function saveSLA()
     {
         $validatedData = $this->validate();
 
         try {
             ServiceLevelAgreement::create($validatedData);
-            $this->clearFormFields();
-            $this->emit('loadServiceLevelAgreements');
+            $this->actionOnSubmit();
             flash()->addSuccess('A new SLA has been created.');
 
         } catch (\Exception $e) {

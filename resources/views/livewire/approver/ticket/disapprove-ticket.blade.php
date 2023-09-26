@@ -9,9 +9,9 @@
                             Reason why you disapprove this ticket
                         </h6>
                         <div wire:ignore>
-                            <textarea wire:model="description" id="description"></textarea>
+                            <textarea wire:model="reasonDescription" id="reasonDescription"></textarea>
                         </div>
-                        @error('description')
+                        @error('reasonDescription')
                         <span class="error__message">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                             {{ $message }}
@@ -38,7 +38,7 @@
 @push('livewire-textarea')
 <script>
     tinymce.init({
-        selector: '#description',
+        selector: '#reasonDescription',
         plugins: 'lists',
         toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
         height: 350,
@@ -48,7 +48,7 @@
                 editor.save();
             });
             editor.on('change', function (e) {
-                @this.set('description', editor.getContent());
+                @this.set('reasonDescription', editor.getContent());
             });
         }
     });

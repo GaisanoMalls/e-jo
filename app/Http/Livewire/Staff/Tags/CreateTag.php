@@ -29,18 +29,23 @@ class CreateTag extends Component
         $this->resetValidation();
     }
 
+    public function actionOnSubmit()
+    {
+        $this->emit('loadTags');
+        $this->clearFormField();
+    }
+
     public function saveTag()
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         try {
             Tag::create([
-                'name' => $validatedData['name'],
-                'slug' => \Str::slug($validatedData['name'])
+                'name' => $this->name,
+                'slug' => \Str::slug($this->name)
             ]);
 
-            $this->emit('loadTags');
-            $this->clearFormField();
+            $this->actionOnSubmit();
             flash()->addSuccess('Tag created');
 
         } catch (\Exception $e) {

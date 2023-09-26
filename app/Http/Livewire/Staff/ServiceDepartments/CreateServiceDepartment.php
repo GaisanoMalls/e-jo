@@ -26,18 +26,23 @@ class CreateServiceDepartment extends Component
         $this->resetValidation();
     }
 
+    public function actionOnSubmit()
+    {
+        $this->clearFormField();
+        $this->emit('loadServiceDepartments');
+    }
+
     public function saveServiceDepartment()
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         try {
             ServiceDepartment::create([
-                'name' => $validatedData['name'],
-                'slug' => \Str::slug($validatedData['name'])
+                'name' => $this->name,
+                'slug' => \Str::slug($this->name)
             ]);
 
-            $this->clearFormField();
-            $this->emit('loadServiceDepartments');
+            $this->actionOnSubmit();
             flash()->addSuccess('A new service department has been created.');
 
         } catch (\Exception $e) {

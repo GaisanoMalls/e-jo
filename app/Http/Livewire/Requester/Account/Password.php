@@ -32,10 +32,10 @@ class Password extends Component
 
     public function savePassword()
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         User::where('id', auth()->user()->id)->update([
-            'password' => Hash::make($validatedData['new_password'])
+            'password' => Hash::make($this->new_password)
         ]);
 
         $this->clearFormFields();

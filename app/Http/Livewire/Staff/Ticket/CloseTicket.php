@@ -11,19 +11,22 @@ class CloseTicket extends Component
 {
     public Ticket $ticket;
 
-    public function closeTicket()
+    public function actionOnSubmit()
     {
-        $this->ticket->update(['status_id' => Status::CLOSED]);
+        sleep(1);
         $this->emit('loadPriorityLevel');
         $this->emit('loadReplyButtonHeader');
         $this->emit('loadTicketStatusTextHeader');
         $this->emit('loadTicketStatusButtonHeader');
         $this->dispatchBrowserEvent('close-modal');
+    }
 
-        sleep(1);
-        flash()->addSuccess('Ticket has been closed');
+    public function closeTicket()
+    {
+        $this->ticket->update(['status_id' => Status::CLOSED]);
         ActivityLog::make($this->ticket->id, 'closed the ticket');
-
+        $this->actionOnSubmit();
+        flash()->addSuccess('Ticket has been closed');
     }
 
     public function render()

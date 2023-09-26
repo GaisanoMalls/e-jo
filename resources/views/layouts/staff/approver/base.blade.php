@@ -39,15 +39,12 @@
     <script src="{{ asset('js/roles/staff/approver.js') }}"></script>
     <script src="{{ asset('js/roles/staff/approver.js') }}"></script>
     <script src="{{ asset('js/toaster-message.js') }}"></script>
-    <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
 
-    @stack('livewire-textarea')
     @stack('livewire-modal')
-    @stack('offcanvas-error')
+    @stack('livewire-textarea')
     @stack('modal-with-error')
-    @stack('toastr-message-js')
     <script>
         var table = document.getElementById('approverTable');
         var options = {

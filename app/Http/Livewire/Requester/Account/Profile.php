@@ -41,34 +41,42 @@ class Profile extends Component
 
     public function resetFileField()
     {
+        $this->picture = null;
         $this->imageUpload++;
+    }
+
+    public function actionOnSubmit()
+    {
+        $this->resetValidation();
+        $this->emit('loadProfilePreview');
+        $this->emit('loadNavProfilePic');
     }
 
     public function saveProfile()
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         try {
-            DB::transaction(function () use ($validatedData) {
+            DB::transaction(function () {
                 $user = Auth::user();
-                $pictureName = $validatedData['picture'] ? $this->generateNewProfilePictureName($validatedData['picture']) : null;
+                $pictureName = $this->picture ? $this->generateNewProfilePictureName($this->picture) : null;
 
                 $user->update(['email' => $this->email]);
                 $user->profile->update([
-                    'first_name' => $validatedData['first_name'],
-                    'middle_name' => $validatedData['middle_name'],
-                    'last_name' => $validatedData['last_name'],
-                    'suffix' => $validatedData['suffix'],
-                    'mobile_number' => $validatedData['mobile_number'],
-                    'picture' => $validatedData['picture'] != null
+                    'first_name' => $this->first_name,
+                    'middle_name' => $this->middle_name,
+                    'last_name' => $this->last_name,
+                    'suffix' => $this->suffix,
+                    'mobile_number' => $this->mobile_number,
+                    'picture' => $this->picture != null
                         ? (
                             $user->profile->picture != null && Storage::exists($user->profile->picture)
                             ? (
                                 Storage::delete($user->profile->picture)
-                                ? (Storage::putFileAs("public/profile_picture/" . $this->fileDirByUserType(), $validatedData['picture'], $pictureName))
-                                : $validatedData['picture']
+                                ? (Storage::putFileAs("public/profile_picture/" . $this->fileDirByUserType(), $this->picture, $pictureName))
+                                : $this->picture
                             )
-                            : (Storage::putFileAs("public/profile_picture/" . $this->fileDirByUserType(), $validatedData['picture'], $pictureName))
+                            : (Storage::putFileAs("public/profile_picture/" . $this->fileDirByUserType(), $this->picture, $pictureName))
                         )
                         : $user->profile->picture
                 ]);
@@ -84,9 +92,7 @@ class Profile extends Component
                     ? flash()->addSuccess('Profile successfully updated.')
                     : flash()->addInfo('No changes have been made in your profile.');
 
-                $this->resetValidation();
-                $this->emit('loadProfilePreview');
-                $this->emit('loadNavProfilePic');
+                $this->actionOnSubmit();
 
             });
         } catch (\Exception $e) {

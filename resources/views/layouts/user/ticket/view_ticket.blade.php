@@ -67,7 +67,7 @@
                 @endif
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div class="d-flex align-items-center gap-3">
-                        <p class="mb-0 ticket__details__status">{{ $ticket->status->name }}</p>
+                        @livewire('requester.ticket.load-ticket-status-header-text', ['ticket' => $ticket])
                         <h6 class="ticket__details__ticketnumber mb-0">Ticket: {{ $ticket->ticket_number }}</h6>
                     </div>
                     <p class="mb-0 ticket__details__priority">{{ $ticket->priorityLevel->name }}</p>
@@ -155,7 +155,7 @@
                         @include('layouts.user.ticket.includes.ticket_details')
                         @include('layouts.user.ticket.includes.ticket_assigned_agent')
                         {{-- @include('layouts.user.ticket.includes.approvals') --}}
-                        @include('layouts.user.ticket.includes.ticket_activity_logs')
+                        @livewire('requester.ticket.ticket-logs', ['ticket' => $ticket])
                     </div>
                 </div>
             </div>
@@ -164,7 +164,7 @@
 </div>
 @include('layouts.user.ticket.includes.modal.preview_ticket_files_modal')
 @include('layouts.user.ticket.includes.offcanvas.reply_ticket_offcanvas')
-@include('layouts.user.ticket.includes.offcanvas.reply_clarification_offcanvas')
+@livewire('requester.ticket.send-clarification', ['ticket' => $ticket])
 @endsection
 
 @if ($errors->requesterStoreTicketReply->any())

@@ -11,6 +11,11 @@ class LoadReplyButtonHeader extends Component
 
     protected $listeners = ['loadReplyButtonHeader' => 'render'];
 
+    public function getLatestReply()
+    {
+        $this->emit('loadLatestReply');
+    }
+
     public function render()
     {
         return view('livewire.staff.ticket.load-reply-button-header');

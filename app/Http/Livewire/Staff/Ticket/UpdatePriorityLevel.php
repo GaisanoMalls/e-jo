@@ -19,6 +19,14 @@ class UpdatePriorityLevel extends Component
         $this->priority_level = $this->ticket->priority_level_id;
     }
 
+    public function actionOnSubmit()
+    {
+        sleep(1);
+        $this->emit('loadPriorityLevel');
+        $this->emit('loadTicketActivityLogs');
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
     public function updatePriorityLevel()
     {
         try {
@@ -29,11 +37,8 @@ class UpdatePriorityLevel extends Component
                 $newLevel = $this->ticket->priorityLevel->name;
 
                 ActivityLog::make($this->ticket->id, "changed the priority level from {$currentLevel} to {$newLevel}");
+                $this->actionOnSubmit();
 
-                $this->emit('loadPriorityLevel');
-                $this->emit('loadTicketActivityLogs');
-                $this->dispatchBrowserEvent('close-modal');
-                sleep(1);
             }
         } catch (\Exception $e) {
             flash()->addError('Oops, something went wrong');

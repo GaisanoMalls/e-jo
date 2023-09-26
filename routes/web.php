@@ -272,7 +272,6 @@ Route::middleware(['auth', Role::approver()])->group(function () {
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(ApproverTicketsController::class)->group(function () {
                 Route::get('/{ticket}/view', 'viewTicketDetails')->name('view_ticket_details');
-                Route::post('/{ticket}/clarification/send', 'sendClarification')->name('send_clarification');
             });
         });
         Route::prefix('notifications')->name('notification.')->group(function () {
@@ -306,7 +305,6 @@ Route::middleware(['auth', Role::user()])->group(function () {
                 Route::post('/{ticket}/reply/store', 'requesterReplyTicket')->name('store_reply_ticket');
                 Route::get('/{ticket}/view', 'viewTicket')->name('view_ticket');
                 Route::get('/{ticket}/view/clarifications', 'ticketClarifications')->name('ticket_clarifications');
-                Route::post('/{ticket}/view/clarification/send', 'sendClarification')->name('send_clarification');
 
                 // Axios endpoints
                 Route::get('/branches', 'loadBranches');

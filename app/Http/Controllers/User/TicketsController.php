@@ -8,8 +8,6 @@ use App\Http\Requests\Requester\StoreTicketClarificationRequest;
 use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\Requester\Tickets;
 use App\Http\Traits\Utils;
-use App\Mail\FromRequesterClarificationMail;
-use App\Mail\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
 use App\Models\Branch;
@@ -29,7 +27,6 @@ use App\Models\UserServiceDepartment;
 use App\Notifications\TicketNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
@@ -140,7 +137,6 @@ class TicketsController extends Controller
     public function viewTicket(Ticket $ticket)
     {
         $latestReply = $this->getLatestReply($ticket->id);
-        $latestClarification = $this->getLatestClarification($ticket->id);
         $reason = $ticket->reasons()->where('ticket_id', $ticket->id)->first();
 
         $levelApprovers = LevelApprover::where('help_topic_id', $ticket->helpTopic->id)->get();
@@ -151,7 +147,6 @@ class TicketsController extends Controller
             compact([
                 'ticket',
                 'latestReply',
-                'latestClarification',
                 'reason',
                 'levelApprovers',
                 'approvers'
@@ -224,57 +219,6 @@ class TicketsController extends Controller
                 'approvers'
             ])
         );
-    }
-
-    public function sendClarification(StoreTicketClarificationRequest $request, Ticket $ticket)
-    {
-        try {
-            DB::transaction(function () use ($request, $ticket) {
-                $ticket->update(['status_id' => Status::ON_PROCESS]);
-
-                $clarification = Clarification::create([
-                    'user_id' => auth()->user()->id,
-                    'ticket_id' => $ticket->id,
-                    'description' => $request->description
-                ]);
-
-                if ($request->hasFile('clarificationFiles')) {
-                    foreach ($request->file('clarificationFiles') as $uploadedClarificationFile) {
-                        $fileName = $uploadedClarificationFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs("public/ticket/{$ticket->ticket_number}/clarification_attachments/" . $this->fileDirByUserType(), $uploadedClarificationFile, $fileName);
-
-                        $clarificationFile = new ClarificationFile();
-                        $clarificationFile->file_attachment = $fileAttachment;
-                        $clarificationFile->clarification_id = $clarification->id;
-
-                        $clarification->fileAttachments()->save($clarificationFile);
-                    }
-                }
-
-                // * GET THE LATEST STAFF
-                $latestStaff = $clarification->whereHas('user', function ($user) {
-                    $user->where('id', '!=', auth()->user()->id);
-                })
-                    ->where('ticket_id', $ticket->id)
-                    ->latest('created_at')
-                    ->first();
-
-                // * CONSTRUCT A LOG DESCRIPTION
-                $logClarificationDescription = $ticket->clarifications()
-                    ->where('user_id', '!=', auth()->user()->id)->count() === 0
-                    ? 'sent a clarification'
-                    : 'replied a clarification to ' . $latestStaff->user->profile->getFullName();
-
-                ActivityLog::make($ticket->id, $logClarificationDescription);
-                // Mail::to($latestStaff->user->email)->send(new FromRequesterClarificationMail($ticket, $request->description));
-            });
-
-
-            return back()->with('success', 'Ticket clarification has been sent.');
-
-        } catch (\Exception $e) {
-            return back()->with('error', 'Failed to send ticket clarification. Please try again.');
-        }
     }
 
     public function loadBranches()

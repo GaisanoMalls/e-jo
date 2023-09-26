@@ -152,9 +152,32 @@ $color-1: #d32839;
     }
 }
 
-.reason__modal {
+
+
+.reason__modal,
+.clarification__modal {
     border-radius: $border-radius-10;
     border: none;
+}
+
+.clarification__modal {
+    .modal__content {
+        .title {
+            font-size: $fs-15;
+            font-weight: $fw-600;
+            color: #212529;
+        }
+    }
+}
+
+.ticket__file__input {
+    border: 0;
+    border-radius: 0;
+    font-size: $fs-13;
+
+    &:focus {
+        box-shadow: none;
+    }
 }
 
 .reason__modal {
@@ -941,86 +964,69 @@ body {
     }
 }
 
-.custom__reply__ticket__offcanvas {
-    border-radius: $border-radius-9 $border-radius-9 0 0;
-    transition: width 0.3s;
-    height: 80% !important;
-    width: 60% !important;
+.ticket__actions__label {
+    font-size: $fs-14;
+    font-weight: $fw-600;
+    margin-bottom: 3px;
+    color: #131313;
+}
 
-    .custom__offcanvas__title {
-        font-size: $fs-16;
-        text-transform: capitalize;
+.reply__ticket__info {
+    padding: 1.2rem;
+    background-color: #f7f7f7;
+    border-radius: $border-radius-9;
+
+    img.sender__profile {
+        height: 30px !important;
+        width: 30px !important;
+        border-radius: $border-radius-50;
     }
 
-    .offcanvas__close__button {
-        height: 30px;
-        width: 30px;
-        font-size: $fs-15;
-        border-radius: $border-radius-50 !important;
-
-        &:focus {
-            border: none;
-        }
-    }
-
-    .reply__ticket__info {
-        padding: 1.2rem;
-        background-color: #f7f7f7;
+    .user__name__initial {
+        font-size: $fs-12;
+        height: 30px !important;
+        width: 30px !important;
         border-radius: $border-radius-9;
+        border: 2px solid #d9ddd9;
 
-        img.sender__profile {
-            height: 30px !important;
-            width: 30px !important;
-            border-radius: $border-radius-50;
-        }
-
-        .user__name__initial {
-            font-size: $fs-12;
-            height: 30px !important;
-            width: 30px !important;
-            border-radius: $border-radius-9;
-            border: 2px solid #d9ddd9;
-
-        }
-
-        .time__sent {
-            font-size: $fs-12;
-        }
-
-        .ticet__description {
-            font-size: $fs-13;
-        }
     }
 
-    .ticket__file__input {
-        border: 0;
-        border-radius: 0;
+    .time__sent {
+        font-size: $fs-12;
+    }
+
+    .ticet__description {
         font-size: $fs-13;
-
-        &:focus {
-            box-shadow: none;
-        }
     }
+}
 
-    .btn__send__ticket__reply {
-        padding: 0.5rem 1rem;
-        font-size: $fs-15;
-        border-radius: $border-radius-9;
-        background-color: $color-1;
+.ticket__file__input {
+    border: 0;
+    border-radius: 0;
+    font-size: $fs-13;
+
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+.btn__send__ticket__reply {
+    padding: 0.5rem 1rem;
+    font-size: $fs-15;
+    border-radius: $border-radius-9;
+    background-color: $color-1;
+    color: #FFFFFF;
+    font-weight: $fw-500;
+
+    &:focus {
         color: #FFFFFF;
-        font-weight: $fw-500;
-
-        &:focus {
-            color: #FFFFFF;
-            background-color: $color-1;
-        }
-
-        &:hover {
-            color: #FFFFFF;
-            background-color: $color-1;
-        }
+        background-color: $color-1;
     }
 
+    &:hover {
+        color: #FFFFFF;
+        background-color: $color-1;
+    }
 }
 
 .account__settings {

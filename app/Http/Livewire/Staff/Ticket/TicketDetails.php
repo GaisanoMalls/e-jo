@@ -11,16 +11,21 @@ class TicketDetails extends Component
 
     protected $listeners = ['loadTicketDetails' => 'render'];
 
+    public function actionOnSubmit()
+    {
+        $this->emit('loadTicketDetails');
+    }
+
     public function removeAssingedTeam()
     {
         $this->ticket->update(['team_id' => null]);
-        $this->emit('loadTicketDetails');
+        $this->actionOnSubmit();
     }
 
     public function removeAssignedAgent()
     {
         $this->ticket->update(['agent_id' => null]);
-        $this->emit('loadTicketDetails');
+        $this->actionOnSubmit();
     }
 
     public function render()

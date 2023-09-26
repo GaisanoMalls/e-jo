@@ -26,18 +26,23 @@ class CreateBranch extends Component
         $this->resetValidation();
     }
 
+    public function actionOnSubmit()
+    {
+        $this->clearFormField();
+        $this->emit('loadBranches');
+    }
+
     public function saveBranch()
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         try {
             Branch::create([
-                'name' => $validatedData['name'],
-                'slug' => \Str::slug($validatedData['name']),
+                'name' => $this->name,
+                'slug' => \Str::slug($this->name),
             ]);
 
-            $this->clearFormField();
-            $this->emit('loadBranches');
+            $this->actionOnSubmit();
             flash()->addSuccess('New branch has been created.');
 
         } catch (\Exception $e) {

@@ -19,7 +19,7 @@ class ReplyTicket extends Component
     use WithFileUploads, Utils;
 
     public Ticket $ticket;
-    public $description, $replyFiles = [];
+    public $description, $replyFiles = [], $upload = 0;
 
     public function rules()
     {
@@ -31,50 +31,56 @@ class ReplyTicket extends Component
         return (new StaffReplyTicketRequest())->messages();
     }
 
+    public function actionOnSubmit()
+    {
+        sleep(1);
+        $this->replyFiles = null;
+        $this->upload++;
+        $this->reset('description');
+        $this->emit('loadTicketReplies');
+        $this->emit('loadTicketStatusTextHeader');
+        $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('reload-modal');
+    }
+
     public function replyTicket()
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
-        DB::transaction(function () use ($validatedData) {
-            $this->ticket->update(['status_id' => Status::ON_PROCESS]);
+        try {
+            DB::transaction(function () {
+                $this->ticket->update(['status_id' => Status::ON_PROCESS]);
 
-            $reply = Reply::create([
-                'user_id' => auth()->user()->id,
-                'ticket_id' => $this->ticket->id,
-                'description' => $validatedData['description']
-            ]);
+                $reply = Reply::create([
+                    'user_id' => auth()->user()->id,
+                    'ticket_id' => $this->ticket->id,
+                    'description' => $this->description
+                ]);
 
-            if ($validatedData['replyFiles']) {
-                foreach ($validatedData['replyFiles'] as $uploadedReplyFile) {
-                    $fileName = $uploadedReplyFile->getClientOriginalName();
-                    $fileAttachment = Storage::putFileAs("public/ticket/{$this->ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(), $uploadedReplyFile, $fileName);
+                if ($this->replyFiles) {
+                    foreach ($this->replyFiles as $uploadedReplyFile) {
+                        $fileName = $uploadedReplyFile->getClientOriginalName();
+                        $fileAttachment = Storage::putFileAs("public/ticket/{$this->ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(), $uploadedReplyFile, $fileName);
 
-                    $replyFile = new ReplyFile();
-                    $replyFile->file_attachment = $fileAttachment;
-                    $replyFile->reply_id = $reply->id;
+                        $replyFile = new ReplyFile();
+                        $replyFile->file_attachment = $fileAttachment;
+                        $replyFile->reply_id = $reply->id;
 
-                    $reply->fileAttachments()->save($replyFile);
+                        $reply->fileAttachments()->save($replyFile);
+                    }
                 }
-            }
 
-            sleep(1);
-            $this->emit('loadTicketReplies');
-            $this->emit('loadTicketStatusTextHeader');
-            $this->dispatchBrowserEvent('close-modal');
+                ActivityLog::make($this->ticket->id, "replied to {$this->ticket->user->profile->getFullName()}");
+                $this->actionOnSubmit();
 
-            ActivityLog::make($this->ticket->id, "replied to {$this->ticket->user->profile->getFullName()}");
-        });
+            });
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to send ticket clarification. Please try again.');
+        }
     }
 
     public function render()
     {
-        $latestReply = Reply::where('ticket_id', $this->ticket->id)
-            ->where('user_id', '!=', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
-            ->first();
-
-        return view('livewire.staff.ticket.reply-ticket', [
-            'latestReply' => $latestReply
-        ]);
+        return view('livewire.staff.ticket.reply-ticket');
     }
 }

@@ -30,14 +30,19 @@ class UserUpdatePassword extends Component
         $this->reset('new_password', 'confirm_password');
     }
 
+    public function actionOnSubmit()
+    {
+        $this->clearFormFields();
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
     public function updatePassword(User $user)
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         try {
-            $this->updateUserPassword($user, $validatedData['new_password'], $validatedData['confirm_password']);
-            $this->clearFormFields();
-            $this->dispatchBrowserEvent('close-modal');
+            $this->updateUserPassword($user, $this->new_password, $this->confirm_password);
+            $this->actionOnSubmit();
             flash()->addSuccess('Password has been updated.');
 
         } catch (\Exception $e) {

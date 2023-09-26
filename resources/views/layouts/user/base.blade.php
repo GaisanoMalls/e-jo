@@ -51,8 +51,8 @@
     <script src="{{ asset('js/roles/user/user.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
 
-    @stack('offcanvas-error')
-    @stack('toastr-message-js')
+    @stack('livewire-textarea')
+    @stack('livewire-modal')
 
     @if ($errors->storeTicket->any())
     <script>

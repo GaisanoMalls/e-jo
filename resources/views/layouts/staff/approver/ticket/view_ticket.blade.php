@@ -128,29 +128,6 @@
     </div>
 </div>
 @livewire('approver.ticket.approve-ticket', ['ticket' => $ticket])
+@livewire('approver.ticket.send-clarification', ['ticket' => $ticket])
 @include('layouts.staff.approver.ticket.includes.modal.preview_ticket_files_modal')
-@include('layouts.staff.approver.ticket.includes.offcanvas.ticket_clarifications_offcanvas')
 @endsection
-
-@if ($errors->storeTicketClarification->any())
-@push('offcanvas-error')
-<script>
-    $(function () {
-        var offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasTicketClarificationForm'));
-        offcanvas.show();
-    });
-
-</script>
-@endpush
-@endif
-
-@if ($errors->disapproveTicket->any())
-@push('modal-with-error')
-<script>
-    $(function () {
-        $('#disapproveTicketModal').modal('show');
-    });
-
-</script>
-@endpush
-@endif

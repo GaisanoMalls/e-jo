@@ -63,9 +63,25 @@
   color: black;
 }
 
-.reason__modal {
+.reason__modal,
+.clarification__modal {
   border-radius: 0.625rem;
   border: none;
+}
+
+.clarification__modal .modal__content .title {
+  font-size: 0.938rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.ticket__file__input {
+  border: 0;
+  border-radius: 0;
+  font-size: 0.813rem;
+}
+.ticket__file__input:focus {
+  box-shadow: none;
 }
 
 .reason__modal .modal__content {
@@ -705,57 +721,47 @@ body {
   font-size: 0.75rem;
 }
 
-.custom__reply__ticket__offcanvas {
-  border-radius: 0.563rem 0.563rem 0 0;
-  transition: width 0.3s;
-  height: 80% !important;
-  width: 60% !important;
+.ticket__actions__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 3px;
+  color: #131313;
 }
-.custom__reply__ticket__offcanvas .custom__offcanvas__title {
-  font-size: 1rem;
-  text-transform: capitalize;
-}
-.custom__reply__ticket__offcanvas .offcanvas__close__button {
-  height: 30px;
-  width: 30px;
-  font-size: 0.938rem;
-  border-radius: 3.125rem !important;
-}
-.custom__reply__ticket__offcanvas .offcanvas__close__button:focus {
-  border: none;
-}
-.custom__reply__ticket__offcanvas .reply__ticket__info {
+
+.reply__ticket__info {
   padding: 1.2rem;
   background-color: #f7f7f7;
   border-radius: 0.563rem;
 }
-.custom__reply__ticket__offcanvas .reply__ticket__info img.sender__profile {
+.reply__ticket__info img.sender__profile {
   height: 30px !important;
   width: 30px !important;
   border-radius: 3.125rem;
 }
-.custom__reply__ticket__offcanvas .reply__ticket__info .user__name__initial {
+.reply__ticket__info .user__name__initial {
   font-size: 0.75rem;
   height: 30px !important;
   width: 30px !important;
   border-radius: 0.563rem;
   border: 2px solid #d9ddd9;
 }
-.custom__reply__ticket__offcanvas .reply__ticket__info .time__sent {
+.reply__ticket__info .time__sent {
   font-size: 0.75rem;
 }
-.custom__reply__ticket__offcanvas .reply__ticket__info .ticet__description {
+.reply__ticket__info .ticet__description {
   font-size: 0.813rem;
 }
-.custom__reply__ticket__offcanvas .ticket__file__input {
+
+.ticket__file__input {
   border: 0;
   border-radius: 0;
   font-size: 0.813rem;
 }
-.custom__reply__ticket__offcanvas .ticket__file__input:focus {
+.ticket__file__input:focus {
   box-shadow: none;
 }
-.custom__reply__ticket__offcanvas .btn__send__ticket__reply {
+
+.btn__send__ticket__reply {
   padding: 0.5rem 1rem;
   font-size: 0.938rem;
   border-radius: 0.563rem;
@@ -763,11 +769,11 @@ body {
   color: #FFFFFF;
   font-weight: 500;
 }
-.custom__reply__ticket__offcanvas .btn__send__ticket__reply:focus {
+.btn__send__ticket__reply:focus {
   color: #FFFFFF;
   background-color: #d32839;
 }
-.custom__reply__ticket__offcanvas .btn__send__ticket__reply:hover {
+.btn__send__ticket__reply:hover {
   color: #FFFFFF;
   background-color: #d32839;
 }

@@ -17,7 +17,6 @@ class TicketActivityLogs extends Component
         $this->ticket->activityLogs;
     }
 
-
     public function render()
     {
         return view('livewire.ticket-activity-logs');

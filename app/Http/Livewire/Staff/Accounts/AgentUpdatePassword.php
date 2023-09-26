@@ -30,14 +30,19 @@ class AgentUpdatePassword extends Component
         $this->reset('new_password', 'confirm_password');
     }
 
+    public function actionOnSubmit()
+    {
+        $this->clearFormFields();
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
     public function updatePassword(User $agent)
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         try {
-            $this->updateUserPassword($agent, $validatedData['new_password'], $validatedData['confirm_password']);
-            $this->clearFormFields();
-            $this->dispatchBrowserEvent('close-modal');
+            $this->updateUserPassword($agent, $this->new_password, $this->confirm_password);
+            $this->actionOnSubmit();
             flash()->addSuccess('Password has been updated.');
 
         } catch (\Exception $e) {

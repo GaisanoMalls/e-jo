@@ -14,22 +14,33 @@ use Livewire\Component;
 class DisapproveTicket extends Component
 {
     public Ticket $ticket;
-    public $description;
+    public $reasonDescription;
 
     public function rules()
     {
         return (new StoreDisapproveTicketRequest())->rules();
     }
 
+    public function actionOnSubmit()
+    {
+        sleep(1);
+        $this->emit('loadReason');
+        $this->emit('loadTicketLogs');
+        $this->emit('loadApprovalButtonHeader');
+        $this->emit('loadTicketStatusHeaderText');
+        $this->dispatchBrowserEvent('close-modal');
+        $this->reset('reasonDescription');
+    }
+
     public function disapproveTicket()
     {
-        $validatedData = $this->validate();
+        $this->validate();
 
         try {
-            DB::transaction(function () use ($validatedData) {
+            DB::transaction(function () {
                 $reason = Reason::create([
                     'ticket_id' => $this->ticket->id,
-                    'description' => $validatedData['description']
+                    'description' => $this->reasonDescription
                 ]);
 
                 $reason->ticket()->where('id', $this->ticket->id)
@@ -38,14 +49,8 @@ class DisapproveTicket extends Component
                         'approval_status' => ApprovalStatus::DISAPPROVED
                     ]);
 
-                sleep(1);
-                $this->emit('loadReason');
-                $this->emit('loadTicketLogs');
-                $this->emit('loadApprovalButtonHeader');
-                $this->emit('loadTicketStatusHeaderText');
-                $this->dispatchBrowserEvent('close-modal');
-                $this->reset('description');
                 ActivityLog::make($this->ticket->id, 'disapproved the ticket');
+                $this->actionOnSubmit();
             });
 
             flash()->addSuccess('The ticket has been disapproved.');

@@ -18,9 +18,10 @@ class AssignTag extends Component
     {
         try {
             $this->ticket->tags()->sync($this->selectedTags);
+
+            sleep(1);
             $this->emit('loadTicketTags');
             $this->dispatchBrowserEvent('close-modal');
-            sleep(1);
 
         } catch (\Exception $e) {
             flash()->addError('Oops, something went wrong');
