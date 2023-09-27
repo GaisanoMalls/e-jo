@@ -46,12 +46,14 @@
                     </div>
                     @if ($clarification->fileAttachments->count() > 0)
                     <div class="ticket__attachments d-inline-flex gap-1" data-bs-toggle="modal"
-                        data-bs-target="#clarificationTicketFilesModalForm{{ $clarification->id }}">
+                        data-bs-target="#previewClarificaionFileModal{{ $clarification->id }}">
                         <i class="fa-solid fa-file-image"></i>
                         <small class="attachment__count">{{ $clarification->fileAttachments->count() }}</small>
-                        <small class="attachment__label">{{ $clarification->fileAttachments->count() > 1 ? 'Attachments'
-                            :
-                            'Attachment' }} </small>
+                        <small class="attachment__label">
+                            {{ $clarification->fileAttachments->count() > 1
+                            ? 'Attachments'
+                            : 'Attachment' }}
+                        </small>
                     </div>
                     @endif
                     <i class="fa-solid fa-circle-check ticket__reply__content__check__icon"></i>

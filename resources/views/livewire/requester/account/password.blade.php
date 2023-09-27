@@ -38,7 +38,12 @@
                         </div>
                     </div>
                     <div class="col-12 mt-3">
-                        <button type="submit" class="btn w-auto btn__save__account">Save Profile</button>
+                        <button type="submit" class="btn w-auto btn__save__account" wire:loading.attr="disabled">
+                            <span wire:loading wire:target="savePassword" class="spinner-border spinner-border-sm"
+                                role="status" aria-hidden="true">
+                            </span>
+                            Update
+                        </button>
                     </div>
                 </div>
             </div>

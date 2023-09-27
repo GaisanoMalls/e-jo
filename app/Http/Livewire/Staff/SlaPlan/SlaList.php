@@ -55,6 +55,7 @@ class SlaList extends Component
 
         try {
             ServiceLevelAgreement::find($this->slaEditId)->update($validatedData);
+            sleep(1);
             $this->clearFormFields();
             $this->fetchServiceLevelAgreements();
             $this->dispatchBrowserEvent('close-modal');
@@ -77,6 +78,7 @@ class SlaList extends Component
     {
         try {
             ServiceLevelAgreement::find($this->slaDeleteId)->delete();
+            sleep(1);
             $this->slaDeleteId = null;
             $this->fetchServiceLevelAgreements();
             $this->dispatchBrowserEvent('close-modal');

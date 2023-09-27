@@ -83,7 +83,12 @@
                     </div>
                     <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
                         <div class="d-flex align-items-center gap-2">
-                            <button type="submit" class="btn m-0 btn__modal__footer btn__send">Save</button>
+                            <button type="submit" class="btn m-0 btn__modal__footer btn__send">
+                                <span wire:loading wire:target="updateServiceDepartment"
+                                    class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                </span>
+                                Update
+                            </button>
                             <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
                                 data-bs-dismiss="modal" wire:click="clearFormField">Cancel</button>
                         </div>
@@ -114,6 +119,9 @@
                     <button type="submit"
                         class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
                         wire:click="delete">
+                        <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm" role="status"
+                            aria-hidden="true">
+                        </span>
                         Yes, delete
                     </button>
                 </div>

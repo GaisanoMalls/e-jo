@@ -31,6 +31,7 @@ class CreateTag extends Component
 
     public function actionOnSubmit()
     {
+        sleep(1);
         $this->emit('loadTags');
         $this->clearFormField();
     }

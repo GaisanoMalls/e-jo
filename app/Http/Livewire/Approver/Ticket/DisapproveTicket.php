@@ -26,6 +26,8 @@ class DisapproveTicket extends Component
         sleep(1);
         $this->emit('loadReason');
         $this->emit('loadTicketLogs');
+        $this->emit('loadTicketDetails');
+        $this->emit('loadBackButtonHeader');
         $this->emit('loadApprovalButtonHeader');
         $this->emit('loadTicketStatusHeaderText');
         $this->dispatchBrowserEvent('close-modal');

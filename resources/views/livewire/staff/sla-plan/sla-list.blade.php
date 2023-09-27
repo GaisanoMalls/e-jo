@@ -74,7 +74,7 @@
                             <div class="col-md-12">
                                 <div class="mb-2">
                                     <label for="countdown_approach" class="form-label form__field__label">Hours</label>
-                                    <input type="text" wire:model.debounce.500ms="countdown_approach" class="form-control form__field
+                                    <input type="text" wire:model="countdown_approach" class="form-control form__field
                                         @error('countdown_approach') is-invalid @enderror" id="countdown_approach"
                                         placeholder="e.g. 24">
                                     @error('countdown_approach')
@@ -96,7 +96,7 @@
                                     <label for="time_unit" class="form-label form__field__label">
                                         Time unit
                                     </label>
-                                    <input type="text" wire:model.debounce.500ms="time_unit" class="form-control form__field
+                                    <input type="text" wire:model="time_unit" class="form-control form__field
                                         @error('time_unit') is-invalid @enderror" id="time_unit"
                                         placeholder="e.g. 1 Day">
                                     @error('time_unit')
@@ -111,7 +111,13 @@
                     </div>
                     <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
                         <div class="d-flex align-items-center gap-2">
-                            <button type="submit" class="btn m-0 btn__modal__footer btn__send">Save</button>
+                            <button type="submit"
+                                class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__modal__footer btn__send">
+                                <span wire:loading wire:target="updateSLA" class="spinner-border spinner-border-sm"
+                                    role="status" aria-hidden="true">
+                                </span>
+                                Update
+                            </button>
                             <button type="button" class="btn m-0 btn__modal__footer btn__cancel" data-bs-dismiss="modal"
                                 wire:click="clearFormFields">Cancel</button>
                         </div>
@@ -142,6 +148,9 @@
                     <button type="submit"
                         class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
                         wire:click="delete">
+                        <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm" role="status"
+                            aria-hidden="true">
+                        </span>
                         Yes, delete
                     </button>
                 </div>

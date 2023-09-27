@@ -47,6 +47,7 @@ class Profile extends Component
 
     public function actionOnSubmit()
     {
+        sleep(1);
         $this->resetValidation();
         $this->emit('loadProfilePreview');
         $this->emit('loadNavProfilePic');

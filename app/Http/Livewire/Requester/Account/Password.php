@@ -38,6 +38,7 @@ class Password extends Component
             'password' => Hash::make($this->new_password)
         ]);
 
+        sleep(1);
         $this->clearFormFields();
         flash()->addSuccess('Your password has been updated.');
 

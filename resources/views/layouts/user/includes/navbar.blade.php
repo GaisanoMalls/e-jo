@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg bg-white px-5 py-3 sticky-top">
-    <div class="container gap-5">
+<nav class="navbar navbar-expand-lg bg-white px-3 py-3 sticky-top">
+    <div class="container-fluid gap-5">
         <a href="{{ route('user.dashboard') }}"
             class="navbar-brand d-flex gap-2 align-items-center justify-content-center">
             <img src="{{ asset('images/gmall.png') }}" class="company__logo" alt="GMall Ticketing System">

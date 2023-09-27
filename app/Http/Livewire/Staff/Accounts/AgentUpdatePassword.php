@@ -32,6 +32,7 @@ class AgentUpdatePassword extends Component
 
     public function actionOnSubmit()
     {
+        sleep(1);
         $this->clearFormFields();
         $this->dispatchBrowserEvent('close-modal');
     }

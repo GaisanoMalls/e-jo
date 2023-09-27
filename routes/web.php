@@ -302,7 +302,6 @@ Route::middleware(['auth', Role::user()])->group(function () {
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(UserTicketsController::class)->group(function () {
                 Route::post('/store', 'store')->name('store');
-                Route::post('/{ticket}/reply/store', 'requesterReplyTicket')->name('store_reply_ticket');
                 Route::get('/{ticket}/view', 'viewTicket')->name('view_ticket');
                 Route::get('/{ticket}/view/clarifications', 'ticketClarifications')->name('ticket_clarifications');
 

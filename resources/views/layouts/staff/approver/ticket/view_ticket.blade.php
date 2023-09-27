@@ -7,38 +7,7 @@
     <div class="card ticket__card" id="userTicketCard">
         <div class="ticket__details__section">
             <div class="mb-3 d-flex flex-column details__card__top">
-                @switch($ticket->status_id)
-                @case(App\Models\Status::OPEN)
-                <a href="{{ route('approver.tickets.open') }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @break
-                @case(App\Models\Status::VIEWED)
-                <a href="{{ route('approver.tickets.viewed') }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @break
-                @case(App\Models\Status::APPROVED)
-                <a href="{{ route('approver.tickets.approved') }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @break
-                @case(App\Models\Status::ON_PROCESS)
-                <a href="{{ route('approver.tickets.on_process') }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @break
-                @endswitch
-                @if ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
-                <a href="{{ route('approver.tickets.disapproved') }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @endif
+                @livewire('approver.ticket.load-back-button-header', ['ticket' => $ticket])
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div class="d-flex align-items-center gap-3">
                         @livewire('approver.ticket.load-ticket-status-header-text', ['ticket' => $ticket])
@@ -119,7 +88,7 @@
                 </div>
                 <div class="col-md-5">
                     <div class="container__ticket__details__right">
-                        @include('layouts.staff.approver.ticket.includes.ticket_details')
+                        @livewire('approver.ticket.ticket-details', ['ticket' => $ticket])
                         @livewire('approver.ticket.ticket-logs', ['ticket' => $ticket])
                     </div>
                 </div>

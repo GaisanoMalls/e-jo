@@ -28,6 +28,7 @@ class CreateSla extends Component
 
     public function actionOnSubmit()
     {
+        sleep(1);
         $this->clearFormFields();
         $this->emit('loadServiceLevelAgreements');
     }

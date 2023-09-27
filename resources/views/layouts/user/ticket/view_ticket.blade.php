@@ -1,70 +1,12 @@
 @extends('layouts.user.base', ['title' => $ticket->subject ])
 
 @section('main-content')
-@if ($reason)
-@include('layouts.user.ticket.includes.modal.reason')
-@endif
-@if ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
-<div class="alert alert-warning p-3 rounded-3 border-0 mt-4 mb-3" role="alert" style="font-size: 13px;">
-    <div class="mb-2">We regret to inform you that the approver has disapproved your ticket. After careful
-        consideration, the
-        decision has been made not to proceed with the requested action at this time.
-        <br>
-        Please feel free to reach out
-        to the approver or the relevant team if you have any questions or require further
-        clarification on the disapproval decision. They will be more than willing to assist you with any concerns
-        you may have.
-    </div>
-    @if ($reason)
-    <button type="button" class="btn btn-sm p-0 d-flex align-items-center rounded-0 border-0 gap-1 btn__see__reason"
-        data-bs-toggle="modal" data-bs-target="#reasonModal">
-        See reason of disapproval
-    </button>
-    @endif
-</div>
-@endif
+@livewire('requester.ticket.reason-of-disapproval', ['ticket' => $ticket])
 <div class="row mx-0">
     <div class="card ticket__card" id="userTicketCard">
         <div class="ticket__details__section">
             <div class="mb-3 d-flex flex-column details__card__top">
-                @switch($ticket->status_id)
-                @case(App\Models\Status::OPEN)
-                <a href="{{ route('user.tickets.open_tickets') }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @break
-                @case(App\Models\Status::ON_PROCESS)
-                <a href="{{ route('user.tickets.on_process_tickets') }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @break
-                @case(App\Models\Status::VIEWED)
-                <a href="{{ route('user.tickets.viewed_tickets') }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @break
-                @case(App\Models\Status::APPROVED)
-                <a href="{{ route('user.tickets.approved_tickets') }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @break
-                @endswitch
-                @if ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
-                <a href="{{ url()->previous() }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @endif
-                @if ($ticket->status_id === App\Models\Status::CLOSED)
-                <a href="{{ url()->previous() }}" type="button"
-                    class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-                @endif
+                @livewire('requester.ticket.load-back-button-header', ['ticket' => $ticket])
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div class="d-flex align-items-center gap-3">
                         @livewire('requester.ticket.load-ticket-status-header-text', ['ticket' => $ticket])
@@ -81,7 +23,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-7 position-relative">
+                <div class="col-md-8 position-relative">
                     <div class="card border-0 p-0 card__ticket__details">
                         <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                             <div class="d-flex align-items-center user__account__media">
@@ -127,8 +69,7 @@
                     <div class="mb-4 mt-4 d-flex align-items-center justify-content-between">
                         <small class="ticket__discussions text-muted">
                             @section('count-replyThraeds-clarificafions')
-                            {{ $ticket->replies->count() > 1 ? 'Discussions' : 'Discussion' }}
-                            ({{ $ticket->replies->count() }})
+                            @livewire('requester.ticket.load-discussions-count', ['ticket' => $ticket])
                             @show
                         </small>
                         <div class="d-flex align-items-center gap-3 threads__clarifications__tab__container">
@@ -150,11 +91,11 @@
                     @show
                     {{-- End Replies/Comments --}}
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <div class="container__ticket__details__right">
-                        @include('layouts.user.ticket.includes.ticket_details')
-                        @include('layouts.user.ticket.includes.ticket_assigned_agent')
-                        {{-- @include('layouts.user.ticket.includes.approvals') --}}
+                        @livewire('requester.ticket.ticket-details', ['ticket' => $ticket])
+                        @livewire('requester.ticket.assigned-agent', ['ticket' => $ticket])
+                        {{-- PARTIALY DISABLED @livewire('requester.ticket.approvers', ['ticket' => $ticket]) --}}
                         @livewire('requester.ticket.ticket-logs', ['ticket' => $ticket])
                     </div>
                 </div>
@@ -163,30 +104,6 @@
     </div>
 </div>
 @include('layouts.user.ticket.includes.modal.preview_ticket_files_modal')
-@include('layouts.user.ticket.includes.offcanvas.reply_ticket_offcanvas')
+@livewire('requester.ticket.send-ticket-reply', ['ticket' => $ticket])
 @livewire('requester.ticket.send-clarification', ['ticket' => $ticket])
 @endsection
-
-@if ($errors->requesterStoreTicketReply->any())
-@push('offcanvas-error')
-<script>
-    $(function () {
-        var offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRequesterReplyTicketForm'));
-        offcanvas.show();
-    });
-
-</script>
-@endpush
-@endif
-
-@if ($errors->storeTicketReplyClarification->any())
-@push('offcanvas-error')
-<script>
-    $(function () {
-        var offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRequesterReplyTicketClarificationForm'));
-        offcanvas.show();
-    });
-
-</script>
-@endpush
-@endif

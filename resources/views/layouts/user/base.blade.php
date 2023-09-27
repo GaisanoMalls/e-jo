@@ -22,11 +22,9 @@
     @include('layouts.user.includes.navbar')
     @include('layouts.user.account.includes.confirm_logout')
     @include('layouts.user.includes.modals.create_ticket_modal')
-    <div class="container mb-5 requester__section">
+    <div class="container-fluid px-lg-4 px-3 mb-5 requester__section">
         @livewire('offline')
         @if (Route::is('user.tickets.*'))
-        {{-- Show this section if the route matches the given pattern --}}
-        {{-- @include('layouts.user.includes.ticket_tab') --}}
         @livewire('requester.ticket-tab')
         <div class="row mx-0 ticket__content header user">
             <div class="d-flex flex-wrap px-0 align-items-center justify-content-between">

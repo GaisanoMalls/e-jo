@@ -63,8 +63,9 @@
                 <div class="modal-content custom__modal__content">
                     <div class="modal__header d-flex justify-content-between align-items-center">
                         <h6 class="modal__title">
-                            {{ $reply->fileAttachments->count() > 1 ? 'Reply file attachments' : 'Reply file
-                            attachment'}}
+                            {{ $reply->fileAttachments->count() > 1
+                            ? 'Reply file attachments'
+                            : 'Reply file attachment'}}
                             ({{ $reply->fileAttachments->count() }})
                         </h6>
                         <a href="" style="font-size: 14px; color: #123831;">Download all</a>
@@ -130,8 +131,7 @@
         @if ($ticket->status_id !== App\Models\Status::CLOSED )
         <button type="button"
             class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2 float-end"
-            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRequesterReplyTicketForm"
-            aria-controls="offcanvasBottom">
+            data-bs-toggle="modal" data-bs-target="#ticketReplyModal" wire:click="getLatestReply">
             <i class="fa-solid fa-pen"></i>
             <span class="lbl__reply">Reply</span>
         </button>

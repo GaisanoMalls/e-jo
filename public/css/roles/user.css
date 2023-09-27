@@ -64,12 +64,14 @@
 }
 
 .reason__modal,
-.clarification__modal {
+.clarification__modal,
+.reply__ticket__modal {
   border-radius: 0.625rem;
   border: none;
 }
 
-.clarification__modal .modal__content .title {
+.clarification__modal .modal__content .title,
+.reply__ticket__modal .modal__content .title {
   font-size: 0.938rem;
   font-weight: 600;
   color: #212529;

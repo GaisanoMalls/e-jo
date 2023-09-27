@@ -136,89 +136,12 @@ class TicketsController extends Controller
 
     public function viewTicket(Ticket $ticket)
     {
-        $latestReply = $this->getLatestReply($ticket->id);
-        $reason = $ticket->reasons()->where('ticket_id', $ticket->id)->first();
-
-        $levelApprovers = LevelApprover::where('help_topic_id', $ticket->helpTopic->id)->get();
-        $approvers = User::approvers();
-
-        return view(
-            'layouts.user.ticket.view_ticket',
-            compact([
-                'ticket',
-                'latestReply',
-                'reason',
-                'levelApprovers',
-                'approvers'
-            ])
-        );
-    }
-
-    public function requesterReplyTicket(ReplyTicketRequest $request, Ticket $ticket)
-    {
-        try {
-            DB::transaction(function () use ($request, $ticket) {
-                $ticket->update(['status_id' => Status::ON_PROCESS]);
-
-                $reply = Reply::create([
-                    'user_id' => auth()->user()->id,
-                    'ticket_id' => $ticket->id,
-                    'description' => $request->description
-                ]);
-
-                if ($request->hasFile('replyFiles')) {
-                    foreach ($request->file('replyFiles') as $uploadedReplyFile) {
-                        $fileName = $uploadedReplyFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs("public/ticket/{$ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(), $uploadedReplyFile, $fileName);
-
-                        $replyFile = new ReplyFile();
-                        $replyFile->file_attachment = $fileAttachment;
-                        $replyFile->reply_id = $reply->id;
-
-                        $reply->fileAttachments()->save($replyFile);
-                    }
-                }
-
-                $latestReply = Reply::where('ticket_id', $ticket->id)
-                    ->whereHas('user', function ($user) {
-                        $user->where('role_id', '!=', Role::USER);
-                    })
-                    ->latest('created_at')
-                    ->first();
-
-                ActivityLog::make(
-                    $ticket->id,
-                    'replied to ' . $latestReply->user->profile->getFullName()
-                );
-            });
-
-            return back()->with('success', 'Ticket reply has been sent.');
-
-        } catch (\Exception $e) {
-            return back()->with('error', 'Failed to send your reply. Please try again.');
-        }
+        return view('layouts.user.ticket.view_ticket', compact('ticket'));
     }
 
     public function ticketClarifications(Ticket $ticket)
     {
-        $latestReply = $this->getLatestReply($ticket->id);
-        $latestClarification = $this->getLatestClarification($ticket->id);
-        $reason = $ticket->reasons()->where('ticket_id', $ticket->id)->first();
-
-        $levelApprovers = LevelApprover::where('help_topic_id', $ticket->helpTopic->id)->get();
-        $approvers = User::approvers();
-
-        return view(
-            'layouts.user.ticket.includes.ticket_clarifications',
-            compact([
-                'ticket',
-                'latestReply',
-                'latestClarification',
-                'reason',
-                'levelApprovers',
-                'approvers'
-            ])
-        );
+        return view('layouts.user.ticket.includes.ticket_clarifications', compact('ticket'));
     }
 
     public function loadBranches()

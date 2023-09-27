@@ -10,9 +10,16 @@ class TicketReplies extends Component
     public Ticket $ticket;
     public $replies = null;
 
+    protected $listeners = ['loadTicketDiscussions' => 'render'];
+
     public function loadReplies()
     {
         $this->replies = $this->ticket->replies;
+    }
+
+    public function getLatestReply()
+    {
+        $this->emit('loadLatestReply');
     }
 
     public function render()

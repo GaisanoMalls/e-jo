@@ -1,8 +1,7 @@
 @extends('layouts.user.ticket.view_ticket')
 
 @section('count-replyThraeds-clarificafions')
-{{ $ticket->clarifications->count() > 1 ? 'Clarifications' : 'Clarification' }}
-({{ $ticket->clarifications->count() }})
+@livewire('requester.ticket.load-clarifications-count', ['ticket' => $ticket])
 @endsection
 
 @section('ticket-reply-clarifications')

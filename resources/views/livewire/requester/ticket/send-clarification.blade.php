@@ -4,7 +4,7 @@
         <div class="modal-dialog modal-xl modal-dialog-centered custom__modal">
             <div class="modal-content d-flex flex-column custom__modal__content">
                 <div class="modal__header d-flex justify-content-between align-items-center">
-                    <h6 class="modal__title">Write your reply</h6>
+                    <h6 class="modal__title">Write your clarification</h6>
                     <button class="btn d-flex align-items-center justify-content-center modal__close__button"
                         data-bs-dismiss="modal" id="btnCloseModal">
                         <i class="fa-solid fa-xmark"></i>
@@ -15,7 +15,7 @@
                     <form wire:submit.prevent="sendClarification">
                         <div class="my-2">
                             <div wire:ignore>
-                                <textarea wire:model="description" id="description"></textarea>
+                                <textarea wire:model="description" id="clarificationDescription"></textarea>
                             </div>
                             @error('description')
                             <span class="error__message">
@@ -62,7 +62,7 @@
 @push('livewire-textarea')
 <script>
     tinymce.init({
-        selector: '#description',
+        selector: '#clarificationDescription',
         plugins: 'lists',
         toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
         height: 350,
@@ -85,7 +85,7 @@
     });
 
     window.addEventListener('reload-modal', () =>{
-        tinymce.get("description").setContent("");
+        tinymce.get("clarificationDescription").setContent("");
     });
 </script>
 @endpush

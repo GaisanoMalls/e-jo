@@ -38,6 +38,7 @@ class SendClarification extends Component
         $this->upload++;
         $this->reset('description');
         $this->emit('loadTicketLogs');
+        $this->emit('loadTicketDetails');
         $this->emit('loadClarifications');
         $this->emit('loadLatestClarification');
         $this->emit('loadTicketStatusHeaderText');

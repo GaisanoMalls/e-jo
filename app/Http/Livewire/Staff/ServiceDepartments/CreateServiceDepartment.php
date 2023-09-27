@@ -28,6 +28,7 @@ class CreateServiceDepartment extends Component
 
     public function actionOnSubmit()
     {
+        sleep(1);
         $this->clearFormField();
         $this->emit('loadServiceDepartments');
     }

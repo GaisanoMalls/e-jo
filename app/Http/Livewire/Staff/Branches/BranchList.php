@@ -55,6 +55,7 @@ class BranchList extends Component
                 'slug' => \Str::slug($this->name)
             ]);
 
+            sleep(1);
             $this->clearFormField();
             $this->fetchBranches();
             $this->dispatchBrowserEvent('close-modal');
@@ -76,6 +77,7 @@ class BranchList extends Component
     {
         try {
             Branch::find($this->branchDeleteId)->delete();
+            sleep(1);
             $this->branchDeleteId = '';
             $this->fetchBranches();
             $this->dispatchBrowserEvent('close-modal');

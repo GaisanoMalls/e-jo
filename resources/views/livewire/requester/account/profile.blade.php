@@ -96,7 +96,13 @@
                         </div>
                     </div>
                     <div class="col-12 mt-3">
-                        <button type="submit" class="btn w-auto btn__save__account">Save Profile</button>
+                        <button type="submit" wire:loading.attr="disabled"
+                            class="btn w-auto d-flex align-items-center justify-content-center gap-2 btn__save__account">
+                            <span wire:loading wire:target="saveProfile" class="spinner-border spinner-border-sm"
+                                role="status" aria-hidden="true">
+                            </span>
+                            Update
+                        </button>
                     </div>
                 </div>
             </div>

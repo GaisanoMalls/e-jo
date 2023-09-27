@@ -76,7 +76,7 @@
                                 <div class="mb-2">
                                     <label for="name" class="form-label form__field__label">Name</label>
                                     <input type="text" class="form-control form__field" id="name"
-                                        placeholder="Enter tag name" wire:model.debounce.500ms="name">
+                                        placeholder="Enter tag name" wire:model="name">
                                     @error('name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -90,8 +90,11 @@
                     <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
                         <div class="d-flex align-items-center gap-2">
                             <button type="submit"
-                                class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send">
-                                Save
+                                class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__modal__footer btn__send">
+                                <span wire:loading wire:target="updateTag" class="spinner-border spinner-border-sm"
+                                    role="status" aria-hidden="true">
+                                </span>
+                                Update
                             </button>
                             <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
                                 data-bs-dismiss="modal" wire:click="clearFormField">Cancel</button>
@@ -123,6 +126,9 @@
                     <button type="submit"
                         class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
                         wire:click="delete">
+                        <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm" role="status"
+                            aria-hidden="true">
+                        </span>
                         Yes, delete
                     </button>
                 </div>
