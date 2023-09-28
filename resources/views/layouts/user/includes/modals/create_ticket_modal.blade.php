@@ -1,6 +1,6 @@
 <form action="{{ route('user.ticket.store') }}" method="post" enctype="multipart/form-data">
     @csrf
-    <div class="modal create__ticket__modal" id="createTicketModal" tabindex="-1"
+    <div class="modal slideIn animate create__ticket__modal" id="createTicketModal" tabindex="-1"
         aria-labelledby="createtTicketModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-lg">
             <div class="modal-content modal__content">

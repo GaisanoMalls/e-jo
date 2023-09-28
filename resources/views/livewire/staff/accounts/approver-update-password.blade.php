@@ -1,4 +1,4 @@
-<div wire:ignore.self class="modal edit__password__modal" id="editPasswordModal"
+<div wire:ignore.self class="modal slideIn animate edit__password__modal" id="editPasswordModal"
     aria-labelledby="editPasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal__content">

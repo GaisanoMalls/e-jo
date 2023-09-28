@@ -12,6 +12,7 @@ class BranchList extends Component
 
     public $branches = [];
     public $branchEditId, $branchDeleteId, $name;
+
     protected $listeners = ['loadBranches' => 'fetchBranches'];
 
     public function rules()
@@ -42,7 +43,7 @@ class BranchList extends Component
         $this->branchEditId = $branch->id;
         $this->name = $branch->name;
         $this->dispatchBrowserEvent('show-edit-branch-modal');
-        $this->clearValidation();
+        $this->resetValidation();
     }
 
     public function update()

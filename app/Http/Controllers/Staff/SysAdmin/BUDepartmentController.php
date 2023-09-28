@@ -30,33 +30,6 @@ class BUDepartmentController extends Controller
         );
     }
 
-    public function store(StoreBUDepartmentRequest $request)
-    {
-        if ($request->branches[0] === null) {
-            return back()->with('empty_branch', 'Branch is required.')
-                ->withInput();
-        }
-
-        $selectedBranches = $this->getSelectedValue($request->branches);
-
-        $existingBranches = Branch::whereIn('id', $selectedBranches)->pluck('id');
-        if (count($existingBranches) !== count($selectedBranches)) {
-            return back()->with('invalid_branch', 'Invalid branch selected.')
-                ->withInput();
-        }
-
-        DB::transaction(function () use ($request, $existingBranches) {
-            $department = Department::create([
-                'name' => $request->name,
-                'slug' => \Str::slug($request->name)
-            ]);
-
-            $department->branches()->attach($existingBranches);
-        });
-
-        return back()->with('success', 'BU/Department successfully added.');
-    }
-
     public function update(Request $request, Department $buDepartment)
     {
         $validator = Validator::make($request->all(), [

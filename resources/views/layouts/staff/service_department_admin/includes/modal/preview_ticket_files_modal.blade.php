@@ -1,5 +1,5 @@
 <!-- Preview Ticket Files Modal -->
-<div class="modal ticket__actions__modal" id="previewTicketFileModal" tabindex="-1"
+<div class="modal slideIn animate ticket__actions__modal" id="previewTicketFileModal" tabindex="-1"
     aria-labelledby="modalFormLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered custom__modal">
         <div class="modal-content custom__modal__content">

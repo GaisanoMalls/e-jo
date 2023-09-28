@@ -7,55 +7,18 @@
 /* Keyframes */
 @keyframes slideIn {
     0% {
-        transform: translateY(1rem);
-        opacity: 0;
-    }
-
-    100% {
         transform: translateY(0rem);
-        opacity: 1;
+        opacity: 0;
     }
 
-    0% {
+    100% {
         transform: translateY(1rem);
-        opacity: 0;
-    }
-}
-
-@-webkit-keyframes slideIn {
-    0% {
-        -webkit-transform: transform;
-        -webkit-opacity: 0;
-    }
-
-    100% {
-        -webkit-transform: translateY(0);
-        -webkit-opacity: 1;
-    }
-
-    0% {
-        -webkit-transform: translateY(1rem);
-        -webkit-opacity: 0;
-    }
-}
-
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
         opacity: 1;
     }
-}
 
-@keyframes center-animate {
     0% {
-        transform: scaleX(120);
-    }
-
-    100% {
-        transform: scaleX(0);
+        transform: translateY(0rem);
+        opacity: 0;
     }
 }
 
@@ -2620,6 +2583,20 @@ input[type="checkbox"] {
     }
 
     .modal__confirm__delete__department {
+        .btn__confirm__modal {
+            @include generic.button-config;
+
+            &.btn__cancel__delete {
+                @include generic.form-button-cancel;
+            }
+
+            &.btn__confirm__delete {
+                @include generic.form-button-submit;
+            }
+        }
+    }
+
+    .modal__confirm__delete__bu__department {
         .btn__confirm__modal {
             @include generic.button-config;
 

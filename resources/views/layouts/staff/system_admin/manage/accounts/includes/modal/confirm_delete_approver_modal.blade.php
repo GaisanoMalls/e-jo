@@ -1,5 +1,5 @@
-<div class="modal modal__confirm__delete__user__account" id="confirmDeleteApprover{{ $approver->id }}" tabindex="-1"
-    aria-labelledby="confirmDeleteApproverLabel" aria-hidden="true">
+<div class="modal slideIn animate modal__confirm__delete__user__account" id="confirmDeleteApprover{{ $approver->id }}"
+    tabindex="-1" aria-labelledby="confirmDeleteApproverLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal__content">
             <form action="{{ route('staff.manage.user_account.approver.delete', $approver->id) }}" method="post">

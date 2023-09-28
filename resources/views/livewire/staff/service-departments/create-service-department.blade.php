@@ -1,6 +1,6 @@
 <div>
-    <div wire:ignore.self class="modal department__modal" id="addNewServiceDepartmentModal" tabindex="-1"
-        aria-labelledby="addNewServiceDepartmentModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal slideIn animate department__modal" id="addNewServiceDepartmentModal"
+        tabindex="-1" aria-labelledby="addNewServiceDepartmentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0">

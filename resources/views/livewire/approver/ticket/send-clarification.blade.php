@@ -1,5 +1,5 @@
 <div>
-    <div wire:ignore.self class="modal clarification__modal" id="ticketClarificationModal" tabindex="-1"
+    <div wire:ignore.self class="modal slideIn animate clarification__modal" id="ticketClarificationModal" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered custom__modal">
             <div class="modal-content d-flex flex-column custom__modal__content">

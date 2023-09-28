@@ -1,5 +1,5 @@
-<div class="modal account__modal" id="addNewUserModal" tabindex="-1" aria-labelledby="addNewUserModalLabel"
-    aria-hidden="true">
+<div class="modal slideIn animate account__modal" id="addNewUserModal" tabindex="-1"
+    aria-labelledby="addNewUserModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">

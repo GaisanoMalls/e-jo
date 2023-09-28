@@ -1,5 +1,5 @@
 <div>
-    <div wire:poll.visible.5s class="table-responsive custom__table">
+    <div class="table-responsive custom__table">
         @if (!$serviceLevelAgreements->isEmpty())
         <table class="table table-striped mb-0" id="table">
             <thead>
@@ -58,8 +58,8 @@
     </div>
 
     {{-- Edit SLA Modal --}}
-    <div wire:ignore.self class="modal sla__modal" id="editSLAModal" tabindex="-1" aria-labelledby="editSLAModalLabel"
-        aria-hidden="true">
+    <div wire:ignore.self class="modal slideIn animate sla__modal" id="editSLAModal" tabindex="-1"
+        aria-labelledby="editSLAModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0">
@@ -128,7 +128,7 @@
     </div>
 
     {{-- Delete SLA Modal --}}
-    <div wire:ignore.self class="modal modal__confirm__delete__sla" id="deleteSLAModal" tabindex="-1"
+    <div wire:ignore.self class="modal slideIn animate modal__confirm__delete__sla" id="deleteSLAModal" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">

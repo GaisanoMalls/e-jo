@@ -1,4 +1,4 @@
-<div class="modal help__topic__modal" id="addNewHelpTopicModal" tabindex="-1"
+<div class="modal slideIn animate help__topic__modal" id="addNewHelpTopicModal" tabindex="-1"
     aria-labelledby="addNewHelpTopicModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content modal__content">

@@ -1,5 +1,5 @@
 <div>
-    <div wire:poll.visible.5s class="table-responsive custom__table">
+    <div class="table-responsive custom__table">
         @if (!$tags->isEmpty())
         <table class="table table-striped mb-0" id="table">
             <thead>
@@ -59,7 +59,7 @@
     </div>
 
     {{-- Edit Tag Modal --}}
-    <div wire:ignore.self class="modal tag__modal" id="updateTagModal" tabindex="-1"
+    <div wire:ignore.self class="modal slideIn animate tag__modal" id="updateTagModal" tabindex="-1"
         aria-labelledby="addNewTagModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
@@ -106,7 +106,7 @@
     </div>
 
     {{-- Delete Tag Modal --}}
-    <div wire:ignore.self class="modal modal__confirm__delete__tag" id="deleteTagModal" tabindex="-1"
+    <div wire:ignore.self class="modal slideIn animate modal__confirm__delete__tag" id="deleteTagModal" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">

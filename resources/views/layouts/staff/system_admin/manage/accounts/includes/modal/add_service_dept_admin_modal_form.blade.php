@@ -1,4 +1,4 @@
-<div class="modal account__modal" id="addNewServiceDeptAdminModal" tabindex="-1"
+<div class="modal slideIn animate account__modal" id="addNewServiceDeptAdminModal" tabindex="-1"
     aria-labelledby="addNewDeptAdminModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content modal__content">

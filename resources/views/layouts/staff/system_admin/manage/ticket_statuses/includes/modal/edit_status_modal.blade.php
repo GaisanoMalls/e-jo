@@ -1,4 +1,4 @@
-<div class="modal status__modal" id="editStatus{{ $status->id }}" tabindex="-1"
+<div class="modal slideIn animate status__modal" id="editStatus{{ $status->id }}" tabindex="-1"
     aria-labelledby="addNewTicketStatusModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal__content">

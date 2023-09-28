@@ -1,0 +1,124 @@
+<?php
+
+namespace App\Http\Livewire\Staff\BUDepartments;
+
+use App\Http\Traits\BasicModelQueries;
+use App\Models\Branch;
+use App\Models\Department;
+use Livewire\Component;
+
+class BUDepartmentList extends Component
+{
+    use BasicModelQueries;
+
+    public $buDepartments = [], $editSelectedBranches = [];
+    public $buDepartmentEditId, $buDepartmentDeleteId, $name;
+
+    protected $listeners = ['loadBUDepartments' => 'fetchBUDepartments'];
+
+    public function rules()
+    {
+        return [
+            'name' => 'required|unique:departments,name,' . $this->buDepartmentEditId,
+            'editSelectedBranches' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'editSelectedBranches.required' => 'The branch field is required.'
+        ];
+    }
+
+    public function updated($fields)
+    {
+        $this->validateOnly($fields);
+    }
+
+    public function fetchBUDepartments()
+    {
+        $this->buDepartments = $this->queryBUDepartments();
+    }
+
+    public function editBUDepartment(Department $department)
+    {
+        $this->buDepartmentEditId = $department->id;
+        $this->name = $department->name;
+        $this->resetValidation();
+        $this->dispatchBrowserEvent('show-edit-bu-department-modal');
+        $this->dispatchBrowserEvent('update-branch-select-option', [
+            'branchIds' => Branch::whereHas('departments', fn($department) => $department->where('departments.id', $this->buDepartmentEditId))->pluck('id')->toArray()
+        ]);
+    }
+
+    public function update()
+    {
+        $this->validate();
+
+        try {
+            $buDepartment = Department::find($this->buDepartmentEditId);
+
+            if ($buDepartment) {
+                $buDepartment->update([
+                    'name' => $this->name,
+                    'slug' => \Str::slug($this->name),
+                ]);
+
+                $buDepartment->branches()->sync($this->editSelectedBranches);
+                $this->actionOnSubmit();
+
+            }
+
+        } catch (\Exception $e) {
+            flash()->addError('Oops, something went wrong');
+        }
+    }
+
+    public function deleteBUDepartment(Department $department)
+    {
+        $this->buDepartmentDeleteId = $department->id;
+        $this->name = $department->name;
+        $this->dispatchBrowserEvent('show-delete-bu-department-modal');
+    }
+
+    public function delete()
+    {
+        try {
+            Department::find($this->buDepartmentDeleteId)->delete();
+            sleep(1);
+            $this->buDepartmentDeleteId = null;
+            $this->emit('loadBUDepartments');
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('close-modal');
+            flash()->addSuccess('BU/Department successfully deleted');
+
+        } catch (\Exception $e) {
+            flash()->addError('Oops, something went wrong');
+        }
+    }
+
+    public function cancel()
+    {
+        $this->reset();
+        $this->resetValidation();
+    }
+
+    public function actionOnSubmit()
+    {
+        sleep(1);
+        $this->reset();
+        $this->resetValidation();
+        $this->emit('loadBUDepartments');
+        $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('clear-branch-select-option');
+    }
+
+    public function render()
+    {
+        return view('livewire.staff.b-u-departments.b-u-department-list', [
+            'buDepartments' => $this->fetchBUDepartments(),
+            'branches' => $this->queryBranches(),
+        ]);
+    }
+}

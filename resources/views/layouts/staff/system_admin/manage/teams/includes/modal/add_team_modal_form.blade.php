@@ -1,5 +1,5 @@
-<div class="modal service__department__modal" id="addNewTeamModal" tabindex="-1" aria-labelledby="addNewTeamModalLabel"
-    aria-hidden="true">
+<div class="modal slideIn animate service__department__modal" id="addNewTeamModal" tabindex="-1"
+    aria-labelledby="addNewTeamModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">

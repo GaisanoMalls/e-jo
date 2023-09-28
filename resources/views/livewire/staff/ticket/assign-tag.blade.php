@@ -1,5 +1,5 @@
 <div>
-    <div wire:ignore.self class="modal ticket__actions__modal" id="ticketTagModal" tabindex="-1"
+    <div wire:ignore.self class="modal slideIn animate ticket__actions__modal" id="ticketTagModal" tabindex="-1"
         aria-labelledby="modalFormLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom__modal">
             <div class="modal-content custom__modal__content">
@@ -40,7 +40,7 @@
 
 @push('livewire-select')
 <script>
-    let tagOption = [
+    const tagOption = [
         @foreach ($tags as $tag)
             {
                 label: "{{ $tag->name }}",
@@ -60,11 +60,11 @@
         popupDropboxBreakpoint: '3000px',
     });
 
-    let tagSelect = document.querySelector('#select-tag')
+    const tagSelect = document.querySelector('#select-tag')
     tagSelect.setValue({{ $ticket->tags->pluck('id') }});
 
     tagSelect.addEventListener('change', () => {
-        let tagId = tagSelect.value;
+        const tagId = tagSelect.value;
         @this.set('selectedTags', tagId);
     });
 

@@ -1,5 +1,6 @@
-<div class="modal modal__confirm__delete__announcement" id="confirmDeleteAnnouncement{{ $announcement->id }}"
-    tabindex="-1" aria-labelledby="confirmDeleteAnnouncementLabel" aria-hidden="true">
+<div class="modal slideIn animate modal__confirm__delete__announcement"
+    id="confirmDeleteAnnouncement{{ $announcement->id }}" tabindex="-1" aria-labelledby="confirmDeleteAnnouncementLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal__content">
             <form action="{{ route('staff.announcement.delete', $announcement) }}" method="post">

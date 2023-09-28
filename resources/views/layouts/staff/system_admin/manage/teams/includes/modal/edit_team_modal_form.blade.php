@@ -1,4 +1,4 @@
-<div class="modal service__department__modal" id="editTeam{{ $team->id }}" tabindex="-1"
+<div class="modal slideIn animate service__department__modal" id="editTeam{{ $team->id }}" tabindex="-1"
     aria-labelledby="editTeamModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content modal__content">

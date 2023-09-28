@@ -49,7 +49,7 @@ trait BasicModelQueries
 
     public function queryBUDepartments()
     {
-        return Department::orderBy('name', 'asc')->get();
+        return Department::orderBy('created_at', 'desc')->get();
     }
 
     public function queryPriorityLevels()

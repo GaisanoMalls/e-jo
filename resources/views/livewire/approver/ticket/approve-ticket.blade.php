@@ -1,6 +1,6 @@
 <div>
-    <div wire:ignore.self class="modal modal__confirm__approve__ticket" id="confirmTicketApproveModal" tabindex="-1"
-        aria-hidden="true">
+    <div wire:ignore.self class="modal slideIn animate modal__confirm__approve__ticket" id="confirmTicketApproveModal"
+        tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <form wire:submit.prevent="approveTicket">

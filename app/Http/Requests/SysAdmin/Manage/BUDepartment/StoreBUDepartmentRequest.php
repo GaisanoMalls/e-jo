@@ -25,8 +25,15 @@ class StoreBUDepartmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'branches' => ['array'],
-            'name' => ['required', 'unique:departments,name']
+            'name' => ['required', 'unique:departments,name'],
+            'selectedBranches' => ['required', 'array']
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'selectedBranch.required' => 'The branch field is required.'
         ];
     }
 }

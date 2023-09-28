@@ -1,5 +1,6 @@
 <div>
-    <div wire:ignore.self class="modal reply__ticket__modal" id="ticketReplyModal" tabindex="-1" aria-hidden="true">
+    <div wire:ignore.self class="modal slideIn animate reply__ticket__modal" id="ticketReplyModal" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered custom__modal">
             <div class="modal-content d-flex flex-column custom__modal__content">
                 <div class="modal__header d-flex justify-content-between align-items-center">

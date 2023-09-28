@@ -1,7 +1,7 @@
 <div>
     <!-- Priority Level Modal -->
-    <div wire:ignore.self class="modal ticket__actions__modal" id="changePriorityLevelModal" tabindex="-1"
-        aria-labelledby="modalFormLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal slideIn animate ticket__actions__modal" id="changePriorityLevelModal"
+        tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom__modal">
             <div class="modal-content d-flex flex-column custom__modal__content">
                 <div class="modal__header d-flex justify-content-between align-items-center">

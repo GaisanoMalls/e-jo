@@ -14,7 +14,7 @@ BU/Departments
 @section('manage-content')
 <div class="row">
     <div class="departments__section">
-        @include('layouts.staff.system_admin.manage.bu_departments.includes.modal.add_bu_department_modal_form')
+        @livewire('staff.b-u-departments.create-bu-department')
         <div class="row">
             <div class="col-12 content__container">
                 <div class="card card__rounded__and__no__border">
@@ -29,15 +29,7 @@ BU/Departments
                             </button>
                         </div>
                     </div>
-                    <div class="table-responsive custom__table">
-                        @if (!$buDepartments->isEmpty())
-                        @include('layouts.staff.system_admin.manage.bu_departments.includes.bu_department_list')
-                        @else
-                        <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                            <small style="font-size: 14px;">No records for BU\departments.</small>
-                        </div>
-                        @endif
-                    </div>
+                    @livewire('staff.b-u-departments.b-u-department-list')
                 </div>
             </div>
         </div>

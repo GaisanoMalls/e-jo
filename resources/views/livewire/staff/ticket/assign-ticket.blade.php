@@ -1,5 +1,5 @@
 <div>
-    <div wire:ignore.self class="modal ticket__actions__modal" id="assignTicketModal" tabindex="-1"
+    <div wire:ignore.self class="modal slideIn fade ticket__actions__modal" id="assignTicketModal" tabindex="-1"
         aria-labelledby="modalFormLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom__modal">
             <div class="modal-content d-flex flex-column custom__modal__content">
@@ -53,7 +53,7 @@
 
 @push('livewire-select')
 <script>
-    let teamOption = [
+    const teamOption = [
         @foreach ($teams as $team)
             {
                 label: "{{ $team->name }}",
@@ -70,15 +70,15 @@
         hasOptionDescription: true,
     });
 
-    let teamSelect = document.querySelector('#select-team');
+    const teamSelect = document.querySelector('#select-team');
 
     teamSelect.addEventListener('change', () => {
-        let teamId = parseInt(teamSelect.value);
+        const teamId = parseInt(teamSelect.value);
         @this.set('team', teamId);
     });
 
 
-    let agentOption = [
+    const agentOption = [
         @foreach($agents as $agent)
             {
                 label: "{{ $agent->profile->getFullName() }}",
@@ -97,10 +97,10 @@
         hasOptionDescription: true
     });
 
-    let agentSelect = document.querySelector('#select-agent');
+    const agentSelect = document.querySelector('#select-agent');
 
     agentSelect.addEventListener('change', () => {
-        let agentId = parseInt(agentSelect.value);
+        const agentId = parseInt(agentSelect.value);
         @this.set('agent', agentId);
     });
 
