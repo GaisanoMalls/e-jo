@@ -10071,3 +10071,14 @@ input[type=checkbox]:checked + .form-check-label {
     margin-left: 0 !important;
   }
 }
+@media (max-width: 1120px) {
+  .ticket__tag__buttons__container {
+    gap: 25px !important;
+  }
+  .btn__clear__tags .tag__button__action__label {
+    display: none;
+  }
+  .btn__add__tags .tag__button__action__label {
+    display: none !important;
+  }
+}

@@ -1,25 +1,29 @@
 <div>
     <div class="card border-0 p-0 card__ticket__details card__ticket__details__right">
         <div class="ticket__details__card__body__right">
-            <div class="mb-3 d-flex justify-content-between">
+            <div class="mb-3 d-flex flex-wrap justify-content-between gap-2">
                 <div class="d-flex align-items-center gap-2 mb-">
                     <small class="ticket__actions__label">Tags</small>
                     <div wire:loading class="spinner-border spinner-border-sm loading__spinner" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-3 ticket__tag__buttons__container">
                     @if ($ticket->status_id != \App\Models\Status::CLOSED)
                     @if (!$ticket->tags->isEmpty())
                     <button type="button" class="btn__clear__tags" wire:click="clearTags">
                         <i class="bi bi-trash"></i>
-                        Clear
+                        <span class="tag__button__action__label">
+                            Clear
+                        </span>
                     </button>
                     @endif
                     <button type="button" class="btn__add__tags" data-bs-toggle="modal" data-bs-target="#ticketTagModal"
                         wire:click="getCurrentAssignedTags">
                         <i class="bi bi-plus-lg"></i>
-                        Add/Remove
+                        <span class="tag__button__action__label">
+                            Add/Remove
+                        </span>
                     </button>
                     @endif
                 </div>
