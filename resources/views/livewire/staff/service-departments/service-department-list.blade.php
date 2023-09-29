@@ -83,7 +83,8 @@
                     </div>
                     <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
                         <div class="d-flex align-items-center gap-2">
-                            <button type="submit" class="btn m-0 btn__modal__footer btn__send">
+                            <button type="submit"
+                                class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__modal__footer btn__send">
                                 <span wire:loading wire:target="updateServiceDepartment"
                                     class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                                 </span>

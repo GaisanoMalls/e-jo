@@ -16,8 +16,8 @@
                         Clear
                     </button>
                     @endif
-                    <button type="button" class="btn__add__tags" data-bs-toggle="modal"
-                        data-bs-target="#ticketTagModal">
+                    <button type="button" class="btn__add__tags" data-bs-toggle="modal" data-bs-target="#ticketTagModal"
+                        wire:click="getCurrentAssignedTags">
                         <i class="bi bi-plus-lg"></i>
                         Add/Remove
                     </button>

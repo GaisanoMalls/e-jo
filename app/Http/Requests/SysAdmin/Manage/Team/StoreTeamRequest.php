@@ -7,7 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTeamRequest extends FormRequest
 {
-    protected $errorBag = 'storeTeam';
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,7 +25,6 @@ class StoreTeamRequest extends FormRequest
     public function rules()
     {
         return [
-            'service_department' => ['required'],
             'name' => [
                 'required',
                 'unique:teams,name',
@@ -37,7 +35,17 @@ class StoreTeamRequest extends FormRequest
                         $fail("The team name cannot be the same as any of the department names.");
                     }
                 }
-            ]
+            ],
+            'selectedServiceDepartment' => ['required'],
+            'selectedBranches' => ['required'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'selectedServiceDepartment.required' => 'The service department field is required.',
+            'selectedBranches.required' => 'The branch field is required.'
         ];
     }
 }

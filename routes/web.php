@@ -188,9 +188,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 });
             });
             Route::prefix('roles-and-permissions')->name('roles_and_permissions.')->group(function () {
-                Route::controller(RolesAndPermissionsController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                });
+                Route::get('/', RolesAndPermissionsController::class)->name('index');
             });
             Route::prefix('service-level-agreements')->name('service_level_agreements.')->group(function () {
                 Route::get('/', SLAController::class)->name('index');
@@ -199,23 +197,13 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::get('/', BranchController::class)->name('index');
             });
             Route::prefix('bu-department')->name('bu_department.')->group(function () {
-                Route::controller(BUDepartmentController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::delete('/{buDepartment}/delete', 'delete')->name('delete');
-                    Route::put('/{buDepartment}/update', 'update')->name('update');
-                });
+                Route::get('/', BUDepartmentController::class)->name('index');
             });
             Route::prefix('service-department')->name('service_department.')->group(function () {
                 Route::get('/', ServiceDepartmentController::class)->name('index');
             });
             Route::prefix('team')->name('team.')->group(function () {
-                Route::controller(TeamController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::put('/{team}/update', 'update')->name('update');
-                    Route::delete('{team}/delete', 'delete')->name('delete');
-                });
+                Route::get('/', TeamController::class)->name('index');
             });
             Route::prefix('help-topics')->name('help_topic.')->group(function () {
                 Route::controller(HelpTopicsController::class)->group(function () {

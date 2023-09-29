@@ -45,8 +45,8 @@ class SlaList extends Component
         $this->slaEditId = $serviceLevelAgreement->id;
         $this->countdown_approach = $serviceLevelAgreement->countdown_approach;
         $this->time_unit = $serviceLevelAgreement->time_unit;
-        $this->dispatchBrowserEvent('show-edit-sla-modal');
         $this->resetValidation();
+        $this->dispatchBrowserEvent('show-edit-sla-modal');
     }
 
     public function updateSLA()

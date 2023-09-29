@@ -14,7 +14,7 @@ Teams
 @section('manage-content')
 <div class="row">
     <div class="team__section">
-        @include('layouts.staff.system_admin.manage.teams.includes.modal.add_team_modal_form')
+        @livewire('staff.teams.create-team')
         <div class="col-12 content__container">
             <div class="card card__rounded__and__no__border">
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-1 table__header">
@@ -28,42 +28,9 @@ Teams
                         </button>
                     </div>
                 </div>
-                <div class="table-responsive custom__table">
-                    @if (!$teams->isEmpty())
-                    @include('layouts.staff.system_admin.manage.teams.includes.team_list')
-                    @else
-                    <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                        <small style="font-size: 14px;">No records for teams.</small>
-                    </div>
-                    @endif
-                </div>
+                @livewire('staff.teams.team-list')
             </div>
         </div>
     </div>
 </div>
 @endsection
-
-@if ($errors->storeTeam->any() || session()->has('empty_branch') || session()->has('invalid_branch'))
-@push('modal-with-error')
-<script>
-    $(function () {
-        $('#addNewTeamModal').modal('show');
-    });
-
-</script>
-@endpush
-@endif
-
-@if ($errors->editTeam->any() || session()->has('duplicate_name_error'))
-{{-- Show edit modal based on the selected record/data --}}
-<input type="hidden" id="teamId" value="{{ session('teamId') }}">
-@push('modal-with-error')
-<script>
-    const teamId = document.getElementById('teamId');
-    $(function () {
-        $(`#editTeam${teamId.value}`).modal('show');
-    });
-
-</script>
-@endpush
-@endif

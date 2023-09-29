@@ -8,7 +8,7 @@ use App\Models\User;
 
 class RolesAndPermissionsController extends Controller
 {
-    public function index()
+    public function __invoke()
     {
         $userQuery = User::with(['department', 'branch', 'role'])->orderBy('created_at', 'asc')->get();
 

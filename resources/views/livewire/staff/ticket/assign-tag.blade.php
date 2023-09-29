@@ -64,8 +64,7 @@
     tagSelect.setValue({{ $ticket->tags->pluck('id') }});
 
     tagSelect.addEventListener('change', () => {
-        const tagId = tagSelect.value;
-        @this.set('selectedTags', tagId);
+        @this.set('selectedTags', tagSelect.value);
     });
 
     // Clear all selected tags in the select option when clear button is clicked.
@@ -73,8 +72,13 @@
         tagSelect.reset();
     });
 
-    // Update the selected tags after removing of tags.
+    // Update the selected tags after removing specific tag.
     window.addEventListener('update-tag-select-option', event =>{
+        tagSelect.setValue(event.detail.tagIds);
+    });
+
+    // Get the current assigned tags when button "Add/Remove" is clicked.
+    window.addEventListener('get-current-assigned-tags', event =>{
         tagSelect.setValue(event.detail.tagIds);
     });
 </script>

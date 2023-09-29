@@ -12,15 +12,15 @@
 /* Keyframes */
 @keyframes slideIn {
   0% {
-    transform: translateY(1rem);
+    transform: translateY(0rem);
     opacity: 0;
   }
   100% {
-    transform: translateY(0rem);
+    transform: translateY(1.5rem);
     opacity: 1;
   }
   0% {
-    transform: translateY(1rem);
+    transform: translateY(0rem);
     opacity: 0;
   }
 }

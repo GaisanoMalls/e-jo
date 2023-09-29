@@ -3,8 +3,8 @@
 namespace App\Http\Livewire\Staff\BUDepartments;
 
 use App\Http\Traits\BasicModelQueries;
-use App\Models\Branch;
 use App\Models\Department;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class BUDepartmentList extends Component
@@ -45,11 +45,11 @@ class BUDepartmentList extends Component
     {
         $this->buDepartmentEditId = $department->id;
         $this->name = $department->name;
+        $this->editSelectedBranches = $department->branches->pluck('id')->toArray();
+
         $this->resetValidation();
         $this->dispatchBrowserEvent('show-edit-bu-department-modal');
-        $this->dispatchBrowserEvent('update-branch-select-option', [
-            'branchIds' => Branch::whereHas('departments', fn($department) => $department->where('departments.id', $this->buDepartmentEditId))->pluck('id')->toArray()
-        ]);
+        $this->dispatchBrowserEvent('update-branch-select-option', ['branchIds' => $this->editSelectedBranches]);
     }
 
     public function update()
@@ -57,19 +57,20 @@ class BUDepartmentList extends Component
         $this->validate();
 
         try {
-            $buDepartment = Department::find($this->buDepartmentEditId);
+            $buDepartment = Department::findOrFail($this->buDepartmentEditId);
 
             if ($buDepartment) {
-                $buDepartment->update([
-                    'name' => $this->name,
-                    'slug' => \Str::slug($this->name),
-                ]);
+                DB::transaction(function () use ($buDepartment) {
+                    $buDepartment->update([
+                        'name' => $this->name,
+                        'slug' => \Str::slug($this->name),
+                    ]);
 
-                $buDepartment->branches()->sync($this->editSelectedBranches);
+                    $buDepartment->branches()->sync($this->editSelectedBranches);
+                });
+
                 $this->actionOnSubmit();
-
             }
-
         } catch (\Exception $e) {
             flash()->addError('Oops, something went wrong');
         }
@@ -88,8 +89,6 @@ class BUDepartmentList extends Component
             Department::find($this->buDepartmentDeleteId)->delete();
             sleep(1);
             $this->buDepartmentDeleteId = null;
-            $this->emit('loadBUDepartments');
-            $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('BU/Department successfully deleted');
 
@@ -109,7 +108,6 @@ class BUDepartmentList extends Component
         sleep(1);
         $this->reset();
         $this->resetValidation();
-        $this->emit('loadBUDepartments');
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('clear-branch-select-option');
     }

@@ -45,7 +45,7 @@ Ticket Statuses
         </div>
         <div class="col-12 content__container">
             <div class="card card__rounded__and__no__border pt-4">
-                <div class="table-responsive custom__table" id="table">
+                <div class="table-responsive custom__table">
                     @if (!$statuses->isEmpty())
                     @include('layouts.staff.system_admin.manage.ticket_statuses.includes.status_list')
                     @else

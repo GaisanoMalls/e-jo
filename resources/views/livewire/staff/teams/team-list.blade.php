@@ -1,43 +1,53 @@
 <div>
     <div class="table-responsive custom__table">
-        <table class="table table-striped mb-0" id="table">
-            @if (!$buDepartments->isEmpty())
+        @if (!$teams->isEmpty())
+        <table class="table table-striped mb-0">
             <thead>
                 <tr>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">BU/Department</th>
+                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Team</th>
+                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
                     <th class="border-0 table__head__label" style="padding: 17px 30px;">Branches</th>
                     <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
+                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($buDepartments as $department)
+                @foreach ($teams as $team)
                 <tr>
                     <td>
                         <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $department->name }}</span>
+                            <span>{{ $team->name }}</span>
                         </div>
                     </td>
                     <td>
                         <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $department->getBranches() }}</span>
+                            <span>{{ $team->serviceDepartment->name ?? '----' }}</span>
                         </div>
                     </td>
                     <td>
                         <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $department->dateCreated() }}</span>
+                            <span>{{ $team->getBranches() }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center text-start td__content">
+                            <span>{{ $team->dateCreated() }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center text-start td__content">
+                            <span>{{ $team->dateUpdated() }}</span>
                         </div>
                     </td>
                     <td>
                         <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                             <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
                                 type="button" class="btn action__button" data-bs-toggle="modal"
-                                data-bs-target="#editBUDepartmentModal"
-                                wire:click="editBUDepartment({{ $department->id }})">
+                                data-bs-target="#editTeamModal" wire:click="editTeam({{ $team->id }})">
                                 <i class="bi bi-pencil"></i>
                             </button>
                             <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
-                                data-bs-target="#deleteBUDepartmentModal"
-                                wire:click="deleteBUDepartment({{ $department->id }})">
+                                data-bs-target="#deleteTeamModal" wire:click="deleteTeam({{ $team->id }})">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -45,21 +55,21 @@
                 </tr>
                 @endforeach
             </tbody>
-            @else
-            <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                <small style="font-size: 14px;">No records for BU/Departments.</small>
-            </div>
-            @endif
         </table>
+        @else
+        <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
+            <small style="font-size: 14px;">No records for teams.</small>
+        </div>
+        @endif
     </div>
 
-    {{-- Edit BU/Department Modal --}}
-    <div wire:ignore.self class="modal slideIn animate department__modal" id="editBUDepartmentModal" tabindex="-1"
-        aria-labelledby="editBUDepartmentModalLabel" aria-hidden="true">
+    {{-- Edit Team Modal --}}
+    <div wire:ignore.self class="modal slideIn animate team__modal" id="editTeamModal" tabindex="-1"
+        aria-labelledby="editTeamModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0">
-                    <h1 class="modal-title modal__title" id="addNewDepartmentModalLabel">Edit BU/Department</h1>
+                    <h1 class="modal-title modal__title" id="addNewTeamModalLabel">Edit team</h1>
                     <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
                         <i class="fa-sharp fa-solid fa-xmark"></i>
                     </button>
@@ -71,8 +81,20 @@
                                 <label for="name" class="form-label form__field__label">Name</label>
                                 <input type="text" wire:model="name"
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
-                                    placeholder="Enter BU/department name">
+                                    placeholder="Enter team name">
                                 @error('name')
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                                @enderror
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label form__field__label">Service Department</label>
+                                <div>
+                                    <div id="edit-select-service-department" wire:ignore></div>
+                                </div>
+                                @error('editSelectedServiceDepartment')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}
@@ -84,11 +106,11 @@
                                 <div>
                                     <div id="edit-select-branch" wire:ignore></div>
                                 </div>
-                                @error ('editSelectedBranches')
-                                <div class="error__message mt-1">
+                                @error('editSelectedBranches')
+                                <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}
-                                </div>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -100,10 +122,10 @@
                                 <span wire:loading wire:target="update" class="spinner-border spinner-border-sm"
                                     role="status" aria-hidden="true">
                                 </span>
-                                Update
+                                Add new
                             </button>
-                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
-                                data-bs-dismiss="modal" wire:click="cancel">Cancel</button>
+                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" wire:click="cancel"
+                                data-bs-dismiss="modal">Cancel</button>
                         </div>
                     </div>
                 </form>
@@ -111,9 +133,9 @@
         </div>
     </div>
 
-    {{-- Delete BU/Department Modal --}}
-    <div wire:ignore.self class="modal slideIn animate modal__confirm__delete__bu__department"
-        id="deleteBUDepartmentModal" tabindex="-1" aria-hidden="true">
+    {{-- Delete Team Modal --}}
+    <div wire:ignore.self class="modal slideIn animate modal__confirm__delete__team" id="deleteTeamModal" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-body border-0 text-center pt-4 pb-1">
@@ -121,7 +143,7 @@
                         Confirm Delete
                     </h6>
                     <p class="mb-1" style="font-weight: 500; font-size: 15px;">
-                        Are you sure you want to delete this BU/Department?
+                        Are you sure you want to delete this team?
                     </p>
                     <strong>{{ $name }}</strong>
                 </div>
@@ -145,12 +167,29 @@
 
 @push('livewire-select')
 <script>
+    const editServiceDepartmentOption = [
+        @foreach ($serviceDepartments as $serviceDepartment)
+            {
+                label: "{{ $serviceDepartment->name }}",
+                value: "{{ $serviceDepartment->id }}"
+            },
+        @endforeach
+    ];
+
+    VirtualSelect.init({
+        ele: '#edit-select-service-department',
+        options: editServiceDepartmentOption,
+        search: true,
+        required: true,
+        markSearchResults: true,
+    });
+
     const editBranchOption = [
         @foreach ($branches as $branch)
-            {
-                label: "{{ $branch->name }}",
-                value: "{{ $branch->id }}"
-            },
+        {
+            label: "{{ $branch->name }}",
+            value: "{{ $branch->id }}"
+        },
         @endforeach
     ];
 
@@ -158,29 +197,42 @@
         ele: '#edit-select-branch',
         options: editBranchOption,
         search: true,
-        multiple: true,
         required: true,
+        multiple: true,
         showValueAsTags: true,
         markSearchResults: true,
-        hasOptionDescription: true,
         popupDropboxBreakpoint: '3000px',
     });
 
-    const editBranchSelect = document.querySelector('#edit-select-branch')
+    const editServiceDepartmentSelect = document.querySelector('#edit-select-service-department');
+    const editBranchSelect = document.querySelector('#edit-select-branch');
+
+    editServiceDepartmentSelect.addEventListener('change', () => {
+        @this.set('editSelectedServiceDepartment', editServiceDepartmentSelect.value);
+    });
+
     editBranchSelect.addEventListener('change', () => {
         @this.set('editSelectedBranches', editBranchSelect.value);
     });
 
-    // Check the current branches assigned to the selected BU/Department.
-    window.addEventListener('update-branch-select-option', event =>{
+    // Clear all selected branches in the select option.
+    window.addEventListener('clear-select-options', event => {
+        editBranchSelect.reset();
+        editServiceDepartmentSelect.reset();
+    });
+
+    window.addEventListener('edit-current-service-department-id', event => {
+        editServiceDepartmentSelect.setValue(event.detail.serviceDepartmentId);
+    });
+
+    window.addEventListener('edit-current-branch-ids', event => {
         editBranchSelect.setValue(event.detail.branchIds);
     });
 
-    // Clear the branch select option after update.
-    window.addEventListener('clear-branch-select-option', event =>{
+    window.addEventListener('reset-select-options', event => {
+        editServiceDepartmentSelect.reset();
         editBranchSelect.reset();
     });
-
 </script>
 @endpush
 
@@ -188,17 +240,16 @@
 @push('livewire-modal')
 <script>
     window.addEventListener('close-modal', event =>{
-        $('#editBUDepartmentModal').modal('hide');
-        $('#deleteBUDepartmentModal').modal('hide');
+        $('#editTeamModal').modal('hide');
+        $('#deleteTeamModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-bu-department-modal', event =>{
-        $('#editBUDepartmentModal').modal('show');
+    window.addEventListener('show-edit-team-modal', event =>{
+        $('#editTeamModal').modal('show');
     });
 
-    window.addEventListener('show-delete-bu-department-modal', event =>{
-        $('#deleteBUDepartmentModal').modal('show');
+    window.addEventListener('show-delete-team-modal', event =>{
+        $('#deleteTeamModal').modal('show');
     });
-
 </script>
 @endpush

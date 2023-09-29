@@ -42,8 +42,8 @@ class TagList extends Component
     {
         $this->tagUpdateId = $tag->id;
         $this->name = $tag->name;
-        $this->dispatchBrowserEvent('show-edit-tag-modal');
         $this->resetValidation();
+        $this->dispatchBrowserEvent('show-edit-tag-modal');
     }
 
     public function updateTag()

@@ -26,12 +26,17 @@ class CreateBuDepartment extends Component
         return (new StoreBUDepartmentRequest())->messages();
     }
 
+    public function updated($fields)
+    {
+        $this->validateOnly($fields);
+    }
+
     public function actionOnSubmit()
     {
         sleep(1);
+        $this->reset();
         $this->resetValidation();
         $this->emit('loadBUDepartments');
-        $this->reset('name', 'selectedBranches');
         $this->dispatchBrowserEvent('clear-branch-select-option');
     }
 

@@ -73,10 +73,8 @@
     const teamSelect = document.querySelector('#select-team');
 
     teamSelect.addEventListener('change', () => {
-        const teamId = parseInt(teamSelect.value);
-        @this.set('team', teamId);
+        @this.set('team', teamSelect.value);
     });
-
 
     const agentOption = [
         @foreach($agents as $agent)
@@ -100,8 +98,7 @@
     const agentSelect = document.querySelector('#select-agent');
 
     agentSelect.addEventListener('change', () => {
-        const agentId = parseInt(agentSelect.value);
-        @this.set('agent', agentId);
+        @this.set('agent', agentSelect.value);
     });
 
     const saveAssignTicketButton = document.querySelector('#saveAssignTicketButton');

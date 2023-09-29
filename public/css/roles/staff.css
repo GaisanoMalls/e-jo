@@ -6805,7 +6805,7 @@
     opacity: 0;
   }
   100% {
-    transform: translateY(1rem);
+    transform: translateY(1.5rem);
     opacity: 1;
   }
   0% {
@@ -8978,13 +8978,6 @@ input[type=checkbox]:checked + .form-check-label {
   font-weight: 500;
   box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
 }
-.departments__section .department__modal .modal__content .modal__footer .is__urgent__check {
-  margin-left: -25px !important;
-  margin-right: 9px;
-}
-.departments__section .department__modal .modal__content .modal__footer .is__urgent__check__label {
-  margin-top: 3px;
-}
 .departments__section .department__modal .modal__content .form__field__label {
   font-size: 0.875rem;
 }
@@ -9269,24 +9262,24 @@ input[type=checkbox]:checked + .form-check-label {
   padding: 9px 20px;
   height: 50px;
 }
-.team__section .service__department__modal .modal__content {
+.team__section .team__modal .modal__content {
   padding: 2rem 2.3rem;
   border: 0;
   border-radius: 0.563rem;
 }
-.team__section .service__department__modal .modal__content .modal__header .modal__title {
+.team__section .team__modal .modal__content .modal__header .modal__title {
   font-size: 1.125rem;
   font-weight: 600;
 }
-.team__section .service__department__modal .modal__content .modal__body {
+.team__section .team__modal .modal__content .modal__body {
   padding: 1.3rem 0 0.5rem 0;
 }
-.team__section .service__department__modal .modal__content .modal__footer .btn__modal__footer {
+.team__section .team__modal .modal__content .modal__footer .btn__modal__footer {
   padding: 0.6rem 1rem;
   border-radius: 0.563rem;
   font-size: 0.875rem;
 }
-.team__section .service__department__modal .modal__content .modal__footer .btn__modal__footer.btn__cancel {
+.team__section .team__modal .modal__content .modal__footer .btn__modal__footer.btn__cancel {
   padding: 0.6rem 1rem;
   padding: 0.6rem 1rem;
   border-radius: 0.563rem;
@@ -9296,7 +9289,7 @@ input[type=checkbox]:checked + .form-check-label {
   color: #d32839;
   font-weight: 500;
 }
-.team__section .service__department__modal .modal__content .modal__footer .btn__modal__footer.btn__send {
+.team__section .team__modal .modal__content .modal__footer .btn__modal__footer.btn__send {
   padding: 0.6rem 1rem;
   padding: 0.6rem 1rem;
   border-radius: 0.563rem;
@@ -9306,25 +9299,43 @@ input[type=checkbox]:checked + .form-check-label {
   font-weight: 500;
   box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
 }
-.team__section .service__department__modal .modal__content .modal__footer .is__urgent__check {
-  margin-left: -25px !important;
-  margin-right: 9px;
-}
-.team__section .service__department__modal .modal__content .modal__footer .is__urgent__check__label {
-  margin-top: 3px;
-}
-.team__section .service__department__modal .modal__content .form__field__label {
+.team__section .team__modal .modal__content .form__field__label {
   font-size: 0.875rem;
 }
-.team__section .service__department__modal .modal__content .form__field {
+.team__section .team__modal .modal__content .form__field {
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
   border-radius: 0.563rem;
   border: 1px solid #e7e9eb;
 }
-.team__section .service__department__modal .modal__content .form__field:focus {
+.team__section .team__modal .modal__content .form__field:focus {
   box-shadow: none;
   border-color: #d32839;
+}
+.team__section .modal__confirm__delete__team .btn__confirm__modal {
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+}
+.team__section .modal__confirm__delete__team .btn__confirm__modal.btn__cancel__delete {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  border: 1px solid #e7e9eb;
+  background-color: transparent;
+  color: #d32839;
+  font-weight: 500;
+}
+.team__section .modal__confirm__delete__team .btn__confirm__modal.btn__confirm__delete {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  background-color: #d32839;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
 }
 
 .roles__permissions__section .roles__permissions__card {
