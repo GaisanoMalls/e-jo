@@ -85,11 +85,11 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event =>{
+    window.addEventListener('close-modal', event => {
         $('#replyTicketModal').modal('hide');
     });
 
-    window.addEventListener('reload-modal', event =>{
+    window.addEventListener('reload-modal', event => {
         tinymce.get("description").setContent("");
     });
 </script>

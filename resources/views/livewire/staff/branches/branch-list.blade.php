@@ -131,16 +131,16 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event =>{
+    window.addEventListener('close-modal', event => {
         $('#editBranchModal').modal('hide');
         $('#deleteBranchModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-branch-modal', event =>{
+    window.addEventListener('show-edit-branch-modal', event => {
         $('#editBranchModal').modal('show');
     });
 
-    window.addEventListener('show-delete-branch-modal', event =>{
+    window.addEventListener('show-delete-branch-modal', event => {
         $('#deleteBranchModal').modal('show');
     });
 

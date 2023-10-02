@@ -140,16 +140,16 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event =>{
+    window.addEventListener('close-modal', event => {
         $('#updateTagModal').modal('hide');
         $('#deleteTagModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-tag-modal', event =>{
+    window.addEventListener('show-edit-tag-modal', event => {
         $('#updateTagModal').modal('show');
     });
 
-    window.addEventListener('show-delete-tag-modal', event =>{
+    window.addEventListener('show-delete-tag-modal', event => {
         $('#deleteTagModal').modal('show');
     });
 </script>

@@ -162,16 +162,16 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event =>{
+    window.addEventListener('close-modal', event => {
         $('#editSLAModal').modal('hide');
         $('#deleteSLAModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-sla-modal', event =>{
+    window.addEventListener('show-edit-sla-modal', event => {
         $('#editSLAModal').modal('show');
     });
 
-    window.addEventListener('show-delete-sla-modal', event =>{
+    window.addEventListener('show-delete-sla-modal', event => {
         $('#deleteSLAModal').modal('show');
     });
 

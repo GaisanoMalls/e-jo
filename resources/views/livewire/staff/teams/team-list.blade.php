@@ -239,16 +239,16 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event =>{
+    window.addEventListener('close-modal', event => {
         $('#editTeamModal').modal('hide');
         $('#deleteTeamModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-team-modal', event =>{
+    window.addEventListener('show-edit-team-modal', event => {
         $('#editTeamModal').modal('show');
     });
 
-    window.addEventListener('show-delete-team-modal', event =>{
+    window.addEventListener('show-delete-team-modal', event => {
         $('#deleteTeamModal').modal('show');
     });
 </script>

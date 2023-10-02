@@ -1,5 +1,5 @@
 <div>
-    <div wire:ignore.self class="modal slideIn fade ticket__actions__modal" id="assignTicketModal" tabindex="-1"
+    <div wire:ignore.self class="modal slideIn animate ticket__actions__modal" id="assignTicketModal" tabindex="-1"
         aria-labelledby="modalFormLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom__modal">
             <div class="modal-content d-flex flex-column custom__modal__content">
@@ -25,9 +25,15 @@
                             @enderror
                         </div>
                         <div class="my-2">
-                            <label class="ticket__actions__label mb-2">Assign to agent</label>
+                            <label class="ticket__actions__label mb-2">
+                                Assign to agent
+                                @if ($agents)
+                                <span class="fw-normal ms-1" id="agentCountBUDepartment" style="font-size: 13px;">
+                                    ({{ $agents->count() }})</span>
+                                @endif
+                            </label>
                             <div>
-                                <div id="select-agent" wire:ignore></div>
+                                <div id="select-agent" placeholder="Select (optional)" wire:ignore></div>
                             </div>
                             @error('agent')
                             <span class="error__message">
@@ -37,8 +43,7 @@
                             @enderror
                         </div>
                         <button type="submit"
-                            class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom"
-                            id="saveAssignTicketButton">
+                            class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
                             <span wire:loading wire:target="saveAssignTicket" class="spinner-border spinner-border-sm"
                                 role="status" aria-hidden="true">
                             </span>
@@ -62,6 +67,7 @@
         @endforeach
     ];
 
+    const teamSelect = document.querySelector('#select-team');
     VirtualSelect.init({
         ele: '#select-team',
         options: teamOption,
@@ -70,41 +76,62 @@
         hasOptionDescription: true,
     });
 
-    const teamSelect = document.querySelector('#select-team');
-
-    teamSelect.addEventListener('change', () => {
-        @this.set('team', teamSelect.value);
-    });
-
-    const agentOption = [
-        @foreach($agents as $agent)
-            {
-                label: "{{ $agent->profile->getFullName() }}",
-                value:  "{{ $agent->id }}",
-                // description: '<i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>'
-                //                 + "{{ $agent->getTeams() }}"
-            },
-        @endforeach
-    ];
-
+    const agentSelect = document.querySelector('#select-agent');
+    // Initialize the agent select dropdown
     VirtualSelect.init({
         ele: '#select-agent',
-        options: agentOption,
         search: true,
         markSearchResults: true,
         hasOptionDescription: true
     });
+    agentSelect.disable();
 
-    const agentSelect = document.querySelector('#select-agent');
+    window.addEventListener('get-current-team-or-agent', event => {
+        teamSelect.setValue(event.detail.ticket.team_id);
+    });
+
+    teamSelect.addEventListener('change', () => {
+        const teamId = teamSelect.value;
+        @this.set('team', teamSelect.value);
+
+        if (teamId) {
+            agentSelect.enable();
+            window.addEventListener('get-agents-from-team', event => {
+                const agents = event.detail.agents;
+                const agentOption = [];
+
+                if (agents.length > 0) {
+                    agents.forEach(function (agent) {
+                        VirtualSelect.init({
+                            ele: '#select-agent',
+                            search: true,
+                            markSearchResults: true,
+                            hasOptionDescription: true
+                        });
+
+                        const middleName = `${agent.profile.middle_name ?? ''}`;
+                        const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+
+                        agentOption.push({
+                            label: `${agent.profile.first_name} ${firstLetter} ${agent.profile.last_name}`,
+                            value: agent.id
+                        })
+                    });
+                    agentSelect.setOptions(agentOption);
+                } else {
+                    agentSelect.reset();
+                    agentSelect.disable()
+                }
+            });
+        }
+    });
+
+    teamSelect.addEventListener('reset', () => {
+        agentSelect.setOptions([]);
+    });
 
     agentSelect.addEventListener('change', () => {
         @this.set('agent', agentSelect.value);
     });
-
-    const saveAssignTicketButton = document.querySelector('#saveAssignTicketButton');
-    saveAssignTicketButton.addEventListener('click', function () {
-        teamSelect.reset();
-        agentSelect.reset();
-    })
 </script>
 @endpush

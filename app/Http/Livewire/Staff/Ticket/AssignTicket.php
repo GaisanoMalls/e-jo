@@ -14,26 +14,7 @@ class AssignTicket extends Component
     use BasicModelQueries;
 
     public Ticket $ticket;
-    public $teams, $team, $agents, $agent;
-
-    public function mount()
-    {
-        $this->agents = $this->fetchAgents();
-        $this->teams = $this->fetchTeams();
-    }
-
-    public function fetchAgents()
-    {
-        return User::whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
-            ->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->ticket->serviceDepartment->id))
-            ->whereHas('branch', fn($branch) => $branch->where('branch_id', $this->ticket->branch->id))->get();
-    }
-
-    public function fetchTeams()
-    {
-        return Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->ticket->serviceDepartment->id))
-            ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))->get();
-    }
+    public $agents = [], $team, $agent;
 
     public function actionOnSubmit()
     {
@@ -49,6 +30,7 @@ class AssignTicket extends Component
                 'team_id' => $this->team ?? $this->ticket->team_id,
                 'agent_id' => $this->agent ?? $this->ticket->agent_id,
             ]);
+
             $this->actionOnSubmit();
 
         } catch (\Exception $e) {
@@ -56,8 +38,22 @@ class AssignTicket extends Component
         }
     }
 
+    public function updatedTeam()
+    {
+        $this->agents = User::with('profile')->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
+            ->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->ticket->serviceDepartment->id))
+            ->whereHas('branch', fn($branch) => $branch->where('branch_id', $this->ticket->branch->id))
+            ->whereHas('teams', fn($team) => $team->where('teams.id', $this->team))->get();
+
+        $this->dispatchBrowserEvent('get-agents-from-team', ['agents' => $this->agents->toArray()]);
+    }
+
     public function render()
     {
-        return view('livewire.staff.ticket.assign-ticket');
+        return view('livewire.staff.ticket.assign-ticket', [
+            'agents' => $this->agents,
+            'teams' => Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->ticket->serviceDepartment->id))
+                ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))->get()
+        ]);
     }
 }

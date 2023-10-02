@@ -16,9 +16,10 @@ class TicketDetails extends Component
         $this->emit('loadTicketDetails');
     }
 
-    public function removeAssingedTeam()
+    public function removeAssignedTeam()
     {
         $this->ticket->update(['team_id' => null]);
+        $this->removeAssignedAgent();
         $this->actionOnSubmit();
     }
 

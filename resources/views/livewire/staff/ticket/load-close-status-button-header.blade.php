@@ -22,7 +22,7 @@
 
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event =>{
+    window.addEventListener('close-modal', event => {
         $('#closeTicketModal').modal('hide');
     });
 </script>

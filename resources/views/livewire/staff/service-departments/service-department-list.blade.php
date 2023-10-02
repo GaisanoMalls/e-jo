@@ -134,16 +134,16 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event =>{
+    window.addEventListener('close-modal', event => {
         $('#editServiceDepartmentModal').modal('hide');
         $('#deleteServiceDepartmentModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-service-department-modal', event =>{
+    window.addEventListener('show-edit-service-department-modal', event => {
         $('#editServiceDepartmentModal').modal('show');
     });
 
-    window.addEventListener('show-delete-service-department-modal', event =>{
+    window.addEventListener('show-delete-service-department-modal', event => {
         $('#deleteServiceDepartmentModal').modal('show');
     });
 

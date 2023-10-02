@@ -86,7 +86,7 @@
     });
 
     // Clear all selected branches in the select option.
-    window.addEventListener('clear-branch-select-option', event =>{
+    window.addEventListener('clear-branch-select-option', event => {
         branchSelect.reset();
     });
 </script>

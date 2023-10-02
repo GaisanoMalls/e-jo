@@ -230,7 +230,7 @@ Edit Service Dept. Admin
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event =>{
+    window.addEventListener('close-modal', event => {
         $('#editPasswordModal').modal('hide');
     });
 </script>

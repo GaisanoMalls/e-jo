@@ -8116,8 +8116,7 @@ input[type=checkbox]:checked + .form-check-label {
 
 .ticket__actions__label {
   font-size: 0.875rem;
-  color: #131313;
-  font-weight: 600;
+  color: #212529;
 }
 
 .ticket__actions__modal .ticket__dropdown__select {

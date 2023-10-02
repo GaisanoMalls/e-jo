@@ -72,7 +72,7 @@
                     </div>
                     @livewire('staff.ticket.priority-level', ['ticket' => $ticket])
                 </div>
-                <div class="d-flex flex-wrap justify-content-between ticket__details__header">
+                <div class="d-flex flex-wrap gap-2 justify-content-between ticket__details__header">
                     <div class="mb-2">
                         <h6 class="ticket__details__title mb-0">{{ $ticket->subject }}</h6>
                         <small class="ticket__details__datetime">{{ $ticket->dateCreated() }},
@@ -180,28 +180,7 @@
                 <div class="col-md-4">
                     <div class="container__ticket__details__right">
                         @livewire('staff.ticket.ticket-details', ['ticket' => $ticket])
-                        @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN && $ticket->status_id
-                        != App\Models\Status::CLOSED)
-                        <div class="card border-0 p-0 card__ticket__details">
-                            <div class="d-flex flex-column gap-3 ticket__details__card__body__right">
-                                <label class="ticket__actions__label">Ticket Actions</label>
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                                    <ul class="mb-0 ticket__actions" style="padding-left: 1.1rem;">
-                                        <li>
-                                            <small>Move this ticket to other team.</small>
-                                        </li>
-                                        <li>
-                                            <small>Assign this ticket to other agent.</small>
-                                        </li>
-                                    </ul>
-                                    <button class="btn btn-block bg-dark btn__ticket__set__action"
-                                        data-bs-toggle="modal" data-bs-target="#assignTicketModal">
-                                        Set Action
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
+                        @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
                         @livewire('staff.ticket.ticket-tag', ['ticket' => $ticket])
                         @livewire('ticket-activity-logs', ['ticket' => $ticket])
                     </div>

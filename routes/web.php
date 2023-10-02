@@ -223,12 +223,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::get('/', TagController::class)->name('index');
             });
             Route::prefix('ticket-statuses')->name('ticket_statuses.')->group(function () {
-                Route::controller(TicketStatusController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::put('/{status}/edit', 'update')->name('update');
-                    Route::delete('/{status}/delete', 'delete')->name('delete');
-                });
+                Route::get('/', TicketStatusController::class)->name('index');
             });
         });
         // Directory Routes

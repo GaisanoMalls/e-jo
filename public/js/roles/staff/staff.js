@@ -45,18 +45,6 @@ document.addEventListener('DOMContentLoaded', function () {
   if (btnCloseModal) {
     btnCloseModal.addEventListener('click', clearModalForm);
   }
-
-  // Add Ticket Status
-  var statusColorSelect = document.getElementById('statusColorSelect');
-  var statusColorHexVal = document.getElementById('statusColorHexVal');
-  if (statusColorSelect || statusColorHexVal) {
-    statusColorSelect.addEventListener('input', function () {
-      statusColorHexVal.value = this.value;
-    });
-    statusColorHexVal.addEventListener('input', function () {
-      statusColorSelect.value = this.value;
-    });
-  }
 });
 /******/ })()
 ;

@@ -19,20 +19,12 @@ Branches
             <div class="card card__rounded__and__no__border">
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-1 table__header">
                     <h6 class="mb-0 table__name shadow">Mall Branches</h6>
-                    <div class="d-flex flex-wrap gap-3">
-                        <button type="button"
-                            class="btn d-flex align-items-center justify-content-center gap-2 button__header"
-                            data-bs-toggle="modal" data-bs-target="">
-                            <i class="fa-solid fa-filter"></i>
-                            <span class="button__name">Add filter</span>
-                        </button>
-                        <button type="button"
-                            class="btn d-flex align-items-center justify-content-center gap-2 button__header"
-                            data-bs-toggle="modal" data-bs-target="#addNewBranchModal">
-                            <i class="fa-solid fa-plus"></i>
-                            <span class="button__name">Add new</span>
-                        </button>
-                    </div>
+                    <button type="button"
+                        class="btn d-flex align-items-center justify-content-center gap-2 button__header"
+                        data-bs-toggle="modal" data-bs-target="#addNewBranchModal">
+                        <i class="fa-solid fa-plus"></i>
+                        <span class="button__name">Add new</span>
+                    </button>
                 </div>
                 @livewire('staff.branches.branch-list')
             </div>

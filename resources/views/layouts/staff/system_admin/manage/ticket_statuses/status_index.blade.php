@@ -14,7 +14,6 @@ Ticket Statuses
 @section('manage-content')
 <div class="row gap-4">
     <div class="ticket__statuses__section">
-        @include('layouts.staff.system_admin.manage.ticket_statuses.includes.modal.add_status_modal')
         <div class="col-12 content__container mb-4">
             <div class="card card__rounded__and__no__border">
                 <div class="table__header">
@@ -28,17 +27,6 @@ Ticket Statuses
                                 the specific ticketing system in use.
                             </p>
                         </div>
-                        <div class="col-md-4">
-                            <div
-                                class="d-flex align-items-center justify-content-start justify-content-lg-end justify-content-md-end">
-                                <button type="button"
-                                    class="btn d-flex align-items-center justify-content-center gap-2 btn btn__add__status"
-                                    data-bs-toggle="modal" data-bs-target="#addNewTicketStatusModal">
-                                    <i class="fa-solid fa-plus"></i>
-                                    Create Status
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -47,7 +35,47 @@ Ticket Statuses
             <div class="card card__rounded__and__no__border pt-4">
                 <div class="table-responsive custom__table">
                     @if (!$statuses->isEmpty())
-                    @include('layouts.staff.system_admin.manage.ticket_statuses.includes.status_list')
+                    <table class="table table-striped mb-0" id="table">
+                        <thead>
+                            <tr>
+                                <th class="border-0 table__head__label" style="padding: 17px 30px;">Name</th>
+                                <th class="border-0 table__head__label" style="padding: 17px 30px;">Color</th>
+                                <th class="border-0 table__head__label" style="padding: 17px 30px;">Tickets</th>
+                                <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($statuses as $status)
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ $status->name }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start gap-2 td__content">
+                                        <div class="rounded-1" style="background-color: {{ $status->color }}; height: 16px; width: 16px; box-shadow: 0 0.25rem
+                                            0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20,
+                                            0.07);">
+                                        </div>
+                                        <span>{{ $status->color }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start gap-2 td__content">
+                                        <span>{{ $status->tickets()->count() }}</span>
+                                        <i class="fa-solid fa-envelope" style="font-size: 13px; color: #8d94a1;"></i>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ $status->dateCreated() }}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                     @else
                     <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
                         <small style="font-size: 14px;">No records for statuses.</small>
@@ -59,27 +87,3 @@ Ticket Statuses
     </div>
 </div>
 @endsection
-
-@if ($errors->storeTicketStatus->any())
-@push('modal-with-error')
-<script>
-    $(function () {
-        $('#addNewTicketStatusModal').modal('show');
-    });
-
-</script>
-@endpush
-@endif
-
-@if ($errors->editStatus->any() || session()->has('duplicate_name_error'))
-{{-- Show edit modal based on the selected record/data --}}
-<input type="hidden" id="statusId" value="{{ session('statusId') }}">
-@push('modal-with-error')
-<script>
-    const statusId = document.getElementById('statusId');
-    $(function () {
-        $(`#editStatus${statusId.value}`).modal('show');
-    });
-</script>
-@endpush
-@endif

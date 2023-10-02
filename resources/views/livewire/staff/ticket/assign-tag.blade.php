@@ -68,17 +68,17 @@
     });
 
     // Clear all selected tags in the select option when clear button is clicked.
-    window.addEventListener('clear-tag-select-option', event =>{
+    window.addEventListener('clear-tag-select-option', event => {
         tagSelect.reset();
     });
 
     // Update the selected tags after removing specific tag.
-    window.addEventListener('update-tag-select-option', event =>{
+    window.addEventListener('update-tag-select-option', event => {
         tagSelect.setValue(event.detail.tagIds);
     });
 
     // Get the current assigned tags when button "Add/Remove" is clicked.
-    window.addEventListener('get-current-assigned-tags', event =>{
+    window.addEventListener('get-current-assigned-tags', event => {
         tagSelect.setValue(event.detail.tagIds);
     });
 </script>

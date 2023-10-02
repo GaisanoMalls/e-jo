@@ -172,12 +172,12 @@
     });
 
     // Check the current branches assigned to the selected BU/Department.
-    window.addEventListener('update-branch-select-option', event =>{
+    window.addEventListener('update-branch-select-option', event => {
         editBranchSelect.setValue(event.detail.branchIds);
     });
 
     // Clear the branch select option after update.
-    window.addEventListener('clear-branch-select-option', event =>{
+    window.addEventListener('clear-branch-select-option', event => {
         editBranchSelect.reset();
     });
 
@@ -187,16 +187,16 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event =>{
+    window.addEventListener('close-modal', event => {
         $('#editBUDepartmentModal').modal('hide');
         $('#deleteBUDepartmentModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-bu-department-modal', event =>{
+    window.addEventListener('show-edit-bu-department-modal', event => {
         $('#editBUDepartmentModal').modal('show');
     });
 
-    window.addEventListener('show-delete-bu-department-modal', event =>{
+    window.addEventListener('show-delete-bu-department-modal', event => {
         $('#deleteBUDepartmentModal').modal('show');
     });
 

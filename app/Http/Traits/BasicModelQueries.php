@@ -10,6 +10,7 @@ use App\Models\PriorityLevel;
 use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\ServiceLevelAgreement;
+use App\Models\Status;
 use App\Models\Suffix;
 use App\Models\Tag;
 use App\Models\Team;
@@ -85,6 +86,11 @@ trait BasicModelQueries
     public function queryTags()
     {
         return Tag::orderBy('created_at', 'desc')->get();
+    }
+
+    public function queryTicketStatus()
+    {
+        return Status::orderBy('created_at', 'desc')->get();
     }
 
 }

@@ -50,7 +50,7 @@
                         <i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->team->name ?? '----' }}
                         @if ($ticket->team_id)
-                        <i wire:click="removeAssingedTeam" class="bi bi-x ms-2 text-danger position-absolute"
+                        <i wire:click="removeAssignedTeam" class="bi bi-x ms-2 text-danger position-absolute"
                             style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
                         @endif
                     </small>
@@ -95,7 +95,7 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event =>{
+    window.addEventListener('close-modal', event => {
         $('#assignTicketModal').modal('hide');
     });
 </script>
