@@ -49,8 +49,7 @@
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-4">
                 <li class="nav-item my-auto custom__nav__item">
-                    <button href="" type="button" class="btn btn__nav__create__ticket" data-bs-toggle="modal"
-                        data-bs-target="#createTicketModal" id="navBtnCreateNewTicket">Create Ticket</button>
+                    @livewire('requester.ticket.create-ticket-button')
                 </li>
                 <li class="nav-item my-auto dropdown">
                     <a class="nav-link icon__nav__link" href="" role="button" data-bs-toggle="dropdown"

@@ -27,8 +27,8 @@ class AssignTicket extends Component
     {
         try {
             $this->ticket->update([
-                'team_id' => $this->team ?? $this->ticket->team_id,
-                'agent_id' => $this->agent ?? $this->ticket->agent_id,
+                'team_id' => $this->team ?: null,
+                'agent_id' => $this->agent ?: null,
             ]);
 
             $this->actionOnSubmit();

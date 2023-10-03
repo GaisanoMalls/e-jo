@@ -23,6 +23,11 @@ class ServiceLevelAgreement extends Model
         return $this->hasMany(Ticket::class);
     }
 
+    public function helpTopics()
+    {
+        return $this->hasMany(HelpTopic::class);
+    }
+
     public function dateCreated()
     {
         return $this->createdAt($this->created_at);

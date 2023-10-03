@@ -13,7 +13,7 @@ class HelpTopic extends Model
     protected $fillable = [
         'service_department_id',
         'team_id',
-        'sla_id',
+        'service_level_agreement_id',
         'name',
         'slug'
     ];

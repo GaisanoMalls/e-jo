@@ -21,7 +21,7 @@
 <body>
     @include('layouts.user.includes.navbar')
     @include('layouts.user.account.includes.confirm_logout')
-    @include('layouts.user.includes.modals.create_ticket_modal')
+    @livewire('requester.ticket.create-ticket')
     <div class="container-fluid px-lg-4 px-3 mb-5 requester__section">
         @livewire('offline')
         @if (Route::is('user.tickets.*'))
@@ -46,11 +46,11 @@
     <script src="{{ asset('js/toaster-message.js') }}"></script>
     <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
-    <script src="{{ asset('js/roles/user/user.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
 
     @stack('livewire-textarea')
     @stack('livewire-modal')
+    @stack('livewire-select')
 
     @if ($errors->storeTicket->any())
     <script>

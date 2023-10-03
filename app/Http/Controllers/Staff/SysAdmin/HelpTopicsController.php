@@ -43,7 +43,7 @@ class HelpTopicsController extends Controller
                 $helpTopic = HelpTopic::create([
                     'service_department_id' => $request->service_department,
                     'team_id' => $request->team,
-                    'sla_id' => $request->sla,
+                    'service_level_agreement_id' => $request->sla,
                     'name' => $request->name,
                     'slug' => \Str::slug($request->name)
                 ]);
@@ -100,7 +100,7 @@ class HelpTopicsController extends Controller
                 $helpTopic->update([
                     'service_department_id' => $request->service_department,
                     'team_id' => $request->team,
-                    'sla_id' => $request->sla,
+                    'service_level_agreement_id' => $request->sla,
                     'name' => $request->name,
                     'slug' => \Str::slug($request->name)
                 ]);

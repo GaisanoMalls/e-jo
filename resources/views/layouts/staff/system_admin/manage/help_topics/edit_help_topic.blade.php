@@ -48,7 +48,8 @@ Edit Help Topic
                                     <label class="form-label form__field__label">Service Level Agreements (SLA)</label>
                                     <select name="sla" data-search="false" placeholder="Select (required)">
                                         @foreach ($serviceLevelAgreements as $sla)
-                                        <option value="{{ $sla->id }}" {{ $sla->id === $helpTopic->sla_id
+                                        <option value="{{ $sla->id }}" {{ $sla->id ===
+                                            $helpTopic->service_level_agreement_id
                                             ? 'selected' : '' }}>
                                             {{ $sla->time_unit }}
                                         </option>

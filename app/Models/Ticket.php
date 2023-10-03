@@ -32,7 +32,7 @@ class Ticket extends Model
         'help_topic_id',
         'status_id',
         'priority_level_id',
-        'sla_id',
+        'service_level_agreement',
         'ticket_number',
         'subject',
         'description',
@@ -91,7 +91,7 @@ class Ticket extends Model
 
     public function sla()
     {
-        return $this->belongsTo(ServiceLevelAgreement::class, 'sla_id');
+        return $this->belongsTo(ServiceLevelAgreement::class, 'service_level_agreement');
     }
 
     public function tags()

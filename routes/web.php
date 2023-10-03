@@ -287,11 +287,6 @@ Route::middleware(['auth', Role::user()])->group(function () {
                 Route::post('/store', 'store')->name('store');
                 Route::get('/{ticket}/view', 'viewTicket')->name('view_ticket');
                 Route::get('/{ticket}/view/clarifications', 'ticketClarifications')->name('ticket_clarifications');
-
-                // Axios endpoints
-                Route::get('/branches', 'loadBranches');
-                Route::get('/{helpTopic}/sla', 'helpTopicSLA');
-                Route::get('/{helpTopic}/team', 'helpTopicTeam');
             });
         });
         Route::prefix('account-settings')->name('account_settings.')->group(function () {
@@ -302,14 +297,6 @@ Route::middleware(['auth', Role::user()])->group(function () {
         });
     });
 });
-
-Route::prefix('ticket')->group(function () {
-    Route::controller(UserTicketsController::class)->group(function () {
-        Route::get('/service-departments', 'loadServiceDepartments');
-        Route::get('/{serviceDepartment}/help-topics', 'serviceDepartmentHelpTopics');
-    });
-});
-
 
 // * Feedback Routes
 Route::middleware(['auth', Role::user()])->group(function () {

@@ -28,7 +28,7 @@
                             <label class="ticket__actions__label mb-2">
                                 Assign to agent
                                 @if ($agents)
-                                <span class="fw-normal ms-1" id="agentCountBUDepartment" style="font-size: 13px;">
+                                <span class="fw-normal ms-1" style="font-size: 13px;">
                                     ({{ $agents->count() }})</span>
                                 @endif
                             </label>
@@ -92,7 +92,7 @@
 
     teamSelect.addEventListener('change', () => {
         const teamId = teamSelect.value;
-        @this.set('team', teamSelect.value);
+        @this.set('team', teamId);
 
         if (teamId) {
             agentSelect.enable();
@@ -101,6 +101,7 @@
                 const agentOption = [];
 
                 if (agents.length > 0) {
+                    agentSelect.open();
                     agents.forEach(function (agent) {
                         VirtualSelect.init({
                             ele: '#select-agent',
@@ -119,6 +120,7 @@
                     });
                     agentSelect.setOptions(agentOption);
                 } else {
+                    agentSelect.close();
                     agentSelect.reset();
                     agentSelect.disable()
                 }
@@ -128,6 +130,7 @@
 
     teamSelect.addEventListener('reset', () => {
         agentSelect.setOptions([]);
+        agentSelect.close();
     });
 
     agentSelect.addEventListener('change', () => {

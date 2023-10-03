@@ -92,5 +92,4 @@ trait BasicModelQueries
     {
         return Status::orderBy('created_at', 'desc')->get();
     }
-
 }

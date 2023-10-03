@@ -31,7 +31,7 @@ class CreateTicketsTable extends Migration
             $table->foreignIdFor(HelpTopic::class, 'help_topic_id');
             $table->foreignIdFor(Status::class, 'status_id');
             $table->foreignIdFor(PriorityLevel::class, 'priority_level_id');
-            $table->foreignIdFor(ServiceLevelAgreement::class, 'sla_id')->nullable();
+            $table->foreignIdFor(ServiceLevelAgreement::class, 'service_level_agreement')->nullable();
             $table->string('ticket_number')->unique();
             $table->string('subject');
             $table->longText('description');

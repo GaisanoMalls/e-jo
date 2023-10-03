@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(ServiceDepartment::class, 'service_department_id')->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Team::class, 'team_id')->nullable()->constrained();
-            $table->foreignIdFor(ServiceLevelAgreement::class, 'sla_id');
+            $table->foreignIdFor(ServiceLevelAgreement::class, 'service_level_agreement_id');
             $table->string('name');
             $table->string('slug');
             $table->timestamps();
