@@ -1,6 +1,6 @@
 <!-- Preview Ticket Files Modal -->
-<div class="modal slideIn animate ticket__actions__modal" id="previewClarificaionFileModal{{ $clarification->id }}"
-    tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
+<div class="modal fade ticket__actions__modal" id="previewClarificaionFileModal{{ $clarification->id }}" tabindex="-1"
+    aria-labelledby="modalFormLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered custom__modal">
         <div class="modal-content custom__modal__content">
             <div class="modal__header d-flex justify-content-between align-items-center">

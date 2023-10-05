@@ -9,6 +9,8 @@ class TicketTab extends Component
 {
     use Tickets;
 
+    protected $listeners = ['loadTicketTab' => 'render'];
+
     public function render()
     {
         $onProcessTickets = $this->getOnProcessTickets();

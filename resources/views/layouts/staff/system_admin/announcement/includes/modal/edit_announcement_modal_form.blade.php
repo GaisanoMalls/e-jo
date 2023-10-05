@@ -1,4 +1,4 @@
-<div class="modal slideIn animate announcement__modal" id="editAnnouncement{{ $announcement->id }}" tabindex="-1"
+<div class="modal fade announcement__modal" id="editAnnouncement{{ $announcement->id }}" tabindex="-1"
     aria-labelledby="editAnnouncementLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content modal__content">

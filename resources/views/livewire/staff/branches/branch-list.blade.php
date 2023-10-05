@@ -52,7 +52,7 @@
     </div>
 
     {{-- Edit Branch Modal --}}
-    <div wire:ignore.self class="modal slideIn animate branch__modal" id="editBranchModal" tabindex="-1"
+    <div wire:ignore.self class="modal fade branch__modal" id="editBranchModal" tabindex="-1"
         aria-labelledby="addNewBranchModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
@@ -97,8 +97,8 @@
     </div>
 
     {{-- Delete Branch Modal --}}
-    <div wire:ignore.self class="modal slideIn animate modal__confirm__delete__branch" id="deleteBranchModal"
-        tabindex="-1" aria-hidden="true">
+    <div wire:ignore.self class="modal fade modal__confirm__delete__branch" id="deleteBranchModal" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-body border-0 text-center pt-4 pb-1">

@@ -9,6 +9,8 @@ class Dashboard extends Component
 {
     use RequestserTickets;
 
+    protected $listeners = ['loadDashboard' => 'render'];
+
     public function render()
     {
         $openTickets = $this->getOpenTickets();

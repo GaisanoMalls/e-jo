@@ -1,5 +1,5 @@
 <div>
-    <div wire:ignore.self class="modal slideIn animate ticket__actions__modal" id="assignTicketModal" tabindex="-1"
+    <div wire:ignore.self class="modal fade ticket__actions__modal" id="assignTicketModal" tabindex="-1"
         aria-labelledby="modalFormLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom__modal">
             <div class="modal-content d-flex flex-column custom__modal__content">
@@ -79,7 +79,7 @@
     const agentSelect = document.querySelector('#select-agent');
     // Initialize the agent select dropdown
     VirtualSelect.init({
-        ele: '#select-agent',
+        ele: agentSelect,
         search: true,
         markSearchResults: true,
         hasOptionDescription: true
@@ -104,7 +104,7 @@
                     agentSelect.open();
                     agents.forEach(function (agent) {
                         VirtualSelect.init({
-                            ele: '#select-agent',
+                            ele: agentSelect,
                             search: true,
                             markSearchResults: true,
                             hasOptionDescription: true
@@ -136,5 +136,6 @@
     agentSelect.addEventListener('change', () => {
         @this.set('agent', agentSelect.value);
     });
+
 </script>
 @endpush

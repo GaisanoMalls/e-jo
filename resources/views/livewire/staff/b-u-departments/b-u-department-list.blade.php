@@ -54,7 +54,7 @@
     </div>
 
     {{-- Edit BU/Department Modal --}}
-    <div wire:ignore.self class="modal slideIn animate department__modal" id="editBUDepartmentModal" tabindex="-1"
+    <div wire:ignore.self class="modal fade department__modal" id="editBUDepartmentModal" tabindex="-1"
         aria-labelledby="editBUDepartmentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content modal__content">
@@ -112,8 +112,8 @@
     </div>
 
     {{-- Delete BU/Department Modal --}}
-    <div wire:ignore.self class="modal slideIn animate modal__confirm__delete__bu__department"
-        id="deleteBUDepartmentModal" tabindex="-1" aria-hidden="true">
+    <div wire:ignore.self class="modal fade modal__confirm__delete__bu__department" id="deleteBUDepartmentModal"
+        tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-body border-0 text-center pt-4 pb-1">

@@ -113,6 +113,13 @@ class TeamList extends Component
         }
     }
 
+    public function cancel()
+    {
+        $this->reset();
+        $this->resetValidation();
+        $this->dispatchBrowserEvent('clear-select-options');
+    }
+
     public function render()
     {
         return view('livewire.staff.teams.team-list', [

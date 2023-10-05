@@ -14,8 +14,8 @@ class BookmarkTicket extends Component
 
     public function bookmark()
     {
-        Bookmark::firstOrCreate(['ticket_id' => $this->ticket->id]);
         sleep(1);
+        Bookmark::firstOrCreate(['ticket_id' => $this->ticket->id]);
     }
 
     public function removeBookmark()

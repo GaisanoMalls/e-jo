@@ -1,5 +1,5 @@
 <div>
-    <div wire:ignore.self class="modal slideIn animate create__ticket__modal" id="createTicketModal" tabindex="-1"
+    <div wire:ignore.self class="modal fade create__ticket__modal" id="createTicketModal" tabindex="-1"
         aria-labelledby="createtTicketModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-lg">
             <div class="modal-content modal__content">
@@ -112,31 +112,40 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-8">
-                                    <div>
-                                        <label for="ticketSubject" class="form-label input__field__label">
-                                            Priority Level
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <div class="d-flex">
-                                            @foreach ($priorityLevels as $priority)
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" wire:model="priorityLevel"
-                                                    id="rbnt{{ $priority->name }}" value="{{ $priority->id }}">
-                                                <label class="form-check-label radio__button__label"
-                                                    for="rbnt{{ $priority->name }}">{{ $priority->name }}</label>
-                                            </div>
-                                            @endforeach
+                                    <label for="ticketSubject" class="form-label input__field__label">
+                                        Priority Level
+                                    </label>
+                                    <div class="d-flex">
+                                        @foreach ($priorityLevels as $priority)
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" wire:model="priorityLevel"
+                                                id="rbnt{{ $priority->name }}" value="{{ $priority->id }}">
+                                            <label class="form-check-label radio__button__label"
+                                                for="rbnt{{ $priority->name }}">{{ $priority->name }}</label>
                                         </div>
-                                        @error('priorityLevel')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                        @enderror
+                                        @endforeach
                                     </div>
+                                    @error('priorityLevel')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                    @enderror
                                 </div>
                                 <div class="col-md-4 mt-auto">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <label for="ticketSubject" class="form-label input__field__label">
+                                            Attachment
+                                        </label>
+                                        <div wire:loading wire:target="fileAttachments">
+                                            <div class="d-flex align-items-center gap-3 mb-2">
+                                                <div class="spinner-border text-info" style="height: 15px; width: 15px;"
+                                                    role="status">
+                                                </div>
+                                                <small style="fot-size: 12px;">Uploading...</small>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <input class="form-control form-control-sm border-0 ticket__file" type="file"
                                         wire:model="fileAttachments" multiple id="upload-{{ $upload }}">
                                     @error('fileAttachments.*')
@@ -204,8 +213,7 @@
 
     const helpTopicSelect = document.querySelector('#userCreateTicketHelpTopicDropdown');
     VirtualSelect.init({
-        ele: '#userCreateTicketHelpTopicDropdown',
-        options: serviceDepartmentOption,
+        ele: helpTopicSelect,
         search: true,
         markSearchResults: true,
     });
@@ -228,9 +236,7 @@
                     helpTopicSelect.open();
                     helpTopics.forEach(function (helpTopic) {
                         VirtualSelect.init({
-                            ele: '#userCreateTicketHelpTopicDropdown',
-                            search: true,
-                            markSearchResults: true,
+                            ele: helpTopicSelect,
                         });
 
                         helpTopicOption.push({
@@ -239,11 +245,9 @@
                         });
                     });
                     helpTopicSelect.setOptions(helpTopicOption);
-
-
                 } else {
                     helpTopicSelect.close();
-                    helpTopicSelect.reset();
+                    helpTopicSelect.setOptions([]);
                     helpTopicSelect.disable();
                 }
             });

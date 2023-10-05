@@ -1,4 +1,4 @@
-<div class="modal slideIn animate filter__user__with__roles__modal" id="filterUserWithRolesModal" tabindex="-1"
+<div class="modal fade filter__user__with__roles__modal" id="filterUserWithRolesModal" tabindex="-1"
     aria-labelledby="filterUserWithRolesModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal__content">

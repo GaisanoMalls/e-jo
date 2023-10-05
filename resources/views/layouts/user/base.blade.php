@@ -22,7 +22,7 @@
     @include('layouts.user.includes.navbar')
     @include('layouts.user.account.includes.confirm_logout')
     @livewire('requester.ticket.create-ticket')
-    <div class="container-fluid px-lg-4 px-3 mb-5 requester__section">
+    <div class="container mb-5 requester__section">
         @livewire('offline')
         @if (Route::is('user.tickets.*'))
         @livewire('requester.ticket-tab')

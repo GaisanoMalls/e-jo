@@ -9,6 +9,7 @@ use App\Http\Controllers\Staff\Approver\NotificationController as ApproverNotifi
 use App\Http\Controllers\Staff\DashboardController;
 use App\Http\Controllers\Staff\DirectoryController;
 use App\Http\Controllers\Staff\ServiceDeptAdmin\AnnouncementController;
+use App\Http\Controllers\Staff\ServiceDeptAdmin\TicketClarificationController;
 use App\Http\Controllers\Staff\SysAdmin\AccountAgentController;
 use App\Http\Controllers\Staff\SysAdmin\AccountApproverController;
 use App\Http\Controllers\Staff\SysAdmin\AccountsController;
@@ -63,30 +64,20 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 // Route::get('/reopened', 'reopenedTickets')->name('reopened_tickets');
                 Route::get('/overdue', 'overdueTickets')->name('overdue_tickets');
                 Route::get('/closed', 'closedTickets')->name('closed_tickets');
-                // Endpoint for axios
-                Route::get('/{department}/teams', 'ticketActionGetDepartmentServiceDepartments');
             });
         });
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
                 Route::get('/{ticket}/view', 'viewTicket')->name('view_ticket');
+                Route::middleware(['auth', Role::serviceDepartmentAdmin()])->group(function () {
+                    Route::get('/{ticket}/clarifications', TicketClarificationController::class)->name('ticket_clarifications');
+                });
             });
             Route::controller(AgentTicketController::class)->group(function () {
                 Route::put('{ticket}/claim', 'claimTicket')->name('claim_ticket');
                 Route::put('{ticket}/claim', 'ticketDetialsClaimTicket')->name('ticket_details_claim_ticket');
             });
         });
-
-        // TODO - Disable this route for now until processflow from FPM is applied.
-        // Route::prefix('service-dept-head')->name('service_dept_head.')->group(function () {
-        //     Route::controller(TicketLevel1ApprovalController::class)->group(function () {
-        //         Route::prefix('level-1-approval')->name('level_1_approval.')->group(function () {
-        //             Route::get('/', 'index')->name('index');
-        //             Route::get('/{ticket}', 'show')->name('show');
-        //             Route::post('/{ticket}/send-clarification', 'sendClarification')->name('send_clarification');
-        //         });
-        //     });
-        // });
 
         Route::prefix('/announcement')->name('announcement.')->group(function () {
             Route::controller(AnnouncementController::class)->group(function () {

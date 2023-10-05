@@ -13,7 +13,7 @@
         <button
             class="btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
             data-bs-toggle="modal" data-bs-target="#closeTicketModal" type="submit">
-            <i class="bi bi-check-lg"></i>
+            <i class="fa-solid fa-check"></i>
         </button>
         <small class="ticket__details__topbuttons__label">Close</small>
     </div>

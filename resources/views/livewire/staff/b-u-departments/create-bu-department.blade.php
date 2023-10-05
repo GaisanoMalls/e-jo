@@ -1,5 +1,5 @@
 <div>
-    <div wire:ignore.self class="modal slideIn animate department__modal" id="addNewBUDepartmentModal" tabindex="-1"
+    <div wire:ignore.self class="modal fade department__modal" id="addNewBUDepartmentModal" tabindex="-1"
         aria-labelledby="addNewBUDepartmentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">

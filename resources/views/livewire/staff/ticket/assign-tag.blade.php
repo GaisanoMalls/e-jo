@@ -1,5 +1,5 @@
 <div>
-    <div wire:ignore.self class="modal slideIn animate ticket__actions__modal" id="ticketTagModal" tabindex="-1"
+    <div wire:ignore.self class="modal fade ticket__actions__modal" id="ticketTagModal" tabindex="-1"
         aria-labelledby="modalFormLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom__modal">
             <div class="modal-content custom__modal__content">

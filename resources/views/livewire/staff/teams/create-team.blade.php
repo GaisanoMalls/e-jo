@@ -1,5 +1,5 @@
 <div>
-    <div wire:ignore.self class="modal slideIn animate team__modal" id="addNewTeamModal" tabindex="-1"
+    <div wire:ignore.self class="modal fade team__modal" id="addNewTeamModal" tabindex="-1"
         aria-labelledby="addNewTeamModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content modal__content">

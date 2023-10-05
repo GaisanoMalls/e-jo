@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Models\Ticket;
 use Livewire\Component;
 
-class LoadCloseTicketStatusHeaderText extends Component
+class LoadTicketStatusHeaderText extends Component
 {
     public Ticket $ticket;
 
@@ -13,6 +13,6 @@ class LoadCloseTicketStatusHeaderText extends Component
 
     public function render()
     {
-        return view('livewire.staff.ticket.load-close-ticket-status-header-text');
+        return view('livewire.staff.ticket.load-ticket-status-header-text');
     }
 }

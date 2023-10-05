@@ -20,7 +20,7 @@
     @endif
 
     @if ($reason)
-    <div class="modal slideIn animate reason__modal" id="reasonModal" tabindex="-1" aria-labelledby="reasonModalLabel"
+    <div class="modal fade reason__modal" id="reasonModal" tabindex="-1" aria-labelledby="reasonModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 modal__content">

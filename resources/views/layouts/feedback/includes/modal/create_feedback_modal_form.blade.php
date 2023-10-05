@@ -1,6 +1,6 @@
 <form action="{{ route('feedback.store') }}" method="post">
     @csrf
-    <div class="modal slideIn animate feedback__modal" id="ticketFeedbackModal{{ $ticket->id }}" tabindex="-1"
+    <div class="modal fade feedback__modal" id="ticketFeedbackModal{{ $ticket->id }}" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content feedback__content">

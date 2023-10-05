@@ -3298,49 +3298,6 @@ if (levelOfApproverDropdown) {
 }
 
 // ------------------------------------------------------------------------------------------------------------------------
-// View Ticket Section (Ticket Action)
-var transferTicketDepartmentsDropdown = document.getElementById('transferTicketDepartmentsDropdown');
-var transferTicketTeamsDropdown = document.getElementById('transferTicketTeamsDropdown');
-var transferTicketNoTeamsMessage = document.getElementById('transferTicketNoTeamsMessage');
-var transferTicketCountTeams = document.getElementById('transferTicketCountTeams');
-function transFerTicketClearTeamsWhenResetDepartment() {
-  transferTicketTeamsDropdown.disable();
-  transferTicketNoTeamsMessage.textContent = '';
-  transferTicketCountTeams.textContent = '';
-}
-if (transferTicketDepartmentsDropdown || transferTicketTeamsDropdown) {
-  transferTicketDepartmentsDropdown.addEventListener('reset', transFerTicketClearTeamsWhenResetDepartment);
-  transferTicketDepartmentsDropdown.addEventListener('change', function () {
-    var departmentId = this.value;
-    if (departmentId) {
-      axios.get("/staff/tickets/".concat(departmentId, "/teams")).then(function (response) {
-        var teams = response.data;
-        var serviceDepartmentsOption = [];
-        if (teams && teams.length > 0) {
-          teams.forEach(function (team) {
-            serviceDepartmentsOption.push({
-              value: team.id,
-              label: team.name
-            });
-          });
-          transferTicketTeamsDropdown.enable();
-          transferTicketTeamsDropdown.setOptions(serviceDepartmentsOption);
-          transferTicketCountTeams.textContent = "(".concat(serviceDepartmentsOption.length, ")");
-          transferTicketNoTeamsMessage.textContent = "";
-        } else {
-          transferTicketTeamsDropdown.reset();
-          transferTicketTeamsDropdown.disable();
-          transferTicketCountTeams.textContent = "";
-          transferTicketNoTeamsMessage.textContent = "(No teams)";
-        }
-      })["catch"](function (error) {
-        console.log(error.response.data);
-      });
-    } else {
-      transferTicketTeamsDropdown.reset();
-    }
-  });
-}
 })();
 
 /******/ })()

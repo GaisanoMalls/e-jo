@@ -106,9 +106,4 @@ class TicketController extends Controller
             ])
         );
     }
-
-    public function ticketActionGetDepartmentServiceDepartments(Department $department)
-    {
-        return response()->json($department->teams);
-    }
 }

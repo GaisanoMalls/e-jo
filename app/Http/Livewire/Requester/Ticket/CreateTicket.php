@@ -63,6 +63,8 @@ class CreateTicket extends Component
         $this->resetValidation();
         $this->fileAttachments = null;
         $this->upload++;
+        $this->emit('loadDashboard');
+        $this->emit('loadTicketTab');
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('reload-modal');
     }
@@ -85,10 +87,10 @@ class CreateTicket extends Component
                     'subject' => $this->subject,
                     'description' => $this->description,
                     'approval_status' => ApprovalStatus::FOR_APPROVAL,
-                    'service_department_head_approver' => [
-                        'id' => UserServiceDepartment::where('service_department_id', $this->serviceDepartment)->pluck('user_id')->first(),
-                        'is_approved' => false
-                    ]
+                    // 'service_department_admin_approver' => [
+                    //     'service_department_admin_id' => UserServiceDepartment::where('service_department_id', $this->serviceDepartment)->pluck('user_id')->first(),
+                    //     'is_approved' => false
+                    // ]
                 ]);
 
                 if ($this->fileAttachments) {

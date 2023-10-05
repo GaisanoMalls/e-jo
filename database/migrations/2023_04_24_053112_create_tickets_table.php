@@ -37,9 +37,6 @@ class CreateTicketsTable extends Migration
             $table->longText('description');
             $table->longText('issue_summary')->nullable();
             $table->enum('approval_status', ['for_approval', 'approved', 'disapproved']);
-            $table->json('service_department_head_approver');
-            $table->json('bu_head_approver')->nullable();
-            $table->boolean('head_approval_completed')->default(false);
             $table->timestamps();
         });
     }

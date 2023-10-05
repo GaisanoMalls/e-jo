@@ -13,30 +13,15 @@
                         Dashboard
                     </a>
                 </li>
-
-                {{-- ! Disable this section for now until processflow from FPM is applied. --}}
-                {{-- @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
-                <li class="mb-1">
-                    <a href="{{ route('staff.service_dept_head.level_1_approval.index') }}"
-                        class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
-                            {{ Route::is('staff.service_dept_head.level_1_approval.*') ? 'sidebar__btn__active active' : '' }}">
-                        <div
-                            class=" d-flex align-items-center justify-content-center sidebar__button__icon__container fade__in__sidebar__icon__container">
-                            <i class="fa-solid fa-thumbs-up"></i>
-                        </div>
-                        For Approval
-                    </a>
-                </li>
-                @endif --}}
                 @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
                 <li class="mb-1">
                     <a href="{{ route('staff.manual_ticket_assign.to_assign') }}" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons -bottom-3
                     {{ Route::is('staff.manual_ticket_assign.*') ? 'sidebar__btn__active active' : '' }}">
-                        <div class=" d-flex align-items-center justify-content-center sidebar__button__icon__container
-                    fade__in__sidebar__icon__container">
+                        <div
+                            class=" d-flex align-items-center justify-content-center sidebar__button__icon__container fade__in__sidebar__icon__container">
                             <i class="bi bi-person-fill-check"></i>
                         </div>
-                        Assign Ticket
+                        Ticket Assigning
                     </a>
                 </li>
                 @endif

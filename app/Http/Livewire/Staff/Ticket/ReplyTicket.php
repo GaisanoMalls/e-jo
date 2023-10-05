@@ -38,6 +38,8 @@ class ReplyTicket extends Component
         $this->upload++;
         $this->reset('description');
         $this->emit('loadTicketReplies');
+        $this->emit('loadDiscussionCount');
+        $this->emit('loadTicketActivityLogs');
         $this->emit('loadTicketStatusTextHeader');
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('reload-modal');

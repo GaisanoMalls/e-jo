@@ -59,7 +59,7 @@
     </div>
 
     {{-- Edit Tag Modal --}}
-    <div wire:ignore.self class="modal slideIn animate tag__modal" id="updateTagModal" tabindex="-1"
+    <div wire:ignore.self class="modal fade tag__modal" id="updateTagModal" tabindex="-1"
         aria-labelledby="addNewTagModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
@@ -106,7 +106,7 @@
     </div>
 
     {{-- Delete Tag Modal --}}
-    <div wire:ignore.self class="modal slideIn animate modal__confirm__delete__tag" id="deleteTagModal" tabindex="-1"
+    <div wire:ignore.self class="modal fade modal__confirm__delete__tag" id="deleteTagModal" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">

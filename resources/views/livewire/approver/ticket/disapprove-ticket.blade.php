@@ -1,6 +1,6 @@
 <div>
-    <div wire:ignore.self class="modal slideIn animate disapprove__reason__modal" id="disapproveTicketModal"
-        tabindex="-1" aria-labelledby="disapproveTicketLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade disapprove__reason__modal" id="disapproveTicketModal" tabindex="-1"
+        aria-labelledby="disapproveTicketLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 modal__content">
                 <form wire:submit.prevent="disapproveTicket">

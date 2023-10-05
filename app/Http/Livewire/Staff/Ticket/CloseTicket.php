@@ -18,6 +18,7 @@ class CloseTicket extends Component
         $this->emit('loadReplyButtonHeader');
         $this->emit('loadTicketStatusTextHeader');
         $this->emit('loadTicketStatusButtonHeader');
+        $this->emit('loadClarificationButtonHeader');
         $this->dispatchBrowserEvent('close-modal');
     }
 

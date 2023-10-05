@@ -37,14 +37,10 @@ class Ticket extends Model
         'subject',
         'description',
         'approval_status',
-        'service_department_head_approver',
-        'bu_head_approver',
-        'head_approval_completed'
     ];
 
     protected $casts = [
-        'service_department_head_approver' => 'array',
-        'bu_head_approver' => 'array',
+        //
     ];
 
     public function user()

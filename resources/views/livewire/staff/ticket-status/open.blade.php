@@ -32,8 +32,13 @@
                 </thead>
                 <tbody>
                     @foreach ($openTickets as $ticket)
+                    @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+                    <tr wire:key="seen-ticket-{{ $ticket->id }}" wire:click="seenTicket({{ $ticket->id }})"
+                        class="ticket__tr">
+                        @else
                     <tr class="ticket__tr"
                         onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'">
+                        @endif
                         <td class="position-relative">
                             <div class="ticket__list__status__line"
                                 style="background-color: {{ $ticket->priorityLevel->color }};">

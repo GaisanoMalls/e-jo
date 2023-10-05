@@ -7195,6 +7195,7 @@ input:not(:focus)::placeholder {
 }
 
 .dropdown-menu {
+  margin-top: -20px !important;
   position: absolute;
   padding: 1rem 0.5rem 1rem 0.5rem;
   top: 60px;
@@ -7559,6 +7560,18 @@ a:hover {
   font-size: 2rem;
 }
 
+.threads__clarifications__tab__container a {
+  font-size: 0.813rem;
+  font-weight: 500;
+  border: 0;
+  padding-bottom: 6px;
+}
+.threads__clarifications__tab__container a.active {
+  border-bottom: 2px solid #d32839;
+  color: #d32839;
+  font-weight: 600;
+}
+
 .custom__table {
   padding: 0;
   margin: 0;
@@ -7752,8 +7765,6 @@ a:hover {
 }
 .ticket__section .ticket__details__container .ticket__discussions {
   font-size: 0.813rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
 }
 .ticket__section .ticket__details__container .card__ticket__details__right .btn__add__tags,
 .ticket__section .ticket__details__container .card__ticket__details__right .btn__clear__tags {
@@ -8007,6 +8018,56 @@ a:hover {
 .btn__claim__ticket:hover {
   color: #FFFFFF;
   background-color: #9DA85C;
+}
+
+.modal__confirm__approve__ticket .btn__confirm__modal {
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+}
+.modal__confirm__approve__ticket .btn__confirm__modal.btn__cancel__delete {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  border: 1px solid #e7e9eb;
+  background-color: transparent;
+  color: #d32839;
+  font-weight: 500;
+}
+.modal__confirm__approve__ticket .btn__confirm__modal.btn__confirm__delete {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  background-color: #d32839;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+}
+
+.approval__dropdown__menu {
+  outline: none;
+  padding: 8px;
+  border-radius: 0.563rem;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+  margin-top: 13px !important;
+}
+.approval__dropdown__menu .dropdown__select__button {
+  border: 0;
+  font-size: 0.813rem;
+  padding: 8px 13px;
+  border-radius: 0.563rem;
+}
+.approval__dropdown__menu .dropdown__select__button.button__approve:hover {
+  background-color: #9DA85C;
+  color: #FFFFFF;
+}
+.approval__dropdown__menu .dropdown__select__button.button__disapprove {
+  color: #d32839;
+}
+.approval__dropdown__menu .dropdown__select__button.button__disapprove:hover {
+  background-color: #E4EEED;
 }
 
 .custom__button__menu {

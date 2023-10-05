@@ -1,5 +1,5 @@
-<div class="modal slideIn animate confirm__logout__modal" id="confirmLogout" tabindex="-1"
-    aria-labelledby="confirmLogoutLabel" aria-hidden="true">
+<div class="modal fade confirm__logout__modal" id="confirmLogout" tabindex="-1" aria-labelledby="confirmLogoutLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0">
             <form action="{{ route('auth.logout') }}" method="post">

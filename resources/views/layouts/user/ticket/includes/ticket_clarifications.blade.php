@@ -1,6 +1,6 @@
 @extends('layouts.user.ticket.view_ticket')
 
-@section('count-replyThraeds-clarificafions')
+@section('count-replyThreads-clarificafions')
 @livewire('requester.ticket.load-clarifications-count', ['ticket' => $ticket])
 @endsection
 

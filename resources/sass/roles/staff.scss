@@ -456,6 +456,7 @@ input {
 }
 
 .dropdown-menu {
+    margin-top: -20px !important;
     position: absolute;
     padding: 1rem 0.5rem 1rem 0.5rem;
     top: 60px;
@@ -908,6 +909,21 @@ a {
     }
 }
 
+.threads__clarifications__tab__container {
+    a {
+        font-size: $fs-13;
+        font-weight: $fw-500;
+        border: 0;
+        padding-bottom: 6px;
+
+        &.active {
+            border-bottom: 2px solid $color-1;
+            color: $color-1;
+            font-weight: $fw-600;
+        }
+    }
+}
+
 .custom__table {
     padding: 0;
     margin: 0;
@@ -1166,8 +1182,6 @@ a {
 
         .ticket__discussions {
             font-size: $fs-13;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
         }
 
         .card__ticket__details__right {
@@ -1459,6 +1473,50 @@ a {
     &:hover {
         color: #FFFFFF;
         background-color: #9DA85C;
+    }
+}
+
+.modal__confirm__approve__ticket {
+    .btn__confirm__modal {
+        @include generic.button-config;
+
+        &.btn__cancel__delete {
+            @include generic.form-button-cancel;
+        }
+
+        &.btn__confirm__delete {
+            @include generic.form-button-submit;
+        }
+    }
+}
+
+.approval__dropdown__menu {
+    outline: none;
+    padding: 8px;
+    border-radius: $border-radius-9;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+    margin-top: 13px !important;
+
+    .dropdown__select__button {
+        border: 0;
+        font-size: $fs-13;
+        padding: 8px 13px;
+        border-radius: $border-radius-9;
+
+        &.button__approve {
+            &:hover {
+                background-color: #9DA85C;
+                color: #FFFFFF;
+            }
+        }
+
+        &.button__disapprove {
+            color: $color-1;
+
+            &:hover {
+                background-color: #E4EEED;
+            }
+        }
     }
 }
 

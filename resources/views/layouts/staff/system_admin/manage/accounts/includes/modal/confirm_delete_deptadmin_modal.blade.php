@@ -1,4 +1,4 @@
-<div class="modal slideIn animate modal__confirm__delete__user__account"
+<div class="modal fade modal__confirm__delete__user__account"
     id="confirmDeleteServiceDeptAdmin{{ $serviceDepartmentAdmin->id }}" tabindex="-1"
     aria-labelledby="confirmDeleteDeptAdminLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
