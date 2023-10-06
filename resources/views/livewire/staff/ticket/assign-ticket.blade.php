@@ -101,7 +101,6 @@
                 const agentOption = [];
 
                 if (agents.length > 0) {
-                    agentSelect.open();
                     agents.forEach(function (agent) {
                         VirtualSelect.init({
                             ele: agentSelect,
@@ -120,7 +119,6 @@
                     });
                     agentSelect.setOptions(agentOption);
                 } else {
-                    agentSelect.close();
                     agentSelect.reset();
                     agentSelect.disable()
                 }

@@ -1,6 +1,7 @@
 <div>
-    @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN && $ticket->status_id
-    != App\Models\Status::CLOSED)
+    @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN && ($ticket->status_id
+    != App\Models\Status::CLOSED && $ticket->status_id
+    != App\Models\Status::DISAPPROVED))
     <div class="card border-0 p-0 card__ticket__details">
         <div class="d-flex flex-column gap-3 ticket__details__card__body__right">
             <label class="ticket__actions__label">Ticket Actions</label>

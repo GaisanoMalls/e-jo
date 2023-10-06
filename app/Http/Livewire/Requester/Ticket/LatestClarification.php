@@ -13,7 +13,7 @@ class LatestClarification extends Component
     public Ticket $ticket;
     public $latestClarification;
 
-    protected $listeners = ['loadLatestClarification' => 'render'];
+    protected $listeners = ['loadLatestClarification' => '$refresh'];
 
     public function render()
     {

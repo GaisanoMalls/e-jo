@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\TicketStatus;
 
 use App\Http\Traits\TicketsByStaffWithSameTemplates;
 use App\Models\ActivityLog;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use Livewire\Component;

@@ -12,7 +12,7 @@ class LatestReply extends Component
     public Ticket $ticket;
     public $latestReply;
 
-    protected $listeners = ['loadLatestReply' => 'render'];
+    protected $listeners = ['loadLatestReply' => '$refresh'];
 
     public function render()
     {

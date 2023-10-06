@@ -1,3 +1,5 @@
+@if (auth()->user()->role_id !== App\Models\Role::SERVICE_DEPARTMENT_ADMIN && $ticket->status_id !==
+App\Models\Status::DISAPPROVED)
 <div>
     @if ($ticket->status_id == App\Models\Status::CLOSED)
     <div class="d-flex flex-column">
@@ -27,3 +29,4 @@
     });
 </script>
 @endpush
+@endif

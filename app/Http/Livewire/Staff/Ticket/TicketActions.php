@@ -9,9 +9,11 @@ class TicketActions extends Component
 {
     public Ticket $ticket;
 
+    protected $listeners = ['loadTicketActions' => '$refresh'];
+
     public function getCurrentTeamOrAgent()
     {
-        if (!is_null($this->ticket->team_id) && !is_null($this->ticket->agent_id)) {
+        if (!is_null($this->ticket->team_id)) {
             $this->dispatchBrowserEvent('get-current-team-or-agent', ['ticket' => $this->ticket]);
         }
     }

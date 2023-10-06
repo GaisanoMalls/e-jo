@@ -9,7 +9,7 @@ class LoadTicketDiscussionCount extends Component
 {
     public Ticket $ticket;
 
-    protected $listeners = ['loadDiscussionCount' => 'render'];
+    protected $listeners = ['loadDiscussionCount' => '$refresh'];
 
     public function render()
     {

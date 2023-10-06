@@ -10,7 +10,7 @@ class TicketClarifications extends Component
     public Ticket $ticket;
     public $clarifications = null;
 
-    protected $listeners = ['loadTicketClarifications' => 'render'];
+    protected $listeners = ['loadTicketClarifications' => '$refresh'];
 
     public function loadClarifications()
     {

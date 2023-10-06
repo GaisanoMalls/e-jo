@@ -14,11 +14,16 @@ class CloseTicket extends Component
     public function actionOnSubmit()
     {
         sleep(1);
+        $this->emit('loadTicketTags');
         $this->emit('loadPriorityLevel');
+        $this->emit('loadTicketActions');
+        $this->emit('loadBackButtonHeader');
         $this->emit('loadReplyButtonHeader');
+        $this->emit('loadDropdownApprovalButton');
         $this->emit('loadTicketStatusTextHeader');
         $this->emit('loadTicketStatusButtonHeader');
         $this->emit('loadClarificationButtonHeader');
+        $this->emit('loadSidebarCollapseTicketStatus');
         $this->dispatchBrowserEvent('close-modal');
     }
 

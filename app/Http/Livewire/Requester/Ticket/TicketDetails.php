@@ -9,7 +9,7 @@ class TicketDetails extends Component
 {
     public Ticket $ticket;
 
-    protected $listeners = ['loadTicketDetails' => 'render'];
+    protected $listeners = ['loadTicketDetails' => '$refresh'];
 
     public function render()
     {

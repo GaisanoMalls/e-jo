@@ -9,7 +9,7 @@ class LoadApprovalButtonsHeader extends Component
 {
     public Ticket $ticket;
 
-    protected $listeners = ['loadApprovalButtonHeader' => 'render'];
+    protected $listeners = ['loadApprovalButtonHeader' => '$refresh'];
 
     public function render()
     {

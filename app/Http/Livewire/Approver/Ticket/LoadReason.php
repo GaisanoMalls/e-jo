@@ -9,7 +9,7 @@ class LoadReason extends Component
 {
     public Ticket $ticket;
 
-    protected $listeners = ['loadReason' => 'render'];
+    protected $listeners = ['loadReason' => '$refresh'];
 
     public function render()
     {

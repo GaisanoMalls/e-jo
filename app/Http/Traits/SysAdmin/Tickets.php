@@ -21,7 +21,7 @@ trait Tickets
     public function sysAdminGetDisapprovedTickets()
     {
         return Ticket::where(function ($statusQuery) {
-            $statusQuery->where('status_id', Status::CLOSED)
+            $statusQuery->where('status_id', Status::DISAPPROVED)
                 ->where('approval_status', ApprovalStatus::DISAPPROVED);
         })
             ->orderBy('created_at', 'desc')
@@ -83,7 +83,7 @@ trait Tickets
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLOSED)
-                ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::DISAPPROVED]);
+                ->where('approval_status', ApprovalStatus::APPROVED);
         })
             ->orderBy('created_at', 'desc')
             ->get();

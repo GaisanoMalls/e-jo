@@ -10,7 +10,7 @@ class BookmarkTicket extends Component
 {
     public Ticket $ticket;
 
-    protected $listeners = ['loadBookmarkButton' => 'render'];
+    protected $listeners = ['loadBookmarkButton' => '$refresh'];
 
     public function bookmark()
     {

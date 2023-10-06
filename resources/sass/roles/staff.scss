@@ -1460,6 +1460,40 @@ a {
     .log__list:last-child {
         border-bottom: 0 !important;
     }
+
+    .my__logs {
+        background-color: #E9ECEF;
+        font-size: $fs-12;
+        color: #212529;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .my__logs__dropdown {
+        border: 0;
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+        margin-top: 5px !important;
+        border-radius: 0.563rem;
+        padding: 8px;
+
+        .dropdown-item {
+            color: #131313;
+            border: 0;
+            font-size: $fs-13;
+            padding: 8px 13px;
+            border-radius: $border-radius-9;
+
+            i {
+                color: #777d87 !important;
+            }
+
+            &:focus {
+                background-color: #E9ECEF !important;
+            }
+        }
+    }
 }
 
 .btn__claim__ticket {
@@ -1508,6 +1542,7 @@ a {
                 background-color: #9DA85C;
                 color: #FFFFFF;
             }
+
         }
 
         &.button__disapprove {
@@ -1650,6 +1685,7 @@ input[type="checkbox"] {
 .ticket__actions__label {
     font-size: $fs-14;
     color: #212529;
+    font-weight: 500;
 }
 
 .ticket__actions__modal {
@@ -2201,24 +2237,22 @@ input[type="checkbox"] {
 }
 
 .ticket__tag {
-    background-color: #1f723f;
-    border-radius: $border-radius-50;
-    font-size: $fs-12;
-    color: $white;
+    background-color: #F5F7F9;
+    border-radius: 3.125rem;
+    font-size: 0.75rem;
     padding: 3px 3px 3px 12px;
     white-space: nowrap;
     margin-bottom: 5px;
 
+    .tag__link {
+        color: black;
+    }
+
     &:hover {
-        background-color: #196837 !important;
+        background-color: #a0c5af !important;
 
         &>.tag__link {
-
             color: white !important;
-        }
-
-        &>.remove__tag i {
-            color: #39925b;
         }
 
         &>.remove__tag {
@@ -2231,12 +2265,12 @@ input[type="checkbox"] {
     }
 
     .remove__tag {
-        background-color: #39925b;
+        background-color: #a0c5af;
         border-radius: 50%;
         height: 17px;
         width: 17px;
         color: white;
-        font-size: 16px;
+        font-size: $fs-16;
 
         &:hover {
             cursor: pointer;

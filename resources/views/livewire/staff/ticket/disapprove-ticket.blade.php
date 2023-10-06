@@ -1,17 +1,16 @@
 <div>
-    {{-- Close Ticket Modal --}}
-    <div wire:ignore.self class="modal fade modal__confirm__close__ticket" id="closeTicketModal" tabindex="-1"
-        aria-hidden="true">
+    <div wire:ignore.self class="modal fade modal__confirm__approve__ticket" id="confirmTicketDisapproveModal"
+        tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
-                <form wire:submit.prevent="closeTicket">
+                <form wire:submit.prevent="disapproveTicket">
                     <div class="modal-body border-0 text-center pt-4 pb-1">
                         <h6 class="fw-bold mb-4"
                             style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
-                            Confirm
+                            Confirm Approval
                         </h6>
                         <p class="mb-1" style="font-weight: 500; font-size: 15px;">
-                            Are you sure you want to close this ticket?
+                            Disapprove this ticket?
                         </p>
                         <strong>{{ $ticket->ticket_number }}</strong>
                     </div>
@@ -21,10 +20,10 @@
                             data-bs-dismiss="modal">Cancel</button>
                         <button type="submit"
                             class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal">
-                            <span wire:loading wire:target="closeTicket" class="spinner-border spinner-border-sm"
+                            <span wire:loading wire:target="disapproveTicket" class="spinner-border spinner-border-sm"
                                 role="status" aria-hidden="true">
                             </span>
-                            Yes, close this ticket
+                            Yes, disapprove
                         </button>
                     </div>
                 </form>
@@ -32,3 +31,11 @@
         </div>
     </div>
 </div>
+
+@push('livewire-modal')
+<script>
+    window.addEventListener('close-modal', event => {
+        $('#confirmTicketDisapproveModal').modal('hide');
+    });
+</script>
+@endpush

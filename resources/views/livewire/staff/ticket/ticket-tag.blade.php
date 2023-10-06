@@ -32,8 +32,7 @@
             <div class="d-flex flex-wrap align-items-center gap-2">
                 @foreach ($ticket->tags as $tag)
                 <div class="d-flex align-items-center shadow-sm gap-2 ticket__tag">
-                    <a href=""
-                        class="text-white tag__link {{ $ticket->status_id == \App\Models\Status::CLOSED ? 'me-2' : '' }}">
+                    <a href="" class="tag__link {{ $ticket->status_id == \App\Models\Status::CLOSED ? 'me-2' : '' }}">
                         {{ $tag->name }}
                     </a>
                     @if ($ticket->status_id != \App\Models\Status::CLOSED)

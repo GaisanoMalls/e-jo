@@ -37,7 +37,7 @@ trait Tickets
     public function serviceDeptAdminGetDisapprovedTickets()
     {
         return Ticket::where(function ($statusQuery) {
-            $statusQuery->where('status_id', Status::CLOSED)
+            $statusQuery->where('status_id', Status::DISAPPROVED)
                 ->where('approval_status', ApprovalStatus::DISAPPROVED);
         })->where(function ($byUserQuery) {
             $byUserQuery->where('branch_id', auth()->user()->branch_id)
@@ -109,9 +109,8 @@ trait Tickets
                     $byUserQuery->where('branch_id', auth()->user()->branch_id)
                         ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
                 });
-        })->orWhere(function ($statusQuery) {
-            $statusQuery->where('approval_status', ApprovalStatus::APPROVED)
-                ->where('approval_status', ApprovalStatus::DISAPPROVED);
+        })->where(function ($statusQuery) {
+            $statusQuery->where('approval_status', ApprovalStatus::APPROVED);
         })->orderBy('created_at', 'desc')->get();
     }
 }

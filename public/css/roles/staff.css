@@ -8006,6 +8006,34 @@ a:hover {
 .log__container .log__list:last-child {
   border-bottom: 0 !important;
 }
+.log__container .my__logs {
+  background-color: #E9ECEF;
+  font-size: 0.75rem;
+  color: #212529;
+}
+.log__container .my__logs:hover {
+  cursor: pointer;
+}
+.log__container .my__logs__dropdown {
+  border: 0;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+  margin-top: 5px !important;
+  border-radius: 0.563rem;
+  padding: 8px;
+}
+.log__container .my__logs__dropdown .dropdown-item {
+  color: #131313;
+  border: 0;
+  font-size: 0.813rem;
+  padding: 8px 13px;
+  border-radius: 0.563rem;
+}
+.log__container .my__logs__dropdown .dropdown-item i {
+  color: #777d87 !important;
+}
+.log__container .my__logs__dropdown .dropdown-item:focus {
+  background-color: #E9ECEF !important;
+}
 
 .btn__claim__ticket {
   color: #FFFFFF;
@@ -8178,6 +8206,7 @@ input[type=checkbox]:checked + .form-check-label {
 .ticket__actions__label {
   font-size: 0.875rem;
   color: #212529;
+  font-weight: 500;
 }
 
 .ticket__actions__modal .ticket__dropdown__select {
@@ -8674,22 +8703,21 @@ input[type=checkbox]:checked + .form-check-label {
 }
 
 .ticket__tag {
-  background-color: #1f723f;
+  background-color: #F5F7F9;
   border-radius: 3.125rem;
   font-size: 0.75rem;
-  color: #ffffff;
   padding: 3px 3px 3px 12px;
   white-space: nowrap;
   margin-bottom: 5px;
 }
+.ticket__tag .tag__link {
+  color: black;
+}
 .ticket__tag:hover {
-  background-color: #196837 !important;
+  background-color: #a0c5af !important;
 }
 .ticket__tag:hover > .tag__link {
   color: white !important;
-}
-.ticket__tag:hover > .remove__tag i {
-  color: #39925b;
 }
 .ticket__tag:hover > .remove__tag {
   background-color: #39925b;
@@ -8698,12 +8726,12 @@ input[type=checkbox]:checked + .form-check-label {
   color: white !important;
 }
 .ticket__tag .remove__tag {
-  background-color: #39925b;
+  background-color: #a0c5af;
   border-radius: 50%;
   height: 17px;
   width: 17px;
   color: white;
-  font-size: 16px;
+  font-size: 1rem;
 }
 .ticket__tag .remove__tag:hover {
   cursor: pointer;

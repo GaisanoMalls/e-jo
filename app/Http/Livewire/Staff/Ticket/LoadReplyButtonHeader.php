@@ -9,7 +9,7 @@ class LoadReplyButtonHeader extends Component
 {
     public Ticket $ticket;
 
-    protected $listeners = ['loadReplyButtonHeader' => 'render'];
+    protected $listeners = ['loadReplyButtonHeader' => '$refresh'];
 
     public function getLatestReply()
     {

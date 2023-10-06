@@ -8,7 +8,7 @@ use App\Models\Status;
 use App\Models\Ticket;
 use Livewire\Component;
 
-class ApproveTicket extends Component
+class DisapproveTicket extends Component
 {
     public Ticket $ticket;
 
@@ -29,14 +29,14 @@ class ApproveTicket extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function approveTicket()
+    public function disapproveTicket()
     {
         $this->ticket->update([
-            'status_id' => Status::APPROVED,
-            'approval_status' => ApprovalStatus::APPROVED
+            'status_id' => Status::DISAPPROVED,
+            'approval_status' => ApprovalStatus::DISAPPROVED
         ]);
 
-        ActivityLog::make($this->ticket->id, 'approved the ticket');
+        ActivityLog::make($this->ticket->id, 'disapproved the ticket');
 
         $this->actionOnSubmit();
         flash()->addSuccess('Ticket has been approved');
@@ -44,6 +44,6 @@ class ApproveTicket extends Component
 
     public function render()
     {
-        return view('livewire.staff.ticket.approve-ticket');
+        return view('livewire.staff.ticket.disapprove-ticket');
     }
 }

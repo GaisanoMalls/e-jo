@@ -9,7 +9,7 @@ class Dashboard extends Component
 {
     use RequestserTickets;
 
-    protected $listeners = ['loadDashboard' => 'render'];
+    protected $listeners = ['loadDashboard' => '$refresh'];
 
     public function render()
     {

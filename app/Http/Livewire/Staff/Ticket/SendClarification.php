@@ -37,10 +37,12 @@ class SendClarification extends Component
         $this->replyFiles = null;
         $this->upload++;
         $this->reset('description');
+        $this->emit('loadBackButtonHeader');
         $this->emit('loadClarificationCount');
         $this->emit('loadTicketActivityLogs');
         $this->emit('loadTicketClarifications');
         $this->emit('loadTicketStatusTextHeader');
+        $this->emit('loadSidebarCollapseTicketStatus');
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('reload-modal');
     }

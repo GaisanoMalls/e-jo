@@ -9,6 +9,8 @@ class CollapseTicketStatus extends Component
 {
     use TicketsByStaffWithSameTemplates;
 
+    protected $listeners = ['loadSidebarCollapseTicketStatus' => '$refresh'];
+
     public function render()
     {
         $openTickets = $this->getOpenTickets();

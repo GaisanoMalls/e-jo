@@ -12,7 +12,7 @@ class AssignTag extends Component
 
     public Ticket $ticket;
     public $selectedTags = [];
-    protected $listeners = ['loadAssignTicketForm' => 'render'];
+    protected $listeners = ['loadAssignTicketForm' => '$refresh'];
 
     public function saveAssignTicketTag()
     {

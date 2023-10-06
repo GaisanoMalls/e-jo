@@ -9,7 +9,7 @@ class LoadTicketStatusHeaderText extends Component
 {
     public Ticket $ticket;
 
-    protected $listeners = ['loadTicketStatusTextHeader' => 'render'];
+    protected $listeners = ['loadTicketStatusTextHeader' => '$refresh'];
 
     public function render()
     {

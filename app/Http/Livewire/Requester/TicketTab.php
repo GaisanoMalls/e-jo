@@ -9,7 +9,7 @@ class TicketTab extends Component
 {
     use Tickets;
 
-    protected $listeners = ['loadTicketTab' => 'render'];
+    protected $listeners = ['loadTicketTab' => '$refresh'];
 
     public function render()
     {

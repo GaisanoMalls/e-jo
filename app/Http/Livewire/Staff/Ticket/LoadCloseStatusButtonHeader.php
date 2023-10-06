@@ -9,7 +9,7 @@ class LoadCloseStatusButtonHeader extends Component
 {
     public Ticket $ticket;
 
-    protected $listeners = ['loadTicketStatusButtonHeader' => 'render'];
+    protected $listeners = ['loadTicketStatusButtonHeader' => '$refresh'];
 
     public function render()
     {

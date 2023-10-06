@@ -9,7 +9,7 @@ class LoadBackButtonHeader extends Component
 {
     public Ticket $ticket;
 
-    protected $listeners = ['loadBackButtonHeader' => 'render'];
+    protected $listeners = ['loadBackButtonHeader' => '$refresh'];
 
     public function render()
     {

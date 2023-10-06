@@ -9,7 +9,7 @@
             </div>
             <div wire:loading.class="text-muted" class="d-flex flex-column gap-2">
                 <div class="d-flex align-items-center justify-content-between">
-                    <small class="ticket__details__info__label" style="font-weight: 500;">
+                    <small class="ticket__details__info__label">
                         Approval status:
                     </small>
                     <small class="ticket__details__info">
@@ -30,14 +30,14 @@
                     </small>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
-                    <small class="ticket__details__info__label" style="font-weight: 500;">Branch:</small>
+                    <small class="ticket__details__info__label">Branch:</small>
                     <small class="ticket__details__info">
                         <i class="fa-solid fa-location-dot me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->branch->name }}
                     </small>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
-                    <small class="ticket__details__info__label" style="font-weight: 500;">
+                    <small class="ticket__details__info__label">
                         Service department:</small>
                     <small class="ticket__details__info">
                         <i class="fa-solid fa-gears me-1 text-muted" style="font-size: 11px;"></i>
@@ -45,7 +45,7 @@
                     </small>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
-                    <small class="ticket__details__info__label" style="font-weight: 500;">Team:</small>
+                    <small class="ticket__details__info__label">Team:</small>
                     <small class="position-relative ticket__details__info">
                         <i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->team->name ?? '----' }}
@@ -56,7 +56,7 @@
                     </small>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
-                    <small class="ticket__details__info__label" style="font-weight: 500;">
+                    <small class="ticket__details__info__label">
                         Help topic:
                     </small>
                     <small class="ticket__details__info">
@@ -65,7 +65,7 @@
                     </small>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
-                    <small class="ticket__details__info__label" style="font-weight: 500;">
+                    <small class="ticket__details__info__label">
                         Assigned agent:
                     </small>
                     <small
@@ -81,7 +81,7 @@
                     </small>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
-                    <small class="ticket__details__info__label" style="font-weight: 500;">
+                    <small class="ticket__details__info__label">
                         SLA:</small>
                     <small class="ticket__details__info">
                         <i class="fa-solid fa-clock me-1 text-muted" style="font-size: 11px;"></i>

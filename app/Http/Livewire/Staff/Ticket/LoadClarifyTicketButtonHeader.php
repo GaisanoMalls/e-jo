@@ -9,7 +9,7 @@ class LoadClarifyTicketButtonHeader extends Component
 {
     public Ticket $ticket;
 
-    protected $listeners = ['loadClarificationButtonHeader' => 'render'];
+    protected $listeners = ['loadClarificationButtonHeader' => '$refresh'];
 
     public function getLatestClarification()
     {

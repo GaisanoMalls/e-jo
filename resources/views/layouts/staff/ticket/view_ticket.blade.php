@@ -69,38 +69,7 @@
                         </div>
                         @endif
                         @livewire('staff.ticket.load-close-status-button-header', ['ticket' => $ticket])
-                        @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
-                        <div>
-                            <div class="btn-group">
-                                <div class="d-flex flex-column">
-                                    <button type="button"
-                                        class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center dropdown-toggle"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa-regular fa-handshake"></i>
-                                    </button>
-                                    <small class="ticket__details__topbuttons__label">Approval</small>
-                                    <ul
-                                        class="dropdown-menu dropdown-menu-end approval__dropdown__menu slideIn animate">
-                                        <li>
-                                            <button type="button"
-                                                class="btn d-flex align-items-center gap-3 w-100 dropdown__select__button button__approve"
-                                                data-bs-toggle="modal" data-bs-target="#confirmTicketApproveModal">
-                                                <i class="fa-regular fa-thumbs-up"></i>
-                                                Approve
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button type="button"
-                                                class="btn d-flex align-items-center gap-3 w-100 dropdown__select__button button__disapprove">
-                                                <i class="fa-regular fa-thumbs-down"></i>
-                                                Disapprove
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
+                        @livewire('staff.ticket.dropdown-approval-button', ['ticket' => $ticket])
                         @livewire('staff.ticket.bookmark-ticket', ['ticket' => $ticket])
                     </div>
                 </div>
@@ -200,8 +169,8 @@
 @if (Route::is('staff.ticket.ticket_clarifications'))
 @livewire('staff.ticket.send-clarification', ['ticket' => $ticket])
 @endif
-
 @livewire('staff.ticket.approve-ticket', ['ticket' => $ticket])
+@livewire('staff.ticket.disapprove-ticket', ['ticket' => $ticket])
 @endif
 
 @livewire('staff.ticket.assign-tag', ['ticket' => $ticket])
