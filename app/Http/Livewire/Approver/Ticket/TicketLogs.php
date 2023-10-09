@@ -12,7 +12,7 @@ class TicketLogs extends Component
     protected $listeners = ['loadTicketLogs' => '$refresh'];
 
     public function render()
-    {   
+    {
         return view('livewire.approver.ticket.ticket-logs');
     }
 }

@@ -13,29 +13,51 @@ class TicketActivityLogs extends Component
     public $isMyLogsOnly = false;
     public $ticketLogs = [];
 
-    protected $listeners = ['loadTicketActivityLogs' => '$refresh'];
+    protected $listeners = [
+        'loadTicketActivityLogs' => '$refresh',
+        'loadTicketLogs' => 'loadLogs'
+    ];
 
     public function filterAll()
     {
         $this->isAll = true;
-        $this->isMyLogsOnly = true;
-        $this->dispatchBrowserEvent('display-my-logs-label', ['allLabel' => 'All']);
-        $this->emit('loadTicketActivityLogs');
+        $this->isMyLogsOnly = false;
+        $this->loadLogs();
     }
 
     public function filterMyLogs()
     {
-        $this->isMyLogsOnly = true;
-        $this->isAll = false;
-        $this->ticketLogs = ActivityLog::where('ticket_id', $this->ticket->id)->where('user_id', auth()->user()->id)->get();
+        if (!$this->isMyLogsOnly || $this->hasMyLogs()) {
+            $this->isMyLogsOnly = true;
+            $this->isAll = false;
+            $this->loadLogs();
+        }
+    }
+
+    public function hasMyLogs()
+    {
+        // Check if there are logs for the current user
+        return ActivityLog::where('ticket_id', $this->ticket->id)
+            ->where('user_id', auth()->user()->id)
+            ->exists();
+    }
+
+    public function loadLogs()
+    {
+        if ($this->isAll) {
+            $this->ticketLogs = $this->ticket->activityLogs;
+        } elseif ($this->isMyLogsOnly) {
+            $this->ticketLogs = ActivityLog::where('ticket_id', $this->ticket->id)
+                ->where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')
+                ->get();
+        }
     }
 
     public function render()
     {
-        $this->isAll ? $this->ticketLogs = $this->ticket->activityLogs
-            : ($this->isMyLogsOnly
-                ? $this->filterMyLogs()
-                : $this->ticketLogs = $this->ticket->activityLogs);
+        if (!$this->isAll && !$this->isMyLogsOnly) {
+            $this->filterAll();
+        }
 
         return view('livewire.ticket-activity-logs');
     }

@@ -38,6 +38,7 @@
                 @endif
             </div>
             <div class="d-flex flex-column">
+                @if (!$ticketLogs->isEmpty())
                 @foreach ($ticketLogs as $log)
                 <div wire:loading.class="text-muted"
                     class="d-flex justify-content-between py-3 log__list {{ $ticketLogs->count() > 1 ? 'border-bottom' : '' }}">
@@ -61,6 +62,11 @@
                     </small>
                 </div>
                 @endforeach
+                @else
+                <div class="rounded-3 mt-1" style="font-size: 0.8rem; padding: 12px 18px; background-color: #F5F7F9;">
+                    No ticket logs
+                </div>
+                @endif
             </div>
         </div>
     </div>

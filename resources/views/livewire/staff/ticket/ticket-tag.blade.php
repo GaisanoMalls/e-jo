@@ -45,7 +45,7 @@
                 @endforeach
             </div>
             @else
-            <div class="rounded-3" style="font-size: 0.8rem; padding: 9px 18px; background-color: #F5F7F9;">
+            <div class="rounded-3" style="font-size: 0.8rem; padding: 12px 18px; background-color: #F5F7F9;">
                 Empty tags
             </div>
             @endif

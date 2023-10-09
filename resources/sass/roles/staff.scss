@@ -1524,6 +1524,37 @@ a {
     }
 }
 
+.reason__modal {
+    .modal__content {
+        padding: 20px;
+
+        .title {
+            font-size: $fs-15;
+            font-weight: $fw-600;
+            color: #212529;
+        }
+
+        .reason__content {
+            font-size: $fs-14;
+
+            p {
+                margin-bottom: 2px;
+            }
+        }
+    }
+}
+
+.btn__see__reason {
+    color: black;
+    text-decoration: underline !important;
+    font-weight: 500;
+    font-size: 13px;
+
+    &:hover {
+        color: black;
+    }
+}
+
 .approval__dropdown__menu {
     outline: none;
     padding: 8px;

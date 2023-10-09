@@ -21,6 +21,7 @@ App\Models\Status::DISAPPROVED)
     </div>
     @endif
 </div>
+@endif
 
 @push('livewire-modal')
 <script>
@@ -29,4 +30,3 @@ App\Models\Status::DISAPPROVED)
     });
 </script>
 @endpush
-@endif

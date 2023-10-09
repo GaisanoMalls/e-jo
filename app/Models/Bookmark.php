@@ -9,5 +9,5 @@ class Bookmark extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['ticket_id'];
+    protected $fillable = ['ticket_id', 'user_id'];
 }

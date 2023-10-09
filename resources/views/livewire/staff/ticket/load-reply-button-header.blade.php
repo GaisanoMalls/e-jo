@@ -1,5 +1,5 @@
+@if ($ticket->status_id != App\Models\Status::CLOSED && $ticket->status_id != App\Models\Status::DISAPPROVED)
 <div>
-    @if ($ticket->status_id != App\Models\Status::CLOSED && $ticket->status_id != App\Models\Status::DISAPPROVED)
     <div class="d-flex flex-column">
         @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN && $ticket->approval_status ===
         App\Models\ApprovalStatus::FOR_APPROVAL)
@@ -18,5 +18,5 @@
         <small
             class="ticket__details__topbuttons__label {{ auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN && $ticket->approval_status === App\Models\ApprovalStatus::FOR_APPROVAL ? 'text-muted' : '' }}">Reply</small>
     </div>
-    @endif
 </div>
+@endif

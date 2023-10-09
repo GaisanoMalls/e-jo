@@ -46,7 +46,6 @@ class Team extends Model
     {
         return $this->belongsToMany(User::class, 'user_team')
             ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
-            ->wherePivot(['user_id', 'team_id'])
             ->withTimestamps();
     }
 

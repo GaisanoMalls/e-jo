@@ -15,6 +15,7 @@ class CloseTicket extends Component
     {
         sleep(1);
         $this->emit('loadTicketTags');
+        $this->emit('loadTicketLogs');
         $this->emit('loadPriorityLevel');
         $this->emit('loadTicketActions');
         $this->emit('loadBackButtonHeader');

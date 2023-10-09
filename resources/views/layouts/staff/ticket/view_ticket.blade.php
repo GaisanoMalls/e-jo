@@ -1,6 +1,7 @@
 @extends('layouts.staff.base', ['title' => $ticket->subject])
 
 @section('main-content')
+@livewire('staff.ticket.load-disapproval-reason', ['ticket' => $ticket])
 @if ($ticket)
 <div class="ticket__section">
     <div class="row">
@@ -28,48 +29,13 @@
                         App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
                         @livewire('staff.ticket.load-clarify-ticket-button-header', ['ticket' => $ticket])
                         @endif
-                        @if (auth()->user()->role_id == App\Models\Role::AGENT && $ticket->status_id !=
-                        App\Models\Status::CLOSED)
-                        {{-- SHOW "Claim" BUTTON FOR AGENT USER ONLY --}}
-                        <div class="d-flex flex-column">
-                            @if ($ticket->status_id == App\Models\Status::CLAIMED)
-                            <button style="background-color: {{ $ticket->status->color }} !important;"
-                                class="btn btn-sm border-0 m-auto text-white ticket__detatails__btn__claim claimed d-flex  align-items-center justify-content-center">
-                                <i class="fa-regular fa-flag"></i>
-                            </button>
-                            <small class="ticket__details__topbuttons__label fw-bold">Claimed</small>
-                            @else
-                            @if ($ticket->agent_id == null)
-                            <form action="{{ route('staff.ticket.ticket_details_claim_ticket', $ticket->id) }}"
-                                method="post">
-                                @csrf
-                                @method('PUT')
-                                <button type="submit" class="btn bx-burst btn-sm border-0 m-auto ticket__detatails__btn__claim d-flex
-                                    align-items-center justify-content-center">
-                                    <i class="fa-regular fa-flag"></i>
-                                </button>
-                                <small class="ticket__details__topbuttons__label">Claim</small>
-                            </form>
-                            @else
-                            <button style="background-color: #FF8B8B !important;"
-                                class="btn btn-sm border-0 m-auto text-white ticket__detatails__btn__claim claimed d-flex  align-items-center justify-content-center">
-                                <i class="fa-regular fa-flag"></i>
-                            </button>
-                            <small class="ticket__details__topbuttons__label fw-bold">Claimed</small>
-                            @endif
-                            @endif
-                        </div>
-                        @elseif ($ticket->status_id == App\Models\Status::CLAIMED)
-                        <div class="d-flex flex-column">
-                            <button style="background-color: {{ $ticket->status->color }} !important;" class="btn btn-sm border-0 m-auto text-white ticket__detatails__btn__claim claimed d-flex
-                                align-items-center justify-content-center">
-                                <i class="fa-regular fa-flag"></i>
-                            </button>
-                            <small class="ticket__details__topbuttons__label fw-bold">Claimed</small>
-                        </div>
+                        @if (auth()->user()->role_id == App\Models\Role::AGENT)
+                        @livewire('staff.ticket.claim-ticket', ['ticket' => $ticket])
                         @endif
                         @livewire('staff.ticket.load-close-status-button-header', ['ticket' => $ticket])
+                        @if (auth()->user()->role_id == App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
                         @livewire('staff.ticket.dropdown-approval-button', ['ticket' => $ticket])
+                        @endif
                         @livewire('staff.ticket.bookmark-ticket', ['ticket' => $ticket])
                     </div>
                 </div>

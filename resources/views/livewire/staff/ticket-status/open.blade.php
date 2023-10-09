@@ -23,11 +23,6 @@
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
                             Priority
                         </th>
-                        @if (auth()->user()->role_id === App\Models\Role::AGENT)
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Action
-                        </th>
-                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -89,26 +84,12 @@
                                     $ticket->priorityLevel->name }}</span>
                             </div>
                         </td>
-                        @if (auth()->user()->role_id === App\Models\Role::AGENT)
-                        <td>
-                            <div class="d-flex align-items-center justify-content-start td__content">
-                                <form action="{{ route('staff.ticket.ticket_details_claim_ticket', $ticket->id) }}"
-                                    method="post">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-sm btn__claim__ticket">
-                                        Claim ticket
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                        @endif
                     </tr>
                     @endforeach
                 </tbody>
             </table>
             @else
-            <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
+            <div class=" bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
                 <small style="font-size: 14px;">No records for open tickets.</small>
             </div>
             @endif

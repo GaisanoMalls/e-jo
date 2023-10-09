@@ -15,17 +15,22 @@ class BookmarkTicket extends Component
     public function bookmark()
     {
         sleep(1);
-        Bookmark::firstOrCreate(['ticket_id' => $this->ticket->id]);
+        Bookmark::firstOrCreate([
+            'ticket_id' => $this->ticket->id,
+            'user_id' => auth()->user()->id
+        ]);
     }
 
     public function removeBookmark()
     {
-        Bookmark::where('ticket_id', $this->ticket->id)->delete();
+        Bookmark::where('ticket_id', $this->ticket->id)
+            ->where('user_id', auth()->user()->id)->delete();
     }
 
     private function isBookmarked()
     {
-        return Bookmark::where('ticket_id', $this->ticket->id)->exists();
+        return Bookmark::where('ticket_id', $this->ticket->id)
+            ->where('user_id', auth()->user()->id)->exists();
     }
 
     public function render()

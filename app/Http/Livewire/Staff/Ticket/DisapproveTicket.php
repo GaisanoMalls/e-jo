@@ -2,24 +2,37 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Http\Requests\Approver\StoreDisapproveTicketRequest;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
+use App\Models\Reason;
 use App\Models\Status;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class DisapproveTicket extends Component
 {
     public Ticket $ticket;
 
+    public $reasonDescription;
+
+    public function rules()
+    {
+        return (new StoreDisapproveTicketRequest())->rules();
+    }
+
     public function actionOnSubmit()
     {
         sleep(1);
+        $this->reset('reasonDescription');
         $this->emit('loadTicketTags');
+        $this->emit('loadTicketLogs');
         $this->emit('loadTicketDetails');
         $this->emit('loadTicketActions');
         $this->emit('loadBackButtonHeader');
         $this->emit('loadReplyButtonHeader');
+        $this->emit('loadDisapprovalReason');
         $this->emit('loadTicketActivityLogs');
         $this->emit('loadDropdownApprovalButton');
         $this->emit('loadTicketStatusTextHeader');
@@ -27,19 +40,34 @@ class DisapproveTicket extends Component
         $this->emit('loadClarificationButtonHeader');
         $this->emit('loadSidebarCollapseTicketStatus');
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('reload-modal');
     }
 
     public function disapproveTicket()
     {
-        $this->ticket->update([
-            'status_id' => Status::DISAPPROVED,
-            'approval_status' => ApprovalStatus::DISAPPROVED
-        ]);
+        $this->validate();
 
-        ActivityLog::make($this->ticket->id, 'disapproved the ticket');
+        try {
+            DB::transaction(function () {
+                $reason = Reason::create([
+                    'ticket_id' => $this->ticket->id,
+                    'description' => $this->reasonDescription
+                ]);
 
-        $this->actionOnSubmit();
-        flash()->addSuccess('Ticket has been approved');
+                $reason->ticket()->where('id', $this->ticket->id)
+                    ->update([
+                        'status_id' => Status::DISAPPROVED,
+                        'approval_status' => ApprovalStatus::DISAPPROVED
+                    ]);
+            });
+
+            ActivityLog::make($this->ticket->id, 'disapproved the ticket');
+            $this->actionOnSubmit();
+            flash()->addSuccess('Ticket has been approved');
+
+        } catch (\Exception $e) {
+            flash()->addError('Ooos, something went wrong');
+        }
     }
 
     public function render()

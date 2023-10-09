@@ -8,8 +8,11 @@ use App\Http\Traits\TicketsByStaffWithSameTemplates;
 use App\Http\Traits\Utils;
 use App\Models\Department;
 use App\Models\Reply;
+use App\Models\Role;
+use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -76,34 +79,42 @@ class TicketController extends Controller
 
     public function viewTicket(Ticket $ticket)
     {
-        $teams = $this->queryTeams();
-        $departments = $this->queryBUDepartments();
-        $priorityLevels = $this->queryPriorityLevels();
-        $serviceDepartments = $this->queryServiceDepartments();
-        $approvers = User::whereHas('teams', function ($query) use ($ticket) {
-            $query->where('teams.id', $ticket->team_id);
-        })
-            ->where('users.branch_id', $ticket->branch_id)
-            ->where('users.service_department_id', $ticket->service_department_id)
-            ->where('id', '!=', $ticket->agent_id)
-            ->get();
+        $teamId = Team::whereHas('agents', fn($query) => $query->where('users.id', Auth::user()->id))->pluck('id')->first();
+        $agentId = Auth::user()->whereHas('role', fn($query) => $query->where('role_id', Role::AGENT))->where('id', $ticket->agent_id)->pluck('id')->first();
+        $serviceDepartmentId = Auth::user()->serviceDepartments->pluck('id')->first();
 
-        $latestReply = Reply::where('ticket_id', $ticket->id)
-            ->where('user_id', '!=', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
-            ->first();
+        if (($ticket->team_id == $teamId && $ticket->agent_id == $agentId) || $ticket->service_department_id == $serviceDepartmentId) {
+            $teams = $this->queryTeams();
+            $departments = $this->queryBUDepartments();
+            $priorityLevels = $this->queryPriorityLevels();
+            $serviceDepartments = $this->queryServiceDepartments();
+            $approvers = User::whereHas('teams', function ($query) use ($ticket) {
+                $query->where('teams.id', $ticket->team_id);
+            })
+                ->where('users.branch_id', $ticket->branch_id)
+                ->where('users.service_department_id', $ticket->service_department_id)
+                ->where('id', '!=', $ticket->agent_id)
+                ->get();
 
-        return view(
-            'layouts.staff.ticket.view_ticket',
-            compact([
-                'ticket',
-                'departments',
-                'serviceDepartments',
-                'latestReply',
-                'priorityLevels',
-                'teams',
-                'approvers'
-            ])
-        );
+            $latestReply = Reply::where('ticket_id', $ticket->id)
+                ->where('user_id', '!=', auth()->user()->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            return view(
+                'layouts.staff.ticket.view_ticket',
+                compact([
+                    'ticket',
+                    'departments',
+                    'serviceDepartments',
+                    'latestReply',
+                    'priorityLevels',
+                    'teams',
+                    'approvers'
+                ])
+            );
+        }
+
+        return abort(404);
     }
 }

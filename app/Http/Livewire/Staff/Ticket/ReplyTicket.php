@@ -37,6 +37,7 @@ class ReplyTicket extends Component
         $this->replyFiles = null;
         $this->upload++;
         $this->reset('description');
+        $this->emit('loadTicketLogs');
         $this->emit('loadTicketReplies');
         $this->emit('loadDiscussionCount');
         $this->emit('loadBackButtonHeader');
