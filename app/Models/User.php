@@ -106,12 +106,12 @@ class User extends Authenticatable
 
     public function serviceDepartments()
     {
-        return $this->belongsToMany(ServiceDepartment::class, 'user_service_department');
+        return $this->belongsToMany(ServiceDepartment::class, 'user_service_department', 'user_id', 'service_department_id');
     }
 
     public function branches()
     {
-        return $this->belongsToMany(Branch::class, 'user_branch');
+        return $this->belongsToMany(Branch::class, 'user_branch', 'user_id', 'branch_id');
     }
 
     public function buDepartments()
@@ -258,7 +258,7 @@ class User extends Authenticatable
 
     public static function serviceDepartmentAdmins()
     {
-        return self::with('profile')
+        return self::with(['profile', 'serviceDepartment'])
             ->whereHas('role', fn($serviceDepartmentAdmin) => $serviceDepartmentAdmin->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
             ->orderBy('created_at', 'desc')
             ->get();

@@ -5,21 +5,23 @@ namespace App\Http\Livewire\Requester\Ticket;
 use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
+use App\Mail\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
 use App\Models\Branch;
 use App\Models\HelpTopic;
 use App\Models\LevelApprover;
+use App\Models\Role;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketFile;
 use App\Models\User;
-use App\Models\UserServiceDepartment;
 use App\Notifications\TicketNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -76,12 +78,12 @@ class CreateTicket extends Component
             DB::transaction(function () {
                 $ticket = Ticket::create([
                     'user_id' => Auth::user()->id,
-                    'branch_id' => $this->branch ?: Auth::user()->branch->id,
-                    'service_department_id' => $this->serviceDepartment,
-                    'team_id' => $this->team != 'undefined' ? $this->team : null,
-                    'help_topic_id' => $this->helpTopic,
+                    'branch_id' => (int) $this->branch ?: Auth::user()->branch->id,
+                    'service_department_id' => (int) $this->serviceDepartment,
+                    'team_id' => (int) $this->team != 'undefined' ? $this->team : null,
+                    'help_topic_id' => (int) $this->helpTopic,
                     'status_id' => Status::OPEN,
-                    'priority_level_id' => $this->priorityLevel,
+                    'priority_level_id' => (int) $this->priorityLevel,
                     'service_level_agreement' => $this->sla,
                     'ticket_number' => $this->generatedTicketNumber(),
                     'subject' => $this->subject,
@@ -106,24 +108,31 @@ class CreateTicket extends Component
                     }
                 }
 
+                // ! TEMPORARY
                 // Notify approvers through email and app based notification.
-                $levelApprovers = LevelApprover::where('help_topic_id', $ticket->helpTopic->id)->get();
-                $approvers = User::approvers();
+                // $levelApprovers = LevelApprover::where('help_topic_id', $ticket->helpTopic->id)->get();
+                // $approvers = User::approvers();
 
-                foreach ($ticket->helpTopic->levels as $level) {
-                    foreach ($levelApprovers as $levelApprover) {
-                        foreach ($approvers as $approver) {
-                            if ($approver->id === $levelApprover->user_id) {
-                                if ($levelApprover->level_id === $level->id) {
-                                    if ($approver->buDepartments->pluck('id')->first() === $ticket->user->department_id) {
-                                        Notification::send($approver, new TicketNotification($ticket, "New ticket created - $ticket->ticket_number", 'created a ticket'));
-                                        // Mail::to($approver)->send(new TicketCreatedMail($ticket));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                // foreach ($ticket->helpTopic->levels as $level) {
+                //     foreach ($levelApprovers as $levelApprover) {
+                //         foreach ($approvers as $approver) {
+                //             if ($approver->id === $levelApprover->user_id) {
+                //                 if ($levelApprover->level_id === $level->id) {
+                //                     if ($approver->buDepartments->pluck('id')->first() === $ticket->user->department_id) {
+                //                         Notification::send($approver, new TicketNotification($ticket, "New ticket created - $ticket->ticket_number", 'created a ticket'));
+                //                         // Mail::to($approver)->send(new TicketCreatedMail($ticket));
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+
+                // Email the first approver (Service Department Admin)
+                $serviceDepartmentAdmin = User::whereHas('role', fn($query) => $query->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+                    ->withWhereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $ticket->service_department_id))->first();
+                Notification::send($serviceDepartmentAdmin, new TicketNotification($ticket, "New ticket created - $ticket->ticket_number", 'created a ticket'));
+                // Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket));
 
                 ActivityLog::make($ticket->id, 'created a ticket');
                 $this->actionOnSubmit();

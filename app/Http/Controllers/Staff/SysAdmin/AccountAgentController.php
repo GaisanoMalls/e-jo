@@ -37,9 +37,9 @@ class AccountAgentController extends Controller
         try {
             DB::transaction(function () use ($request, $existingTeams) {
                 $agent = User::create([
-                    'branch_id' => $request->branch,
-                    'department_id' => $request->bu_department,
-                    'service_department_id' => $request->service_department,
+                    'branch_id' => (int) $request->branch,
+                    'department_id' => (int) $request->bu_department,
+                    'service_department_id' => (int) $request->service_department,
                     'role_id' => Role::AGENT,
                     'email' => $request->email,
                     'password' => \Hash::make('agent'),
@@ -101,9 +101,9 @@ class AccountAgentController extends Controller
         try {
             DB::transaction(function () use ($agent, $request) {
                 $agent->update([
-                    'branch_id' => $request->branch,
-                    'department_id' => $request->bu_department,
-                    'service_department_id' => $request->service_department,
+                    'branch_id' => (int) $request->branch,
+                    'department_id' => (int) $request->bu_department,
+                    'service_department_id' => (int) $request->service_department,
                     'email' => $request->email
                 ]);
 

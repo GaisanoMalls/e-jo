@@ -13,8 +13,6 @@ class Open extends Component
 {
     use TicketsByStaffWithSameTemplates;
 
-    public $claimTicketId;
-
     public function seenTicket($id)
     {
         $ticket = Ticket::findOrFail($id);

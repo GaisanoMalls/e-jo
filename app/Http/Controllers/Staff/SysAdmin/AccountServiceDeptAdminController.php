@@ -37,9 +37,9 @@ class AccountServiceDeptAdminController extends Controller
         try {
             DB::transaction(function () use ($request, $existingServiceDepartments) {
                 $serviceDeptAdmin = User::create([
-                    'branch_id' => $request->branch,
-                    'department_id' => $request->bu_department,
-                    'service_department_id' => $request->service_department,
+                    'branch_id' => (int) $request->branch,
+                    'department_id' => (int) $request->bu_department,
+                    'service_department_id' => (int) $request->service_department,
                     'role_id' => Role::SERVICE_DEPARTMENT_ADMIN,
                     'email' => $request->email,
                     'password' => \Hash::make('departmentadmin')
@@ -105,9 +105,9 @@ class AccountServiceDeptAdminController extends Controller
         try {
             DB::transaction(function () use ($serviceDeptAdmin, $request) {
                 $serviceDeptAdmin->update([
-                    'branch_id' => $request->branch,
-                    'department_id' => $request->bu_department,
-                    'service_department_id' => $request->service_department,
+                    'branch_id' => (int) $request->branch,
+                    'department_id' => (int) $request->bu_department,
+                    'service_department_id' => (int) $request->service_department,
                     'email' => $request->email
                 ]);
 

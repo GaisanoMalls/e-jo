@@ -224,7 +224,7 @@
 
     serviceDepartmentSelect.addEventListener('change', () => {
         const serviceDepartmentId = serviceDepartmentSelect.value;
-        @this.set('serviceDepartment', serviceDepartmentId);
+        @this.set('serviceDepartment', parseInt(serviceDepartmentId));
 
         if (serviceDepartmentId) {
             helpTopicSelect.enable();
@@ -255,7 +255,7 @@
     });
 
     helpTopicSelect.addEventListener('change', () => {
-        @this.set('helpTopic', helpTopicSelect.value)
+        @this.set('helpTopic', parseInt(helpTopicSelect.value))
     });
 
     const branchSelect = document.querySelector('#userCreateTicketBranchesDropdown');
@@ -275,7 +275,7 @@
     });
 
     branchSelect.addEventListener('change', () => {
-        @this.set('branch', branchSelect.value);
+        @this.set('branch', parseInt(branchSelect.value));
     })
 
     const selectOtherBranch = document.querySelector('#checkOtherBranch');

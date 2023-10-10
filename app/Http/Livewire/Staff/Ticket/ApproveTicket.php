@@ -24,7 +24,6 @@ class ApproveTicket extends Component
         $this->emit('loadBackButtonHeader');
         $this->emit('loadReplyButtonHeader');
         $this->emit('loadDisapprovalReason');
-        $this->emit('loadTicketActivityLogs');
         $this->emit('loadDropdownApprovalButton');
         $this->emit('loadTicketStatusTextHeader');
         $this->emit('loadTicketStatusButtonHeader');

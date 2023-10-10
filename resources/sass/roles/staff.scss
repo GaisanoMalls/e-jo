@@ -113,12 +113,104 @@ $color-1: #d32839;
     -webkit-animation-fill-mode: both;
 }
 
+body {
+    background-color: $body-color;
+}
+
 .error__message {
     @include generic.error-message;
 }
 
-body {
-    background-color: $body-color;
+// Notification Canvas
+.notification__canvas {
+    min-width: 30% !important;
+
+    .notification__count {
+        background-color: $color-1;
+        color: white;
+        font-size: $fs-11;
+        padding: 3px 4px;
+        min-width: 22px;
+    }
+
+    .notification__message {
+        font-size: $fs-14;
+        color: #09090b;
+        font-weight: $fw-600;
+    }
+
+    .notification__date__time {
+        font-size: $fs-11;
+    }
+
+    .notification__running__time {
+        font-size: $fs-11;
+    }
+
+    .sender__name__initial {
+        height: 30px !important;
+        width: 30px !important;
+        border-radius: 0.625rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+        background-color: #F2F2F2;
+        border: 2px solid #d9ddd9;
+        color: 1a3c40;
+        font-size: $fs-11;
+        padding-top: 1px;
+        font-weight: 500;
+    }
+
+    .notification__sender__picture {
+        object-fit: cover;
+        height: 30px !important;
+        width: 30px !important;
+        border-radius: 0.625rem;
+        border: 2px solid #d9ddd9;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    }
+
+    .notification__sender__fullname {
+        font-weight: $fw-500;
+        font-size: $fs-13;
+    }
+
+    .notification__card {
+        transition: 0.3s;
+
+        &:hover {
+            cursor: pointer;
+            background-color: #F2F2F2;
+        }
+    }
+
+    .no__notification {
+        .notification__bell__container {
+            width: 50px;
+            height: 50px;
+        }
+
+        .message__1 {
+            font-size: $fs-15;
+        }
+
+        .message__2 {
+            font-size: $fs-14;
+        }
+    }
+
+    .btn__close__notification__canvas {
+        box-shadow: none;
+        font-size: $fs-20;
+        padding: 10px;
+        height: 30px;
+        width: 30px;
+        border-radius: $border-radius-50;
+        border: none;
+
+        &:hover {
+            background-color: #F8F9FA;
+        }
+    }
 }
 
 .action__button {
@@ -616,7 +708,7 @@ a {
 
     .nav-link {
         i {
-            font-size: $fs-13;
+            font-size: $fs-14;
             color: #262b40;
         }
     }

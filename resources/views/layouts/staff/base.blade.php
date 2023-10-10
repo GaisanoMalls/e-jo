@@ -21,6 +21,7 @@
 <body>
     <div class="page__wrapper compact__wrapper">
         @include('layouts.staff.includes.header')
+        @livewire('staff.notification.notification-canvas')
         <div class="page__body__wrapper">
             @include('layouts.staff.includes.sidebar')
             <div class="page__body">

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Role;
+use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\User;
@@ -30,6 +31,13 @@ class AssignTicket extends Component
                 'team_id' => $this->team ?: null,
                 'agent_id' => $this->agent ?: null,
             ]);
+
+            $this->ticket->refresh();
+            if (!is_null($this->ticket->agent_id)) {
+                $this->ticket->update(['status_id' => Status::CLAIMED]);
+                $this->emit('loadBackButtonHeader');
+                $this->emit('loadTicketStatusTextHeader');
+            }
 
             $this->actionOnSubmit();
 

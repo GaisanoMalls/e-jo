@@ -13,10 +13,7 @@ class TicketActivityLogs extends Component
     public $isMyLogsOnly = false;
     public $ticketLogs = [];
 
-    protected $listeners = [
-        'loadTicketActivityLogs' => '$refresh',
-        'loadTicketLogs' => 'loadLogs'
-    ];
+    protected $listeners = ['loadTicketLogs' => 'loadLogs'];
 
     public function filterAll()
     {

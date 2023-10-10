@@ -41,9 +41,9 @@ class HelpTopicsController extends Controller
         try {
             DB::transaction(function () use ($request) {
                 $helpTopic = HelpTopic::create([
-                    'service_department_id' => $request->service_department,
-                    'team_id' => $request->team,
-                    'service_level_agreement_id' => $request->sla,
+                    'service_department_id' => (int) $request->service_department,
+                    'team_id' => (int) $request->team,
+                    'service_level_agreement_id' => (int) $request->sla,
                     'name' => $request->name,
                     'slug' => \Str::slug($request->name)
                 ]);
@@ -98,9 +98,9 @@ class HelpTopicsController extends Controller
         try {
             DB::transaction(function () use ($request, $helpTopic) {
                 $helpTopic->update([
-                    'service_department_id' => $request->service_department,
-                    'team_id' => $request->team,
-                    'service_level_agreement_id' => $request->sla,
+                    'service_department_id' => (int) $request->service_department,
+                    'team_id' => (int) $request->team,
+                    'service_level_agreement_id' => (int) $request->sla,
                     'name' => $request->name,
                     'slug' => \Str::slug($request->name)
                 ]);

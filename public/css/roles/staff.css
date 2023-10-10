@@ -6863,14 +6863,90 @@
   -webkit-animation-fill-mode: both;
 }
 
+body {
+  background-color: #f5f7f9;
+}
+
 .error__message {
   font-size: 0.75rem !important;
   font-weight: 500 !important;
   color: red !important;
 }
 
-body {
-  background-color: #f5f7f9;
+.notification__canvas {
+  min-width: 30% !important;
+}
+.notification__canvas .notification__count {
+  background-color: #d32839;
+  color: white;
+  font-size: 0.688rem;
+  padding: 3px 4px;
+  min-width: 22px;
+}
+.notification__canvas .notification__message {
+  font-size: 0.875rem;
+  color: #09090b;
+  font-weight: 600;
+}
+.notification__canvas .notification__date__time {
+  font-size: 0.688rem;
+}
+.notification__canvas .notification__running__time {
+  font-size: 0.688rem;
+}
+.notification__canvas .sender__name__initial {
+  height: 30px !important;
+  width: 30px !important;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  background-color: #F2F2F2;
+  border: 2px solid #d9ddd9;
+  color: 1a3c40;
+  font-size: 0.688rem;
+  padding-top: 1px;
+  font-weight: 500;
+}
+.notification__canvas .notification__sender__picture {
+  -o-object-fit: cover;
+     object-fit: cover;
+  height: 30px !important;
+  width: 30px !important;
+  border-radius: 0.625rem;
+  border: 2px solid #d9ddd9;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+.notification__canvas .notification__sender__fullname {
+  font-weight: 500;
+  font-size: 0.813rem;
+}
+.notification__canvas .notification__card {
+  transition: 0.3s;
+}
+.notification__canvas .notification__card:hover {
+  cursor: pointer;
+  background-color: #F2F2F2;
+}
+.notification__canvas .no__notification .notification__bell__container {
+  width: 50px;
+  height: 50px;
+}
+.notification__canvas .no__notification .message__1 {
+  font-size: 0.938rem;
+}
+.notification__canvas .no__notification .message__2 {
+  font-size: 0.875rem;
+}
+.notification__canvas .btn__close__notification__canvas {
+  box-shadow: none;
+  font-size: 1.25rem;
+  padding: 10px;
+  height: 30px;
+  width: 30px;
+  border-radius: 3.125rem;
+  border: none;
+}
+.notification__canvas .btn__close__notification__canvas:hover {
+  background-color: #F8F9FA;
 }
 
 .action__button {
@@ -7316,7 +7392,7 @@ a:hover {
   left: 1px;
 }
 .page__main__header .nav-link i {
-  font-size: 0.813rem;
+  font-size: 0.875rem;
   color: #262b40;
 }
 .page__main__header .nav-item {

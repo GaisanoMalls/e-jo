@@ -41,7 +41,6 @@ class ReplyTicket extends Component
         $this->emit('loadTicketReplies');
         $this->emit('loadDiscussionCount');
         $this->emit('loadBackButtonHeader');
-        $this->emit('loadTicketActivityLogs');
         $this->emit('loadTicketStatusTextHeader');
         $this->emit('loadSidebarCollapseTicketStatus');
         $this->dispatchBrowserEvent('close-modal');
