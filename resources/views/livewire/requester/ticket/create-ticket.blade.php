@@ -294,7 +294,15 @@
                 branchSelect.disable();
             }
         });
+
+        window.addEventListener('clear-branch-dropdown-select', () => {
+            if (selectOtherBranch.checked) {
+                selectOtherBranch.checked = false;
+                userCreateTicketBranchSelectionContainer.style.display = 'none';
+            }
+        })
     }
+
 </script>
 @endpush
 

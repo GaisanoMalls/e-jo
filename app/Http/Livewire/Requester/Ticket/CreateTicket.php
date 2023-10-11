@@ -5,12 +5,10 @@ namespace App\Http\Livewire\Requester\Ticket;
 use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
-use App\Mail\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
 use App\Models\Branch;
 use App\Models\HelpTopic;
-use App\Models\LevelApprover;
 use App\Models\Role;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
@@ -18,10 +16,9 @@ use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketFile;
 use App\Models\User;
-use App\Notifications\TicketNotification;
+use App\Notifications\Requester\TicketNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -69,6 +66,7 @@ class CreateTicket extends Component
         $this->emit('loadTicketTab');
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('reload-modal');
+        $this->dispatchBrowserEvent('clear-branch-dropdown-select');
     }
 
     public function sendTicket()
@@ -130,14 +128,20 @@ class CreateTicket extends Component
 
                 // Email the first approver (Service Department Admin)
                 $serviceDepartmentAdmin = User::whereHas('role', fn($query) => $query->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+                    ->whereHas('branch', fn($query) => $query->where('branch_id', $ticket->branch_id))
                     ->withWhereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $ticket->service_department_id))->first();
-                Notification::send($serviceDepartmentAdmin, new TicketNotification($ticket, "New ticket created - $ticket->ticket_number", 'created a ticket'));
-                // Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket));
+
+                if ($serviceDepartmentAdmin) {
+                    Notification::send($serviceDepartmentAdmin, new TicketNotification($ticket, "New ticket created - $ticket->ticket_number", 'created a ticket'));
+                    // Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket));
+                }
 
                 ActivityLog::make($ticket->id, 'created a ticket');
-                $this->actionOnSubmit();
-                flash()->addSuccess('Ticket successfully created.');
             });
+
+            $this->actionOnSubmit();
+            flash()->addSuccess('Ticket successfully created.');
+
         } catch (\Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong.');

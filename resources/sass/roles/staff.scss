@@ -181,6 +181,13 @@ body {
             cursor: pointer;
             background-color: #F2F2F2;
         }
+
+        .btn__delete__notification {
+            height: 25px;
+            width: 25px;
+            font-size: $fs-12;
+            background-color: #E9ECEF;
+        }
     }
 
     .no__notification {

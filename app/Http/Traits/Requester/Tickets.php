@@ -72,7 +72,7 @@ trait Tickets
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
-                $statusQuery->where('status_id', Status::CLOSED)
+                $statusQuery->where('status_id', Status::DISAPPROVED)
                     ->where('approval_status', ApprovalStatus::DISAPPROVED);
             })
             ->where('user_id', auth()->user()->id)
@@ -85,7 +85,7 @@ trait Tickets
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
                 $statusQuery->where('status_id', Status::CLOSED)
-                    ->where('approval_status', ApprovalStatus::DISAPPROVED);
+                    ->where('approval_status', ApprovalStatus::APPROVED);
             })
             ->where('user_id', auth()->user()->id)
             ->orderBy('created_at', 'desc')

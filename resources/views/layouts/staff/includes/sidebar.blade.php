@@ -28,14 +28,6 @@
                 <li class="mb-1">
                     @livewire('staff.collapse-ticket-status')
                 </li>
-                <li class="mb-1">
-                    <a href="" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons">
-                        <div class="d-flex align-items-center justify-content-center sidebar__button__icon__container">
-                            <i class="fa-solid fa-chart-simple"></i>
-                        </div>
-                        Statistics
-                    </a>
-                </li>
                 @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
                 <li class="mb-1">
                     <a href="{{ route('staff.announcement.home') }}" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
@@ -47,6 +39,15 @@
                     </a>
                 </li>
                 @endif
+                <li class="mb-1">
+                    <a href="{{ route('staff.my_bookmarks.my_bookmarked_tickets') }}" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
+                        {{ Route::is('staff.my_bookmarks.*') ? 'sidebar__btn__active active' : '' }}">
+                        <div class="d-flex align-items-center justify-content-center sidebar__button__icon__container">
+                            <i class="fa-solid fa-bookmark"></i>
+                        </div>
+                        Bookmarks
+                    </a>
+                </li>
                 <hr>
                 @if (auth()->user()->role_id === App\Models\Role::SYSTEM_ADMIN)
                 <li class="mb-1">
@@ -59,6 +60,14 @@
                     </a>
                 </li>
                 @endif
+                <li class="mb-1">
+                    <a href="" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons">
+                        <div class="d-flex align-items-center justify-content-center sidebar__button__icon__container">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        Statistics
+                    </a>
+                </li>
                 <li class="mb-1">
                     <a href="" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons">
                         <div class="d-flex align-items-center justify-content-center sidebar__button__icon__container">

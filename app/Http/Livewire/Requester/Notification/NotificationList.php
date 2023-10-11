@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Staff\Notification;
+namespace App\Http\Livewire\Requester\Notification;
 
 use Livewire\Component;
 
@@ -10,8 +10,7 @@ class NotificationList extends Component
 
     public function readNotification($notificationId)
     {
-        auth()->user()->notifications()->find($notificationId)->markAsRead();
-        $this->emit('loadNotificationCanvas');
+        auth()->user()->notifications->find($notificationId)->markAsRead();
         $this->emit('loadNavlinkNotification');
     }
 
@@ -24,7 +23,7 @@ class NotificationList extends Component
 
     public function render()
     {
-        return view('livewire.staff.notification.notification-list', [
+        return view('livewire.requester.notification.notification-list', [
             'userNotifications' => auth()->user()->notifications()->latest()->get()
         ]);
     }

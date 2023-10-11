@@ -1,6 +1,7 @@
 <div wire:init="loadClarifications">
     @if (!is_null($clarifications))
-    @if ($ticket->clarifications->count() === 0 && $ticket->status_id !== App\Models\Status::CLOSED)
+    @if ($ticket->clarifications->count() === 0 && ($ticket->status_id !== App\Models\Status::CLOSED &&
+    $ticket->status_id !== App\Models\Status::DISAPPROVED))
     <div class="row align-items-center px-2 py-3 rounded-3 mx-1 mt-2 mb-4" style="background-color: #FFF3CD;">
         <div class="col-lg-6 col-md-12">
             <p class="mb-0" style="font-size: 13px; line-height: 18px;">

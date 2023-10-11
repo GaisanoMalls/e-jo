@@ -22,6 +22,7 @@
     @include('layouts.user.includes.navbar')
     @include('layouts.user.account.includes.confirm_logout')
     @livewire('requester.ticket.create-ticket')
+    @livewire('requester.notification.notification-canvas')
     <div class="container mb-5 requester__section">
         @livewire('offline')
         @if (Route::is('user.tickets.*'))
@@ -47,20 +48,9 @@
     <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
-
     @stack('livewire-textarea')
     @stack('livewire-modal')
     @stack('livewire-select')
-
-    @if ($errors->storeTicket->any())
-    <script>
-        $(function () {
-            $('#createTicketModal').modal('show');
-        });
-
-    </script>
-    @endif
-
     <script>
         var table = document.getElementById('userTable');
         var options = {
@@ -102,7 +92,6 @@
 
         };
         var dataTable = new DataTable(table, options);
-
     </script>
 </body>
 

@@ -74,7 +74,7 @@ trait Tickets
     {
         $closedTickets = Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLOSED)
-                ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::DISAPPROVED]);
+                ->where('approval_status', ApprovalStatus::APPROVED);
         })->where(function ($byUserQuery) {
             $byUserQuery->where('agent_id', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branch_id)

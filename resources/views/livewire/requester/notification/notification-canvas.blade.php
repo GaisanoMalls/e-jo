@@ -6,9 +6,7 @@
             <div class="d-flex flex-column gap-1">
                 <div class="d-flex align-items-center gap-2">
                     <h6 class="offcanvas-title fw-bold" id="offcanvasRightLabel">Notifications</h6>
-                    @if (auth()->user()->unreadNotifications->count() > 0)
-                    @livewire('staff.notification.unread-notification-count')
-                    @endif
+                    @livewire('requester.notification.unread-notification-count')
                 </div>
                 <div class="d-flex align-items-center gap-1 text-small">
                     <button type="submit" class="btn btn-sm p-0 d-flex align-items-center gap-2"
@@ -38,7 +36,7 @@
             </button>
         </div>
         <div class="offcanvas-body py-0 px-0">
-            @livewire('staff.notification.notification-list')
+            @livewire('requester.notification.notification-list')
         </div>
         @else
         <div class="offcanvas-header align-items-baseline justify-content-end p-4">

@@ -52,31 +52,7 @@
                     @livewire('requester.ticket.create-ticket-button')
                 </li>
                 <li class="nav-item my-auto dropdown">
-                    <a class="nav-link icon__nav__link" href="" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="bi bi-bell-fill"></i>
-                    </a>
-                    <ul
-                        class="dropdown-menu dropdown-menu-end slideIn animate custom__dropdown__menu notification__dropdown__menu">
-                        <div class="d-flex align-items-center justify-content-between notification__header">
-                            <h6 class="mb-0 title">Notifications</h6>
-                            <form action="" method="">
-                                <button type="submit"
-                                    class="btn btn-sm p-0 d-flex align-items-center gap-2 btn__mark__all__as__read">
-                                    <i class="fa-solid fa-check-double"></i>
-                                    Mark all as read
-                                </button>
-                            </form>
-                        </div>
-                        @foreach (auth()->user()->notifications() as $notification)
-                        <li>
-                            <a class="btn dropdown-item dropdown__menu__items" href="">
-                                {{ $notification->requester }}
-                                Notifications
-                            </a>
-                        </li>
-                        @endforeach
-                    </ul>
+                    @livewire('requester.notification.navlink-notification')
                 </li>
                 <li class="nav-item my-auto dropdown">
                     <a class="nav-link icon__nav__link" href="" role="button" data-bs-toggle="dropdown"

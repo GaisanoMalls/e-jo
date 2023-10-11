@@ -4,10 +4,8 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
-use App\Models\Reason;
 use App\Models\Status;
 use App\Models\Ticket;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class ApproveTicket extends Component

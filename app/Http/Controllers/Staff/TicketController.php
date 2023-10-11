@@ -6,13 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\TicketsByStaffWithSameTemplates;
 use App\Http\Traits\Utils;
-use App\Models\Department;
 use App\Models\Reply;
-use App\Models\Role;
-use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -75,6 +71,12 @@ class TicketController extends Controller
     {
         $closedTickets = $this->getClosedTickets();
         return view('layouts.staff.ticket.statuses.closed_tickets', compact('closedTickets'));
+    }
+
+    public function myBookmarkedTickets()
+    {
+        $bookmarkedTickets = Ticket::whereHas('bookmark', fn($query) => $query->where('bookmarks.user_id', auth()->user()->id))->get();
+        return view('layouts.staff.bookmark.my_bookmarks', compact('bookmarkedTickets'));
     }
 
     public function viewTicket(Ticket $ticket)

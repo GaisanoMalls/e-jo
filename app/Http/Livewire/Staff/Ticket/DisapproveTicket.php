@@ -8,7 +8,10 @@ use App\Models\ApprovalStatus;
 use App\Models\Reason;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\User;
+use App\Notifications\ServiceDepartmentAdmin\DisapprovedTicketNotification;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
 class DisapproveTicket extends Component
@@ -58,6 +61,8 @@ class DisapproveTicket extends Component
                         'status_id' => Status::DISAPPROVED,
                         'approval_status' => ApprovalStatus::DISAPPROVED
                     ]);
+
+                Notification::send($this->ticket->user, new DisapprovedTicketNotification($this->ticket, "Disapproved Ticket - {$this->ticket->ticket_number}", 'disapproved your ticket'));
             });
 
             ActivityLog::make($this->ticket->id, 'disapproved the ticket');

@@ -98,6 +98,11 @@ class User extends Authenticatable
         return $this->hasMany(ActivityLog::class);
     }
 
+    public function bookmarks()
+    {
+        return $this->hasMany(Bookmark::class);
+    }
+
     public function levels()
     {
         return $this->belongsToMany(Level::class, 'level_approver', 'user_id', 'level_id')
@@ -109,6 +114,7 @@ class User extends Authenticatable
         return $this->belongsToMany(ServiceDepartment::class, 'user_service_department', 'user_id', 'service_department_id');
     }
 
+    // For Approvers Only
     public function branches()
     {
         return $this->belongsToMany(Branch::class, 'user_branch', 'user_id', 'branch_id');

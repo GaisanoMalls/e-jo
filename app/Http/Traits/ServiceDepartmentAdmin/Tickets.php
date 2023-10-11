@@ -103,14 +103,12 @@ trait Tickets
 
     public function serviceDeptAdminGetClosedTickets()
     {
-        return Ticket::where(function ($query) {
-            $query->where('status_id', Status::CLOSED)
-                ->where(function ($byUserQuery) {
-                    $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                        ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
-                });
-        })->where(function ($statusQuery) {
-            $statusQuery->where('approval_status', ApprovalStatus::APPROVED);
+        return Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::CLOSED)
+                ->where('approval_status', ApprovalStatus::APPROVED);
+        })->where(function ($byUserQuery) {
+            $byUserQuery->where('branch_id', auth()->user()->branch_id)
+                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
         })->orderBy('created_at', 'desc')->get();
     }
 }

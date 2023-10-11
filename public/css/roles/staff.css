@@ -6926,6 +6926,12 @@ body {
   cursor: pointer;
   background-color: #F2F2F2;
 }
+.notification__canvas .notification__card .btn__delete__notification {
+  height: 25px;
+  width: 25px;
+  font-size: 0.75rem;
+  background-color: #E9ECEF;
+}
 .notification__canvas .no__notification .notification__bell__container {
   width: 50px;
   height: 50px;

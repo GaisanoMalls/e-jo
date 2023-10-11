@@ -88,6 +88,12 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
             });
         });
 
+        Route::prefix('my-bookmarks')->name('my_bookmarks.')->group(function () {
+            Route::controller(StaffTicketController::class)->group(function () {
+                Route::get('/', 'myBookmarkedTickets')->name('my_bookmarked_tickets');
+            });
+        });
+
         // Manage (Admin Role)
         Route::prefix('manage')->name('manage.')->group(function () {
             Route::view('/', 'layouts.staff.system_admin.manage.manage_main')->name('home');
