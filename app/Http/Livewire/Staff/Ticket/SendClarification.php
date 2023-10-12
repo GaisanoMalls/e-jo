@@ -4,12 +4,14 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Requests\ServiceDeptAdmin\StoreClarificationRequest;
 use App\Http\Traits\Utils;
+use App\Mail\Staff\FromApproverClarificationMail;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -37,9 +39,9 @@ class SendClarification extends Component
         $this->replyFiles = null;
         $this->upload++;
         $this->reset('description');
+        $this->emit('loadTicketLogs');
         $this->emit('loadBackButtonHeader');
         $this->emit('loadClarificationCount');
-        $this->emit('loadTicketLogs');
         $this->emit('loadTicketClarifications');
         $this->emit('loadTicketStatusTextHeader');
         $this->emit('loadSidebarCollapseTicketStatus');
@@ -75,9 +77,7 @@ class SendClarification extends Component
                 }
 
                 // * GET THE REQUESTER
-                $requester = $clarification->whereHas('user', function ($user) {
-                    $user->where('id', '!=', auth()->user()->id);
-                })
+                $requester = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
                     ->where('ticket_id', $this->ticket->id)
                     ->latest('created_at')
                     ->first();
@@ -88,10 +88,11 @@ class SendClarification extends Component
                     : 'replied a clarification to ' . $requester->user->profile->getFullName();
 
                 ActivityLog::make($this->ticket->id, $logDescription);
-                // Mail::to($ticket->user)->send(new FromApproverClarificationMail($ticket, $request->description));
+                Mail::to($this->ticket->user)->send(new FromApproverClarificationMail($this->ticket, $this->ticket->user, $this->description));
 
-                $this->actionOnSubmit();
             });
+
+            $this->actionOnSubmit();
 
         } catch (\Exception $e) {
             flash()->addError('Oops, something went wrong.');

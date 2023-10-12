@@ -125,6 +125,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Department::class, 'user_department', 'user_id', 'department_id');
     }
 
+    // For Agents Only
     public function teams()
     {
         return $this->belongsToMany(Team::class, 'user_team')

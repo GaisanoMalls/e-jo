@@ -10,9 +10,11 @@ class NotificationList extends Component
 
     public function readNotification($notificationId)
     {
-        auth()->user()->notifications()->find($notificationId)->markAsRead();
+        $notification = auth()->user()->notifications->find($notificationId);
+        $notification->markAsRead();
         $this->emit('loadNotificationCanvas');
         $this->emit('loadNavlinkNotification');
+        return redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
     }
 
     public function deleteNotification($notificationId)

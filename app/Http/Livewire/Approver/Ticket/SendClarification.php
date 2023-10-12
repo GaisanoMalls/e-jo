@@ -89,8 +89,9 @@ class SendClarification extends Component
                 ActivityLog::make($this->ticket->id, $logDescription);
                 // Mail::to($ticket->user)->send(new FromApproverClarificationMail($ticket, $request->description));
 
-                $this->actionOnSubmit();
             });
+
+            $this->actionOnSubmit();
 
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to send ticket clarification. Please try again.');

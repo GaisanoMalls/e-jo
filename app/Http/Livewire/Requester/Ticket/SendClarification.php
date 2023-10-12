@@ -4,12 +4,14 @@ namespace App\Http\Livewire\Requester\Ticket;
 
 use App\Http\Requests\Requester\StoreTicketClarificationRequest;
 use App\Http\Traits\Utils;
+use App\Mail\Requester\FromRequesterClarificationMail;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -75,9 +77,7 @@ class SendClarification extends Component
                 }
 
                 // * GET THE LATEST STAFF
-                $latestStaff = $clarification->whereHas('user', function ($user) {
-                    $user->where('id', '!=', auth()->user()->id);
-                })
+                $latestStaff = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
                     ->where('ticket_id', $this->ticket->id)
                     ->latest('created_at')
                     ->first();
@@ -89,12 +89,13 @@ class SendClarification extends Component
                     : 'replied a clarification to ' . $latestStaff->user->profile->getFullName();
 
                 ActivityLog::make($this->ticket->id, $logClarificationDescription);
-                // Mail::to($latestStaff->user->email)->send(new FromRequesterClarificationMail($ticket, $request->description));
+                Mail::to($latestStaff->user->email)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user, $this->description));
             });
 
             $this->actionOnSubmit();
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

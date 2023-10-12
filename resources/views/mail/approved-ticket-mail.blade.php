@@ -1,8 +1,12 @@
 <x-mail::message>
-# {{ $ticketSubject }}
+# {{ $ticketNumber }}
 
-{!! $message !!}
+<strong>{!! $ticketSubject !!}</strong>
+<small>{!! $ticketDescription !!}</small>
 
-Thanks,<br>
-{{ config('app.name') }}
+<small>Created by:</small><br>
+<small>{{ $requesterFullName }} <em>({{ $requesterOtherInfo }})</em></small>
+<hr>
+<small>Approved by:</small><br>
+<small>{{ $approver }} <em>(Service Dept. Admin)</em></small>
 </x-mail::message>

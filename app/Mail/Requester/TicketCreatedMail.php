@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Requester;
 
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -16,14 +17,16 @@ class TicketCreatedMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public Ticket $ticket;
+    public User $recipient;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket)
+    public function __construct(Ticket $ticket, User $recipient)
     {
         $this->ticket = $ticket;
+        $this->recipient = $recipient;
     }
 
     /**
@@ -35,6 +38,7 @@ class TicketCreatedMail extends Mailable implements ShouldQueue
     {
         return new Envelope(
             from: new Address(auth()->user()->email, auth()->user()->profile->getFullName()),
+            replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName())],
             subject: "New Ticket - {$this->ticket->ticket_number}",
         );
     }

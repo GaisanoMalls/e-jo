@@ -1,26 +1,5 @@
 <div wire:init="loadClarifications">
     @if (!is_null($clarifications))
-    @if ($ticket->clarifications->count() === 0 && ($ticket->status_id !== App\Models\Status::CLOSED &&
-    $ticket->status_id !== App\Models\Status::DISAPPROVED))
-    <div class="row align-items-center px-2 py-3 rounded-3 mx-1 mt-2 mb-4" style="background-color: #FFF3CD;">
-        <div class="col-lg-6 col-md-12">
-            <p class="mb-0" style="font-size: 13px; line-height: 18px;">
-                Connect to approver if you have any questions or clarifications with regards to this ticket.
-            </p>
-        </div>
-        <div class="col-lg-6 col-md-12">
-            <div
-                class="d-flex align-items-center justify-content-start justify-content-lg-end justify-content-md-start">
-                <button type="button"
-                    class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-4 d-flex align-items-center justify-content-center gap-2"
-                    data-bs-toggle="modal" data-bs-target="#ticketClarificationModal">
-                    <i class="fa-solid fa-pen"></i>
-                    <span class="lbl__reply">Connect with approver</span>
-                </button>
-            </div>
-        </div>
-    </div>
-    @endif
     <div wire:poll.visible.7s>
         @if (!$ticket->clarifications->isEmpty())
         @foreach ($ticket->clarifications as $clarification)

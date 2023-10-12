@@ -75,9 +75,7 @@ class SendTicketReply extends Component
                 }
 
                 $latestReply = Reply::where('ticket_id', $this->ticket->id)
-                    ->whereHas('user', function ($user) {
-                        $user->where('role_id', '!=', Role::USER);
-                    })
+                    ->whereHas('user', fn($user) => $user->where('role_id', '!=', Role::USER))
                     ->latest('created_at')
                     ->first();
 

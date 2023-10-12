@@ -3,6 +3,5 @@
 
 {!! $message !!}
 
-Thanks,<br>
-{{ $sender }}
+-{{ $sender }}
 </x-mail::message>

@@ -284,7 +284,7 @@ body {
 }
 
 .notification__canvas {
-  min-width: 30% !important;
+  min-width: 25% !important;
 }
 .notification__canvas .notification__count {
   background-color: #d32839;
@@ -304,37 +304,25 @@ body {
 .notification__canvas .notification__running__time {
   font-size: 0.688rem;
 }
-.notification__canvas .sender__name__initial {
-  height: 30px !important;
-  width: 30px !important;
-  border-radius: 0.625rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-  background-color: #F2F2F2;
-  border: 2px solid #d9ddd9;
-  color: 1a3c40;
-  font-size: 0.688rem;
-  padding-top: 1px;
-  font-weight: 500;
-}
-.notification__canvas .notification__sender__picture {
-  -o-object-fit: cover;
-     object-fit: cover;
-  height: 30px !important;
-  width: 30px !important;
-  border-radius: 0.625rem;
-  border: 2px solid #d9ddd9;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-}
 .notification__canvas .notification__sender__fullname {
   font-weight: 500;
-  font-size: 0.813rem;
+  font-size: 0.875rem;
 }
 .notification__canvas .notification__card {
   transition: 0.3s;
 }
+.notification__canvas .notification__card.unread__border {
+  border-left: 2px solid #d32839;
+}
 .notification__canvas .notification__card:hover {
-  cursor: pointer;
   background-color: #F2F2F2;
+}
+.notification__canvas .notification__card .btn__view__notification {
+  font-size: 0.875rem;
+  color: #d32839;
+}
+.notification__canvas .notification__card .btn__view__notification:hover {
+  cursor: pointer;
 }
 .notification__canvas .notification__card .btn__delete__notification {
   height: 25px;
@@ -364,7 +352,8 @@ body {
 .notification__canvas .btn__close__notification__canvas:hover {
   background-color: #F8F9FA;
 }
-.notification__canvas .loading__spinner {
+
+.loading__spinner {
   height: 12px;
   width: 12px;
 }

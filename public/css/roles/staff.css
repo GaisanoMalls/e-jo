@@ -6874,7 +6874,7 @@ body {
 }
 
 .notification__canvas {
-  min-width: 30% !important;
+  min-width: 25% !important;
 }
 .notification__canvas .notification__count {
   background-color: #d32839;
@@ -6922,9 +6922,18 @@ body {
 .notification__canvas .notification__card {
   transition: 0.3s;
 }
+.notification__canvas .notification__card.unread__border {
+  border-left: 2px solid #d32839;
+}
 .notification__canvas .notification__card:hover {
-  cursor: pointer;
   background-color: #F2F2F2;
+}
+.notification__canvas .notification__card .btn__view__notification {
+  font-size: 0.875rem;
+  color: #d32839;
+}
+.notification__canvas .notification__card .btn__view__notification:hover {
+  cursor: pointer;
 }
 .notification__canvas .notification__card .btn__delete__notification {
   height: 25px;

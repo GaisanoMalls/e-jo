@@ -63,9 +63,9 @@ class DisapproveTicket extends Component
                     ]);
 
                 Notification::send($this->ticket->user, new DisapprovedTicketNotification($this->ticket, "Disapproved Ticket - {$this->ticket->ticket_number}", 'disapproved your ticket'));
+                ActivityLog::make($this->ticket->id, 'disapproved the ticket');
             });
 
-            ActivityLog::make($this->ticket->id, 'disapproved the ticket');
             $this->actionOnSubmit();
             flash()->addSuccess('Ticket has been approved');
 

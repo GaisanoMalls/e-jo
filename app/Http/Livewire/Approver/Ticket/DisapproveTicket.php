@@ -52,9 +52,9 @@ class DisapproveTicket extends Component
                     ]);
 
                 ActivityLog::make($this->ticket->id, 'disapproved the ticket');
-                $this->actionOnSubmit();
             });
 
+            $this->actionOnSubmit();
             flash()->addSuccess('The ticket has been disapproved.');
 
         } catch (\Exception $e) {

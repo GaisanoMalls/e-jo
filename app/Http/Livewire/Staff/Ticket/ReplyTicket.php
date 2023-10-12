@@ -75,9 +75,10 @@ class ReplyTicket extends Component
                 }
 
                 ActivityLog::make($this->ticket->id, "replied to {$this->ticket->user->profile->getFullName()}");
-                $this->actionOnSubmit();
-
             });
+
+            $this->actionOnSubmit();
+
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to send ticket clarification. Please try again.');
         }

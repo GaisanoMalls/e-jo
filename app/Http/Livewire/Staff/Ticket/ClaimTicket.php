@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Models\ActivityLog;
 use App\Models\Status;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class ClaimTicket extends Component
@@ -27,18 +28,21 @@ class ClaimTicket extends Component
     public function claimTicket()
     {
         try {
-            $existingAgentId = Ticket::where('id', $this->ticket->id)->value('agent_id');
+            DB::transaction(function () {
+                $existingAgentId = Ticket::where('id', $this->ticket->id)->value('agent_id');
 
-            if (!is_null($existingAgentId)) {
-                flash()->addError('Ticket has already been claimed by another agent. Select another ticket to claim.');
-            }
+                if (!is_null($existingAgentId)) {
+                    flash()->addError('Ticket has already been claimed by another agent. Select another ticket to claim.');
+                }
 
-            $this->ticket->update([
-                'agent_id' => auth()->user()->id,
-                'status_id' => Status::CLAIMED
-            ]);
+                $this->ticket->update([
+                    'agent_id' => auth()->user()->id,
+                    'status_id' => Status::CLAIMED
+                ]);
 
-            ActivityLog::make($this->ticket->id, 'claimed the ticket');
+                ActivityLog::make($this->ticket->id, 'claimed the ticket');
+            });
+
             $this->actionOnSubmit();
             flash()->addSuccess("You have claimed the ticket - {$this->ticket->ticket_number}.");
 

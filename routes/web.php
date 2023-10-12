@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Controllers\Staff\Agent\AgentTicketController;
 use App\Http\Controllers\Staff\Approver\ApproverDashboardController;
 use App\Http\Controllers\Staff\Approver\ApproverTicketsController;
 use App\Http\Controllers\Staff\Approver\NotificationController as ApproverNotificationController;
@@ -72,10 +71,6 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 Route::middleware(['auth', Role::serviceDepartmentAdmin()])->group(function () {
                     Route::get('/{ticket}/clarifications', TicketClarificationController::class)->name('ticket_clarifications');
                 });
-            });
-            Route::controller(AgentTicketController::class)->group(function () {
-                Route::put('{ticket}/claim', 'claimTicket')->name('claim_ticket');
-                Route::put('{ticket}/claim', 'ticketDetialsClaimTicket')->name('ticket_details_claim_ticket');
             });
         });
 

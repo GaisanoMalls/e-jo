@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Staff;
 
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -11,21 +12,21 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class FromApproverClarificationMail extends Mailable
+class ApprovedTicketMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public Ticket $ticket;
-    public string $clarificationDescription;
+    public User $recipient;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket, string $clarificationDescription)
+    public function __construct(Ticket $ticket, User $recipient)
     {
         $this->ticket = $ticket;
-        $this->clarificationDescription = $clarificationDescription;
+        $this->recipient = $recipient;
     }
 
     /**
@@ -37,7 +38,8 @@ class FromApproverClarificationMail extends Mailable
     {
         return new Envelope(
             from: new Address(auth()->user()->email, auth()->user()->profile->getFullName()),
-            subject: "Clarification for ticket {$this->ticket->ticket_number}",
+            replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName())],
+            subject: 'You have a new ticket approved by your Service Dept. Admin',
         );
     }
 
@@ -49,11 +51,14 @@ class FromApproverClarificationMail extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'mail.approver-clarification-mail',
+            markdown: 'mail.approved-ticket-mail',
             with: [
-                'ticketSubject' => "Approver's Clarification",
-                'message' => "{$this->clarificationDescription}",
-                'sender' => auth()->user()->profile->getFullName(),
+                'ticketNumber' => "Ticket #{$this->ticket->ticket_number}",
+                'ticketSubject' => $this->ticket->subject,
+                'ticketDescription' => $this->ticket->description,
+                'requesterFullName' => $this->ticket->user->profile->getFullName(),
+                'requesterOtherInfo' => "{$this->ticket->user->department->name} - {$this->ticket->user->branch->name}",
+                'approver' => auth()->user()->profile->getFullName()
             ]
         );
     }

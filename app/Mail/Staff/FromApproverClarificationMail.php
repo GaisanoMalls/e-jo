@@ -1,32 +1,33 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Staff;
 
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
 
-class FromRequesterClarificationMail extends Mailable
+class FromApproverClarificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public Ticket $ticket;
+    public User $recipient;
     public string $clarificationDescription;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket, string $clarificationDescription)
+    public function __construct(Ticket $ticket, User $recipient, string $clarificationDescription)
     {
         $this->ticket = $ticket;
+        $this->recipient = $recipient;
         $this->clarificationDescription = $clarificationDescription;
     }
 
@@ -39,6 +40,7 @@ class FromRequesterClarificationMail extends Mailable
     {
         return new Envelope(
             from: new Address(auth()->user()->email, auth()->user()->profile->getFullName()),
+            replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName())],
             subject: "Clarification for ticket {$this->ticket->ticket_number}",
         );
     }
@@ -51,9 +53,9 @@ class FromRequesterClarificationMail extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'mail.from-requester-clarification-mail',
+            markdown: 'mail.approver-clarification-mail',
             with: [
-                'ticketSubject' => "Requestter's Clarification",
+                'ticketSubject' => "Approver's Clarification",
                 'message' => "{$this->clarificationDescription}",
                 'sender' => auth()->user()->profile->getFullName(),
             ]
@@ -67,8 +69,6 @@ class FromRequesterClarificationMail extends Mailable
      */
     public function attachments()
     {
-        return [
-            // Attachment::fromStorage($this->ticket->clarifications->fileAttachments)
-        ];
+        return [];
     }
 }

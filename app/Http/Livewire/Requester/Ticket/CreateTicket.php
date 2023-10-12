@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Requester\Ticket;
 use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
+use App\Mail\Requester\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
 use App\Models\Branch;
@@ -19,6 +20,7 @@ use App\Models\User;
 use App\Notifications\Requester\TicketNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -133,7 +135,7 @@ class CreateTicket extends Component
 
                 if ($serviceDepartmentAdmin) {
                     Notification::send($serviceDepartmentAdmin, new TicketNotification($ticket, "New ticket created - $ticket->ticket_number", 'created a ticket'));
-                    // Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket));
+                    Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin));
                 }
 
                 ActivityLog::make($ticket->id, 'created a ticket');

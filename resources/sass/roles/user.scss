@@ -385,7 +385,7 @@ body {
 
 // Notification Canvas
 .notification__canvas {
-    min-width: 30% !important;
+    min-width: 25% !important;
 
     .notification__count {
         background-color: $color-1;
@@ -409,39 +409,29 @@ body {
         font-size: $fs-11;
     }
 
-    .sender__name__initial {
-        height: 30px !important;
-        width: 30px !important;
-        border-radius: 0.625rem;
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-        background-color: #F2F2F2;
-        border: 2px solid #d9ddd9;
-        color: 1a3c40;
-        font-size: $fs-11;
-        padding-top: 1px;
-        font-weight: 500;
-    }
-
-    .notification__sender__picture {
-        object-fit: cover;
-        height: 30px !important;
-        width: 30px !important;
-        border-radius: 0.625rem;
-        border: 2px solid #d9ddd9;
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-    }
-
     .notification__sender__fullname {
         font-weight: $fw-500;
-        font-size: $fs-13;
+        font-size: $fs-14;
     }
 
     .notification__card {
         transition: 0.3s;
 
+        &.unread__border {
+            border-left: 2px solid $color-1;
+        }
+
         &:hover {
-            cursor: pointer;
             background-color: #F2F2F2;
+        }
+
+        .btn__view__notification {
+            font-size: $fs-14;
+            color: $color-1;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
 
         .btn__delete__notification {
@@ -481,10 +471,11 @@ body {
         }
     }
 
-    .loading__spinner {
-        height: 12px;
-        width: 12px;
-    }
+}
+
+.loading__spinner {
+    height: 12px;
+    width: 12px;
 }
 
 .ticket__tab__header {

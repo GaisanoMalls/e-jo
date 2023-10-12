@@ -92,10 +92,10 @@ class Profile extends Component
                 ]))
                     ? flash()->addSuccess('Profile successfully updated.')
                     : flash()->addInfo('No changes have been made in your profile.');
-
-                $this->actionOnSubmit();
-
             });
+
+            $this->actionOnSubmit();
+
         } catch (\Exception $e) {
             flash()->addError('Something went wrong while updating your profile.');
         }

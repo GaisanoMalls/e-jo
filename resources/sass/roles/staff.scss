@@ -123,7 +123,7 @@ body {
 
 // Notification Canvas
 .notification__canvas {
-    min-width: 30% !important;
+    min-width: 25% !important;
 
     .notification__count {
         background-color: $color-1;
@@ -177,9 +177,21 @@ body {
     .notification__card {
         transition: 0.3s;
 
+        &.unread__border {
+            border-left: 2px solid $color-1;
+        }
+
         &:hover {
-            cursor: pointer;
             background-color: #F2F2F2;
+        }
+
+        .btn__view__notification {
+            font-size: $fs-14;
+            color: $color-1;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
 
         .btn__delete__notification {

@@ -124,9 +124,7 @@ class AccountServiceDeptAdminController extends Controller
                     ]))
                 ]);
 
-                $serviceDeptAdmin->serviceDepartments()->sync(
-                    $this->getSelectedValue($request->service_departments)
-                );
+                $serviceDeptAdmin->serviceDepartments()->sync($this->getSelectedValue($request->service_departments));
             });
 
             return back()->with('success', "You have successfully updated the account for {$serviceDeptAdmin->profile->getFullName()}.");
