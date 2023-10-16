@@ -24,18 +24,7 @@
                                     <i class="fa-solid fa-user"></i>
                                     <span class="mx-2"></span>
                                     <span>
-                                        <small class="dropdown__menu__item__label">My Profile</small>
-                                    </span>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="btn dropdown-item dropdown__menu__items" href="">
-                                <div class="d-flex d-flex align-items-center my-1">
-                                    <i class="fa-solid fa-gear"></i>
-                                    <span class="mx-2"></span>
-                                    <span>
-                                        <small class="dropdown__menu__item__label">Account Settings</small>
+                                        <small class="dropdown__menu__item__label">My Account</small>
                                     </span>
                                 </div>
                             </a>

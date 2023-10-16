@@ -25,7 +25,6 @@
                                 </div>
                             </div>
                             <div class="col-12">
-
                                 <div class="col-lg-6 col-md-12">
                                     <div wire:ignore.self class="mb-3" id="userCreateTicketBranchSelectionContainer">
                                         <label class="form-label input__field__label">
@@ -160,7 +159,7 @@
                     </div>
                     <div class="d-flex align-items-center gap-2 p-3">
                         <button type="button" class="btn ticket__modal__button btn__close__ticket__modal"
-                            data-bs-dismiss="modal">Close</button>
+                            data-bs-dismiss="modal" wire:click="cancel">Cancel</button>
                         <button type="submit"
                             class="btn d-flex align-items-center justify-content-center gap-2 ticket__modal__button">
                             <span wire:loading wire:target="sendTicket" class="spinner-border spinner-border-sm"
@@ -302,6 +301,19 @@
             }
         })
     }
+
+    window.addEventListener('clear-select-dropdown', () => {
+        branchSelect.reset();
+        helpTopicSelect.reset();
+        serviceDepartmentSelect.reset();
+        helpTopicSelect.disable();
+        tinymce.get("createTicketDescription").setContent("");
+
+        if (selectOtherBranch.checked) {
+            selectOtherBranch.checked = false;
+            userCreateTicketBranchSelectionContainer.style.display = 'none';
+        }
+    })
 
 </script>
 @endpush

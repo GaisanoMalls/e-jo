@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\BasicModelQueries;
+use App\Mail\Staff\AssignedAgentMail;
 use App\Models\ApprovalStatus;
 use App\Models\Role;
 use App\Models\Status;
@@ -11,6 +12,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\ServiceDepartmentAdmin\AssignedAgentNotification;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
@@ -44,7 +46,7 @@ class AssignTicket extends Component
                         'approval_status' => ApprovalStatus::APPROVED
                     ]);
                     Notification::send($this->ticket->agent, new AssignedAgentNotification($this->ticket));
-
+                    Mail::to($this->ticket->agent)->send(new AssignedAgentMail($this->ticket, $this->ticket->agent));
                 }
 
                 $this->emit('loadBackButtonHeader');

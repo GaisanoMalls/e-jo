@@ -91,7 +91,6 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
 
         // Manage (Admin Role)
         Route::prefix('manage')->name('manage.')->group(function () {
-            Route::view('/', 'layouts.staff.system_admin.manage.manage_main')->name('home');
             // Agents
             Route::view('/agent', 'layouts.staff.system_admin.manage.agents.agent_list')->name('agents');
             // User Accounts

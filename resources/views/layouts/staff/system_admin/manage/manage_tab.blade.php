@@ -2,10 +2,10 @@
     <ul
         class="list-unstyled ps-0 mb-0 d-flex justify-content-lg-start justify-content-md-between border-bottom overflow-scroll ul__tab">
         <li>
-            <a href="{{ route('staff.manage.home') }}" class="btn d-flex align-items-center border-0 settings__tab__button
-                {{ Route::is('staff.manage.home') ? 'settings__active__tab' : '' }}">
-                <i class="bi bi-house-door-fill settings__icon__active__tab"></i>
-                Home
+            <a href="{{ route('staff.manage.roles_and_permissions.index') }}" class="btn d-flex align-items-center border-0 settings__tab__button
+                        {{ Route::is('staff.manage.roles_and_permissions.*') ? 'settings__active__tab' : '' }}">
+                <i class="fa-solid fa-user-lock settings__icon__active__tab"></i>
+                Roles & Permissions
             </a>
         </li>
         <li>
@@ -13,13 +13,6 @@
                 {{ Route::is('staff.manage.user_account.*') ? 'settings__active__tab' : '' }}">
                 <i class="bi bi-people-fill settings__icon__active__tab"></i>
                 Accounts
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('staff.manage.roles_and_permissions.index') }}" class="btn d-flex align-items-center border-0 settings__tab__button
-                {{ Route::is('staff.manage.roles_and_permissions.*') ? 'settings__active__tab' : '' }}">
-                <i class="fa-solid fa-user-lock settings__icon__active__tab"></i>
-                Roles & Permissions
             </a>
         </li>
         <li>

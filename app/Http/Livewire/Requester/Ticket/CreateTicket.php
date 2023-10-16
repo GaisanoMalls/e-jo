@@ -161,6 +161,13 @@ class CreateTicket extends Component
         $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', (int) $this->helpTopic))->pluck('id')->first();
     }
 
+
+    public function cancel()
+    {
+        $this->reset();
+        $this->dispatchBrowserEvent('clear-select-dropdown');
+    }
+
     public function render()
     {
         return view('livewire.requester.ticket.create-ticket', [

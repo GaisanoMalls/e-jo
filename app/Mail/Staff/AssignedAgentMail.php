@@ -39,7 +39,7 @@ class AssignedAgentMail extends Mailable
     {
         return new Envelope(
             subject: "Ticket assigned to you - {$this->ticket->ticket_number}",
-            from: new Address(auth()->user()->emial, auth()->user()->profile->getFullName()),
+            from: new Address(auth()->user()->email, auth()->user()->profile->getFullName()),
             replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName())]
         );
     }

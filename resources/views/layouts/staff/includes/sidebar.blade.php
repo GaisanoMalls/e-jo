@@ -51,7 +51,7 @@
                 <hr>
                 @if (auth()->user()->role_id === App\Models\Role::SYSTEM_ADMIN)
                 <li class="mb-1">
-                    <a href="{{ route('staff.manage.home') }}" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
+                    <a href="{{ route('staff.manage.roles_and_permissions.index') }}" class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
                         {{ Route::is('staff.manage.*') ? 'sidebar__btn__active active' : '' }}">
                         <div class="d-flex align-items-center justify-content-center sidebar__button__icon__container">
                             <i class="bi bi-gear-fill"></i>

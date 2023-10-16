@@ -22,10 +22,8 @@
         <div class="col-xl-12 settings__container">
             <div class="row mt-3">
                 <div class="col-12">
-                    @include('layouts.staff.system_admin.manage.includes.manage_tab')
-                    @section('manage-content')
-                    @include('layouts.staff.system_admin.manage.includes.manage_home')
-                    @show
+                    @include('layouts.staff.system_admin.manage.manage_tab')
+                    @yield('manage-content')
                 </div>
             </div>
         </div>
