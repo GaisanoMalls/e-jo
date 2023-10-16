@@ -9,7 +9,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class DisapprovedTicketNotification extends Notification implements ShouldQueue
+class ApprovedTicketForAgentNotification extends Notification
 {
     use Queueable;
 
@@ -49,8 +49,8 @@ class DisapprovedTicketNotification extends Notification implements ShouldQueue
 
         return [
             'ticket' => $this->ticket,
-            'title' => "Disapproved Ticket - {$this->ticket->ticket_number}",
-            'message' => "{$serviceDepartmentAdmin->profile->getFullName()} disapproved your ticket",
+            'title' => "New Ticket - {$this->ticket->ticket_number}",
+            'message' => "{$serviceDepartmentAdmin->profile->getFullName()} approved the ticket",
         ];
     }
 }

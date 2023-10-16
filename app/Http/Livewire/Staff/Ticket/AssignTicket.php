@@ -3,11 +3,15 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\BasicModelQueries;
+use App\Models\ApprovalStatus;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Notifications\ServiceDepartmentAdmin\AssignedAgentNotification;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
 class AssignTicket extends Component
@@ -27,17 +31,25 @@ class AssignTicket extends Component
     public function saveAssignTicket()
     {
         try {
-            $this->ticket->update([
-                'team_id' => $this->team ?: null,
-                'agent_id' => $this->agent ?: null,
-            ]);
+            DB::transaction(function () {
+                $this->ticket->update([
+                    'team_id' => $this->team ?: null,
+                    'agent_id' => $this->agent ?: null,
+                ]);
 
-            $this->ticket->refresh();
-            if (!is_null($this->ticket->agent_id)) {
-                $this->ticket->update(['status_id' => Status::CLAIMED]);
+                $this->ticket->refresh();
+                if (!is_null($this->ticket->agent_id)) {
+                    $this->ticket->update([
+                        'status_id' => Status::CLAIMED,
+                        'approval_status' => ApprovalStatus::APPROVED
+                    ]);
+                    Notification::send($this->ticket->agent, new AssignedAgentNotification($this->ticket));
+
+                }
+
                 $this->emit('loadBackButtonHeader');
                 $this->emit('loadTicketStatusTextHeader');
-            }
+            });
 
             $this->actionOnSubmit();
 

@@ -1,30 +1,29 @@
 <?php
 
-namespace App\Notifications\Requester;
+namespace App\Notifications\ServiceDepartmentAdmin;
 
+use App\Models\Role;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Storage;
 
-class TicketNotification extends Notification implements ShouldQueue
+class AssignedAgentNotification extends Notification
 {
     use Queueable;
 
     public Ticket $ticket;
-    public string $title;
-    public string $message;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket, string $title, string $message)
+    public function __construct(Ticket $ticket)
     {
         $this->ticket = $ticket;
-        $this->title = $title;
-        $this->message = $message;
     }
 
     /**
@@ -46,15 +45,13 @@ class TicketNotification extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
+        $serviceDepartmentAdmin = User::with('profile')->where('id', auth()->user()->id)
+            ->whereHas('role', fn($query) => $query->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))->first();
+
         return [
             'ticket' => $this->ticket,
-            'title' => $this->title,
-            'message' => $this->message,
-            'sender' => [
-                'profilePicture' => Storage::url($this->ticket->user->profile->picture) ?? null,
-                'nameInitial' => $this->ticket->user->profile->getNameInitial(),
-                'fullName' => $this->ticket->user->profile->getFullName()
-            ]
+            'title' => "Assigned Ticket - {$this->ticket->ticket_number}",
+            'message' => "{$serviceDepartmentAdmin->profile->getFullName()} assign this ticket to you.",
         ];
     }
 }

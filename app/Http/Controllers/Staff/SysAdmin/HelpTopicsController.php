@@ -42,7 +42,7 @@ class HelpTopicsController extends Controller
             DB::transaction(function () use ($request) {
                 $helpTopic = HelpTopic::create([
                     'service_department_id' => (int) $request->service_department,
-                    'team_id' => (int) $request->team,
+                    'team_id' => $request->team ?? null,
                     'service_level_agreement_id' => (int) $request->sla,
                     'name' => $request->name,
                     'slug' => \Str::slug($request->name)
@@ -66,6 +66,7 @@ class HelpTopicsController extends Controller
             return back()->with('success', 'Help topic successfully created.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to save the help topic');
         }
 
@@ -99,7 +100,7 @@ class HelpTopicsController extends Controller
             DB::transaction(function () use ($request, $helpTopic) {
                 $helpTopic->update([
                     'service_department_id' => (int) $request->service_department,
-                    'team_id' => (int) $request->team,
+                    'team_id' => $request->team,
                     'service_level_agreement_id' => (int) $request->sla,
                     'name' => $request->name,
                     'slug' => \Str::slug($request->name)

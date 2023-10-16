@@ -78,7 +78,6 @@ class AccountApproverController extends Controller
             return back()->with('success', 'Account successfully created');
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return back()->with('error', 'Failed to save a new approver.');
         }
     }

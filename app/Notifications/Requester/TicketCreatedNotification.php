@@ -1,20 +1,17 @@
 <?php
 
-namespace App\Notifications\ServiceDepartmentAdmin;
+namespace App\Notifications\Requester;
 
-use App\Models\Role;
 use App\Models\Ticket;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class DisapprovedTicketNotification extends Notification implements ShouldQueue
+class TicketCreatedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     public Ticket $ticket;
-
     /**
      * Create a new notification instance.
      *
@@ -44,13 +41,10 @@ class DisapprovedTicketNotification extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        $serviceDepartmentAdmin = User::with('profile')->where('id', auth()->user()->id)
-            ->whereHas('role', fn($query) => $query->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))->first();
-
         return [
             'ticket' => $this->ticket,
-            'title' => "Disapproved Ticket - {$this->ticket->ticket_number}",
-            'message' => "{$serviceDepartmentAdmin->profile->getFullName()} disapproved your ticket",
+            'title' => "New ticket created - {$this->ticket->ticket_number}",
+            'message' => 'created a ticket',
         ];
     }
 }

@@ -17,7 +17,7 @@ use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketFile;
 use App\Models\User;
-use App\Notifications\Requester\TicketNotification;
+use App\Notifications\Requester\TicketCreatedNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -80,7 +80,7 @@ class CreateTicket extends Component
                     'user_id' => Auth::user()->id,
                     'branch_id' => (int) $this->branch ?: Auth::user()->branch->id,
                     'service_department_id' => (int) $this->serviceDepartment,
-                    'team_id' => (int) $this->team != 'undefined' ? $this->team : null,
+                    'team_id' => $this->team != 'undefined' ? $this->team : null,
                     'help_topic_id' => (int) $this->helpTopic,
                     'status_id' => Status::OPEN,
                     'priority_level_id' => (int) $this->priorityLevel,
@@ -119,7 +119,7 @@ class CreateTicket extends Component
                 //             if ($approver->id === $levelApprover->user_id) {
                 //                 if ($levelApprover->level_id === $level->id) {
                 //                     if ($approver->buDepartments->pluck('id')->first() === $ticket->user->department_id) {
-                //                         Notification::send($approver, new TicketNotification($ticket, "New ticket created - $ticket->ticket_number", 'created a ticket'));
+                //                         Notification::send($approver, new TicketCreatedNotification($ticket));
                 //                         // Mail::to($approver)->send(new TicketCreatedMail($ticket));
                 //                     }
                 //                 }
@@ -134,7 +134,7 @@ class CreateTicket extends Component
                     ->withWhereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $ticket->service_department_id))->first();
 
                 if ($serviceDepartmentAdmin) {
-                    Notification::send($serviceDepartmentAdmin, new TicketNotification($ticket, "New ticket created - $ticket->ticket_number", 'created a ticket'));
+                    Notification::send($serviceDepartmentAdmin, new TicketCreatedNotification($ticket));
                     Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin));
                 }
 
@@ -145,7 +145,6 @@ class CreateTicket extends Component
             flash()->addSuccess('Ticket successfully created.');
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
     }

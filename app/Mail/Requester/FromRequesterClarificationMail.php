@@ -14,7 +14,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 
-class FromRequesterClarificationMail extends Mailable
+class FromRequesterClarificationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -41,9 +41,9 @@ class FromRequesterClarificationMail extends Mailable
     public function envelope()
     {
         return new Envelope(
+            subject: "Clarification for ticket {$this->ticket->ticket_number}",
             from: new Address(auth()->user()->email, auth()->user()->profile->getFullName()),
             replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName())],
-            subject: "Clarification for ticket {$this->ticket->ticket_number}",
         );
     }
 
@@ -55,7 +55,7 @@ class FromRequesterClarificationMail extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'mail.from-requester-clarification-mail',
+            markdown: 'mail.requester.from-requester-clarification-mail',
             with: [
                 'ticketSubject' => "Requester's Clarification",
                 'message' => "{$this->clarificationDescription}",

@@ -12,7 +12,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ApprovedTicketMail extends Mailable
+class ApprovedTicketMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -37,9 +37,9 @@ class ApprovedTicketMail extends Mailable
     public function envelope()
     {
         return new Envelope(
+            subject: 'You have a new ticket approved by your Service Dept. Admin',
             from: new Address(auth()->user()->email, auth()->user()->profile->getFullName()),
             replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName())],
-            subject: 'You have a new ticket approved by your Service Dept. Admin',
         );
     }
 
@@ -51,7 +51,7 @@ class ApprovedTicketMail extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'mail.approved-ticket-mail',
+            markdown: 'mail.staff.approved-ticket-mail',
             with: [
                 'ticketNumber' => "Ticket #{$this->ticket->ticket_number}",
                 'ticketSubject' => $this->ticket->subject,

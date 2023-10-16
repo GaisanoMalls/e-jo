@@ -7,9 +7,10 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class DisapprovedTicketNotification extends Notification implements ShouldQueue
+class ApprovedTicketForRequesterNotification extends Notification
 {
     use Queueable;
 
@@ -49,8 +50,8 @@ class DisapprovedTicketNotification extends Notification implements ShouldQueue
 
         return [
             'ticket' => $this->ticket,
-            'title' => "Disapproved Ticket - {$this->ticket->ticket_number}",
-            'message' => "{$serviceDepartmentAdmin->profile->getFullName()} disapproved your ticket",
+            'title' => "Approved Ticket - {$this->ticket->ticket_number}",
+            'message' => "{$serviceDepartmentAdmin->profile->getFullName()} approved your ticket",
         ];
     }
 }

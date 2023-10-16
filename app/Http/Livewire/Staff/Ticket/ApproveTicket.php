@@ -8,8 +8,11 @@ use App\Models\ApprovalStatus;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Notifications\ServiceDepartmentAdmin\ApprovedTicketForAgentNotification;
+use App\Notifications\ServiceDepartmentAdmin\ApprovedTicketForRequesterNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
 class ApproveTicket extends Component
@@ -49,6 +52,8 @@ class ApproveTicket extends Component
 
                 foreach ($agents as $agent) {
                     Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
+                    Notification::send($agent, new ApprovedTicketForAgentNotification($this->ticket));
+                    Notification::send($this->ticket->user, new ApprovedTicketForRequesterNotification($this->ticket));
                 }
 
                 ActivityLog::make($this->ticket->id, 'approved the ticket');
@@ -58,7 +63,6 @@ class ApproveTicket extends Component
             flash()->addSuccess('Ticket has been approved');
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

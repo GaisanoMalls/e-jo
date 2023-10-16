@@ -2,6 +2,11 @@
 
 namespace App\Http\Livewire\Staff\Notification;
 
+use App\Models\ActivityLog;
+use App\Models\Role;
+use App\Models\Status;
+use App\Models\Ticket;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class NotificationList extends Component
@@ -10,11 +15,27 @@ class NotificationList extends Component
 
     public function readNotification($notificationId)
     {
-        $notification = auth()->user()->notifications->find($notificationId);
-        $notification->markAsRead();
-        $this->emit('loadNotificationCanvas');
-        $this->emit('loadNavlinkNotification');
-        return redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
+        try {
+            DB::transaction(function () use ($notificationId) {
+                $notification = auth()->user()->notifications->find($notificationId);
+                $notification->markAsRead();
+
+                if (auth()->user()->role_id === Role::SERVICE_DEPARTMENT_ADMIN) {
+                    $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
+                    if ($ticket->status_id != Status::VIEWED) {
+                        $ticket->update(['status_id' => Status::VIEWED]);
+                        ActivityLog::make($ticket->id, 'seen the ticket');
+                    }
+                }
+
+                $this->emit('loadNotificationCanvas');
+                $this->emit('loadNavlinkNotification');
+                return redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
+
+            });
+        } catch (\Exception $e) {
+            flash()->addError('Oops, something went wrong');
+        }
     }
 
     public function deleteNotification($notificationId)

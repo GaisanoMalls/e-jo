@@ -12,7 +12,6 @@
             </small>
             <div class="d-flex align-items-center gap-2 mt-1">
                 <small class="notification__sender__fullname">
-                    {{ $notification->data['sender']['fullName'] }}
                     {{ $notification->data['message'] }}
                 </small>
             </div>
