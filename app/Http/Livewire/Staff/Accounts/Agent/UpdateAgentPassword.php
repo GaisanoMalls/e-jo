@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Livewire\Staff\Accounts;
+namespace App\Http\Livewire\Staff\Accounts\Agent;
 
 use App\Http\Requests\SysAdmin\Manage\Account\UpdatePasswordRequest;
 use App\Http\Traits\SysAdmin\UserAccountConfig;
 use App\Models\User;
 use Livewire\Component;
 
-class ApproverUpdatePassword extends Component
+class UpdateAgentPassword extends Component
 {
     use UserAccountConfig;
 
-    public User $approver;
+    public User $agent;
     public $new_password, $confirm_password;
 
     protected function rules()
@@ -37,12 +37,12 @@ class ApproverUpdatePassword extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function updatePassword(User $approver)
+    public function updatePassword(User $agent)
     {
         $this->validate();
 
         try {
-            $this->updateUserPassword($approver, $this->new_password, $this->confirm_password);
+            $this->updateUserPassword($agent, $this->new_password, $this->confirm_password);
             $this->actionOnSubmit();
             flash()->addSuccess('Password has been updated.');
 
@@ -53,6 +53,6 @@ class ApproverUpdatePassword extends Component
 
     public function render()
     {
-        return view('livewire.staff.accounts.approver-update-password');
+        return view('livewire.staff.accounts.agent.update-agent-password');
     }
 }

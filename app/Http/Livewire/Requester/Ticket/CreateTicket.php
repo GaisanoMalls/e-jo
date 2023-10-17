@@ -78,12 +78,12 @@ class CreateTicket extends Component
             DB::transaction(function () {
                 $ticket = Ticket::create([
                     'user_id' => Auth::user()->id,
-                    'branch_id' => (int) $this->branch ?: Auth::user()->branch->id,
-                    'service_department_id' => (int) $this->serviceDepartment,
+                    'branch_id' => $this->branch ?: Auth::user()->branch->id,
+                    'service_department_id' => $this->serviceDepartment,
                     'team_id' => $this->team != 'undefined' ? $this->team : null,
-                    'help_topic_id' => (int) $this->helpTopic,
+                    'help_topic_id' => $this->helpTopic,
                     'status_id' => Status::OPEN,
-                    'priority_level_id' => (int) $this->priorityLevel,
+                    'priority_level_id' => $this->priorityLevel,
                     'service_level_agreement' => $this->sla,
                     'ticket_number' => $this->generatedTicketNumber(),
                     'subject' => $this->subject,
@@ -131,6 +131,7 @@ class CreateTicket extends Component
                 // Email the first approver (Service Department Admin)
                 $serviceDepartmentAdmin = User::whereHas('role', fn($query) => $query->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
                     ->whereHas('branch', fn($query) => $query->where('branch_id', $ticket->branch_id))
+                    ->whereHas('department', fn($query) => $query->where('department_id', $ticket->user->department_id))
                     ->withWhereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $ticket->service_department_id))->first();
 
                 if ($serviceDepartmentAdmin) {
@@ -151,14 +152,14 @@ class CreateTicket extends Component
 
     public function updatedServiceDepartment()
     {
-        $this->helpTopics = HelpTopic::with(['team', 'sla'])->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', (int) $this->serviceDepartment))->get();
+        $this->helpTopics = HelpTopic::with(['team', 'sla'])->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->serviceDepartment))->get();
         $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);
     }
 
     public function updatedHelpTopic()
     {
-        $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', (int) $this->helpTopic))->pluck('id')->first();
-        $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', (int) $this->helpTopic))->pluck('id')->first();
+        $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
+        $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
     }
 
 

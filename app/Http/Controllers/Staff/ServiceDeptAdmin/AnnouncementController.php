@@ -45,7 +45,7 @@ class AnnouncementController extends Controller
     {
         Announcement::create([
             'title' => $request->title,
-            'department_id' => (int) $request->department,
+            'department_id' => $request->department,
             'description' => $request->description,
             'is_important' => (bool) $request->is_important
         ]);
@@ -57,7 +57,7 @@ class AnnouncementController extends Controller
     {
         $announcement->update([
             'title' => $request->title,
-            'department_id' => (int) $request->department,
+            'department_id' => $request->department,
             'description' => $request->description,
             'is_important' => (bool) $request->is_important
         ]);

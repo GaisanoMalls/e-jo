@@ -61,7 +61,7 @@
                                     <label class="form-label input__field__label">
                                         Help Topic
                                         @if ($helpTopics)
-                                        <span class="fw-normal ms-1" style="font-size: 13px;">
+                                        <span class="fw-normal" style="font-size: 13px;">
                                             ({{ $helpTopics->count() }})</span>
                                         @endif
                                     </label>
@@ -204,7 +204,7 @@
     ];
     const serviceDepartmentSelect = document.querySelector('#userCreateTicketServiceDepartmentDropdown');
     VirtualSelect.init({
-        ele: '#userCreateTicketServiceDepartmentDropdown',
+        ele: serviceDepartmentSelect,
         options: serviceDepartmentOption,
         search: true,
         markSearchResults: true,
@@ -235,7 +235,7 @@
                     helpTopicSelect.open();
                     helpTopics.forEach(function (helpTopic) {
                         VirtualSelect.init({
-                            ele: helpTopicSelect,
+                            ele: helpTopicSelect
                         });
 
                         helpTopicOption.push({

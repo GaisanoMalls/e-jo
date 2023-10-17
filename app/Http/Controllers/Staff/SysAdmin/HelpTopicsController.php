@@ -41,24 +41,26 @@ class HelpTopicsController extends Controller
         try {
             DB::transaction(function () use ($request) {
                 $helpTopic = HelpTopic::create([
-                    'service_department_id' => (int) $request->service_department,
+                    'service_department_id' => $request->service_department,
                     'team_id' => $request->team ?? null,
-                    'service_level_agreement_id' => (int) $request->sla,
+                    'service_level_agreement_id' => $request->sla,
                     'name' => $request->name,
                     'slug' => \Str::slug($request->name)
                 ]);
 
                 $levelOfApproval = (int) $request->level_of_approval;
-                for ($level = 1; $level <= $levelOfApproval; $level++) {
-                    $helpTopic->levels()->attach($level);
-                    $approvers = $this->getSelectedValue($request->input("approvers{$level}"));
+                if ($levelOfApproval) {
+                    for ($level = 1; $level <= $levelOfApproval; $level++) {
+                        $helpTopic->levels()->attach($level);
+                        $approvers = $this->getSelectedValue($request->input("approvers{$level}"));
 
-                    foreach ($approvers as $approver) {
-                        LevelApprover::create([
-                            'level_id' => $level,
-                            'user_id' => $approver,
-                            'help_topic_id' => $helpTopic->id
-                        ]);
+                        foreach ($approvers as $approver) {
+                            LevelApprover::create([
+                                'level_id' => $level,
+                                'user_id' => $approver,
+                                'help_topic_id' => $helpTopic->id
+                            ]);
+                        }
                     }
                 }
             });
@@ -99,9 +101,9 @@ class HelpTopicsController extends Controller
         try {
             DB::transaction(function () use ($request, $helpTopic) {
                 $helpTopic->update([
-                    'service_department_id' => (int) $request->service_department,
+                    'service_department_id' => $request->service_department,
                     'team_id' => $request->team,
-                    'service_level_agreement_id' => (int) $request->sla,
+                    'service_level_agreement_id' => $request->sla,
                     'name' => $request->name,
                     'slug' => \Str::slug($request->name)
                 ]);
@@ -176,7 +178,7 @@ class HelpTopicsController extends Controller
                     if ($levelApprover->user_id == $approver->id && $levelApprover->level_id == $level->id) {
                         array_push($currentApprovers, [
                             'id' => $approver->id,
-                            'level' => (int) $level->value
+                            'level' => $level->value
                         ]);
                     }
                 }

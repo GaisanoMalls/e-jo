@@ -18,7 +18,7 @@ class RolesAndPermissionsController extends Controller
         $serviceDeptAdmins = $userQuery->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN);
 
         $allUsers = $userQuery;
-        $profilePicLimit = (int) 5;
+        $profilePicLimit = 5;
 
         return view(
             'layouts.staff.system_admin.manage.roles_and_permissions.roles_and_permissions_index',

@@ -14,7 +14,7 @@ Edit Service Dept. Admin
 @endsection
 
 @section('manage-content')
-@livewire('staff.accounts.service-dept-admin-update-password', ['serviceDeptAdmin' => $serviceDeptAdmin])
+@livewire('staff.accounts.service-department-admin.update-service-dept-admin-password', ['serviceDeptAdmin' => $serviceDeptAdmin])
 <div class="row accounts__section justify-content-center">
     <div class="col-xxl-9 col-lg-12">
         <div class="card d-flex flex-column gap-2 users__account__card">

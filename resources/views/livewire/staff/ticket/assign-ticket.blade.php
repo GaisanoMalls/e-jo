@@ -28,7 +28,7 @@
                             <label class="ticket__actions__label mb-2">
                                 Assign to agent
                                 @if ($agents)
-                                <span class="fw-normal ms-1" style="font-size: 13px;">
+                                <span class="fw-normal" style="font-size: 13px;">
                                     ({{ $agents->count() }})</span>
                                 @endif
                             </label>

@@ -140,8 +140,8 @@ class AccountApproverController extends Controller
         try {
             DB::transaction(function () use ($approver, $request, $existingBranches, $existingBUDepartments) {
                 $approver->update([
-                    'branch_id' => (int) $request->branch,
-                    'department_id' => (int) $request->bu_department,
+                    'branch_id' => $request->branch,
+                    'department_id' => $request->bu_department,
                     'email' => $request->email
                 ]);
 

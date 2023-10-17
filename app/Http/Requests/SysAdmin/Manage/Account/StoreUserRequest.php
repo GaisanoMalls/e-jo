@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUserRequest extends FormRequest
 {
-    protected $errorBag = 'storeUser';
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -31,7 +30,7 @@ class StoreUserRequest extends FormRequest
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],
             'suffix' => ['nullable', 'min:1', 'max:4'],
-            'email' => ['required', 'max:80', 'email']
+            'email' => ['required', 'max:80', 'email', 'unique:users,email']
         ];
     }
 }

@@ -64,7 +64,7 @@
                                             <label for="team" class="form-label form__field__label">
                                                 Team
                                                 @if ($teams)
-                                                <span class="fw-normal ms-1" style="font-size: 13px;">
+                                                <span class="fw-normal" style="font-size: 13px;">
                                                     ({{ $teams->count() }})</span>
                                                 @endif
                                             </label>

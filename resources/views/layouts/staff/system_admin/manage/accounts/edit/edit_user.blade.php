@@ -13,7 +13,7 @@ Edit Requester
 @endsection
 
 @section('manage-content')
-@livewire('staff.accounts.user-update-password', ['user' => $user])
+@livewire('staff.accounts.requester.update-requester-password', ['user' => $user])
 <div class="row accounts__section justify-content-center">
     <div class="col-xxl-9 col-lg-12">
         <div class="card d-flex flex-column gap-2 users__account__card">

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\Staff\Accounts;
+namespace App\Http\Livewire\Staff\Accounts\Requester;
 
 use App\Http\Requests\SysAdmin\Manage\Account\UpdatePasswordRequest;
 use App\Http\Traits\SysAdmin\UserAccountConfig;
 use App\Models\User;
 use Livewire\Component;
 
-class UserUpdatePassword extends Component
+class UpdateRequesterPassword extends Component
 {
     use UserAccountConfig;
 
@@ -53,6 +53,6 @@ class UserUpdatePassword extends Component
 
     public function render()
     {
-        return view('livewire.staff.accounts.user-update-password');
+        return view('livewire.staff.accounts.requester.update-requester-password');
     }
 }

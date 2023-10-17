@@ -113,6 +113,7 @@ Edit Help Topic
                                     <label class="form-label form__field__label">Level of Approval</label>
                                     <select name="level_of_approval" data-search="false"
                                         id="editHelpTopicLevelOfApprovalDropdown" placeholder="Select (required)">
+                                        <option value="" selected>N/A</option>
                                         @foreach ($levelOfApprovals as $level)
                                         <option value="{{ $level->id }}" {{ in_array($level->id,
                                             $helpTopic->levels->pluck('id')->toArray())

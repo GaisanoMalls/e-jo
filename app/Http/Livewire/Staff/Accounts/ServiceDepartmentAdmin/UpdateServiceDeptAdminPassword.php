@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Livewire\Staff\Accounts;
+namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 
 use App\Http\Requests\SysAdmin\Manage\Account\UpdatePasswordRequest;
 use App\Http\Traits\SysAdmin\UserAccountConfig;
 use App\Models\User;
 use Livewire\Component;
 
-class AgentUpdatePassword extends Component
+class UpdateServiceDeptAdminPassword extends Component
 {
     use UserAccountConfig;
 
-    public User $agent;
+    public User $serviceDeptAdmin;
     public $new_password, $confirm_password;
 
     protected function rules()
@@ -37,12 +37,12 @@ class AgentUpdatePassword extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function updatePassword(User $agent)
+    public function updatePassword(User $serviceDeptAdmin)
     {
         $this->validate();
 
         try {
-            $this->updateUserPassword($agent, $this->new_password, $this->confirm_password);
+            $this->updateUserPassword($serviceDeptAdmin, $this->new_password, $this->confirm_password);
             $this->actionOnSubmit();
             flash()->addSuccess('Password has been updated.');
 
@@ -50,9 +50,8 @@ class AgentUpdatePassword extends Component
             flash()->addError('Oops, something went wrong');
         }
     }
-
     public function render()
     {
-        return view('livewire.staff.accounts.agent-update-password');
+        return view('livewire.staff.accounts.service-department-admin.update-service-dept-admin-password');
     }
 }

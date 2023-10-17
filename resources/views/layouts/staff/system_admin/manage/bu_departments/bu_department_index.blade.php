@@ -1,4 +1,4 @@
-@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'Service Departments'])
+@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'BU/Departments'])
 
 @section('manage-header-title')
 BU/Departments

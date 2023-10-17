@@ -24,8 +24,8 @@ class AccountUserController extends Controller
         try {
             DB::transaction(function () use ($request) {
                 $user = User::create([
-                    'department_id' => (int) $request->department,
-                    'branch_id' => (int) $request->branch,
+                    'department_id' => $request->department,
+                    'branch_id' => $request->branch,
                     'role_id' => Role::USER,
                     'email' => $request->email,
                     'password' => \Hash::make('requester')
@@ -81,8 +81,8 @@ class AccountUserController extends Controller
         try {
             DB::transaction(function () use ($user, $request) {
                 $user->update([
-                    'branch_id' => (int) $request->branch,
-                    'department_id' => (int) $request->bu_department,
+                    'branch_id' => $request->branch,
+                    'department_id' => $request->bu_department,
                     'email' => $request->email
                 ]);
 
