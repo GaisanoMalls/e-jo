@@ -6,7 +6,6 @@ use Livewire\Component;
 
 class NotificationCanvas extends Component
 {
-
     protected $listeners = ['loadNotificationCanvas' => '$refresh'];
 
     public function markAllAsRead()

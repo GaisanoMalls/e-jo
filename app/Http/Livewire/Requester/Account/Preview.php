@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class Preview extends Component
 {
-    protected $listeners = ["loadProfilePreview" => "render"];
+    protected $listeners = ['loadProfilePreview' => '$refresh'];
 
     public function render()
     {
