@@ -49,7 +49,7 @@ class DisapprovedTicketNotification extends Notification implements ShouldQueue
 
         return [
             'ticket' => $this->ticket,
-            'title' => "Disapproved Ticket - {$this->ticket->ticket_number}",
+            'title' => "Disapproved Ticket {$this->ticket->ticket_number}",
             'message' => "{$serviceDepartmentAdmin->profile->getFullName()} disapproved your ticket",
         ];
     }

@@ -56,6 +56,7 @@ class AssignTicket extends Component
             $this->actionOnSubmit();
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

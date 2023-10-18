@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Notifications\ServiceDepartmentAdmin;
+namespace App\Notifications\Requester;
 
-use App\Models\Role;
 use App\Models\Ticket;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AssignedAgentNotification extends Notification
+class TicketClarificationFromRequesterNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -45,13 +43,11 @@ class AssignedAgentNotification extends Notification
      */
     public function toArray($notifiable)
     {
-        $serviceDepartmentAdmin = User::with('profile')->where('id', auth()->user()->id)
-            ->whereHas('role', fn($query) => $query->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))->first();
-
         return [
             'ticket' => $this->ticket,
-            'title' => "Assigned Ticket {$this->ticket->ticket_number}",
-            'message' => "{$serviceDepartmentAdmin->profile->getFullName()} assign this ticket to you.",
+            'title' => "Clarification for ticket {$this->ticket->ticket_number}",
+            'message' => "Ticket clarification sent by {$this->ticket->user->profile->getFullName()} ",
+            'for_clarification' => true
         ];
     }
 }

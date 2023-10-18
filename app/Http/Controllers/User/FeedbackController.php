@@ -49,6 +49,7 @@ class FeedbackController extends Controller
             return back()->with('success', 'Thank you for sending your feedback!');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to save feedback. Please try again.');
         }
     }

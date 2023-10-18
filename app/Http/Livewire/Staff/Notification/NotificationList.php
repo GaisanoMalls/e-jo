@@ -18,7 +18,7 @@ class NotificationList extends Component
         try {
             DB::transaction(function () use ($notificationId) {
                 $notification = auth()->user()->notifications->find($notificationId);
-                $notification->markAsRead();
+                (!$notification->read()) ? $notification->markAsRead() : null;
 
                 if (auth()->user()->role_id === Role::SERVICE_DEPARTMENT_ADMIN) {
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
@@ -30,10 +30,14 @@ class NotificationList extends Component
 
                 $this->emit('loadNotificationCanvas');
                 $this->emit('loadNavlinkNotification');
-                return redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
 
+                return (array_key_exists('for_clarification', $notification->data)) && $notification->data['for_clarification']
+                    ? redirect()->route('staff.ticket.ticket_clarifications', $notification->data['ticket']['id'])
+                    : redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
             });
+
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

@@ -58,7 +58,8 @@ class ApprovedTicketMail extends Mailable implements ShouldQueue
                 'ticketDescription' => $this->ticket->description,
                 'requesterFullName' => $this->ticket->user->profile->getFullName(),
                 'requesterOtherInfo' => "{$this->ticket->user->department->name} - {$this->ticket->user->branch->name}",
-                'approver' => auth()->user()->profile->getFullName()
+                'approver' => auth()->user()->profile->getFullName(),
+                'url' => "http://10.10.99.81/staff/ticket/{$this->ticket->id}/view"
             ]
         );
     }

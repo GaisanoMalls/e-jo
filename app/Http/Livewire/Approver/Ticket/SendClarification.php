@@ -94,6 +94,7 @@ class SendClarification extends Component
             $this->actionOnSubmit();
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to send ticket clarification. Please try again.');
         }
     }

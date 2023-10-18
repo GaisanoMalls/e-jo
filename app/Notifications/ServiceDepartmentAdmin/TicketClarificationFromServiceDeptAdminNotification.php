@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AssignedAgentNotification extends Notification
+class TicketClarificationFromServiceDeptAdminNotification extends Notification
 {
     use Queueable;
 
@@ -50,8 +50,9 @@ class AssignedAgentNotification extends Notification
 
         return [
             'ticket' => $this->ticket,
-            'title' => "Assigned Ticket {$this->ticket->ticket_number}",
-            'message' => "{$serviceDepartmentAdmin->profile->getFullName()} assign this ticket to you.",
+            'title' => "Clarification for ticket {$this->ticket->ticket_number}",
+            'message' => "Ticket clarification sent by {$serviceDepartmentAdmin->profile->getFullName()} ",
+            'for_clarification' => true
         ];
     }
 }

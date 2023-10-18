@@ -97,6 +97,7 @@ class Profile extends Component
             $this->actionOnSubmit();
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Something went wrong while updating your profile.');
         }
     }

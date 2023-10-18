@@ -58,6 +58,7 @@ class FromApproverClarificationMail extends Mailable implements ShouldQueue
                 'ticketSubject' => "Approver's Clarification",
                 'message' => "{$this->clarificationDescription}",
                 'sender' => auth()->user()->profile->getFullName(),
+                'url' => "http://10.10.99.81/user/ticket/{$this->ticket->id}/view/clarifications"
             ]
         );
     }

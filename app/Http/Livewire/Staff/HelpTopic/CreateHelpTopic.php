@@ -58,6 +58,7 @@ class CreateHelpTopic extends Component
             });
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
     }

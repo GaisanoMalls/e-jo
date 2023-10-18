@@ -50,7 +50,7 @@ class ApprovedTicketForRequesterNotification extends Notification
 
         return [
             'ticket' => $this->ticket,
-            'title' => "Approved Ticket - {$this->ticket->ticket_number}",
+            'title' => "Approved Ticket {$this->ticket->ticket_number}",
             'message' => "{$serviceDepartmentAdmin->profile->getFullName()} approved your ticket",
         ];
     }

@@ -10,8 +10,10 @@ use App\Models\Clarification;
 use App\Models\ClarificationFile;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Notifications\Requester\TicketClarificationFromRequesterNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -89,12 +91,14 @@ class SendClarification extends Component
                     : 'replied a clarification to ' . $latestStaff->user->profile->getFullName();
 
                 ActivityLog::make($this->ticket->id, $logClarificationDescription);
-                Mail::to($latestStaff->user->email)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user, $this->description));
+                Notification::send($latestStaff->user, new TicketClarificationFromRequesterNotification($this->ticket));
+                Mail::to($latestStaff->user)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user, $this->description));
             });
 
             $this->actionOnSubmit();
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

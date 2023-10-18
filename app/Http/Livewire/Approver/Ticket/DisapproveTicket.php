@@ -58,6 +58,7 @@ class DisapproveTicket extends Component
             flash()->addSuccess('The ticket has been disapproved.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Faild to disapprove the ticket.');
         }
     }

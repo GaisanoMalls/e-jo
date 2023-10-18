@@ -58,6 +58,7 @@ class CreateBuDepartment extends Component
             flash()->addSuccess('New BU\Department has been created.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

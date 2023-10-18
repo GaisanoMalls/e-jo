@@ -72,6 +72,7 @@ class AnnouncementController extends Controller
             return back()->with('success', 'Announcement successfully deleted.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('success', 'Announcemant cannot be deleted.');
         }
     }

@@ -11,10 +11,14 @@ class NotificationList extends Component
     public function readNotification($notificationId)
     {
         $notification = auth()->user()->notifications->find($notificationId);
-        $notification->markAsRead();
+        (!$notification->read()) ? $notification->markAsRead() : null;
+
         $this->emit('loadNotificationCanvas');
         $this->emit('loadNavlinkNotification');
-        return redirect()->route('user.ticket.view_ticket', $notification->data['ticket']['id']);
+
+        return (array_key_exists('for_clarification', $notification->data)) && $notification->data['for_clarification']
+            ? redirect()->route('user.ticket.ticket_clarifications', $notification->data['ticket']['id'])
+            : redirect()->route('user.ticket.view_ticket', $notification->data['ticket']['id']);
     }
 
     public function deleteNotification($notificationId)

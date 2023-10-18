@@ -130,6 +130,7 @@ class AccountServiceDeptAdminController extends Controller
             return back()->with('success', "You have successfully updated the account for {$serviceDeptAdmin->profile->getFullName()}.");
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to update the account.');
         }
     }
@@ -147,6 +148,7 @@ class AccountServiceDeptAdminController extends Controller
             return back()->with('success', 'Account successfully deleted.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to delete the service department admin.');
         }
     }

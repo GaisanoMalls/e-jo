@@ -78,6 +78,7 @@ class AccountApproverController extends Controller
             return back()->with('success', 'Account successfully created');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to save a new approver.');
         }
     }
@@ -165,6 +166,7 @@ class AccountApproverController extends Controller
             return back()->with('success', "You have successfully updated the account for {$approver->profile->getFullName()}.");
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to update the account.');
         }
     }
@@ -182,6 +184,7 @@ class AccountApproverController extends Controller
             return back()->with('success', 'Account successfully deleted.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to delete the approver.');
         }
     }

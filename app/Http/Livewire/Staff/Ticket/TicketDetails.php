@@ -21,6 +21,7 @@ class TicketDetails extends Component
         $this->emit('loadTicketDetails');
         $this->emit('loadBackButtonHeader');
         $this->emit('loadTicketStatusTextHeader');
+        $this->emit('loadSidebarCollapseTicketStatus');
     }
 
     public function removeAssignedTeam()

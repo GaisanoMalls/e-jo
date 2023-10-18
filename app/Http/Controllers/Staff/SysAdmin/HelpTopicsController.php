@@ -67,7 +67,8 @@ class HelpTopicsController extends Controller
 
             return back()->with('success', 'Help topic successfully created.');
 
-        } catch (\Exception $e) {
+        }
+        dd($e->getMessage());
             dd($e->getMessage());
             return back()->with('error', 'Failed to save the help topic');
         }
@@ -125,6 +126,7 @@ class HelpTopicsController extends Controller
             return back()->with('success', 'Help topic successfully updated.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to update the help topic.');
         }
     }
@@ -135,6 +137,7 @@ class HelpTopicsController extends Controller
             $helpTopic->delete();
             return back()->with('success', 'Help topic successfully deleted.');
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to delete the help topic');
         }
     }

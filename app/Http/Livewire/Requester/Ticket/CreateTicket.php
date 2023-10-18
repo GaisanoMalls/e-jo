@@ -146,6 +146,7 @@ class CreateTicket extends Component
             flash()->addSuccess('Ticket successfully created.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
     }

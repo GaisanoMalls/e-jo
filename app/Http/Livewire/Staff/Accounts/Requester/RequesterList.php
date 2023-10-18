@@ -29,6 +29,7 @@ class RequesterList extends Component
             flash()->addSuccess('Requester account has been deleted');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addSuccess('Oops, something went wrong');
         }
     }

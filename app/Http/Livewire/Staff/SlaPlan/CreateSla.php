@@ -43,6 +43,7 @@ class CreateSla extends Component
             flash()->addSuccess('A new SLA has been created.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

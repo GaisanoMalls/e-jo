@@ -5,14 +5,14 @@
             <button type="button"
                 class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center dropdown-toggle"
                 data-bs-toggle="dropdown" aria-expanded="false"
-                style="background-color: {{ $ticket->status->color }} !important; color: white !important">
+                style="background-color: #FF8B8B !important; color: white !important">
                 <i class="bi bi-check-lg"></i>
             </button>
             @elseif ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
             <button type="button"
                 class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center dropdown-toggle"
                 data-bs-toggle="dropdown" aria-expanded="false"
-                style="background-color: {{ $ticket->status->color }} !important; color: white !important">
+                style="background-color: #FF8B8B !important; color: white !important">
                 <i class="bi bi-x-lg"></i>
             </button>
             @else

@@ -77,6 +77,7 @@ class CreateRequester extends Component
             flash()->addSuccess('Account successfully created');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

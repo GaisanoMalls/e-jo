@@ -70,6 +70,7 @@ class DisapproveTicket extends Component
             flash()->addSuccess('Ticket has been approved');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Ooos, something went wrong');
         }
     }

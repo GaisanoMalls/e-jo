@@ -12,7 +12,7 @@ class AssignTag extends Component
 
     public Ticket $ticket;
     public $selectedTags = [];
-    
+
     protected $listeners = ['loadAssignTicketForm' => '$refresh'];
 
     public function saveAssignTicketTag()
@@ -25,6 +25,7 @@ class AssignTag extends Component
             $this->dispatchBrowserEvent('close-modal');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

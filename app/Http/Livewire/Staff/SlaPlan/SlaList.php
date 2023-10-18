@@ -62,6 +62,7 @@ class SlaList extends Component
             flash()->addSuccess('SLA successfully updated');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
@@ -85,6 +86,7 @@ class SlaList extends Component
             flash()->addSuccess('SLA successfully deleted');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

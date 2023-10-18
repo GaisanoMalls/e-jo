@@ -49,7 +49,7 @@ class ApprovedTicketForAgentNotification extends Notification
 
         return [
             'ticket' => $this->ticket,
-            'title' => "New Ticket - {$this->ticket->ticket_number}",
+            'title' => "New Ticket {$this->ticket->ticket_number}",
             'message' => "{$serviceDepartmentAdmin->profile->getFullName()} approved the ticket",
         ];
     }

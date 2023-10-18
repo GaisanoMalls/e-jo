@@ -6,6 +6,11 @@
 
 <small>Created by:</small><br>
 <small>{{ $requesterFullName }} <em>({{ $requesterOtherInfo }})</em></small>
+
+<x-mail::button :url="$url">
+View Ticket
+</x-mail::button>
+
 <hr>
 <small>Approved by:</small><br>
 <small>{{ $approver }} <em>(Service Dept. Admin)</em></small>

@@ -47,6 +47,7 @@ class ClaimTicket extends Component
             flash()->addSuccess("You have claimed the ticket - {$this->ticket->ticket_number}.");
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to claim the ticket.');
         }
     }

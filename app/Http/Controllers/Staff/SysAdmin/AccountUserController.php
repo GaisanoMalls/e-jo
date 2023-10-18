@@ -49,6 +49,7 @@ class AccountUserController extends Controller
             return back()->with('success', 'Account successfully created');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('success', 'Failed to save a new user/requester');
         }
     }
@@ -103,6 +104,7 @@ class AccountUserController extends Controller
             return back()->with('success', "You have successfully updated the account for {$user->profile->getFullName()}.");
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to update the account.');
         }
     }
@@ -120,6 +122,7 @@ class AccountUserController extends Controller
             return back()->with('success', 'Account successfully deleted.');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Failed to delete the account.');
         }
     }
