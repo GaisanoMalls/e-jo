@@ -45,6 +45,7 @@ class AssignTicket extends Component
                         'status_id' => Status::CLAIMED,
                         'approval_status' => ApprovalStatus::APPROVED
                     ]);
+
                     Notification::send($this->ticket->agent, new AssignedAgentNotification($this->ticket));
                     Mail::to($this->ticket->agent)->send(new AssignedAgentMail($this->ticket, $this->ticket->agent));
                 }
