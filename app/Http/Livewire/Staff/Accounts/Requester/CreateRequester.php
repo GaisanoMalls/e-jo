@@ -24,11 +24,6 @@ class CreateRequester extends Component
         return (new StoreUserRequest())->rules();
     }
 
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
-    }
-
     public function updatedBranch()
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();

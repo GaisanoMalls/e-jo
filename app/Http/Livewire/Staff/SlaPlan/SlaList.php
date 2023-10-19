@@ -24,11 +24,6 @@ class SlaList extends Component
         ];
     }
 
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
-    }
-
     public function fetchServiceLevelAgreements()
     {
         $this->serviceLevelAgreements = $this->queryServiceLevelAgreements();

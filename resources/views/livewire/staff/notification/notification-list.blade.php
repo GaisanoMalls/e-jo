@@ -1,5 +1,5 @@
 <div wire:poll.7s>
-    @foreach ($userNotifications as $notification)
+    @foreach ($userNotifications->sortByDesc('created_at') as $notification)
     <div
         class="d-flex justify-content-between px-4 py-3 border-top notification__card {{ $notification->read() ? 'text-muted' : 'unread__border'}}">
         <div class="d-flex flex-column gap-1">

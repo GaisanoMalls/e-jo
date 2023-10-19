@@ -39,11 +39,6 @@ class TeamList extends Component
         $this->teams = $this->queryTeams();
     }
 
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
-    }
-
     public function actionOnSubmit()
     {
         sleep(1);

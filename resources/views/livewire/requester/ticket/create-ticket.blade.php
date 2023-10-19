@@ -83,7 +83,7 @@
                                         <small>(Issue Summary)</small>
                                     </span>
                                 </label>
-                                <input type="text" wire:model="subject" class="form-control input__field"
+                                <input type="text" wire:model.defer="subject" class="form-control input__field"
                                     placeholder="Tell us about your concern">
                                 @error('subject')
                                 <span class="error__message">
@@ -100,7 +100,7 @@
                                     </span>
                                 </label>
                                 <div wire:ignore>
-                                    <textarea wire:model="description" id="createTicketDescription"></textarea>
+                                    <textarea wire:model.defer="description" id="createTicketDescription"></textarea>
                                 </div>
                                 @error('description')
                                 <span class="error__message">
@@ -117,8 +117,9 @@
                                     <div class="d-flex">
                                         @foreach ($priorityLevels as $priority)
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" wire:model="priorityLevel"
-                                                id="rbnt{{ $priority->name }}" value="{{ $priority->id }}">
+                                            <input class="form-check-input" type="radio"
+                                                wire:model.defer="priorityLevel" id="rbnt{{ $priority->name }}"
+                                                value="{{ $priority->id }}">
                                             <label class="form-check-label radio__button__label"
                                                 for="rbnt{{ $priority->name }}">{{ $priority->name }}</label>
                                         </div>
@@ -146,7 +147,7 @@
                                         </div>
                                     </div>
                                     <input class="form-control form-control-sm border-0 ticket__file" type="file"
-                                        wire:model="fileAttachments" multiple id="upload-{{ $upload }}">
+                                        wire:model.defer="fileAttachments" multiple id="upload-{{ $upload }}">
                                     @error('fileAttachments.*')
                                     <span class=" error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>

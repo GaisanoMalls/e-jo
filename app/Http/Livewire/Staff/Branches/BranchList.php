@@ -22,11 +22,6 @@ class BranchList extends Component
         ];
     }
 
-    public function updated($field)
-    {
-        $this->validateOnly($field);
-    }
-
     public function fetchBranches()
     {
         $this->branches = $this->queryBranches();

@@ -24,22 +24,11 @@ class AuthUser extends Component
         return (new AuthRequest())->messages();
     }
 
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
-    }
-
     public function login()
     {
         $this->validate();
 
-        if (
-            Auth::attempt([
-                'email' => $this->email,
-                'password' => $this->password,
-                'is_active' => true
-            ])
-        ) {
+        if (Auth::attempt(['email' => $this->email, 'password' => $this->password, 'is_active' => true])) {
             session()->regenerate();
             sleep(1);
             return $this->redirectAuthenticatedWithRole();

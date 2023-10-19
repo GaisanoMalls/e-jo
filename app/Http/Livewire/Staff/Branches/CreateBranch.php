@@ -15,11 +15,6 @@ class CreateBranch extends Component
         return (new StoreBranchRequest())->rules();
     }
 
-    public function updated($field)
-    {
-        $this->validateOnly($field);
-    }
-
     public function clearFormField()
     {
         $this->reset();

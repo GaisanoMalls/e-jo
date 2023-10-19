@@ -19,11 +19,6 @@ class UpdateServiceDeptAdminPassword extends Component
         return (new UpdatePasswordRequest())->rules();
     }
 
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
-    }
-
     public function clearFormFields()
     {
         $this->resetValidation();

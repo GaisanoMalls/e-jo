@@ -6,7 +6,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="currentPassword" class="form-label input__field__label">Current Password</label>
-                            <input type="password" wire:model="current_password"
+                            <input type="password" wire:model.defer="current_password"
                                 class="form-control input__field @error('current_password') is-invalid @enderror"
                                 id="currentPassword">
                             @error('current_password')
@@ -18,7 +18,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="newPassword" class="form-label input__field__label">New Password</label>
-                            <input type="password" wire:model="new_password"
+                            <input type="password" wire:model.defer="new_password"
                                 class="form-control input__field @error('new_password') is-invalid @enderror"
                                 id="newPassword">
                             @error('new_password')
@@ -29,7 +29,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="confirmPassword" class="form-label input__field__label">Confirm Password</label>
-                            <input type="password" wire:model="confirm_password"
+                            <input type="password" wire:model.defer="confirm_password"
                                 class="form-control input__field @error('confirm_password') is-invalid @enderror"
                                 id="confirmPassword">
                             @error('confirm_password')

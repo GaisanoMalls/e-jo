@@ -13,7 +13,12 @@ class LevelApprover extends Model
     use HasFactory;
 
     protected $table = 'level_approver';
-    protected $fillable = ['level_id', 'user_id', 'help_topic_id'];
+    protected $fillable = [
+        'level_id',
+        'user_id',
+        'help_topic_id',
+        'is_done'
+    ];
 
     public function level()
     {

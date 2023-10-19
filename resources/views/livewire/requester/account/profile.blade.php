@@ -13,7 +13,7 @@
                 <div class="d-flex flex-wrap flex-column">
                     <div class="d-flex align-items-center gap-3">
                         <input class="form-control form-control-sm border-0 upload__photo__field"
-                            id="upload_{{ $imageUpload }}" type="file" wire:model="picture" accept="image/*">
+                            id="upload_{{ $imageUpload }}" type="file" wire:model.defer="picture" accept="image/*">
                         <div wire:loading wire:target="picture">
                             <div class="d-flex align-items-center gap-2">
                                 <div class="spinner-border text-info" style="height: 20px; width: 20px;" role="status">
@@ -34,7 +34,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="firstName" class="form-label input__field__label">First Name</label>
-                            <input type="text" wire:model="first_name"
+                            <input type="text" wire:model.defer="first_name"
                                 class="form-control @error('first_name') is-invalid @enderror input__field "
                                 id="firstName">
                             @error('first_name')
@@ -45,7 +45,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="middleName" class="form-label input__field__label">Middle Name</label>
-                            <input type="text" wire:model="middle_name"
+                            <input type="text" wire:model.defer="middle_name"
                                 class="form-control @error('middle_name') is-invalid @enderror input__field"
                                 id="middleName">
                             @error('middle_name')
@@ -56,7 +56,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="lastName" class="form-label input__field__label">Last Name</label>
-                            <input type="text" wire:model="last_name"
+                            <input type="text" wire:model.defer="last_name"
                                 class="form-control @error('last_name') is-invalid @enderror input__field"
                                 id="lastName">
                             @error('last_name')
@@ -67,7 +67,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="suffix" class="form-label input__field__label">Suffix</label>
-                            <input type="text" wire:model="suffix"
+                            <input type="text" wire:model.defer="suffix"
                                 class="form-control @error('suffix') is-invalid @enderror input__field" id="suffix">
                             @error('suffix')
                             <span class="text-danger custom__field__message">{{ $message }}</span>
@@ -77,7 +77,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="email" class="form-label input__field__label">Email</label>
-                            <input type="text" wire:model="email"
+                            <input type="text" wire:model.defer="email"
                                 class="form-control @error('email') is-invalid @enderror input__field" id="email">
                             @error('email')
                             <span class="text-danger custom__field__message">{{ $message }}</span>
@@ -87,7 +87,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="mobileNumber" class="form-label input__field__label">Mobile No.</label>
-                            <input type="text" wire:model="mobile_number"
+                            <input type="text" wire:model.defer="mobile_number"
                                 class="form-control @error('mobile_number') is-invalid @enderror input__field"
                                 maxlength="11" id="mobileNumber">
                             @error('mobile_number')

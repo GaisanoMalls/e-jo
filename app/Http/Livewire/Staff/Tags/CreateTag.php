@@ -18,11 +18,6 @@ class CreateTag extends Component
         return (new StoreTagRequest())->rules();
     }
 
-    public function updated($field)
-    {
-        $this->validateOnly($field);
-    }
-
     public function clearFormField()
     {
         $this->reset();

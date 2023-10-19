@@ -34,11 +34,6 @@ class Profile extends Component
         return (new UpdateProfileRequest())->rules();
     }
 
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
-    }
-
     public function resetFileField()
     {
         $this->picture = null;

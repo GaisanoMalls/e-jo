@@ -26,7 +26,7 @@
             <i class="bi bi-x fs-4"></i>
         </button>
     </div>
-    <div class="offcanvas-body py-0 px-0">
+    {{-- <div class="offcanvas-body py-0 px-0">
         @foreach (auth()->user()->notifications()->latest()->get() as $notification)
         <div class="d-flex justify-content-between px-4 py-3 border-top notification__card {{ $notification->read() ? 'text-muted' : ''}}"
             data-notification-id="{{ !$notification->read() ? $notification->id : '' }}">
@@ -72,6 +72,6 @@
         </div>
         <h6 class="mb-0 fw-bold message__1">No notifications</h6>
         <small class="text-muted message__2">Please check again later.</small>
-    </div>
+    </div> --}}
     @endif
 </div>

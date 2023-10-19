@@ -25,11 +25,6 @@ class CreateTeam extends Component
         return (new StoreTeamRequest())->messages();
     }
 
-    public function updated($fields)
-    {
-        return $this->validateOnly($fields);
-    }
-
     public function actionOnSubmit()
     {
         sleep(1);

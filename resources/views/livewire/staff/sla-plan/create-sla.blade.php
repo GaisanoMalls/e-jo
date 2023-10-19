@@ -15,7 +15,7 @@
                             <div class="col-md-12">
                                 <div class="mb-2">
                                     <label for="countdown_approach" class="form-label form__field__label">Hours</label>
-                                    <input type="text" wire:model="countdown_approach" class="form-control form__field
+                                    <input type="text" wire:model.defer="countdown_approach" class="form-control form__field
                                     @error('countdown_approach') is-invalid @enderror" id="countdown_approach"
                                         placeholder="e.g. 24">
                                     @error('countdown_approach')
@@ -31,7 +31,7 @@
                                     <label for="time_unit" class="form-label form__field__label">
                                         Time unit
                                     </label>
-                                    <input type="text" wire:model="time_unit" class="form-control form__field
+                                    <input type="text" wire:model.defer="time_unit" class="form-control form__field
                                     @error('time_unit') is-invalid @enderror" id=" time_unit" placeholder="e.g. 1 Day">
                                     @error('time_unit')
                                     <span class="error__message">

@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\BasicModelQueries;
-use App\Models\Role;
-use App\Models\Team;
-use App\Models\User;
 
 class DirectoryController extends Controller
 {

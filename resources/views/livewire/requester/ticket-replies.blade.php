@@ -68,7 +68,6 @@
                             : 'Reply file attachment'}}
                             ({{ $reply->fileAttachments->count() }})
                         </h6>
-                        <a href="" style="font-size: 14px; color: #123831;">Download all</a>
                     </div>
                     <div class="modal__body mt-3">
                         <ul class="list-group list-group-flush">

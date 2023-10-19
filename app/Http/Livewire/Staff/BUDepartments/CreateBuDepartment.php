@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Staff\BUDepartments;
 
 use App\Http\Requests\SysAdmin\Manage\BUDepartment\StoreBUDepartmentRequest;
 use App\Http\Traits\BasicModelQueries;
-use App\Models\Branch;
 use App\Models\Department;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -24,11 +23,6 @@ class CreateBuDepartment extends Component
     public function messages()
     {
         return (new StoreBUDepartmentRequest())->messages();
-    }
-
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
     }
 
     public function actionOnSubmit()

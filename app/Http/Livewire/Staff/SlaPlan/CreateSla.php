@@ -15,11 +15,6 @@ class CreateSla extends Component
         return (new StoreSLARequest())->rules();
     }
 
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
-    }
-
     public function clearFormFields()
     {
         $this->reset();

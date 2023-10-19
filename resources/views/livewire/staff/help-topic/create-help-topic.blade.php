@@ -17,7 +17,7 @@
                                     <div class="col-md-8">
                                         <div class="mb-2">
                                             <label for="name" class="form-label form__field__label">Name</label>
-                                            <input type="text" wire:model="name" class="form-control form__field"
+                                            <input type="text" wire:model.defer="name" class="form-control form__field"
                                                 id="name" placeholder="Enter help topic name">
                                             @error('name')
                                             <span class="error__message">

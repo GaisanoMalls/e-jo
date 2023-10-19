@@ -15,7 +15,7 @@
                     <form wire:submit.prevent="sendClarification">
                         <div class="my-2">
                             <div wire:ignore>
-                                <textarea wire:model="description" id="description"></textarea>
+                                <textarea wire:model.defer="description" id="description"></textarea>
                             </div>
                             @error('description')
                             <span class="error__message">
@@ -37,7 +37,7 @@
                                 </div>
                             </div>
                             <input class="form-control ticket__file__input w-auto my-3" type="file"
-                                wire:model="clarificationFiles" multiple id="upload-{{ $upload }}">
+                                wire:model.defer="clarificationFiles" multiple id="upload-{{ $upload }}">
                             @error('clarificationFiles.*')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>

@@ -9,7 +9,7 @@
                             Reason why you disapprove this ticket
                         </h6>
                         <div wire:ignore>
-                            <textarea wire:model="reasonDescription" id="reasonDescription"></textarea>
+                            <textarea wire:model.defer="reasonDescription" id="reasonDescription"></textarea>
                         </div>
                         @error('reasonDescription')
                         <span class="error__message">

@@ -22,11 +22,6 @@ class ServiceDepartmentList extends Component
         ];
     }
 
-    public function updated($field)
-    {
-        $this->validateOnly($field);
-    }
-
     public function fetchServiceDepartments()
     {
         $this->serviceDepartments = $this->queryServiceDepartments();

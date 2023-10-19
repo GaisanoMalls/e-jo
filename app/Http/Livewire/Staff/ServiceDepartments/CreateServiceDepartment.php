@@ -15,11 +15,6 @@ class CreateServiceDepartment extends Component
         return (new StoreServiceDepartmentRequest())->rules();
     }
 
-    public function updated($field)
-    {
-        $this->validateOnly($field);
-    }
-
     public function clearFormField()
     {
         $this->reset();

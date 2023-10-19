@@ -31,11 +31,6 @@ class BUDepartmentList extends Component
         ];
     }
 
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
-    }
-
     public function fetchBUDepartments()
     {
         $this->buDepartments = $this->queryBUDepartments();

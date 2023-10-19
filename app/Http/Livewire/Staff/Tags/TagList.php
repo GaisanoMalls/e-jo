@@ -22,11 +22,6 @@ class TagList extends Component
         ];
     }
 
-    public function updated($field)
-    {
-        $this->validateOnly($field);
-    }
-
     public function fetchTags()
     {
         $this->tags = $this->queryTags();

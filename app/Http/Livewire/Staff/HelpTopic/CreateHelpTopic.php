@@ -25,11 +25,6 @@ class CreateHelpTopic extends Component
         return (new StoreHelpTopicRequest())->rules();
     }
 
-    public function updated($fields)
-    {
-        $this->validateOnly($fields);
-    }
-
     public function saveHelpTopic()
     {
         $this->validate();

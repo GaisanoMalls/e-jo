@@ -53,9 +53,9 @@ class ApproveTicket extends Component
                 foreach ($agents as $agent) {
                     Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
                     Notification::send($agent, new ApprovedTicketForAgentNotification($this->ticket));
-                    Notification::send($this->ticket->user, new ApprovedTicketForRequesterNotification($this->ticket));
                 }
 
+                Notification::send($this->ticket->user, new ApprovedTicketForRequesterNotification($this->ticket));
                 ActivityLog::make($this->ticket->id, 'approved the ticket');
             });
 
