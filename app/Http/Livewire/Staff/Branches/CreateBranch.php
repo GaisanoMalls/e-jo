@@ -10,7 +10,7 @@ class CreateBranch extends Component
 {
     public $name;
 
-    protected function rules()
+    public function rules()
     {
         return (new StoreBranchRequest())->rules();
     }
@@ -21,7 +21,7 @@ class CreateBranch extends Component
         $this->resetValidation();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->clearFormField();

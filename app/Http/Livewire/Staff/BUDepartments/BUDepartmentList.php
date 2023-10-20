@@ -16,7 +16,7 @@ class BUDepartmentList extends Component
 
     protected $listeners = ['loadBUDepartments' => 'fetchBUDepartments'];
 
-    public function rules()
+    protected function rules()
     {
         return [
             'name' => 'required|unique:departments,name,' . $this->buDepartmentEditId,
@@ -100,7 +100,7 @@ class BUDepartmentList extends Component
         $this->resetValidation();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset();

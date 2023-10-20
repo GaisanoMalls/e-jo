@@ -23,7 +23,7 @@ class AssignTicket extends Component
     public Ticket $ticket;
     public $agents = [], $team, $agent;
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->emit('loadTicketDetails');

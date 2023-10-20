@@ -25,7 +25,7 @@ class CreateTeam extends Component
         return (new StoreTeamRequest())->messages();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset();

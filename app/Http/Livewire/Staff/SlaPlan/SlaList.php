@@ -16,7 +16,7 @@ class SlaList extends Component
 
     protected $listeners = ['loadServiceLevelAgreements' => 'fetchServiceLevelAgreements'];
 
-    public function rules()
+    protected function rules()
     {
         return [
             'countdown_approach' => 'required|numeric',

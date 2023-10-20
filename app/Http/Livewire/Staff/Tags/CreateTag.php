@@ -13,7 +13,7 @@ class CreateTag extends Component
 
     public $name;
 
-    protected function rules()
+    public function rules()
     {
         return (new StoreTagRequest())->rules();
     }
@@ -24,7 +24,7 @@ class CreateTag extends Component
         $this->resetValidation();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->emit('loadTags');

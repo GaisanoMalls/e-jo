@@ -15,7 +15,7 @@ class BranchList extends Component
 
     protected $listeners = ['loadBranches' => 'fetchBranches'];
 
-    public function rules()
+    protected function rules()
     {
         return [
             'name' => 'required|unique:branches,name,' . $this->branchEditId

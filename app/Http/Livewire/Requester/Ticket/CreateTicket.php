@@ -52,7 +52,7 @@ class CreateTicket extends Component
         $this->resetValidation();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset();

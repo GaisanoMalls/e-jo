@@ -17,7 +17,7 @@ class TeamList extends Component
 
     protected $listeners = ['loadTeams' => 'fetchTeams'];
 
-    public function rules()
+    protected function rules()
     {
         return [
             'name' => 'required|unique:departments,name,' . $this->teamEditId,
@@ -39,7 +39,7 @@ class TeamList extends Component
         $this->teams = $this->queryTeams();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset();

@@ -32,7 +32,7 @@ class SendTicketReply extends Component
         return (new ReplyTicketRequest())->messages();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->replyFiles = null;

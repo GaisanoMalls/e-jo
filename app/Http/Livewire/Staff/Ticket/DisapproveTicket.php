@@ -25,7 +25,7 @@ class DisapproveTicket extends Component
         return (new StoreDisapproveTicketRequest())->rules();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset('reasonDescription');

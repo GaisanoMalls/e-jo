@@ -35,7 +35,7 @@ class SendClarification extends Component
         return (new StoreClarificationRequest())->messages();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->replyFiles = null;

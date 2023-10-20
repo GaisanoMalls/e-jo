@@ -14,7 +14,7 @@ class UpdateAgentPassword extends Component
     public User $agent;
     public $new_password, $confirm_password;
 
-    protected function rules()
+    public function rules()
     {
         return (new UpdatePasswordRequest())->rules();
     }
@@ -25,7 +25,7 @@ class UpdateAgentPassword extends Component
         $this->reset('new_password', 'confirm_password');
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->clearFormFields();

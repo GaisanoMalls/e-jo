@@ -15,7 +15,7 @@ class ServiceDepartmentList extends Component
 
     protected $listeners = ['loadServiceDepartments' => 'fetchServiceDepartments'];
 
-    public function rules()
+    protected function rules()
     {
         return [
             'name' => 'required|unique:service_departments,name,' . $this->serviceDepartmentEditId

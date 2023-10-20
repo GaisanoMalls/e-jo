@@ -31,7 +31,7 @@ class ReplyTicket extends Component
         return (new StaffReplyTicketRequest())->messages();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->replyFiles = null;

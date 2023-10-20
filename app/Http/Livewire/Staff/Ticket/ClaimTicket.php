@@ -14,7 +14,7 @@ class ClaimTicket extends Component
 
     protected $listeners = ['loadClaimTicket' => '$refresh'];
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->emit('loadTicketLogs');

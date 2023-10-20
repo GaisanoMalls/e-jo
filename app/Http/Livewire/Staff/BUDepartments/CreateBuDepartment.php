@@ -25,7 +25,7 @@ class CreateBuDepartment extends Component
         return (new StoreBUDepartmentRequest())->messages();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset();

@@ -19,7 +19,7 @@ class ApproveTicket extends Component
 {
     public Ticket $ticket;
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->emit('loadTicketTags');

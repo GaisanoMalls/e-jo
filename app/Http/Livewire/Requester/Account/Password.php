@@ -14,7 +14,7 @@ class Password extends Component
 
     public $current_password, $new_password, $confirm_password;
 
-    protected function rules()
+    public function rules()
     {
         return (new UpdatePasswordRequest())->rules();
     }

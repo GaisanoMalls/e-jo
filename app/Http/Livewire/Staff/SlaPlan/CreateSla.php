@@ -21,7 +21,7 @@ class CreateSla extends Component
         $this->resetValidation();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->clearFormFields();

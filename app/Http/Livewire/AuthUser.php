@@ -14,12 +14,12 @@ class AuthUser extends Component
     public string $email = "";
     public string $password = "";
 
-    protected function rules()
+    public function rules()
     {
         return (new AuthRequest())->rules();
     }
 
-    protected function messages()
+    public function messages()
     {
         return (new AuthRequest())->messages();
     }

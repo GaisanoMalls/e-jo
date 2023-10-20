@@ -10,7 +10,7 @@ class CreateServiceDepartment extends Component
 {
     public $name;
 
-    protected function rules()
+    public function rules()
     {
         return (new StoreServiceDepartmentRequest())->rules();
     }
@@ -21,7 +21,7 @@ class CreateServiceDepartment extends Component
         $this->resetValidation();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->clearFormField();

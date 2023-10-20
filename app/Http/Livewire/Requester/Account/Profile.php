@@ -29,7 +29,7 @@ class Profile extends Component
         $this->mobile_number = $authUser->profile->mobile_number;
     }
 
-    protected function rules()
+    public function rules()
     {
         return (new UpdateProfileRequest())->rules();
     }
@@ -40,7 +40,7 @@ class Profile extends Component
         $this->imageUpload++;
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->resetValidation();

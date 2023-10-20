@@ -19,7 +19,7 @@ class UpdatePriorityLevel extends Component
         $this->priority_level = $this->ticket->priority_level_id;
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->emit('loadPriorityLevel');

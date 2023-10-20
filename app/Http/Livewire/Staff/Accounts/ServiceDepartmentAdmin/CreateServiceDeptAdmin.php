@@ -15,8 +15,6 @@ class CreateServiceDeptAdmin extends Component
         return (new StoreServiceDeptAdminRequest())->rules();
     }
 
-    public funcruon
-
     public function render()
     {
         return view('livewire.staff.accounts.service-department-admin.create-service-dept-admin');

@@ -15,7 +15,7 @@ class TicketDetails extends Component
 
     protected $listeners = ['loadTicketDetails' => '$refresh'];
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         $this->emit('loadTicketLogs');
         $this->emit('loadTicketDetails');
