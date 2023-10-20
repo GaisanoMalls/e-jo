@@ -18,7 +18,7 @@ class ServiceDepartmentList extends Component
     protected function rules()
     {
         return [
-            'name' => 'required|unique:service_departments,name,' . $this->serviceDepartmentEditId
+            'name' => "required|unique:service_departments,name,{$this->serviceDepartmentEditId}"
         ];
     }
 

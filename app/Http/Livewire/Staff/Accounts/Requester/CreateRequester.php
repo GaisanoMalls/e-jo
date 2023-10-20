@@ -77,6 +77,13 @@ class CreateRequester extends Component
         }
     }
 
+    public function cancel()
+    {
+        $this->reset();
+        $this->resetValidation();
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
     public function render()
     {
         return view('livewire.staff.accounts.requester.create-requester', [

@@ -8664,7 +8664,6 @@ input[type=checkbox]:checked + .form-check-label {
   padding: 0.6rem 1rem;
   border-radius: 0.563rem;
   font-size: 0.875rem;
-  width: 6rem;
 }
 .accounts__section .users__account__card .user__details__container .btn__details.btn__cancel {
   padding: 0.6rem 1rem;
@@ -9767,7 +9766,6 @@ input[type=checkbox]:checked + .form-check-label {
 .help__topics__section .help__topic__details__card .help__topic__details__container .btn__details {
   font-weight: 500;
   font-size: 0.875rem;
-  width: 6rem;
 }
 .help__topics__section .help__topic__details__card .help__topic__details__container .btn__details.btn__send {
   padding: 0.6rem 1rem;

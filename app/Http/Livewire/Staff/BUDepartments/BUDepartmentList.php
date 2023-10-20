@@ -19,7 +19,7 @@ class BUDepartmentList extends Component
     protected function rules()
     {
         return [
-            'name' => 'required|unique:departments,name,' . $this->buDepartmentEditId,
+            'name' => "required|unique:departments,name,{$this->buDepartmentEditId}",
             'editSelectedBranches' => 'required'
         ];
     }

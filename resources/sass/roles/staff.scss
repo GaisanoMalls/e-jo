@@ -2243,7 +2243,6 @@ input[type="checkbox"] {
 
             .btn__details {
                 @include generic.button-config;
-                width: 6rem;
 
                 &.btn__cancel {
                     @include generic.form-button-cancel;
@@ -3340,7 +3339,6 @@ input[type="checkbox"] {
             .btn__details {
                 font-weight: $fw-500;
                 font-size: $fs-14;
-                width: 6rem;
 
                 &.btn__send {
                     padding: 0.6rem 1rem;

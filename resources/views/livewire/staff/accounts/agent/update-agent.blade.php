@@ -1,21 +1,20 @@
 <div>
-    @livewire('staff.accounts.requester.update-requester-password', ['user' => $user])
+    @livewire('staff.accounts.agent.update-agent-password', ['agent' => $agent])
     <div class="row accounts__section justify-content-center">
         <div class="col-xxl-9 col-lg-12">
             <div class="card d-flex flex-column gap-2 users__account__card">
                 <div class="user__details__container d-flex flex-wrap mb-4 justify-content-between">
-                    <h6 class="card__title">Requester's Information</h6>
+                    <h6 class="card__title">Agent's Information</h6>
                     <small class="text-muted" style="font-size: 12px;">
                         Last updated:
-                        @if ($user->dateUpdated() > $user->profile->dateUpdated())
-                        {{ $user->dateUpdated() }}
+                        @if ($agent->dateUpdated() > $agent->profile->dateUpdated())
+                        {{ $agent->dateUpdated() }}
                         @else
-                        {{ $user->profile->dateUpdated() }}
+                        {{ $agent->profile->dateUpdated() }}
                         @endif
                     </small>
                 </div>
-                <form wire:submit.prevent="updateRequesterAccount">
-                    <input type="hidden" id="userID" value="{{ $user->id }}">
+                <form wire:submit.prevent="updateAgentAccount">
                     <div class="row gap-4 user__details__container">
                         <div class="col-12">
                             <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Profile</h6>
@@ -24,9 +23,8 @@
                                     <div class="mb-3">
                                         <label for="first_name" class="form-label form__field__label">First
                                             name</label>
-                                        <input type="text" wire:model.defer="first_name"
-                                            class="form-control form__field" id="first_name"
-                                            placeholder="Enter first name (required)">
+                                        <input type="text" wire:model="first_name" class="form-control form__field"
+                                            id="first_name" placeholder="Enter first name (required)">
                                         @error('first_name')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
@@ -39,9 +37,8 @@
                                     <div class="mb-3">
                                         <label for="middle_name" class="form-label form__field__label">Middle
                                             name</label>
-                                        <input type="text" wire:model.defer="middle_name"
-                                            class="form-control form__field" id="middle_name"
-                                            placeholder="Enter middle name (optional)">
+                                        <input type="text" wire:model="middle_name" class="form-control form__field"
+                                            id="middle_name" placeholder="Enter middle name (optional)">
                                         @error('middle_name')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
@@ -53,7 +50,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="last_name" class="form-label form__field__label">Last name</label>
-                                        <input type="text" wire:model.defer="last_name" class="form-control form__field"
+                                        <input type="text" wire:model="last_name" class="form-control form__field"
                                             id="last_name" placeholder="Enter last name (required)">
                                         @error('last_name')
                                         <span class="error__message">
@@ -67,7 +64,7 @@
                                     <div class="mb-3">
                                         <label class="form-label form__field__label">Suffix</label>
                                         <div>
-                                            <div id="select-requester-suffix" wire:ignore></div>
+                                            <div id="select-agent-suffix" wire:ignore></div>
                                         </div>
                                         @error('suffix')
                                         <span class="error__message">
@@ -85,7 +82,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="email" class="form-label form__field__label">Email</label>
-                                        <input type="email" wire:model.defer="email" class="form-control form__field"
+                                        <input type="email" wire:model="email" class="form-control form__field"
                                             id="email" placeholder="Enter email (required)">
                                         @error('email')
                                         <span class="error__message">
@@ -110,9 +107,10 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
+                                        <input type="hidden" value="{{ $agent->branch_id }}" id="agentCurrentBranchId">
                                         <label class="form-label form__field__label">Branch</label>
                                         <div>
-                                            <div id="select-requester-branch" wire:ignore></div>
+                                            <div id="select-agent-branch" wire:ignore></div>
                                         </div>
                                         @error('branch')
                                         <span class="error__message">
@@ -124,7 +122,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="branch" class="form-label form__field__label">
+                                        <input type="hidden" value="{{ $agent->department_id }}"
+                                            id="agentCurrentBUDepartmentId">
+                                        <label class="form-label form__field__label">
                                             BU/Department
                                             @if ($BUDepartments)
                                             <span class="fw-normal" style="font-size: 13px;">
@@ -132,9 +132,46 @@
                                             @endif
                                         </label>
                                         <div>
-                                            <div id="select-requester-bu-department" wire:ignore></div>
+                                            <div id="select-agent-bu-department" wire:ignore></div>
                                         </div>
                                         @error('bu_department')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <input type="hidden" value="{{ $agent->team_id }}" id="agentCurrentTeamId">
+                                        <label class="form-label form__field__label">
+                                            Team
+                                            @if ($teams)
+                                            <span class="fw-normal" style="font-size: 13px;">
+                                                ({{ $teams->count() }})</span>
+                                            @endif
+                                        </label>
+                                        <div>
+                                            <div id="select-agent-team" wire:ignore></div>
+                                        </div>
+                                        @error('teams')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="branch" class="form-label form__field__label">
+                                            Service Department
+                                        </label>
+                                        <div>
+                                            <div id="select-agent-service-department" wire:ignore></div>
+                                        </div>
+                                        @error('service_department')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}
@@ -148,13 +185,13 @@
                             <div class="d-flex align-items-center gap-2">
                                 <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"
                                     data-bs-dismiss="modal"
-                                    onclick="window.location.href='{{ route('staff.manage.user_account.users') }}'">Cancel</button>
+                                    onclick="window.location.href='{{ route('staff.manage.user_account.agents') }}'">Cancel</button>
                                 <button type="submit"
                                     class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__details btn__send">
-                                    <span wire:loading wire:target="updateRequesterAccount"
+                                    <span wire:loading wire:target="updateAgentAccount"
                                         class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                                     </span>
-                                    Update
+                                    Save
                                 </button>
                             </div>
                         </div>
@@ -167,8 +204,8 @@
 
 @push('livewire-select')
 <script>
-    const requesterSuffixOption = [
-        @foreach ($requesterSuffixes as $suffix)
+    const agentSuffixOption = [
+        @foreach ($agentSuffixes as $suffix)
             {
                 label: "{{ $suffix->name }}",
                 value: "{{ $suffix->name }}"
@@ -176,21 +213,17 @@
         @endforeach
     ];
 
-    const requesterSuffixSelect = document.querySelector('#select-requester-suffix');
+    const agentSuffixSelect = document.querySelector('#select-agent-suffix');
     VirtualSelect.init({
-        ele: requesterSuffixSelect,
-        options: requesterSuffixOption,
+        ele: agentSuffixSelect,
+        options: agentSuffixOption,
         search: true,
         markSearchResults: true,
-        selectedValue: '{{ $user->profile->suffix }}'
+        selectedValue: '{{ $agent->profile->suffix }}'
     });
 
-    requesterSuffixSelect.addEventListener('change', () => {
-        @this.set('suffix', requesterSuffixSelect.value);
-    })
-
-    const requesterBranchOption = [
-        @foreach ($requesterBranches as $branch)
+    const agentBranchOption = [
+        @foreach ($agentBranches as $branch)
             {
                 label: "{{ $branch->name }}",
                 value: "{{ $branch->id }}"
@@ -198,17 +231,17 @@
         @endforeach
     ];
 
-    const requesterBranchSelect = document.querySelector('#select-requester-branch');
+    const agentBranchSelect = document.querySelector('#select-agent-branch');
     VirtualSelect.init({
-        ele: requesterBranchSelect,
-        options: requesterBranchOption,
+        ele: agentBranchSelect,
+        options: agentBranchOption,
         search: true,
         markSearchResults: true,
-        selectedValue: "{{ $user->branch_id }}"
+        selectedValue: '{{ $agent->branch_id }}'
     });
 
-    const requesterBUDepartmentOption = [
-        @foreach ($requesterBUDepartments as $department)
+    const agentBUDepartmentOption = [
+        @foreach ($agentBUDepartments as $department)
             {
                 label: "{{ $department->name }}",
                 value: "{{ $department->id }}"
@@ -216,48 +249,52 @@
         @endforeach
     ];
 
-    const requesterBUDepartmentSelect = document.querySelector('#select-requester-bu-department')
+    const agentBUDepartmentSelect = document.querySelector('#select-agent-bu-department');
     VirtualSelect.init({
-        ele: requesterBUDepartmentSelect,
-        options: requesterBUDepartmentOption,
+        ele: agentBUDepartmentSelect,
+        options: agentBUDepartmentOption,
         search: true,
         markSearchResults: true,
-        selectedValue: "{{ $user->department_id }}"
+        selectedValue: '{{ $agent->branch_id }}'
     });
 
-    requesterBranchSelect.addEventListener('change', () => {
-        const requesterBranchId = requesterBranchSelect.value;
-        @this.set('branch', parseInt(requesterBranchId));
+    const agentTeamOption = [
+        @foreach ($agentTeams as $team)
+            {
+                label: "{{ $team->name }}",
+                value: "{{ $team->id }}"
+            },
+        @endforeach
+    ];
 
-        if (requesterBranchId) {
-            window.addEventListener('get-branch-bu-departments', event => {
-                const requesterBUDepartments = event.detail.BUDepartments;
-                const requesterBUDepartmentOption = [];
-
-                if (requesterBUDepartments.length > 0) {
-                        requesterBUDepartments.forEach(function (requesterBUDepartment) {
-                        VirtualSelect.init({
-                            ele: requesterBUDepartmentSelect
-                        });
-
-                        requesterBUDepartmentOption.push({
-                            label: requesterBUDepartment.name,
-                            value: requesterBUDepartment.id
-                        });
-                    });
-                    requesterBUDepartmentSelect.setOptions(requesterBUDepartmentOption);
-                } else {
-                    requesterBUDepartmentSelect.close();
-                    requesterBUDepartmentSelect.setOptions([]);
-                    requesterBUDepartmentSelect.disable();
-                }
-            });
-        }
+    const agentTeamSelect = document.querySelector('#select-agent-team');
+    VirtualSelect.init({
+        ele: agentTeamSelect,
+        options: agentTeamOption,
+        search: true,
+        multiple: true,
+        markSearchResults: true,
+        selectedValue: {{ json_encode($currentTeams) }}
     });
 
-    requesterBUDepartmentSelect.addEventListener('change', () => {
-        @this.set('bu_department', parseInt(requesterBUDepartmentSelect.value));
+    const agentServiceDepartmentOption = [
+        @foreach ($agentServiceDepartments as $serviceDepartment)
+            {
+                label: "{{ $serviceDepartment->name }}",
+                value: "{{ $serviceDepartment->id }}"
+            },
+        @endforeach
+    ];
+
+    const agentServiceDepartmentSelect = document.querySelector('#select-agent-service-department');
+    VirtualSelect.init({
+        ele: agentServiceDepartmentSelect,
+        options: agentServiceDepartmentOption,
+        search: true,
+        markSearchResults: true,
+        selectedValue: '{{ $agent->service_department_id }}'
     });
+
 
 </script>
 @endpush

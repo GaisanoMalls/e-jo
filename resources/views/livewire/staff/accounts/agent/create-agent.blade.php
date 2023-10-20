@@ -1,20 +1,20 @@
 <div>
-    <div wire:ignore.self class="modal fade account__modal" id="addNewUserModal" tabindex="-1"
-        aria-labelledby="addNewUserModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade account__modal" id="addNewAgentModal" tabindex="-1"
+        aria-labelledby="addNewAgentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0">
-                    <h1 class="modal-title modal__title" id="addNewUserModalLabel">Add new requester</h1>
+                    <h1 class="modal-title modal__title" id="addNewAgentModalLabel">Add new agent</h1>
                     <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
                         <i class="fa-sharp fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <form wire:submit.prevent="saveRequester">
+                <form wire:submit.prevent="saveAgent">
                     <div class="modal-body modal__body">
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="d-flex flex-column">
-                                    <img src="{{ asset('images/user_creation.jpg') }}" alt=""
+                                    <img src="{{ asset('images/agent_creation.jpg') }}" alt=""
                                         style="height: auto; width: 100%;">
                                 </div>
                             </div>
@@ -26,7 +26,7 @@
                                             <div class="mb-2">
                                                 <label for="first_name" class="form-label form__field__label">First
                                                     name</label>
-                                                <input type="text" wire:model.defer="first_name"
+                                                <input type="text" wire:model="first_name"
                                                     class="form-control form__field" id="first_name"
                                                     placeholder="Enter first name (required)">
                                                 @error('first_name')
@@ -42,9 +42,9 @@
                                                 <label for="middle_name" class="form-label form__field__label">
                                                     Middle name
                                                 </label>
-                                                <input type="text" wire:model.defer="middle_name"
+                                                <input type="text" wire:model="middle_name"
                                                     class="form-control form__field" id="middle_name"
-                                                    placeholder="Enter middle name (required)">
+                                                    placeholder="Enter middle name (optional)">
                                                 @error('middle_name')
                                                 <span class="error__message">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -57,7 +57,7 @@
                                             <div class="mb-2">
                                                 <label for="last_name" class="form-label form__field__label">Last
                                                     name</label>
-                                                <input type="text" wire:model.defer="last_name"
+                                                <input type="text" wire:model="last_name"
                                                     class="form-control form__field" id="last_name"
                                                     placeholder="Enter last name (required)">
                                                 @error('last_name')
@@ -74,9 +74,23 @@
                                                     Suffix
                                                 </label>
                                                 <div>
-                                                    <div id="select-requester-suffix" wire:ignore></div>
+                                                    <div id="select-agent-suffix" wire:ignore></div>
                                                 </div>
                                                 @error('suffix')
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mb-2">
+                                                <label for="email" class="form-label form__field__label">Email
+                                                    address</label>
+                                                <input type="email" wire:model="email" class="form-control form__field"
+                                                    id="email" placeholder="Enter email (required)">
+                                                @error('email')
                                                 <span class="error__message">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                                     {{ $message }}
@@ -88,25 +102,10 @@
                                     <div class="col-md-6">
                                         <div class="col-md-12">
                                             <div class="mb-2">
-                                                <label for="email" class="form-label form__field__label">Email
-                                                    address</label>
-                                                <input type="email" wire:model.defer="email"
-                                                    class="form-control form__field" id="email"
-                                                    placeholder="Enter email (required)">
-                                                @error('email')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-2">
                                                 <label for="role" class="form-label form__field__label">User
                                                     role</label>
-                                                <input type="text" value="User / Requester"
-                                                    class="form-control form__field" disabled readonly
+                                                <input type="text" value="Agent" class="form-control form__field"
+                                                    disabled readonly
                                                     style="padding: 0.75rem 1rem; font-size: 0.875rem; border-radius: 0.563rem; border: 1px solid #e7e9eb;">
                                             </div>
                                         </div>
@@ -116,7 +115,7 @@
                                                     Branch
                                                 </label>
                                                 <div>
-                                                    <div id="select-requester-branch" wire:ignore></div>
+                                                    <div id="select-agent-branch" wire:ignore></div>
                                                 </div>
                                                 @error('branch')
                                                 <span class="error__message">
@@ -128,7 +127,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="mb-2">
-                                                <label for="department" class="form-label form__field__label">
+                                                <label for="bu_department" class="form-label form__field__label">
                                                     BU/Department
                                                     @if ($BUDepartments)
                                                     <span class="fw-normal" style="font-size: 13px;">
@@ -136,9 +135,45 @@
                                                     @endif
                                                 </label>
                                                 <div>
-                                                    <div id="select-requester-bu-department" wire:ignore></div>
+                                                    <div id="select-agent-bu-department" wire:ignore></div>
                                                 </div>
-                                                @error('department')
+                                                @error('bu_department')
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mb-2">
+                                                <label class="form-label form__field__label">
+                                                    Team
+                                                    @if ($teams)
+                                                    <span class="fw-normal" style="font-size: 13px;">
+                                                        ({{ $teams->count() }})</span>
+                                                    @endif
+                                                </label>
+                                                <div>
+                                                    <div id="select-agent-team" wire:ignore></div>
+                                                </div>
+                                                @error('teams')
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mb-2">
+                                                <label for="department" class="form-label form__field__label">
+                                                    Service Department
+                                                </label>
+                                                <div>
+                                                    <div id="select-agent-service-department" wire:ignore></div>
+                                                </div>
+                                                @error('service_department')
                                                 <span class="error__message">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                                     {{ $message }}
@@ -153,7 +188,7 @@
                                             <div class="d-flex align-items-center gap-2">
                                                 <button type="submit"
                                                     class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__modal__footer btn__send">
-                                                    <span wire:loading wire:target="saveRequester"
+                                                    <span wire:loading wire:target="saveAgent"
                                                         class="spinner-border spinner-border-sm" role="status"
                                                         aria-hidden="true">
                                                     </span>
@@ -177,8 +212,8 @@
 
 @push('livewire-select')
 <script>
-    const requesterSuffixOption = [
-        @foreach ($requesterSuffixes as $suffix)
+    const agentSuffixOption = [
+        @foreach ($agentSuffixes as $suffix)
             {
                 label: "{{ $suffix->name }}",
                 value: "{{ $suffix->name }}"
@@ -186,20 +221,20 @@
         @endforeach
     ];
 
-    const requesterSuffixSelect = document.querySelector('#select-requester-suffix');
+    const agentSuffixSelect = document.querySelector('#select-agent-suffix');
     VirtualSelect.init({
-        ele: requesterSuffixSelect,
-        options: requesterSuffixOption,
+        ele: agentSuffixSelect,
+        options: agentSuffixOption,
         search: true,
         markSearchResults: true,
     });
 
-    requesterSuffixSelect.addEventListener('change', () => {
-        @this.set('suffix', requesterSuffixSelect.value);
-    })
+    agentSuffixSelect.addEventListener('change', () => {
+        @this.set('suffix', agentSuffixSelect.value)
+    });
 
-    const requesterBranchOption = [
-        @foreach ($requesterBranches as $branch)
+    const agentBranchOption = [
+        @foreach ($agentBranches as $branch)
             {
                 label: "{{ $branch->name }}",
                 value: "{{ $branch->id }}"
@@ -207,68 +242,132 @@
         @endforeach
     ];
 
-    const requesterBranchSelect = document.querySelector('#select-requester-branch')
+    const agentBranchSelect = document.querySelector('#select-agent-branch')
     VirtualSelect.init({
-        ele: requesterBranchSelect,
-        options: requesterBranchOption,
+        ele: agentBranchSelect,
+        options: agentBranchOption,
         search: true,
         markSearchResults: true,
     });
 
-    const requesterBUDepartmentSelect = document.querySelector('#select-requester-bu-department')
+    const agentBUDepartmentSelect = document.querySelector('#select-agent-bu-department')
     VirtualSelect.init({
-        ele: requesterBUDepartmentSelect,
+        ele: agentBUDepartmentSelect,
         search: true,
         markSearchResults: true,
     });
-    requesterBUDepartmentSelect.disable();
+    agentBUDepartmentSelect.disable();
 
-    requesterBranchSelect.addEventListener('change', () => {
-        const requesterBranchId = requesterBranchSelect.value;
-        @this.set('branch', parseInt(requesterBranchId));
+    const agentTeamSelect = document.querySelector('#select-agent-team')
+    VirtualSelect.init({
+        ele: agentTeamSelect,
+        multiple: true,
+        search: true,
+        markSearchResults: true,
+    });
+    agentTeamSelect.disable();
 
-        if (requesterBranchId) {
-            requesterBUDepartmentSelect.enable();
-            window.addEventListener('get-branch-bu-departments', event => {
-                const requesterBUDepartments = event.detail.BUDepartments;
-                const requesterBUDepartmentOption = [];
+    agentBranchSelect.addEventListener('change', () => {
+        const agentBranchId = agentBranchSelect.value;
+        @this.set('branch', parseInt(agentBranchId));
 
-                if (requesterBUDepartments.length > 0) {
-                    requesterBUDepartments.forEach(function (requesterBUDepartment) {
+        if (agentBranchId) {
+            agentBUDepartmentSelect.enable();
+            agentTeamSelect.enable();
+            window.addEventListener('get-branch-bu-departments-and-teams', event => {
+                const agentBUDepartments = event.detail.BUDepartments;
+                const agentTeams = event.detail.teams;
+                const agentBUDepartmentOption = [];
+                const agentTeamOption = [];
+
+                //  BU/Department Select
+                if (agentBUDepartments.length > 0) {
+                    agentBUDepartments.forEach(function (agentBUDepartment) {
                         VirtualSelect.init({
-                            ele: requesterBUDepartmentSelect
+                            ele: agentBUDepartmentSelect
                         });
 
-                        requesterBUDepartmentOption.push({
-                            label: requesterBUDepartment.name,
-                            value: requesterBUDepartment.id
+                        agentBUDepartmentOption.push({
+                            label: agentBUDepartment.name,
+                            value: agentBUDepartment.id
                         });
                     });
-                    requesterBUDepartmentSelect.setOptions(requesterBUDepartmentOption);
+                    agentBUDepartmentSelect.setOptions(agentBUDepartmentOption);
                 } else {
-                    requesterBUDepartmentSelect.close();
-                    requesterBUDepartmentSelect.setOptions([]);
-                    requesterBUDepartmentSelect.disable();
+                    agentBUDepartmentSelect.close();
+                    agentBUDepartmentSelect.setOptions();
+                    agentBUDepartmentSelect.disable();
+                }
+
+                // Team Select
+                if (agentTeams.length > 0) {
+                    agentTeams.forEach(function (agentTeam) {
+                        VirtualSelect.init({
+                            ele: agentTeamSelect
+                        });
+
+                        agentTeamOption.push({
+                            label: agentTeam.name,
+                            value: agentTeam.id
+                        });
+                    });
+                    agentTeamSelect.setOptions(agentTeamOption);
+                } else {
+                    agentTeamSelect.close();
+                    agentTeamSelect.setOptions();
+                    agentTeamSelect.disable();
                 }
             });
         }
+    })
+
+    const agentServiceDepartmentOption = [
+        @foreach ($agentServiceDepartments as $serviceDepartment)
+            {
+                label: "{{ $serviceDepartment->name }}",
+                value: "{{ $serviceDepartment->id }}"
+            },
+        @endforeach
+    ];
+
+    const agentServiceDepartmentSelect = document.querySelector('#select-agent-service-department');
+    VirtualSelect.init({
+        ele: agentServiceDepartmentSelect,
+        options: agentServiceDepartmentOption,
+        search: true,
+        markSearchResults: true,
     });
 
-    requesterBUDepartmentSelect.addEventListener('change', () => {
-        @this.set('department', parseInt(requesterBUDepartmentSelect.value));
+    agentBranchSelect.addEventListener('reset', () => {
+        agentTeamSelect.reset();
+        agentBUDepartmentSelect.reset();
+        agentTeamSelect.disable();
+        agentBUDepartmentSelect.disable();
     });
 
+    agentBUDepartmentSelect.addEventListener('change', () => {
+        @this.set('bu_department', parseInt(agentBUDepartmentSelect.value));
+    });
+    agentTeamSelect.addEventListener('change', () => {
+        @this.set('selectedTeams', agentTeamSelect.value);
+    });
+    agentServiceDepartmentSelect.addEventListener('change', () => {
+        @this.set('service_department', parseInt(agentServiceDepartmentSelect.value));
+    });
 </script>
 @endpush
 
 @push('livewire-modal')
 <script>
     window.addEventListener('close-modal', () =>{
-        $('#addNewUserModal').modal('hide');
-        requesterSuffixSelect.reset();
-        requesterBranchSelect.reset();
-        requesterBUDepartmentSelect.reset();
-        requesterBUDepartmentSelect.disable();
+        $('#addNewAgentModal').modal('hide');
+        agentSuffixSelect.reset();
+        agentBranchSelect.reset();
+        agentTeamSelect.reset();
+        agentBUDepartmentSelect.reset();
+        agentServiceDepartmentSelect.reset();
+        agentTeamSelect.disable();
+        agentBUDepartmentSelect.disable();
     });
 </script>
 @endpush

@@ -18,7 +18,7 @@ class TagList extends Component
     protected function rules()
     {
         return [
-            'name' => 'required|unique:tags,name,' . $this->tagUpdateId,
+            'name' => "required|unique:tags,name,{$this->tagUpdateId}"
         ];
     }
 

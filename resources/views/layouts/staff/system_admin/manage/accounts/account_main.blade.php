@@ -32,34 +32,12 @@ session()->has('invalid_service_departments'))
 @endpush
 @endif
 
-@if ($errors->storeAgent->any() || session()->has('empty_teams'))
-@push('modal-with-error')
-<script>
-    $(function () {
-        $('#addNewAgentModal').modal('show');
-    });
-
-</script>
-@endpush
-@endif
-
 @if ($errors->storeApprover->any() || session()->has('empty_branches') || session()->has('empty_bu_departments') ||
 session()->has('invalid_branches') || session()->has('invalid_bu_departments'))
 @push('modal-with-error')
 <script>
     $(function () {
         $('#addNewApproverModal').modal('show');
-    });
-
-</script>
-@endpush
-@endif
-
-@if ($errors->storeUser->any())
-@push('modal-with-error')
-<script>
-    $(function () {
-        $('#addNewUserModal').modal('show');
     });
 
 </script>

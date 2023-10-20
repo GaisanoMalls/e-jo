@@ -47,6 +47,11 @@ class CreateTicket extends Component
         return (new StoreTicketRequest())->messages();
     }
 
+    public function updated($fields)
+    {
+        $this->validateOnly($fields);
+    }
+
     public function clearErrorMessage()
     {
         $this->resetValidation();

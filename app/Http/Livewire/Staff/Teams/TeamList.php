@@ -20,7 +20,7 @@ class TeamList extends Component
     protected function rules()
     {
         return [
-            'name' => 'required|unique:departments,name,' . $this->teamEditId,
+            'name' => "required|unique:teams,name,{$this->teamEditId}",
             'editSelectedServiceDepartment' => 'required',
             'editSelectedBranches' => 'required'
         ];

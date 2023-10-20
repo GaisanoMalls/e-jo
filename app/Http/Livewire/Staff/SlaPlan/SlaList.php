@@ -20,7 +20,7 @@ class SlaList extends Component
     {
         return [
             'countdown_approach' => 'required|numeric',
-            'time_unit' => 'required|unique:service_level_agreements,time_unit,' . $this->slaEditId
+            'time_unit' => "required|unique:service_level_agreements,time_unit,{$this->slaEditId}"
         ];
     }
 
