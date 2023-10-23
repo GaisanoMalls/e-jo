@@ -23,10 +23,10 @@ class AgentList extends Component
     {
         try {
             User::find($this->agentDeleteId)->delete();
-            sleep(1);
             $this->agentDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Requester account has been deleted');
+            sleep(1);
 
         } catch (\Exception $e) {
             dd($e->getMessage());

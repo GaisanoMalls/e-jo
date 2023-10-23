@@ -9,7 +9,7 @@
                             Reason why you disapprove this ticket
                         </h6>
                         <div wire:ignore>
-                            <textarea wire:model.defer="reasonDescription" id="reasonDescription"></textarea>
+                            <textarea wire:model="reasonDescription" id="reasonDescription"></textarea>
                         </div>
                         @error('reasonDescription')
                         <span class="error__message">
@@ -57,7 +57,7 @@
 
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event => {
+    window.addEventListener('close-modal', () => {
         $('#disapproveTicketModal').modal('hide');
     });
 </script>
@@ -65,7 +65,7 @@
 
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event => {
+    window.addEventListener('close-modal', () => {
         $('#confirmTicketDisapproveModal').modal('hide');
     });
 

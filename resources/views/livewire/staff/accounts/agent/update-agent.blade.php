@@ -107,7 +107,6 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <input type="hidden" value="{{ $agent->branch_id }}" id="agentCurrentBranchId">
                                         <label class="form-label form__field__label">Branch</label>
                                         <div>
                                             <div id="select-agent-branch" wire:ignore></div>
@@ -240,6 +239,49 @@
         selectedValue: '{{ $agent->branch_id }}'
     });
 
+    agentBranchSelect.addEventListener('change', () => {
+        const agentBranchId = agentBranchSelect.value;
+        if (agentBranchId) {
+            @this.set('branch', parseInt(agentBranchId));
+            window.addEventListener('get-branch-bu-departments-and-teams', (event) => {
+                const agentBUDepartments = event.detail.BUDepartments;
+                const agentTeams = event.detail.teams;
+                const agentBUDepartmentOption = [];
+                const agentTeamOption = [];
+
+                // BU/Department Select
+                if (agentBUDepartments.length > 0) {
+                    agentBUDepartments.forEach(function (agentBUDepartment) {
+                        VirtualSelect.init({
+                            ele: agentBUDepartmentSelect
+                        });
+
+                        agentBUDepartmentOption.push({
+                            label: agentBUDepartment.name,
+                            value: agentBUDepartment.id
+                        });
+                    });
+                    agentBUDepartmentSelect.setOptions(agentBUDepartmentOption);
+                }
+
+                // Teams Select
+                if (agentTeams.length > 0) {
+                    agentTeams.forEach(function (agentTeam) {
+                        VirtualSelect.init({
+                            ele: agentTeamSelect
+                        });
+
+                        agentTeamOption.push({
+                            label: agentTeam.name,
+                            value: agentTeam.id
+                        });
+                    });
+                    agentTeamSelect.setOptions(agentTeamOption);
+                }
+            })
+        }
+    });
+
     const agentBUDepartmentOption = [
         @foreach ($agentBUDepartments as $department)
             {
@@ -255,7 +297,7 @@
         options: agentBUDepartmentOption,
         search: true,
         markSearchResults: true,
-        selectedValue: '{{ $agent->branch_id }}'
+        selectedValue: '{{ $agent->department_id }}'
     });
 
     const agentTeamOption = [
@@ -295,6 +337,18 @@
         selectedValue: '{{ $agent->service_department_id }}'
     });
 
+    // Set value of the property
+    agentBUDepartmentSelect.addEventListener('change', () => {
+        @this.set('bu_department', parseInt(agentBUDepartmentSelect.value));
+    });
+
+    agentTeamSelect.addEventListener('change', () => {
+        @this.set('teams', agentTeamSelect.value);
+    });
+
+    agentServiceDepartmentSelect.addEventListener('change', () => {
+        @this.set('service_department', parseInt(agentServiceDepartmentSelect.value));
+    });
 
 </script>
 @endpush
@@ -302,7 +356,7 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event => {
+    window.addEventListener('close-modal', () => {
         $('#editPasswordModal').modal('hide');
     });
 </script>

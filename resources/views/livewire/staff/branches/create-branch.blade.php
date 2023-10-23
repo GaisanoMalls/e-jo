@@ -14,7 +14,7 @@
                         <div class="row mb-2">
                             <div class="mb-2">
                                 <label for="name" class="form-label form__field__label">Name</label>
-                                <input type="text" wire:model.defer="name"
+                                <input type="text" wire:model="name"
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
                                     placeholder="Enter branch name">
                                 @error('name')

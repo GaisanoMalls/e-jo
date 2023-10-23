@@ -223,11 +223,10 @@
 
     serviceDepartmentSelect.addEventListener('change', () => {
         const serviceDepartmentId = serviceDepartmentSelect.value;
-        @this.set('serviceDepartment', parseInt(serviceDepartmentId));
-
         if (serviceDepartmentId) {
+            @this.set('serviceDepartment', parseInt(serviceDepartmentId));
             helpTopicSelect.enable();
-            window.addEventListener('get-help-topics-from-service-department', event => {
+            window.addEventListener('get-help-topics-from-service-department', (event) => {
                 const helpTopics = event.detail.helpTopics;
                 const helpTopicOption = [];
 

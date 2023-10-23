@@ -141,20 +141,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 // Agent Routes
                 Route::prefix('agent')->name('agent.')->group(function () {
                     Route::controller(AccountAgentController::class)->group(function () {
-                        Route::post('/store', 'store')->name('store');
-                        Route::delete('/{agent}/store', 'delete')->name('delete');
-                        Route::put('/{agent}/update', 'update')->name('update');
                         Route::get('/{agent}/view-details', 'viewDetails')->name('view_details');
                         Route::get('/{agent}/edit-details', 'editDetails')->name('edit_details');
-
-                        // Axios endpoints
-                        // For create agent
-                        Route::get('/{branch}/bu-departments', 'branchDepartments');
-                        Route::get('/{branch}/teams', 'branchTeams');
-                        // For edit agent
-                        Route::get('edit/{branch}/bu-departments', 'branchDepartments');
-                        Route::get('edit/{branch}/teams', 'branchTeams');
-                        Route::get('/{agent}/agent-teams', 'agenTeams');
                     });
                     Route::controller(UpdatePasswordController::class)->group(function () {
                         Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
@@ -163,18 +151,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 // User/Requester Routes
                 Route::prefix('user')->name('user.')->group(function () {
                     Route::controller(AccountUserController::class)->group(function () {
-                        Route::post('/store', 'store')->name('store');
-                        Route::put('/{user}/update', 'update')->name('update');
                         Route::get('/{user}/view-details', 'viewDetails')->name('view_details');
                         Route::get('/{user}/edit-details', 'editDetails')->name('edit_details');
-                        Route::delete('/{user}/delete', 'delete')->name('delete');
-
-                        // Endpoint for axios
-                        // For create requester
-                        Route::get('/{branch}/bu-departments', 'getBUDepartments');
-                        // For edit requester
-                        Route::get('/edit/{branch}/bu-departments', 'getBUDepartments');
-                        // Route::get('/assign/department/{department}/service-departments', 'getServiceDepartments');
                     });
                 });
             });

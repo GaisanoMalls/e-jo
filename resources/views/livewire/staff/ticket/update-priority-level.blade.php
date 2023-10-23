@@ -17,7 +17,7 @@
                             <div class="d-flex justify-content-between gap-2">
                                 @foreach ($priorityLevels as $priorityLevel)
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" wire:model.defer="priority_level"
+                                    <input class="form-check-input" type="radio" wire:model="priority_level"
                                         id="rbnt{{ $priorityLevel->name }}" value="{{ $priorityLevel->id }}"
                                         style="border-color: {{ $priorityLevel->color }} !important">
                                     <label class="form-check-label radio__button__label"

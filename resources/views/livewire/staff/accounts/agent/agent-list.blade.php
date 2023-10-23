@@ -163,11 +163,11 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event => {
+    window.addEventListener('close-modal', () => {
         $('#confirmDeleteAgentModal').modal('hide');
     });
 
-    window.addEventListener('show-delete-agent-modal', event => {
+    window.addEventListener('show-delete-agent-modal', () => {
         $('#confirmDeleteAgentModal').modal('show');
     });
 

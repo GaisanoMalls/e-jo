@@ -26,7 +26,7 @@
                                             <div class="mb-2">
                                                 <label for="first_name" class="form-label form__field__label">First
                                                     name</label>
-                                                <input type="text" wire:model.defer="first_name"
+                                                <input type="text" wire:model="first_name"
                                                     class="form-control form__field" id="first_name"
                                                     placeholder="Enter first name (required)">
                                                 @error('first_name')
@@ -42,7 +42,7 @@
                                                 <label for="middle_name" class="form-label form__field__label">
                                                     Middle name
                                                 </label>
-                                                <input type="text" wire:model.defer="middle_name"
+                                                <input type="text" wire:model="middle_name"
                                                     class="form-control form__field" id="middle_name"
                                                     placeholder="Enter middle name (required)">
                                                 @error('middle_name')
@@ -57,7 +57,7 @@
                                             <div class="mb-2">
                                                 <label for="last_name" class="form-label form__field__label">Last
                                                     name</label>
-                                                <input type="text" wire:model.defer="last_name"
+                                                <input type="text" wire:model="last_name"
                                                     class="form-control form__field" id="last_name"
                                                     placeholder="Enter last name (required)">
                                                 @error('last_name')
@@ -90,9 +90,8 @@
                                             <div class="mb-2">
                                                 <label for="email" class="form-label form__field__label">Email
                                                     address</label>
-                                                <input type="email" wire:model.defer="email"
-                                                    class="form-control form__field" id="email"
-                                                    placeholder="Enter email (required)">
+                                                <input type="email" wire:model="email" class="form-control form__field"
+                                                    id="email" placeholder="Enter email (required)">
                                                 @error('email')
                                                 <span class="error__message">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -131,7 +130,8 @@
                                                 <label for="department" class="form-label form__field__label">
                                                     BU/Department
                                                     @if ($BUDepartments)
-                                                    <span class="fw-normal" style="font-size: 13px;">
+                                                    <span class="fw-normal" style="font-size: 13px;"
+                                                        id="requesterQueryCountBUDepartment">
                                                         ({{ $BUDepartments->count() }})</span>
                                                     @endif
                                                 </label>
@@ -225,11 +225,10 @@
 
     requesterBranchSelect.addEventListener('change', () => {
         const requesterBranchId = requesterBranchSelect.value;
-        @this.set('branch', parseInt(requesterBranchId));
-
         if (requesterBranchId) {
+            @this.set('branch', parseInt(requesterBranchId));
             requesterBUDepartmentSelect.enable();
-            window.addEventListener('get-branch-bu-departments', event => {
+            window.addEventListener('get-branch-bu-departments', (event) => {
                 const requesterBUDepartments = event.detail.BUDepartments;
                 const requesterBUDepartmentOption = [];
 
@@ -256,6 +255,12 @@
 
     requesterBUDepartmentSelect.addEventListener('change', () => {
         @this.set('department', parseInt(requesterBUDepartmentSelect.value));
+    });
+
+    requesterBranchSelect.addEventListener('reset', () => {
+        requesterBUDepartmentSelect.reset();
+        requesterBUDepartmentSelect.disable();
+        requesterBUDepartmentSelect.setOptions([]);
     });
 
 </script>

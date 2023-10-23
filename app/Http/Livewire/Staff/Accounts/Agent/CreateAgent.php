@@ -48,11 +48,6 @@ class CreateAgent extends Component
     {
         $this->validate();
 
-        $validTeams = Team::whereIn('id', $this->selectedTeams)->pluck('id');
-        if (count($validTeams) !== count($this->selectedTeams)) {
-            flash()->addError('Oops, invalid team.');
-        }
-
         try {
             DB::transaction(function () {
                 $agent = User::create([

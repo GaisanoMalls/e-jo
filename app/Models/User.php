@@ -289,7 +289,7 @@ class User extends Authenticatable
 
     public static function requesters()
     {
-        return self::with('profile')
+        return self::with(['profile', 'department', 'branch'])
             ->whereHas('role', fn($requester) => $requester->where('role_id', Role::USER))
             ->orderBy('created_at', 'desc')
             ->get();

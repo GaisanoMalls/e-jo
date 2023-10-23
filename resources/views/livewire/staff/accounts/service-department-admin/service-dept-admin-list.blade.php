@@ -1,14 +1,15 @@
 <div>
-    @if (!$users->isEmpty())
-    <div
-        class="card account__type__card {{ Route::is('staff.manage.user_account.users') ? 'card__rounded__and__no__border' : '' }}">
+    @if (!$serviceDepartmentAdmins->isEmpty())
+    <div class="card account__type__card">
         <div class="table-responsive custom__table">
-            <table class="table table-striped mb-0" @if (Route::is('staff.manage.user_account.users')) id="table"
-                @endif>
+            <table class="table table-striped mb-0">
                 <thead>
                     <tr>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
                             Name
+                        </th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                            Service Department
                         </th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
                             Branch
@@ -20,7 +21,8 @@
                             Status
                         </th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Date Added
+                            Date
+                            Added
                         </th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
                             Date Updated
@@ -28,56 +30,64 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($serviceDepartmentAdmins as $serviceDepartmentAdmin)
                     <tr>
                         <td>
-                            <a href="{{ route('staff.manage.user_account.user.view_details', $user->id) }}">
+                            <a
+                                href="{{ route('staff.manage.user_account.service_department_admin.view_details', $serviceDepartmentAdmin->id) }}">
                                 <div class="media d-flex align-items-center user__account__media">
                                     <div class="flex-shrink-0">
-                                        @if ($user->profile->picture)
-                                        <img src="{{ Storage::url($user->profile->picture) }}" alt=""
+                                        @if ($serviceDepartmentAdmin->profile->picture)
+                                        <img src="{{ Storage::url($serviceDepartmentAdmin->profile->picture) }}" alt=""
                                             class="image-fluid user__picture">
                                         @else
-                                        <div class="user__name__initial" style="background-color: #24695C;">
-                                            {{ $user->profile->getNameInitial() }}
+                                        <div class="user__name__initial" style="background-color: #9DA85C;">
+                                            {{ $serviceDepartmentAdmin->profile->getNameInitial() }}
                                         </div>
                                         @endif
                                     </div>
                                     <div class="d-flex flex-column gap-1 ms-3 w-100">
                                         <span class="user__name">{{
-                                            $user->profile->getFullName() }}</span>
-                                        <small>{{ $user->email }}</small>
+                                            $serviceDepartmentAdmin->profile->getFullName() }}</span>
+                                        <small>{{ $serviceDepartmentAdmin->email }}</small>
                                     </div>
                                 </div>
                             </a>
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->branch->name }}</span>
+                                <span>{{ $serviceDepartmentAdmin->getServiceDepartments() }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->department->name }}</span>
+                                <span>{{ $serviceDepartmentAdmin->branch->name }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->isActive() ? 'Active' : 'Inactive' }}</span>
+                                <span>{{ $serviceDepartmentAdmin->department->name }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->dateCreated() }}</span>
+                                <span>{{ $serviceDepartmentAdmin->isActive() ? 'Active' : 'Inactive'
+                                    }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center text-start td__content">
+                                <span>{{ $serviceDepartmentAdmin->dateCreated() }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
                                 <span>
-                                    @if ($user->dateUpdated() > $user->profile->dateUpdated())
-                                    {{ $user->dateUpdated() }}
+                                    @if ($serviceDepartmentAdmin->dateUpdated() >
+                                    $serviceDepartmentAdmin->profile->dateUpdated())
+                                    {{ $serviceDepartmentAdmin->dateUpdated() }}
                                     @else
-                                    {{ $user->profile->dateUpdated() }}
+                                    {{ $serviceDepartmentAdmin->profile->dateUpdated() }}
                                     @endif
                                 </span>
                             </div>
@@ -85,14 +95,14 @@
                         <td>
                             <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                                 <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
-                                    onclick="window.location.href='{{ route('staff.manage.user_account.user.edit_details', $user->id) }}'"
+                                    onclick="window.location.href='{{ route('staff.manage.user_account.service_department_admin.edit_details', $serviceDepartmentAdmin->id) }}'"
                                     type="button" class="btn action__button">
                                     <i class="bi bi-pencil"></i>
                                 </button>
                                 <button data-tooltip="Delete" data-tooltip-position="top" data-tooltip-font-size="11px"
                                     type="button" class="btn action__button" data-bs-toggle="modal"
-                                    data-bs-target="#confirmDeleteUserModal"
-                                    wire:click="deleteRequester({{ $user->id }})">
+                                    data-bs-target="#confirmDeleteServiceDeptAdminModal"
+                                    wire:click="deleteServiceDepartmentAdmin({{ $serviceDepartmentAdmin->id }})">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
@@ -107,13 +117,14 @@
     <div class="alert text-center d-flex align-items-center justify-content-center gap-2" role="alert"
         style="background-color: #F5F7F9; font-size: 14px;">
         <i class="fa-solid fa-circle-info"></i>
-        Empty records for requesters.
+        Empty records for service department administrators.
     </div>
     @endif
 
-    {{-- Delete Requester Modal --}}
-    <div wire:ignore.self class="modal fade modal__confirm__delete__user__account" id="confirmDeleteUserModal"
-        tabindex="-1" aria-labelledby="confirmDeleteUserModalLabel" aria-hidden="true">
+    {{-- Delete Service Department Admin Modal --}}
+    <div wire:ignore.self class="modal fade modal__confirm__delete__user__account"
+        id="confirmDeleteServiceDeptAdminModal" tabindex="-1" aria-labelledby="confirmDeleteDeptAdminLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <form wire:submit.prevent="delete">
@@ -123,9 +134,9 @@
                             Confirm Delete
                         </h5>
                         <p class="mb-1" style="font-weight: 500; font-size: 15px;">
-                            Are you sure you want to delete this requester?
+                            Are you sure you want to delete this service department admin?
                         </p>
-                        <strong>{{ $requesterFullName }}</strong>
+                        <strong>{{ $serviceDeptAdminFullName }}</strong>
                     </div>
                     <hr>
                     <div class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
@@ -149,11 +160,11 @@
 @push('livewire-modal')
 <script>
     window.addEventListener('close-modal', () => {
-        $('#confirmDeleteUserModal').modal('hide');
+        $('#confirmDeleteServiceDeptAdminModal').modal('hide');
     });
 
-    window.addEventListener('show-delete-requester-modal', () => {
-        $('#confirmDeleteUserModal').modal('show');
+    window.addEventListener('show-delete-service-dept-admin-modal', () => {
+        $('#confirmDeleteServiceDeptAdminModal').modal('show');
     });
 
 </script>

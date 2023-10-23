@@ -15,7 +15,7 @@
                     <form wire:submit.prevent="sendTicketReply">
                         <div class="my-2">
                             <div wire:ignore>
-                                <textarea wire:model.defer="description" id="discussionDescription"></textarea>
+                                <textarea wire:model="description" id="discussionDescription"></textarea>
                             </div>
                             @error('description')
                             <span class="error__message">
@@ -37,7 +37,7 @@
                                 </div>
                             </div>
                             <input class="form-control ticket__file__input w-auto my-3" type="file"
-                                wire:model.defer="replyFiles" multiple id="upload-{{ $upload }}">
+                                wire:model="replyFiles" multiple id="upload-{{ $upload }}">
                             @error('replyFiles.*')
                             <span class="error__message">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -80,7 +80,7 @@
 
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event => {
+    window.addEventListener('close-modal', () => {
         $('#ticketReplyModal').modal('hide');
     });
 

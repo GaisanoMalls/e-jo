@@ -269,12 +269,11 @@
 
     agentBranchSelect.addEventListener('change', () => {
         const agentBranchId = agentBranchSelect.value;
-        @this.set('branch', parseInt(agentBranchId));
-
         if (agentBranchId) {
+            @this.set('branch', parseInt(agentBranchId));
             agentBUDepartmentSelect.enable();
             agentTeamSelect.enable();
-            window.addEventListener('get-branch-bu-departments-and-teams', event => {
+            window.addEventListener('get-branch-bu-departments-and-teams', (event) => {
                 const agentBUDepartments = event.detail.BUDepartments;
                 const agentTeams = event.detail.teams;
                 const agentBUDepartmentOption = [];
@@ -343,6 +342,8 @@
         agentBUDepartmentSelect.reset();
         agentTeamSelect.disable();
         agentBUDepartmentSelect.disable();
+        agentTeamSelect.setOptions([]);
+        agentBUDepartmentSelect.setOptions([]);
     });
 
     agentBUDepartmentSelect.addEventListener('change', () => {

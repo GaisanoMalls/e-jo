@@ -69,7 +69,7 @@
                         <div class="row mb-2">
                             <div class="mb-2">
                                 <label for="name" class="form-label form__field__label">Name</label>
-                                <input type="text" wire:model.defer="name"
+                                <input type="text" wire:model="name"
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
                                     placeholder="Enter BU/department name">
                                 @error('name')
@@ -172,12 +172,12 @@
     });
 
     // Check the current branches assigned to the selected BU/Department.
-    window.addEventListener('update-branch-select-option', event => {
+    window.addEventListener('update-branch-select-option', (event) => {
         editBranchSelect.setValue(event.detail.branchIds);
     });
 
     // Clear the branch select option after update.
-    window.addEventListener('clear-branch-select-option', event => {
+    window.addEventListener('clear-branch-select-option', () => {
         editBranchSelect.reset();
     });
 
@@ -187,16 +187,16 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event => {
+    window.addEventListener('close-modal', () => {
         $('#editBUDepartmentModal').modal('hide');
         $('#deleteBUDepartmentModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-bu-department-modal', event => {
+    window.addEventListener('show-edit-bu-department-modal', () => {
         $('#editBUDepartmentModal').modal('show');
     });
 
-    window.addEventListener('show-delete-bu-department-modal', event => {
+    window.addEventListener('show-delete-bu-department-modal', () => {
         $('#deleteBUDepartmentModal').modal('show');
     });
 

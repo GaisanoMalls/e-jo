@@ -17,7 +17,7 @@
                                     <div class="col-md-8">
                                         <div class="mb-2">
                                             <label for="name" class="form-label form__field__label">Name</label>
-                                            <input type="text" wire:model.defer="name" class="form-control form__field"
+                                            <input type="text" wire:model="name" class="form-control form__field"
                                                 id="name" placeholder="Enter help topic name">
                                             @error('name')
                                             <span class="error__message">
@@ -182,7 +182,7 @@
 
         if (serviceDepartmentId) {
             teamSelect.enable();
-            window.addEventListener('get-teams-from-selected-service-department', event => {
+            window.addEventListener('get-teams-from-selected-service-department', (event) => {
                 const teams = event.detail.teams;
                 const teamOption = [];
 
@@ -251,7 +251,7 @@
 
                 selectApproverContainer.insertAdjacentHTML('beforeend', html);
 
-                window.addEventListener('load-approvers', event => {
+                window.addEventListener('load-approvers', (event) => {
                     const levelOfApproverSelect = document.getElementById(`level_${i}_approver`);
                     const approvers = event.detail.approvers;
                     const approverOption = [];

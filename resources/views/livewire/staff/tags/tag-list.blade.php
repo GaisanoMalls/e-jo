@@ -76,7 +76,7 @@
                                 <div class="mb-2">
                                     <label for="name" class="form-label form__field__label">Name</label>
                                     <input type="text" class="form-control form__field" id="name"
-                                        placeholder="Enter tag name" wire:model.defer="name">
+                                        placeholder="Enter tag name" wire:model="name">
                                     @error('name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -140,16 +140,16 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event => {
+    window.addEventListener('close-modal', () => {
         $('#updateTagModal').modal('hide');
         $('#deleteTagModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-tag-modal', event => {
+    window.addEventListener('show-edit-tag-modal', () => {
         $('#updateTagModal').modal('show');
     });
 
-    window.addEventListener('show-delete-tag-modal', event => {
+    window.addEventListener('show-delete-tag-modal', () => {
         $('#deleteTagModal').modal('show');
     });
 </script>

@@ -15,7 +15,7 @@ class UpdateAgent extends Component
     use BasicModelQueries, Utils;
 
     public User $agent;
-    public $BUDepartments = [], $teams = [], $selectedTeams = [], $currentTeams = [];
+    public $BUDepartments = [], $teams = [], $currentTeams = [];
     public $first_name, $middle_name, $last_name, $suffix, $email, $branch, $bu_department, $service_department;
 
     public function mount(User $agent)
@@ -50,6 +50,16 @@ class UpdateAgent extends Component
         ];
     }
 
+    public function updatedBranch()
+    {
+        $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
+        $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
+        $this->dispatchBrowserEvent('get-branch-bu-departments-and-teams', [
+            'BUDepartments' => $this->BUDepartments,
+            'teams' => $this->teams
+        ]);
+    }
+
     public function updateAgentAccount()
     {
         $this->validate();
@@ -76,9 +86,7 @@ class UpdateAgent extends Component
                     ]))
                 ]);
 
-                $this->agent->teams()->sync(
-                    $this->getSelectedValue($this->teams)
-                );
+                $this->agent->teams()->sync($this->teams);
             });
 
             flash()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName()}.");

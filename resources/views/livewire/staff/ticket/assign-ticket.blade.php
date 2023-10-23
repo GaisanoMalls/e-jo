@@ -86,7 +86,7 @@
     });
     agentSelect.disable();
 
-    window.addEventListener('get-current-team-or-agent', event => {
+    window.addEventListener('get-current-team-or-agent', (event) => {
         teamSelect.setValue(event.detail.ticket.team_id);
     });
 
@@ -96,7 +96,7 @@
 
         if (teamId) {
             agentSelect.enable();
-            window.addEventListener('get-agents-from-team', event => {
+            window.addEventListener('get-agents-from-team', (event) => {
                 const agents = event.detail.agents;
                 const agentOption = [];
 

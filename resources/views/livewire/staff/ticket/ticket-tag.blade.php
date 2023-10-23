@@ -56,7 +56,7 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event => {
+    window.addEventListener('close-modal', () => {
         $('#ticketTagModal').modal('hide');
     });
 </script>

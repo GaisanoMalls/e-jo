@@ -25,7 +25,7 @@ App\Models\Status::DISAPPROVED)
 
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event => {
+    window.addEventListener('close-modal', () => {
         $('#closeTicketModal').modal('hide');
     });
 </script>

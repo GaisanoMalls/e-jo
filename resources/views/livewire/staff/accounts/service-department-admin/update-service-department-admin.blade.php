@@ -1,21 +1,22 @@
 <div>
-    @livewire('staff.accounts.requester.update-requester-password', ['user' => $user])
+    @livewire('staff.accounts.service-department-admin.update-service-dept-admin-password', ['serviceDeptAdmin' =>
+    $serviceDeptAdmin])
     <div class="row accounts__section justify-content-center">
         <div class="col-xxl-9 col-lg-12">
             <div class="card d-flex flex-column gap-2 users__account__card">
                 <div class="user__details__container d-flex flex-wrap mb-4 justify-content-between">
-                    <h6 class="card__title">Requester's Information</h6>
+                    <h6 class="card__title">Service Dept. Admin's Information</h6>
                     <small class="text-muted" style="font-size: 12px;">
                         Last updated:
-                        @if ($user->dateUpdated() > $user->profile->dateUpdated())
-                        {{ $user->dateUpdated() }}
+                        @if ($serviceDeptAdmin->dateUpdated() > $serviceDeptAdmin->profile->dateUpdated())
+                        {{ $serviceDeptAdmin->dateUpdated() }}
                         @else
-                        {{ $user->profile->dateUpdated() }}
+                        {{ $serviceDeptAdmin->profile->dateUpdated() }}
                         @endif
                     </small>
                 </div>
-                <form wire:submit.prevent="updateRequesterAccount">
-                    <input type="hidden" id="userID" value="{{ $user->id }}">
+                <form wire:submit.prevent="updateServiceDepartmentAdminAccount">
+                    <input type="hidden" id="serviceDeptAdminUserID" value="{{ $serviceDeptAdmin->id }}">
                     <div class="row gap-4 user__details__container">
                         <div class="col-12">
                             <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Profile</h6>
@@ -65,7 +66,7 @@
                                     <div class="mb-3">
                                         <label class="form-label form__field__label">Suffix</label>
                                         <div>
-                                            <div id="select-requester-suffix" wire:ignore></div>
+                                            <div id="select-service-dept-admin-suffix" wire:ignore></div>
                                         </div>
                                         @error('suffix')
                                         <span class="error__message">
@@ -110,7 +111,7 @@
                                     <div class="mb-3">
                                         <label class="form-label form__field__label">Branch</label>
                                         <div>
-                                            <div id="select-requester-branch" wire:ignore></div>
+                                            <div id="select-service-dept-admin-branch" wire:ignore></div>
                                         </div>
                                         @error('branch')
                                         <span class="error__message">
@@ -122,6 +123,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
+                                        <input type="hidden" value="{{ $serviceDeptAdmin->department_id }}"
+                                            id="serviceDeptAdminCurrentBUDepartmentId">
                                         <label for="branch" class="form-label form__field__label">
                                             BU/Department
                                             @if ($BUDepartments)
@@ -130,9 +133,26 @@
                                             @endif
                                         </label>
                                         <div>
-                                            <div id="select-requester-bu-department" wire:ignore></div>
+                                            <div id="select-service-dept-admin-bu-department" wire:ignore></div>
                                         </div>
                                         @error('bu_department')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="branch" class="form-label form__field__label">
+                                            Service Department
+                                        </label>
+                                        <div>
+                                            <div id="select-service-dept-admin-service-department" wire:ignore>
+                                            </div>
+                                        </div>
+                                        @error('service_departments')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}
@@ -146,13 +166,12 @@
                             <div class="d-flex align-items-center gap-2">
                                 <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"
                                     data-bs-dismiss="modal"
-                                    onclick="window.location.href='{{ route('staff.manage.user_account.users') }}'">Cancel</button>
-                                <button type="submit"
-                                    class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__details btn__send">
-                                    <span wire:loading wire:target="updateRequesterAccount"
+                                    onclick="window.location.href='{{ route('staff.manage.user_account.service_department_admins') }}'">Cancel</button>
+                                <button type="submit" class="btn m-0 btn__details btn__send">
+                                    <span wire:loading wire:target="updateServiceDepartmentAdminAccount"
                                         class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                                     </span>
-                                    Update
+                                    Save
                                 </button>
                             </div>
                         </div>
@@ -165,8 +184,8 @@
 
 @push('livewire-select')
 <script>
-    const requesterSuffixOption = [
-        @foreach ($requesterSuffixes as $suffix)
+    const serviceDeptAdminSuffixOption = [
+        @foreach ($serviceDeptAdminSuffixes as $suffix)
             {
                 label: "{{ $suffix->name }}",
                 value: "{{ $suffix->name }}"
@@ -174,88 +193,112 @@
         @endforeach
     ];
 
-    const requesterSuffixSelect = document.querySelector('#select-requester-suffix');
+    const serviceDeptAdminSuffixSelect = document.querySelector('#select-service-dept-admin-suffix');
     VirtualSelect.init({
-        ele: requesterSuffixSelect,
-        options: requesterSuffixOption,
+        ele: serviceDeptAdminSuffixSelect,
+        options: serviceDeptAdminSuffixOption,
         search: true,
         markSearchResults: true,
-        selectedValue: '{{ $user->profile->suffix }}'
+        selectedValue: '{{ $serviceDeptAdmin->profile->suffix }}'
     });
 
-    requesterSuffixSelect.addEventListener('change', () => {
-        @this.set('suffix', requesterSuffixSelect.value);
-    })
+    serviceDeptAdminSuffixSelect.addEventListener('change', () => {
+        @this.set('suffix', serviceDeptAdminSuffixSelect.value)
+    });
 
-    const requesterBranchOption = [
-        @foreach ($requesterBranches as $branch)
-            {
-                label: "{{ $branch->name }}",
-                value: "{{ $branch->id }}"
-            },
+    const serviceDeptAdminBranchOption = [
+        @foreach ($serviceDeptAdminBranches as $branch)
+        {
+            label: "{{ $branch->name }}",
+            value: "{{ $branch->id }}"
+        },
         @endforeach
     ];
 
-    const requesterBranchSelect = document.querySelector('#select-requester-branch');
+    const serviceDeptAdminBranchSelect = document.querySelector('#select-service-dept-admin-branch');
     VirtualSelect.init({
-        ele: requesterBranchSelect,
-        options: requesterBranchOption,
+        ele: serviceDeptAdminBranchSelect,
+        options: serviceDeptAdminBranchOption,
         search: true,
         markSearchResults: true,
-        selectedValue: "{{ $user->branch_id }}"
+        selectedValue: '{{ $serviceDeptAdmin->branch_id }}'
     });
 
-    const requesterBUDepartmentOption = [
-        @foreach ($requesterBUDepartments as $department)
-            {
-                label: "{{ $department->name }}",
-                value: "{{ $department->id }}"
-            },
-        @endforeach
-    ];
-
-    const requesterBUDepartmentSelect = document.querySelector('#select-requester-bu-department')
-    VirtualSelect.init({
-        ele: requesterBUDepartmentSelect,
-        options: requesterBUDepartmentOption,
-        search: true,
-        markSearchResults: true,
-        selectedValue: "{{ $user->department_id }}"
+    serviceDeptAdminBranchSelect.addEventListener('reset', () => {
+        serviceDeptAdminBUDepartmentSelect.reset();
+        serviceDeptAdminBUDepartmentSelect.disable();
+        serviceDeptAdminBUDepartmentSelect.setOptions([]);
     });
 
-    requesterBranchSelect.addEventListener('change', () => {
-        const requesterBranchId = requesterBranchSelect.value;
-        if (requesterBranchId) {
-            @this.set('branch', parseInt(requesterBranchId));
+    serviceDeptAdminBranchSelect.addEventListener('change', () => {
+        const serviceDeptAdminBranchId = serviceDeptAdminBranchSelect.value;
+        if (serviceDeptAdminBranchId) {
+            @this.set('branch', parseInt(serviceDeptAdminBranchId));
             window.addEventListener('get-branch-bu-departments', (event) => {
-                const requesterBUDepartments = event.detail.BUDepartments;
-                const requesterBUDepartmentOption = [];
+                const serviceDeptAdminBUDepartments = event.detail.BUDepartments;
+                const serviceDeptAdminBUDepartmentOption = [];
 
-                if (requesterBUDepartments.length > 0) {
-                        requesterBUDepartments.forEach(function (requesterBUDepartment) {
+                if (serviceDeptAdminBUDepartments.length > 0) {
+                     serviceDeptAdminBUDepartments.forEach(function (serviceDeptAdminBUDepartment) {
                         VirtualSelect.init({
-                            ele: requesterBUDepartmentSelect
+                            ele: serviceDeptAdminBUDepartmentSelect
                         });
 
-                        requesterBUDepartmentOption.push({
-                            label: requesterBUDepartment.name,
-                            value: requesterBUDepartment.id
+                        serviceDeptAdminBUDepartmentOption.push({
+                            label: serviceDeptAdminBUDepartment.name,
+                            value: serviceDeptAdminBUDepartment.id
                         });
                     });
-                    requesterBUDepartmentSelect.setOptions(requesterBUDepartmentOption);
-                } else {
-                    requesterBUDepartmentSelect.close();
-                    requesterBUDepartmentSelect.setOptions([]);
-                    requesterBUDepartmentSelect.disable();
+                    serviceDeptAdminBUDepartmentSelect.setOptions(serviceDeptAdminBUDepartmentOption);
                 }
-            });
+            })
         }
+    })
+
+     const serviceDeptAdminBUDepartmentOption = [
+        @foreach ($serviceDeptAdminBUDepartments as $department)
+        {
+            label: "{{ $department->name }}",
+            value: "{{ $department->id }}"
+        },
+        @endforeach
+    ];
+
+    const serviceDeptAdminBUDepartmentSelect = document.querySelector('#select-service-dept-admin-bu-department');
+    VirtualSelect.init({
+        ele: serviceDeptAdminBUDepartmentSelect,
+        options: serviceDeptAdminBUDepartmentOption,
+        search: true,
+        markSearchResults: true,
+        selectedValue: '{{ $serviceDeptAdmin->department_id }}'
     });
 
-    requesterBUDepartmentSelect.addEventListener('change', () => {
-        @this.set('bu_department', parseInt(requesterBUDepartmentSelect.value));
+    serviceDeptAdminBUDepartmentSelect.addEventListener('change', () => {
+        @this.set('bu_department', parseInt(serviceDeptAdminBUDepartmentSelect.value));
     });
 
+    const serviceDeptAdminServiceDepartmentOption = [
+        @foreach ($serviceDeptAdminServiceDepartments as $serviceDepartment)
+        {
+            label: "{{ $serviceDepartment->name }}",
+            value: "{{ $serviceDepartment->id }}"
+        },
+        @endforeach
+    ];
+
+    const serviceDeptAdminSeviceDepartmentSelect = document.querySelector('#select-service-dept-admin-service-department');
+    VirtualSelect.init({
+        ele: serviceDeptAdminSeviceDepartmentSelect,
+        options: serviceDeptAdminServiceDepartmentOption,
+        search: true,
+        multiple: true,
+        markSearchResults: true,
+        selectedValue: {{ json_encode($currentServiceDepartments) }}
+    });
+
+    serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', () => {
+        @this.set('service_departments', serviceDeptAdminSeviceDepartmentSelect.value);
+    });
 </script>
 @endpush
 

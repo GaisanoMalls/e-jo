@@ -79,7 +79,7 @@
                         <div class="row mb-2">
                             <div class="mb-2">
                                 <label for="name" class="form-label form__field__label">Name</label>
-                                <input type="text" wire:model.defer="name"
+                                <input type="text" wire:model="name"
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
                                     placeholder="Enter team name">
                                 @error('name')
@@ -216,20 +216,20 @@
     });
 
     // Clear all selected branches in the select option.
-    window.addEventListener('clear-select-options', event => {
+    window.addEventListener('clear-select-options', () => {
         editBranchSelect.reset();
         editServiceDepartmentSelect.reset();
     });
 
-    window.addEventListener('edit-current-service-department-id', event => {
+    window.addEventListener('edit-current-service-department-id', (event) => {
         editServiceDepartmentSelect.setValue(event.detail.serviceDepartmentId);
     });
 
-    window.addEventListener('edit-current-branch-ids', event => {
+    window.addEventListener('edit-current-branch-ids', (event) => {
         editBranchSelect.setValue(event.detail.branchIds);
     });
 
-    window.addEventListener('reset-select-options', event => {
+    window.addEventListener('reset-select-options', () => {
         editServiceDepartmentSelect.reset();
         editBranchSelect.reset();
     });
@@ -239,16 +239,16 @@
 {{-- Modal Scripts --}}
 @push('livewire-modal')
 <script>
-    window.addEventListener('close-modal', event => {
+    window.addEventListener('close-modal', () => {
         $('#editTeamModal').modal('hide');
         $('#deleteTeamModal').modal('hide');
     });
 
-    window.addEventListener('show-edit-team-modal', event => {
+    window.addEventListener('show-edit-team-modal', () => {
         $('#editTeamModal').modal('show');
     });
 
-    window.addEventListener('show-delete-team-modal', event => {
+    window.addEventListener('show-delete-team-modal', () => {
         $('#deleteTeamModal').modal('show');
     });
 </script>
