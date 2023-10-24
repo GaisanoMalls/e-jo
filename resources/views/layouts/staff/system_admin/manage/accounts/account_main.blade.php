@@ -19,27 +19,3 @@ Accounts
     @include('layouts.staff.system_admin.manage.accounts.includes.user')
 </div>
 @endsection
-
-@if ($errors->storeServiceDeptAdmin->any() || session()->has('empty_service_departments') ||
-session()->has('invalid_service_departments'))
-@push('modal-with-error')
-<script>
-    $(function () {
-        $('#addNewServiceDeptAdminModal').modal('show');
-    });
-
-</script>
-@endpush
-@endif
-
-@if ($errors->storeApprover->any() || session()->has('empty_branches') || session()->has('empty_bu_departments') ||
-session()->has('invalid_branches') || session()->has('invalid_bu_departments'))
-@push('modal-with-error')
-<script>
-    $(function () {
-        $('#addNewApproverModal').modal('show');
-    });
-
-</script>
-@endpush
-@endif

@@ -14,11 +14,21 @@
                     <div class="row mb-2">
                         <div class="col-md-12">
                             <div class="row">
+                                <div class="col-12 mb-3">
+                                    <div class="form-check" style="white-space: nowrap;">
+                                        <input class="form-check-input check__special__project" type="checkbox"
+                                            role="switch" id="specialProjectCheck">
+                                        <label class="form-check-label" for="specialProjectCheck">
+                                            Check if the help topic is a special project
+                                        </label>
+                                    </div>
+                                </div>
                                 <div class="col-md-8">
                                     <div class="mb-2">
-                                        <label for="name" class="form-label form__field__label">Name</label>
-                                        <input type="text" name="name" class="form-control form__field" id="name"
-                                            value="{{ old('name') }}" placeholder="Enter help topic name">
+                                        <label for="helpTopicName" class="form-label form__field__label">Name</label>
+                                        <input type="text" name="name" class="form-control form__field"
+                                            id="helpTopicName" value="{{ old('name') }}"
+                                            placeholder="Enter help topic name">
                                         @error('name', 'storeHelpTopic')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
@@ -93,34 +103,36 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <small class="fw-bold my-3">Approvals</small>
-                                <div class="col-md-4">
-                                    <div class="mb-2">
-                                        <label class="form-label form__field__label">
-                                            Level of approval
-                                        </label>
-                                        <select id="levelOfApproverDropdown" name="level_of_approval"
-                                            placeholder="Select (required)" data-search="false"
-                                            data-silent-initial-value-set="true">
-                                            <option value="" selected>N/A</option>
-                                            @foreach ($levelOfApprovals as $level)
-                                            <option value="{{ $level->id }}" {{ old('level_of_approval')==$level->id
-                                                ? 'selected' : '' }}>
-                                                {{ $level->description }}
-                                            </option>
-                                            @endforeach
-                                        </select>
-                                        @error('level_of_approval', 'storeHelpTopic')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                        @enderror
+                                <div class="mt-2" id="specialProjectContainer">
+                                    <small class="fw-bold my-3">Approvals</small>
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                            <label class="form-label form__field__label">
+                                                Level of approval
+                                            </label>
+                                            <select id="levelOfApproverDropdown" name="level_of_approval"
+                                                placeholder="Select (required)" data-search="false"
+                                                data-silent-initial-value-set="true">
+                                                <option value="" selected>N/A</option>
+                                                @foreach ($levelOfApprovals as $level)
+                                                <option value="{{ $level->id }}" {{ old('level_of_approval')==$level->id
+                                                    ? 'selected' : '' }}>
+                                                    {{ $level->description }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                            @error('level_of_approval', 'storeHelpTopic')
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="mb-2">
-                                        <div class="row" id="selectApproverContainer">
+                                    <div class="col-md-12">
+                                        <div class="mb-2">
+                                            <div class="row" id="selectApproverContainer">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

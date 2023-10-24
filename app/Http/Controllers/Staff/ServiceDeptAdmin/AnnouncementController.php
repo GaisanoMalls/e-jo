@@ -7,17 +7,11 @@ use App\Http\Requests\ServiceDeptAdmin\StoreAnnouncementRequest;
 use App\Http\Requests\ServiceDeptAdmin\UpdateAnnouncementRequest;
 use App\Models\Announcement;
 use App\Models\Department;
-use App\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AnnouncementController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth', Role::onlyServiceAndSystemAdmin()]);
-    }
-
     public function index()
     {
         $departments = Department::orderBy('name', 'asc')->get();
@@ -31,7 +25,7 @@ class AnnouncementController extends Controller
             ->get();
 
         return view(
-            'layouts.staff.system_admin.announcement.announcement_main',
+            'layouts.staff.announcement.announcement_main',
             compact([
                 'departments',
                 'today_announcements',

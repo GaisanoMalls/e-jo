@@ -14,8 +14,8 @@ Help Topics
 @section('manage-content')
 <div class="row gap-4">
     <div class="help__topics__section">
-        @include('layouts.staff.system_admin.manage.help_topics.includes.modal.add_helptopic_modal')
-        {{-- @livewire('staff.help-topic.create-help-topic') --}}
+        {{-- @include('layouts.staff.system_admin.manage.help_topics.includes.modal.add_helptopic_modal') --}}
+        @livewire('staff.help-topic.create-help-topic')
         <div class="col-12 content__container">
             <div class="card card__rounded__and__no__border">
                 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-1 table__header">

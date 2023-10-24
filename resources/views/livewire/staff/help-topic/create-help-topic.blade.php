@@ -14,11 +14,22 @@
                         <div class="row mb-2">
                             <div class="col-md-12">
                                 <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <div class="form-check" style="white-space: nowrap;">
+                                            <input wire:model="checked" wire:change="specialProject"
+                                                class="form-check-input check__special__project" type="checkbox"
+                                                role="switch" id="specialProjectCheck" wire:loading.attr="disabled">
+                                            <label class="form-check-label" for="specialProjectCheck">
+                                                Check if the help topic is a special project
+                                            </label>
+                                        </div>
+                                    </div>
                                     <div class="col-md-8">
                                         <div class="mb-2">
-                                            <label for="name" class="form-label form__field__label">Name</label>
+                                            <label for="specialProjectName"
+                                                class="form-label form__field__label">Name</label>
                                             <input type="text" wire:model="name" class="form-control form__field"
-                                                id="name" placeholder="Enter help topic name">
+                                                id="specialProjectName" placeholder="Enter help topic name">
                                             @error('name')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -51,7 +62,7 @@
                                             <div>
                                                 <div id="serviceDepartmentSelect" wire:ignore></div>
                                             </div>
-                                            @error('serviceDepartment')
+                                            @error('service_department')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -79,27 +90,29 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <small class="fw-bold my-3">Approvals</small>
-                                    <div class="col-md-4">
-                                        <div class="mb-2">
-                                            <label class="form-label form__field__label">
-                                                Level of approval
-                                            </label>
-                                            <div>
-                                                <div id="levelOfApprovalSelect" wire:ignore></div>
+                                    <div wire:ignore class="mt-2" id="specialProjectContainer">
+                                        <small class="fw-bold my-3">Approvals</small>
+                                        <div class="col-md-4">
+                                            <div class="mb-2">
+                                                <label class="form-label form__field__label">
+                                                    Level of approval
+                                                </label>
+                                                <div>
+                                                    <div id="levelOfApprovalSelect" wire:ignore></div>
+                                                </div>
+                                                @error('levelOfApproval')
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                                @enderror
                                             </div>
-                                            @error('levelOfApproval')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                            @enderror
                                         </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="mb-2">
-                                            <div>
-                                                <div wire:ignore class="row" id="selectApproverContainer">
+                                        <div class="col-md-12">
+                                            <div class="mb-2">
+                                                <div>
+                                                    <div wire:ignore class="row" id="selectApproverContainer">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -118,7 +131,7 @@
                                 Add new
                             </button>
                             <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
-                                data-bs-dismiss="modal">
+                                data-bs-dismiss="modal" wire:click="cancel">
                                 Cancel
                             </button>
                         </div>
@@ -129,13 +142,52 @@
     </div>
 </div>
 
+@push('extra')
+<script>
+    const specialProjectContainer = document.getElementById('specialProjectContainer');
+    const specialProjectCheck = document.getElementById('specialProjectCheck');
+    const specialProjectName = document.getElementById('specialProjectName');
+
+    if (specialProjectCheck && specialProjectContainer) {
+        specialProjectContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
+        const name = 'Special Project';
+
+        specialProjectCheck.addEventListener('change', function () {
+            if (specialProjectCheck.checked) {
+                window.addEventListener('show-special-project-container', () => {
+                    specialProjectContainer.style.display = 'block';
+                    specialProjectName.value = name;
+                    @this.set('name', name);
+                });
+            } else {
+                window.addEventListener('hide-special-project-container', () => {
+                    specialProjectContainer.style.display = 'none';
+                    specialProjectName.value = null;
+                    @this.set('name', null);
+                });
+            }
+        });
+
+        window.addEventListener('checkAndShowContainer', () => {
+            specialProjectCheck.checked = true;
+            specialProjectContainer.style.display = 'block';
+        });
+
+        window.addEventListener('checkAndHideContainer', () => {
+            specialProjectCheck.checked = false;
+            specialProjectContainer.style.display = 'none';
+        });
+    }
+</script>
+@endpush
+
 @push('livewire-select')
 <script>
     const serviceLevelAgreementOption = [
         @foreach ($serviceLevelAgreements as $sla)
         {
             label: "{{ $sla->time_unit }}",
-            value: "{{ $sla->countdown_approach }}"
+            value: "{{ $sla->id }}"
         },
         @endforeach
     ];
@@ -148,8 +200,8 @@
         markSearchResults: true,
     });
     slaSelect.addEventListener('change', () => {
-        @this.set('sla', slaSelect.value);
-    })
+        @this.set('sla', parseInt(slaSelect.value));
+    });
 
     const serviceDepartmentOption = [
         @foreach ($serviceDepartments as $serviceDepartment)
@@ -178,9 +230,9 @@
 
     serviceDepartmentSelect.addEventListener('change', () => {
         const serviceDepartmentId = serviceDepartmentSelect.value;
-        @this.set('serviceDepartment', serviceDepartmentId);
 
         if (serviceDepartmentId) {
+            @this.set('service_department', serviceDepartmentId);
             teamSelect.enable();
             window.addEventListener('get-teams-from-selected-service-department', (event) => {
                 const teams = event.detail.teams;
@@ -235,7 +287,7 @@
 
 
         if (levelOfApproval) {
-            @this.set('levelOfApproval', levelOfApproval);
+            @this.set('level_of_approval', levelOfApproval);
             for (let i = 1; i <= levelOfApproval; i++) {
                 const html = `
                     <div class="col-md-6">
@@ -282,6 +334,21 @@
                 });
             }
         }
+    });
+</script>
+@endpush
+
+@push('livewire-modal')
+<script>
+    window.addEventListener('close-modal', () => {
+        serviceDepartmentSelect.reset();
+        slaSelect.reset();
+        teamSelect.reset();
+        teamSelect.disable();
+        teamSelect.setOptions([]);
+
+        @this.set('name', null);
+        specialProjectContainer.style.display = 'none';
     });
 </script>
 @endpush

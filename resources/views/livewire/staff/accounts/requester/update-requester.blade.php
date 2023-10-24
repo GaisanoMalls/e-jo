@@ -205,6 +205,14 @@
         selectedValue: "{{ $user->branch_id }}"
     });
 
+    requesterBranchSelect.addEventListener('reset', () => {
+        @this.set('branch', null);
+        @this.set('bu_department', null);
+        requesterBUDepartmentSelect.reset();
+        requesterBUDepartmentSelect.disable();
+        requesterBUDepartmentSelect.setOptions([]);
+    });
+
     const requesterBUDepartmentOption = [
         @foreach ($requesterBUDepartments as $department)
             {
@@ -227,6 +235,7 @@
         const requesterBranchId = requesterBranchSelect.value;
         if (requesterBranchId) {
             @this.set('branch', parseInt(requesterBranchId));
+            requesterBUDepartmentSelect.enable();
             window.addEventListener('get-branch-bu-departments', (event) => {
                 const requesterBUDepartments = event.detail.BUDepartments;
                 const requesterBUDepartmentOption = [];

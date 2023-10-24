@@ -32,6 +32,12 @@ class UpdateServiceDepartmentAdmin extends Component
         $this->currentServiceDepartments = $serviceDeptAdmin->serviceDepartments->pluck('id')->toArray();
     }
 
+    public function updatedBranch()
+    {
+        $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
+        $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
+    }
+
     public function rules()
     {
         return [

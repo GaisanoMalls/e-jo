@@ -18,7 +18,7 @@ class CreateAnnouncementsTable extends Migration
         Schema::create('announcements', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(ServiceDepartment::class, 'service_department_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Team::class, 'team_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Team::class, 'team_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->longText('description');
             $table->boolean('is_important')->default(false);

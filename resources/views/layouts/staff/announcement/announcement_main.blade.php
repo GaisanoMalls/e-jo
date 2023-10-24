@@ -12,13 +12,13 @@
 @endsection
 
 @section('main-content')
-    @include('layouts.staff.system_admin.announcement.includes.modal.add_announcement_modal_form')
+    @include('layouts.staff.announcement.includes.modal.add_announcement_modal_form')
     <div class="row mt-3 announcement__section">
         <div class="col-xxl-2 col-lg-2 col-md-3 col-12">
-            @include('layouts.staff.system_admin.announcement.includes.announcement_tab')
+            @include('layouts.staff.announcement.includes.announcement_tab')
         </div>
         <div class="col-xxl-10 col-lg-10 col-md-9 col-12">
-            @include('layouts.staff.system_admin.announcement.includes.announcement_card')
+            @include('layouts.staff.announcement.includes.announcement_card')
         </div>
     </div>
 @endsection

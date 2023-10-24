@@ -3,17 +3,9 @@
 namespace App\Http\Controllers\Staff\SysAdmin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SysAdmin\Manage\Account\StoreAgenRequest;
-use App\Http\Requests\SysAdmin\Manage\Account\UpdateAgenRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
-use App\Models\Branch;
-use App\Models\Profile;
-use App\Models\Role;
-use App\Models\Team;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class AccountAgentController extends Controller
 {

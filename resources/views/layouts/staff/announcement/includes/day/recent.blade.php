@@ -8,8 +8,8 @@
         </div>
     </div>
     @foreach ($recent_announcements as $announcement)
-    @include('layouts.staff.system_admin.announcement.includes.modal.confirm_delete_announcement')
-    @include('layouts.staff.system_admin.announcement.includes.modal.edit_announcement_modal_form')
+    @include('layouts.staff.announcement.includes.modal.confirm_delete_announcement')
+    @include('layouts.staff.announcement.includes.modal.edit_announcement_modal_form')
     <div class="row mb-3">
         <div class="col-xxl-1 col-lg-2 col-md-2 col-3">
             <div class="day__year d-flex flex-column">

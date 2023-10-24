@@ -106,17 +106,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 // Approver Routes
                 Route::prefix('approver')->name('approver.')->group(function () {
                     Route::controller(AccountApproverController::class)->group(function () {
-                        Route::post('/store', 'store')->name('store');
-                        Route::delete('/{approver}/delete', 'delete')->name('delete');
-                        Route::put('/{approver}/update', 'update')->name('update');
                         Route::get('/{approver}/view-details', 'viewDetails')->name('view_details');
                         Route::get('/{approver}/edit-details', 'editDetails')->name('edit_details');
-
-                        // Axios endpoints
-                        // (For create approver)
-                        Route::get('/{branch}/bu-departments', 'branchDepartments');
-                        // (For Edit approver)
-                        Route::get('/edit/{branch}/bu-departments', 'branchDepartments');
                     });
                     Route::controller(UpdatePasswordController::class)->group(function () {
                         Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
@@ -125,17 +116,8 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                 // Department Admin Routes
                 Route::prefix('service-department-admin')->name('service_department_admin.')->group(function () {
                     Route::controller(AccountServiceDeptAdminController::class)->group(function () {
-                        Route::post('/store', 'store')->name('store');
-                        Route::delete('/{serviceDeptAdmin}/delete', 'delete')->name('delete');
-                        Route::put('/{serviceDeptAdmin}/update', 'update')->name('update');
                         Route::get('/{serviceDeptAdmin}/view-details', 'viewDetails')->name('view_details');
                         Route::get('/{serviceDeptAdmin}/edit-details', 'editDetails')->name('edit_details');
-
-                        // Axios endpoints
-                        // For create service department admin
-                        Route::get('/{branch}/bu-departments', 'branchBUDepartments');
-                        // For edit service department admin
-                        Route::get('/edit/{branch}/bu-departments', 'branchBUDepartments');
                     });
                 });
                 // Agent Routes

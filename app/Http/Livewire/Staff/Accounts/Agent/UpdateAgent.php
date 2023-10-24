@@ -15,7 +15,7 @@ class UpdateAgent extends Component
     use BasicModelQueries, Utils;
 
     public User $agent;
-    public $BUDepartments = [], $teams = [], $currentTeams = [];
+    public $BUDepartments = [], $teams = [], $currentTeams = [], $selectedTeams = [];
     public $first_name, $middle_name, $last_name, $suffix, $email, $branch, $bu_department, $service_department;
 
     public function mount(User $agent)
@@ -29,7 +29,6 @@ class UpdateAgent extends Component
         $this->branch = $agent->branch_id;
         $this->bu_department = $agent->department_id;
         $this->service_department = $agent->service_department_id;
-        $this->teams = $agent->teams->pluck('id')->toArray();
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->currentTeams = $agent->teams->pluck('id')->toArray();
@@ -40,13 +39,20 @@ class UpdateAgent extends Component
         return [
             'branch' => 'required',
             'bu_department' => 'required',
-            'teams' => 'required',
+            'selectedTeams' => 'required',
             'service_department' => 'required',
             'first_name' => 'required|min:2|max:100',
             'middle_name' => 'nullable|min:2|max:100',
             'last_name' => 'required|min:2|max:100',
             'suffix' => 'nullable|min:1|max:4',
             'email' => "required|max:80|unique:users,email,{$this->agent->id}"
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'selectedTeams.required' => 'Teams field is required.'
         ];
     }
 
@@ -86,7 +92,7 @@ class UpdateAgent extends Component
                     ]))
                 ]);
 
-                $this->agent->teams()->sync($this->teams);
+                $this->agent->teams()->sync($this->selectedTeams);
             });
 
             flash()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName()}.");

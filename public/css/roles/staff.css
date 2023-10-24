@@ -9816,6 +9816,9 @@ input[type=checkbox]:checked + .form-check-label {
   font-size: 0.75rem;
   font-weight: 400;
 }
+.help__topics__section .check__special__project {
+  margin-right: 10px !important;
+}
 
 .sla__section .table__header {
   padding: 20px 30px !important;

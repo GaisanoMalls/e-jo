@@ -57,6 +57,7 @@
     @stack('livewire-modal')
     @stack('livewire-textarea')
     @stack('modal-with-error')
+    @stack('extra')
     <script>
         var table = document.getElementById('table');
         var options = {

@@ -20,9 +20,9 @@
     </div>
     <div class="announcement__card__list d-flex flex-column">
         <div class="w-100 d-flex flex-column gap-4">
-            @include('layouts.staff.system_admin.announcement.includes.day.today')
-            @include('layouts.staff.system_admin.announcement.includes.day.yesterday')
-            @include('layouts.staff.system_admin.announcement.includes.day.recent')
+            @include('layouts.staff.announcement.includes.day.today')
+            @include('layouts.staff.announcement.includes.day.yesterday')
+            @include('layouts.staff.announcement.includes.day.recent')
         </div>
     </div>
 </div>

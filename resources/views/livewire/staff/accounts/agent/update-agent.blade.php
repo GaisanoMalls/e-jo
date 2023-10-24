@@ -154,7 +154,7 @@
                                         <div>
                                             <div id="select-agent-team" wire:ignore></div>
                                         </div>
-                                        @error('teams')
+                                        @error('selectedTeams')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}
@@ -239,10 +239,25 @@
         selectedValue: '{{ $agent->branch_id }}'
     });
 
+    agentBranchSelect.addEventListener('reset', () => {
+        @this.set('branch', null);
+        @this.set('bu_department', null);
+        @this.set('selectedTeams', []);
+        agentBUDepartmentSelect.reset();
+        agentTeamSelect.reset();
+        agentBUDepartmentSelect.disable();
+        agentTeamSelect.disable();
+        agentTeamSelect.setOptions([]);
+        agentBUDepartmentSelect.setOptions([]);
+
+    });
+
     agentBranchSelect.addEventListener('change', () => {
         const agentBranchId = agentBranchSelect.value;
         if (agentBranchId) {
             @this.set('branch', parseInt(agentBranchId));
+            agentBUDepartmentSelect.enable();
+            agentTeamSelect.enable();
             window.addEventListener('get-branch-bu-departments-and-teams', (event) => {
                 const agentBUDepartments = event.detail.BUDepartments;
                 const agentTeams = event.detail.teams;
@@ -300,6 +315,10 @@
         selectedValue: '{{ $agent->department_id }}'
     });
 
+    agentBUDepartmentSelect.addEventListener('change', () => {
+        @this.set('bu_department', parseInt(agentBUDepartmentSelect.value));
+    });
+
     const agentTeamOption = [
         @foreach ($agentTeams as $team)
             {
@@ -317,6 +336,10 @@
         multiple: true,
         markSearchResults: true,
         selectedValue: {{ json_encode($currentTeams) }}
+    });
+
+    agentTeamSelect.addEventListener('change', () => {
+        @this.set('selectedTeams', agentTeamSelect.value);
     });
 
     const agentServiceDepartmentOption = [
@@ -337,19 +360,9 @@
         selectedValue: '{{ $agent->service_department_id }}'
     });
 
-    // Set value of the property
-    agentBUDepartmentSelect.addEventListener('change', () => {
-        @this.set('bu_department', parseInt(agentBUDepartmentSelect.value));
-    });
-
-    agentTeamSelect.addEventListener('change', () => {
-        @this.set('teams', agentTeamSelect.value);
-    });
-
-    agentServiceDepartmentSelect.addEventListener('change', () => {
+      agentServiceDepartmentSelect.addEventListener('change', () => {
         @this.set('service_department', parseInt(agentServiceDepartmentSelect.value));
     });
-
 </script>
 @endpush
 
