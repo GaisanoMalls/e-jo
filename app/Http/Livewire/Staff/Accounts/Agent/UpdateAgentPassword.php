@@ -3,14 +3,12 @@
 namespace App\Http\Livewire\Staff\Accounts\Agent;
 
 use App\Http\Requests\SysAdmin\Manage\Account\UpdatePasswordRequest;
-use App\Http\Traits\SysAdmin\UserAccountConfig;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 
 class UpdateAgentPassword extends Component
 {
-    use UserAccountConfig;
-
     public User $agent;
     public $new_password, $confirm_password;
 
@@ -37,7 +35,7 @@ class UpdateAgentPassword extends Component
         $this->validate();
 
         try {
-            $this->updateUserPassword($agent, $this->new_password, $this->confirm_password);
+            $agent->update(['password' => Hash::make($this->new_password)]);
             $this->actionOnSubmit();
             flash()->addSuccess('Password has been updated.');
 

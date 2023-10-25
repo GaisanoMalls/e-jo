@@ -4,25 +4,9 @@ namespace App\Http\Traits;
 
 use App\Models\Role;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 trait Utils
 {
-    /**
-     * Validate Login Credentials
-     * Method: validateLoginCrendentials()
-     */
-    public function validateLoginCrendentials(Request $request, string $field1, string $field2)
-    {
-        $validator = Validator::make($request->all(), [
-            $field1 => ['required', 'email'],
-            $field2 => ['required']
-        ]);
-
-        return $validator->validate();
-    }
-
     /**
      * Timestamps
      * Methods:

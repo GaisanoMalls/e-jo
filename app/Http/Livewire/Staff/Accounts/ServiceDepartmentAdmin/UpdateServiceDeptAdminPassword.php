@@ -3,14 +3,11 @@
 namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 
 use App\Http\Requests\SysAdmin\Manage\Account\UpdatePasswordRequest;
-use App\Http\Traits\SysAdmin\UserAccountConfig;
 use App\Models\User;
 use Livewire\Component;
 
 class UpdateServiceDeptAdminPassword extends Component
 {
-    use UserAccountConfig;
-
     public User $serviceDeptAdmin;
     public $new_password, $confirm_password;
 
@@ -37,7 +34,7 @@ class UpdateServiceDeptAdminPassword extends Component
         $this->validate();
 
         try {
-            $this->updateUserPassword($serviceDeptAdmin, $this->new_password, $this->confirm_password);
+            $serviceDeptAdmin->update(['password' => $this->new_password]);
             $this->actionOnSubmit();
             flash()->addSuccess('Password has been updated.');
 

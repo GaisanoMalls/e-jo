@@ -40,15 +40,20 @@ class CreateHelpTopic extends Component
                     'slug' => \Str::slug($this->name)
                 ]);
 
-                for ($level = 1; $level <= (int) $this->level_of_approval; $level++) {
-                    $helpTopic->levels()->attach($level);
+                if ($this->checked) {
+                    $levelOfApproval = (int) $this->level_of_approval;
+                    if ($levelOfApproval) {
+                        for ($level = 1; $level <= $levelOfApproval; $level++) {
+                            $helpTopic->levels()->attach($level);
 
-                    foreach ($this->levelApprovers as $approver) {
-                        LevelApprover::create([
-                            'level_id' => $level,
-                            'user_id' => $approver,
-                            'help_topic_id' => $helpTopic->id
-                        ]);
+                            foreach ($this->levelApprovers as $approver) {
+                                LevelApprover::create([
+                                    'level_id' => $level,
+                                    'user_id' => $approver,
+                                    'help_topic_id' => $helpTopic->id
+                                ]);
+                            }
+                        }
                     }
                 }
             });
@@ -73,11 +78,10 @@ class CreateHelpTopic extends Component
 
     public function updatedName()
     {
-        if ($this->name === 'Special Project' || $this->name === 'special project') {
-            $this->dispatchBrowserEvent('checkAndShowContainer');
-        } else {
-            $this->dispatchBrowserEvent('checkAndHideContainer');
-        }
+        ($this->name === 'Special Project' || $this->name === 'special project')
+            ? $this->dispatchBrowserEvent('checkAndShowContainer')
+            : $this->dispatchBrowserEvent('checkAndHideContainer');
+
     }
 
     public function showSpecialProjectContainer()
@@ -92,7 +96,9 @@ class CreateHelpTopic extends Component
 
     public function specialProject()
     {
-        ($this->checked) ? $this->showSpecialProjectContainer() : $this->hideSpecialProjectContainer();
+        ($this->checked)
+            ? $this->showSpecialProjectContainer()
+            : $this->hideSpecialProjectContainer();
     }
 
     public function cancel()

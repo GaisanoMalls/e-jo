@@ -5,7 +5,6 @@ namespace App\Http\Traits;
 use App\Models\ApprovalLevel;
 use App\Models\Branch;
 use App\Models\Department;
-use App\Models\HelpTopic;
 use App\Models\PriorityLevel;
 use App\Models\Role;
 use App\Models\ServiceDepartment;

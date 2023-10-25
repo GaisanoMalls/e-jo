@@ -274,7 +274,7 @@
 
     branchSelect.addEventListener('change', () => {
         @this.set('branch', parseInt(branchSelect.value));
-    })
+    });
 
     const selectOtherBranch = document.querySelector('#checkOtherBranch');
     const userCreateTicketBranchSelectionContainer = document.querySelector('#userCreateTicketBranchSelectionContainer');
@@ -298,7 +298,7 @@
                 selectOtherBranch.checked = false;
                 userCreateTicketBranchSelectionContainer.style.display = 'none';
             }
-        })
+        });
     }
 
     window.addEventListener('clear-select-dropdown', () => {
@@ -312,23 +312,30 @@
             selectOtherBranch.checked = false;
             userCreateTicketBranchSelectionContainer.style.display = 'none';
         }
-    })
-
+    });
 </script>
 @endpush
 
 
 @push('livewire-modal')
 <script>
+    const refreshServiceDepartmentOption = [
+        @foreach ($serviceDepartments as $serviceDepartment)
+            {
+                label: "{{ $serviceDepartment->name }}",
+                value: "{{ $serviceDepartment->id }}"
+            },
+        @endforeach
+    ];
     window.addEventListener('close-modal', () =>{
         $('#createTicketModal').modal('hide');
-    });
-
-    window.addEventListener('reload-modal', () =>{
         tinymce.get("createTicketDescription").setContent("");
         serviceDepartmentSelect.reset();
         helpTopicSelect.reset();
         branchSelect.reset();
+        helpTopicSelect.disable();
+        helpTopicSelect.setOptions([]);
+
     });
 </script>
 @endpush

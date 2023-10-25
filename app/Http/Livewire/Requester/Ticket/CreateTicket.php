@@ -67,7 +67,6 @@ class CreateTicket extends Component
         $this->emit('loadDashboard');
         $this->emit('loadTicketTab');
         $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('reload-modal');
         $this->dispatchBrowserEvent('clear-branch-dropdown-select');
     }
 
@@ -130,7 +129,7 @@ class CreateTicket extends Component
 
                 // Email the first approver (Service Department Admin)
                 $serviceDepartmentAdmin = User::whereHas('role', fn($query) => $query->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
-                    ->whereHas('branch', fn($query) => $query->where('branch_id', $ticket->branch_id))
+                    // ->whereHas('branch', fn($query) => $query->where('branch_id', $ticket->branch_id))
                     ->whereHas('department', fn($query) => $query->where('department_id', $ticket->user->department_id))
                     ->withWhereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $ticket->service_department_id))->first();
 

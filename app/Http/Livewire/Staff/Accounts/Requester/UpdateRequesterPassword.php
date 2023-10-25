@@ -3,14 +3,11 @@
 namespace App\Http\Livewire\Staff\Accounts\Requester;
 
 use App\Http\Requests\SysAdmin\Manage\Account\UpdatePasswordRequest;
-use App\Http\Traits\SysAdmin\UserAccountConfig;
 use App\Models\User;
 use Livewire\Component;
 
 class UpdateRequesterPassword extends Component
 {
-    use UserAccountConfig;
-
     public User $user;
     public $new_password, $confirm_password;
 
@@ -37,7 +34,7 @@ class UpdateRequesterPassword extends Component
         $this->validate();
 
         try {
-            $this->updateUserPassword($user, $this->new_password, $this->confirm_password);
+            $user->update(['user' => $this->new_password]);
             $this->actionOnSubmit();
             flash()->addSuccess('Password has been updated.');
 

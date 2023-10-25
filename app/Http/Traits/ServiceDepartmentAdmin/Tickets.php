@@ -3,11 +3,8 @@
 namespace App\Http\Traits\ServiceDepartmentAdmin;
 
 use App\Models\ApprovalStatus;
-use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 trait Tickets
 {
@@ -54,11 +51,10 @@ trait Tickets
             $statusQuery->where('status_id', Status::OPEN)
                 ->where('approval_status', ApprovalStatus::FOR_APPROVAL);
         })->where(function ($byUserQuery) {
-            $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
+            // $byUserQuery->where('branch_id', auth()->user()->branch_id)
+            $byUserQuery->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                 ->whereHas('user', fn($query) => $query->where('users.department_id', auth()->user()->department_id));
         })->orderBy('created_at', 'desc')->get();
-
     }
 
     public function serviceDeptAdminGetClaimedTickets()

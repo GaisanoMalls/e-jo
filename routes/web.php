@@ -23,7 +23,6 @@ use App\Http\Controllers\Staff\SysAdmin\SLAController;
 use App\Http\Controllers\Staff\SysAdmin\TagController;
 use App\Http\Controllers\Staff\SysAdmin\TeamController;
 use App\Http\Controllers\Staff\SysAdmin\TicketStatusController;
-use App\Http\Controllers\Staff\SysAdmin\UpdatePasswordController;
 use App\Http\Controllers\Staff\TicketController as StaffTicketController;
 use App\Http\Controllers\User\AccountController as UserAccountSettingsController;
 use App\Http\Controllers\User\Dashboard as UserDashboardController;
@@ -109,9 +108,6 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                         Route::get('/{approver}/view-details', 'viewDetails')->name('view_details');
                         Route::get('/{approver}/edit-details', 'editDetails')->name('edit_details');
                     });
-                    Route::controller(UpdatePasswordController::class)->group(function () {
-                        Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
-                    });
                 });
                 // Department Admin Routes
                 Route::prefix('service-department-admin')->name('service_department_admin.')->group(function () {
@@ -125,9 +121,6 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
                     Route::controller(AccountAgentController::class)->group(function () {
                         Route::get('/{agent}/view-details', 'viewDetails')->name('view_details');
                         Route::get('/{agent}/edit-details', 'editDetails')->name('edit_details');
-                    });
-                    Route::controller(UpdatePasswordController::class)->group(function () {
-                        Route::put('/{user}/update-password', 'updatePassword')->name('update_password');
                     });
                 });
                 // User/Requester Routes

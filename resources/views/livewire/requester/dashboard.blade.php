@@ -67,7 +67,7 @@
             onclick="window.location.href='{{ route('user.tickets.claimed_tickets') }}'">
             <div class="d-flex align-items-center justify-content-start gap-4 card__content">
                 <div class="d-flex align-items-center justify-content-center icon__container">
-                    <i class="fa-solid fa-thumbs-down"></i>
+                    <i class="fa-solid fa-list-check"></i>
                 </div>
                 <div class="d-flex flex-column">
                     <p class="mb-0 ticket__count">{{ $claimedTickets->count() }}</p>
