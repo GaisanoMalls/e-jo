@@ -45,7 +45,7 @@ class TicketActivityLogs extends Component
             $this->ticketLogs = $this->ticket->activityLogs;
         } elseif ($this->isMyLogsOnly) {
             $this->ticketLogs = ActivityLog::where('ticket_id', $this->ticket->id)
-                ->where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')
+                ->where('user_id', auth()->user()->id)->orderByDesc('created_at')
                 ->get();
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Requester\Notification;
 
+use App\Models\Ticket;
 use Livewire\Component;
 
 class NotificationList extends Component
@@ -30,8 +31,11 @@ class NotificationList extends Component
 
     public function render()
     {
+        $notifications = auth()->user()->notifications->filter(
+            fn($notification) => Ticket::where('id', data_get($notification->data, 'ticket.id'))->exists()
+        );
         return view('livewire.requester.notification.notification-list', [
-            'userNotifications' => auth()->user()->notifications()->latest()->get(),
+            'userNotifications' => $notifications
         ]);
     }
 }

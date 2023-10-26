@@ -18,7 +18,7 @@ class LatestReply extends Component
     {
         $this->latestReply = Reply::where('ticket_id', $this->ticket->id)
             ->where('user_id', '!=', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->first();
 
         return view('livewire.staff.ticket.latest-reply');

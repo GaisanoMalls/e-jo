@@ -40,7 +40,7 @@ class RequesterList extends Component
     {
         return User::with(['department', 'branch'])
             ->whereHas('role', fn($user) => $user->where('role_id', Role::USER))
-            ->orderBy('created_at', 'desc')->get();
+            ->orderByDesc('created_at')->get();
     }
 
     public function render()
@@ -48,12 +48,12 @@ class RequesterList extends Component
         $this->users = (Route::is('staff.manage.user_account.index'))
             ? User::with(['profile', 'department', 'branch'])
                 ->whereHas('role', fn($user) => $user->where('role_id', Role::USER))
-                ->take(5)->orderBy('created_at', 'desc')->get()
+                ->take(5)->orderByDesc('created_at')->get()
             : (
                 (Route::is('staff.manage.user_account.users'))
                 ? User::with(['profile', 'department', 'branch'])
                     ->whereHas('role', fn($user) => $user->where('role_id', Role::USER))
-                    ->orderBy('created_at', 'desc')->get()
+                    ->orderByDesc('created_at')->get()
                 : $this->getInitialQuery()
             );
 

@@ -41,7 +41,7 @@ class ApproverTicketsController extends Controller
     {
         $latestClarification = Clarification::whereHas('ticket', fn($query) => $query->where('ticket_id', $ticket->id))
             ->whereHas('user', fn($user) => $user->where('user_id', '!=', auth()->user()->id))
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->first();
 
         return view(

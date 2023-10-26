@@ -17,11 +17,11 @@ class AnnouncementController extends Controller
         $departments = Department::orderBy('name', 'asc')->get();
         $annnouncements = Announcement::query();
 
-        $today_announcements = $annnouncements->whereDate('created_at', Carbon::today()->toDateString())->orderBy('created_at', 'desc')->get();
-        $yesterday_announcements = $annnouncements->whereDate('created_at', Carbon::yesterday()->toDateString())->orderBy('created_at', 'desc')->get();
+        $today_announcements = $annnouncements->whereDate('created_at', Carbon::today()->toDateString())->orderByDesc('created_at')->get();
+        $yesterday_announcements = $annnouncements->whereDate('created_at', Carbon::yesterday()->toDateString())->orderByDesc('created_at')->get();
         $recent_announcements = $annnouncements->whereDate('created_at', '!=', Carbon::today()->toDateString())
             ->whereDate('created_at', '!=', Carbon::yesterday()->toDateString())
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
 
         return view(

@@ -95,7 +95,7 @@ class TicketController extends Controller
 
         $latestReply = Reply::where('ticket_id', $ticket->id)
             ->where('user_id', '!=', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->first();
 
         return view(

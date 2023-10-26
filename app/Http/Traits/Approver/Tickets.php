@@ -24,7 +24,7 @@ trait Tickets
         })->withWhereHas('user.department', function ($department) {
             $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -41,7 +41,7 @@ trait Tickets
         })->withWhereHas('user.department', function ($department) {
             $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -58,7 +58,7 @@ trait Tickets
         })->withWhereHas('user.department', function ($department) {
             $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -75,7 +75,7 @@ trait Tickets
         })->withWhereHas('user.department', function ($department) {
             $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -92,7 +92,7 @@ trait Tickets
         })->withWhereHas('user.department', function ($department) {
             $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -109,7 +109,7 @@ trait Tickets
         })->withWhereHas('user.department', function ($department) {
             $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 }

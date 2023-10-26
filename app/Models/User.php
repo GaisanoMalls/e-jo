@@ -259,7 +259,7 @@ class User extends Authenticatable
     {
         return self::with(['profile', 'branch'])
             ->whereHas('role', fn($systemAdmin) => $systemAdmin->where('role_id', Role::SYSTEM_ADMIN))
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -267,7 +267,7 @@ class User extends Authenticatable
     {
         return self::with(['profile', 'serviceDepartment'])
             ->whereHas('role', fn($serviceDepartmentAdmin) => $serviceDepartmentAdmin->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -275,7 +275,7 @@ class User extends Authenticatable
     {
         return self::with(['profile', 'branch'])
             ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -283,7 +283,7 @@ class User extends Authenticatable
     {
         return self::with(['profile', 'branch'])
             ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -291,7 +291,7 @@ class User extends Authenticatable
     {
         return self::with(['profile', 'department', 'branch'])
             ->whereHas('role', fn($requester) => $requester->where('role_id', Role::USER))
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 

@@ -14,7 +14,7 @@ trait Tickets
             $statusQuery->where('status_id', Status::APPROVED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -24,7 +24,7 @@ trait Tickets
             $statusQuery->where('status_id', Status::DISAPPROVED)
                 ->where('approval_status', ApprovalStatus::DISAPPROVED);
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -34,7 +34,7 @@ trait Tickets
             $statusQuery->where('status_id', Status::OPEN)
                 ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -45,7 +45,7 @@ trait Tickets
                 ->where('approval_status', ApprovalStatus::APPROVED)
                 ->whereNotNull('agent_id');
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -55,7 +55,7 @@ trait Tickets
             $statusQuery->where('status_id', Status::ON_PROCESS)
                 ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -65,7 +65,7 @@ trait Tickets
             $statusQuery->where('status_id', Status::VIEWED)
                 ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -75,7 +75,7 @@ trait Tickets
             $statusQuery->where('status_id', Status::OVERDUE)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -85,7 +85,7 @@ trait Tickets
             $statusQuery->where('status_id', Status::CLOSED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 }

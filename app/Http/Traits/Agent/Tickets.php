@@ -18,7 +18,7 @@ trait Tickets
                 ->where('service_department_id', auth()->user()->service_department_id);
         })
             ->whereIn('team_id', auth()->user()->teams->pluck('id'))
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
 
         return $openTickets;
@@ -34,7 +34,7 @@ trait Tickets
                 ->where('agent_id', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branch_id)
                 ->where('service_department_id', auth()->user()->service_department_id);
-        })->orderBy('created_at', 'desc')
+        })->orderByDesc('created_at')
             ->get();
 
         return $claimedTickets;
@@ -49,7 +49,7 @@ trait Tickets
             $byUserQuery->where('agent_id', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branch_id)
                 ->where('service_department_id', auth()->user()->service_department_id);
-        })->orderBy('created_at', 'desc')
+        })->orderByDesc('created_at')
             ->get();
 
         return $onProcessTickets;
@@ -64,7 +64,7 @@ trait Tickets
             $byUserQuery->where('agent_id', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branch_id)
                 ->where('service_department_id', auth()->user()->service_department_id);
-        })->orderBy('created_at', 'desc')
+        })->orderByDesc('created_at')
             ->get();
 
         return $overdueTickets;
@@ -79,7 +79,7 @@ trait Tickets
             $byUserQuery->where('agent_id', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branch_id)
                 ->where('service_department_id', auth()->user()->service_department_id);
-        })->orderBy('created_at', 'desc')
+        })->orderByDesc('created_at')
             ->get();
 
         return $closedTickets;

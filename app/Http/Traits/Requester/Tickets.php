@@ -15,7 +15,7 @@ trait Tickets
         return Ticket::with(['replies', 'priorityLevel'])
             ->where('status_id', Status::OPEN)
             ->where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -27,7 +27,7 @@ trait Tickets
                     ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
             })
             ->where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -39,7 +39,7 @@ trait Tickets
                     ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
             })
             ->where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -51,7 +51,7 @@ trait Tickets
                     ->where('approval_status', ApprovalStatus::APPROVED);
             })
             ->where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -64,7 +64,7 @@ trait Tickets
             })
             ->whereNotNull('agent_id')
             ->where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -76,7 +76,7 @@ trait Tickets
                     ->where('approval_status', ApprovalStatus::DISAPPROVED);
             })
             ->where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -88,7 +88,7 @@ trait Tickets
                     ->where('approval_status', ApprovalStatus::APPROVED);
             })
             ->where('user_id', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->get();
     }
 
@@ -96,7 +96,7 @@ trait Tickets
     {
         return Reply::where('ticket_id', $id)
             ->where('user_id', '!=', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->first();
     }
 
@@ -104,7 +104,7 @@ trait Tickets
     {
         return Clarification::where('ticket_id', $id)
             ->where('user_id', '!=', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('created_at')
             ->first();
     }
 }

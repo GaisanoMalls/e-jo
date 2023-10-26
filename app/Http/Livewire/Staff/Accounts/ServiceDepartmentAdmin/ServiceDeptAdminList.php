@@ -40,7 +40,7 @@ class ServiceDeptAdminList extends Component
     {
         return User::with(['department', 'branch'])
             ->whereHas('role', fn($agent) => $agent->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
-            ->orderBy('created_at', 'desc')->get();
+            ->orderByDesc('created_at')->get();
     }
 
     public function render()
@@ -48,12 +48,12 @@ class ServiceDeptAdminList extends Component
         $this->serviceDepartmentAdmins = (Route::is('staff.manage.user_account.index'))
             ? User::with(['profile', 'department', 'branch'])
                 ->whereHas('role', fn($agent) => $agent->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
-                ->take(5)->orderBy('created_at', 'desc')->get()
+                ->take(5)->orderByDesc('created_at')->get()
             : (
                 (Route::is('staff.manage.user_account.service_department_admins'))
                 ? User::with(['profile', 'department', 'branch'])
                     ->whereHas('role', fn($agent) => $agent->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
-                    ->orderBy('created_at', 'desc')->get()
+                    ->orderByDesc('created_at')->get()
                 : $this->getInitialQuery()
             );
 

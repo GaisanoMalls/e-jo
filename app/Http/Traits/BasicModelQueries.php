@@ -19,7 +19,7 @@ trait BasicModelQueries
 {
     public function queryServiceDepartments()
     {
-        return ServiceDepartment::orderBy('created_at', 'desc')->get();
+        return ServiceDepartment::orderByDesc('created_at')->get();
     }
 
     public function queryLevelOfApprovals()
@@ -29,7 +29,7 @@ trait BasicModelQueries
 
     public function queryServiceLevelAgreements()
     {
-        return ServiceLevelAgreement::orderBy('created_at', 'desc')->get();
+        return ServiceLevelAgreement::orderByDesc('created_at')->get();
     }
 
     public function queryRoles()
@@ -44,12 +44,12 @@ trait BasicModelQueries
 
     public function queryBranches()
     {
-        return Branch::orderBy('created_at', 'desc')->get();
+        return Branch::orderByDesc('created_at')->get();
     }
 
     public function queryBUDepartments()
     {
-        return Department::orderBy('created_at', 'desc')->get();
+        return Department::orderByDesc('created_at')->get();
     }
 
     public function queryPriorityLevels()
@@ -59,7 +59,7 @@ trait BasicModelQueries
 
     public function queryTeams()
     {
-        return Team::orderBy('created_at', 'desc')->get();
+        return Team::orderByDesc('created_at')->get();
     }
 
     public function queryApprovers()
@@ -84,11 +84,11 @@ trait BasicModelQueries
 
     public function queryTags()
     {
-        return Tag::orderBy('created_at', 'desc')->get();
+        return Tag::orderByDesc('created_at')->get();
     }
 
     public function queryTicketStatus()
     {
-        return Status::orderBy('created_at', 'desc')->get();
+        return Status::orderByDesc('created_at')->get();
     }
 }

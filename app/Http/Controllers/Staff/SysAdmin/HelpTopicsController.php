@@ -22,7 +22,7 @@ class HelpTopicsController extends Controller
         $levelOfApprovals = $this->queryLevelOfApprovals();
         $approvers = $this->queryApprovers();
         $slas = $this->queryServiceLevelAgreements();
-        $helpTopics = HelpTopic::with(['serviceDepartment', 'department', 'sla'])->orderBy('created_at', 'desc')->get();
+        $helpTopics = HelpTopic::with(['serviceDepartment', 'department', 'sla'])->orderByDesc('created_at')->get();
 
         return view(
             'layouts.staff.system_admin.manage.help_topics.help_topics_index',

@@ -40,7 +40,7 @@ class AgentList extends Component
     {
         return User::with(['department', 'branch'])
             ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
-            ->take(5)->orderBy('created_at', 'desc')->get();
+            ->take(5)->orderByDesc('created_at')->get();
     }
 
     public function render()
@@ -48,12 +48,12 @@ class AgentList extends Component
         $this->agents = (Route::is('staff.manage.user_account.index'))
             ? User::with(['profile', 'department', 'branch'])
                 ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
-                ->take(5)->orderBy('created_at', 'desc')->get()
+                ->take(5)->orderByDesc('created_at')->get()
             : (
                 (Route::is('staff.manage.user_account.agents'))
                 ? User::with(['profile', 'department', 'branch'])
                     ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
-                    ->orderBy('created_at', 'desc')->get()
+                    ->orderByDesc('created_at')->get()
                 : $this->getInitialQuery()
             );
 

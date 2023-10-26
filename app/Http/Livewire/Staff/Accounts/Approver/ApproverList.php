@@ -40,7 +40,7 @@ class ApproverList extends Component
     {
         return $this->approvers = User::with('branch')
             ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
-            ->orderBy('created_at', 'desc')->get();
+            ->orderByDesc('created_at')->get();
     }
 
     public function render()
@@ -48,12 +48,12 @@ class ApproverList extends Component
         $this->approvers = (Route::is('staff.manage.user_account.index'))
             ? User::with(['profile', 'branch'])
                 ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
-                ->take(5)->orderBy('created_at', 'desc')->get()
+                ->take(5)->orderByDesc('created_at')->get()
             : (
                 (Route::is('staff.manage.user_account.approvers'))
                 ? User::with(['profile', 'branch'])
                     ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
-                    ->orderBy('created_at', 'desc')->get()
+                    ->orderByDesc('created_at')->get()
                 : $this->getInitialQuery()
             );
 

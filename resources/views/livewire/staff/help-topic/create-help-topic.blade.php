@@ -329,6 +329,7 @@
                     });
 
                     levelOfApproverSelect.addEventListener('change', () => {
+                        console.log(levelOfApproverSelect.value);
                         @this.set('levelApprovers', levelOfApproverSelect.value);
                     });
                 });

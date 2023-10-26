@@ -16,9 +16,8 @@ trait Tickets
                 ->where('status_id', '!=', Status::CLAIMED);
         })->where(function ($byUserQuery) {
             $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                 ->whereHas('user', fn($query) => $query->where('users.department_id', auth()->user()->department_id));
-        })->whereNull('team_id')->orWhereNull('team_id')->orderBy('created_at', 'desc')->get();
+        })->whereNull('team_id')->orWhereNull('team_id')->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetApprovedTickets()
@@ -28,9 +27,8 @@ trait Tickets
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })->where(function ($byUserQuery) {
             $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                 ->whereHas('user', fn($query) => $query->where('users.department_id', auth()->user()->department_id));
-        })->orderBy('created_at', 'desc')->get();
+        })->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetDisapprovedTickets()
@@ -40,9 +38,8 @@ trait Tickets
                 ->where('approval_status', ApprovalStatus::DISAPPROVED);
         })->where(function ($byUserQuery) {
             $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                 ->whereHas('user', fn($query) => $query->where('users.department_id', auth()->user()->department_id));
-        })->orderBy('created_at', 'desc')->get();
+        })->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetOpentTickets()
@@ -51,10 +48,9 @@ trait Tickets
             $statusQuery->where('status_id', Status::OPEN)
                 ->where('approval_status', ApprovalStatus::FOR_APPROVAL);
         })->where(function ($byUserQuery) {
-            // $byUserQuery->where('branch_id', auth()->user()->branch_id)
-            $byUserQuery->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
+            $byUserQuery->where('branch_id', auth()->user()->branch_id)
                 ->whereHas('user', fn($query) => $query->where('users.department_id', auth()->user()->department_id));
-        })->orderBy('created_at', 'desc')->get();
+        })->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetClaimedTickets()
@@ -64,9 +60,8 @@ trait Tickets
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })->where(function ($byUserQuery) {
             $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                 ->whereHas('user', fn($query) => $query->where('users.department_id', auth()->user()->department_id));
-        })->orderBy('created_at', 'desc')->get();
+        })->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetOnProcessTickets()
@@ -76,9 +71,8 @@ trait Tickets
                 ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
         })->where(function ($byUserQuery) {
             $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                 ->whereHas('user', fn($query) => $query->where('users.department_id', auth()->user()->department_id));
-        })->orderBy('created_at', 'desc')->get();
+        })->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetViewedTickets()
@@ -88,9 +82,8 @@ trait Tickets
                 ->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]);
         })->where(function ($byUserQuery) {
             $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                 ->whereHas('user', fn($query) => $query->where('users.department_id', auth()->user()->department_id));
-        })->orderBy('created_at', 'desc')->get();
+        })->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetOverdueTickets()
@@ -100,9 +93,8 @@ trait Tickets
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })->where(function ($byUserQuery) {
             $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                 ->whereHas('user', fn($query) => $query->where('users.department_id', auth()->user()->department_id));
-        })->orderBy('created_at', 'desc')->get();
+        })->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetClosedTickets()
@@ -112,8 +104,7 @@ trait Tickets
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })->where(function ($byUserQuery) {
             $byUserQuery->where('branch_id', auth()->user()->branch_id)
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                 ->whereHas('user', fn($query) => $query->where('users.department_id', auth()->user()->department_id));
-        })->orderBy('created_at', 'desc')->get();
+        })->orderByDesc('created_at')->get();
     }
 }
