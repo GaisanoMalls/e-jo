@@ -4,11 +4,13 @@ namespace App\Http\Livewire\Staff\Accounts\Approver;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
 class ApproverList extends Component
 {
     public $approverDeleteId, $approverFullName;
+    public $approvers;
 
     protected $listeners = ['loadApproverList' => '$refresh'];
 
@@ -24,9 +26,9 @@ class ApproverList extends Component
         try {
             User::find($this->approverDeleteId)->delete();
             $this->approverDeleteId = null;
+            sleep(1);
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Approver account has been deleted');
-            sleep(1);
 
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -34,14 +36,29 @@ class ApproverList extends Component
         }
     }
 
+    private function getInitialQuery()
+    {
+        return $this->approvers = User::with('branch')
+            ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
+            ->orderBy('created_at', 'desc')->get();
+    }
+
     public function render()
     {
-        $approvers = User::with('branch')
-            ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
-            ->take(5)->orderBy('created_at', 'desc')->get();
+        $this->approvers = (Route::is('staff.manage.user_account.index'))
+            ? User::with(['profile', 'branch'])
+                ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
+                ->take(5)->orderBy('created_at', 'desc')->get()
+            : (
+                (Route::is('staff.manage.user_account.approvers'))
+                ? User::with(['profile', 'branch'])
+                    ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
+                    ->orderBy('created_at', 'desc')->get()
+                : $this->getInitialQuery()
+            );
 
         return view('livewire.staff.accounts.approver.approver-list', [
-            'approvers' => $approvers
+            'approvers' => $this->approvers
         ]);
     }
 }

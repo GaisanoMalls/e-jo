@@ -4,11 +4,13 @@ namespace App\Http\Livewire\Staff\Accounts\Agent;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
 class AgentList extends Component
 {
     public $agentDeleteId, $agentFullName;
+    public $agents;
 
     protected $listeners = ['loadAgentList' => '$refresh'];
 
@@ -34,14 +36,29 @@ class AgentList extends Component
         }
     }
 
-    public function render()
+    private function getInitialQuery()
     {
-        $agents = User::with(['department', 'branch'])
+        return User::with(['department', 'branch'])
             ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
             ->take(5)->orderBy('created_at', 'desc')->get();
+    }
+
+    public function render()
+    {
+        $this->agents = (Route::is('staff.manage.user_account.index'))
+            ? User::with(['profile', 'department', 'branch'])
+                ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
+                ->take(5)->orderBy('created_at', 'desc')->get()
+            : (
+                (Route::is('staff.manage.user_account.agents'))
+                ? User::with(['profile', 'department', 'branch'])
+                    ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
+                    ->orderBy('created_at', 'desc')->get()
+                : $this->getInitialQuery()
+            );
 
         return view('livewire.staff.accounts.agent.agent-list', [
-            'agents' => $agents
+            'agents' => $this->agents
         ]);
     }
 }

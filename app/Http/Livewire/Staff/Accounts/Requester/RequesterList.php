@@ -4,11 +4,13 @@ namespace App\Http\Livewire\Staff\Accounts\Requester;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
 class RequesterList extends Component
 {
     public $requesterDeleteId, $requesterFullName;
+    public $users;
 
     protected $listeners = ['loadRequesterList' => '$refresh'];
 
@@ -34,14 +36,29 @@ class RequesterList extends Component
         }
     }
 
+    private function getInitialQuery()
+    {
+        return User::with(['department', 'branch'])
+            ->whereHas('role', fn($user) => $user->where('role_id', Role::USER))
+            ->orderBy('created_at', 'desc')->get();
+    }
+
     public function render()
     {
-        $users = User::with(['department', 'branch'])
-            ->whereHas('role', fn($user) => $user->where('role_id', Role::USER))
-            ->take(5)->orderBy('created_at', 'desc')->get();
+        $this->users = (Route::is('staff.manage.user_account.index'))
+            ? User::with(['profile', 'department', 'branch'])
+                ->whereHas('role', fn($user) => $user->where('role_id', Role::USER))
+                ->take(5)->orderBy('created_at', 'desc')->get()
+            : (
+                (Route::is('staff.manage.user_account.users'))
+                ? User::with(['profile', 'department', 'branch'])
+                    ->whereHas('role', fn($user) => $user->where('role_id', Role::USER))
+                    ->orderBy('created_at', 'desc')->get()
+                : $this->getInitialQuery()
+            );
 
         return view('livewire.staff.accounts.requester.requester-list', [
-            'users' => $users
+            'users' => $this->users
         ]);
     }
 }

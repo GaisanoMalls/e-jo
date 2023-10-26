@@ -4,11 +4,13 @@ namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
 class ServiceDeptAdminList extends Component
 {
     public $serviceDeptAdminDeleteId, $serviceDeptAdminFullName;
+    public $serviceDepartmentAdmins;
 
     protected $listeners = ['loadServiceDeptAdminList' => '$refresh'];
 
@@ -34,14 +36,29 @@ class ServiceDeptAdminList extends Component
         }
     }
 
+    private function getInitialQuery()
+    {
+        return User::with(['department', 'branch'])
+            ->whereHas('role', fn($agent) => $agent->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+            ->orderBy('created_at', 'desc')->get();
+    }
+
     public function render()
     {
-        $serviceDepartmentAdmins = User::with(['department', 'branch'])
-            ->whereHas('role', fn($agent) => $agent->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
-            ->take(5)->orderBy('created_at', 'desc')->get();
+        $this->serviceDepartmentAdmins = (Route::is('staff.manage.user_account.index'))
+            ? User::with(['profile', 'department', 'branch'])
+                ->whereHas('role', fn($agent) => $agent->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+                ->take(5)->orderBy('created_at', 'desc')->get()
+            : (
+                (Route::is('staff.manage.user_account.service_department_admins'))
+                ? User::with(['profile', 'department', 'branch'])
+                    ->whereHas('role', fn($agent) => $agent->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+                    ->orderBy('created_at', 'desc')->get()
+                : $this->getInitialQuery()
+            );
 
         return view('livewire.staff.accounts.service-department-admin.service-dept-admin-list', [
-            'serviceDepartmentAdmins' => $serviceDepartmentAdmins
+            'serviceDepartmentAdmins' => $this->serviceDepartmentAdmins
         ]);
     }
 }
