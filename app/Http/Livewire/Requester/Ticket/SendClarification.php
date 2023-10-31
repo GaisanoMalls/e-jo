@@ -68,7 +68,11 @@ class SendClarification extends Component
                 if ($this->clarificationFiles) {
                     foreach ($this->clarificationFiles as $uploadedClarificationFile) {
                         $fileName = $uploadedClarificationFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs("public/ticket/{$this->ticket->ticket_number}/clarification_attachments/" . $this->fileDirByUserType(), $uploadedClarificationFile, $fileName);
+                        $fileAttachment = Storage::putFileAs(
+                            "public/ticket/{$this->ticket->ticket_number}/clarification_attachments/" . $this->fileDirByUserType(),
+                            $uploadedClarificationFile,
+                            $fileName
+                        );
 
                         $clarificationFile = new ClarificationFile();
                         $clarificationFile->file_attachment = $fileAttachment;

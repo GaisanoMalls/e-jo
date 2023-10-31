@@ -17,8 +17,8 @@ class CreateHelpTopic extends Component
     use Utils, BasicModelQueries;
 
     public $teams = [], $levelApprovers = [];
-    public $name, $level_of_approval;
-    public $sla, $service_department, $team;
+    public $level1Approvers = [], $level2Approvers = [], $level3Approvers = [], $level4Approvers = [], $level5Approvers = [];
+    public $name, $sla, $service_department, $team, $levelOfApproval;
     public bool $checked = false;
 
     public function rules()
@@ -40,20 +40,22 @@ class CreateHelpTopic extends Component
                     'slug' => \Str::slug($this->name)
                 ]);
 
-                if ($this->checked) {
-                    $levelOfApproval = (int) $this->level_of_approval;
-                    if ($levelOfApproval) {
-                        for ($level = 1; $level <= $levelOfApproval; $level++) {
-                            $helpTopic->levels()->attach($level);
+                $levelApprovers = [
+                    $this->level1Approvers,
+                    $this->level2Approvers,
+                    $this->level3Approvers,
+                    $this->level4Approvers,
+                    $this->level5Approvers,
+                ];
 
-                            foreach ($this->levelApprovers as $approver) {
-                                LevelApprover::create([
-                                    'level_id' => $level,
-                                    'user_id' => $approver,
-                                    'help_topic_id' => $helpTopic->id
-                                ]);
-                            }
-                        }
+                for ($level = 1; $level <= $this->levelOfApproval; $level++) {
+                    $helpTopic->levels()->attach($level);
+                    foreach ($levelApprovers[$level - 1] as $approver) {
+                        LevelApprover::create([
+                            'level_id' => $level,
+                            'user_id' => $approver,
+                            'help_topic_id' => $helpTopic->id
+                        ]);
                     }
                 }
             });
@@ -70,12 +72,6 @@ class CreateHelpTopic extends Component
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 
-    public function updatedLevelOfApproval()
-    {
-        $this->level_of_approval = ApprovalLevel::where('id', $this->level_of_approval)->pluck('id')->first();
-        $this->dispatchBrowserEvent('load-approvers', ['approvers' => $this->queryApprovers()]);
-    }
-
     public function updatedName()
     {
         ($this->name === 'Special Project' || $this->name === 'special project')
@@ -86,7 +82,7 @@ class CreateHelpTopic extends Component
 
     public function showSpecialProjectContainer()
     {
-        $this->dispatchBrowserEvent('show-special-project-container');
+        $this->dispatchBrowserEvent('show-special-project-container', ['approvers' => $this->queryApprovers()]);
     }
 
     public function hideSpecialProjectContainer()

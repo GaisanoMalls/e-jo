@@ -97,7 +97,11 @@ class CreateTicket extends Component
                 if ($this->fileAttachments) {
                     foreach ($this->fileAttachments as $uploadedFile) {
                         $fileName = $uploadedFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs("public/ticket/{$ticket->ticket_number}/creation_attachments", $uploadedFile, $fileName);
+                        $fileAttachment = Storage::putFileAs(
+                            "public/ticket/{$ticket->ticket_number}/creation_attachments",
+                            $uploadedFile,
+                            $fileName
+                        );
 
                         $ticketFile = new TicketFile();
                         $ticketFile->file_attachment = $fileAttachment;

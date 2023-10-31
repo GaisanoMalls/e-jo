@@ -46,23 +46,24 @@ document.addEventListener('DOMContentLoaded', function () {
     btnCloseModal.addEventListener('click', clearModalForm);
   }
 
-  // // Helpt Topic - Special Project
-  // const specialProjectContainer = document.getElementById('specialProjectContainer');
-  // const specialProjectCheck = document.getElementById('specialProjectCheck');
-  // const helpTopicName = document.getElementById('helpTopicName');
-
-  // if (specialProjectCheck && helpTopicName) {
-  //     specialProjectContainer.style.display = 'none';
-  //     specialProjectCheck.addEventListener('change', (event) => {
-  //         if (event.target.checked) {
-  //             specialProjectContainer.style.display = 'block';
-  //             helpTopicName.value = "Special Project";
-  //         } else {
-  //             specialProjectContainer.style.display = 'none';
-  //             helpTopicName.value = null;
-  //         }
-  //     });
-  // }
+  // Helpt Topic - Special Project
+  var specialProjectContainer = document.getElementById('specialProjectContainer');
+  var specialProjectCheck = document.getElementById('specialProjectCheck');
+  var specialProjectName = document.getElementById('specialProjectName');
+  var levelOfApprovalSelect = document.querySelector('#levelOfApprovalSelect');
+  if (specialProjectCheck && helpTopicName) {
+    var _specialProjectName = 'Special Project';
+    specialProjectContainer.style.display = 'none';
+    specialProjectCheck.addEventListener('change', function (event) {
+      if (event.target.checked) {
+        specialProjectContainer.style.display = 'block';
+        helpTopicName.value = _specialProjectName;
+      } else {
+        specialProjectContainer.style.display = 'none';
+        helpTopicName.value = null;
+      }
+    });
+  }
 });
 /******/ })()
 ;

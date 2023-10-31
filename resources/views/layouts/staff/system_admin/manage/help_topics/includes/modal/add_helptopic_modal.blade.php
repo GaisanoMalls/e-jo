@@ -95,7 +95,7 @@
                                         <select name="team" placeholder="Select (optional)" data-search="true"
                                             data-silent-initial-value-set="true" id="helpTopicTeamsDropdown">
                                         </select>
-                                        @error('service_department', 'storeHelpTopic')
+                                        @error('team', 'storeHelpTopic')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}
