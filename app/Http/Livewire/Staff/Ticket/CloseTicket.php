@@ -11,7 +11,7 @@ class CloseTicket extends Component
 {
     public Ticket $ticket;
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->emit('loadTicketTags');
@@ -28,7 +28,7 @@ class CloseTicket extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function closeTicket()
+    public function closeTicket(): void
     {
         $this->ticket->update(['status_id' => Status::CLOSED]);
         ActivityLog::make($this->ticket->id, 'closed the ticket');

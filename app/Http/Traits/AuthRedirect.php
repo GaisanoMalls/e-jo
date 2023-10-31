@@ -4,6 +4,7 @@ namespace App\Http\Traits;
 
 use App\Models\Role;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 trait AuthRedirect
@@ -12,7 +13,7 @@ trait AuthRedirect
     /**
      * Redirect authenticated staffs to a route based on their roles.
      *
-     * @return void
+     * @return RedirectResponse
      */
     public function redirectAuthenticatedWithRole()
     {

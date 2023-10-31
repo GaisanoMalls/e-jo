@@ -186,9 +186,9 @@
                         selectApproverContainer.innerHTML = '';
 
                         if (levelOfApproval) {
-                            const approverOption = [];
                             @this.set('levelOfApproval', levelOfApproval);
                             for (let count = 1; count <= levelOfApproval; count++) {
+                                const approverOption = [];
                                 const selectOptionHTML = `
                                     <div class="col-md-6">
                                         <div class="mb-2">

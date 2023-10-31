@@ -7,6 +7,7 @@ use App\Http\Traits\Utils;
 use App\Models\Department;
 use App\Models\Team;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -18,7 +19,7 @@ class UpdateAgent extends Component
     public $BUDepartments = [], $teams = [], $currentTeams = [], $selectedTeams = [];
     public $first_name, $middle_name, $last_name, $suffix, $email, $branch, $bu_department, $service_department;
 
-    public function mount(User $agent)
+    public function mount(User $agent): void
     {
         $this->agent = $agent;
         $this->first_name = $agent->profile->first_name;
@@ -34,7 +35,7 @@ class UpdateAgent extends Component
         $this->currentTeams = $agent->teams->pluck('id')->toArray();
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'branch' => 'required',
@@ -49,14 +50,14 @@ class UpdateAgent extends Component
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'selectedTeams.required' => 'Teams field is required.'
         ];
     }
 
-    public function updatedBranch()
+    public function updatedBranch(): void
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
@@ -66,7 +67,7 @@ class UpdateAgent extends Component
         ]);
     }
 
-    public function updateAgentAccount()
+    public function updateAgentAccount(): void
     {
         $this->validate();
 
@@ -97,7 +98,7 @@ class UpdateAgent extends Component
 
             flash()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName()}.");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Failed to update the agent.');
         }

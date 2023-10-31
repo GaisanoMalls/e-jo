@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PriorityLevel extends Model
 {
@@ -24,7 +25,7 @@ class PriorityLevel extends Model
         self::URGENT => 'FF0000'
     ];
 
-    public function tickets()
+    public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
     }

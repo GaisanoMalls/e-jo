@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Tags;
 
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Tag;
+use Exception;
 use Livewire\Component;
 
 class TagList extends Component
@@ -15,25 +16,25 @@ class TagList extends Component
 
     protected $listeners = ["loadTags" => "fetchTags"];
 
-    protected function rules()
+    protected function rules(): array
     {
         return [
             'name' => "required|unique:tags,name,{$this->tagUpdateId}"
         ];
     }
 
-    public function fetchTags()
+    public function fetchTags(): void
     {
         $this->tags = $this->queryTags();
     }
 
-    public function clearFormField()
+    public function clearFormField(): void
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    public function editTag(Tag $tag)
+    public function editTag(Tag $tag): void
     {
         $this->tagUpdateId = $tag->id;
         $this->name = $tag->name;
@@ -41,7 +42,7 @@ class TagList extends Component
         $this->dispatchBrowserEvent('show-edit-tag-modal');
     }
 
-    public function updateTag()
+    public function updateTag(): void
     {
         $this->validate();
 
@@ -58,20 +59,20 @@ class TagList extends Component
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Tag updated');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
-    public function deleteTag(Tag $tag)
+    public function deleteTag(Tag $tag): void
     {
         $this->tagDeleteId = $tag->id;
         $this->name = $tag->name;
         $this->dispatchBrowserEvent('show-delete-tag-modal');
     }
 
-    public function delete()
+    public function delete(): void
     {
         try {
             Tag::find($this->tagDeleteId)->delete();
@@ -81,7 +82,7 @@ class TagList extends Component
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Tag successfully deleted');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

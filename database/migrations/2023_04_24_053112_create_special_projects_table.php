@@ -13,8 +13,12 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::table('level_approver', function (Blueprint $table) {
-            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->after('user_id');
+        Schema::create('special_projects', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained()->cascadeOnDelete();
+            $table->decimal('amount');
+            $table->json('meta_data');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::table('level_approver', function (Blueprint $table) {
-            $table->dropColumn('help_topic_id');
-        });
+        Schema::dropIfExists('special_projects');
     }
 };

@@ -13,7 +13,12 @@ use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\Team;
 use App\Models\Ticket;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -58,86 +63,86 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function profile()
+    public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
     }
 
-    public function role()
+    public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
 
-    public function branch()
+    public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
     }
 
-    public function serviceDepartment()
+    public function serviceDepartment(): BelongsTo
     {
         return $this->belongsTo(ServiceDepartment::class);
     }
 
-    public function department()
+    public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
     }
 
-    public function tickets()
+    public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
     }
 
-    public function feedbacks()
+    public function feedbacks(): HasMany
     {
         return $this->hasMany(Feedback::class);
     }
 
-    public function activityLogs()
+    public function activityLogs(): HasMany
     {
         return $this->hasMany(ActivityLog::class);
     }
 
-    public function bookmarks()
+    public function bookmarks(): HasMany
     {
         return $this->hasMany(Bookmark::class);
     }
 
-    public function levels()
+    public function levels(): BelongsToMany
     {
         return $this->belongsToMany(Level::class, 'level_approver', 'user_id', 'level_id')
             ->withTimestamps();
     }
 
-    public function serviceDepartments()
+    public function serviceDepartments(): BelongsToMany
     {
         return $this->belongsToMany(ServiceDepartment::class, 'user_service_department', 'user_id', 'service_department_id');
     }
 
     // For Approvers Only
-    public function branches()
+    public function branches(): BelongsToMany
     {
         return $this->belongsToMany(Branch::class, 'user_branch', 'user_id', 'branch_id');
     }
 
-    public function buDepartments()
+    public function buDepartments(): BelongsToMany
     {
         return $this->belongsToMany(Department::class, 'user_department', 'user_id', 'department_id');
     }
 
     // For Agents Only
-    public function teams()
+    public function teams(): BelongsToMany
     {
         return $this->belongsToMany(Team::class, 'user_team')
             ->withPivot(['user_id', 'team_id']);
     }
 
-    public function getServiceDepartments()
+    public function getServiceDepartments(): string
     {
         $serviceDepartmentNames = [];
 
         foreach ($this->serviceDepartments as $serviceDepartment) {
-            array_push($serviceDepartmentNames, $serviceDepartment->name);
+            $serviceDepartmentNames[] = $serviceDepartment->name;
         }
 
         if (!empty($serviceDepartmentNames)) {
@@ -147,12 +152,12 @@ class User extends Authenticatable
         return '----';
     }
 
-    public function getTeams()
+    public function getTeams(): string
     {
         $teams = [];
 
         foreach ($this->teams as $team) {
-            array_push($teams, $team->name);
+            $teams[] = $team->name;
         }
 
         if (!empty($teams)) {
@@ -163,12 +168,12 @@ class User extends Authenticatable
     }
 
     // Get the branches assiged to approver.
-    public function getBranches()
+    public function getBranches(): string
     {
         $branchNames = [];
 
         foreach ($this->branches as $branch) {
-            array_push($branchNames, $branch->name);
+            $branchNames[] = $branch->name;
         }
 
         if (!empty($branchNames)) {
@@ -179,12 +184,12 @@ class User extends Authenticatable
     }
 
     // Get the branches assiged to approver.
-    public function getBUDepartments()
+    public function getBUDepartments(): string
     {
         $buDepartmentNames = [];
 
         foreach ($this->buDepartments as $buDepartment) {
-            array_push($buDepartmentNames, $buDepartment->name);
+            $buDepartmentNames[] = $buDepartment->name;
         }
 
         if (!empty($buDepartmentNames)) {
@@ -255,7 +260,7 @@ class User extends Authenticatable
     }
 
     // Filter user types by roles
-    public static function systemAdmins()
+    public static function systemAdmins(): Collection|array
     {
         return self::with(['profile', 'branch'])
             ->whereHas('role', fn($systemAdmin) => $systemAdmin->where('role_id', Role::SYSTEM_ADMIN))
@@ -263,7 +268,7 @@ class User extends Authenticatable
             ->get();
     }
 
-    public static function serviceDepartmentAdmins()
+    public static function serviceDepartmentAdmins(): Collection|array
     {
         return self::with(['profile', 'serviceDepartment'])
             ->whereHas('role', fn($serviceDepartmentAdmin) => $serviceDepartmentAdmin->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
@@ -271,7 +276,7 @@ class User extends Authenticatable
             ->get();
     }
 
-    public static function approvers()
+    public static function approvers(): Collection|array
     {
         return self::with(['profile', 'branch'])
             ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
@@ -279,7 +284,7 @@ class User extends Authenticatable
             ->get();
     }
 
-    public static function agents()
+    public static function agents(): Collection|array
     {
         return self::with(['profile', 'branch'])
             ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
@@ -287,7 +292,7 @@ class User extends Authenticatable
             ->get();
     }
 
-    public static function requesters()
+    public static function requesters(): Collection|array
     {
         return self::with(['profile', 'department', 'branch'])
             ->whereHas('role', fn($requester) => $requester->where('role_id', Role::USER))
@@ -295,12 +300,12 @@ class User extends Authenticatable
             ->get();
     }
 
-    public function dateCreated()
+    public function dateCreated(): string
     {
         return $this->createdAt($this->created_at);
     }
 
-    public function dateUpdated()
+    public function dateUpdated(): string
     {
         return $this->updatedAt($this->created_at, $this->updated_at);
     }

@@ -143,6 +143,5 @@
     window.addEventListener('show-delete-branch-modal', () => {
         $('#deleteBranchModal').modal('show');
     });
-
 </script>
 @endpush

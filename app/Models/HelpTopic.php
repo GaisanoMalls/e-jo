@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Http\Traits\Utils;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HelpTopic extends Model
 {
@@ -18,42 +21,42 @@ class HelpTopic extends Model
         'slug'
     ];
 
-    public function department()
+    public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
     }
 
-    public function serviceDepartment()
+    public function serviceDepartment(): BelongsTo
     {
         return $this->belongsTo(ServiceDepartment::class);
     }
 
-    public function team()
+    public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }
 
-    public function sla()
+    public function sla(): BelongsTo
     {
         return $this->belongsTo(ServiceLevelAgreement::class);
     }
 
-    public function tickets()
+    public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
     }
 
-    public function levels()
+    public function levels(): BelongsToMany
     {
         return $this->belongsToMany(Level::class, 'help_topic_level', 'help_topic_id', 'level_id');
     }
 
-    public function dateCreated()
+    public function dateCreated(): string
     {
         return $this->createdAt($this->created_at);
     }
 
-    public function dateUpdated()
+    public function dateUpdated(): string
     {
         return $this->updatedAt($this->created_at, $this->updated_at);
     }

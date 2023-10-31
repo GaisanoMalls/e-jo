@@ -6,6 +6,7 @@ use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -36,13 +37,13 @@ class NotificationList extends Component
                     : redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
             });
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
-    public function deleteNotification($notificationId)
+    public function deleteNotification($notificationId): void
     {
         auth()->user()->notifications->find($notificationId)->delete();
         $this->emit('loadNotificationCanvas');

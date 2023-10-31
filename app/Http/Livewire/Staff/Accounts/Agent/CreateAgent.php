@@ -10,6 +10,7 @@ use App\Models\Profile;
 use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -20,12 +21,12 @@ class CreateAgent extends Component
     public $BUDepartments = [], $teams = [], $selectedTeams = [];
     public $first_name, $middle_name, $last_name, $suffix, $email, $branch, $bu_department, $service_department;
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreAgenRequest())->rules();
     }
 
-    public function updatedBranch()
+    public function updatedBranch(): void
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
@@ -35,7 +36,7 @@ class CreateAgent extends Component
         ]);
     }
 
-    public function actionOnSubmit()
+    public function actionOnSubmit(): void
     {
         sleep(1);
         $this->reset();
@@ -44,7 +45,7 @@ class CreateAgent extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function saveAgent()
+    public function saveAgent(): void
     {
         $this->validate();
 
@@ -75,13 +76,13 @@ class CreateAgent extends Component
 
             $this->actionOnSubmit();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
     }
 
-    public function cancel()
+    public function cancel(): void
     {
         $this->reset();
         $this->resetValidation();

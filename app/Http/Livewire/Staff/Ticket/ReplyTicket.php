@@ -9,6 +9,7 @@ use App\Models\Reply;
 use App\Models\ReplyFile;
 use App\Models\Status;
 use App\Models\Ticket;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -19,19 +20,21 @@ class ReplyTicket extends Component
     use WithFileUploads, Utils;
 
     public Ticket $ticket;
-    public $description, $replyFiles = [], $upload = 0;
+    public $upload = 0;
+    public $replyFiles = [];
+    public $description;
 
-    public function rules()
+    public function rules(): array
     {
         return (new StaffReplyTicketRequest())->rules();
     }
 
-    public function messages()
+    public function messages(): array
     {
         return (new StaffReplyTicketRequest())->messages();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->replyFiles = null;
@@ -47,7 +50,7 @@ class ReplyTicket extends Component
         $this->dispatchBrowserEvent('reload-modal');
     }
 
-    public function replyTicket()
+    public function replyTicket(): void
     {
         $this->validate();
 
@@ -83,9 +86,9 @@ class ReplyTicket extends Component
 
             $this->actionOnSubmit();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
-            return back()->with('error', 'Failed to send ticket clarification. Please try again.');
+            flash()->addError('Failed to send ticket clarification. Please try again.');
         }
     }
 

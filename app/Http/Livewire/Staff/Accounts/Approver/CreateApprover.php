@@ -8,6 +8,7 @@ use App\Http\Traits\Utils;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -18,12 +19,12 @@ class CreateApprover extends Component
     public $bu_departments = [], $branches = [];
     public $first_name, $middle_name, $last_name, $email, $suffix;
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreApproverRequest())->rules();
     }
 
-    public function actionOnSubmit()
+    public function actionOnSubmit(): void
     {
         sleep(1);
         $this->reset();
@@ -32,7 +33,7 @@ class CreateApprover extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function saveApprover()
+    public function saveApprover(): void
     {
         $this->validate();
 
@@ -65,7 +66,7 @@ class CreateApprover extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('Account successfully created');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Failed to save a new approver');
         }

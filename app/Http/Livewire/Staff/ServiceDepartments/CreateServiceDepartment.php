@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\ServiceDepartments;
 
 use App\Http\Requests\SysAdmin\Manage\ServiceDepartment\StoreServiceDepartmentRequest;
 use App\Models\ServiceDepartment;
+use Exception;
 use Livewire\Component;
 
 class CreateServiceDepartment extends Component
@@ -15,20 +16,20 @@ class CreateServiceDepartment extends Component
         return (new StoreServiceDepartmentRequest())->rules();
     }
 
-    public function clearFormField()
+    public function clearFormField(): void
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->clearFormField();
         $this->emit('loadServiceDepartments');
     }
 
-    public function saveServiceDepartment()
+    public function saveServiceDepartment(): void
     {
         $this->validate();
 
@@ -41,7 +42,7 @@ class CreateServiceDepartment extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('A new service department has been created.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

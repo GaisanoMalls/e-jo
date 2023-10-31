@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\ActivityLog;
 use App\Models\Ticket;
+use Exception;
 use Livewire\Component;
 
 class UpdatePriorityLevel extends Component
@@ -14,12 +15,12 @@ class UpdatePriorityLevel extends Component
     public Ticket $ticket;
     public $priority_level;
 
-    public function mount()
+    public function mount(): void
     {
         $this->priority_level = $this->ticket->priority_level_id;
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->emit('loadPriorityLevel');
@@ -27,7 +28,7 @@ class UpdatePriorityLevel extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function updatePriorityLevel()
+    public function updatePriorityLevel(): void
     {
         try {
             if ($this->priority_level != $this->ticket->priority_level_id) {
@@ -40,7 +41,7 @@ class UpdatePriorityLevel extends Component
                 $this->actionOnSubmit();
 
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

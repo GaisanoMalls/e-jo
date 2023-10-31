@@ -9,6 +9,7 @@ use App\Models\ApprovalLevel;
 use App\Models\HelpTopic;
 use App\Models\LevelApprover;
 use App\Models\Team;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -16,17 +17,25 @@ class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
 
-    public $teams = [], $levelApprovers = [];
-    public $level1Approvers = [], $level2Approvers = [], $level3Approvers = [], $level4Approvers = [], $level5Approvers = [];
+    public $teams = [], $level1Approvers = [], $level2Approvers = [], $level3Approvers = [], $level4Approvers = [], $level5Approvers = [];
     public $name, $sla, $service_department, $team, $levelOfApproval;
-    public bool $checked = false;
+    public $checked = false;
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreHelpTopicRequest())->rules();
     }
 
-    public function saveHelpTopic()
+    public function actionOnSubmit(): void
+    {
+        sleep(1);
+        $this->reset();
+        $this->resetValidation();
+        $this->emit('loadHelpTopics');
+        $this->dispatchBrowserEvent('clear-modal');
+    }
+
+    public function saveHelpTopic(): void
     {
         $this->validate();
 
@@ -60,19 +69,21 @@ class CreateHelpTopic extends Component
                 }
             });
 
-        } catch (\Exception $e) {
+            $this->actionOnSubmit();
+
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
     }
 
-    public function updatedServiceDepartment()
+    public function updatedServiceDepartment(): void
     {
         $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->service_department))->get();
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 
-    public function updatedName()
+    public function updatedName(): void
     {
         ($this->name === 'Special Project' || $this->name === 'special project')
             ? $this->dispatchBrowserEvent('checkAndShowContainer')
@@ -80,24 +91,24 @@ class CreateHelpTopic extends Component
 
     }
 
-    public function showSpecialProjectContainer()
+    public function showSpecialProjectContainer(): void
     {
         $this->dispatchBrowserEvent('show-special-project-container', ['approvers' => $this->queryApprovers()]);
     }
 
-    public function hideSpecialProjectContainer()
+    public function hideSpecialProjectContainer(): void
     {
         $this->dispatchBrowserEvent('hide-special-project-container');
     }
 
-    public function specialProject()
+    public function specialProject(): void
     {
         ($this->checked)
             ? $this->showSpecialProjectContainer()
             : $this->hideSpecialProjectContainer();
     }
 
-    public function cancel()
+    public function cancel(): void
     {
         $this->reset();
         $this->resetValidation();

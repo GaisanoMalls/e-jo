@@ -11,7 +11,7 @@ class PriorityLevel extends Component
 
     protected $listeners = ['loadPriorityLevel' => 'fetchPriorityLevel'];
 
-    public function fetchPriorityLevel()
+    public function fetchPriorityLevel(): void
     {
         $this->ticket->priorityLevel->name;
     }

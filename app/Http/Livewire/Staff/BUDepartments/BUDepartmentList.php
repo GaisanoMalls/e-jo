@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\BUDepartments;
 
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Department;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -16,7 +17,7 @@ class BUDepartmentList extends Component
 
     protected $listeners = ['loadBUDepartments' => 'fetchBUDepartments'];
 
-    protected function rules()
+    protected function rules(): array
     {
         return [
             'name' => "required|unique:departments,name,{$this->buDepartmentEditId}",
@@ -24,19 +25,19 @@ class BUDepartmentList extends Component
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'editSelectedBranches.required' => 'The branch field is required.'
         ];
     }
 
-    public function fetchBUDepartments()
+    public function fetchBUDepartments(): void
     {
         $this->buDepartments = $this->queryBUDepartments();
     }
 
-    public function editBUDepartment(Department $department)
+    public function editBUDepartment(Department $department): void
     {
         $this->buDepartmentEditId = $department->id;
         $this->name = $department->name;
@@ -47,7 +48,7 @@ class BUDepartmentList extends Component
         $this->dispatchBrowserEvent('update-branch-select-option', ['branchIds' => $this->editSelectedBranches]);
     }
 
-    public function update()
+    public function update(): void
     {
         $this->validate();
 
@@ -66,20 +67,20 @@ class BUDepartmentList extends Component
 
                 $this->actionOnSubmit();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
-    public function deleteBUDepartment(Department $department)
+    public function deleteBUDepartment(Department $department): void
     {
         $this->buDepartmentDeleteId = $department->id;
         $this->name = $department->name;
         $this->dispatchBrowserEvent('show-delete-bu-department-modal');
     }
 
-    public function delete()
+    public function delete(): void
     {
         try {
             Department::find($this->buDepartmentDeleteId)->delete();
@@ -88,19 +89,19 @@ class BUDepartmentList extends Component
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('BU/Department successfully deleted');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
-    public function cancel()
+    public function cancel(): void
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->reset();

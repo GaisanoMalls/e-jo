@@ -7,6 +7,7 @@ use App\Http\Requests\Requester\StoreFeedbackRequest;
 use App\Models\Feedback;
 use App\Models\Status;
 use App\Models\Ticket;
+use Exception;
 
 class FeedbackController extends Controller
 {
@@ -48,7 +49,7 @@ class FeedbackController extends Controller
 
             return back()->with('success', 'Thank you for sending your feedback!');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             return back()->with('error', 'Failed to save feedback. Please try again.');
         }

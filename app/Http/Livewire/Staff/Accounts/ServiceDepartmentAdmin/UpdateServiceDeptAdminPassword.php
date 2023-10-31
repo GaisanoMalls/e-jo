@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 
 use App\Http\Requests\SysAdmin\Manage\Account\UpdatePasswordRequest;
 use App\Models\User;
+use Exception;
 use Livewire\Component;
 
 class UpdateServiceDeptAdminPassword extends Component
@@ -11,25 +12,25 @@ class UpdateServiceDeptAdminPassword extends Component
     public User $serviceDeptAdmin;
     public $new_password, $confirm_password;
 
-    public function rules()
+    public function rules(): array
     {
         return (new UpdatePasswordRequest())->rules();
     }
 
-    public function clearFormFields()
+    public function clearFormFields(): void
     {
         $this->resetValidation();
         $this->reset('new_password', 'confirm_password');
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->clearFormFields();
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function updatePassword(User $serviceDeptAdmin)
+    public function updatePassword(User $serviceDeptAdmin): void
     {
         $this->validate();
 
@@ -38,7 +39,7 @@ class UpdateServiceDeptAdminPassword extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('Password has been updated.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

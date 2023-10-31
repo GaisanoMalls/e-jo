@@ -4,6 +4,9 @@ namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Models\Clarification;
 use App\Models\Ticket;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class LatestClarification extends Component

@@ -18,6 +18,8 @@ use App\Models\Ticket;
 use App\Models\TicketFile;
 use App\Models\User;
 use App\Notifications\Requester\TicketCreatedNotification;
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -32,32 +34,31 @@ class CreateTicket extends Component
 
     public $upload = 0;
     public $fileAttachments = [], $helpTopics = [];
-    public $subject, $description;
-    public $branch, $team, $sla, $priorityLevel, $serviceDepartment, $helpTopic;
+    public $subject, $description, $branch, $team, $sla, $priorityLevel, $serviceDepartment, $helpTopic;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreTicketRequest())->rules();
     }
 
-    public function messages()
+    public function messages(): array
     {
         return (new StoreTicketRequest())->messages();
     }
 
-    public function updated($fields)
+    public function updated($fields): void
     {
         $this->validateOnly($fields);
     }
 
-    public function clearErrorMessage()
+    public function clearErrorMessage(): void
     {
         $this->resetValidation();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->reset();
@@ -70,7 +71,7 @@ class CreateTicket extends Component
         $this->dispatchBrowserEvent('clear-branch-dropdown-select');
     }
 
-    public function sendTicket()
+    public function sendTicket(): void
     {
         $this->validate();
         try {
@@ -98,7 +99,7 @@ class CreateTicket extends Component
                     foreach ($this->fileAttachments as $uploadedFile) {
                         $fileName = $uploadedFile->getClientOriginalName();
                         $fileAttachment = Storage::putFileAs(
-                            "public/ticket/{$ticket->ticket_number}/creation_attachments",
+                            "public/ticket/$ticket->ticket_number/creation_attachments",
                             $uploadedFile,
                             $fileName
                         );
@@ -147,26 +148,26 @@ class CreateTicket extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('Ticket successfully created.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
     }
 
-    public function updatedServiceDepartment()
+    public function updatedServiceDepartment(): void
     {
         $this->helpTopics = HelpTopic::with(['team', 'sla'])->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->serviceDepartment))->get();
         $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);
     }
 
-    public function updatedHelpTopic()
+    public function updatedHelpTopic(): void
     {
         $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
         $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
     }
 
 
-    public function cancel()
+    public function cancel(): void
     {
         $this->reset();
         $this->dispatchBrowserEvent('clear-select-dropdown');

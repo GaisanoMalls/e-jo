@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\BUDepartments;
 use App\Http\Requests\SysAdmin\Manage\BUDepartment\StoreBUDepartmentRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Department;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -12,20 +13,20 @@ class CreateBuDepartment extends Component
 {
     use BasicModelQueries;
 
-    public $selectedBranches = [];
     public $name;
+    public $selectedBranches = [];
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreBUDepartmentRequest())->rules();
     }
 
-    public function messages()
+    public function messages(): array
     {
         return (new StoreBUDepartmentRequest())->messages();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->reset();
@@ -34,7 +35,7 @@ class CreateBuDepartment extends Component
         $this->dispatchBrowserEvent('clear-branch-select-option');
     }
 
-    public function saveBUDepartment()
+    public function saveBUDepartment(): void
     {
         $this->validate();
 
@@ -51,13 +52,13 @@ class CreateBuDepartment extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('New BU\Department has been created.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
-    public function cancel()
+    public function cancel(): void
     {
         $this->resetValidation();
         $this->reset('name', 'selectedBranches');

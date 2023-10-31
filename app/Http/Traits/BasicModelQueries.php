@@ -5,6 +5,7 @@ namespace App\Http\Traits;
 use App\Models\ApprovalLevel;
 use App\Models\Branch;
 use App\Models\Department;
+use App\Models\HelpTopic;
 use App\Models\PriorityLevel;
 use App\Models\Role;
 use App\Models\ServiceDepartment;
@@ -14,6 +15,7 @@ use App\Models\Suffix;
 use App\Models\Tag;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 
 trait BasicModelQueries
 {
@@ -27,6 +29,11 @@ trait BasicModelQueries
         return ApprovalLevel::orderBy('description', 'asc')->get();
     }
 
+    public function queryHelpTopics()
+    {
+        return HelpTopic::orderByDesc('created_at')->get();
+    }
+
     public function queryServiceLevelAgreements()
     {
         return ServiceLevelAgreement::orderByDesc('created_at')->get();
@@ -37,7 +44,7 @@ trait BasicModelQueries
         return Role::orderBy('name', 'asc')->get();
     }
 
-    public function querySuffixes()
+    public function querySuffixes(): Collection
     {
         return Suffix::all();
     }
@@ -67,17 +74,17 @@ trait BasicModelQueries
         return User::approvers();
     }
 
-    public function queryServiceDepartmentAdmins()
+    public function queryServiceDepartmentAdmins(): Collection|array
     {
         return User::serviceDepartmentAdmins();
     }
 
-    public function queryAgents()
+    public function queryAgents(): Collection|array
     {
         return User::agents();
     }
 
-    public function queryUsers()
+    public function queryUsers(): Collection|array
     {
         return User::requesters();
     }

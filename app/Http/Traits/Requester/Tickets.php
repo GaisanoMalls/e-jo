@@ -7,10 +7,11 @@ use App\Models\Clarification;
 use App\Models\Reply;
 use App\Models\Status;
 use App\Models\Ticket;
+use Illuminate\Database\Eloquent\Collection;
 
 trait Tickets
 {
-    public function getOpenTickets()
+    public function getOpenTickets(): Collection
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where('status_id', Status::OPEN)
@@ -19,7 +20,7 @@ trait Tickets
             ->get();
     }
 
-    public function getOnProcessTickets()
+    public function getOnProcessTickets(): Collection
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
@@ -31,7 +32,7 @@ trait Tickets
             ->get();
     }
 
-    public function getViewedTickets()
+    public function getViewedTickets(): Collection
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
@@ -43,7 +44,7 @@ trait Tickets
             ->get();
     }
 
-    public function getApprovedTickets()
+    public function getApprovedTickets(): Collection
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
@@ -55,7 +56,7 @@ trait Tickets
             ->get();
     }
 
-    public function getClaimedTickets()
+    public function getClaimedTickets(): Collection
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
@@ -68,7 +69,7 @@ trait Tickets
             ->get();
     }
 
-    public function getDisapprovedTickets()
+    public function getDisapprovedTickets(): Collection
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
@@ -80,7 +81,7 @@ trait Tickets
             ->get();
     }
 
-    public function getClosedTickets()
+    public function getClosedTickets(): Collection
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
@@ -92,7 +93,7 @@ trait Tickets
             ->get();
     }
 
-    public function getLatestReply(int $id)
+    public function getLatestReply(int $id): ?Reply
     {
         return Reply::where('ticket_id', $id)
             ->where('user_id', '!=', auth()->user()->id)
@@ -100,7 +101,7 @@ trait Tickets
             ->first();
     }
 
-    public function getLatestClarification(int $id)
+    public function getLatestClarification(int $id): ?Clarification
     {
         return Clarification::where('ticket_id', $id)
             ->where('user_id', '!=', auth()->user()->id)

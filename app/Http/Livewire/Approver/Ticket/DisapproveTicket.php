@@ -8,6 +8,7 @@ use App\Models\ApprovalStatus;
 use App\Models\Reason;
 use App\Models\Status;
 use App\Models\Ticket;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -16,12 +17,12 @@ class DisapproveTicket extends Component
     public Ticket $ticket;
     public $reasonDescription;
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreDisapproveTicketRequest())->rules();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->emit('loadReason');
@@ -34,7 +35,7 @@ class DisapproveTicket extends Component
         $this->reset('reasonDescription');
     }
 
-    public function disapproveTicket()
+    public function disapproveTicket(): void
     {
         $this->validate();
 
@@ -57,7 +58,7 @@ class DisapproveTicket extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('The ticket has been disapproved.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Faild to disapprove the ticket.');
         }

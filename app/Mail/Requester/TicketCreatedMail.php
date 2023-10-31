@@ -34,12 +34,12 @@ class TicketCreatedMail extends Mailable implements ShouldQueue
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope()
+    public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "New Ticket - {$this->ticket->ticket_number}",
             from: new Address(auth()->user()->email, auth()->user()->profile->getFullName()),
             replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName())],
+            subject: "New Ticket - {$this->ticket->ticket_number}",
         );
     }
 
@@ -48,7 +48,7 @@ class TicketCreatedMail extends Mailable implements ShouldQueue
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content()
+    public function content(): Content
     {
         return new Content(
             markdown: 'mail.requester.ticket-created-mail',
@@ -65,7 +65,7 @@ class TicketCreatedMail extends Mailable implements ShouldQueue
      *
      * @return array
      */
-    public function attachments()
+    public function attachments(): array
     {
         return [];
     }

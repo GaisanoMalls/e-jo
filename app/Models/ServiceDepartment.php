@@ -8,8 +8,12 @@ use App\Models\Role;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ServiceDepartment extends Model
 {
@@ -20,38 +24,38 @@ class ServiceDepartment extends Model
         'slug'
     ];
 
-    public function users()
+    public function users(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function tickets()
+    public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
     }
 
-    public function teams()
+    public function teams(): HasMany
     {
         return $this->hasMany(Team::class);
     }
 
-    public function helpTopics()
+    public function helpTopics(): HasMany
     {
         return $this->hasMany(HelpTopic::class);
     }
 
-    public function serviceDepartmentAdmins()
+    public function serviceDepartmentAdmins(): Builder|BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_service_department')
             ->whereHas('role', fn($serviceDeptAdmin) => $serviceDeptAdmin->where('role_id', Role::APPROVER));
     }
 
-    public function dateCreated()
+    public function dateCreated(): string
     {
         return $this->createdAt($this->created_at);
     }
 
-    public function dateUpdated()
+    public function dateUpdated(): string
     {
         return $this->updatedAt($this->created_at, $this->updated_at);
     }

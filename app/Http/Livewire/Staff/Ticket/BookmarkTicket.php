@@ -12,7 +12,7 @@ class BookmarkTicket extends Component
 
     protected $listeners = ['loadBookmarkButton' => '$refresh'];
 
-    public function bookmark()
+    public function bookmark(): void
     {
         sleep(1);
         Bookmark::firstOrCreate([
@@ -21,13 +21,13 @@ class BookmarkTicket extends Component
         ]);
     }
 
-    public function removeBookmark()
+    public function removeBookmark(): void
     {
         Bookmark::where('ticket_id', $this->ticket->id)
             ->where('user_id', auth()->user()->id)->delete();
     }
 
-    private function isBookmarked()
+    private function isBookmarked(): bool
     {
         return Bookmark::where('ticket_id', $this->ticket->id)
             ->where('user_id', auth()->user()->id)->exists();

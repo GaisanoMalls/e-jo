@@ -36,29 +36,3 @@ BU/Departments
     </div>
 </div>
 @endsection
-
-@if ($errors->storeBUDepartment->any() || session()->has('empty_branch') || session()->has('invalid_branch'))
-@push('modal-with-error')
-<script>
-    $(function () {
-        $('#addNewBUDepartmentModal').modal('show');
-    });
-
-</script>
-@endpush
-@endif
-
-@if ($errors->editBUDepartment->any() || session()->has('empty_branch') || session()->has('invalid_branch') ||
-session()->has('duplicate_name_error'))
-{{-- Show edit modal based on the selected record/data --}}
-<input type="hidden" id="buDeptId" value="{{ session('buDepartmentId') }}">
-@push('modal-with-error')
-<script>
-    const buDeptId = document.getElementById('buDeptId');
-    $(function () {
-        $(`#editBUDepartment${buDeptId.value}`).modal('show');
-    });
-
-</script>
-@endpush
-@endif

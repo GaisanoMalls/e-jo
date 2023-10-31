@@ -6,158 +6,94 @@ use App\Http\Traits\Agent\Tickets as AgentTickets;
 use App\Http\Traits\ServiceDepartmentAdmin\Tickets as ServiceDepartmentAdminTickets;
 use App\Http\Traits\SysAdmin\Tickets as SysAdminTickets;
 use App\Models\Role;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 trait TicketsByStaffWithSameTemplates
 {
     use ServiceDepartmentAdminTickets, SysAdminTickets, AgentTickets;
 
-    public function getTicketsToAssign()
+    public function getTicketsToAssign(): Collection|array
     {
         return (auth()->user()->role_id === Role::SERVICE_DEPARTMENT_ADMIN)
             ? $this->serviceDeptAdminGetTicketsToAssign()
             : [];
     }
 
-    public function getApprovedTickets()
+    public function getApprovedTickets(): Collection|array
     {
-        switch (auth()->user()->role_id) {
-            case Role::SYSTEM_ADMIN:
-                $approvedTickets = $this->sysAdminGetApprovedTickets();
-                break;
-            case Role::SERVICE_DEPARTMENT_ADMIN:
-                $approvedTickets = $this->serviceDeptAdminGetApprovedTickets();
-                break;
-            default:
-                $approvedTickets = [];
-        }
-
-        return $approvedTickets;
+        return match (auth()->user()->role_id) {
+            Role::SYSTEM_ADMIN => $this->sysAdminGetApprovedTickets(),
+            Role::SERVICE_DEPARTMENT_ADMIN => $this->serviceDeptAdminGetApprovedTickets(),
+            default => [],
+        };
     }
 
-    public function getDisapprovedTickets()
+    public function getDisapprovedTickets(): Collection|array
     {
-        switch (auth()->user()->role_id) {
-            case Role::SYSTEM_ADMIN:
-                $approvedTickets = $this->sysAdminGetDisapprovedTickets();
-                break;
-            case Role::SERVICE_DEPARTMENT_ADMIN:
-                $approvedTickets = $this->serviceDeptAdminGetDisapprovedTickets();
-                break;
-            default:
-                $approvedTickets = [];
-        }
-
-        return $approvedTickets;
+        return match (auth()->user()->role_id) {
+            Role::SYSTEM_ADMIN => $this->sysAdminGetDisapprovedTickets(),
+            Role::SERVICE_DEPARTMENT_ADMIN => $this->serviceDeptAdminGetDisapprovedTickets(),
+            default => [],
+        };
     }
 
-    public function getOpenTickets()
+    public function getOpenTickets(): Collection|Builder|array
     {
-        switch (auth()->user()->role_id) {
-            case Role::SYSTEM_ADMIN:
-                $openTickets = $this->sysAdminGetOpenTickets();
-                break;
-            case Role::SERVICE_DEPARTMENT_ADMIN:
-                $openTickets = $this->serviceDeptAdminGetOpentTickets();
-                break;
-            case Role::AGENT:
-                $openTickets = $this->agentGetOpenTickets();
-                break;
-            default:
-                $openTickets = [];
-        }
-
-        return $openTickets;
+        return match (auth()->user()->role_id) {
+            Role::SYSTEM_ADMIN => $this->sysAdminGetOpenTickets(),
+            Role::SERVICE_DEPARTMENT_ADMIN => $this->serviceDeptAdminGetOpentTickets(),
+            Role::AGENT => $this->agentGetOpenTickets(),
+            default => [],
+        };
     }
 
-    public function getClaimedTickets()
+    public function getClaimedTickets(): Collection|Builder|array
     {
-        switch (auth()->user()->role_id) {
-            case Role::SYSTEM_ADMIN:
-                $claimedTickets = $this->sysAdminGetClaimedTickets();
-                break;
-            case Role::SERVICE_DEPARTMENT_ADMIN:
-                $claimedTickets = $this->serviceDeptAdminGetClaimedTickets();
-                break;
-            case Role::AGENT:
-                $claimedTickets = $this->agentGetClaimedTickets();
-                break;
-            default:
-                $claimedTickets = [];
-        }
-
-        return $claimedTickets;
+        return match (auth()->user()->role_id) {
+            Role::SYSTEM_ADMIN => $this->sysAdminGetClaimedTickets(),
+            Role::SERVICE_DEPARTMENT_ADMIN => $this->serviceDeptAdminGetClaimedTickets(),
+            Role::AGENT => $this->agentGetClaimedTickets(),
+            default => [],
+        };
     }
 
-    public function getOnProcessTickets()
+    public function getOnProcessTickets(): Collection|Builder|array
     {
-        switch (auth()->user()->role_id) {
-            case Role::SYSTEM_ADMIN:
-                $onProcessTickets = $this->sysAdminGetOnProcessTickets();
-                break;
-            case Role::SERVICE_DEPARTMENT_ADMIN:
-                $onProcessTickets = $this->serviceDeptAdminGetOnProcessTickets();
-                break;
-            case Role::AGENT:
-                $onProcessTickets = $this->agentGetOnProcessTickets();
-                break;
-            default:
-                $onProcessTickets = [];
-        }
-
-        return $onProcessTickets;
+        return match (auth()->user()->role_id) {
+            Role::SYSTEM_ADMIN => $this->sysAdminGetOnProcessTickets(),
+            Role::SERVICE_DEPARTMENT_ADMIN => $this->serviceDeptAdminGetOnProcessTickets(),
+            Role::AGENT => $this->agentGetOnProcessTickets(),
+            default => [],
+        };
     }
 
-    public function getViewedTickets()
+    public function getViewedTickets(): Collection|array
     {
-        switch (auth()->user()->role_id) {
-            case Role::SYSTEM_ADMIN:
-                $viewedTickets = $this->sysAdminGetViewedTickets();
-                break;
-            case Role::SERVICE_DEPARTMENT_ADMIN:
-                $viewedTickets = $this->serviceDeptAdminGetViewedTickets();
-                break;
-            default:
-                $viewedTickets = [];
-        }
-
-        return $viewedTickets;
+        return match (auth()->user()->role_id) {
+            Role::SYSTEM_ADMIN => $this->sysAdminGetViewedTickets(),
+            Role::SERVICE_DEPARTMENT_ADMIN => $this->serviceDeptAdminGetViewedTickets(),
+            default => [],
+        };
     }
 
-    public function getOverdueTickets()
+    public function getOverdueTickets(): Collection|Builder|array
     {
-        switch (auth()->user()->role_id) {
-            case Role::SYSTEM_ADMIN:
-                $overdueTickets = $this->sysAdminGetOverdueTickets();
-                break;
-            case Role::SERVICE_DEPARTMENT_ADMIN:
-                $overdueTickets = $this->serviceDeptAdminGetOverdueTickets();
-                break;
-            case Role::AGENT:
-                $overdueTickets = $this->agentGetOverdueTickets();
-                break;
-            default:
-                $overdueTickets = [];
-        }
-
-        return $overdueTickets;
+        return match (auth()->user()->role_id) {
+            Role::SYSTEM_ADMIN => $this->sysAdminGetOverdueTickets(),
+            Role::SERVICE_DEPARTMENT_ADMIN => $this->serviceDeptAdminGetOverdueTickets(),
+            Role::AGENT => $this->agentGetOverdueTickets(),
+            default => [],
+        };
     }
 
-    public function getClosedTickets()
+    public function getClosedTickets(): Collection|Builder|array
     {
-        switch (auth()->user()->role_id) {
-            case Role::SYSTEM_ADMIN:
-                $closedTickets = $this->sysAdminGetClosedTickets();
-                break;
-            case Role::SERVICE_DEPARTMENT_ADMIN:
-                $closedTickets = $this->serviceDeptAdminGetClosedTickets();
-                break;
-            case Role::AGENT:
-                $closedTickets = $this->agentGetClosedTickets();
-                break;
-            default:
-                $closedTickets = [];
-        }
-
-        return $closedTickets;
+        return match (auth()->user()->role_id) {
+            Role::SYSTEM_ADMIN => $this->sysAdminGetClosedTickets(),
+            Role::SERVICE_DEPARTMENT_ADMIN => $this->serviceDeptAdminGetClosedTickets(),
+            Role::AGENT => $this->agentGetClosedTickets(),
+            default => [],
+        };
     }
 }

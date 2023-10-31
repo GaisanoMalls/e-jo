@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Models\ActivityLog;
 use App\Models\Status;
 use App\Models\Ticket;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -14,7 +15,7 @@ class ClaimTicket extends Component
 
     protected $listeners = ['loadClaimTicket' => '$refresh'];
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->emit('loadTicketLogs');
@@ -25,7 +26,7 @@ class ClaimTicket extends Component
         $this->emit('loadSidebarCollapseTicketStatus');
     }
 
-    public function claimTicket()
+    public function claimTicket(): void
     {
         try {
             DB::transaction(function () {
@@ -46,9 +47,9 @@ class ClaimTicket extends Component
             $this->actionOnSubmit();
             flash()->addSuccess("You have claimed the ticket - {$this->ticket->ticket_number}.");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
-            return back()->with('error', 'Failed to claim the ticket.');
+            flash()->addError('Failed to claim the ticket.');
         }
     }
 

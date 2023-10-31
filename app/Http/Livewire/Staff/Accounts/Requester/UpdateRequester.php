@@ -6,6 +6,7 @@ use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\Department;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -17,7 +18,7 @@ class UpdateRequester extends Component
     public $BUDepartments = [];
     public $first_name, $middle_name, $last_name, $suffix, $email, $branch, $bu_department;
 
-    public function mount(User $user)
+    public function mount(User $user): void
     {
         $this->user = $user;
         $this->first_name = $user->profile->first_name;
@@ -30,7 +31,7 @@ class UpdateRequester extends Component
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
     }
 
-    protected function rules()
+    protected function rules(): array
     {
         return [
             'bu_department' => 'required',
@@ -43,13 +44,13 @@ class UpdateRequester extends Component
         ];
     }
 
-    public function updatedBranch()
+    public function updatedBranch(): void
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
     }
 
-    public function updateRequesterAccount()
+    public function updateRequesterAccount(): void
     {
         $this->validate();
 
@@ -78,7 +79,7 @@ class UpdateRequester extends Component
             sleep(1);
             flash()->addSuccess("You have successfully updated the account for {$this->user->profile->getFullName()}.");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Failed to update the account.');
         }

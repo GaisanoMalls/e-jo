@@ -9,8 +9,12 @@ use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\Ticket;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Team extends Model
 {
@@ -22,39 +26,39 @@ class Team extends Model
         'slug'
     ];
 
-    public function serviceDepartment()
+    public function serviceDepartment(): BelongsTo
     {
         return $this->belongsTo(ServiceDepartment::class);
     }
 
-    public function tickets()
+    public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
     }
 
-    public function helpTopics()
+    public function helpTopics(): HasMany
     {
         return $this->hasMany(HelpTopic::class);
     }
 
-    public function branches()
+    public function branches(): BelongsToMany
     {
         return $this->belongsToMany(Branch::class, 'team_branch');
     }
 
-    public function agents()
+    public function agents(): Builder|BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_team')
             ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
             ->withTimestamps();
     }
 
-    public function getBranches()
+    public function getBranches(): string
     {
         $branchNames = [];
 
         foreach ($this->branches as $branch) {
-            array_push($branchNames, $branch->name);
+            $branchNames[] = $branch->name;
         }
 
         if (!empty($branchNames)) {
@@ -64,12 +68,12 @@ class Team extends Model
         return '----';
     }
 
-    public function dateCreated()
+    public function dateCreated(): string
     {
         return $this->createdAt($this->created_at);
     }
 
-    public function dateUpdated()
+    public function dateUpdated(): string
     {
         return $this->updatedAt($this->created_at, $this->updated_at);
     }

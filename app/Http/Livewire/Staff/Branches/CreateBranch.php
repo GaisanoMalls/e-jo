@@ -4,31 +4,32 @@ namespace App\Http\Livewire\Staff\Branches;
 
 use App\Http\Requests\SysAdmin\Manage\Branch\StoreBranchRequest;
 use App\Models\Branch;
+use Exception;
 use Livewire\Component;
 
 class CreateBranch extends Component
 {
     public $name;
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreBranchRequest())->rules();
     }
 
-    public function clearFormField()
+    public function clearFormField(): void
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->clearFormField();
         $this->emit('loadBranches');
     }
 
-    public function saveBranch()
+    public function saveBranch(): void
     {
         $this->validate();
 
@@ -41,7 +42,7 @@ class CreateBranch extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('New branch has been created.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

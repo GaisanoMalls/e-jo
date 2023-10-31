@@ -38,12 +38,12 @@ class FromRequesterClarificationMail extends Mailable implements ShouldQueue
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope()
+    public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Clarification for ticket {$this->ticket->ticket_number}",
             from: new Address(auth()->user()->email, auth()->user()->profile->getFullName()),
             replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName())],
+            subject: "Clarification for ticket {$this->ticket->ticket_number}",
         );
     }
 
@@ -52,7 +52,7 @@ class FromRequesterClarificationMail extends Mailable implements ShouldQueue
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content()
+    public function content(): Content
     {
         return new Content(
             markdown: 'mail.requester.from-requester-clarification-mail',
@@ -70,7 +70,7 @@ class FromRequesterClarificationMail extends Mailable implements ShouldQueue
      *
      * @return array
      */
-    public function attachments()
+    public function attachments(): array
     {
         return [
             // Attachment::fromStorage($this->ticket->clarifications->fileAttachments)

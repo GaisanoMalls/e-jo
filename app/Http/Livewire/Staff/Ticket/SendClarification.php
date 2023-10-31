@@ -11,6 +11,7 @@ use App\Models\ClarificationFile;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Notifications\ServiceDepartmentAdmin\TicketClarificationFromServiceDeptAdminNotification;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -23,19 +24,21 @@ class SendClarification extends Component
     use WithFileUploads, Utils;
 
     public Ticket $ticket;
-    public $description, $clarificationFiles = [], $upload = 0;
+    public $upload = 0;
+    public $clarificationFiles = [];
+    public $description;
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreClarificationRequest())->rules();
     }
 
-    public function messages()
+    public function messages(): array
     {
         return (new StoreClarificationRequest())->messages();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->replyFiles = null;
@@ -51,7 +54,7 @@ class SendClarification extends Component
         $this->dispatchBrowserEvent('reload-modal');
     }
 
-    public function sendClarification()
+    public function sendClarification(): void
     {
         $this->validate();
 
@@ -101,7 +104,7 @@ class SendClarification extends Component
 
             $this->actionOnSubmit();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }

@@ -5,10 +5,11 @@ namespace App\Http\Traits\SysAdmin;
 use App\Models\ApprovalStatus;
 use App\Models\Status;
 use App\Models\Ticket;
+use Illuminate\Database\Eloquent\Collection;
 
 trait Tickets
 {
-    public function sysAdminGetApprovedTickets()
+    public function sysAdminGetApprovedTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::APPROVED)
@@ -18,7 +19,7 @@ trait Tickets
             ->get();
     }
 
-    public function sysAdminGetDisapprovedTickets()
+    public function sysAdminGetDisapprovedTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::DISAPPROVED)
@@ -28,7 +29,7 @@ trait Tickets
             ->get();
     }
 
-    public function sysAdminGetOpenTickets()
+    public function sysAdminGetOpenTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OPEN)
@@ -38,7 +39,7 @@ trait Tickets
             ->get();
     }
 
-    public function sysAdminGetClaimedTickets()
+    public function sysAdminGetClaimedTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLAIMED)
@@ -49,7 +50,7 @@ trait Tickets
             ->get();
     }
 
-    public function sysAdminGetOnProcessTickets()
+    public function sysAdminGetOnProcessTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::ON_PROCESS)
@@ -59,7 +60,7 @@ trait Tickets
             ->get();
     }
 
-    public function sysAdminGetViewedTickets()
+    public function sysAdminGetViewedTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::VIEWED)
@@ -69,7 +70,7 @@ trait Tickets
             ->get();
     }
 
-    public function sysAdminGetOverdueTickets()
+    public function sysAdminGetOverdueTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OVERDUE)
@@ -79,7 +80,7 @@ trait Tickets
             ->get();
     }
 
-    public function sysAdminGetClosedTickets()
+    public function sysAdminGetClosedTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLOSED)

@@ -8,6 +8,7 @@ use App\Http\Requests\ServiceDeptAdmin\UpdateAnnouncementRequest;
 use App\Models\Announcement;
 use App\Models\Department;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 
 class AnnouncementController extends Controller
@@ -65,7 +66,7 @@ class AnnouncementController extends Controller
             $announcement->delete();
             return back()->with('success', 'Announcement successfully deleted.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             return back()->with('success', 'Announcemant cannot be deleted.');
         }

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Tags;
 use App\Http\Requests\SysAdmin\Manage\Tag\StoreTagRequest;
 use App\Http\Traits\Utils;
 use App\Models\Tag;
+use Exception;
 use Livewire\Component;
 
 class CreateTag extends Component
@@ -13,25 +14,25 @@ class CreateTag extends Component
 
     public $name;
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreTagRequest())->rules();
     }
 
-    public function clearFormField()
+    public function clearFormField(): void
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->emit('loadTags');
         $this->clearFormField();
     }
 
-    public function saveTag()
+    public function saveTag(): void
     {
         $this->validate();
 
@@ -44,7 +45,7 @@ class CreateTag extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('Tag created');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

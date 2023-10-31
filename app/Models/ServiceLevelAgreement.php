@@ -6,6 +6,7 @@ use App\Http\Traits\Utils;
 use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ServiceLevelAgreement extends Model
 {
@@ -18,22 +19,22 @@ class ServiceLevelAgreement extends Model
      */
     protected $fillable = ['countdown_approach', 'time_unit'];
 
-    public function tickets()
+    public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
     }
 
-    public function helpTopics()
+    public function helpTopics(): HasMany
     {
         return $this->hasMany(HelpTopic::class);
     }
 
-    public function dateCreated()
+    public function dateCreated(): string
     {
         return $this->createdAt($this->created_at);
     }
 
-    public function dateUpdated()
+    public function dateUpdated(): string
     {
         return $this->updatedAt($this->created_at, $this->updated_at);
     }

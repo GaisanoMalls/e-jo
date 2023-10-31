@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Requester\Account;
 
 use App\Http\Requests\Requester\UpdateProfileRequest;
 use App\Http\Traits\Utils;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -14,10 +15,11 @@ class Profile extends Component
 {
     use WithFileUploads, Utils;
 
+    public $imageUpload = 0;
     public $first_name, $middle_name, $last_name, $suffix, $email, $mobile_number, $picture;
-    public int $imageUpload = 0;
 
-    public function mount()
+
+    public function mount(): void
     {
         $authUser = Auth::user();
 
@@ -29,18 +31,18 @@ class Profile extends Component
         $this->mobile_number = $authUser->profile->mobile_number;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return (new UpdateProfileRequest())->rules();
     }
 
-    public function resetFileField()
+    public function resetFileField(): void
     {
         $this->picture = null;
         $this->imageUpload++;
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->resetValidation();
@@ -48,7 +50,7 @@ class Profile extends Component
         $this->emit('loadNavProfilePic');
     }
 
-    public function saveProfile()
+    public function saveProfile(): void
     {
         $this->validate();
 
@@ -91,7 +93,7 @@ class Profile extends Component
 
             $this->actionOnSubmit();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Something went wrong while updating your profile.');
         }

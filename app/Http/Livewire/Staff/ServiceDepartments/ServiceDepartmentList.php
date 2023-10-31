@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\ServiceDepartments;
 
 use App\Http\Traits\BasicModelQueries;
 use App\Models\ServiceDepartment;
+use Exception;
 use Livewire\Component;
 
 class ServiceDepartmentList extends Component
@@ -15,25 +16,25 @@ class ServiceDepartmentList extends Component
 
     protected $listeners = ['loadServiceDepartments' => 'fetchServiceDepartments'];
 
-    protected function rules()
+    protected function rules(): array
     {
         return [
             'name' => "required|unique:service_departments,name,{$this->serviceDepartmentEditId}"
         ];
     }
 
-    public function fetchServiceDepartments()
+    public function fetchServiceDepartments(): void
     {
         $this->serviceDepartments = $this->queryServiceDepartments();
     }
 
-    public function clearFormField()
+    public function clearFormField(): void
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    public function editServiceDepartment(ServiceDepartment $serviceDepartment)
+    public function editServiceDepartment(ServiceDepartment $serviceDepartment): void
     {
         $this->serviceDepartmentEditId = $serviceDepartment->id;
         $this->name = $serviceDepartment->name;
@@ -41,7 +42,7 @@ class ServiceDepartmentList extends Component
         $this->resetValidation();
     }
 
-    public function updateServiceDepartment()
+    public function updateServiceDepartment(): void
     {
         $this->validate();
 
@@ -58,20 +59,20 @@ class ServiceDepartmentList extends Component
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Service department successfully updated');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
-    public function deleteServiceDepartment(ServiceDepartment $serviceDepartment)
+    public function deleteServiceDepartment(ServiceDepartment $serviceDepartment): void
     {
         $this->serviceDepartmentDeleteId = $serviceDepartment->id;
         $this->name = $serviceDepartment->name;
         $this->dispatchBrowserEvent('show-delete-service-department-modal');
     }
 
-    public function delete()
+    public function delete(): void
     {
         try {
             ServiceDepartment::find($this->serviceDepartmentDeleteId)->delete();
@@ -81,7 +82,7 @@ class ServiceDepartmentList extends Component
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Service department successfully deleted');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

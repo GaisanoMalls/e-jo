@@ -14,7 +14,6 @@ Help Topics
 @section('manage-content')
 <div class="row gap-4">
     <div class="help__topics__section">
-        {{-- @include('layouts.staff.system_admin.manage.help_topics.includes.modal.add_helptopic_modal') --}}
         @livewire('staff.help-topic.create-help-topic')
         <div class="col-12 content__container">
             <div class="card card__rounded__and__no__border">
@@ -35,28 +34,9 @@ Help Topics
                         </button>
                     </div>
                 </div>
-                <div class="table-responsive custom__table">
-                    @if (!$helpTopics->isEmpty())
-                    @include('layouts.staff.system_admin.manage.help_topics.includes.help_topic_list')
-                    @else
-                    <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                        <small style="font-size: 14px;">No records for help topics.</small>
-                    </div>
-                    @endif
-                </div>
+                @livewire('staff.help-topic.help-topic-list')
             </div>
         </div>
     </div>
 </div>
 @endsection
-
-@if ($errors->storeHelpTopic->any())
-@push('modal-with-error')
-<script>
-    $(function () {
-        $('#addNewHelpTopicModal').modal('show');
-    });
-
-</script>
-@endpush
-@endif

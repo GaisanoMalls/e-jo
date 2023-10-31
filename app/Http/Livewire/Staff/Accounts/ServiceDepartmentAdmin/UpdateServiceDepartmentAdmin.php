@@ -6,6 +6,7 @@ use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\Department;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -17,7 +18,7 @@ class UpdateServiceDepartmentAdmin extends Component
     public $BUDepartments = [], $service_departments = [], $currentServiceDepartments = [];
     public $first_name, $middle_name, $last_name, $email, $suffix, $branch, $bu_department;
 
-    public function mount(User $serviceDeptAdmin)
+    public function mount(User $serviceDeptAdmin): void
     {
         $this->serviceDeptAdmin = $serviceDeptAdmin;
         $this->first_name = $serviceDeptAdmin->profile->first_name;
@@ -32,13 +33,13 @@ class UpdateServiceDepartmentAdmin extends Component
         $this->currentServiceDepartments = $serviceDeptAdmin->serviceDepartments->pluck('id')->toArray();
     }
 
-    public function updatedBranch()
+    public function updatedBranch(): void
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'branch' => 'required',
@@ -52,7 +53,7 @@ class UpdateServiceDepartmentAdmin extends Component
         ];
     }
 
-    public function updateServiceDepartmentAdminAccount()
+    public function updateServiceDepartmentAdminAccount(): void
     {
         $this->validate();
 
@@ -82,7 +83,7 @@ class UpdateServiceDepartmentAdmin extends Component
 
             flash()->addSuccess("You have successfully updated the account for {$this->serviceDeptAdmin->profile->getFullName()}.");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Failed to update the account.');
         }

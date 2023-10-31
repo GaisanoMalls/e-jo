@@ -10,6 +10,7 @@ use App\Models\ReplyFile;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -20,14 +21,15 @@ class SendTicketReply extends Component
     use WithFileUploads, Utils;
 
     public Ticket $ticket;
-    public $description, $replyFiles = [], $upload = 0;
+    public $upload = 0;
+    public $description, $replyFiles = [];
 
-    public function rules()
+    public function rules(): array
     {
         return (new ReplyTicketRequest())->rules();
     }
 
-    public function messages()
+    public function messages(): array
     {
         return (new ReplyTicketRequest())->messages();
     }
@@ -88,7 +90,7 @@ class SendTicketReply extends Component
 
             $this->actionOnSubmit();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

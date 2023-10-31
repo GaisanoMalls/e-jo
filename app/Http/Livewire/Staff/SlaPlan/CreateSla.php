@@ -4,31 +4,32 @@ namespace App\Http\Livewire\Staff\SlaPlan;
 
 use App\Http\Requests\SysAdmin\Manage\SLA\StoreSLARequest;
 use App\Models\ServiceLevelAgreement;
+use Exception;
 use Livewire\Component;
 
 class CreateSla extends Component
 {
     public $countdown_approach, $time_unit;
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreSLARequest())->rules();
     }
 
-    public function clearFormFields()
+    public function clearFormFields(): void
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->clearFormFields();
         $this->emit('loadServiceLevelAgreements');
     }
 
-    public function saveSLA()
+    public function saveSLA(): void
     {
         $validatedData = $this->validate();
 
@@ -37,7 +38,7 @@ class CreateSla extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('A new SLA has been created.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

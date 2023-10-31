@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Ticket;
+use Exception;
 use Livewire\Component;
 
 class AssignTag extends Component
@@ -15,7 +16,7 @@ class AssignTag extends Component
 
     protected $listeners = ['loadAssignTicketForm' => '$refresh'];
 
-    public function saveAssignTicketTag()
+    public function saveAssignTicketTag(): void
     {
         try {
             $this->ticket->tags()->sync($this->selectedTags);
@@ -24,7 +25,7 @@ class AssignTag extends Component
             $this->emit('loadTicketTags');
             $this->dispatchBrowserEvent('close-modal');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

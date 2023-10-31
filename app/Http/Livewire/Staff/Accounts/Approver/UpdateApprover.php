@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Accounts\Approver;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -16,7 +17,7 @@ class UpdateApprover extends Component
     public $bu_departments = [], $branches = [], $currentBranches = [], $currentBUDepartments = [];
     public $first_name, $middle_name, $last_name, $email, $suffix;
 
-    public function mount(User $approver)
+    public function mount(User $approver): void
     {
         $this->approver = $approver;
         $this->first_name = $approver->profile->first_name;
@@ -30,7 +31,7 @@ class UpdateApprover extends Component
         $this->currentBUDepartments = $approver->buDepartments->pluck("id")->toArray();
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'branches' => 'required',
@@ -43,7 +44,7 @@ class UpdateApprover extends Component
         ];
     }
 
-    public function updateApproverAccount()
+    public function updateApproverAccount(): void
     {
         $this->validate();
 
@@ -70,7 +71,7 @@ class UpdateApprover extends Component
             sleep(1);
             flash()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName()}.");
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Failed to update the account');
         }

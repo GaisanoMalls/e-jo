@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Teams;
 use App\Http\Requests\SysAdmin\Manage\Team\StoreTeamRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Team;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -13,19 +14,19 @@ class CreateTeam extends Component
     use BasicModelQueries;
 
     public $selectedBranches = [];
-    public $selectedServiceDepartment, $name;
+    public $selectedServiceDepartment, $name = '';
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreTeamRequest())->rules();
     }
 
-    public function messages()
+    public function messages(): array
     {
         return (new StoreTeamRequest())->messages();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->reset();
@@ -34,7 +35,7 @@ class CreateTeam extends Component
         $this->dispatchBrowserEvent('clear-select-options');
     }
 
-    public function saveTeam()
+    public function saveTeam(): void
     {
         $this->validate();
 
@@ -52,13 +53,13 @@ class CreateTeam extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('New team has been created.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, someting went wrong.');
         }
     }
 
-    public function cancel()
+    public function cancel(): void
     {
         $this->reset();
         $this->resetValidation();

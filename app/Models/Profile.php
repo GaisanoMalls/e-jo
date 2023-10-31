@@ -6,6 +6,7 @@ use App\Http\Traits\Utils;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Profile extends Model
 {
@@ -23,7 +24,7 @@ class Profile extends Model
         'slug'
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -33,7 +34,7 @@ class Profile extends Model
         $middleInitial = $this->middle_name ? $this->middle_name[0] . '.' : '';
         $suffix = $this->suffix ?? '';
 
-        return "{$this->first_name} {$middleInitial} {$this->last_name} {$suffix}";
+        return "$this->first_name $middleInitial $this->last_name $suffix";
     }
 
     public function getNameInitial(): string

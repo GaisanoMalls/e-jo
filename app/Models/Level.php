@@ -5,8 +5,10 @@ namespace App\Models;
 use App\Models\HelpTopic;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Level extends Model
 {
@@ -14,7 +16,7 @@ class Level extends Model
 
     protected $fillable = ['value'];
 
-    public function approvers()
+    public function approvers(): Builder|BelongsToMany
     {
         return $this->belongsToMany(User::class, 'level_approver')
             ->whereHas('role', fn($query) => $query->where('role_id', Role::APPROVER))
@@ -22,7 +24,7 @@ class Level extends Model
             ->withTimestamps();
     }
 
-    public function helpTopics()
+    public function helpTopics(): BelongsToMany
     {
         return $this->belongsToMany(HelpTopic::class, 'help_topic_level');
     }

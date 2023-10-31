@@ -34,12 +34,12 @@ class ApprovedTicketMail extends Mailable implements ShouldQueue
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope()
+    public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'You have a new ticket approved by your Service Dept. Admin',
             from: new Address(auth()->user()->email, auth()->user()->profile->getFullName()),
             replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName())],
+            subject: 'You have a new ticket approved by your Service Dept. Admin',
         );
     }
 
@@ -48,7 +48,7 @@ class ApprovedTicketMail extends Mailable implements ShouldQueue
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content()
+    public function content(): Content
     {
         return new Content(
             markdown: 'mail.staff.approved-ticket-mail',
@@ -69,7 +69,7 @@ class ApprovedTicketMail extends Mailable implements ShouldQueue
      *
      * @return array
      */
-    public function attachments()
+    public function attachments(): array
     {
         return [];
     }

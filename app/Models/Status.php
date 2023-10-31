@@ -6,6 +6,7 @@ use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Status extends Model
 {
@@ -32,12 +33,12 @@ class Status extends Model
         self::CLOSED => '#7A7E87'
     ];
 
-    public function tickets()
+    public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
     }
 
-    public function dateCreated()
+    public function dateCreated(): string
     {
         return Carbon::parse($this->created_at)->format('M d, Y');
     }

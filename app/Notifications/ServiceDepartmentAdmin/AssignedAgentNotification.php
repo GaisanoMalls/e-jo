@@ -32,7 +32,7 @@ class AssignedAgentNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['database'];
     }
@@ -43,7 +43,7 @@ class AssignedAgentNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray($notifiable): array
     {
         $serviceDepartmentAdmin = User::with('profile')->where('id', auth()->user()->id)
             ->whereHas('role', fn($query) => $query->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))->first();

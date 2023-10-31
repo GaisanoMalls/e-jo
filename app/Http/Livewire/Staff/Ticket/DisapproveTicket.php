@@ -10,6 +10,7 @@ use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\ServiceDepartmentAdmin\DisapprovedTicketNotification;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
@@ -20,12 +21,12 @@ class DisapproveTicket extends Component
 
     public $reasonDescription;
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreDisapproveTicketRequest())->rules();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->reset('reasonDescription');
@@ -45,7 +46,7 @@ class DisapproveTicket extends Component
         $this->dispatchBrowserEvent('reload-modal');
     }
 
-    public function disapproveTicket()
+    public function disapproveTicket(): void
     {
         $this->validate();
 
@@ -69,7 +70,7 @@ class DisapproveTicket extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('Ticket has been approved');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Ooos, something went wrong');
         }

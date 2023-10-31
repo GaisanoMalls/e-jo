@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Teams;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Branch;
 use App\Models\Team;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -17,7 +18,7 @@ class TeamList extends Component
 
     protected $listeners = ['loadTeams' => 'fetchTeams'];
 
-    protected function rules()
+    protected function rules(): array
     {
         return [
             'name' => "required|unique:teams,name,{$this->teamEditId}",
@@ -26,7 +27,7 @@ class TeamList extends Component
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'editSelectedServiceDepartment.required' => 'The service department field is required.',
@@ -34,12 +35,12 @@ class TeamList extends Component
         ];
     }
 
-    public function fetchTeams()
+    public function fetchTeams(): void
     {
         $this->teams = $this->queryTeams();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->reset();
@@ -48,7 +49,7 @@ class TeamList extends Component
         $this->dispatchBrowserEvent('reset-select-options');
     }
 
-    public function editTeam(Team $team)
+    public function editTeam(Team $team): void
     {
         $this->teamEditId = $team->id;
         $this->name = $team->name;
@@ -61,7 +62,7 @@ class TeamList extends Component
         $this->dispatchBrowserEvent('edit-current-branch-ids', ['branchIds' => $this->editSelectedBranches]);
     }
 
-    public function update()
+    public function update(): void
     {
         $this->validate();
 
@@ -82,20 +83,20 @@ class TeamList extends Component
 
             $this->actionOnSubmit();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
-    public function deleteTeam(Team $team)
+    public function deleteTeam(Team $team): void
     {
         $this->teamDeleteId = $team->id;
         $this->name = $team->name;
         $this->dispatchBrowserEvent('show-delete-team-modal');
     }
 
-    public function delete()
+    public function delete(): void
     {
         try {
             Team::find($this->teamDeleteId)->delete();
@@ -104,13 +105,13 @@ class TeamList extends Component
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Team successfully deleted');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
-    public function cancel()
+    public function cancel(): void
     {
         $this->reset();
         $this->resetValidation();

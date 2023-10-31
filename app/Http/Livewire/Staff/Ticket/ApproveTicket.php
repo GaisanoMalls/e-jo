@@ -10,6 +10,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\ServiceDepartmentAdmin\ApprovedTicketForAgentNotification;
 use App\Notifications\ServiceDepartmentAdmin\ApprovedTicketForRequesterNotification;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -19,7 +20,7 @@ class ApproveTicket extends Component
 {
     public Ticket $ticket;
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->emit('loadTicketTags');
@@ -37,7 +38,7 @@ class ApproveTicket extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function approveTicket()
+    public function approveTicket(): void
     {
         try {
             DB::transaction(function () {
@@ -62,7 +63,7 @@ class ApproveTicket extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('Ticket has been approved');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

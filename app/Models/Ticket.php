@@ -16,8 +16,13 @@ use App\Models\Tag;
 use App\Models\Team;
 use App\Models\TicketFile;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Ticket extends Model
 {
@@ -43,89 +48,89 @@ class Ticket extends Model
         //
     ];
 
-    public function user()
+    public function user(): BelongsTo|Builder
     {
         return $this->belongsTo(User::class, 'user_id')
             ->whereHas('role', fn($requester) => $requester->where('role_id', Role::USER));
     }
 
-    public function agent()
+    public function agent(): BelongsTo|Builder
     {
         return $this->belongsTo(User::class, 'agent_id')
             ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT));
     }
 
-    public function branch()
+    public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 
-    public function serviceDepartment()
+    public function serviceDepartment(): BelongsTo
     {
         return $this->belongsTo(ServiceDepartment::class, 'service_department_id');
     }
 
-    public function team()
+    public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'team_id');
     }
 
-    public function helpTopic()
+    public function helpTopic(): BelongsTo
     {
         return $this->belongsTo(HelpTopic::class, 'help_topic_id');
     }
 
-    public function status()
+    public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class, 'status_id');
     }
 
-    public function priorityLevel()
+    public function priorityLevel(): BelongsTo
     {
         return $this->belongsTo(PriorityLevel::class, 'priority_level_id');
     }
 
-    public function sla()
+    public function sla(): BelongsTo
     {
         return $this->belongsTo(ServiceLevelAgreement::class, 'service_level_agreement');
     }
 
-    public function tags()
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'ticket_tag');
     }
 
-    public function fileAttachments()
+    public function fileAttachments(): HasMany
     {
         return $this->hasMany(TicketFile::class);
     }
 
-    public function replies()
+    public function replies(): HasMany
     {
         return $this->hasMany(Reply::class);
     }
 
-    public function reasons()
+    public function reasons(): HasMany
     {
         return $this->hasMany(Reason::class);
     }
 
-    public function clarifications()
+    public function clarifications(): HasMany
     {
         return $this->hasMany(Clarification::class);
     }
 
-    public function activityLogs()
+    public function activityLogs(): HasMany
     {
         return $this->hasMany(ActivityLog::class)->orderByDesc('created_at');
     }
 
-    public function bookmark()
+    public function bookmark(): HasOne
     {
         return $this->hasOne(Bookmark::class);
     }
 
-    public function dateCreated()
+    public function dateCreated(): string
     {
         return $this->createdAt($this->created_at);
     }

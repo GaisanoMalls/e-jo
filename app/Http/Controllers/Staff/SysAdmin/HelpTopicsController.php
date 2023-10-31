@@ -10,6 +10,7 @@ use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
 use App\Models\LevelApprover;
 use App\Models\ServiceDepartment;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class HelpTopicsController extends Controller
@@ -67,7 +68,7 @@ class HelpTopicsController extends Controller
 
             return back()->with('success', 'Help topic successfully created.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             return back()->with('error', 'Failed to save the help topic');
         }

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Branches;
 
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Branch;
+use Exception;
 use Livewire\Component;
 
 class BranchList extends Component
@@ -15,25 +16,25 @@ class BranchList extends Component
 
     protected $listeners = ['loadBranches' => 'fetchBranches'];
 
-    protected function rules()
+    protected function rules(): array
     {
         return [
             'name' => "required|unique:branches,name,{$this->branchEditId}"
         ];
     }
 
-    public function fetchBranches()
+    public function fetchBranches(): void
     {
         $this->branches = $this->queryBranches();
     }
 
-    public function clearFormField()
+    public function clearFormField(): void
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    public function editBranch(Branch $branch)
+    public function editBranch(Branch $branch): void
     {
         $this->branchEditId = $branch->id;
         $this->name = $branch->name;
@@ -41,7 +42,7 @@ class BranchList extends Component
         $this->resetValidation();
     }
 
-    public function update()
+    public function update(): void
     {
         $this->validate();
 
@@ -57,20 +58,20 @@ class BranchList extends Component
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Branch successfully updated');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
-    public function deleteBranch(Branch $branch)
+    public function deleteBranch(Branch $branch): void
     {
         $this->branchDeleteId = $branch->id;
         $this->name = $branch->name;
         $this->dispatchBrowserEvent('show-delete-branch-modal');
     }
 
-    public function delete()
+    public function delete(): void
     {
         try {
             Branch::find($this->branchDeleteId)->delete();
@@ -80,7 +81,7 @@ class BranchList extends Component
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Branch successfully deleted');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }

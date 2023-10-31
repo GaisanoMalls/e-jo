@@ -5,12 +5,13 @@ namespace App\Http\Traits\Agent;
 use App\Models\ApprovalStatus;
 use App\Models\Status;
 use App\Models\Ticket;
+use Illuminate\Database\Eloquent\Builder;
 
 trait Tickets
 {
-    public function agentGetOpenTickets()
+    public function agentGetOpenTickets(): Builder
     {
-        $openTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::APPROVED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })->where(function ($byUserQuery) {
@@ -20,13 +21,11 @@ trait Tickets
             ->whereIn('team_id', auth()->user()->teams->pluck('id'))
             ->orderByDesc('created_at')
             ->get();
-
-        return $openTickets;
     }
 
-    public function agentGetClaimedTickets()
+    public function agentGetClaimedTickets(): Builder
     {
-        $claimedTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLAIMED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })->where(function ($byUserQuery) {
@@ -36,13 +35,11 @@ trait Tickets
                 ->where('service_department_id', auth()->user()->service_department_id);
         })->orderByDesc('created_at')
             ->get();
-
-        return $claimedTickets;
     }
 
-    public function agentGetOnProcessTickets()
+    public function agentGetOnProcessTickets(): Builder
     {
-        $onProcessTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::ON_PROCESS)
                 ->whereIn('approval_status', [ApprovalStatus::FOR_APPROVAL, ApprovalStatus::APPROVED]);
         })->where(function ($byUserQuery) {
@@ -51,13 +48,11 @@ trait Tickets
                 ->where('service_department_id', auth()->user()->service_department_id);
         })->orderByDesc('created_at')
             ->get();
-
-        return $onProcessTickets;
     }
 
-    public function agentGetOverdueTickets()
+    public function agentGetOverdueTickets(): Builder
     {
-        $overdueTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OVERDUE)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })->where(function ($byUserQuery) {
@@ -66,13 +61,11 @@ trait Tickets
                 ->where('service_department_id', auth()->user()->service_department_id);
         })->orderByDesc('created_at')
             ->get();
-
-        return $overdueTickets;
     }
 
-    public function agentGetClosedTickets()
+    public function agentGetClosedTickets(): Builder
     {
-        $closedTickets = Ticket::where(function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLOSED)
                 ->where('approval_status', ApprovalStatus::APPROVED);
         })->where(function ($byUserQuery) {
@@ -81,7 +74,5 @@ trait Tickets
                 ->where('service_department_id', auth()->user()->service_department_id);
         })->orderByDesc('created_at')
             ->get();
-
-        return $closedTickets;
     }
 }

@@ -9,6 +9,7 @@ use App\Models\Clarification;
 use App\Models\ClarificationFile;
 use App\Models\Status;
 use App\Models\Ticket;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -19,22 +20,24 @@ class SendClarification extends Component
     use WithFileUploads, Utils;
 
     public Ticket $ticket;
-    public $description, $clarificationFiles = [], $upload = 0;
+    public $upload = 0;
+    public $description;
+    public $clarificationFiles = [];
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreClarificationRequest())->rules();
     }
 
-    public function messages()
+    public function messages(): array
     {
         return (new StoreClarificationRequest())->messages();
     }
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
-        $this->clarificationFiles = null;
+        $this->clarificationFiles = [];
         $this->upload++;
         $this->reset('description');
         $this->emit('loadTicketLogs');
@@ -46,7 +49,7 @@ class SendClarification extends Component
         $this->dispatchBrowserEvent('reload-modal');
     }
 
-    public function sendClarification()
+    public function sendClarification(): void
     {
         $this->validate();
 
@@ -97,9 +100,9 @@ class SendClarification extends Component
 
             $this->actionOnSubmit();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
-            return back()->with('error', 'Failed to send ticket clarification. Please try again.');
+            flash()->addError('Failed to send ticket clarification. Please try again.');
         }
     }
 

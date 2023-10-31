@@ -4,24 +4,26 @@ namespace App\Http\Livewire\Staff\Accounts\Agent;
 
 use App\Models\Role;
 use App\Models\User;
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
 class AgentList extends Component
 {
-    public $agentDeleteId, $agentFullName;
     public $agents;
+    public $agentDeleteId, $agentFullName;
 
     protected $listeners = ['loadAgentList' => '$refresh'];
 
-    public function deleteAgent(User $agent)
+    public function deleteAgent(User $agent): void
     {
         $this->agentDeleteId = $agent->id;
         $this->agentFullName = $agent->profile->getFullName();
         $this->dispatchBrowserEvent('show-delete-agent-modal');
     }
 
-    public function delete()
+    public function delete(): void
     {
         try {
             User::find($this->agentDeleteId)->delete();
@@ -30,13 +32,13 @@ class AgentList extends Component
             flash()->addSuccess('Requester account has been deleted');
             sleep(1);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addSuccess('Oops, something went wrong');
         }
     }
 
-    private function getInitialQuery()
+    private function getInitialQuery(): Collection|array
     {
         return User::with(['department', 'branch'])
             ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))

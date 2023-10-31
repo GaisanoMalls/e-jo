@@ -11,6 +11,7 @@ use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\ServiceDepartmentAdmin\AssignedAgentNotification;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -21,16 +22,17 @@ class AssignTicket extends Component
     use BasicModelQueries;
 
     public Ticket $ticket;
-    public $agents = [], $team, $agent;
+    public $agents = [];
+    public $team, $agent;
 
-    private function actionOnSubmit()
+    private function actionOnSubmit(): void
     {
         sleep(1);
         $this->emit('loadTicketDetails');
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function saveAssignTicket()
+    public function saveAssignTicket(): void
     {
         try {
             DB::transaction(function () {
@@ -56,13 +58,13 @@ class AssignTicket extends Component
 
             $this->actionOnSubmit();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
-    public function updatedTeam()
+    public function updatedTeam(): void
     {
         $this->agents = User::with('profile')->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
             ->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->ticket->serviceDepartment->id))

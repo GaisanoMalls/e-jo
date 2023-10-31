@@ -9,6 +9,7 @@ use App\Models\Department;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -19,18 +20,18 @@ class CreateServiceDeptAdmin extends Component
     public $BUDepartments = [], $service_departments = [];
     public $first_name, $middle_name, $last_name, $email, $suffix, $branch, $bu_department;
 
-    public function rules()
+    public function rules(): array
     {
         return (new StoreServiceDeptAdminRequest())->rules();
     }
 
-    public function updatedBranch()
+    public function updatedBranch(): void
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
     }
 
-    public function actionOnSubmit()
+    public function actionOnSubmit(): void
     {
         sleep(1);
         $this->reset();
@@ -39,7 +40,7 @@ class CreateServiceDeptAdmin extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function saveServiceDepartmentAdmin()
+    public function saveServiceDepartmentAdmin(): void
     {
         $this->validate();
 
@@ -73,13 +74,13 @@ class CreateServiceDeptAdmin extends Component
             $this->actionOnSubmit();
             flash()->addSuccess('Account successfully created');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addSuccess('Failed to save a new service department admin');
         }
     }
 
-    public function cancel()
+    public function cancel(): void
     {
         $this->reset();
         $this->resetValidation();

@@ -6,6 +6,7 @@ use App\Models\Tag;
 use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TicketTag extends Model
 {
@@ -15,12 +16,12 @@ class TicketTag extends Model
     protected $table = 'ticket_tag';
     public $timestamps = false;
 
-    public function tag()
+    public function tag(): BelongsTo
     {
         return $this->belongsTo(Tag::class);
     }
 
-    public function ticket()
+    public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);
     }

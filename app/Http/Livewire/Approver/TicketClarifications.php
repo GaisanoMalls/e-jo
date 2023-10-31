@@ -12,12 +12,12 @@ class TicketClarifications extends Component
 
     protected $listeners = ['loadClarifications' => '$refresh'];
 
-    public function loadClarifications()
+    public function loadClarifications(): void
     {
         $this->clarifications = $this->ticket->clarifications;
     }
 
-    public function getLatestClarification()
+    public function getLatestClarification(): void
     {
         $this->emit('loadLatestClarification');
     }

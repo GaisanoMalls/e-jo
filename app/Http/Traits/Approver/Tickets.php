@@ -6,12 +6,13 @@ use App\Http\Traits\BasicModelQueries;
 use App\Models\ApprovalStatus;
 use App\Models\Status;
 use App\Models\Ticket;
+use Illuminate\Database\Eloquent\Collection;
 
 trait Tickets
 {
     use BasicModelQueries;
 
-    public function getForApprovalTickets()
+    public function getForApprovalTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OPEN)
@@ -28,7 +29,7 @@ trait Tickets
             ->get();
     }
 
-    public function getDisapprovedTickets()
+    public function getDisapprovedTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLOSED)
@@ -45,7 +46,7 @@ trait Tickets
             ->get();
     }
 
-    public function getOpenTickets()
+    public function getOpenTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OPEN)
@@ -62,7 +63,7 @@ trait Tickets
             ->get();
     }
 
-    public function getViewedTickets()
+    public function getViewedTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::VIEWED)
@@ -79,7 +80,7 @@ trait Tickets
             ->get();
     }
 
-    public function getApprovedTickets()
+    public function getApprovedTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::APPROVED)
@@ -96,7 +97,7 @@ trait Tickets
             ->get();
     }
 
-    public function getOnProcessTickets()
+    public function getOnProcessTickets(): Collection
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::ON_PROCESS)

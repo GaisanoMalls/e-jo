@@ -4,6 +4,8 @@ namespace App\Http\Traits;
 
 use App\Models\Role;
 use Carbon\Carbon;
+use Exception;
+use Str;
 
 trait Utils
 {
@@ -14,12 +16,12 @@ trait Utils
      * - updatedAt()
      */
 
-    public function createdAt($created_field)
+    public function createdAt($created_field): string
     {
         return Carbon::parse($created_field)->format('M d, Y');
     }
 
-    public function updatedAt($created_field, $updated_field)
+    public function updatedAt($created_field, $updated_field): string
     {
         $created_at = Carbon::parse($created_field)->isoFormat('MMM DD, YYYY HH:mm:ss');
         $updated_at = Carbon::parse($updated_field)->isoFormat('MMM DD, YYYY HH:mm:ss');
@@ -46,6 +48,9 @@ trait Utils
         return date('m');
     }
 
+    /**
+     * @throws Exception
+     */
     private static function alphaNum(): string
     {
         $generatedValues = []; // Array to store previously generated values
@@ -63,7 +68,7 @@ trait Utils
             }
         }
 
-        throw new \Exception('Unable to generate a unique value after ' . $maxAttempts . ' attempts.');
+        throw new Exception('Unable to generate a unique value after ' . $maxAttempts . ' attempts.');
     }
 
     /**
@@ -73,7 +78,7 @@ trait Utils
      */
     public static function slugify(string $word): string
     {
-        return mt_rand(10000, 99999) . "-" . \Str::slug($word);
+        return mt_rand(10000, 99999) . "-" . Str::slug($word);
     }
 
     /**
@@ -94,32 +99,19 @@ trait Utils
      */
     public function fileDirByUserType(): string
     {
-        $staffRolePath = '';
-        switch (auth()->user()->role_id) {
-            case Role::SYSTEM_ADMIN:
-                $staffRolePath = 'system_admin';
-                break;
-            case Role::SERVICE_DEPARTMENT_ADMIN:
-                $staffRolePath = 'service_department_admin';
-                break;
-            case Role::APPROVER:
-                $staffRolePath = 'approver';
-                break;
-            case Role::AGENT:
-                $staffRolePath = 'agent';
-                break;
-            case Role::USER:
-                $staffRolePath = 'requester';
-                break;
-            default:
-                $staffRolePath = 'guest';
-        }
-
-        return $staffRolePath;
+//        $staffRolePath = '';
+        return match (auth()->user()->role_id) {
+            Role::SYSTEM_ADMIN => 'system_admin',
+            Role::SERVICE_DEPARTMENT_ADMIN => 'service_department_admin',
+            Role::APPROVER => 'approver',
+            Role::AGENT => 'agent',
+            Role::USER => 'requester',
+            default => 'guest',
+        };
     }
 
     public function generateNewProfilePictureName($picture): string
     {
-        return time() . "_" . \Str::slug(auth()->user()->profile->getFullName()) . "." . $picture->getClientOriginalExtension();
+        return time() . "_" . Str::slug(auth()->user()->profile->getFullName()) . "." . $picture->getClientOriginalExtension();
     }
 }

@@ -8,8 +8,11 @@ use App\Models\HelpTopic;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Role;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Department extends Model
 {
@@ -17,54 +20,39 @@ class Department extends Model
 
     protected $fillable = ['name', 'slug'];
 
-    public function users()
+    public function users(): HasMany
     {
         return $this->hasMany(User::class);
     }
 
-    public function tickets()
+    public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
     }
 
-    public function helpTopics()
+    public function helpTopics(): HasMany
     {
         return $this->hasMany(HelpTopic::class);
     }
 
-    public function branches()
+    public function branches(): BelongsToMany
     {
         return $this->belongsToMany(Branch::class, 'department_branch')
             ->withTimestamps();
     }
 
-    public function approvers()
+    public function approvers(): Builder|BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_department')
             ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER));
     }
 
-    public function getTeams()
-    {
-        $teamNames = [];
-
-        foreach ($this->teams as $team) {
-            array_push($teamNames, $team->name);
-        }
-
-        if (!empty($teamNames)) {
-            return implode(', ', $teamNames);
-        }
-
-        return '----';
-    }
-
-    public function getBranches()
+    public function getBranches(): string
     {
         $branchNames = [];
 
         foreach ($this->branches as $branch) {
-            array_push($branchNames, $branch->name);
+            $branchNames[] = $branch->name;
         }
 
         if (!empty($branchNames)) {
@@ -74,12 +62,12 @@ class Department extends Model
         return '----';
     }
 
-    public function dateCreated()
+    public function dateCreated(): string
     {
         return $this->createdAt($this->created_at);
     }
 
-    public function dateUpdated()
+    public function dateUpdated(): string
     {
         return $this->updatedAt($this->created_at, $this->updated_at);
     }

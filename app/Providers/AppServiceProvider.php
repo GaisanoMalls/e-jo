@@ -30,16 +30,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $global_departments = Department::all();
-        $global_service_departments = ServiceDepartment::orderBy('name', 'asc')->get();
-        $global_branches = Branch::all();
-        $suffixes = Suffix::orderBy('name', 'asc')->get();
-
-        view()->share([
-            'global_departments' => $global_departments,
-            'global_service_departments' => $global_service_departments,
-            'global_branches' => $global_branches,
-            'suffixes' => $suffixes,
-        ]);
+        //
     }
 }

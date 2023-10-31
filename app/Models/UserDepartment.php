@@ -5,8 +5,10 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Department;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserDepartment extends Model
 {
@@ -17,13 +19,13 @@ class UserDepartment extends Model
     // Many-to-Many Relationship Approver and BU/Department
     protected $fillable = ['user_id', 'department_id'];
 
-    public function approver()
+    public function approver(): BelongsTo|Builder
     {
         return $this->belongsTo(User::class)
             ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER));
     }
 
-    public function department()
+    public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
     }

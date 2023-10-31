@@ -9,10 +9,10 @@ class TicketReplies extends Component
 {
     public Ticket $ticket;
     public $replies = null;
-    
+
     protected $listeners = ['loadTicketReplies' => 'loadReplies'];
 
-    public function loadReplies()
+    public function loadReplies(): void
     {
         $this->replies = $this->ticket->replies;
     }
