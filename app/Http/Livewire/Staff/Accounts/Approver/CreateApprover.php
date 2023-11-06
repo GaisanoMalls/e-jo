@@ -19,12 +19,12 @@ class CreateApprover extends Component
     public $bu_departments = [], $branches = [];
     public $first_name, $middle_name, $last_name, $email, $suffix;
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreApproverRequest())->rules();
     }
 
-    public function actionOnSubmit(): void
+    public function actionOnSubmit()
     {
         sleep(1);
         $this->reset();
@@ -33,7 +33,7 @@ class CreateApprover extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function saveApprover(): void
+    public function saveApprover()
     {
         $this->validate();
 

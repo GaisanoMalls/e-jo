@@ -17,7 +17,7 @@ class BUDepartmentList extends Component
 
     protected $listeners = ['loadBUDepartments' => 'fetchBUDepartments'];
 
-    protected function rules(): array
+    protected function rules()
     {
         return [
             'name' => "required|unique:departments,name,{$this->buDepartmentEditId}",
@@ -25,19 +25,19 @@ class BUDepartmentList extends Component
         ];
     }
 
-    public function messages(): array
+    public function messages()
     {
         return [
             'editSelectedBranches.required' => 'The branch field is required.'
         ];
     }
 
-    public function fetchBUDepartments(): void
+    public function fetchBUDepartments()
     {
         $this->buDepartments = $this->queryBUDepartments();
     }
 
-    public function editBUDepartment(Department $department): void
+    public function editBUDepartment(Department $department)
     {
         $this->buDepartmentEditId = $department->id;
         $this->name = $department->name;
@@ -48,7 +48,7 @@ class BUDepartmentList extends Component
         $this->dispatchBrowserEvent('update-branch-select-option', ['branchIds' => $this->editSelectedBranches]);
     }
 
-    public function update(): void
+    public function update()
     {
         $this->validate();
 
@@ -73,14 +73,14 @@ class BUDepartmentList extends Component
         }
     }
 
-    public function deleteBUDepartment(Department $department): void
+    public function deleteBUDepartment(Department $department)
     {
         $this->buDepartmentDeleteId = $department->id;
         $this->name = $department->name;
         $this->dispatchBrowserEvent('show-delete-bu-department-modal');
     }
 
-    public function delete(): void
+    public function delete()
     {
         try {
             Department::find($this->buDepartmentDeleteId)->delete();
@@ -95,13 +95,13 @@ class BUDepartmentList extends Component
         }
     }
 
-    public function cancel(): void
+    public function cancel()
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset();

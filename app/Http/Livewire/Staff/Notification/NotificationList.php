@@ -43,7 +43,7 @@ class NotificationList extends Component
         }
     }
 
-    public function deleteNotification($notificationId): void
+    public function deleteNotification($notificationId)
     {
         auth()->user()->notifications->find($notificationId)->delete();
         $this->emit('loadNotificationCanvas');

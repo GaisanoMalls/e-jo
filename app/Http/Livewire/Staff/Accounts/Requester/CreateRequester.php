@@ -20,18 +20,18 @@ class CreateRequester extends Component
     public $BUDepartments = [];
     public $first_name, $middle_name, $last_name, $email, $suffix, $branch, $department;
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreUserRequest())->rules();
     }
 
-    public function updatedBranch(): void
+    public function updatedBranch()
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset();
@@ -40,7 +40,7 @@ class CreateRequester extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function saveRequester(): void
+    public function saveRequester()
     {
         $this->validate();
 
@@ -78,7 +78,7 @@ class CreateRequester extends Component
         }
     }
 
-    public function cancel(): void
+    public function cancel()
     {
         $this->reset();
         $this->resetValidation();

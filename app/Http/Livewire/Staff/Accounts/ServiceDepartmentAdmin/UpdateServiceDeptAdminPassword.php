@@ -12,25 +12,25 @@ class UpdateServiceDeptAdminPassword extends Component
     public User $serviceDeptAdmin;
     public $new_password, $confirm_password;
 
-    public function rules(): array
+    public function rules()
     {
         return (new UpdatePasswordRequest())->rules();
     }
 
-    public function clearFormFields(): void
+    public function clearFormFields()
     {
         $this->resetValidation();
         $this->reset('new_password', 'confirm_password');
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->clearFormFields();
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function updatePassword(User $serviceDeptAdmin): void
+    public function updatePassword(User $serviceDeptAdmin)
     {
         $this->validate();
 

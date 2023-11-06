@@ -109,8 +109,9 @@
                                         @break
                                         @default
                                         @endswitch
-                                        <p class="mb-0" style="font-size: 14px;">{{
-                                            basename($replyFile->file_attachment) }}</p>
+                                        <p class="mb-0" style="font-size: 14px;">
+                                            {{ basename($replyFile->file_attachment) }}
+                                        </p>
                                     </div>
                                 </a>
                                 <a href="{{ Storage::url($replyFile->file_attachment) }}" class="file__preview__link"

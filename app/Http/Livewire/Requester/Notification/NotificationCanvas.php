@@ -8,7 +8,7 @@ class NotificationCanvas extends Component
 {
     protected $listeners = ['loadNotificationCanvas' => '$refresh'];
 
-    public function markAllAsRead(): void
+    public function markAllAsRead()
     {
         sleep(1);
         auth()->user()->unreadNotifications->markAsRead();
@@ -17,7 +17,7 @@ class NotificationCanvas extends Component
         $this->emit('loadUnreadNotificationCount');
     }
 
-    public function clearNotifications(): void
+    public function clearNotifications()
     {
         sleep(1);
         auth()->user()->notifications->each(fn($notification) => $notification->delete());

@@ -16,25 +16,25 @@ class TagList extends Component
 
     protected $listeners = ["loadTags" => "fetchTags"];
 
-    protected function rules(): array
+    protected function rules()
     {
         return [
             'name' => "required|unique:tags,name,{$this->tagUpdateId}"
         ];
     }
 
-    public function fetchTags(): void
+    public function fetchTags()
     {
         $this->tags = $this->queryTags();
     }
 
-    public function clearFormField(): void
+    public function clearFormField()
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    public function editTag(Tag $tag): void
+    public function editTag(Tag $tag)
     {
         $this->tagUpdateId = $tag->id;
         $this->name = $tag->name;
@@ -42,7 +42,7 @@ class TagList extends Component
         $this->dispatchBrowserEvent('show-edit-tag-modal');
     }
 
-    public function updateTag(): void
+    public function updateTag()
     {
         $this->validate();
 
@@ -65,14 +65,14 @@ class TagList extends Component
         }
     }
 
-    public function deleteTag(Tag $tag): void
+    public function deleteTag(Tag $tag)
     {
         $this->tagDeleteId = $tag->id;
         $this->name = $tag->name;
         $this->dispatchBrowserEvent('show-delete-tag-modal');
     }
 
-    public function delete(): void
+    public function delete()
     {
         try {
             Tag::find($this->tagDeleteId)->delete();

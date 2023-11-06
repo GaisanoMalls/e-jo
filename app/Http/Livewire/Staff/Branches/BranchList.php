@@ -16,25 +16,25 @@ class BranchList extends Component
 
     protected $listeners = ['loadBranches' => 'fetchBranches'];
 
-    protected function rules(): array
+    protected function rules()
     {
         return [
             'name' => "required|unique:branches,name,{$this->branchEditId}"
         ];
     }
 
-    public function fetchBranches(): void
+    public function fetchBranches()
     {
         $this->branches = $this->queryBranches();
     }
 
-    public function clearFormField(): void
+    public function clearFormField()
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    public function editBranch(Branch $branch): void
+    public function editBranch(Branch $branch)
     {
         $this->branchEditId = $branch->id;
         $this->name = $branch->name;
@@ -42,7 +42,7 @@ class BranchList extends Component
         $this->resetValidation();
     }
 
-    public function update(): void
+    public function update()
     {
         $this->validate();
 
@@ -64,14 +64,14 @@ class BranchList extends Component
         }
     }
 
-    public function deleteBranch(Branch $branch): void
+    public function deleteBranch(Branch $branch)
     {
         $this->branchDeleteId = $branch->id;
         $this->name = $branch->name;
         $this->dispatchBrowserEvent('show-delete-branch-modal');
     }
 
-    public function delete(): void
+    public function delete()
     {
         try {
             Branch::find($this->branchDeleteId)->delete();

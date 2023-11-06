@@ -5,11 +5,10 @@ namespace App\Http\Traits\ServiceDepartmentAdmin;
 use App\Models\ApprovalStatus;
 use App\Models\Status;
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Collection;
 
 trait Tickets
 {
-    public function serviceDeptAdminGetTicketsToAssign(): Collection
+    public function serviceDeptAdminGetTicketsToAssign()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OPEN)
@@ -21,7 +20,7 @@ trait Tickets
         })->whereNull('team_id')->orWhereNull('team_id')->orderByDesc('created_at')->get();
     }
 
-    public function serviceDeptAdminGetApprovedTickets(): Collection
+    public function serviceDeptAdminGetApprovedTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::APPROVED)
@@ -32,7 +31,7 @@ trait Tickets
         })->orderByDesc('created_at')->get();
     }
 
-    public function serviceDeptAdminGetDisapprovedTickets(): Collection
+    public function serviceDeptAdminGetDisapprovedTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::DISAPPROVED)
@@ -43,7 +42,7 @@ trait Tickets
         })->orderByDesc('created_at')->get();
     }
 
-    public function serviceDeptAdminGetOpentTickets(): Collection
+    public function serviceDeptAdminGetOpentTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OPEN)
@@ -54,7 +53,7 @@ trait Tickets
         })->orderByDesc('created_at')->get();
     }
 
-    public function serviceDeptAdminGetClaimedTickets(): Collection
+    public function serviceDeptAdminGetClaimedTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLAIMED)
@@ -65,7 +64,7 @@ trait Tickets
         })->orderByDesc('created_at')->get();
     }
 
-    public function serviceDeptAdminGetOnProcessTickets(): Collection
+    public function serviceDeptAdminGetOnProcessTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::ON_PROCESS)
@@ -76,7 +75,7 @@ trait Tickets
         })->orderByDesc('created_at')->get();
     }
 
-    public function serviceDeptAdminGetViewedTickets(): Collection
+    public function serviceDeptAdminGetViewedTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::VIEWED)
@@ -87,7 +86,7 @@ trait Tickets
         })->orderByDesc('created_at')->get();
     }
 
-    public function serviceDeptAdminGetOverdueTickets(): Collection
+    public function serviceDeptAdminGetOverdueTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OVERDUE)
@@ -98,7 +97,7 @@ trait Tickets
         })->orderByDesc('created_at')->get();
     }
 
-    public function serviceDeptAdminGetClosedTickets(): Collection
+    public function serviceDeptAdminGetClosedTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLOSED)

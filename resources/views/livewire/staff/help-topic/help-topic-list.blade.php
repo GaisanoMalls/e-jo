@@ -58,7 +58,9 @@
                                 type="button" class="btn action__button">
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <button type="submit" class="btn btn-sm action__button mt-0">
+                            <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
+                                data-bs-target="#deleteHelpTopicModal"
+                                wire:click="deleteHelpTopic({{ $helpTopic->id }})">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -73,4 +75,49 @@
         </div>
         @endif
     </div>
+
+    {{-- Delete Help Topic Modal --}}
+    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="deleteHelpTopicModal" tabindex="-1"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal__content">
+                <div class="modal-body border-0 text-center pt-4 pb-1">
+                    <h6 class="fw-bold mb-4" style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                        Confirm Delete
+                    </h6>
+                    <p class="mb-1" style="font-weight: 500; font-size: 15px;">
+                        Are you sure you want to delete this help topic?
+                    </p>
+                    <strong>{{ $helpTopicName }}</strong>
+                </div>
+                <hr>
+                <div class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
+                    <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
+                        data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit"
+                        class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
+                        wire:click="delete">
+                        <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm" role="status"
+                            aria-hidden="true">
+                        </span>
+                        Yes, delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+{{-- Modal Scripts --}}
+@push('livewire-modal')
+<script>
+    window.addEventListener('close-modal', () => {
+        $('#deleteHelpTopicModal').modal('hide');
+    });
+
+    window.addEventListener('show-delete-help-topic-modal', () => {
+        $('#deleteHelpTopicModal').modal('show');
+    });
+
+</script>
+@endpush

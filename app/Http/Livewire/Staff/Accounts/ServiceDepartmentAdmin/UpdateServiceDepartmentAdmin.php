@@ -18,7 +18,7 @@ class UpdateServiceDepartmentAdmin extends Component
     public $BUDepartments = [], $service_departments = [], $currentServiceDepartments = [];
     public $first_name, $middle_name, $last_name, $email, $suffix, $branch, $bu_department;
 
-    public function mount(User $serviceDeptAdmin): void
+    public function mount(User $serviceDeptAdmin)
     {
         $this->serviceDeptAdmin = $serviceDeptAdmin;
         $this->first_name = $serviceDeptAdmin->profile->first_name;
@@ -33,13 +33,13 @@ class UpdateServiceDepartmentAdmin extends Component
         $this->currentServiceDepartments = $serviceDeptAdmin->serviceDepartments->pluck('id')->toArray();
     }
 
-    public function updatedBranch(): void
+    public function updatedBranch()
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
     }
 
-    public function rules(): array
+    public function rules()
     {
         return [
             'branch' => 'required',
@@ -53,7 +53,7 @@ class UpdateServiceDepartmentAdmin extends Component
         ];
     }
 
-    public function updateServiceDepartmentAdminAccount(): void
+    public function updateServiceDepartmentAdminAccount()
     {
         $this->validate();
 

@@ -11,19 +11,19 @@ class Password extends Component
 {
     public $current_password, $new_password, $confirm_password;
 
-    public function rules(): array
+    public function rules()
     {
         return (new UpdatePasswordRequest())->rules();
     }
 
-    public function actionOnSubmit(): void
+    public function actionOnSubmit()
     {
         sleep(1);
         $this->reset();
         $this->resetValidation();
     }
 
-    public function savePassword(): void
+    public function savePassword()
     {
         $this->validate();
         auth()->user()->update(['password' => Hash::make($this->new_password)]);

@@ -17,7 +17,7 @@ class SlaList extends Component
 
     protected $listeners = ['loadServiceLevelAgreements' => 'fetchServiceLevelAgreements'];
 
-    protected function rules(): array
+    protected function rules()
     {
         return [
             'countdown_approach' => 'required|numeric',
@@ -25,18 +25,18 @@ class SlaList extends Component
         ];
     }
 
-    public function fetchServiceLevelAgreements(): void
+    public function fetchServiceLevelAgreements()
     {
         $this->serviceLevelAgreements = $this->queryServiceLevelAgreements();
     }
 
-    public function clearFormFields(): void
+    public function clearFormFields()
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    public function editSLA(ServiceLevelAgreement $serviceLevelAgreement): void
+    public function editSLA(ServiceLevelAgreement $serviceLevelAgreement)
     {
         $this->slaEditId = $serviceLevelAgreement->id;
         $this->countdown_approach = $serviceLevelAgreement->countdown_approach;
@@ -45,7 +45,7 @@ class SlaList extends Component
         $this->dispatchBrowserEvent('show-edit-sla-modal');
     }
 
-    public function updateSLA(): void
+    public function updateSLA()
     {
         $validatedData = $this->validate();
 
@@ -63,7 +63,7 @@ class SlaList extends Component
         }
     }
 
-    public function deleteSLA(ServiceLevelAgreement $serviceLevelAgreement): void
+    public function deleteSLA(ServiceLevelAgreement $serviceLevelAgreement)
     {
         $this->slaDeleteId = $serviceLevelAgreement->id;
         $this->countdown_approach = $serviceLevelAgreement->countdown_approach;
@@ -71,7 +71,7 @@ class SlaList extends Component
         $this->dispatchBrowserEvent('show-delete-sla-modal');
     }
 
-    public function delete(): void
+    public function delete()
     {
         try {
             ServiceLevelAgreement::find($this->slaDeleteId)->delete();

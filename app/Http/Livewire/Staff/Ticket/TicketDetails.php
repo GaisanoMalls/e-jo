@@ -15,7 +15,7 @@ class TicketDetails extends Component
 
     protected $listeners = ['loadTicketDetails' => '$refresh'];
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         $this->emit('loadTicketLogs');
         $this->emit('loadTicketDetails');
@@ -24,7 +24,7 @@ class TicketDetails extends Component
         $this->emit('loadSidebarCollapseTicketStatus');
     }
 
-    public function removeAssignedTeam(): void
+    public function removeAssignedTeam()
     {
         if (Auth::user()->role_id === Role::SERVICE_DEPARTMENT_ADMIN) {
             $this->ticket->update(['team_id' => null]);
@@ -36,7 +36,7 @@ class TicketDetails extends Component
         }
     }
 
-    public function removeAssignedAgent(): void
+    public function removeAssignedAgent()
     {
         if (Auth::user()->role_id === Role::SERVICE_DEPARTMENT_ADMIN) {
             $this->ticket->update([

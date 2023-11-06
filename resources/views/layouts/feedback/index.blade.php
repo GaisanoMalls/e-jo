@@ -17,7 +17,6 @@
 
 <body class="{{ Route::is('feedback.index') ? 'bg-white' : '' }}">
     @include('layouts.feedback.includes.nav__and__banner')
-    @include('layouts.includes.toaster-message')
     @include('layouts.feedback.includes.tab')
     <div class="container feedback__container">
         @section('feedback-content')

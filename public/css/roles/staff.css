@@ -9819,6 +9819,31 @@ input[type=checkbox]:checked + .form-check-label {
 .help__topics__section .check__special__project {
   margin-right: 10px !important;
 }
+.help__topics__section .modal__confirm__delete__help__topic .btn__confirm__modal {
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+}
+.help__topics__section .modal__confirm__delete__help__topic .btn__confirm__modal.btn__cancel__delete {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  border: 1px solid #e7e9eb;
+  background-color: transparent;
+  color: #d32839;
+  font-weight: 500;
+}
+.help__topics__section .modal__confirm__delete__help__topic .btn__confirm__modal.btn__confirm__delete {
+  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.563rem;
+  font-size: 0.875rem;
+  background-color: #d32839;
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+}
 
 .sla__section .table__header {
   padding: 20px 30px !important;

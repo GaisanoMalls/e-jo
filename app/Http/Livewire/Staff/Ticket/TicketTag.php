@@ -12,24 +12,24 @@ class TicketTag extends Component
 
     protected $listeners = ['loadTicketTags' => 'fetchTicketTags'];
 
-    public function fetchTicketTags(): void
+    public function fetchTicketTags()
     {
         $this->ticket->tags;
     }
 
-    public function clearTags(): void
+    public function clearTags()
     {
         $this->ticket->tags()->detach();
         $this->emit('loadTicketTags');
         $this->dispatchBrowserEvent('clear-tag-select-option');
     }
 
-    public function getTagIds(): array
+    public function getTagIds()
     {
         return Tag::whereHas('tickets', fn($ticket) => $ticket->where('tickets.id', $this->ticket->id))->pluck('id')->toArray();
     }
 
-    public function removeTag($tagId): void
+    public function removeTag($tagId)
     {
         $this->ticket->tags()->detach($tagId);
         $this->emit('loadTicketTags');
@@ -38,7 +38,7 @@ class TicketTag extends Component
         $this->dispatchBrowserEvent('update-tag-select-option', ['tagIds' => $this->getTagIds()]);
     }
 
-    public function getCurrentAssignedTags(): void
+    public function getCurrentAssignedTags()
     {
         $this->dispatchBrowserEvent('get-current-assigned-tags', ['tagIds' => $this->getTagIds()]);
     }

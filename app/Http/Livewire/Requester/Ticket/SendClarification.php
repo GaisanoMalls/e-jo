@@ -8,8 +8,10 @@ use App\Mail\Requester\FromRequesterClarificationMail;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\User;
 use App\Notifications\Requester\TicketClarificationFromRequesterNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -27,17 +29,17 @@ class SendClarification extends Component
     public $upload = 0;
     public $description, $clarificationFiles = [];
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreTicketClarificationRequest())->rules();
     }
 
-    public function messages(): array
+    public function messages()
     {
         return (new StoreTicketClarificationRequest())->messages();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->clarificationFiles = null;
@@ -53,7 +55,7 @@ class SendClarification extends Component
         $this->dispatchBrowserEvent('reload-modal');
     }
 
-    public function sendClarification(): void
+    public function sendClarification()
     {
         $this->validate();
 
@@ -84,21 +86,26 @@ class SendClarification extends Component
                     }
                 }
 
-                // * GET THE LATEST STAFF
+                // Get the latest staff
                 $latestStaff = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
                     ->where('ticket_id', $this->ticket->id)
                     ->latest('created_at')
                     ->first();
 
-                // * CONSTRUCT A LOG DESCRIPTION
+                // Create a log description
                 $logClarificationDescription = $this->ticket->clarifications()
                     ->where('user_id', '!=', auth()->user()->id)->count() === 0
                     ? 'sent a clarification'
                     : 'replied a clarification to ' . $latestStaff->user->profile->getFullName();
 
+                // Get the department admin (approver) when there is no latest staff in the clarifications
+                $initialServiceDepartmentAdmin = User::whereHas('role', fn($role) => $role->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+                    ->whereHas('branch', fn($branch) => $branch->where('branch_id', auth()->user()->branch_id))
+                    ->whereHas('department', fn($department) => $department->where('department_id', auth()->user()->department_id))->first();
+
                 ActivityLog::make($this->ticket->id, $logClarificationDescription);
-                Notification::send($latestStaff->user, new TicketClarificationFromRequesterNotification($this->ticket));
-                Mail::to($latestStaff->user)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user, $this->description));
+                Notification::send($latestStaff->user ?? $initialServiceDepartmentAdmin, new TicketClarificationFromRequesterNotification($this->ticket));
+                Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
             });
 
             $this->actionOnSubmit();

@@ -38,12 +38,17 @@ class HelpTopic extends Model
 
     public function sla(): BelongsTo
     {
-        return $this->belongsTo(ServiceLevelAgreement::class);
+        return $this->belongsTo(ServiceLevelAgreement::class, 'service_level_agreement_id');
     }
 
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    public function specialProjects(): HasMany
+    {
+        return $this->hasMany(SpecialProject::class);
     }
 
     public function levels(): BelongsToMany

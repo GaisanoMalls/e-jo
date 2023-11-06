@@ -19,7 +19,6 @@ use App\Models\TicketFile;
 use App\Models\User;
 use App\Notifications\Requester\TicketCreatedNotification;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -38,27 +37,27 @@ class CreateTicket extends Component
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreTicketRequest())->rules();
     }
 
-    public function messages(): array
+    public function messages()
     {
         return (new StoreTicketRequest())->messages();
     }
 
-    public function updated($fields): void
+    public function updated($fields)
     {
         $this->validateOnly($fields);
     }
 
-    public function clearErrorMessage(): void
+    public function clearErrorMessage()
     {
         $this->resetValidation();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset();
@@ -71,7 +70,7 @@ class CreateTicket extends Component
         $this->dispatchBrowserEvent('clear-branch-dropdown-select');
     }
 
-    public function sendTicket(): void
+    public function sendTicket()
     {
         $this->validate();
         try {
@@ -154,20 +153,20 @@ class CreateTicket extends Component
         }
     }
 
-    public function updatedServiceDepartment(): void
+    public function updatedServiceDepartment()
     {
         $this->helpTopics = HelpTopic::with(['team', 'sla'])->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->serviceDepartment))->get();
         $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);
     }
 
-    public function updatedHelpTopic(): void
+    public function updatedHelpTopic()
     {
         $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
         $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
     }
 
 
-    public function cancel(): void
+    public function cancel()
     {
         $this->reset();
         $this->dispatchBrowserEvent('clear-select-dropdown');

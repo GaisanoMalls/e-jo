@@ -12,25 +12,25 @@ class UpdateRequesterPassword extends Component
     public User $user;
     public $new_password, $confirm_password;
 
-    public function rules(): array
+    public function rules()
     {
         return (new UpdatePasswordRequest())->rules();
     }
 
-    public function clearFormFields(): void
+    public function clearFormFields()
     {
         $this->resetValidation();
         $this->reset('new_password', 'confirm_password');
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->clearFormFields();
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function updatePassword(User $user): void
+    public function updatePassword(User $user)
     {
         $this->validate();
 

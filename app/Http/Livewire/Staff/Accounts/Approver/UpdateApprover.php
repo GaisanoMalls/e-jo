@@ -17,7 +17,7 @@ class UpdateApprover extends Component
     public $bu_departments = [], $branches = [], $currentBranches = [], $currentBUDepartments = [];
     public $first_name, $middle_name, $last_name, $email, $suffix;
 
-    public function mount(User $approver): void
+    public function mount(User $approver)
     {
         $this->approver = $approver;
         $this->first_name = $approver->profile->first_name;
@@ -44,7 +44,7 @@ class UpdateApprover extends Component
         ];
     }
 
-    public function updateApproverAccount(): void
+    public function updateApproverAccount()
     {
         $this->validate();
 

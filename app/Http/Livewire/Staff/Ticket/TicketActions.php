@@ -11,7 +11,7 @@ class TicketActions extends Component
 
     protected $listeners = ['loadTicketActions' => '$refresh'];
 
-    public function getCurrentTeamOrAgent(): void
+    public function getCurrentTeamOrAgent()
     {
         if (!is_null($this->ticket->team_id)) {
             $this->dispatchBrowserEvent('get-current-team-or-agent', ['ticket' => $this->ticket]);

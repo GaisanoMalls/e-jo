@@ -16,20 +16,20 @@ class CreateServiceDepartment extends Component
         return (new StoreServiceDepartmentRequest())->rules();
     }
 
-    public function clearFormField(): void
+    public function clearFormField()
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->clearFormField();
         $this->emit('loadServiceDepartments');
     }
 
-    public function saveServiceDepartment(): void
+    public function saveServiceDepartment()
     {
         $this->validate();
 

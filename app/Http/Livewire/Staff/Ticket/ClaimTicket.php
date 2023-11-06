@@ -15,7 +15,7 @@ class ClaimTicket extends Component
 
     protected $listeners = ['loadClaimTicket' => '$refresh'];
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->emit('loadTicketLogs');
@@ -26,7 +26,7 @@ class ClaimTicket extends Component
         $this->emit('loadSidebarCollapseTicketStatus');
     }
 
-    public function claimTicket(): void
+    public function claimTicket()
     {
         try {
             DB::transaction(function () {

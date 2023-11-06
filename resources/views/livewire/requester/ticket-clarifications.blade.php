@@ -57,19 +57,25 @@
             </div>
         </div>
         @endforeach
-        @if ($ticket->clarifications->count() !== 0 && $ticket->status_id !== App\Models\Status::CLOSED)
+        {{-- @if ($ticket->clarifications->count() !== 0 && $ticket->status_id !== App\Models\Status::CLOSED)
         <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
             justify-content-center gap-2 float-end" data-bs-toggle="modal" data-bs-target="#ticketClarificationModal"
             wire:click="getLatestClarification">
             <i class="fa-solid fa-pen"></i>
             <span class="lbl__reply">Reply</span>
         </button>
-        @endif
+        @endif --}}
         @else
         <div class="alert alert-warning py-3 px-3 rounded-3" style="margin: 20px 0px;">
             <small style="font-size: 14px;">No ticket clarifications</small>
         </div>
         @endif
+        <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
+                    justify-content-center gap-2 float-end" data-bs-toggle="modal"
+            data-bs-target="#ticketClarificationModal" wire:click="getLatestClarification">
+            <i class="fa-solid fa-pen"></i>
+            <span class="lbl__reply">Reply</span>
+        </button>
     </div>
     @else
     <div class="d-flex justify-content-center">

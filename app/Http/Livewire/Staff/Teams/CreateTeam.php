@@ -16,17 +16,17 @@ class CreateTeam extends Component
     public $selectedBranches = [];
     public $selectedServiceDepartment, $name = '';
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreTeamRequest())->rules();
     }
 
-    public function messages(): array
+    public function messages()
     {
         return (new StoreTeamRequest())->messages();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset();
@@ -35,7 +35,7 @@ class CreateTeam extends Component
         $this->dispatchBrowserEvent('clear-select-options');
     }
 
-    public function saveTeam(): void
+    public function saveTeam()
     {
         $this->validate();
 
@@ -59,7 +59,7 @@ class CreateTeam extends Component
         }
     }
 
-    public function cancel(): void
+    public function cancel()
     {
         $this->reset();
         $this->resetValidation();

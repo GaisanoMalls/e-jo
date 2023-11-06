@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
@@ -16,14 +15,14 @@ class ServiceDeptAdminList extends Component
 
     protected $listeners = ['loadServiceDeptAdminList' => '$refresh'];
 
-    public function deleteServiceDepartmentAdmin(User $serviceDepartmentAdmin): void
+    public function deleteServiceDepartmentAdmin(User $serviceDepartmentAdmin)
     {
         $this->serviceDeptAdminDeleteId = $serviceDepartmentAdmin->id;
         $this->serviceDeptAdminFullName = $serviceDepartmentAdmin->profile->getFullName();
         $this->dispatchBrowserEvent('show-delete-service-dept-admin-modal');
     }
 
-    public function delete(): void
+    public function delete()
     {
         try {
             User::find($this->serviceDeptAdminDeleteId)->delete();
@@ -38,7 +37,7 @@ class ServiceDeptAdminList extends Component
         }
     }
 
-    private function getInitialQuery(): Collection|array
+    private function getInitialQuery()
     {
         return User::with(['department', 'branch'])
             ->whereHas('role', fn($agent) => $agent->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))

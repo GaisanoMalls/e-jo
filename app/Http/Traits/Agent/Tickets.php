@@ -5,11 +5,10 @@ namespace App\Http\Traits\Agent;
 use App\Models\ApprovalStatus;
 use App\Models\Status;
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Builder;
 
 trait Tickets
 {
-    public function agentGetOpenTickets(): Builder
+    public function agentGetOpenTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::APPROVED)
@@ -23,7 +22,7 @@ trait Tickets
             ->get();
     }
 
-    public function agentGetClaimedTickets(): Builder
+    public function agentGetClaimedTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLAIMED)
@@ -37,7 +36,7 @@ trait Tickets
             ->get();
     }
 
-    public function agentGetOnProcessTickets(): Builder
+    public function agentGetOnProcessTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::ON_PROCESS)
@@ -50,7 +49,7 @@ trait Tickets
             ->get();
     }
 
-    public function agentGetOverdueTickets(): Builder
+    public function agentGetOverdueTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::OVERDUE)
@@ -63,7 +62,7 @@ trait Tickets
             ->get();
     }
 
-    public function agentGetClosedTickets(): Builder
+    public function agentGetClosedTickets()
     {
         return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::CLOSED)

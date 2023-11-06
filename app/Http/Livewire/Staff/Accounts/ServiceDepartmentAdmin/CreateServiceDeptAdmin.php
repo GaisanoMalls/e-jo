@@ -20,18 +20,18 @@ class CreateServiceDeptAdmin extends Component
     public $BUDepartments = [], $service_departments = [];
     public $first_name, $middle_name, $last_name, $email, $suffix, $branch, $bu_department;
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreServiceDeptAdminRequest())->rules();
     }
 
-    public function updatedBranch(): void
+    public function updatedBranch()
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
     }
 
-    public function actionOnSubmit(): void
+    public function actionOnSubmit()
     {
         sleep(1);
         $this->reset();
@@ -40,7 +40,7 @@ class CreateServiceDeptAdmin extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function saveServiceDepartmentAdmin(): void
+    public function saveServiceDepartmentAdmin()
     {
         $this->validate();
 
@@ -80,7 +80,7 @@ class CreateServiceDeptAdmin extends Component
         }
     }
 
-    public function cancel(): void
+    public function cancel()
     {
         $this->reset();
         $this->resetValidation();

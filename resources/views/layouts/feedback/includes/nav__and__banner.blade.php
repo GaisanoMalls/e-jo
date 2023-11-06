@@ -9,10 +9,17 @@
             </h5>
         </a>
         <li class="nav-item dropdown">
-            <a class="nav-link p-1 rounded-5 bg-white" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <img src="https://samuelsabellano.pythonanywhere.com/media/profile/1_Sabellano_Samuel_Jr_C__DSC9469.JPG"
-                    class="feedback__user__picture me-1" alt="">
+            <a class="nav-link d-flex align-items-center justify-content-center p-1 rounded-5 bg-white" href="#"
+                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                @if (auth()->user()->profile->picture)
+                <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="feedback__user__picture me-1"
+                    alt="">
+                @else
+                <div class="d-flex align-items-center p-2 me-2 justify-content-center rounded-circle
+                                                     text-white"
+                    style="background-color: #24695C; font-size: 14px; height: 35px; width: 35px;">
+                    {{ auth()->user()->profile->getNameInitial() }}</div>
+                @endif
                 <small class="pe-2 fw-semibold">{{ auth()->user()->profile->first_name }}</small>
             </a>
             <ul class="dropdown-menu dropdown-menu-end border-0 feedback__user__dropdown__menu">

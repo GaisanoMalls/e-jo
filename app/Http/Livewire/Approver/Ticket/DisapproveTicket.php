@@ -17,12 +17,12 @@ class DisapproveTicket extends Component
     public Ticket $ticket;
     public $reasonDescription;
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreDisapproveTicketRequest())->rules();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->emit('loadReason');
@@ -35,7 +35,7 @@ class DisapproveTicket extends Component
         $this->reset('reasonDescription');
     }
 
-    public function disapproveTicket(): void
+    public function disapproveTicket()
     {
         $this->validate();
 

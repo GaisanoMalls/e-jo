@@ -11,25 +11,25 @@ class CreateSla extends Component
 {
     public $countdown_approach, $time_unit;
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreSLARequest())->rules();
     }
 
-    public function clearFormFields(): void
+    public function clearFormFields()
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->clearFormFields();
         $this->emit('loadServiceLevelAgreements');
     }
 
-    public function saveSLA(): void
+    public function saveSLA()
     {
         $validatedData = $this->validate();
 

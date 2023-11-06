@@ -15,12 +15,12 @@ class UpdatePriorityLevel extends Component
     public Ticket $ticket;
     public $priority_level;
 
-    public function mount(): void
+    public function mount()
     {
         $this->priority_level = $this->ticket->priority_level_id;
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->emit('loadPriorityLevel');
@@ -28,7 +28,7 @@ class UpdatePriorityLevel extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function updatePriorityLevel(): void
+    public function updatePriorityLevel()
     {
         try {
             if ($this->priority_level != $this->ticket->priority_level_id) {

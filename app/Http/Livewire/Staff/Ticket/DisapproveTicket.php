@@ -21,12 +21,12 @@ class DisapproveTicket extends Component
 
     public $reasonDescription;
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreDisapproveTicketRequest())->rules();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset('reasonDescription');

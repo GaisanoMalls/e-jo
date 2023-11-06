@@ -12,7 +12,7 @@ class ApproveTicket extends Component
 {
     public Ticket $ticket;
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->emit('loadTicketLogs');
@@ -23,7 +23,7 @@ class ApproveTicket extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function approveTicket(): void
+    public function approveTicket()
     {
         $this->ticket->update([
             'status_id' => Status::APPROVED,

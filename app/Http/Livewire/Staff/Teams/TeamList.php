@@ -18,7 +18,7 @@ class TeamList extends Component
 
     protected $listeners = ['loadTeams' => 'fetchTeams'];
 
-    protected function rules(): array
+    protected function rules()
     {
         return [
             'name' => "required|unique:teams,name,{$this->teamEditId}",
@@ -27,7 +27,7 @@ class TeamList extends Component
         ];
     }
 
-    public function messages(): array
+    public function messages()
     {
         return [
             'editSelectedServiceDepartment.required' => 'The service department field is required.',
@@ -35,12 +35,12 @@ class TeamList extends Component
         ];
     }
 
-    public function fetchTeams(): void
+    public function fetchTeams()
     {
         $this->teams = $this->queryTeams();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset();
@@ -49,7 +49,7 @@ class TeamList extends Component
         $this->dispatchBrowserEvent('reset-select-options');
     }
 
-    public function editTeam(Team $team): void
+    public function editTeam(Team $team)
     {
         $this->teamEditId = $team->id;
         $this->name = $team->name;
@@ -62,7 +62,7 @@ class TeamList extends Component
         $this->dispatchBrowserEvent('edit-current-branch-ids', ['branchIds' => $this->editSelectedBranches]);
     }
 
-    public function update(): void
+    public function update()
     {
         $this->validate();
 
@@ -89,14 +89,14 @@ class TeamList extends Component
         }
     }
 
-    public function deleteTeam(Team $team): void
+    public function deleteTeam(Team $team)
     {
         $this->teamDeleteId = $team->id;
         $this->name = $team->name;
         $this->dispatchBrowserEvent('show-delete-team-modal');
     }
 
-    public function delete(): void
+    public function delete()
     {
         try {
             Team::find($this->teamDeleteId)->delete();
@@ -111,7 +111,7 @@ class TeamList extends Component
         }
     }
 
-    public function cancel(): void
+    public function cancel()
     {
         $this->reset();
         $this->resetValidation();

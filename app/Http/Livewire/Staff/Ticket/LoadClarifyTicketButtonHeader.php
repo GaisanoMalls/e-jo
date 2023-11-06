@@ -11,7 +11,7 @@ class LoadClarifyTicketButtonHeader extends Component
 
     protected $listeners = ['loadClarificationButtonHeader' => '$refresh'];
 
-    public function getLatestClarification(): void
+    public function getLatestClarification()
     {
         $this->emit('loadLatestClarification');
     }

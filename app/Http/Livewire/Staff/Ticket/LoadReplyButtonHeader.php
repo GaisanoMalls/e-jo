@@ -11,7 +11,7 @@ class LoadReplyButtonHeader extends Component
 
     protected $listeners = ['loadReplyButtonHeader' => '$refresh'];
 
-    public function getLatestReply(): void
+    public function getLatestReply()
     {
         $this->emit('loadLatestReply');
     }

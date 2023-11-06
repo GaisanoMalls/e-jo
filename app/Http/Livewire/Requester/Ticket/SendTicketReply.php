@@ -24,12 +24,12 @@ class SendTicketReply extends Component
     public $upload = 0;
     public $description, $replyFiles = [];
 
-    public function rules(): array
+    public function rules()
     {
         return (new ReplyTicketRequest())->rules();
     }
 
-    public function messages(): array
+    public function messages()
     {
         return (new ReplyTicketRequest())->messages();
     }

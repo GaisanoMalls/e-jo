@@ -7,11 +7,10 @@ use App\Models\Clarification;
 use App\Models\Reply;
 use App\Models\Status;
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Collection;
 
 trait Tickets
 {
-    public function getOpenTickets(): Collection
+    public function getOpenTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where('status_id', Status::OPEN)
@@ -20,7 +19,7 @@ trait Tickets
             ->get();
     }
 
-    public function getOnProcessTickets(): Collection
+    public function getOnProcessTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
@@ -32,7 +31,7 @@ trait Tickets
             ->get();
     }
 
-    public function getViewedTickets(): Collection
+    public function getViewedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
@@ -44,7 +43,7 @@ trait Tickets
             ->get();
     }
 
-    public function getApprovedTickets(): Collection
+    public function getApprovedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
@@ -56,7 +55,7 @@ trait Tickets
             ->get();
     }
 
-    public function getClaimedTickets(): Collection
+    public function getClaimedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
@@ -69,7 +68,7 @@ trait Tickets
             ->get();
     }
 
-    public function getDisapprovedTickets(): Collection
+    public function getDisapprovedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {
@@ -81,7 +80,7 @@ trait Tickets
             ->get();
     }
 
-    public function getClosedTickets(): Collection
+    public function getClosedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
             ->where(function ($statusQuery) {

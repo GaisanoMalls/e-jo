@@ -19,7 +19,7 @@ class Profile extends Component
     public $first_name, $middle_name, $last_name, $suffix, $email, $mobile_number, $picture;
 
 
-    public function mount(): void
+    public function mount()
     {
         $authUser = Auth::user();
 
@@ -31,18 +31,18 @@ class Profile extends Component
         $this->mobile_number = $authUser->profile->mobile_number;
     }
 
-    public function rules(): array
+    public function rules()
     {
         return (new UpdateProfileRequest())->rules();
     }
 
-    public function resetFileField(): void
+    public function resetFileField()
     {
         $this->picture = null;
         $this->imageUpload++;
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->resetValidation();
@@ -50,7 +50,7 @@ class Profile extends Component
         $this->emit('loadNavProfilePic');
     }
 
-    public function saveProfile(): void
+    public function saveProfile()
     {
         $this->validate();
 

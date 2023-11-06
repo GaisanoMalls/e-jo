@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Staff\Accounts\Requester;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
@@ -16,14 +15,14 @@ class RequesterList extends Component
 
     protected $listeners = ['loadRequesterList' => '$refresh'];
 
-    public function deleteRequester(User $requester): void
+    public function deleteRequester(User $requester)
     {
         $this->requesterDeleteId = $requester->id;
         $this->requesterFullName = $requester->profile->getFullName();
         $this->dispatchBrowserEvent('show-delete-requester-modal');
     }
 
-    public function delete(): void
+    public function delete()
     {
         try {
             User::find($this->requesterDeleteId)->delete();
@@ -38,7 +37,7 @@ class RequesterList extends Component
         }
     }
 
-    private function getInitialQuery(): Collection|array
+    private function getInitialQuery()
     {
         return User::with(['department', 'branch'])
             ->whereHas('role', fn($user) => $user->where('role_id', Role::USER))

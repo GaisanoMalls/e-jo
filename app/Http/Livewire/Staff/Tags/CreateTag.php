@@ -14,25 +14,25 @@ class CreateTag extends Component
 
     public $name;
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreTagRequest())->rules();
     }
 
-    public function clearFormField(): void
+    public function clearFormField()
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->emit('loadTags');
         $this->clearFormField();
     }
 
-    public function saveTag(): void
+    public function saveTag()
     {
         $this->validate();
 

@@ -24,17 +24,17 @@ class ReplyTicket extends Component
     public $replyFiles = [];
     public $description;
 
-    public function rules(): array
+    public function rules()
     {
         return (new StaffReplyTicketRequest())->rules();
     }
 
-    public function messages(): array
+    public function messages()
     {
         return (new StaffReplyTicketRequest())->messages();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->replyFiles = null;
@@ -50,7 +50,7 @@ class ReplyTicket extends Component
         $this->dispatchBrowserEvent('reload-modal');
     }
 
-    public function replyTicket(): void
+    public function replyTicket()
     {
         $this->validate();
 

@@ -28,17 +28,17 @@ class SendClarification extends Component
     public $clarificationFiles = [];
     public $description;
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreClarificationRequest())->rules();
     }
 
-    public function messages(): array
+    public function messages()
     {
         return (new StoreClarificationRequest())->messages();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->replyFiles = null;
@@ -54,7 +54,7 @@ class SendClarification extends Component
         $this->dispatchBrowserEvent('reload-modal');
     }
 
-    public function sendClarification(): void
+    public function sendClarification()
     {
         $this->validate();
 

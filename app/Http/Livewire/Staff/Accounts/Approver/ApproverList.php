@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Staff\Accounts\Approver;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
@@ -16,14 +15,14 @@ class ApproverList extends Component
 
     protected $listeners = ['loadApproverList' => '$refresh'];
 
-    public function deleteApprover(User $approver): void
+    public function deleteApprover(User $approver)
     {
         $this->approverDeleteId = $approver->id;
         $this->approverFullName = $approver->profile->getFullName();
         $this->dispatchBrowserEvent('show-delete-apprvoer-modal');
     }
 
-    public function delete(): void
+    public function delete()
     {
         try {
             User::find($this->approverDeleteId)->delete();
@@ -38,7 +37,7 @@ class ApproverList extends Component
         }
     }
 
-    private function getInitialQuery(): Collection|array
+    private function getInitialQuery()
     {
         return $this->approvers = User::with('branch')
             ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))

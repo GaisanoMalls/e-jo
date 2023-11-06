@@ -12,7 +12,7 @@ class TicketReplies extends Component
 
     protected $listeners = ['loadTicketReplies' => 'loadReplies'];
 
-    public function loadReplies(): void
+    public function loadReplies()
     {
         $this->replies = $this->ticket->replies;
     }

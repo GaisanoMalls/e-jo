@@ -3,14 +3,13 @@
 namespace App\Http\Livewire\Requester\Notification;
 
 use App\Models\Ticket;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
 class NotificationList extends Component
 {
     protected $listeners = ['loadNotificationList' => '$refresh'];
 
-    public function readNotification($notificationId): RedirectResponse
+    public function readNotification($notificationId)
     {
         $notification = auth()->user()->notifications->find($notificationId);
         (!$notification->read()) ? $notification->markAsRead() : null;
@@ -23,7 +22,7 @@ class NotificationList extends Component
             : redirect()->route('user.ticket.view_ticket', $notification->data['ticket']['id']);
     }
 
-    public function deleteNotification($notificationId): void
+    public function deleteNotification($notificationId)
     {
         auth()->user()->notifications->find($notificationId)->delete();
         $this->emit('loadNotificationCanvas');

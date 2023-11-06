@@ -18,7 +18,7 @@ class UpdateRequester extends Component
     public $BUDepartments = [];
     public $first_name, $middle_name, $last_name, $suffix, $email, $branch, $bu_department;
 
-    public function mount(User $user): void
+    public function mount(User $user)
     {
         $this->user = $user;
         $this->first_name = $user->profile->first_name;
@@ -31,7 +31,7 @@ class UpdateRequester extends Component
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
     }
 
-    protected function rules(): array
+    protected function rules()
     {
         return [
             'bu_department' => 'required',
@@ -44,13 +44,13 @@ class UpdateRequester extends Component
         ];
     }
 
-    public function updatedBranch(): void
+    public function updatedBranch()
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
     }
 
-    public function updateRequesterAccount(): void
+    public function updateRequesterAccount()
     {
         $this->validate();
 

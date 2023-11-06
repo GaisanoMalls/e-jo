@@ -19,7 +19,7 @@ class UpdateAgent extends Component
     public $BUDepartments = [], $teams = [], $currentTeams = [], $selectedTeams = [];
     public $first_name, $middle_name, $last_name, $suffix, $email, $branch, $bu_department, $service_department;
 
-    public function mount(User $agent): void
+    public function mount(User $agent)
     {
         $this->agent = $agent;
         $this->first_name = $agent->profile->first_name;
@@ -35,7 +35,7 @@ class UpdateAgent extends Component
         $this->currentTeams = $agent->teams->pluck('id')->toArray();
     }
 
-    public function rules(): array
+    public function rules()
     {
         return [
             'branch' => 'required',
@@ -50,14 +50,14 @@ class UpdateAgent extends Component
         ];
     }
 
-    public function messages(): array
+    public function messages()
     {
         return [
             'selectedTeams.required' => 'Teams field is required.'
         ];
     }
 
-    public function updatedBranch(): void
+    public function updatedBranch()
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
@@ -67,7 +67,7 @@ class UpdateAgent extends Component
         ]);
     }
 
-    public function updateAgentAccount(): void
+    public function updateAgentAccount()
     {
         $this->validate();
 

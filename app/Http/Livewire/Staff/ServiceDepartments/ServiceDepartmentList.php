@@ -16,25 +16,25 @@ class ServiceDepartmentList extends Component
 
     protected $listeners = ['loadServiceDepartments' => 'fetchServiceDepartments'];
 
-    protected function rules(): array
+    protected function rules()
     {
         return [
             'name' => "required|unique:service_departments,name,{$this->serviceDepartmentEditId}"
         ];
     }
 
-    public function fetchServiceDepartments(): void
+    public function fetchServiceDepartments()
     {
         $this->serviceDepartments = $this->queryServiceDepartments();
     }
 
-    public function clearFormField(): void
+    public function clearFormField()
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    public function editServiceDepartment(ServiceDepartment $serviceDepartment): void
+    public function editServiceDepartment(ServiceDepartment $serviceDepartment)
     {
         $this->serviceDepartmentEditId = $serviceDepartment->id;
         $this->name = $serviceDepartment->name;
@@ -42,7 +42,7 @@ class ServiceDepartmentList extends Component
         $this->resetValidation();
     }
 
-    public function updateServiceDepartment(): void
+    public function updateServiceDepartment()
     {
         $this->validate();
 
@@ -65,14 +65,14 @@ class ServiceDepartmentList extends Component
         }
     }
 
-    public function deleteServiceDepartment(ServiceDepartment $serviceDepartment): void
+    public function deleteServiceDepartment(ServiceDepartment $serviceDepartment)
     {
         $this->serviceDepartmentDeleteId = $serviceDepartment->id;
         $this->name = $serviceDepartment->name;
         $this->dispatchBrowserEvent('show-delete-service-department-modal');
     }
 
-    public function delete(): void
+    public function delete()
     {
         try {
             ServiceDepartment::find($this->serviceDepartmentDeleteId)->delete();

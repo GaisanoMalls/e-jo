@@ -20,7 +20,8 @@
                         </em>
                     </p>
                 </div>
-                <p class="mb-0 time__sent">{{ $latestReply->created_at->diffForHumans(null, true) }} ago
+                <p class="mb-0 time__sent">
+                    {{ $latestReply->created_at->diffForHumans(null, true) }} ago
                 </p>
             </div>
             <div class="ticket__description" style="font-size: 13px;">

@@ -3,13 +3,39 @@
 namespace App\Http\Livewire\Staff\HelpTopic;
 
 use App\Http\Traits\BasicModelQueries;
+use App\Models\HelpTopic;
+use Exception;
 use Livewire\Component;
 
 class HelpTopicList extends Component
 {
     use BasicModelQueries;
 
+    public $helpTopicDeleteId, $helpTopicName;
+
     protected $listeners = ['loadHelpTopics' => '$refresh'];
+
+    public function deleteHelpTopic(HelpTopic $helpTopic)
+    {
+        $this->helpTopicDeleteId = $helpTopic->id;
+        $this->helpTopicName = $helpTopic->name;
+        $this->dispatchBrowserEvent('show-delete-help-topic-modal');
+    }
+
+    public function delete()
+    {
+        try {
+            HelpTopic::find($this->helpTopicDeleteId)->delete();
+            sleep(1);
+            $this->helpTopicDeleteId = null;
+            $this->dispatchBrowserEvent('close-modal');
+            flash()->addSuccess('Help topic successfully deleted');
+
+        } catch (Exception $e) {
+            dd($e->getMessage());
+            flash()->addError('Oops, something went wrong');
+        }
+    }
 
     public function render()
     {

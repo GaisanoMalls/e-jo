@@ -11,25 +11,25 @@ class CreateBranch extends Component
 {
     public $name;
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreBranchRequest())->rules();
     }
 
-    public function clearFormField(): void
+    public function clearFormField()
     {
         $this->reset();
         $this->resetValidation();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->clearFormField();
         $this->emit('loadBranches');
     }
 
-    public function saveBranch(): void
+    public function saveBranch()
     {
         $this->validate();
 

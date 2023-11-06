@@ -16,17 +16,17 @@ class CreateBuDepartment extends Component
     public $name;
     public $selectedBranches = [];
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreBUDepartmentRequest())->rules();
     }
 
-    public function messages(): array
+    public function messages()
     {
         return (new StoreBUDepartmentRequest())->messages();
     }
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->reset();
@@ -35,7 +35,7 @@ class CreateBuDepartment extends Component
         $this->dispatchBrowserEvent('clear-branch-select-option');
     }
 
-    public function saveBUDepartment(): void
+    public function saveBUDepartment()
     {
         $this->validate();
 
@@ -58,7 +58,7 @@ class CreateBuDepartment extends Component
         }
     }
 
-    public function cancel(): void
+    public function cancel()
     {
         $this->resetValidation();
         $this->reset('name', 'selectedBranches');

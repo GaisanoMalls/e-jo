@@ -6,21 +6,19 @@ use App\Http\Traits\Agent\Tickets as AgentTickets;
 use App\Http\Traits\ServiceDepartmentAdmin\Tickets as ServiceDepartmentAdminTickets;
 use App\Http\Traits\SysAdmin\Tickets as SysAdminTickets;
 use App\Models\Role;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 
 trait TicketsByStaffWithSameTemplates
 {
     use ServiceDepartmentAdminTickets, SysAdminTickets, AgentTickets;
 
-    public function getTicketsToAssign(): Collection|array
+    public function getTicketsToAssign()
     {
         return (auth()->user()->role_id === Role::SERVICE_DEPARTMENT_ADMIN)
             ? $this->serviceDeptAdminGetTicketsToAssign()
             : [];
     }
 
-    public function getApprovedTickets(): Collection|array
+    public function getApprovedTickets()
     {
         return match (auth()->user()->role_id) {
             Role::SYSTEM_ADMIN => $this->sysAdminGetApprovedTickets(),
@@ -29,7 +27,7 @@ trait TicketsByStaffWithSameTemplates
         };
     }
 
-    public function getDisapprovedTickets(): Collection|array
+    public function getDisapprovedTickets()
     {
         return match (auth()->user()->role_id) {
             Role::SYSTEM_ADMIN => $this->sysAdminGetDisapprovedTickets(),
@@ -38,7 +36,7 @@ trait TicketsByStaffWithSameTemplates
         };
     }
 
-    public function getOpenTickets(): Collection|Builder|array
+    public function getOpenTickets()
     {
         return match (auth()->user()->role_id) {
             Role::SYSTEM_ADMIN => $this->sysAdminGetOpenTickets(),
@@ -48,7 +46,7 @@ trait TicketsByStaffWithSameTemplates
         };
     }
 
-    public function getClaimedTickets(): Collection|Builder|array
+    public function getClaimedTickets()
     {
         return match (auth()->user()->role_id) {
             Role::SYSTEM_ADMIN => $this->sysAdminGetClaimedTickets(),
@@ -58,7 +56,7 @@ trait TicketsByStaffWithSameTemplates
         };
     }
 
-    public function getOnProcessTickets(): Collection|Builder|array
+    public function getOnProcessTickets()
     {
         return match (auth()->user()->role_id) {
             Role::SYSTEM_ADMIN => $this->sysAdminGetOnProcessTickets(),
@@ -68,7 +66,7 @@ trait TicketsByStaffWithSameTemplates
         };
     }
 
-    public function getViewedTickets(): Collection|array
+    public function getViewedTickets()
     {
         return match (auth()->user()->role_id) {
             Role::SYSTEM_ADMIN => $this->sysAdminGetViewedTickets(),
@@ -77,7 +75,7 @@ trait TicketsByStaffWithSameTemplates
         };
     }
 
-    public function getOverdueTickets(): Collection|Builder|array
+    public function getOverdueTickets()
     {
         return match (auth()->user()->role_id) {
             Role::SYSTEM_ADMIN => $this->sysAdminGetOverdueTickets(),
@@ -87,7 +85,7 @@ trait TicketsByStaffWithSameTemplates
         };
     }
 
-    public function getClosedTickets(): Collection|Builder|array
+    public function getClosedTickets()
     {
         return match (auth()->user()->role_id) {
             Role::SYSTEM_ADMIN => $this->sysAdminGetClosedTickets(),

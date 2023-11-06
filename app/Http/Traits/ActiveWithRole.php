@@ -16,7 +16,7 @@ trait ActiveWithRole
      * @param  array|string  $role
      * @return mixed
      */
-    public function activeAndHasRole($request, $next, $role): mixed
+    public function activeAndHasRole($request, $next, $role)
     {
         $user = $request->user();
 

@@ -21,12 +21,12 @@ class CreateAgent extends Component
     public $BUDepartments = [], $teams = [], $selectedTeams = [];
     public $first_name, $middle_name, $last_name, $suffix, $email, $branch, $bu_department, $service_department;
 
-    public function rules(): array
+    public function rules()
     {
         return (new StoreAgenRequest())->rules();
     }
 
-    public function updatedBranch(): void
+    public function updatedBranch()
     {
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
@@ -36,7 +36,7 @@ class CreateAgent extends Component
         ]);
     }
 
-    public function actionOnSubmit(): void
+    public function actionOnSubmit()
     {
         sleep(1);
         $this->reset();
@@ -45,7 +45,7 @@ class CreateAgent extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function saveAgent(): void
+    public function saveAgent()
     {
         $this->validate();
 
@@ -82,7 +82,7 @@ class CreateAgent extends Component
         }
     }
 
-    public function cancel(): void
+    public function cancel()
     {
         $this->reset();
         $this->resetValidation();

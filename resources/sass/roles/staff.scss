@@ -3405,6 +3405,20 @@ input[type="checkbox"] {
     .check__special__project {
         margin-right: 10px !important;
     }
+
+    .modal__confirm__delete__help__topic {
+        .btn__confirm__modal {
+            @include generic.button-config;
+
+            &.btn__cancel__delete {
+                @include generic.form-button-cancel;
+            }
+
+            &.btn__confirm__delete {
+                @include generic.form-button-submit;
+            }
+        }
+    }
 }
 
 .sla__section {

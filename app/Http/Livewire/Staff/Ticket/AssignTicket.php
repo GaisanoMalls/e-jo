@@ -25,14 +25,14 @@ class AssignTicket extends Component
     public $agents = [];
     public $team, $agent;
 
-    private function actionOnSubmit(): void
+    private function actionOnSubmit()
     {
         sleep(1);
         $this->emit('loadTicketDetails');
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function saveAssignTicket(): void
+    public function saveAssignTicket()
     {
         try {
             DB::transaction(function () {
@@ -64,7 +64,7 @@ class AssignTicket extends Component
         }
     }
 
-    public function updatedTeam(): void
+    public function updatedTeam()
     {
         $this->agents = User::with('profile')->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
             ->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->ticket->serviceDepartment->id))
