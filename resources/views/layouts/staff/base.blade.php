@@ -48,7 +48,6 @@
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/tooltip.min.js') }}"></script>
     <script src="{{ asset('js/roles/staff/staff.js') }}"></script>
-    <script src="{{ asset('js/toaster-message.js') }}"></script>
     <script src="{{ asset('js/ticket-jquery.js') }}"></script>
     <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>

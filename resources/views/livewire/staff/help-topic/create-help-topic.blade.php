@@ -94,6 +94,20 @@
                                         <div class="py-2">
                                             <hr>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label for="amount" class="form-label form__field__label">Amount</label>
+                                                <input type="text" wire:model="amount"
+                                                    class="form-control form__field amount__field" id="amount"
+                                                    placeholder="Enter amount">
+                                                @error('amount')
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                                @enderror
+                                            </div>
+                                        </div>
                                         <small class="fw-bold">Approvals</small>
                                         <div class="col-md-4 mt-2">
                                             <div class="mb-2">
@@ -101,14 +115,14 @@
                                                     Level of approval
                                                 </label>
                                                 <div>
-                                                    <div id="levelOfApprovalSelect" wire:ignore></div>
+                                                    <div id="select-help-topic-level-of-approval" wire:ignore></div>
                                                 </div>
-                                                @error('levelOfApproval')
+                                                @error('level_of_approval')
                                                 <span class="error__message">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                                     {{ $message }}
                                                 </span>
-                                                @enderror
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="col-md-12 mt-3">
@@ -150,7 +164,7 @@
     const specialProjectContainer = document.getElementById('specialProjectContainer');
     const specialProjectCheck = document.getElementById('specialProjectCheck');
     const specialProjectName = document.getElementById('specialProjectName');
-    const levelOfApprovalSelect = document.querySelector('#levelOfApprovalSelect');
+    const levelOfApprovalSelect = document.querySelector('#select-help-topic-level-of-approval');
 
     const levelOfApprovalOption = [
         @foreach ($levelOfApprovals as $approval)
@@ -166,6 +180,7 @@
         options: levelOfApprovalOption,
         search: true,
         markSearchResults: true,
+        required: true
     });
 
     if (specialProjectCheck && specialProjectContainer) {
@@ -186,7 +201,7 @@
                         selectApproverContainer.innerHTML = '';
 
                         if (levelOfApproval) {
-                            @this.set('levelOfApproval', levelOfApproval);
+                            @this.set('level_of_approval', levelOfApproval);
                             for (let count = 1; count <= levelOfApproval; count++) {
                                 const approverOption = [];
                                 const selectOptionHTML = `
@@ -225,7 +240,7 @@
                                     showValueAsTags: true,
                                     markSearchResults: true,
                                     multiple: true,
-                                    // disabled: true
+                                    required: true,
                                 });
 
                                 // Select option by level (Level 1-5)
@@ -243,8 +258,8 @@
             } else {
                 window.addEventListener('hide-special-project-container', () => {
                     @this.set('name', null);
-                    levelOfApprovalSelect.reset();
                     specialProjectName.value = null;
+                    levelOfApprovalSelect.reset();
                     specialProjectContainer.style.display = 'none';
                 });
             }
@@ -351,6 +366,7 @@
     window.addEventListener('close-modal', () => {
         serviceDepartmentSelect.reset();
         slaSelect.reset();
+        levelOfApprovalSelect.reset();
         teamSelect.reset();
         teamSelect.disable();
         teamSelect.setOptions([]);

@@ -16,7 +16,7 @@ return new class extends Migration {
         Schema::create('clarification_files', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Clarification::class, 'clarification_id')->constrained();
-            $table->string('file_attachment')->nullable();
+            $table->string('file_attachment');
         });
     }
 

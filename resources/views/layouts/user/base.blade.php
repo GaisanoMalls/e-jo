@@ -44,7 +44,6 @@
     <script src="{{ asset('js/select/virtual-select.min.js') }}"></script>
     <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/toaster-message.js') }}"></script>
     <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>

@@ -241,8 +241,6 @@
         $('#addNewApproverModal').modal('hide');
         approverBranchSelect.reset();
         approverBUDepartmentSelect.reset();
-        approverBranchSelect.disable();
-        approverBUDepartmentSelect.disable();
     });
 </script>
 @endpush

@@ -16,7 +16,7 @@ return new class extends Migration {
         Schema::create('ticket_files', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained();
-            $table->string('file_attachment')->nullable();
+            $table->string('file_attachment');
         });
     }
 

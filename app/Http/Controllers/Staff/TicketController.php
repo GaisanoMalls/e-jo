@@ -17,7 +17,6 @@ class TicketController extends Controller
     public function ticketsToAssign()
     {
         return view('layouts.staff.ticket.tickets_to_assign');
-
     }
 
     public function approvedTickets()

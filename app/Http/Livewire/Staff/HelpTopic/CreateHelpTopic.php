@@ -7,6 +7,7 @@ use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
 use App\Models\LevelApprover;
+use App\Models\SpecialProject;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -15,16 +16,34 @@ use Livewire\Component;
 class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
-
     public $checked = false;
     public $teams = [], $level1Approvers = [],
     $level2Approvers = [], $level3Approvers = [],
     $level4Approvers = [], $level5Approvers = [];
-    public $name, $sla, $service_department, $team, $levelOfApproval;
+    public $name, $sla, $service_department, $team, $level_of_approval;
+
+    // Special project
+    public $amount;
 
     public function rules()
     {
-        return (new StoreHelpTopicRequest())->rules();
+        $rules = (new StoreHelpTopicRequest())->rules();
+
+        if ($this->checked) {
+            if (is_null($this->level_of_approval)) {
+                $rules['level_of_approval'] = ['required'];
+            } else {
+                $rules['level_of_approval'] = ['nullable'];
+            }
+
+            if (is_null($this->amount)) {
+                $rules['amount'] = ['required'];
+            } else {
+                $rules['amount'] = ['nullable'];
+            }
+        }
+
+        return $rules;
     }
 
     public function actionOnSubmit()
@@ -42,15 +61,36 @@ class CreateHelpTopic extends Component
 
         try {
             DB::transaction(function () {
-                $helpTopic = HelpTopic::create([
-                    'service_department_id' => $this->service_department,
-                    'team_id' => $this->team,
-                    'service_level_agreement_id' => $this->sla,
-                    'name' => $this->name,
-                    'slug' => \Str::slug($this->name)
-                ]);
-
                 if ($this->checked) {
+                    $helpTopic = HelpTopic::create([
+                        'service_department_id' => $this->service_department,
+                        'team_id' => $this->team,
+                        'service_level_agreement_id' => $this->sla,
+                        'name' => $this->name,
+                        'slug' => \Str::slug($this->name)
+                    ]);
+
+                    SpecialProject::create([
+                        'help_topic_id' => $helpTopic->id,
+                        'amount' => (float) number_format($this->amount, 2),
+                        'meta_data' => [
+                            'approver' => [
+                                'fpm_head_coo_approver' => [
+                                    'approver_id' => null,
+                                    'is_done' => false
+                                ],
+                                'service_department_approver' => [
+                                    'approver_id' => null,
+                                    'is_done' => false
+                                ],
+                                'bu_head_approver' => [
+                                    'approver_id' => null,
+                                    'is_done' => false
+                                ]
+                            ]
+                        ]
+                    ]);
+
                     $levelApprovers = [
                         $this->level1Approvers,
                         $this->level2Approvers,
@@ -59,7 +99,7 @@ class CreateHelpTopic extends Component
                         $this->level5Approvers,
                     ];
 
-                    for ($level = 1; $level <= $this->levelOfApproval; $level++) {
+                    for ($level = 1; $level <= $this->level_of_approval; $level++) {
                         $helpTopic->levels()->attach($level);
                         foreach ($levelApprovers[$level - 1] as $approver) {
                             LevelApprover::create([
@@ -70,7 +110,14 @@ class CreateHelpTopic extends Component
                         }
                     }
 
-
+                } else {
+                    HelpTopic::create([
+                        'service_department_id' => $this->service_department,
+                        'team_id' => $this->team,
+                        'service_level_agreement_id' => $this->sla,
+                        'name' => $this->name,
+                        'slug' => \Str::slug($this->name)
+                    ]);
                 }
             });
 

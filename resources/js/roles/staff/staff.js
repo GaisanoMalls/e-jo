@@ -44,25 +44,4 @@ document.addEventListener('DOMContentLoaded', function () {
     if (btnCloseModal) {
         btnCloseModal.addEventListener('click', clearModalForm);
     }
-
-    // Helpt Topic - Special Project
-    const specialProjectContainer = document.getElementById('specialProjectContainer');
-    const specialProjectCheck = document.getElementById('specialProjectCheck');
-    const specialProjectName = document.getElementById('specialProjectName');
-    const levelOfApprovalSelect = document.querySelector('#levelOfApprovalSelect');
-
-    if (specialProjectCheck && helpTopicName) {
-        const specialProjectName = 'Special Project';
-        specialProjectContainer.style.display = 'none';
-
-        specialProjectCheck.addEventListener('change', (event) => {
-            if (event.target.checked) {
-                specialProjectContainer.style.display = 'block';
-                helpTopicName.value = specialProjectName;
-            } else {
-                specialProjectContainer.style.display = 'none';
-                helpTopicName.value = null;
-            }
-        });
-    }
 });

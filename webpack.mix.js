@@ -21,7 +21,6 @@ mix.copyDirectory('vendor/tinymce/tinymce', 'public/js/tinymce');
 mix.js('resources/js/init/tinymce-init.js', 'public/js/init')
     .js('resources/js/init/virtual-select-init.js', 'public/js/init')
     .js('resources/js/ticket-jquery.js', 'public/js')
-    .js('resources/js/toaster-message.js', 'public/js')
     .js('resources/js/roles/staff/staff.js', 'public/js/roles/staff')
     .js('resources/js/roles/staff/dependent-dropdown.js', 'public/js/roles/staff')
     .js('resources/js/roles/staff/approver.js', 'public/js/roles/staff')

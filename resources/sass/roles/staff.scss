@@ -121,6 +121,15 @@ body {
     @include generic.error-message;
 }
 
+.amount__field {
+    direction: rtl;
+    text-align: right;
+}
+
+.amount__field::before {
+    content: '₱';
+}
+
 // Notification Canvas
 .notification__canvas {
     min-width: 25% !important;
@@ -3418,6 +3427,15 @@ input[type="checkbox"] {
                 @include generic.form-button-submit;
             }
         }
+    }
+
+    .btn__edit__helptopic__approval__level {
+        padding: 0.4rem 0.6rem;
+        border: 1px solid #bdbcbd;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        color: #777d87;
+        font-size: $fs-13;
     }
 }
 

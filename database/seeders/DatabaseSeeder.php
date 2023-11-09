@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             SuffixesSeeder::class,
             ApprovalLevelSeeder::class,
             LevelSeeder::class,
+            ServiceLevelAgreementSeeder::class,
         ]);
     }
 }

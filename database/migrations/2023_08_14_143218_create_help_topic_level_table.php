@@ -16,8 +16,8 @@ return new class extends Migration {
     {
         Schema::create('help_topic_level', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Level::class, 'level_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Level::class, 'level_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

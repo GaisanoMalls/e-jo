@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class HelpTopic extends Model
 {
@@ -46,9 +47,9 @@ class HelpTopic extends Model
         return $this->hasMany(Ticket::class);
     }
 
-    public function specialProjects(): HasMany
+    public function specialProject(): HasOne
     {
-        return $this->hasMany(SpecialProject::class);
+        return $this->hasOne(SpecialProject::class);
     }
 
     public function levels(): BelongsToMany

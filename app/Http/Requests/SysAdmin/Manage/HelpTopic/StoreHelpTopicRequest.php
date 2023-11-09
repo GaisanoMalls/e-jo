@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreHelpTopicRequest extends FormRequest
 {
-    protected $errorBag = 'storeHelpTopic';
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -29,6 +28,8 @@ class StoreHelpTopicRequest extends FormRequest
             'sla' => ['required'],
             'service_department' => ['required'],
             'team' => ['nullable'],
+            'level_of_approval' => ['nullable'],
+            'amount' => ['nullable']
         ];
     }
 }

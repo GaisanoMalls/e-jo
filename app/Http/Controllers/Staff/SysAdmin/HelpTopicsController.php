@@ -124,7 +124,7 @@ class HelpTopicsController extends Controller
 
             return back()->with('success', 'Help topic successfully updated.');
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with('error', 'Failed to update the help topic.');
         }
     }
@@ -134,7 +134,7 @@ class HelpTopicsController extends Controller
         try {
             $helpTopic->delete();
             return back()->with('success', 'Help topic successfully deleted.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with('error', 'Failed to delete the help topic');
         }
     }

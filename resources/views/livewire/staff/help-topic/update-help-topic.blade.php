@@ -56,7 +56,6 @@
                                         @enderror
                                     </div>
                                 </div>
-
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label form__field__label">
@@ -73,23 +72,14 @@
                                         @enderror
                                     </div>
                                 </div>
-                                @if ($helpTopic->specialProjects->count() != 0))
+                                @if (!is_null($helpTopic->specialProject))
                                 <small class="fw-bold my-3">Approvals</small>
-                                {{--
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label class="form-label form__field__label">Level of Approval</label>
-                                        <select name="level_of_approval" data-search="false"
-                                            id="editHelpTopicLevelOfApprovalDropdown" placeholder="Select (required)">
-                                            <option value="" selected>N/A</option>
-                                            @foreach ($levelOfApprovals as $level)
-                                            <option value="{{ $level->id }}" {{ in_array($level->id,
-                                                $helpTopic->levels->pluck('id')->toArray())
-                                                ? 'selected' : '' }}>
-                                                {{ $level->description }}
-                                            </option>
-                                            @endforeach
-                                        </select>
+                                        <div>
+                                            <div id="select-help-topic-level-of-approval" wire:ignore></div>
+                                        </div>
                                         @error('level_of_approval')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
@@ -104,6 +94,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-12 my-4">
                                     <small class="fw-bold my-3">Current Approvers</small>
                                     <div class="d-flex flex-column gap-3 mt-3 mb-4">
@@ -143,7 +134,7 @@
                                         </div>
                                         @endforeach
                                     </div>
-                                </div> --}}
+                                </div>
                                 @endif
                             </div>
                             <div class="col-12">
@@ -216,6 +207,92 @@
         markSearchResults: true,
         selectedValue: '{{ $helpTopic->team_id }}'
     });
+
+    const levelOfApprovalOption = [
+        @foreach ($levelOfApprovals as $approval)
+            {
+                label: "{{ $approval->description }}",
+                value: "{{ $approval->value }}"
+            },
+        @endforeach
+    ];
+
+    const levelOfApprovalSelect = document.querySelector('#select-help-topic-level-of-approval');
+    VirtualSelect.init({
+        ele: levelOfApprovalSelect,
+        options: levelOfApprovalOption,
+        search: true,
+        markSearchResults: true,
+        selectedValue: {{ $helpTopic->levels->pluck('id')->last() ?? 0 }}
+    });
+
+    window.onload = () => {
+        const numberOfApproval = parseInt(levelOfApprovalSelect.value);
+        const selectApproverContainer = document.querySelector('#editSelectApproverContainer');
+        const approvers = {!! json_encode($approvers) !!};
+
+        if (numberOfApproval) {
+            for (let count = 1; count <= numberOfApproval; count++) {
+                const approverOption = [];
+                const selectOptionHTML = `
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <label class="form-label form__field__label">Level ${count} approver/s</label>
+                            <div>
+                                <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
+                            </div>
+                            @error('level${count}Approver')
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+                    </div>`;
+
+                selectApproverContainer.insertAdjacentHTML('beforeend', selectOptionHTML);
+
+                if (approvers.length > 0) {
+                    approvers.forEach(function (approver) {
+                        const middleName = `${approver.profile.middle_name ?? ''}`;
+                        const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+
+                        approverOption.push({
+                            value: approver.id,
+                            label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                        });
+                    });
+                }
+
+                VirtualSelect.init({
+                    ele: `#level${count}Approver`,
+                    options: approverOption,
+                    showValueAsTags: true,
+                    markSearchResults: true,
+                    multiple: true,
+                    required: true,
+                });
+
+                const selectedCurrentApprovers = [];
+                const currentApprovers = {!! json_encode($currentApprovers) !!};
+                const editLevelOfApproverSelect = document.querySelector(`#level${count}Approver`);
+
+                approverOption.forEach(function (approver) {
+                    currentApprovers.forEach(function(currentApprover) {
+                        if (approver.value == currentApprover.id && currentApprover.level == count) {
+                            // Put the approvers into the array with its level number where they belong.
+                            selectedCurrentApprovers.push({
+                                id: currentApprover.id,
+                                level: currentApprover.level
+                            });
+
+                            editLevelOfApproverSelect.setValue(currentApprover.id);
+                        }
+                    });
+                });
+            }
+        }
+    }
 
 
 </script>
