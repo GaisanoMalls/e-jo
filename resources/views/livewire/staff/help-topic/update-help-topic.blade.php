@@ -94,47 +94,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="col-12 my-4">
-                                    <small class="fw-bold my-3">Current Approvers</small>
-                                    <div class="d-flex flex-column gap-3 mt-3 mb-4">
-                                        @foreach ($helpTopic->levels as $level)
-                                        <div
-                                            class="position-relative bg-light p-3 mt-4 rounded-3 current__approvers__container">
-                                            <h6 class="mb-0 level__label">Level {{ $level->value }}</h6>
-                                            <div class="d-flex flex-wrap gap-3 mt-3">
-                                                @foreach ($levelApprovers as $levelApprover)
-                                                @foreach ($approvers as $approver)
-                                                @if ($levelApprover->user_id == $approver->id &&
-                                                $levelApprover->level_id == $level->id )
-                                                <div class="card border-0 shadow-sm p-3 rounded-3">
-                                                    <div class="d-flex gap-2">
-                                                        @if ($approver->profile->picture)
-                                                        <img src="{{ Storage::url($approver->profile->picture) }}"
-                                                            alt="" class="approver__image approver__picture">
-                                                        @else
-                                                        <div
-                                                            class="approver__image approver__initial__as__picture d-flex align-items-center justify-content-center">
-                                                            {{ $approver->profile->getNameInitial() }}
-                                                        </div>
-                                                        @endif
-                                                        <div class="d-flex flex-column">
-                                                            <h6 class="mb-0 approver__name">
-                                                                {{ $approver->profile->getFullName() }}
-                                                            </h6>
-                                                            <small class="approver__email">{{ $approver->email
-                                                                }}</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @endforeach
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                    </div>
-                                </div>
                                 @endif
                             </div>
                             <div class="col-12">
@@ -230,6 +189,7 @@
         const numberOfApproval = parseInt(levelOfApprovalSelect.value);
         const selectApproverContainer = document.querySelector('#editSelectApproverContainer');
         const approvers = {!! json_encode($approvers) !!};
+        const currentApprovers = {!! json_encode($currentApprovers) !!};
 
         if (numberOfApproval) {
             for (let count = 1; count <= numberOfApproval; count++) {
@@ -273,27 +233,15 @@
                     required: true,
                 });
 
-                const selectedCurrentApprovers = [];
-                const currentApprovers = {!! json_encode($currentApprovers) !!};
+                const levelApprovers = currentApprovers.filter(approver=> approver.level == count);
                 const editLevelOfApproverSelect = document.querySelector(`#level${count}Approver`);
 
-                approverOption.forEach(function (approver) {
-                    currentApprovers.forEach(function(currentApprover) {
-                        if (approver.value == currentApprover.id && currentApprover.level == count) {
-                            // Put the approvers into the array with its level number where they belong.
-                            selectedCurrentApprovers.push({
-                                id: currentApprover.id,
-                                level: currentApprover.level
-                            });
-
-                            editLevelOfApproverSelect.setValue(currentApprover.id);
-                        }
-                    });
-                });
+                if (editLevelOfApproverSelect) {
+                    const selectedApprovers = levelApprovers.map(approver => approver.id);
+                    editLevelOfApproverSelect.setValue(selectedApprovers);
+                }
             }
         }
     }
-
-
 </script>
 @endpush

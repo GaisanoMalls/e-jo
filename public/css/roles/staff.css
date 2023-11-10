@@ -9792,40 +9792,6 @@ input[type=checkbox]:checked + .form-check-label {
   background-color: transparent;
   color: #d32839;
 }
-.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .level__label {
-  position: absolute;
-  top: -14px;
-  color: white;
-  font-size: 0.875rem;
-  padding: 0.3rem 0.6rem;
-  background-color: #9DA85C;
-  border-radius: 5px;
-}
-.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .approver__image {
-  height: 35px;
-  width: 35px;
-  border: 2px solid #d9ddd9;
-  border-radius: 0.563rem;
-}
-.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .approver__image.approver__picture {
-  -o-object-fit: contain;
-     object-fit: contain;
-}
-.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .approver__image.approver__initial__as__picture {
-  font-size: 0.75rem;
-  font-weight: 500;
-  background-color: #3B4053;
-  color: white;
-}
-.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .approver__name {
-  font-size: 0.813rem;
-  font-weight: 600;
-  color: #1a3c40;
-}
-.help__topics__section .help__topic__details__card .help__topic__details__container .current__approvers__container .approver__email {
-  font-size: 0.75rem;
-  font-weight: 400;
-}
 .help__topics__section .check__special__project {
   margin-right: 10px !important;
 }

@@ -12,7 +12,7 @@ class HelpTopicLevel extends Model
 
     protected $fillable = ['help_topic_id', 'level_id'];
 
-    public function helpTopic(): BelongsTogs
+    public function helpTopic(): BelongsTo
     {
         return $this->belongsTo(HelpTopic::class, 'help_topic_id');
     }

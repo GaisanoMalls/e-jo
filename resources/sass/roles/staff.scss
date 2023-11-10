@@ -3366,49 +3366,7 @@ input[type="checkbox"] {
                     color: #d32839;
                 }
             }
-
-            .current__approvers__container {
-                .level__label {
-                    position: absolute;
-                    top: -14px;
-                    color: white;
-                    font-size: $fs-14;
-                    padding: 0.3rem 0.6rem;
-                    background-color: #9DA85C;
-                    border-radius: 5px;
-                }
-
-                .approver__image {
-                    height: 35px;
-                    width: 35px;
-                    border: 2px solid #d9ddd9;
-                    border-radius: $border-radius-9;
-
-                    &.approver__picture {
-                        object-fit: contain;
-                    }
-
-                    &.approver__initial__as__picture {
-                        font-size: 0.75rem;
-                        font-weight: $fw-500;
-                        background-color: #3B4053;
-                        color: white;
-                    }
-                }
-
-                .approver__name {
-                    font-size: $fs-13;
-                    font-weight: $fw-600;
-                    color: #1a3c40;
-                }
-
-                .approver__email {
-                    font-size: $fs-12;
-                    font-weight: $fw-400;
-                }
-            }
         }
-
     }
 
     .check__special__project {
