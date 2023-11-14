@@ -22,7 +22,8 @@ class SendTicketReply extends Component
 
     public Ticket $ticket;
     public $upload = 0;
-    public $description, $replyFiles = [];
+    public $description;
+    public $replyFiles = [];
 
     public function rules()
     {

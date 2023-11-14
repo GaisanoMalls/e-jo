@@ -12,7 +12,9 @@ class BranchList extends Component
     use BasicModelQueries;
 
     public $branches = [];
-    public $branchEditId, $branchDeleteId, $name;
+    public $branchEditId;
+    public $branchDeleteId;
+    public $name;
 
     protected $listeners = ['loadBranches' => 'fetchBranches'];
 

@@ -17,13 +17,18 @@ class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
     public $checked = false;
-    public $teams = [], $level1Approvers = [],
-    $level2Approvers = [], $level3Approvers = [],
-    $level4Approvers = [], $level5Approvers = [];
-    public $name, $sla, $service_department, $team, $level_of_approval;
-
-    // Special project
-    public $amount;
+    public $teams = [];
+    public $level1Approvers = [];
+    public $level2Approvers = [];
+    public $level3Approvers = [];
+    public $level4Approvers = [];
+    public $level5Approvers = [];
+    public $name;
+    public $sla;
+    public $service_department;
+    public $team;
+    public $level_of_approval;
+    public $amount; // For Special project
 
     public function rules()
     {
@@ -72,23 +77,7 @@ class CreateHelpTopic extends Component
 
                     SpecialProject::create([
                         'help_topic_id' => $helpTopic->id,
-                        'amount' => (float) number_format($this->amount, 2),
-                        'meta_data' => [
-                            'approver' => [
-                                'fpm_head_coo_approver' => [
-                                    'approver_id' => null,
-                                    'is_done' => false
-                                ],
-                                'service_department_approver' => [
-                                    'approver_id' => null,
-                                    'is_done' => false
-                                ],
-                                'bu_head_approver' => [
-                                    'approver_id' => null,
-                                    'is_done' => false
-                                ]
-                            ]
-                        ]
+                        'amount' => $this->amount
                     ]);
 
                     $levelApprovers = [
@@ -96,7 +85,7 @@ class CreateHelpTopic extends Component
                         $this->level2Approvers,
                         $this->level3Approvers,
                         $this->level4Approvers,
-                        $this->level5Approvers,
+                        $this->level5Approvers
                     ];
 
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {

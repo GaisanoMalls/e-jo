@@ -335,7 +335,7 @@
         search: true,
         multiple: true,
         markSearchResults: true,
-        selectedValue: {!! json_encode($currentTeams) !!}
+        selectedValue: @json($currentTeams)
     });
 
     agentTeamSelect.addEventListener('change', () => {

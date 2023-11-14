@@ -11,7 +11,8 @@ class HelpTopicList extends Component
 {
     use BasicModelQueries;
 
-    public $helpTopicDeleteId, $helpTopicName;
+    public $helpTopicDeleteId;
+    public $helpTopicName;
 
     protected $listeners = ['loadHelpTopics' => '$refresh'];
 

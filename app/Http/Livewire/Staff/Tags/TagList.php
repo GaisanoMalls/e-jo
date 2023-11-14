@@ -12,7 +12,9 @@ class TagList extends Component
     use BasicModelQueries;
 
     public $tags = [];
-    public $name, $tagDeleteId, $tagUpdateId;
+    public $name;
+    public $tagDeleteId;
+    public $tagUpdateId;
 
     protected $listeners = ["loadTags" => "fetchTags"];
 

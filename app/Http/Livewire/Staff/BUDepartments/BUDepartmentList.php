@@ -12,8 +12,11 @@ class BUDepartmentList extends Component
 {
     use BasicModelQueries;
 
-    public $buDepartments = [], $editSelectedBranches = [];
-    public $buDepartmentEditId, $buDepartmentDeleteId, $name;
+    public $buDepartments = [];
+    public $editSelectedBranches = [];
+    public $buDepartmentEditId;
+    public $buDepartmentDeleteId;
+    public $name;
 
     protected $listeners = ['loadBUDepartments' => 'fetchBUDepartments'];
 

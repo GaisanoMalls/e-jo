@@ -15,8 +15,16 @@ class UpdateServiceDepartmentAdmin extends Component
     use BasicModelQueries, Utils;
 
     public User $serviceDeptAdmin;
-    public $BUDepartments = [], $service_departments = [], $currentServiceDepartments = [];
-    public $first_name, $middle_name, $last_name, $email, $suffix, $branch, $bu_department;
+    public $BUDepartments = [];
+    public $service_departments = [];
+    public $currentServiceDepartments = [];
+    public $first_name;
+    public $middle_name;
+    public $last_name;
+    public $email;
+    public $suffix;
+    public $branch;
+    public $bu_department;
 
     public function mount(User $serviceDeptAdmin)
     {

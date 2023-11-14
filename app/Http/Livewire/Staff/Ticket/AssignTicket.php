@@ -23,7 +23,8 @@ class AssignTicket extends Component
 
     public Ticket $ticket;
     public $agents = [];
-    public $team, $agent;
+    public $team;
+    public $agent;
 
     private function actionOnSubmit()
     {

@@ -14,7 +14,8 @@ class CreateTeam extends Component
     use BasicModelQueries;
 
     public $selectedBranches = [];
-    public $selectedServiceDepartment, $name = '';
+    public $name;
+    public $selectedServiceDepartment;
 
     public function rules()
     {

@@ -10,7 +10,8 @@ use Livewire\Component;
 class UpdateServiceDeptAdminPassword extends Component
 {
     public User $serviceDeptAdmin;
-    public $new_password, $confirm_password;
+    public $new_password;
+    public $confirm_password;
 
     public function rules()
     {

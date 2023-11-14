@@ -5,6 +5,10 @@ namespace App\Http\Livewire\Staff\HelpTopic;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\HelpTopic;
 use App\Models\LevelApprover;
+use App\Models\SpecialProject;
+use App\Models\Team;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class UpdateHelpTopic extends Component
@@ -12,25 +16,99 @@ class UpdateHelpTopic extends Component
     use BasicModelQueries;
 
     public HelpTopic $helpTopic;
+    public $teams = [];
+    public $level1Approvers = [];
+    public $level2Approvers = [];
+    public $level3Approvers = [];
+    public $level4Approvers = [];
+    public $level5Approvers = [];
     public $name;
-    public $approvers = [];
+    public $sla;
+    public $service_department;
+    public $team;
+    public $level_of_approval;
+    public $amount;
+    public $max_amount = 50000;
+    private $levelOfApprovalIsSelected = false;
 
     public function mount(HelpTopic $helpTopic)
     {
-        $this->name = $this->helpTopic->name;
-        $this->approvers = $this->queryApprovers();
+        $this->name = $helpTopic->name;
+        $this->sla = $helpTopic->service_level_agreement_id;
+        $this->service_department = $helpTopic->service_department_id;
+        $this->team = $helpTopic->team_id;
+        $this->amount = $helpTopic->specialProject->amount ?? null;
+        $this->level1Approvers = $this->getLevel1Approvers();
+        $this->level2Approvers = $this->getLevel2Approvers();
+        $this->level3Approvers = $this->getLevel3Approvers();
+        $this->level4Approvers = $this->getLevel4Approvers();
+        $this->level5Approvers = $this->getLevel5Approvers();
+        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
     }
 
     public function rules()
     {
         return [
-            'name' => "required|unique:help_topics,name,{$this->helpTopic->id}"
+            'name' => "required|unique:help_topics,name,{$this->helpTopic->id}",
+            'sla' => 'required',
+            'service_department' => 'required',
+            'team' => 'nullable',
+            'level_of_approval' => 'nullable',
+            'teams' => ''
         ];
     }
 
     public function updateHelpTopic()
     {
         $this->validate();
+
+        try {
+            DB::transaction(function () {
+                $this->helpTopic->update([
+                    'service_department_id' => $this->service_department,
+                    'team_id' => $this->team,
+                    'service_level_agreement_id' => $this->sla,
+                    'name' => $this->name,
+                    'slug' => \Str::slug($this->name)
+                ]);
+
+                if (!is_null($this->helpTopic->specialProject)) {
+                    $this->helpTopic->specialProject->update(['amount' => $this->amount]);
+
+                    $levelApprovers = [
+                        $this->level1Approvers,
+                        $this->level2Approvers,
+                        $this->level3Approvers,
+                        $this->level4Approvers,
+                        $this->level5Approvers
+                    ];
+
+                    for ($level = 1; $level <= $this->level_of_approval; $level++) {
+                        $this->helpTopic->levels()->sync([$level]);
+                        foreach ($levelApprovers[$level - 1] as $approver) {
+                            LevelApprover::where('help_topic_id', $this->helpTopic->id)->update([
+                                'level_id' => $level,
+                                'user_id' => $approver,
+                            ]);
+                        }
+                    }
+                }
+            });
+        } catch (Exception $e) {
+            dd($e->getMessage());
+            flash()->addError('Oops, something went wrong.');
+        }
+    }
+
+    public function updatedLevelOfApproval()
+    {
+        $this->levelOfApprovalIsSelected = true;
+    }
+
+    public function updatedServiceDepartment()
+    {
+        $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->service_department))->get();
+        $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 
     public function getCurrentApprovers()
@@ -45,8 +123,7 @@ class UpdateHelpTopic extends Component
                     if ($levelApprover->user_id == $approver->id && $levelApprover->level_id == $level->id) {
                         array_push($currentApprovers, [
                             'id' => $approver->id,
-                            'name' => $approver->profile->first_name,
-                            'level' => $level->value
+                            'level' => intval($level->value)
                         ]);
                     }
                 }
@@ -56,17 +133,99 @@ class UpdateHelpTopic extends Component
         return $currentApprovers;
     }
 
+    public function getLevel1Approvers()
+    {
+        $level1Approvers = [];
+        $levelApprovers = LevelApprover::where('help_topic_id', $this->helpTopic->id)->get();
+
+        foreach ($levelApprovers as $levelApprover) {
+            if ($levelApprover->level_id === 1) {
+                array_push($level1Approvers, [
+                    'user_id' => $levelApprover->user_id,
+                    'level_id' => $levelApprover->level_id
+                ]);
+            }
+        }
+
+        return $level1Approvers;
+    }
+
+    public function getLevel2Approvers()
+    {
+        $level2Approvers = [];
+        $levelApprovers = LevelApprover::where('help_topic_id', $this->helpTopic->id)->get();
+
+        foreach ($levelApprovers as $levelApprover) {
+            if ($levelApprover->level_id === 2) {
+                array_push($level2Approvers, [
+                    'user_id' => $levelApprover->user_id,
+                    'level_id' => $levelApprover->level_id
+                ]);
+            }
+        }
+
+        return $level2Approvers;
+    }
+
+    public function getLevel3Approvers()
+    {
+        $level3Approvers = [];
+        $levelApprovers = LevelApprover::where('help_topic_id', $this->helpTopic->id)->get();
+
+        foreach ($levelApprovers as $levelApprover) {
+            if ($levelApprover->level_id === 3) {
+                array_push($level3Approvers, [
+                    'user_id' => $levelApprover->user_id,
+                    'level_id' => $levelApprover->level_id
+                ]);
+            }
+        }
+
+        return $level3Approvers;
+    }
+
+    public function getLevel4Approvers()
+    {
+        $level4Approvers = [];
+        $levelApprovers = LevelApprover::where('help_topic_id', $this->helpTopic->id)->get();
+
+        foreach ($levelApprovers as $levelApprover) {
+            if ($levelApprover->level_id === 4) {
+                array_push($level4Approvers, [
+                    'user_id' => $levelApprover->user_id,
+                    'level_id' => $levelApprover->level_id
+                ]);
+            }
+        }
+
+        return $level4Approvers;
+    }
+
+    public function getLevel5Approvers()
+    {
+        $level5Approvers = [];
+        $levelApprovers = LevelApprover::where('help_topic_id', $this->helpTopic->id)->get();
+
+        foreach ($levelApprovers as $levelApprover) {
+            if ($levelApprover->level_id === 5) {
+                array_push($level5Approvers, [
+                    'user_id' => $levelApprover->user_id,
+                    'level_id' => $levelApprover->level_id
+                ]);
+            }
+        }
+
+        return $level5Approvers;
+    }
+
     public function render()
     {
         return view('livewire.staff.help-topic.update-help-topic', [
             'serviceLevelAgreements' => $this->queryServiceLevelAgreements(),
             'serviceDepartments' => $this->queryServiceDepartments(),
             'levelOfApprovals' => $this->queryLevelOfApprovals(),
-            'teams' => $this->queryTeams(),
             'currentApprovers' => $this->getCurrentApprovers(),
             'approvers' => $this->queryApprovers(),
-            'levels' => $this->helpTopic->levels,
-            'levelApprovers' => LevelApprover::where('help_topic_id', $this->helpTopic->id)->get(),
         ]);
     }
 }

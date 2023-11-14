@@ -11,7 +11,8 @@ use Livewire\Component;
 class AgentList extends Component
 {
     public $agents;
-    public $agentDeleteId, $agentFullName;
+    public $agentDeleteId;
+    public $agentFullName;
 
     protected $listeners = ['loadAgentList' => '$refresh'];
 

@@ -16,7 +16,13 @@ class UpdateRequester extends Component
 
     public User $user;
     public $BUDepartments = [];
-    public $first_name, $middle_name, $last_name, $suffix, $email, $branch, $bu_department;
+    public $first_name;
+    public $middle_name;
+    public $last_name;
+    public $suffix;
+    public $email;
+    public $branch;
+    public $bu_department;
 
     public function mount(User $user)
     {

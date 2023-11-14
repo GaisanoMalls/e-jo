@@ -18,7 +18,13 @@ class CreateRequester extends Component
     use BasicModelQueries, Utils;
 
     public $BUDepartments = [];
-    public $first_name, $middle_name, $last_name, $email, $suffix, $branch, $department;
+    public $first_name;
+    public $middle_name;
+    public $last_name;
+    public $email;
+    public $suffix;
+    public $branch;
+    public $department;
 
     public function rules()
     {

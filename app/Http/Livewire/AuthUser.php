@@ -11,8 +11,8 @@ class AuthUser extends Component
 {
     use AuthRedirect;
 
-    public string $email = "";
-    public string $password = "";
+    public $email;
+    public $password;
 
     public function rules()
     {

@@ -108,7 +108,7 @@ class HelpTopicsController extends Controller
                     'slug' => \Str::slug($request->name)
                 ]);
 
-                $levelOfApproval = (int) $request->level_of_approval;
+                $levelOfApproval = intval($request->level_of_approval);
                 for ($level = 1; $level <= $levelOfApproval; $level++) {
                     $helpTopic->levels()->sync([$level]);
                     $approvers = $this->getSelectedValue($request->input("approvers{$level}"));

@@ -11,7 +11,8 @@ use Livewire\Component;
 class ServiceDeptAdminList extends Component
 {
     public $serviceDepartmentAdmins;
-    public $serviceDeptAdminDeleteId, $serviceDeptAdminFullName;
+    public $serviceDeptAdminDeleteId;
+    public $serviceDeptAdminFullName;
 
     protected $listeners = ['loadServiceDeptAdminList' => '$refresh'];
 

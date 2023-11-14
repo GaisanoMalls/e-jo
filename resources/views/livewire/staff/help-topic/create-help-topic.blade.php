@@ -44,7 +44,7 @@
                                                 Serice Level Agreement (SLA)
                                             </label>
                                             <div>
-                                                <div id="slaSelect" wire:ignore></div>
+                                                <div id="select-help-topic-sla" wire:ignore></div>
                                             </div>
                                             @error('sla')
                                             <span class="error__message">
@@ -60,7 +60,7 @@
                                                 Service Department
                                             </label>
                                             <div>
-                                                <div id="serviceDepartmentSelect" wire:ignore></div>
+                                                <div id="select-help-topic-service-department" wire:ignore></div>
                                             </div>
                                             @error('service_department')
                                             <span class="error__message">
@@ -80,7 +80,8 @@
                                                 @endif
                                             </label>
                                             <div>
-                                                <div id="teamSelect" placeholder="Select (optional)" wire:ignore></div>
+                                                <div id="select-help-topic-team" placeholder="Select (optional)"
+                                                    wire:ignore></div>
                                             </div>
                                             @error('team')
                                             <span class="error__message">
@@ -187,7 +188,7 @@
         specialProjectContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
         const name = 'Special Project';
 
-        specialProjectCheck.addEventListener('change', function () {
+        specialProjectCheck.addEventListener('change', () => {
             if (specialProjectCheck.checked) {
                 window.addEventListener('show-special-project-container', (event) => {
                     specialProjectContainer.style.display = 'block';
@@ -204,6 +205,7 @@
                             @this.set('level_of_approval', levelOfApproval);
                             for (let count = 1; count <= levelOfApproval; count++) {
                                 const approverOption = [];
+
                                 const selectOptionHTML = `
                                     <div class="col-md-6">
                                         <div class="mb-2">
@@ -221,6 +223,7 @@
                                     </div>`;
 
                                 selectApproverContainer.insertAdjacentHTML('beforeend', selectOptionHTML);
+                                const levelApproverSelect = document.querySelector(`#level${count}Approver`);
 
                                 if (approvers.length > 0) {
                                     approvers.forEach(function (approver) {
@@ -235,20 +238,18 @@
                                 }
 
                                 VirtualSelect.init({
-                                    ele: `#level${count}Approver`,
+                                    ele: levelApproverSelect,
                                     options: approverOption,
                                     showValueAsTags: true,
                                     markSearchResults: true,
                                     multiple: true,
-                                    required: true,
+                                    required: true
                                 });
 
                                 // Select option by level (Level 1-5)
-                                let levelApprover = `level${count}Appprover`;
-                                window[levelApprover] = document.querySelector(`#level${count}Approver`);
-
-                                window[levelApprover].addEventListener('change', () => {
-                                    @this.set(`level${count}Approvers`, window[levelApprover].value);
+                                let levelApprover = document.querySelector(`#level${count}Approver`);
+                                levelApprover.addEventListener('change', () => {
+                                    @this.set(`level${count}Approvers`, levelApprover.value);
                                 });
                             }
                         }
@@ -289,7 +290,7 @@
         @endforeach
     ];
 
-    const slaSelect = document.querySelector('#slaSelect');
+    const slaSelect = document.querySelector('#select-help-topic-sla');
     VirtualSelect.init({
         ele: slaSelect,
         options: serviceLevelAgreementOption,
@@ -309,7 +310,7 @@
         @endforeach
     ];
 
-    const serviceDepartmentSelect = document.querySelector('#serviceDepartmentSelect');
+    const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
     VirtualSelect.init({
         ele: serviceDepartmentSelect,
         options: serviceDepartmentOption,
@@ -317,7 +318,7 @@
         markSearchResults: true,
     });
 
-    const teamSelect = document.querySelector('#teamSelect');
+    const teamSelect = document.querySelector('#select-help-topic-team');
     VirtualSelect.init({
         ele: teamSelect,
         search: true,
@@ -351,14 +352,24 @@
                     teamSelect.disable();
                 }
             });
+        } else {
+            teamSelect.reset();
+            teamSelect.disable()
+            teamSelect.setOptions([]);
         }
     });
 
     teamSelect.addEventListener('change', () => {
-        @this.set('team', teamSelect.value);
+        const teamId = parseInt(teamSelect.value);
+        if (teamId) @this.set('team', );
+    });
+
+    serviceDepartmentSelect.addEventListener('reset', () => {
+        @this.set('teams', []); // Clear teams count when service department is resetted.
     });
 
 </script>
+
 @endpush
 
 @push('livewire-modal')

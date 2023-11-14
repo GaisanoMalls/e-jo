@@ -11,7 +11,8 @@ use Livewire\Component;
 class ApproverList extends Component
 {
     public $approvers;
-    public $approverDeleteId, $approverFullName;
+    public $approverDeleteId;
+    public $approverFullName;
 
     protected $listeners = ['loadApproverList' => '$refresh'];
 

@@ -10,7 +10,8 @@ use Livewire\Component;
 class UpdateRequesterPassword extends Component
 {
     public User $user;
-    public $new_password, $confirm_password;
+    public $new_password;
+    public $confirm_password;
 
     public function rules()
     {

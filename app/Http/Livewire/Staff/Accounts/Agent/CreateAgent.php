@@ -18,8 +18,17 @@ class CreateAgent extends Component
 {
     use BasicModelQueries, Utils;
 
-    public $BUDepartments = [], $teams = [], $selectedTeams = [];
-    public $first_name, $middle_name, $last_name, $suffix, $email, $branch, $bu_department, $service_department;
+    public $BUDepartments = [];
+    public $teams = [];
+    public $selectedTeams = [];
+    public $first_name;
+    public $middle_name;
+    public $last_name;
+    public $suffix;
+    public $email;
+    public $branch;
+    public $bu_department;
+    public $service_department;
 
     public function rules()
     {

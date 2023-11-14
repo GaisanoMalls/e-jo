@@ -20,6 +20,7 @@ use App\Models\User;
 use App\Notifications\Requester\TicketCreatedNotification;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -32,8 +33,16 @@ class CreateTicket extends Component
     use Utils, BasicModelQueries, WithFileUploads;
 
     public $upload = 0;
-    public $fileAttachments = [], $helpTopics = [];
-    public $subject, $description, $branch, $team, $sla, $priorityLevel, $serviceDepartment, $helpTopic;
+    public $fileAttachments = [];
+    public $helpTopics = [];
+    public $subject;
+    public $description;
+    public $branch;
+    public $team;
+    public $sla;
+    public $priorityLevel;
+    public $serviceDepartment;
+    public $helpTopic;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
@@ -151,6 +160,17 @@ class CreateTicket extends Component
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
+    }
+
+    public function updatedFileAttachments()
+    {
+        $this->validate([
+            'fileAttachments.*' => [
+                'nullable',
+                File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
+                    ->max(25 * 1024) //25600 (25 MB)
+            ],
+        ]);
     }
 
     public function updatedServiceDepartment()

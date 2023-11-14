@@ -16,8 +16,13 @@ class CreateApprover extends Component
 {
     use BasicModelQueries, Utils;
 
-    public $bu_departments = [], $branches = [];
-    public $first_name, $middle_name, $last_name, $email, $suffix;
+    public $bu_departments = [];
+    public $branches = [];
+    public $first_name;
+    public $middle_name;
+    public $last_name;
+    public $email;
+    public $suffix;
 
     public function rules()
     {

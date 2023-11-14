@@ -24,12 +24,13 @@ class StoreHelpTopicRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
+            'name' => ['required', 'unique:help_topics,name'],
             'sla' => ['required'],
             'service_department' => ['required'],
             'team' => ['nullable'],
             'level_of_approval' => ['nullable'],
-            'amount' => ['nullable']
+            'amount' => ['nullable'],
+            'teams' => ''
         ];
     }
 }

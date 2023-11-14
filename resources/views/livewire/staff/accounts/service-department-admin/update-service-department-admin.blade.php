@@ -296,7 +296,7 @@
         search: true,
         multiple: true,
         markSearchResults: true,
-        selectedValue: {!! json_encode($currentServiceDepartments) !!}
+        selectedValue: @json($currentServiceDepartments)
     });
 
     serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', () => {

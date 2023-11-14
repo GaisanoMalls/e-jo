@@ -9,7 +9,8 @@ use Livewire\Component;
 
 class CreateSla extends Component
 {
-    public $countdown_approach, $time_unit;
+    public $countdown_approach;
+    public $time_unit;
 
     public function rules()
     {

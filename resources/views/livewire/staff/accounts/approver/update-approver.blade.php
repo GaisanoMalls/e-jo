@@ -199,7 +199,7 @@
         search: true,
         multiple: true,
         markSearchResults: true,
-        selectedValue: {!! json_encode($currentBranches) !!}
+        selectedValue: @json($currentBranches)
     });
 
     approverBranchSelect.addEventListener('change', () => {
@@ -222,7 +222,7 @@
         search: true,
         multiple: true,
         markSearchResults: true,
-        selectedValue: {!! json_encode($currentBUDepartments) !!}
+        selectedValue: @json($currentBUDepartments)
     });
     approverBUDepartmentSelect.addEventListener('change', () => {
         @this.set('bu_departments', approverBUDepartmentSelect.value);

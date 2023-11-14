@@ -13,7 +13,10 @@ class SlaList extends Component
     use BasicModelQueries;
 
     public $serviceLevelAgreements = [];
-    public $slaEditId, $slaDeleteId, $countdown_approach, $time_unit;
+    public $slaEditId;
+    public $slaDeleteId;
+    public $countdown_approach;
+    public $time_unit;
 
     protected $listeners = ['loadServiceLevelAgreements' => 'fetchServiceLevelAgreements'];
 

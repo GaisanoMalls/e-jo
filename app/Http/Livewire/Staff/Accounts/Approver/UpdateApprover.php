@@ -14,8 +14,15 @@ class UpdateApprover extends Component
     use BasicModelQueries, Utils;
 
     public User $approver;
-    public $bu_departments = [], $branches = [], $currentBranches = [], $currentBUDepartments = [];
-    public $first_name, $middle_name, $last_name, $email, $suffix;
+    public $bu_departments = [];
+    public $branches = [];
+    public $currentBranches = [];
+    public $currentBUDepartments = [];
+    public $first_name;
+    public $middle_name;
+    public $last_name;
+    public $email;
+    public $suffix;
 
     public function mount(User $approver)
     {

@@ -13,8 +13,12 @@ class TeamList extends Component
 {
     use BasicModelQueries;
 
-    public $teams = [], $editSelectedBranches = [];
-    public $teamEditId, $teamDeleteId, $editSelectedServiceDepartment, $name;
+    public $teams = [];
+    public $editSelectedBranches = [];
+    public $teamEditId;
+    public $teamDeleteId;
+    public $editSelectedServiceDepartment;
+    public $name;
 
     protected $listeners = ['loadTeams' => 'fetchTeams'];
 

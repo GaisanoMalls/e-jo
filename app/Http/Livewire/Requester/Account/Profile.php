@@ -16,7 +16,13 @@ class Profile extends Component
     use WithFileUploads, Utils;
 
     public $imageUpload = 0;
-    public $first_name, $middle_name, $last_name, $suffix, $email, $mobile_number, $picture;
+    public $first_name;
+    public $middle_name;
+    public $last_name;
+    public $suffix;
+    public $email;
+    public $mobile_number;
+    public $picture;
 
 
     public function mount()

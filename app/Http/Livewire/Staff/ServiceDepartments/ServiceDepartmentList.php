@@ -12,7 +12,9 @@ class ServiceDepartmentList extends Component
     use BasicModelQueries;
 
     public $serviceDepartments = [];
-    public $serviceDepartmentEditId, $serviceDepartmentDeleteId, $name;
+    public $serviceDepartmentEditId;
+    public $serviceDepartmentDeleteId;
+    public $name;
 
     protected $listeners = ['loadServiceDepartments' => 'fetchServiceDepartments'];
 

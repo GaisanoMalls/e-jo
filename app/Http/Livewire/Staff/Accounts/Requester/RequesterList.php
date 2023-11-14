@@ -11,7 +11,8 @@ use Livewire\Component;
 class RequesterList extends Component
 {
     public $users;
-    public $requesterDeleteId, $requesterFullName;
+    public $requesterDeleteId;
+    public $requesterFullName;
 
     protected $listeners = ['loadRequesterList' => '$refresh'];
 

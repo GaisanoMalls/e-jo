@@ -33,11 +33,11 @@ class StoreTicketRequest extends FormRequest
             'subject' => ['required'],
             'description' => ['required'],
             'priorityLevel' => ['required'],
-            'fileAttachments.*' => [
-                'nullable',
-                File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv'])
-                    ->max(25 * 1024) //25600 (25 MB)
-            ],
+            // 'fileAttachments.*' => [
+            //     'nullable',
+            //     File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
+            //         ->max(25 * 1024) //25600 (25 MB)
+            // ],
         ];
     }
 

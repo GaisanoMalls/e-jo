@@ -146,9 +146,10 @@
                                         </div>
                                     </div>
                                     <input class="form-control form-control-sm border-0 ticket__file" type="file"
-                                        wire:model="fileAttachments" multiple id="upload-{{ $upload }}">
+                                        accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv" wire:model="fileAttachments"
+                                        multiple id="upload-{{ $upload }}">
                                     @error('fileAttachments.*')
-                                    <span class=" error__message">
+                                    <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
                                     </span>
