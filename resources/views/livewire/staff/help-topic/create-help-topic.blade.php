@@ -298,7 +298,8 @@
         markSearchResults: true,
     });
     slaSelect.addEventListener('change', () => {
-        @this.set('sla', parseInt(slaSelect.value));
+        const slaId = parseInt(slaSelect.value);
+        @this.set('sla', slaId);
     });
 
     const serviceDepartmentOption = [
@@ -361,7 +362,7 @@
 
     teamSelect.addEventListener('change', () => {
         const teamId = parseInt(teamSelect.value);
-        if (teamId) @this.set('team', );
+        if (teamId) @this.set('team', teamId);
     });
 
     serviceDepartmentSelect.addEventListener('reset', () => {

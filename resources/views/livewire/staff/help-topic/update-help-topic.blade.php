@@ -208,14 +208,15 @@
 
     // Load approval upon page load.
     const selectApproverContainer = document.querySelector('#editSelectApproverContainer');
-    if (levelOfApprovalSelect) {
-        window.onload = () => {
-            const numberOfApproval = parseInt(levelOfApprovalSelect.value);
+    window.onload = () => {
+        if (levelOfApprovalSelect) {
+            const levelOfApproval = parseInt(levelOfApprovalSelect.value);
             const approvers = @json($approvers);
             const currentApprovers = @json($currentApprovers);
 
-            if (numberOfApproval) {
-                for (let count = 1; count <= numberOfApproval; count++) {
+            if (levelOfApproval) {
+                @this.set('level_of_approval', levelOfApproval);
+                for (let count = 1; count <= levelOfApproval; count++) {
                     const approverOption = [];
                     const selectOptionHTML = `
                         <div class="col-md-6">
@@ -267,19 +268,29 @@
             }
 
             let level1ApproverSelect = document.querySelector(`#level1Approver`);
-            if (level1ApproverSelect) {
+            let level2ApproverSelect = document.querySelector(`#level2Approver`);
+            let level3ApproverSelect = document.querySelector(`#level3Approver`);
+            let level4ApproverSelect = document.querySelector(`#level4Approver`);
+            let level5ApproverSelect = document.querySelector(`#level5Approver`);
+
+            if (level1ApproverSelect || level2ApproverSelect || level3ApproverSelect || level4ApproverSelect || level5ApproverSelect) {
                 level1ApproverSelect.addEventListener('change', () => {
                     @this.set('level1Approvers', level1ApproverSelect.value);
                 });
+                level2ApproverSelect.addEventListener('change', () => {
+                    @this.set('level2Approvers', level2ApproverSelect.value);
+                });
+                level3ApproverSelect.addEventListener('change', () => {
+                    @this.set('level3Approvers', level3ApproverSelect.value);
+                });
+                level4ApproverSelect.addEventListener('change', () => {
+                    @this.set('level4Approvers', level4ApproverSelect.value);
+                });
+                level5ApproverSelect.addEventListener('change', () => {
+                    @this.set('level5Approvers', level5ApproverSelect.value);
+                });
             }
         }
-    }
-
-    let level1ApproverSelect = document.querySelector(`#level1Approver`);
-    if (level1ApproverSelect) {
-        level1ApproverSelect.addEventListener('change', () => {
-            @this.set('level1Approvers', level1ApproverSelect.value);
-        });
     }
 
     if (levelOfApprovalSelect) {
@@ -311,7 +322,7 @@
                     selectApproverContainer.insertAdjacentHTML('beforeend', selectOptionHTML);
                     const levelApproverSelect = document.querySelector(`#level${count}Approver`);
 
-                     if (approvers.length > 0) {
+                    if (approvers.length > 0) {
                         approvers.forEach(function (approver) {
                             const middleName = `${approver.profile.middle_name ?? ''}`;
                             const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
@@ -335,7 +346,6 @@
                     // Select option by level (Level 1-5)
                     let levelApprover = document.querySelector(`#level${count}Approver`);
                     levelApprover.addEventListener('change', () => {
-                        console.log("hello");
                         @this.set(`level${count}Approvers`, levelApprover.value);
                     });
                 }

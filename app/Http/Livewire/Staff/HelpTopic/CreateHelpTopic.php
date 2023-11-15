@@ -98,7 +98,6 @@ class CreateHelpTopic extends Component
                             ]);
                         }
                     }
-
                 } else {
                     HelpTopic::create([
                         'service_department_id' => $this->service_department,

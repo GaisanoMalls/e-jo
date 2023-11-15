@@ -38,6 +38,7 @@ class UpdateHelpTopic extends Component
         $this->service_department = $helpTopic->service_department_id;
         $this->team = $helpTopic->team_id;
         $this->amount = $helpTopic->specialProject->amount ?? null;
+        $this->level_of_approval = $helpTopic->levels->pluck('id')->last() ?? 0;
         $this->level1Approvers = $this->getLevel1Approvers();
         $this->level2Approvers = $this->getLevel2Approvers();
         $this->level3Approvers = $this->getLevel3Approvers();
@@ -85,11 +86,19 @@ class UpdateHelpTopic extends Component
 
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
                         $this->helpTopic->levels()->sync([$level]);
+                        LevelApprover::where(['help_topic_id' => $this->helpTopic->id, 'level_id' => $level])->delete();
                         foreach ($levelApprovers[$level - 1] as $approver) {
-                            LevelApprover::where('help_topic_id', $this->helpTopic->id)->update([
-                                'level_id' => $level,
-                                'user_id' => $approver,
-                            ]);
+                            LevelApprover::updateOrCreate(
+                                [
+                                    'help_topic_id' => $this->helpTopic->id,
+                                    'level_id' => $level,
+                                    'user_id' => $approver,
+                                ],
+                                [
+                                    'level_id' => $level,
+                                    'user_id' => $approver,
+                                ]
+                            );
                         }
                     }
                 }
