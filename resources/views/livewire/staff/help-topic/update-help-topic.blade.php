@@ -267,28 +267,13 @@
                 }
             }
 
-            let level1ApproverSelect = document.querySelector(`#level1Approver`);
-            let level2ApproverSelect = document.querySelector(`#level2Approver`);
-            let level3ApproverSelect = document.querySelector(`#level3Approver`);
-            let level4ApproverSelect = document.querySelector(`#level4Approver`);
-            let level5ApproverSelect = document.querySelector(`#level5Approver`);
-
-            if (level1ApproverSelect || level2ApproverSelect || level3ApproverSelect || level4ApproverSelect || level5ApproverSelect) {
-                level1ApproverSelect.addEventListener('change', () => {
-                    @this.set('level1Approvers', level1ApproverSelect.value);
-                });
-                level2ApproverSelect.addEventListener('change', () => {
-                    @this.set('level2Approvers', level2ApproverSelect.value);
-                });
-                level3ApproverSelect.addEventListener('change', () => {
-                    @this.set('level3Approvers', level3ApproverSelect.value);
-                });
-                level4ApproverSelect.addEventListener('change', () => {
-                    @this.set('level4Approvers', level4ApproverSelect.value);
-                });
-                level5ApproverSelect.addEventListener('change', () => {
-                    @this.set('level5Approvers', level5ApproverSelect.value);
-                });
+            for (let count = 1; count <= 5; count++) {
+                let levelApprover = document.querySelector(`#level${count}Approver`);
+                if (levelApprover) {
+                    levelApprover.addEventListener('change', () => {
+                        @this.set(`level${count}Approvers`, levelApprover.value);
+                    });
+                }
             }
         }
     }

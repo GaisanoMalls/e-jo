@@ -80,17 +80,10 @@ class CreateHelpTopic extends Component
                         'amount' => $this->amount
                     ]);
 
-                    $levelApprovers = [
-                        $this->level1Approvers,
-                        $this->level2Approvers,
-                        $this->level3Approvers,
-                        $this->level4Approvers,
-                        $this->level5Approvers
-                    ];
-
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
                         $helpTopic->levels()->attach($level);
-                        foreach ($levelApprovers[$level - 1] as $approver) {
+                        $levelApprovers = $this->{'level' . $level . 'Approvers'};
+                        foreach ($levelApprovers as $approver) {
                             LevelApprover::create([
                                 'level_id' => $level,
                                 'user_id' => $approver,
