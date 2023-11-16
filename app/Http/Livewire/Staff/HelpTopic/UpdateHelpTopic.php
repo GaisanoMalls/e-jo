@@ -29,7 +29,6 @@ class UpdateHelpTopic extends Component
     public $level_of_approval;
     public $amount;
     public $max_amount = 50000;
-    private $levelOfApprovalIsSelected = false;
 
     public function mount(HelpTopic $helpTopic)
     {
@@ -39,10 +38,12 @@ class UpdateHelpTopic extends Component
         $this->team = $helpTopic->team_id;
         $this->amount = $helpTopic->specialProject->amount ?? null;
         $this->level_of_approval = $helpTopic->levels->pluck('id')->last();
+        $this->level1Approvers = $this->getLevel1Approvers();
+        $this->level2Approvers = $this->getLevel2Approvers();
+        $this->level3Approvers = $this->getLevel3Approvers();
+        $this->level4Approvers = $this->getLevel4Approvers();
+        $this->level5Approvers = $this->getLevel5Approvers();
         $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
-        for ($count = 1; $count <= 5; $count++) {
-            $this->{"level{$count}Approvers"} = $this->{"getLevel{$count}Approvers"}();
-        }
     }
 
     public function rules()
@@ -59,7 +60,6 @@ class UpdateHelpTopic extends Component
 
     public function updateHelpTopic()
     {
-        dd($this->level1Approvers, $this->level2Approvers, $this->level3Approvers, $this->level4Approvers, $this->level5Approvers);
         $this->validate();
 
         try {
@@ -78,8 +78,8 @@ class UpdateHelpTopic extends Component
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
                         $this->helpTopic->levels()->sync([$level]);
                         LevelApprover::where(['help_topic_id' => $this->helpTopic->id, 'level_id' => $level])->delete();
-                        $levelApprovers = $this->{"level{$level}Approvers"};
-                        foreach ($levelApprovers as $approver) {
+
+                        foreach ($this->{"level{$level}Approvers"} as $approver) {
                             LevelApprover::create([
                                 'help_topic_id' => $this->helpTopic->id,
                                 'level_id' => $level,
@@ -89,15 +89,11 @@ class UpdateHelpTopic extends Component
                     }
                 }
             });
+
         } catch (Exception $e) {
             dd($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
-    }
-
-    public function updatedLevelOfApproval()
-    {
-        $this->levelOfApprovalIsSelected = true;
     }
 
     public function updatedServiceDepartment()

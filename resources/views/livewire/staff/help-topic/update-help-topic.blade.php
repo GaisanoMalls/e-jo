@@ -267,6 +267,7 @@
                 }
             }
 
+            // To set the array for udpate help topic (level1Approvers to level5Approvers)
             for (let count = 1; count <= 5; count++) {
                 let levelApprover = document.querySelector(`#level${count}Approver`);
                 if (levelApprover) {
@@ -281,8 +282,8 @@
     if (levelOfApprovalSelect) {
         levelOfApprovalSelect.addEventListener('change', () => {
             const levelOfApproval = parseInt(levelOfApprovalSelect.value);
-            selectApproverContainer.innerHTML = '';
             const approvers = @json($approvers);
+            selectApproverContainer.innerHTML = '';
 
             if (levelOfApproval) {
                 @this.set('level_of_approval', levelOfApproval);
