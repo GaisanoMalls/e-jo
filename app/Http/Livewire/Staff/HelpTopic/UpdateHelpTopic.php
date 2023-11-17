@@ -75,10 +75,14 @@ class UpdateHelpTopic extends Component
                 if (!is_null($this->helpTopic->specialProject)) {
                     $this->helpTopic->specialProject->update(['amount' => $this->amount]);
 
-                    for ($level = 1; $level <= $this->level_of_approval; $level++) {
-                        $this->helpTopic->levels()->sync([$level]);
-                        LevelApprover::where(['help_topic_id' => $this->helpTopic->id, 'level_id' => $level])->delete();
+                    // Sync all levels first
+                    $this->helpTopic->levels()->sync(range(1, $this->level_of_approval));
 
+                    // Delete existing level approvers for the current topic
+                    LevelApprover::where(['help_topic_id' => $this->helpTopic->id])->delete();
+
+                    // Iterate through selected level approvers
+                    for ($level = 1; $level <= $this->level_of_approval; $level++) {
                         foreach ($this->{"level{$level}Approvers"} as $approver) {
                             LevelApprover::create([
                                 'help_topic_id' => $this->helpTopic->id,
