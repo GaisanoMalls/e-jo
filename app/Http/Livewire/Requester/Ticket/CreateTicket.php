@@ -141,7 +141,7 @@ class CreateTicket extends Component
                 // }
 
                 // Email the first approver (Service Department Admin)
-                $serviceDepartmentAdmin = User::whereHas('role', fn($query) => $query->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+                $serviceDepartmentAdmin = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
                     ->whereHas('branch', fn($query) => $query->where('branch_id', $ticket->user->branch_id))
                     ->whereHas('department', fn($query) => $query->where('department_id', $ticket->user->department_id))->first();
 
@@ -157,7 +157,7 @@ class CreateTicket extends Component
             flash()->addSuccess('Ticket successfully created.');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
     }

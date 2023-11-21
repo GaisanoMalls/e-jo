@@ -33,28 +33,25 @@ class ServiceDeptAdminList extends Component
             sleep(1);
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addSuccess('Oops, something went wrong');
         }
     }
 
     private function getInitialQuery()
     {
-        return User::with(['department', 'branch'])
-            ->whereHas('role', fn($agent) => $agent->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+        return User::with(['department', 'branch'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
             ->orderByDesc('created_at')->get();
     }
 
     public function render()
     {
         $this->serviceDepartmentAdmins = (Route::is('staff.manage.user_account.index'))
-            ? User::with(['profile', 'department', 'branch'])
-                ->whereHas('role', fn($agent) => $agent->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+            ? User::with(['profile', 'department', 'branch'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
                 ->take(5)->orderByDesc('created_at')->get()
             : (
                 (Route::is('staff.manage.user_account.service_department_admins'))
-                ? User::with(['profile', 'department', 'branch'])
-                    ->whereHas('role', fn($agent) => $agent->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+                ? User::with(['profile', 'department', 'branch'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
                     ->orderByDesc('created_at')->get()
                 : $this->getInitialQuery()
             );

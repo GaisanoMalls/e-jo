@@ -24,8 +24,9 @@
                                     <div class="col-md-6">
                                         <div class="col-md-12">
                                             <div class="mb-2">
-                                                <label for="first_name" class="form-label form__field__label">First
-                                                    name</label>
+                                                <label for="first_name" class="form-label form__field__label">
+                                                    First name
+                                                </label>
                                                 <input type="text" wire:model="first_name"
                                                     class="form-control form__field" id="first_name"
                                                     placeholder="Enter first name (required)">

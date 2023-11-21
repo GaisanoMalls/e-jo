@@ -8,7 +8,7 @@
                 {{ $reply->user_id === auth()->user()->id ? 'background-color: #D0F0F7; margin-left: auto;' : 'background-color: #E9ECEF; margin-right: auto;' }}">
             <div class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
                 <div class="d-flex align-items-center w-100">
-                    @if ($reply->user->role_id !== App\Models\Role::USER)
+                    @if ($reply->user->hasRole(App\Models\Role::USER))
                     @if ($reply->user->profile->picture)
                     <img src="{{ Storage::url($reply->user->profile->picture) }}" alt=""
                         class="image-fluid ticket__details__user__picture reply__ticket__details__user__picture">
@@ -19,10 +19,10 @@
                     @endif
                     @endif
                     <div class="d-flex flex-wrap justify-content-between w-100">
-                        @if ($reply->user->role_id !== App\Models\Role::USER)
+                        @if ($reply->user->hasRole(App\Models\Role::USER))
                         <small class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                             {{ $reply->user->profile->getFullName() }}
-                            @if ($reply->user->role_id === App\Models\Role::SYSTEM_ADMIN)
+                            @if ($reply->user->hasRole(App\Models\Role::SYSTEM_ADMIN))
                             <i class="bi bi-person-fill-gear text-muted ms-1" title="System Admin"></i>
                             @endif
                         </small>

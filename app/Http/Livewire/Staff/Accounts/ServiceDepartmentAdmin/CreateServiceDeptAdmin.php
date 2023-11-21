@@ -60,6 +60,7 @@ class CreateServiceDeptAdmin extends Component
                     'email' => $this->email,
                     'password' => \Hash::make('departmentadmin')
                 ]);
+                $serviceDeptAdmin->assignRole(Role::SERVICE_DEPARTMENT_ADMIN);
 
                 Profile::create([
                     'user_id' => $serviceDeptAdmin->id,
@@ -82,7 +83,7 @@ class CreateServiceDeptAdmin extends Component
             flash()->addSuccess('Account successfully created');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addSuccess('Failed to save a new service department admin');
         }
     }

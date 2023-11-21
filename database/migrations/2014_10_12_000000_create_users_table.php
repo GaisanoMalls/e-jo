@@ -21,7 +21,6 @@ return new class extends Migration {
             $table->foreignIdFor(Branch::class, 'branch_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Department::class, 'department_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(ServiceDepartment::class, 'service_department_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Role::class, 'role_id')->constrained()->cascadeOnDelete();
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('is_active')->default(true);

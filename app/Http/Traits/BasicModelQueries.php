@@ -7,7 +7,6 @@ use App\Models\Branch;
 use App\Models\Department;
 use App\Models\HelpTopic;
 use App\Models\PriorityLevel;
-use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
@@ -16,6 +15,7 @@ use App\Models\Tag;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Spatie\Permission\Models\Role;
 
 trait BasicModelQueries
 {

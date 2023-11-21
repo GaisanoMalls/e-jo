@@ -69,7 +69,7 @@ class HelpTopicsController extends Controller
             return back()->with('success', 'Help topic successfully created.');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             return back()->with('error', 'Failed to save the help topic');
         }
     }

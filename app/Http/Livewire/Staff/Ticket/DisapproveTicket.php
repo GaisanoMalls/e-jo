@@ -8,7 +8,6 @@ use App\Models\ApprovalStatus;
 use App\Models\Reason;
 use App\Models\Status;
 use App\Models\Ticket;
-use App\Models\User;
 use App\Notifications\ServiceDepartmentAdmin\DisapprovedTicketNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -57,11 +56,10 @@ class DisapproveTicket extends Component
                     'description' => $this->reasonDescription
                 ]);
 
-                $reason->ticket()->where('id', $this->ticket->id)
-                    ->update([
-                        'status_id' => Status::DISAPPROVED,
-                        'approval_status' => ApprovalStatus::DISAPPROVED
-                    ]);
+                $reason->ticket()->where('id', $this->ticket->id)->update([
+                    'status_id' => Status::DISAPPROVED,
+                    'approval_status' => ApprovalStatus::DISAPPROVED
+                ]);
 
                 Notification::send($this->ticket->user, new DisapprovedTicketNotification($this->ticket));
                 ActivityLog::make($this->ticket->id, 'disapproved the ticket');
@@ -71,7 +69,7 @@ class DisapproveTicket extends Component
             flash()->addSuccess('Ticket has been approved');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Ooos, something went wrong');
         }
     }

@@ -79,7 +79,7 @@ class UpdateApprover extends Component
             flash()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName()}.");
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Failed to update the account');
         }
     }

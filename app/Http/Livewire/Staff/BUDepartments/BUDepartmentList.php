@@ -71,7 +71,7 @@ class BUDepartmentList extends Component
                 $this->actionOnSubmit();
             }
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
@@ -93,7 +93,7 @@ class BUDepartmentList extends Component
             flash()->addSuccess('BU/Department successfully deleted');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

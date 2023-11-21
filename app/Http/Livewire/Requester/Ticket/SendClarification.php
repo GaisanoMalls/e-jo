@@ -100,7 +100,7 @@ class SendClarification extends Component
                     : 'replied a clarification to ' . $latestStaff->user->profile->getFullName();
 
                 // Get the department admin (approver) when there is no latest staff in the clarifications
-                $initialServiceDepartmentAdmin = User::whereHas('role', fn($role) => $role->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+                $initialServiceDepartmentAdmin = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
                     ->whereHas('branch', fn($branch) => $branch->where('branch_id', auth()->user()->branch_id))
                     ->whereHas('department', fn($department) => $department->where('department_id', auth()->user()->department_id))->first();
 
@@ -112,7 +112,7 @@ class SendClarification extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

@@ -55,7 +55,7 @@ class CreateTeam extends Component
             flash()->addSuccess('New team has been created.');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, someting went wrong.');
         }
     }

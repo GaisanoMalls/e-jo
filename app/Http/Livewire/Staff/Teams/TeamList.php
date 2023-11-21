@@ -88,7 +88,7 @@ class TeamList extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
@@ -110,7 +110,7 @@ class TeamList extends Component
             flash()->addSuccess('Team successfully deleted');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

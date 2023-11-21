@@ -16,7 +16,14 @@ Roles & Permissions
     <div class="roles__permissions__section">
         <div class="col-12">
             @include('layouts.staff.system_admin.manage.roles_and_permissions.includes.role_type_card')
-            @include('layouts.staff.system_admin.manage.roles_and_permissions.includes.users_list')
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                @include('layouts.staff.system_admin.manage.roles_and_permissions.includes.permissions')
+            </div>
+            {{-- <div class="col-md-6">
+                @include('layouts.staff.system_admin.manage.roles_and_permissions.includes.roles')
+            </div> --}}
         </div>
     </div>
 </div>

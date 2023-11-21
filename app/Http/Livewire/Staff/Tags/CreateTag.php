@@ -46,7 +46,7 @@ class CreateTag extends Component
             flash()->addSuccess('Tag created');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

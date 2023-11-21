@@ -55,10 +55,10 @@ class CreateRequester extends Component
                 $user = User::create([
                     'department_id' => $this->department,
                     'branch_id' => $this->branch,
-                    'role_id' => Role::USER,
                     'email' => $this->email,
                     'password' => \Hash::make('requester')
                 ]);
+                $user->assignRole(Role::USER);
 
                 Profile::create([
                     'user_id' => $user->id,
@@ -79,7 +79,7 @@ class CreateRequester extends Component
             flash()->addSuccess('Account successfully created');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

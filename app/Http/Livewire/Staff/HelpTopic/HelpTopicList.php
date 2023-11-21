@@ -33,7 +33,7 @@ class HelpTopicList extends Component
             flash()->addSuccess('Help topic successfully deleted');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

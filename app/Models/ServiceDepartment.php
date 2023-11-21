@@ -46,8 +46,7 @@ class ServiceDepartment extends Model
 
     public function serviceDepartmentAdmins(): Builder|BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_service_department')
-            ->whereHas('role', fn($serviceDeptAdmin) => $serviceDeptAdmin->where('role_id', Role::APPROVER));
+        return $this->belongsToMany(User::class, 'user_service_department')->role(Role::APPROVER);
     }
 
     public function dateCreated(): string

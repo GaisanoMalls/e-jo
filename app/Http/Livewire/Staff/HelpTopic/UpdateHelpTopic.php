@@ -36,26 +36,37 @@ class UpdateHelpTopic extends Component
         $this->sla = $helpTopic->service_level_agreement_id;
         $this->service_department = $helpTopic->service_department_id;
         $this->team = $helpTopic->team_id;
-        $this->amount = $helpTopic->specialProject->amount ?? null;
+        $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
         $this->level_of_approval = $helpTopic->levels->pluck('id')->last();
-        $this->level1Approvers = $this->getLevel1Approvers();
-        $this->level2Approvers = $this->getLevel2Approvers();
-        $this->level3Approvers = $this->getLevel3Approvers();
-        $this->level4Approvers = $this->getLevel4Approvers();
-        $this->level5Approvers = $this->getLevel5Approvers();
         $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
+        for ($count = 1; $count <= 5; $count++) {
+            $this->{"level{$count}Approvers"} = $this->{"getLevel{$count}Approvers"}();
+        }
     }
 
     public function rules()
     {
-        return [
+        $rules = [
             'name' => "required|unique:help_topics,name,{$this->helpTopic->id}",
             'sla' => 'required',
             'service_department' => 'required',
             'team' => 'nullable',
             'level_of_approval' => 'nullable',
-            'teams' => ''
+            'amount' => 'nullable',
+            'teams' => '',
+            'level1Approvers' => 'nullable'
         ];
+
+        if (!is_null($this->helpTopic->specialProject)) {
+            $rules['amount'] = 'required';
+            $rules['level_of_approval'] = 'required';
+        }
+
+        if (empty($this->level1Approvers)) {
+            $rules['level1Approvers'] = 'required';
+        }
+
+        return $rules;
     }
 
     public function updateHelpTopic()
@@ -94,8 +105,10 @@ class UpdateHelpTopic extends Component
                 }
             });
 
+            flash()->addSuccess('Help topic successfully updated.');
+
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
     }

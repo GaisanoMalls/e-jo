@@ -18,8 +18,7 @@ class Level extends Model
 
     public function approvers(): Builder|BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'level_approver')
-            ->whereHas('role', fn($query) => $query->where('role_id', Role::APPROVER))
+        return $this->belongsToMany(User::class, 'level_approver')->role(Role::APPROVER)
             ->withPivot(['level_id', 'user_id', 'help_topic_id'])
             ->withTimestamps();
     }

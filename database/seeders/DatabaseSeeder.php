@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             ApprovalLevelSeeder::class,
             LevelSeeder::class,
             ServiceLevelAgreementSeeder::class,
+            PermissionModuleSeeder::class,
+            PermissionActionSeeder::class,
         ]);
     }
 }

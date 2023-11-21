@@ -20,8 +20,7 @@ class UserServiceDepartment extends Model
 
     public function serviceDepartmentAdmin(): BelongsTo|Builder
     {
-        return $this->belongsTo(User::class)
-            ->whereHas('role', fn($serviceDeptAdmin) => $serviceDeptAdmin->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN));
+        return $this->belongsTo(User::class)->role(Role::SERVICE_DEPARTMENT_ADMIN);
     }
 
     public function serviceDepartment(): BelongsTo

@@ -26,7 +26,7 @@ class TicketDetails extends Component
 
     public function removeAssignedTeam()
     {
-        if (Auth::user()->role_id === Role::SERVICE_DEPARTMENT_ADMIN) {
+        if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
             $this->ticket->update(['team_id' => null]);
             $this->removeAssignedAgent();
             $this->actionOnSubmit();
@@ -38,7 +38,7 @@ class TicketDetails extends Component
 
     public function removeAssignedAgent()
     {
-        if (Auth::user()->role_id === Role::SERVICE_DEPARTMENT_ADMIN) {
+        if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
             $this->ticket->update([
                 'agent_id' => null,
                 'status_id' => Status::APPROVED

@@ -19,9 +19,8 @@ class UserSeeder extends Seeder
     {
         User::firstOrCreate([
             'branch_id' => 1,
-            'role_id' => Role::SYSTEM_ADMIN,
             'email' => 'admin@gmail.com',
             'password' => Hash::make('admin'),
-        ]);
+        ])->assignRole(Role::SYSTEM_ADMIN);
     }
 }

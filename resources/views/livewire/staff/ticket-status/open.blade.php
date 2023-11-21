@@ -27,7 +27,7 @@
                 </thead>
                 <tbody>
                     @foreach ($openTickets as $ticket)
-                    @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+                    @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
                     <tr wire:key="seen-ticket-{{ $ticket->id }}" wire:click="seenTicket({{ $ticket->id }})"
                         class="ticket__tr">
                         @else

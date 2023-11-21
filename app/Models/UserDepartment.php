@@ -21,8 +21,7 @@ class UserDepartment extends Model
 
     public function approver(): BelongsTo|Builder
     {
-        return $this->belongsTo(User::class)
-            ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER));
+        return $this->belongsTo(User::class)->role(Role::APPROVER);
     }
 
     public function department(): BelongsTo

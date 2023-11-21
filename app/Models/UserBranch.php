@@ -20,8 +20,7 @@ class UserBranch extends Model
 
     public function approver(): Builder|BelongsTo
     {
-        return $this->belongsTo(User::class)
-            ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER));
+        return $this->belongsTo(User::class)->role(Role::APPROVER);
     }
 
     public function branch(): BelongsTo

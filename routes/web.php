@@ -43,7 +43,7 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 // * Staff Routes
-Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
+Route::middleware(['auth', Role::staffsOnly()])->group(function () {
     Route::prefix('staff')->name('staff.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::prefix('manual-ticket-assign')->name('manual_ticket_assign.')->group(function () {
@@ -67,7 +67,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
                 Route::get('/{ticket}/view', 'viewTicket')->name('view_ticket');
-                Route::middleware(['auth', Role::serviceDepartmentAdmin()])->group(function () {
+                Route::middleware(['auth'])->group(function () {
                     Route::get('/{ticket}/clarifications', TicketClarificationController::class)->name('ticket_clarifications');
                 });
             });
@@ -184,7 +184,7 @@ Route::middleware(['auth', Role::onlyStaffs()])->group(function () {
 
 
 // * Approver Routes
-Route::middleware(['auth', Role::approver()])->group(function () {
+Route::middleware(['auth', Role::approversOnly()])->group(function () {
     Route::prefix('approver')->name('approver.')->group(function () {
         Route::get('/dashboard', [ApproverDashboardController::class, 'index'])->name('dashboard');
         Route::prefix('tickets')->name('tickets.')->group(function () {
@@ -212,7 +212,7 @@ Route::middleware(['auth', Role::approver()])->group(function () {
 });
 
 // * User Routes
-Route::middleware(['auth', Role::user()])->group(function () {
+Route::middleware(['auth', Role::requestersOnly()])->group(function () {
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/dashboard', UserDashboardController::class)->name('dashboard');
         Route::prefix('tickets')->name('tickets.')->group(function () {
@@ -243,7 +243,7 @@ Route::middleware(['auth', Role::user()])->group(function () {
 });
 
 // * Feedback Routes
-Route::middleware(['auth', Role::user()])->group(function () {
+Route::middleware(['auth', Role::requestersOnly()])->group(function () {
     Route::prefix('feedback')->name('feedback.')->group(function () {
         Route::controller(FeedbackController::class)->group(function () {
             Route::get('/', 'index')->name('index');

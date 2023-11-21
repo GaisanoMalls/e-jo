@@ -26,7 +26,7 @@ class AssignTag extends Component
             $this->dispatchBrowserEvent('close-modal');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

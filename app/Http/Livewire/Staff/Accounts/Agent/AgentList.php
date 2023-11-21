@@ -33,28 +33,25 @@ class AgentList extends Component
             sleep(1);
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addSuccess('Oops, something went wrong');
         }
     }
 
     private function getInitialQuery()
     {
-        return User::with(['department', 'branch'])
-            ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
+        return User::with(['department', 'branch'])->role(Role::AGENT)
             ->take(5)->orderByDesc('created_at')->get();
     }
 
     public function render()
     {
         $this->agents = (Route::is('staff.manage.user_account.index'))
-            ? User::with(['profile', 'department', 'branch'])
-                ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
+            ? User::with(['profile', 'department', 'branch'])->role(Role::AGENT)
                 ->take(5)->orderByDesc('created_at')->get()
             : (
                 (Route::is('staff.manage.user_account.agents'))
-                ? User::with(['profile', 'department', 'branch'])
-                    ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
+                ? User::with(['profile', 'department', 'branch'])->role(Role::AGENT)
                     ->orderByDesc('created_at')->get()
                 : $this->getInitialQuery()
             );

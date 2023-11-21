@@ -22,7 +22,7 @@
                         @if ($clarification->user->id !== auth()->user()->id)
                         <small class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                             {{ $clarification->user->profile->getFullName() }}
-                            @if ($clarification->user->role_id == App\Models\Role::SYSTEM_ADMIN)
+                            @if ($clarification->user->hasRole(App\Models\Role::SYSTEM_ADMIN))
                             <i class="bi bi-person-fill-gear text-muted ms-1" title="System Admin"></i>
                             @endif
                         </small>

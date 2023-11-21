@@ -62,7 +62,7 @@ class TagList extends Component
             flash()->addSuccess('Tag updated');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
@@ -85,7 +85,7 @@ class TagList extends Component
             flash()->addSuccess('Tag successfully deleted');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

@@ -105,7 +105,7 @@ Approvers Directory
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $approver->role->name }}</span>
+                                <span>{{ $approver->getUserRoles() }}</span>
                             </div>
                         </td>
                     </tr>

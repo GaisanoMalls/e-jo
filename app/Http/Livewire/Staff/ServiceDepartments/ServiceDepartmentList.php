@@ -62,7 +62,7 @@ class ServiceDepartmentList extends Component
             flash()->addSuccess('Service department successfully updated');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
@@ -85,7 +85,7 @@ class ServiceDepartmentList extends Component
             flash()->addSuccess('Service department successfully deleted');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

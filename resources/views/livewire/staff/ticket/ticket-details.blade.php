@@ -49,7 +49,7 @@
                     <small class="position-relative ticket__details__info">
                         <i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->team->name ?? '----' }}
-                        @if ($ticket->team_id && auth()->user()->role_id == App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+                        @if ($ticket->team_id && auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
                         <i wire:click="removeAssignedTeam" class="bi bi-x ms-2 text-danger position-absolute"
                             style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
                         @endif
@@ -74,7 +74,7 @@
                         {{ $ticket->agent_id != null
                         ? $ticket->agent->profile->getFullName()
                         : '----' }}
-                        @if ($ticket->agent_id && auth()->user()->role_id == App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+                        @if ($ticket->agent_id && auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
                         <i wire:click="removeAssignedAgent" class="bi bi-x ms-2 text-danger position-absolute"
                             style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
                         @endif

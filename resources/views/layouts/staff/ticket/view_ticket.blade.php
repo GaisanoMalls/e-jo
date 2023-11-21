@@ -25,15 +25,15 @@
                         @if (Route::is('staff.ticket.view_ticket'))
                         @livewire('staff.ticket.load-reply-button-header', ['ticket' => $ticket])
                         @endif
-                        @if (Route::is('staff.ticket.ticket_clarifications') && auth()->user()->role_id ===
-                        App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+                        @if (Route::is('staff.ticket.ticket_clarifications') &&
+                        auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
                         @livewire('staff.ticket.load-clarify-ticket-button-header', ['ticket' => $ticket])
                         @endif
-                        @if (auth()->user()->role_id == App\Models\Role::AGENT)
+                        @if (auth()->user()->hasRole(App\Models\Role::AGENT))
                         @livewire('staff.ticket.claim-ticket', ['ticket' => $ticket])
                         @endif
                         @livewire('staff.ticket.load-close-status-button-header', ['ticket' => $ticket])
-                        @if (auth()->user()->role_id == App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+                        @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
                         @livewire('staff.ticket.dropdown-approval-button', ['ticket' => $ticket])
                         @endif
                         @livewire('staff.ticket.bookmark-ticket', ['ticket' => $ticket])
@@ -88,7 +88,7 @@
                             @show
                         </small>
                         <div class="d-flex align-items-center gap-3 threads__clarifications__tab__container">
-                            @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+                            @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
                             <a onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'"
                                 class="btn btn-sm px-0 rounded-0 {{ Route::is('staff.ticket.view_ticket') ? 'active' : '' }}"
                                 type="button">
@@ -120,7 +120,7 @@
         </div>
     </div>
 
-    @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+    @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
     @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
     @endif
     @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])
@@ -131,7 +131,7 @@
 @livewire('staff.ticket.reply-ticket', ['ticket' => $ticket])
 @endif
 
-@if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
+@if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
 @if (Route::is('staff.ticket.ticket_clarifications'))
 @livewire('staff.ticket.send-clarification', ['ticket' => $ticket])
 @endif

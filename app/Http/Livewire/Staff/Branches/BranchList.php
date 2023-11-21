@@ -61,7 +61,7 @@ class BranchList extends Component
             flash()->addSuccess('Branch successfully updated');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
@@ -84,7 +84,7 @@ class BranchList extends Component
             flash()->addSuccess('Branch successfully deleted');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

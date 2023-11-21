@@ -48,9 +48,7 @@ class Team extends Model
 
     public function agents(): Builder|BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_team')
-            ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
-            ->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_team')->role(Role::AGENT)->withTimestamps();
     }
 
     public function getBranches(): string

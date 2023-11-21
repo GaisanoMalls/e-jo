@@ -15,18 +15,18 @@
             {{ $clarification->user_id === auth()->user()->id ? 'background-color: #dff9ff; margin-left: auto;' : 'background-color: #F5F7F9; margin-right: auto;' }}">
             <div class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
                 <div class="d-flex align-items-center w-100">
-                    @if ($clarification->user->role_id === App\Models\Role::USER)
+                    @if ($clarification->user->hasRole(App\Models\Role::USER))
                     @if ($clarification->user->profile->picture)
                     <img src="{{ Storage::url($clarification->user->profile->picture) }}" alt="" class="image-fluid ticket__details__user__picture
-                        reply__ticket__details__user__picture">
+                            reply__ticket__details__user__picture">
                     @else
                     <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center
-                        text-white" style="background-color: #24695C;">
+                            text-white" style="background-color: #24695C;">
                         {{ $clarification->user->profile->getNameInitial() }}</div>
                     @endif
                     @endif
                     <div class="d-flex flex-wrap justify-content-between w-100">
-                        @if ($clarification->user->role_id === App\Models\Role::USER)
+                        @if ($clarification->user->hasRole(App\Models\Role::USER))
                         <small class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                             {{ $clarification->user->profile->getFullName() }}
                         </small>

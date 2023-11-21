@@ -109,7 +109,7 @@ class UpdateAgent extends Component
             flash()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName()}.");
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Failed to update the agent.');
         }
     }

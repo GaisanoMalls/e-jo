@@ -41,7 +41,7 @@ class UpdateServiceDeptAdminPassword extends Component
             flash()->addSuccess('Password has been updated.');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

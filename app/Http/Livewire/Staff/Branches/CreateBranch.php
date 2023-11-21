@@ -43,7 +43,7 @@ class CreateBranch extends Component
             flash()->addSuccess('New branch has been created.');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

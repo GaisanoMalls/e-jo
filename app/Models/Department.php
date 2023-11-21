@@ -43,8 +43,7 @@ class Department extends Model
 
     public function approvers(): Builder|BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_department')
-            ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER));
+        return $this->belongsToMany(User::class, 'user_department')->role(Role::APPROVER);
     }
 
     public function getBranches(): string

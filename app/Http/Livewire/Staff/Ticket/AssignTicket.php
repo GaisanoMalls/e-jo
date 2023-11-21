@@ -60,14 +60,14 @@ class AssignTicket extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }
 
     public function updatedTeam()
     {
-        $this->agents = User::with('profile')->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
+        $this->agents = User::with('profile')->role(Role::AGENT)
             ->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->ticket->serviceDepartment->id))
             ->whereHas('branch', fn($branch) => $branch->where('branch_id', $this->ticket->branch->id))
             ->whereHas('teams', fn($team) => $team->where('teams.id', $this->team))->get();

@@ -20,8 +20,7 @@ class UserTeam extends Model
 
     public function agent(): BelongsTo|Builder
     {
-        return $this->belongsTo(User::class)
-            ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT));
+        return $this->belongsTo(User::class)->role(Role::AGENT);
     }
 
     public function team(): BelongsTo

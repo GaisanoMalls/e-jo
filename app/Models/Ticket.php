@@ -50,14 +50,12 @@ class Ticket extends Model
 
     public function user(): BelongsTo|Builder
     {
-        return $this->belongsTo(User::class, 'user_id')
-            ->whereHas('role', fn($requester) => $requester->where('role_id', Role::USER));
+        return $this->belongsTo(User::class, 'user_id')->role(Role::USER);
     }
 
     public function agent(): BelongsTo|Builder
     {
-        return $this->belongsTo(User::class, 'agent_id')
-            ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT));
+        return $this->belongsTo(User::class, 'agent_id')->role(Role::AGENT);
     }
 
     public function branch(): BelongsTo

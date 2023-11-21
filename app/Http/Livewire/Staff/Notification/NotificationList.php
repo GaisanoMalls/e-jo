@@ -21,7 +21,7 @@ class NotificationList extends Component
                 $notification = auth()->user()->notifications->find($notificationId);
                 (!$notification->read()) ? $notification->markAsRead() : null;
 
-                if (auth()->user()->role_id === Role::SERVICE_DEPARTMENT_ADMIN) {
+                if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
                     if ($ticket->status_id != Status::VIEWED) {
                         $ticket->update(['status_id' => Status::VIEWED]);
@@ -38,7 +38,7 @@ class NotificationList extends Component
             });
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

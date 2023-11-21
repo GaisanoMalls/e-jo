@@ -33,28 +33,25 @@ class RequesterList extends Component
             flash()->addSuccess('Requester account has been deleted');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addSuccess('Oops, something went wrong');
         }
     }
 
     private function getInitialQuery()
     {
-        return User::with(['department', 'branch'])
-            ->whereHas('role', fn($user) => $user->where('role_id', Role::USER))
+        return User::with(['department', 'branch'])->role(Role::USER)
             ->orderByDesc('created_at')->get();
     }
 
     public function render()
     {
         $this->users = (Route::is('staff.manage.user_account.index'))
-            ? User::with(['profile', 'department', 'branch'])
-                ->whereHas('role', fn($user) => $user->where('role_id', Role::USER))
+            ? User::with(['profile', 'department', 'branch'])->role(Role::USER)
                 ->take(5)->orderByDesc('created_at')->get()
             : (
                 (Route::is('staff.manage.user_account.users'))
-                ? User::with(['profile', 'department', 'branch'])
-                    ->whereHas('role', fn($user) => $user->where('role_id', Role::USER))
+                ? User::with(['profile', 'department', 'branch'])->role(Role::USER)
                     ->orderByDesc('created_at')->get()
                 : $this->getInitialQuery()
             );

@@ -43,7 +43,7 @@ class CreateServiceDepartment extends Component
             flash()->addSuccess('A new service department has been created.');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

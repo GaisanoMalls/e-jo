@@ -80,19 +80,16 @@ class SendClarification extends Component
                         $clarificationFile = new ClarificationFile();
                         $clarificationFile->file_attachment = $fileAttachment;
                         $clarificationFile->clarification_id = $clarification->id;
-
                         $clarification->fileAttachments()->save($clarificationFile);
                     }
                 }
 
                 // * GET THE REQUESTER
                 $requester = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
-                    ->where('ticket_id', $this->ticket->id)
-                    ->latest('created_at')
-                    ->first();
+                    ->where('ticket_id', $this->ticket->id)->latest('created_at')->first();
 
                 // * CONSTRUCT A LOG DESCRIPTION
-                $logDescription = $this->ticket->clarifications()->where('user_id', '!=', auth()->user()->id)->count() == 0
+                $logDescription = ($this->ticket->clarifications()->where('user_id', '!=', auth()->user()->id)->count() === 0)
                     ? 'sent a clarification'
                     : 'replied a clarification to ' . $requester->user->profile->getFullName();
 
@@ -105,7 +102,7 @@ class SendClarification extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
     }

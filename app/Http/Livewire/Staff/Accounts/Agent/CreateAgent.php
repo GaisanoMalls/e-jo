@@ -64,11 +64,10 @@ class CreateAgent extends Component
                     'branch_id' => $this->branch,
                     'department_id' => $this->bu_department,
                     'service_department_id' => $this->service_department,
-                    'role_id' => Role::AGENT,
                     'email' => $this->email,
                     'password' => \Hash::make('agent'),
                 ]);
-
+                $agent->assignRole(Role::AGENT);
                 $fullname = $this->first_name . $this->middle_name ?? "" . $this->last_name;
 
                 Profile::create([
@@ -86,7 +85,7 @@ class CreateAgent extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
     }

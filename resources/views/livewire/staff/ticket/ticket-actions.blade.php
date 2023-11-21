@@ -1,5 +1,5 @@
 <div>
-    @if (auth()->user()->role_id === App\Models\Role::SERVICE_DEPARTMENT_ADMIN && ($ticket->status_id
+    @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN) && ($ticket->status_id
     != App\Models\Status::CLOSED && $ticket->status_id
     != App\Models\Status::DISAPPROVED))
     <div class="card border-0 p-0 card__ticket__details">

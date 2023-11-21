@@ -121,7 +121,7 @@ Agents Directory
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $agent->role->name }}</span>
+                                <span>{{ $agent->getUserRoles() }}</span>
                             </div>
                         </td>
                     </tr>

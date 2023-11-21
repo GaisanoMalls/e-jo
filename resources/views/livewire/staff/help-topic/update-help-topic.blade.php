@@ -257,7 +257,7 @@
                         required: true,
                     });
 
-                    const levelApprovers = currentApprovers.filter(approver=> approver.level == count);
+                    const levelApprovers = currentApprovers.filter(approver => approver.level == count);
                     const editLevelOfApproverSelect = document.querySelector(`#level${count}Approver`);
 
                     if (editLevelOfApproverSelect) {
@@ -296,7 +296,7 @@
                                 <div>
                                     <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
                                 </div>
-                                @error('level${count}Approver')
+                                @error('level${count}Approvers')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}

@@ -26,7 +26,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Utils;
+    use HasApiTokens, HasFactory, Notifiable, Utils, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -38,7 +38,6 @@ class User extends Authenticatable
         'department_id',
         'service_department_id',
         'team_id',
-        'role_id',
         'email',
         'password',
         'is_active',
@@ -67,11 +66,6 @@ class User extends Authenticatable
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
-    }
-
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
     }
 
     public function branch(): BelongsTo
@@ -261,42 +255,37 @@ class User extends Authenticatable
     }
 
     // Filter user types by roles
-    public static function systemAdmins(): Collection|array
+    public static function systemAdmins()
     {
-        return self::with(['profile', 'branch'])
-            ->whereHas('role', fn($systemAdmin) => $systemAdmin->where('role_id', Role::SYSTEM_ADMIN))
+        return self::with(['profile', 'branch'])->role(Role::SYSTEM_ADMIN)
             ->orderByDesc('created_at')
             ->get();
     }
 
-    public static function serviceDepartmentAdmins(): Collection|array
+    public static function serviceDepartmentAdmins()
     {
-        return self::with(['profile', 'serviceDepartment'])
-            ->whereHas('role', fn($serviceDepartmentAdmin) => $serviceDepartmentAdmin->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))
+        return self::with(['profile', 'serviceDepartment'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
             ->orderByDesc('created_at')
             ->get();
     }
 
-    public static function approvers(): Collection|array
+    public static function approvers()
     {
-        return self::with(['profile', 'branch'])
-            ->whereHas('role', fn($approver) => $approver->where('role_id', Role::APPROVER))
+        return self::with(['profile', 'branch'])->role(Role::APPROVER)
             ->orderByDesc('created_at')
             ->get();
     }
 
-    public static function agents(): Collection|array
+    public static function agents()
     {
-        return self::with(['profile', 'branch'])
-            ->whereHas('role', fn($agent) => $agent->where('role_id', Role::AGENT))
+        return self::with(['profile', 'branch'])->role(Role::AGENT)
             ->orderByDesc('created_at')
             ->get();
     }
 
-    public static function requesters(): Collection|array
+    public static function requesters()
     {
-        return self::with(['profile', 'department', 'branch'])
-            ->whereHas('role', fn($requester) => $requester->where('role_id', Role::USER))
+        return self::with(['profile', 'department', 'branch'])->role(Role::USER)
             ->orderByDesc('created_at')
             ->get();
     }
@@ -309,5 +298,20 @@ class User extends Authenticatable
     public function dateUpdated(): string
     {
         return $this->updatedAt($this->created_at, $this->updated_at);
+    }
+
+    public function getUserRoles(): string
+    {
+        $userRoles = [];
+
+        foreach ($this->roles->pluck('name') as $role) {
+            $userRoles[] = $role;
+        }
+
+        if (!empty($userRoles)) {
+            return implode(', ', $userRoles);
+        }
+
+        return '----';
     }
 }

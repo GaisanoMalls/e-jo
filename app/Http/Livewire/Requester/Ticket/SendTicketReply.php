@@ -81,18 +81,14 @@ class SendTicketReply extends Component
                     }
                 }
 
-                $latestReply = Reply::where('ticket_id', $this->ticket->id)
-                    ->whereHas('user', fn($user) => $user->where('role_id', '!=', Role::USER))
-                    ->latest('created_at')
-                    ->first();
-
+                $latestReply = Reply::where('ticket_id', $this->ticket->id)->role(Role::USER)->latest('created_at')->first();
                 ActivityLog::make($this->ticket->id, 'replied to ' . $latestReply->user->profile->getFullName());
             });
 
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

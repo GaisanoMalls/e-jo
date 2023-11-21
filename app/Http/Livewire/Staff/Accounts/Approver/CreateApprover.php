@@ -45,10 +45,10 @@ class CreateApprover extends Component
         try {
             DB::transaction(function () {
                 $approver = User::create([
-                    'role_id' => Role::APPROVER,
                     'email' => $this->email,
                     'password' => \Hash::make('approver'),
                 ]);
+                $approver->assignRole(Role::APPROVER);
 
                 Profile::create([
                     'user_id' => $approver->id,
@@ -72,7 +72,7 @@ class CreateApprover extends Component
             flash()->addSuccess('Account successfully created');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Failed to save a new approver');
         }
     }

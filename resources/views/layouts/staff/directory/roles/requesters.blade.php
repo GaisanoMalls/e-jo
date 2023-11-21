@@ -113,7 +113,7 @@ Service Dept. Admins Directory
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->role->name }}</span>
+                                <span>{{ $user->getUserRoles() }}</span>
                             </div>
                         </td>
                     </tr>

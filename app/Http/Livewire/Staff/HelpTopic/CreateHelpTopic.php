@@ -106,7 +106,7 @@ class CreateHelpTopic extends Component
             flash()->addSuccess('A new help topic has been created.');
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong.');
         }
     }

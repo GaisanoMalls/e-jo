@@ -24,7 +24,7 @@
                     </span>
                 </a>
             </li>
-            @if (auth()->user()->role_id !== App\Models\Role::AGENT)
+            @if (auth()->user()->hasRole(App\Models\Role::AGENT))
             <li>
                 <a href="{{ route('staff.tickets.viewed_tickets') }}" class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
                     {{ Route::is('staff.tickets.viewed_tickets') ? 'sidebar__collapse__btnlink__active' : '' }}"

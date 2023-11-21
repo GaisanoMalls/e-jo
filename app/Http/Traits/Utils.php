@@ -5,6 +5,7 @@ namespace App\Http\Traits;
 use App\Models\Role;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Str;
 
 trait Utils
@@ -100,12 +101,12 @@ trait Utils
     public function fileDirByUserType(): string
     {
         //        $staffRolePath = '';
-        return match (auth()->user()->role_id) {
-            Role::SYSTEM_ADMIN => 'system_admin',
-            Role::SERVICE_DEPARTMENT_ADMIN => 'service_department_admin',
-            Role::APPROVER => 'approver',
-            Role::AGENT => 'agent',
-            Role::USER => 'requester',
+        return match (true) {
+            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => 'system_admin',
+            Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => 'service_department_admin',
+            Auth::user()->hasRole(Role::APPROVER) => 'approver',
+            Auth::user()->hasRole(Role::AGENT) => 'agent',
+            Auth::user()->hasRole(Role::USER) => 'requester',
             default => 'guest',
         };
     }

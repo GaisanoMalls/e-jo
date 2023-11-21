@@ -42,7 +42,7 @@ class UpdatePriorityLevel extends Component
 
             }
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Oops, something went wrong');
         }
     }

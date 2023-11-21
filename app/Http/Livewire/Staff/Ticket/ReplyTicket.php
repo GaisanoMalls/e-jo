@@ -87,7 +87,7 @@ class ReplyTicket extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dump($e->getMessage());
             flash()->addError('Failed to send ticket clarification. Please try again.');
         }
     }

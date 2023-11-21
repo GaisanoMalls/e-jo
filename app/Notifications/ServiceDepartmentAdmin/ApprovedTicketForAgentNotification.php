@@ -44,8 +44,7 @@ class ApprovedTicketForAgentNotification extends Notification
      */
     public function toArray($notifiable): array
     {
-        $serviceDepartmentAdmin = User::with('profile')->where('id', auth()->user()->id)
-            ->whereHas('role', fn($query) => $query->where('role_id', Role::SERVICE_DEPARTMENT_ADMIN))->first();
+        $serviceDepartmentAdmin = User::with('profile')->where('id', auth()->user()->id)->role(Role::SERVICE_DEPARTMENT_ADMIN)->first();
 
         return [
             'ticket' => $this->ticket,
