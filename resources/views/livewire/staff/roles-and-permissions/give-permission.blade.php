@@ -1,7 +1,10 @@
 <div>
-    <form wire:submit.prevent="savePermission">
+    <form wire:submit.prevent="givePermission">
         <div class="row mx-4 pt-3 gap-3">
-            <div class="col-xl-4 col-lg-12 p-0">
+            <div class="col-1 mt-2">
+                <span style="font-size: 14px;">Can</span>
+            </div>
+            <div class=" col-md-3 p-0">
                 <div>
                     <div id="select-permission-action" placeholder="Select action" wire:ignore></div>
                 </div>
@@ -12,7 +15,7 @@
                 </span>
                 @enderror
             </div>
-            <div class="col-xl-5 col-lg-12 p-0">
+            <div class="col-md-5 p-0">
                 <div>
                     <div id="select-module-name" placeholder="Select module" wire:ignore></div>
                 </div>
@@ -23,11 +26,11 @@
                 </span>
                 @enderror
             </div>
-            <div class="col-xl-2 col-lg-12 p-0">
+            <div class="col-md-2 p-0">
                 <button type="submit" class="btn d-flex align-items-center justify-content-center gap-2 button__header"
                     style="padding-top: 20px; padding-bottom: 20px;">
-                    <i class="fa-solid fa-plus" wire:loading.class="d-none" wire:target="savePermission"></i>
-                    <span wire:loading wire:target="savePermission" class="spinner-border spinner-border-sm"
+                    <i class="fa-solid fa-plus" wire:loading.class="d-none" wire:target="givePermission"></i>
+                    <span wire:loading wire:target="givePermission" class="spinner-border spinner-border-sm"
                         role="status" aria-hidden="true">
                     </span>
                     <span class="button__name">Add</span>

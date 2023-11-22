@@ -15,24 +15,6 @@ class PermissionModuleSeeder extends Seeder
      */
     public function run()
     {
-        $permissionModules = [
-            'accounts',
-            'service level agreements',
-            'branches',
-            'bu/departments',
-            'service departments',
-            'teams',
-            'help topics',
-            'tags',
-            'announcements',
-            'ticket'
-        ];
-
-        foreach ($permissionModules as $module) {
-            PermissionModule::firstOrCreate([
-                'name' => $module
-            ]);
-        }
-
+        PermissionModule::firstOrCreate(['name' => 'ticket']);
     }
 }

@@ -1,7 +1,7 @@
 <div class="col-xl-8 content__container">
     <div class="card card__rounded__and__no__border">
         <div class="table-responsive custom__table">
-            <table class="table mb-0">
+            <table class="table table-striped mb-0">
                 <div class="d-flex align-items-center justify-content-between table__header">
                     <div class="d-flex align-items-center justify-content-center gap-2">
                         <i class="fa-solid fa-circle-exclamation"></i>

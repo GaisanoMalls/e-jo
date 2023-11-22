@@ -56,7 +56,7 @@ class CreateTeam extends Component
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, someting went wrong.');
+            flash()->addError('Oops, something went wrong.');
         }
     }
 

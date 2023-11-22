@@ -13,7 +13,6 @@ class CreatePermission extends Component
     public ?string $permissionAction = null;
     public ?array $permissionModules = [];
 
-
     public function rules()
     {
         return (new StorePermissionRequest())->rules();

@@ -29,10 +29,6 @@ class PermissionActionSeeder extends Seeder
                 'icon' => '<i class="bi bi-pencil text-muted me-2"></i>'
             ],
             [
-                'name' => 'delete',
-                'icon' => '<i class="bi bi-trash text-muted me-2"></i>'
-            ],
-            [
                 'name' => 'approve',
                 'icon' => '<i class="bi bi-hand-thumbs-up text-muted me-2"></i>'
             ],

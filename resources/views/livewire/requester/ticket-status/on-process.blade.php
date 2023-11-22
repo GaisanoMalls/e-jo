@@ -2,7 +2,7 @@
     @if (!$onProcessTickets->isEmpty())
     <div class="card ticket__card" id="userTicketCard">
         <div class="table-responsive">
-            <table class="table mb-0 custom__table" id="userTable">
+            <table class="table table-striped mb-0 custom__table" id="userTable">
                 <thead>
                     <tr>
                         <th class="table__head__label">Date Created</th>

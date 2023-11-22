@@ -18,12 +18,12 @@ Roles & Permissions
             @include('layouts.staff.system_admin.manage.roles_and_permissions.includes.role_type_card')
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-5">
                 @include('layouts.staff.system_admin.manage.roles_and_permissions.includes.permissions')
             </div>
-            {{-- <div class="col-md-6">
-                @include('layouts.staff.system_admin.manage.roles_and_permissions.includes.roles')
-            </div> --}}
+            <div class="col-md-7">
+                @include('layouts.staff.system_admin.manage.roles_and_permissions.includes.give-permission')
+            </div>
         </div>
     </div>
 </div>
