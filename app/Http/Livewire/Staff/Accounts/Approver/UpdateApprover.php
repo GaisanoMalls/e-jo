@@ -16,8 +16,6 @@ class UpdateApprover extends Component
     public User $approver;
     public $bu_departments = [];
     public $branches = [];
-    public $currentBranches = [];
-    public $currentBUDepartments = [];
     public $first_name;
     public $middle_name;
     public $last_name;
@@ -34,8 +32,6 @@ class UpdateApprover extends Component
         $this->suffix = $approver->profile->suffix;
         $this->branches = $approver->branches->pluck("id")->toArray();
         $this->bu_departments = $approver->buDepartments->pluck("id")->toArray();
-        $this->currentBranches = $approver->branches->pluck("id")->toArray();
-        $this->currentBUDepartments = $approver->buDepartments->pluck("id")->toArray();
     }
 
     public function rules(): array

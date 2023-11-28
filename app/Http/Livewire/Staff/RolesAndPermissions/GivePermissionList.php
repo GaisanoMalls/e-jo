@@ -23,47 +23,6 @@ class GivePermissionList extends Component
         return (new GivePermissionRequest())->rules();
     }
 
-    public function assignPermissionToRole(Role $role)
-    {
-        $this->assignPermissionRoleId = $role->id;
-        $this->roleName = $role->name;
-        $this->dispatchBrowserEvent('refresh-permission-select', ['allPermissions' => $this->getAllPermissions()]);
-    }
-
-    public function removePermission(Role $role, Permission $permission)
-    {
-        try {
-            $permission = Permission::find($permission->id);
-            if ($permission) {
-                $role->revokePermissionTo($permission);
-                flash()->addSuccess('Permission revoked successfully');
-            } else {
-                flash()->addError('Permission not found');
-            }
-        } catch (\Exception $e) {
-            flash()->addError('Oops, something went wrong');
-        }
-    }
-
-    public function editAssignedPermission(Role $role)
-    {
-        $this->editPermissionRoleId = $role->id;
-        $this->roleName = $role->name;
-        $this->dispatchBrowserEvent('get-role-permissions-to-edit', [
-            'currentPermissions' => $role->permissions->pluck('name')->toArray()
-        ]);
-    }
-
-    public function updateAssignedPermission()
-    {
-        try {
-            $role = Role::find($this->editPermissionRoleId);
-            // TODO $role->syncPermissions();
-        } catch (\Exception $e) {
-            flash()->addError('Oops, something went wrong');
-        }
-    }
-
     private function getAllPermissions()
     {
         return $this->allPermissions = Permission::all();
@@ -87,14 +46,36 @@ class GivePermissionList extends Component
         $this->validate();
 
         $role = Role::find($this->assignPermissionRoleId);
-        foreach ($this->permissions as $permission) {
-            if (!$role->hasPermissionTo($permission)) {
-                $role->givePermissionTo($permission);
-            }
+        if (!empty($this->permissions)) {
+            $role->syncPermissions($this->permissions);
+            flash()->addSuccess('Permission assigned.');
         }
-
-        flash()->addSuccess('Permission assigned.');
         $this->actionOnSubmit();
+    }
+
+    public function assignPermissionToRole(Role $role)
+    {
+        $this->assignPermissionRoleId = $role->id;
+        $this->roleName = $role->name;
+        $this->dispatchBrowserEvent('refresh-permission-select', [
+            'allPermissions' => $this->getAllPermissions(),
+            'currentPermissions' => $role->permissions->pluck('name')->toArray()
+        ]);
+    }
+
+    public function removePermission(Role $role, Permission $permission)
+    {
+        try {
+            $permission = Permission::find($permission->id);
+            if ($permission) {
+                $role->revokePermissionTo($permission);
+                flash()->addInfo('Permission revoked.');
+            } else {
+                flash()->addError('Permission not found');
+            }
+        } catch (\Exception $e) {
+            flash()->addError('Oops, something went wrong');
+        }
     }
 
     public function render()

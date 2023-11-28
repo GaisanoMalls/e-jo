@@ -334,6 +334,7 @@
         options: agentTeamOption,
         search: true,
         multiple: true,
+        showValueAsTags: true,
         markSearchResults: true,
         selectedValue: @json($currentTeams)
     });

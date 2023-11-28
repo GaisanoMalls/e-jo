@@ -206,6 +206,7 @@
         options: approverBranchOption,
         search: true,
         multiple: true,
+        showValueAsTags: true,
         markSearchResults: true,
     });
 
@@ -228,6 +229,7 @@
         options: approverBUDepartmentOption,
         search: true,
         multiple: true,
+        showValueAsTags: true,
         markSearchResults: true,
     });
     approverBUDepartmentSelect.addEventListener('change', () => {

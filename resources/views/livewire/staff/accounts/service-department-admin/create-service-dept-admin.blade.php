@@ -116,7 +116,7 @@
                                                 <div>
                                                     <div id="select-service-dept-admin-branch" wire:ignore></div>
                                                 </div>
-                                                @error('branch')
+                                                @error('branches')
                                                 <span class="error__message">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                                     {{ $message }}
@@ -227,7 +227,14 @@
         ele: serviceDeptAdminBranchSelect,
         options: serviceDeptAdminBranchOption,
         search: true,
+        multiple: true,
+        showValueAsTags: true,
         markSearchResults: true,
+    });
+
+    serviceDeptAdminBranchSelect.addEventListener('change', () => {
+        const branchIds = serviceDeptAdminBranchSelect.value;
+        @this.set('branches', branchIds);
     });
 
     serviceDeptAdminBranchSelect.addEventListener('reset', () => {
@@ -236,41 +243,21 @@
         serviceDeptAdminBUDepartmentSelect.setOptions([]);
     });
 
-    serviceDeptAdminBranchSelect.addEventListener('change', () => {
-        const serviceDeptAdminBranchId = serviceDeptAdminBranchSelect.value;
-        if (serviceDeptAdminBranchId) {
-            @this.set('branch', parseInt(serviceDeptAdminBranchId));
-            serviceDeptAdminBUDepartmentSelect.enable();
-            window.addEventListener('get-branch-bu-departments', (event) => {
-                const serviceDeptAdminBUDepartments = event.detail.BUDepartments;
-                const serviceDeptAdminBUDepartmentOption = [];
-
-                if (serviceDeptAdminBUDepartments.length > 0) {
-                     serviceDeptAdminBUDepartments.forEach(function (serviceDeptAdminBUDepartment) {
-                        VirtualSelect.init({
-                            ele: serviceDeptAdminBUDepartmentSelect
-                        });
-
-                        serviceDeptAdminBUDepartmentOption.push({
-                            label: serviceDeptAdminBUDepartment.name,
-                            value: serviceDeptAdminBUDepartment.id
-                        });
-                    });
-                    serviceDeptAdminBUDepartmentSelect.setOptions(serviceDeptAdminBUDepartmentOption);
-                }
-            })
-        }
-
-
-    })
-
+    const serviceDeptAdminBUDepartmentOption = [
+        @foreach ($buDepartments as $buDepartment)
+        {
+            label: "{{ $buDepartment->name }}",
+            value: "{{ $buDepartment->id }}"
+        },
+        @endforeach
+    ];
     const serviceDeptAdminBUDepartmentSelect = document.querySelector('#select-service-dept-admin-bu-department');
     VirtualSelect.init({
         ele: serviceDeptAdminBUDepartmentSelect,
+        options: serviceDeptAdminBUDepartmentOption,
         search: true,
         markSearchResults: true,
     });
-    serviceDeptAdminBUDepartmentSelect.disable();
 
     serviceDeptAdminBUDepartmentSelect.addEventListener('change', () => {
         @this.set('bu_department', parseInt(serviceDeptAdminBUDepartmentSelect.value));
@@ -291,6 +278,7 @@
         options: serviceDeptAdminServiceDepartmentOption,
         search: true,
         multiple: true,
+        showValueAsTags: true,
         markSearchResults: true,
     });
 

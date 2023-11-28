@@ -263,6 +263,7 @@
         ele: agentTeamSelect,
         multiple: true,
         search: true,
+        showValueAsTags: true,
         markSearchResults: true,
     });
     agentTeamSelect.disable();

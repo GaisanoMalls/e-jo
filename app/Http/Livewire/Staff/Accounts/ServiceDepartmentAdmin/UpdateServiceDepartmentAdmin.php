@@ -15,42 +15,33 @@ class UpdateServiceDepartmentAdmin extends Component
     use BasicModelQueries, Utils;
 
     public User $serviceDeptAdmin;
+    public $branches = [];
     public $BUDepartments = [];
     public $service_departments = [];
-    public $currentServiceDepartments = [];
     public $first_name;
     public $middle_name;
     public $last_name;
     public $email;
     public $suffix;
-    public $branch;
     public $bu_department;
 
     public function mount(User $serviceDeptAdmin)
     {
         $this->serviceDeptAdmin = $serviceDeptAdmin;
+        $this->branches = $serviceDeptAdmin->branches->pluck('id')->toArray();
+        $this->service_departments = $serviceDeptAdmin->serviceDepartments->pluck('id')->toArray();
+        $this->bu_department = $serviceDeptAdmin->department_id;
         $this->first_name = $serviceDeptAdmin->profile->first_name;
         $this->middle_name = $serviceDeptAdmin->profile->middle_name;
         $this->last_name = $serviceDeptAdmin->profile->last_name;
         $this->suffix = $serviceDeptAdmin->profile->suffix;
         $this->email = $serviceDeptAdmin->email;
-        $this->branch = $serviceDeptAdmin->branch_id;
-        $this->bu_department = $serviceDeptAdmin->department_id;
-        $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
-        $this->service_departments = $serviceDeptAdmin->serviceDepartments->pluck('id')->toArray();
-        $this->currentServiceDepartments = $serviceDeptAdmin->serviceDepartments->pluck('id')->toArray();
-    }
-
-    public function updatedBranch()
-    {
-        $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
-        $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
     }
 
     public function rules()
     {
         return [
-            'branch' => 'required',
+            'branches' => 'required',
             'bu_department' => 'required',
             'service_departments' => 'required',
             'first_name' => 'required|min:2|max:100',
@@ -68,7 +59,6 @@ class UpdateServiceDepartmentAdmin extends Component
         try {
             DB::transaction(function () {
                 $this->serviceDeptAdmin->update([
-                    'branch_id' => $this->branch,
                     'department_id' => $this->bu_department,
                     'email' => $this->email
                 ]);
@@ -86,6 +76,7 @@ class UpdateServiceDepartmentAdmin extends Component
                     ]))
                 ]);
 
+                $this->serviceDeptAdmin->branches()->sync($this->branches);
                 $this->serviceDeptAdmin->serviceDepartments()->sync($this->service_departments);
             });
 
@@ -102,7 +93,7 @@ class UpdateServiceDepartmentAdmin extends Component
         return view('livewire.staff.accounts.service-department-admin.update-service-department-admin', [
             'serviceDeptAdminSuffixes' => $this->querySuffixes(),
             'serviceDeptAdminBranches' => $this->queryBranches(),
-            'serviceDeptAdminBUDepartments' => $this->BUDepartments,
+            'serviceDeptAdminBUDepartments' => $this->queryBUDepartments(),
             'serviceDeptAdminServiceDepartments' => $this->queryServiceDepartments(),
 
         ]);

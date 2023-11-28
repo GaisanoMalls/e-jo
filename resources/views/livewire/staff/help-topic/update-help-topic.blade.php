@@ -121,7 +121,7 @@
                                     <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"
                                         data-bs-dismiss="modal"
                                         onclick="window.location.href='{{ route('staff.manage.help_topic.index') }}'">Cancel</button>
-                                    <button type="submit" class="btn m-0 btn__details btn__send">Save</button>
+                                    <button type="submit" class="btn m-0 btn__details btn__send">Update</button>
                                 </div>
                             </div>
                         </div>
@@ -167,7 +167,7 @@
         options: serviceDepartmentOption,
         search: true,
         markSearchResults: true,
-        selectedValue: '{{ $helpTopic->service_department_id }}'
+        selectedValue: @json($service_department)
     });
 
     const teamOption = [
@@ -383,12 +383,12 @@
 
     slaSelect.addEventListener('change', () => {
         const slaId = parseInt(slaSelect.value);
-        if (slaId) @this.set('sla', slaId);
+        @this.set('sla', slaId);
     });
 
     teamSelect.addEventListener('change', () => {
         const teamId = parseInt(teamSelect.value);
-        if (teamId) @this.set('team', teamId);
+        @this.set('team', teamId);
     });
 
 </script>

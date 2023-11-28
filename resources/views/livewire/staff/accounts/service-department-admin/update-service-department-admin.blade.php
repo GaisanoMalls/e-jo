@@ -113,7 +113,7 @@
                                         <div>
                                             <div id="select-service-dept-admin-branch" wire:ignore></div>
                                         </div>
-                                        @error('branch')
+                                        @error('branches')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}
@@ -220,12 +220,14 @@
         ele: serviceDeptAdminBranchSelect,
         options: serviceDeptAdminBranchOption,
         search: true,
+        multiple: true,
+        showValueAsTags: true,
         markSearchResults: true,
-        selectedValue: '{{ $serviceDeptAdmin->branch_id }}'
+        selectedValue: @json($branches)
     });
 
     serviceDeptAdminBranchSelect.addEventListener('reset', () => {
-        @this.set('branch', null);
+        @this.set('branches', null);
         @this.set('bu_department', null);
         serviceDeptAdminBUDepartmentSelect.reset();
         serviceDeptAdminBUDepartmentSelect.disable();
@@ -233,9 +235,9 @@
     });
 
     serviceDeptAdminBranchSelect.addEventListener('change', () => {
-        const serviceDeptAdminBranchId = serviceDeptAdminBranchSelect.value;
-        if (serviceDeptAdminBranchId) {
-            @this.set('branch', parseInt(serviceDeptAdminBranchId));
+        const serviceDeptAdminBranchIds = serviceDeptAdminBranchSelect.value;
+        if (serviceDeptAdminBranchIds) {
+            @this.set('branches', serviceDeptAdminBranchIds);
             serviceDeptAdminBUDepartmentSelect.enable();
             window.addEventListener('get-branch-bu-departments', (event) => {
                 const serviceDeptAdminBUDepartments = event.detail.BUDepartments;
@@ -273,7 +275,7 @@
         options: serviceDeptAdminBUDepartmentOption,
         search: true,
         markSearchResults: true,
-        selectedValue: '{{ $serviceDeptAdmin->department_id }}'
+        selectedValue: @json($bu_department)
     });
 
     serviceDeptAdminBUDepartmentSelect.addEventListener('change', () => {
@@ -295,8 +297,9 @@
         options: serviceDeptAdminServiceDepartmentOption,
         search: true,
         multiple: true,
+        showValueAsTags: true,
         markSearchResults: true,
-        selectedValue: @json($currentServiceDepartments)
+        selectedValue: @json($service_departments)
     });
 
     serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', () => {

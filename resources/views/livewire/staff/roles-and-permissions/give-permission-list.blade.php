@@ -44,12 +44,6 @@
                                     wire:click="assignPermissionToRole({{ $role->id }})">
                                     <i class="bi bi-person-lock"></i>
                                 </button>
-                                <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
-                                    type="button" class="btn action__button" data-bs-toggle="modal"
-                                    data-bs-target="#editAssignPermissionToRoleModal"
-                                    wire:click="editAssignedPermission({{ $role->id }})">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
                             </div>
                         </td>
                     </tr>
@@ -110,53 +104,6 @@
             </div>
         </div>
     </div>
-
-    {{-- Edit role permissions modal --}}
-    <div wire:ignore.self class="modal fade assign__permission__to__role__modal" id="editAssignPermissionToRoleModal"
-        tabindex="-1" aria-labelledby="editAssignPermissionToRoleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modal__content">
-                <div class="modal-header modal__header p-0 border-0">
-                    <h1 class="modal-title modal__title" id="addNewTagModalLabel">Edit Permission</h1>
-                    <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
-                        <i class="fa-sharp fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <h6 class="mb-0 mt-3">Role: {{ $roleName }}</h6>
-                <form wire:submit.prevent="givePermission">
-                    <div class="modal-body modal__body">
-                        <div class="row mb-2">
-                            <div class="col-12">
-                                <div>
-                                    <div id="select-edit-assign-permission" placeholder="Select permission" wire:ignore>
-                                    </div>
-                                </div>
-                                @error('permissions')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
-                        <div class="d-flex align-items-center gap-2">
-                            <button type="submit"
-                                class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__modal__footer btn__send">
-                                <span wire:loading wire:target="givePermission" class="spinner-border spinner-border-sm"
-                                    role="status" aria-hidden="true">
-                                </span>
-                                Assign
-                            </button>
-                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
-                                data-bs-dismiss="modal" wire:click="cancel">Cancel</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 
 @push('livewire-select')
@@ -179,11 +126,13 @@
         multiple: true,
         showValueAsTags: true,
         markSearchResults: true,
+        popupDropboxBreakpoint: '3000px',
     });
 
     window.addEventListener('refresh-permission-select', (event) => {
         const refreshPermissionOption = [];
         const refreshPermissions = event.detail.allPermissions;
+        const currentPermissions = event.detail.currentPermissions;
 
         refreshPermissions.forEach((permission) => {
             refreshPermissionOption.push({
@@ -193,29 +142,13 @@
         });
 
         selectPermission.setOptions(refreshPermissionOption)
+        selectPermission.setValue(currentPermissions)
     });
 
     // Set value for permissions
     selectPermission.addEventListener('change', () => {
         @this.set('permissions', selectPermission.value);
     });
-
-    // Edit Assigned Permission
-    const editSelectPermission = document.querySelector('#select-edit-assign-permission');
-    VirtualSelect.init({
-        ele: editSelectPermission,
-        options: permissionOption,
-        search: true,
-        required: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-    });
-    window.addEventListener('get-role-permissions-to-edit', (event) => {
-        const currentPermissions = event.detail.currentPermissions;
-        editSelectPermission.setValue(currentPermissions);
-    });
-
 </script>
 @endpush
 

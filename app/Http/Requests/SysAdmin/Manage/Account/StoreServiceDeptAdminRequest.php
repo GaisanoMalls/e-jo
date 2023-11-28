@@ -25,7 +25,7 @@ class StoreServiceDeptAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'branch' => ['required'],
+            'branches' => ['required'],
             'bu_department' => ['required'],
             'service_departments' => ['required'],
             'first_name' => ['required', 'min:2', 'max:100'],

@@ -30,15 +30,15 @@ class UpdateHelpTopic extends Component
     public $amount;
     public $max_amount = 50000;
 
-    public function mount(HelpTopic $helpTopic)
+    public function mount()
     {
-        $this->name = $helpTopic->name;
-        $this->sla = $helpTopic->service_level_agreement_id;
-        $this->service_department = $helpTopic->service_department_id;
-        $this->team = $helpTopic->team_id;
-        $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
-        $this->level_of_approval = $helpTopic->levels->pluck('id')->last();
-        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
+        $this->name = $this->helpTopic->name;
+        $this->sla = $this->helpTopic->service_level_agreement_id;
+        $this->service_department = $this->helpTopic->service_department_id;
+        $this->team = $this->helpTopic->team_id;
+        $this->amount = $this->helpTopic->specialProject ? $this->helpTopic->specialProject->amount : null;
+        $this->level_of_approval = $this->helpTopic->levels->pluck('id')->last();
+        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->helpTopic->service_department_id))->get();
         for ($count = 1; $count <= 5; $count++) {
             $this->{"level{$count}Approvers"} = $this->{"getLevel{$count}Approvers"}();
         }
@@ -54,16 +54,17 @@ class UpdateHelpTopic extends Component
             'level_of_approval' => 'nullable',
             'amount' => 'nullable',
             'teams' => '',
-            'level1Approvers' => 'nullable'
         ];
 
         if (!is_null($this->helpTopic->specialProject)) {
             $rules['amount'] = 'required';
             $rules['level_of_approval'] = 'required';
-        }
 
-        if (empty($this->level1Approvers)) {
-            $rules['level1Approvers'] = 'required';
+            for ($count = 1; $count <= 5; $count++) {
+                if (empty($this->{"level{$count}Approvers"})) {
+                    $rules["level{$count}Approvers"] = 'required';
+                }
+            }
         }
 
         return $rules;
@@ -80,7 +81,7 @@ class UpdateHelpTopic extends Component
                     'team_id' => $this->team,
                     'service_level_agreement_id' => $this->sla,
                     'name' => $this->name,
-                    'slug' => \Str::slug($this->name)
+                    'slug' => \Str::slug($this->name),
                 ]);
 
                 if (!is_null($this->helpTopic->specialProject)) {
@@ -131,7 +132,7 @@ class UpdateHelpTopic extends Component
                     if ($levelApprover->user_id == $approver->id && $levelApprover->level_id == $level->id) {
                         array_push($currentApprovers, [
                             'id' => $approver->id,
-                            'level' => intval($level->value)
+                            'level' => intval($level->value),
                         ]);
                     }
                 }
@@ -150,7 +151,7 @@ class UpdateHelpTopic extends Component
             if ($levelApprover->level_id === 1) {
                 array_push($level1Approvers, [
                     'user_id' => $levelApprover->user_id,
-                    'level_id' => $levelApprover->level_id
+                    'level_id' => $levelApprover->level_id,
                 ]);
             }
         }
@@ -167,7 +168,7 @@ class UpdateHelpTopic extends Component
             if ($levelApprover->level_id === 2) {
                 array_push($level2Approvers, [
                     'user_id' => $levelApprover->user_id,
-                    'level_id' => $levelApprover->level_id
+                    'level_id' => $levelApprover->level_id,
                 ]);
             }
         }
@@ -184,7 +185,7 @@ class UpdateHelpTopic extends Component
             if ($levelApprover->level_id === 3) {
                 array_push($level3Approvers, [
                     'user_id' => $levelApprover->user_id,
-                    'level_id' => $levelApprover->level_id
+                    'level_id' => $levelApprover->level_id,
                 ]);
             }
         }
@@ -201,7 +202,7 @@ class UpdateHelpTopic extends Component
             if ($levelApprover->level_id === 4) {
                 array_push($level4Approvers, [
                     'user_id' => $levelApprover->user_id,
-                    'level_id' => $levelApprover->level_id
+                    'level_id' => $levelApprover->level_id,
                 ]);
             }
         }
@@ -218,7 +219,7 @@ class UpdateHelpTopic extends Component
             if ($levelApprover->level_id === 5) {
                 array_push($level5Approvers, [
                     'user_id' => $levelApprover->user_id,
-                    'level_id' => $levelApprover->level_id
+                    'level_id' => $levelApprover->level_id,
                 ]);
             }
         }

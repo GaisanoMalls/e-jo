@@ -64,7 +64,7 @@ class CreateApprover extends Component
                     ]))
                 ]);
 
-                $approver->branches()->attach($this->branches);
+                $approver->branches()->attach(array_map('intval', $this->branches));
                 $approver->buDepartments()->attach($this->bu_departments);
             });
 

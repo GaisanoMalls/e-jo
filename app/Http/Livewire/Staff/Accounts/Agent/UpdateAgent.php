@@ -56,14 +56,14 @@ class UpdateAgent extends Component
             'middle_name' => 'nullable|min:2|max:100',
             'last_name' => 'required|min:2|max:100',
             'suffix' => 'nullable|min:1|max:4',
-            'email' => "required|max:80|unique:users,email,{$this->agent->id}"
+            'email' => "required|max:80|unique:users,email,{$this->agent->id}",
         ];
     }
 
     public function messages()
     {
         return [
-            'selectedTeams.required' => 'Teams field is required.'
+            'selectedTeams.required' => 'Teams field is required.',
         ];
     }
 
@@ -73,8 +73,13 @@ class UpdateAgent extends Component
         $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments-and-teams', [
             'BUDepartments' => $this->BUDepartments,
-            'teams' => $this->teams
+            'teams' => $this->teams,
         ]);
+    }
+
+    public function montain(string $name)
+    {
+        //
     }
 
     public function updateAgentAccount()
@@ -87,7 +92,7 @@ class UpdateAgent extends Component
                     'branch_id' => $this->branch,
                     'department_id' => $this->bu_department,
                     'service_department_id' => $this->service_department,
-                    'email' => $this->email
+                    'email' => $this->email,
                 ]);
 
                 $this->agent->profile()->update([
@@ -99,8 +104,8 @@ class UpdateAgent extends Component
                         $this->first_name,
                         $this->middle_name,
                         $this->last_name,
-                        $this->suffix
-                    ]))
+                        $this->suffix,
+                    ])),
                 ]);
 
                 $this->agent->teams()->sync($this->selectedTeams);

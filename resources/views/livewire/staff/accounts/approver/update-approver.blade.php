@@ -198,8 +198,9 @@
         options: approverBranchOption,
         search: true,
         multiple: true,
+        showValueAsTags: true,
         markSearchResults: true,
-        selectedValue: @json($currentBranches)
+        selectedValue: @json($branches)
     });
 
     approverBranchSelect.addEventListener('change', () => {
@@ -221,8 +222,9 @@
         options: approverBUDepartmentOption,
         search: true,
         multiple: true,
+        showValueAsTags: true,
         markSearchResults: true,
-        selectedValue: @json($currentBUDepartments)
+        selectedValue: @json($bu_departments)
     });
     approverBUDepartmentSelect.addEventListener('change', () => {
         @this.set('bu_departments', approverBUDepartmentSelect.value);

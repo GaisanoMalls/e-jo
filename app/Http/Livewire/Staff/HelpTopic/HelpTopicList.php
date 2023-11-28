@@ -26,7 +26,8 @@ class HelpTopicList extends Component
     public function delete()
     {
         try {
-            HelpTopic::find($this->helpTopicDeleteId)->delete();
+            $helpTopic = HelpTopic::find($this->helpTopicDeleteId);
+            $helpTopic->delete();
             sleep(1);
             $this->helpTopicDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');

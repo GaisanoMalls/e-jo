@@ -17,6 +17,7 @@ class CreateServiceDeptAdmin extends Component
 {
     use BasicModelQueries, Utils;
 
+    public $branches = [];
     public $BUDepartments = [];
     public $service_departments = [];
     public $first_name;
@@ -24,18 +25,11 @@ class CreateServiceDeptAdmin extends Component
     public $last_name;
     public $email;
     public $suffix;
-    public $branch;
     public $bu_department;
 
     public function rules()
     {
         return (new StoreServiceDeptAdminRequest())->rules();
-    }
-
-    public function updatedBranch()
-    {
-        $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
-        $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
     }
 
     public function actionOnSubmit()
@@ -54,12 +48,13 @@ class CreateServiceDeptAdmin extends Component
         try {
             DB::transaction(function () {
                 $serviceDeptAdmin = User::create([
-                    'branch_id' => $this->branch,
                     'department_id' => $this->bu_department,
                     'role_id' => Role::SERVICE_DEPARTMENT_ADMIN,
                     'email' => $this->email,
                     'password' => \Hash::make('departmentadmin')
                 ]);
+
+                $serviceDeptAdmin->branches()->attach(array_map('intval', $this->branches));
                 $serviceDeptAdmin->assignRole(Role::SERVICE_DEPARTMENT_ADMIN);
 
                 Profile::create([
@@ -100,6 +95,7 @@ class CreateServiceDeptAdmin extends Component
         return view('livewire.staff.accounts.service-department-admin.create-service-dept-admin', [
             'serviceDeptAdminSuffixes' => $this->querySuffixes(),
             'serviceDeptAdminBranches' => $this->queryBranches(),
+            'buDepartments' => $this->queryBUDepartments(),
             'serviceDeptAdminServiceDepartments' => $this->queryServiceDepartments(),
         ]);
     }

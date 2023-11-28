@@ -15,12 +15,12 @@ class UserBranch extends Model
 
     protected $table = 'user_branch';
 
-    // Many-to-Many Relationship Approver and Branch
+    // Many-to-Many Relationship - (Approver & Service Department Admin) and Branch
     protected $fillable = ['user_id', 'branch_id'];
 
     public function approver(): Builder|BelongsTo
     {
-        return $this->belongsTo(User::class)->role(Role::APPROVER);
+        return $this->belongsTo(User::class)->hasRole([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN]);
     }
 
     public function branch(): BelongsTo

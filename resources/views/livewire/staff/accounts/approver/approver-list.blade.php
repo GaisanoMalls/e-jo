@@ -14,7 +14,11 @@
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">
                             BU/Department
                         </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Status
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                            Status
+                        </th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                            Permissions
                         </th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date
                             Added
@@ -61,6 +65,12 @@
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
                                 <span>{{ $approver->isActive() ? 'Active' : 'Inactive' }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center text-start gap-1 td__content">
+                                <span><i class="bi bi-person-lock text-muted"></i></span>
+                                <span>{{ $approver->getAllPermissions()->count() }}</span>
                             </div>
                         </td>
                         <td>
