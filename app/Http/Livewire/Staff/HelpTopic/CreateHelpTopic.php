@@ -72,12 +72,12 @@ class CreateHelpTopic extends Component
                         'team_id' => $this->team,
                         'service_level_agreement_id' => $this->sla,
                         'name' => $this->name,
-                        'slug' => \Str::slug($this->name)
+                        'slug' => \Str::slug($this->name),
                     ]);
 
                     SpecialProject::create([
                         'help_topic_id' => $helpTopic->id,
-                        'amount' => $this->amount
+                        'amount' => $this->amount,
                     ]);
 
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
@@ -87,7 +87,7 @@ class CreateHelpTopic extends Component
                             LevelApprover::create([
                                 'level_id' => $level,
                                 'user_id' => $approver,
-                                'help_topic_id' => $helpTopic->id
+                                'help_topic_id' => $helpTopic->id,
                             ]);
                         }
                     }
@@ -97,7 +97,7 @@ class CreateHelpTopic extends Component
                         'team_id' => $this->team,
                         'service_level_agreement_id' => $this->sla,
                         'name' => $this->name,
-                        'slug' => \Str::slug($this->name)
+                        'slug' => \Str::slug($this->name),
                     ]);
                 }
             });

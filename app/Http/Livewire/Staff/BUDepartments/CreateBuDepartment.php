@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\BUDepartments;
 use App\Http\Requests\SysAdmin\Manage\BUDepartment\StoreBUDepartmentRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Department;
+use App\Models\ServiceDepartment;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -13,6 +14,7 @@ class CreateBuDepartment extends Component
 {
     use BasicModelQueries;
 
+    public $checked = false;
     public $name;
     public $selectedBranches = [];
 
@@ -43,10 +45,18 @@ class CreateBuDepartment extends Component
             DB::transaction(function () {
                 $department = Department::create([
                     'name' => $this->name,
-                    'slug' => \Str::slug($this->name)
+                    'slug' => \Str::slug($this->name),
                 ]);
-
                 $department->branches()->attach($this->selectedBranches);
+
+                // Create a name directly to service department.
+                if ($this->checked) {
+                    ServiceDepartment::create([
+                        'name' => $this->name,
+                        'slug' => \Str::slug($this->name),
+                    ]);
+                    flash()->addSuccess('The service department has also been created.');
+                }
             });
 
             $this->actionOnSubmit();

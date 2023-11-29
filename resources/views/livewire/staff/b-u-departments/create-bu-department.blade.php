@@ -12,7 +12,7 @@
                 <form wire:submit.prevent="saveBUDepartment">
                     <div class="modal-body modal__body">
                         <div class="row mb-2">
-                            <div class="mb-2">
+                            <div class="mb-1">
                                 <label for="name" class="form-label form__field__label">Name</label>
                                 <input type="text" wire:model="name"
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
@@ -23,6 +23,17 @@
                                     {{ $message }}
                                 </span>
                                 @enderror
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="form-check" style="white-space: nowrap;">
+                                    <input wire:model="checked"
+                                        class="form-check-input check__include__name__as__service__department"
+                                        type="checkbox" role="switch" id="sameNameForSpecialProject"
+                                        wire:loading.attr="disabled">
+                                    <label class="form-check-label" for="sameNameForSpecialProject">
+                                        Add this name for Service Department as well.
+                                    </label>
+                                </div>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label form__field__label">Assign to branch</label>

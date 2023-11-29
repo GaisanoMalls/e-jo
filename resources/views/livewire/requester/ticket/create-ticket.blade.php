@@ -136,24 +136,41 @@
                                         <label for="ticketSubject" class="form-label input__field__label">
                                             Attachment
                                         </label>
-                                        <div wire:loading wire:target="fileAttachments">
-                                            <div class="d-flex align-items-center gap-3 mb-2">
-                                                <div class="spinner-border text-info" style="height: 15px; width: 15px;"
-                                                    role="status">
-                                                </div>
-                                                <small style="fot-size: 12px;">Uploading...</small>
+                                    </div>
+                                    <div x-data="{isUploading: false, progress: 1}"
+                                        x-on:livewire-upload-start="isUploading = true; progress = 1"
+                                        x-on:livewire-upload-finish="isUploading = false"
+                                        x-on:livewire-upload-error="isUploading = false"
+                                        x-on:livewire-upload-progress="progress = $event.detail.progress">
+                                        <input class=" form-control form-control-sm border-0 ticket__file" type="file"
+                                            accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
+                                            wire:model="fileAttachments" multiple id="upload-{{ $upload }}">
+                                        <div x-transition.duration.500ms x-show="isUploading"
+                                            class="progress progress-sm mt-1" style="height: 10px;">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                role="progressbar" aria-label="Animated striped example"
+                                                aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                                                x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
                                             </div>
                                         </div>
+                                        <div class="d-flex align-items-center justify-content-between"
+                                            x-transition.duration.500ms>
+                                            <span x-show="isUploading" x-text="progress + '%'" style="font-size: 12px;">
+                                            </span>
+                                            <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
+                                                <i x-show="isUploading" class='bx bx-loader-circle bx-spin'
+                                                    style="font-size: 14px;"></i>
+                                                <span x-show="isUploading">Uploading...</span>
+                                            </span>
+                                        </div>
                                     </div>
-                                    <input class="form-control form-control-sm border-0 ticket__file" type="file"
-                                        accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv" wire:model="fileAttachments"
-                                        multiple id="upload-{{ $upload }}">
                                     @error('fileAttachments.*')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
                                     </span>
                                     @enderror
+
                                 </div>
                             </div>
                         </div>
@@ -336,7 +353,6 @@
         branchSelect.reset();
         helpTopicSelect.disable();
         helpTopicSelect.setOptions([]);
-
     });
 </script>
 @endpush

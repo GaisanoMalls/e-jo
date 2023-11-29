@@ -91,7 +91,7 @@ Requester's Details
                                     BU/Department
                                 </label>
                                 <input type="text" name="email" class="form-control form__field" id="email"
-                                    value="{{ $user->department->name }}" readonly disabled>
+                                    value="{{ $user->getBUDepartments() }}" readonly disabled>
                             </div>
                         </div>
                     </div>

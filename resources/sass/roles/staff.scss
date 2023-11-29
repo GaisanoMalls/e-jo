@@ -2788,6 +2788,15 @@ input[type="checkbox"] {
                 }
             }
         }
+
+        .check__include__name__as__service__department {
+            margin-right: 10px !important;
+        }
+
+        .form-check-label {
+            margin-top: 6px !important;
+            font-size: $fs-14 !important;
+        }
     }
 
     .assign__form__container {

@@ -60,12 +60,7 @@ class CreateTicket extends Component
     {
         $this->validateOnly($fields);
         $this->validate([
-            'fileAttachments.*' => [
-                'nullable',
-                File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
-                    ->max(2) //25600 (25 MB)
-                // ->max(25 * 1024) //25600 (25 MB)
-            ],
+            'fileAttachments.*' => [File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])->max(25600)],
         ]);
     }
 
@@ -90,11 +85,12 @@ class CreateTicket extends Component
     public function sendTicket()
     {
         $this->validate();
+
         try {
             DB::transaction(function () {
                 $ticket = Ticket::create([
                     'user_id' => Auth::user()->id,
-                    'branch_id' => $this->branch ?: Auth::user()->branch->id,
+                    'branch_id' => $this->branch ?: Auth::user()->branches->pluck('id')->first(),
                     'service_department_id' => $this->serviceDepartment,
                     'team_id' => $this->team != 'undefined' ? $this->team : null,
                     'help_topic_id' => $this->helpTopic,
@@ -105,10 +101,6 @@ class CreateTicket extends Component
                     'subject' => $this->subject,
                     'description' => $this->description,
                     'approval_status' => ApprovalStatus::FOR_APPROVAL,
-                    // 'service_department_admin_approver' => [
-                    //     'service_department_admin_id' => UserServiceDepartment::where('service_department_id', $this->serviceDepartment)->pluck('user_id')->first(),
-                    //     'is_approved' => false
-                    // ]
                 ]);
 
                 if ($this->fileAttachments) {
@@ -150,8 +142,8 @@ class CreateTicket extends Component
 
                 // Email the first approver (Service Department Admin)
                 $serviceDepartmentAdmin = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->whereHas('branch', fn($query) => $query->where('branch_id', $ticket->user->branch_id))
-                    ->whereHas('department', fn($query) => $query->where('department_id', $ticket->user->department_id))->first();
+                    ->whereHas('branches', fn($query) => $query->where('branches.id', $ticket->user->branches->pluck('id')->first()))
+                    ->whereHas('buDepartments', fn($query) => $query->where('departments.id', $ticket->user->buDepartments->pluck('id')->first()))->first();
 
                 if ($serviceDepartmentAdmin) {
                     Notification::send($serviceDepartmentAdmin, new TicketCreatedNotification($ticket));
@@ -159,11 +151,9 @@ class CreateTicket extends Component
                 }
 
                 ActivityLog::make($ticket->id, 'created a ticket');
+                $this->actionOnSubmit();
+                flash()->addSuccess('Ticket successfully created.');
             });
-
-            $this->actionOnSubmit();
-            flash()->addSuccess('Ticket successfully created.');
-
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Oops, something went wrong.');

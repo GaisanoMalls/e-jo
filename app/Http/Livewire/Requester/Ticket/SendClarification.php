@@ -102,16 +102,14 @@ class SendClarification extends Component
                 // Get the department admin (approver) when there is no latest staff in the clarifications
                 $initialServiceDepartmentAdmin = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
                     ->whereHas('branches', fn($branch) => $branch->where('branches.id', auth()->user()->branch_id))
-                    ->whereHas('buDepartments', fn($query) => $query->where('departments.id', auth()->user()->department_id))->get();
+                    ->whereHas('buDepartments', fn($query) => $query->where('department_id', auth()->user()->department_id))->get();
 
                 dump($initialServiceDepartmentAdmin);
                 // ActivityLog::make($this->ticket->id, $logClarificationDescription);
                 // Notification::send($latestStaff->user ?? $initialServiceDepartmentAdmin, new TicketClarificationFromRequesterNotification($this->ticket));
                 // Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
+                $this->actionOnSubmit();
             });
-
-            $this->actionOnSubmit();
-
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Oops, something went wrong');

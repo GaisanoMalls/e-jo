@@ -91,7 +91,7 @@ Service Dept. Admin Details
                                     BU/Department
                                 </label>
                                 <input type="text" name="email" class="form-control form__field" id="email"
-                                    value="{{ $serviceDeptAdmin->department->name }}" readonly disabled>
+                                    value="{{ $serviceDeptAdmin->getBUDepartments() }}" readonly disabled>
                             </div>
                         </div>
                         <div class="col-md-12">

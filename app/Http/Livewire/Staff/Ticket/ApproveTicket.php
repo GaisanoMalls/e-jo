@@ -44,12 +44,12 @@ class ApproveTicket extends Component
             DB::transaction(function () {
                 $this->ticket->update([
                     'status_id' => Status::APPROVED,
-                    'approval_status' => ApprovalStatus::APPROVED
+                    'approval_status' => ApprovalStatus::APPROVED,
                 ]);
 
                 $agents = User::withWhereHas('teams', fn($query) => $query->where('teams.id', $this->ticket->team_id))
-                    ->whereHas('branch', fn($query) => $query->where('branch_id', $this->ticket->branch_id))
-                    ->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->ticket->service_department_id))->get();
+                    ->whereHas('branches', fn($query) => $query->where('branches.id', $this->ticket->branch_id))
+                    ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->service_department_id))->get();
 
                 foreach ($agents as $agent) {
                     Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));

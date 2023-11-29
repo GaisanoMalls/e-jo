@@ -87,8 +87,8 @@ class TicketController extends Controller
         $approvers = User::whereHas('teams', function ($query) use ($ticket) {
             $query->where('teams.id', $ticket->team_id);
         })
-            ->where('users.branch_id', $ticket->branch_id)
-            ->where('users.service_department_id', $ticket->service_department_id)
+            ->whereHas('branches', fn($query) => $query->where('branches.id', $ticket->branch_id))
+            ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $ticket->service_department_id))
             ->where('id', '!=', $ticket->agent_id)
             ->get();
 

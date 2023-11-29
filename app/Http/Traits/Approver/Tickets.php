@@ -21,8 +21,8 @@ trait Tickets
                 ->withWhereHas('approvers', function ($approver) {
                     $approver->where('users.id', auth()->user()->id);
                 });
-        })->withWhereHas('user.department', function ($department) {
-            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
+        })->withWhereHas('user.buDepartments', function ($department) {
+            $department->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderByDesc('created_at')
             ->get();
@@ -38,8 +38,8 @@ trait Tickets
                 ->withWhereHas('approvers', function ($approver) {
                     $approver->where('users.id', auth()->user()->id);
                 });
-        })->withWhereHas('user.department', function ($department) {
-            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
+        })->withWhereHas('user.buDepartments', function ($department) {
+            $department->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderByDesc('created_at')
             ->get();
@@ -55,8 +55,8 @@ trait Tickets
                 ->withWhereHas('approvers', function ($approver) {
                     $approver->where('users.id', auth()->user()->id);
                 });
-        })->withWhereHas('user.department', function ($department) {
-            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
+        })->withWhereHas('user.buDepartments', function ($department) {
+            $department->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderByDesc('created_at')
             ->get();
@@ -72,8 +72,8 @@ trait Tickets
                 ->withWhereHas('approvers', function ($approver) {
                     $approver->where('users.id', auth()->user()->id);
                 });
-        })->withWhereHas('user.department', function ($department) {
-            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
+        })->withWhereHas('user.buDepartments', function ($department) {
+            $department->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderByDesc('created_at')
             ->get();
@@ -89,8 +89,8 @@ trait Tickets
                 ->withWhereHas('approvers', function ($approver) {
                     $approver->where('users.id', auth()->user()->id);
                 });
-        })->withWhereHas('user.department', function ($department) {
-            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
+        })->withWhereHas('user.buDepartments', function ($department) {
+            $department->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderByDesc('created_at')
             ->get();
@@ -106,8 +106,8 @@ trait Tickets
                 ->withWhereHas('approvers', function ($approver) {
                     $approver->where('users.id', auth()->user()->id);
                 });
-        })->withWhereHas('user.department', function ($department) {
-            $department->where('id', auth()->user()->buDepartments->pluck('id')->first());
+        })->withWhereHas('user.buDepartments', function ($department) {
+            $department->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
         })
             ->orderByDesc('created_at')
             ->get();

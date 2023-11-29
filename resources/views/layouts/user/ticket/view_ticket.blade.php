@@ -40,7 +40,7 @@
                                         <span>{{ $ticket->user->profile->getFullName() }}</span>
                                     </small>
                                     <small class="ticket__details__user__department">
-                                        {{ $ticket->user->department->name }} - {{ $ticket->user->branch->name }}
+                                        {{ $ticket->user->getBUDepartments() }} - {{ $ticket->user->getBranches() }}
                                     </small>
                                 </div>
                             </div>
