@@ -56,12 +56,12 @@
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->branch->name }}</span>
+                                <span>{{ $user->getBranches() }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->department->name }}</span>
+                                <span>{{ $user->getBUDepartments() }}</span>
                             </div>
                         </td>
                         <td>

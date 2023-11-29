@@ -34,10 +34,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'branch_id',
-        'department_id',
-        'service_department_id',
-        'team_id',
         'email',
         'password',
         'is_active',
@@ -66,21 +62,6 @@ class User extends Authenticatable
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
-    }
-
-    public function branch(): BelongsTo
-    {
-        return $this->belongsTo(Branch::class);
-    }
-
-    public function serviceDepartment(): BelongsTo
-    {
-        return $this->belongsTo(ServiceDepartment::class);
-    }
-
-    public function department(): BelongsTo
-    {
-        return $this->belongsTo(Department::class);
     }
 
     public function tickets(): HasMany

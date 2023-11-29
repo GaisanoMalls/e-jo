@@ -188,10 +188,10 @@
     })
 
     const requesterBranchOption = [
-        @foreach ($requesterBranches as $branch)
+        @foreach ($requesterBranches as $br)
             {
-                label: "{{ $branch->name }}",
-                value: "{{ $branch->id }}"
+                label: "{{ $br->name }}",
+                value: "{{ $br->id }}"
             },
         @endforeach
     ];
@@ -202,7 +202,7 @@
         options: requesterBranchOption,
         search: true,
         markSearchResults: true,
-        selectedValue: "{{ $user->branch_id }}"
+        selectedValue: @json($branch)
     });
 
     requesterBranchSelect.addEventListener('reset', () => {
@@ -228,7 +228,7 @@
         options: requesterBUDepartmentOption,
         search: true,
         markSearchResults: true,
-        selectedValue: "{{ $user->department_id }}"
+        selectedValue: @json($bu_department)
     });
 
     requesterBranchSelect.addEventListener('change', () => {

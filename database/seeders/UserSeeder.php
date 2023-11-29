@@ -17,10 +17,11 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::firstOrCreate([
-            'branch_id' => 1,
+        $user = User::firstOrCreate([
             'email' => 'admin@gmail.com',
             'password' => Hash::make('admin'),
         ])->assignRole(Role::SYSTEM_ADMIN);
+
+        $user->branches()->attach([1]);
     }
 }

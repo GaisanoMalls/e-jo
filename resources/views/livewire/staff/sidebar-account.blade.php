@@ -74,14 +74,12 @@
             @endif
             @endif
         </div>
+        @if (!auth()->user()->hasRole(App\Models\Role::SYSTEM_ADMIN))
         <p class=" sidebar__userdepartment">
-            {{ auth()->user()->role(App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
-            ? auth()->user()->getServiceDepartments() . " -"
-            : (auth()->user()->role(App\Models\Role::SYSTEM_ADMIN)
-            ? auth()->user()->serviceDepartment->name . " -" : '')
-            ?? '' }}
+            {{ auth()->user()->getServiceDepartments() . " -" }}
             {{ auth()->user()->getBranches() ?? '' }}
         </p>
+        @endif
         <div class="mt-3 d-flex staff__ticket__count justify-content-center">
             <li>
                 <span class="counter">9</span>

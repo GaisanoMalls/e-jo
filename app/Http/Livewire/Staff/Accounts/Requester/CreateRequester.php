@@ -53,12 +53,13 @@ class CreateRequester extends Component
         try {
             DB::transaction(function () {
                 $user = User::create([
-                    'department_id' => $this->department,
-                    'branch_id' => $this->branch,
                     'email' => $this->email,
-                    'password' => \Hash::make('requester')
+                    'password' => \Hash::make('requester'),
                 ]);
+
                 $user->assignRole(Role::USER);
+                $user->branches()->attach($this->branch);
+                $user->buDepartments()->attach($this->department);
 
                 Profile::create([
                     'user_id' => $user->id,
@@ -70,14 +71,12 @@ class CreateRequester extends Component
                         $this->first_name,
                         $this->middle_name,
                         $this->last_name,
-                        $this->suffix
-                    ]))
+                        $this->suffix,
+                    ])),
                 ]);
+                $this->actionOnSubmit();
+                flash()->addSuccess('Account successfully created');
             });
-
-            $this->actionOnSubmit();
-            flash()->addSuccess('Account successfully created');
-
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Oops, something went wrong');

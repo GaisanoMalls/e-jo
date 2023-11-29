@@ -32,8 +32,8 @@ class UpdateRequester extends Component
         $this->last_name = $user->profile->last_name;
         $this->suffix = $user->profile->suffix;
         $this->email = $user->email;
-        $this->branch = $this->user->branch_id;
-        $this->bu_department = $this->user->department_id;
+        $this->branch = $this->user->branches->pluck('id');
+        $this->bu_department = $this->user->buDepartments->pluck('id');
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
     }
 
@@ -46,7 +46,7 @@ class UpdateRequester extends Component
             'middle_name' => 'nullable|min:2|max:100',
             'last_name' => 'required|min:2|max:100',
             'suffix' => 'nullable|min:1|max:4',
-            'email' => "required|max:80|unique:users,email,{$this->user->id}"
+            'email' => "required|max:80|unique:users,email,{$this->user->id}",
         ];
     }
 
@@ -62,11 +62,9 @@ class UpdateRequester extends Component
 
         try {
             DB::transaction(function () {
-                $this->user->update([
-                    'branch_id' => $this->branch,
-                    'department_id' => $this->bu_department,
-                    'email' => $this->email
-                ]);
+                $this->user->update(['email' => $this->email]);
+                $this->user->branches()->sync($this->branch);
+                $this->user->buDepartments()->sync($this->bu_department);
 
                 $this->user->profile()->update([
                     'first_name' => $this->first_name,
@@ -77,13 +75,12 @@ class UpdateRequester extends Component
                         $this->first_name,
                         $this->middle_name,
                         $this->last_name,
-                        $this->suffix
-                    ]))
+                        $this->suffix,
+                    ])),
                 ]);
+                sleep(1);
+                flash()->addSuccess("You have successfully updated the account for {$this->user->profile->getFullName()}.");
             });
-
-            sleep(1);
-            flash()->addSuccess("You have successfully updated the account for {$this->user->profile->getFullName()}.");
 
         } catch (Exception $e) {
             dump($e->getMessage());
@@ -96,7 +93,7 @@ class UpdateRequester extends Component
         return view('livewire.staff.accounts.requester.update-requester', [
             'requesterSuffixes' => $this->querySuffixes(),
             'requesterBranches' => $this->queryBranches(),
-            'requesterBUDepartments' => $this->BUDepartments
+            'requesterBUDepartments' => $this->BUDepartments,
         ]);
     }
 }
