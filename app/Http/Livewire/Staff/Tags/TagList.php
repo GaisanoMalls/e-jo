@@ -21,7 +21,7 @@ class TagList extends Component
     protected function rules()
     {
         return [
-            'name' => "required|unique:tags,name,{$this->tagUpdateId}"
+            'name' => "required|unique:tags,name,{$this->tagUpdateId}",
         ];
     }
 
@@ -52,7 +52,7 @@ class TagList extends Component
             Tag::find($this->tagUpdateId)
                 ->update([
                     'name' => $this->name,
-                    'slug' => \Str::slug($this->name)
+                    'slug' => \Str::slug($this->name),
                 ]);
 
             sleep(1);
@@ -77,7 +77,7 @@ class TagList extends Component
     public function delete()
     {
         try {
-            Tag::find($this->tagDeleteId)->delete();
+            Tag::findOrFail($this->tagDeleteId)->delete();
             sleep(1);
             $this->tagDeleteId = null;
             $this->fetchTags();

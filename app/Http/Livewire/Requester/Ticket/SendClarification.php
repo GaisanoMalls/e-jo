@@ -67,7 +67,7 @@ class SendClarification extends Component
                 $clarification = Clarification::create([
                     'user_id' => auth()->user()->id,
                     'ticket_id' => $this->ticket->id,
-                    'description' => $this->description
+                    'description' => $this->description,
                 ]);
 
                 if ($this->clarificationFiles) {
@@ -101,12 +101,13 @@ class SendClarification extends Component
 
                 // Get the department admin (approver) when there is no latest staff in the clarifications
                 $initialServiceDepartmentAdmin = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->whereHas('branch', fn($branch) => $branch->where('branch_id', auth()->user()->branch_id))
-                    ->whereHas('department', fn($department) => $department->where('department_id', auth()->user()->department_id))->first();
+                    ->whereHas('branches', fn($branch) => $branch->where('branches.id', auth()->user()->branch_id))
+                    ->whereHas('buDepartments', fn($query) => $query->where('departments.id', auth()->user()->department_id))->get();
 
-                ActivityLog::make($this->ticket->id, $logClarificationDescription);
-                Notification::send($latestStaff->user ?? $initialServiceDepartmentAdmin, new TicketClarificationFromRequesterNotification($this->ticket));
-                Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
+                dump($initialServiceDepartmentAdmin);
+                // ActivityLog::make($this->ticket->id, $logClarificationDescription);
+                // Notification::send($latestStaff->user ?? $initialServiceDepartmentAdmin, new TicketClarificationFromRequesterNotification($this->ticket));
+                // Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
             });
 
             $this->actionOnSubmit();

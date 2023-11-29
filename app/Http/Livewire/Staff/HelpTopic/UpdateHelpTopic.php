@@ -30,15 +30,15 @@ class UpdateHelpTopic extends Component
     public $amount;
     public $max_amount = 50000;
 
-    public function mount()
+    public function mount(HelpTopic $helpTopic)
     {
-        $this->name = $this->helpTopic->name;
-        $this->sla = $this->helpTopic->service_level_agreement_id;
-        $this->service_department = $this->helpTopic->service_department_id;
-        $this->team = $this->helpTopic->team_id;
-        $this->amount = $this->helpTopic->specialProject ? $this->helpTopic->specialProject->amount : null;
-        $this->level_of_approval = $this->helpTopic->levels->pluck('id')->last();
-        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->helpTopic->service_department_id))->get();
+        $this->name = $helpTopic->name;
+        $this->sla = $helpTopic->service_level_agreement_id;
+        $this->service_department = $helpTopic->service_department_id;
+        $this->team = $helpTopic->team_id;
+        $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
+        $this->level_of_approval = $helpTopic->levels->pluck('id')->last();
+        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
         for ($count = 1; $count <= 5; $count++) {
             $this->{"level{$count}Approvers"} = $this->{"getLevel{$count}Approvers"}();
         }

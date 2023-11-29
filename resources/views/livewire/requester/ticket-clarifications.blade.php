@@ -70,12 +70,14 @@
             <small style="font-size: 14px;">No ticket clarifications</small>
         </div>
         @endif
+        @if ($ticket->status_id !== App\Models\Status::DISAPPROVED)
         <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
                     justify-content-center gap-2 float-end" data-bs-toggle="modal"
             data-bs-target="#ticketClarificationModal" wire:click="getLatestClarification">
             <i class="fa-solid fa-pen"></i>
-            <span class="lbl__reply">Reply</span>
+            <span class="lbl__reply">Clarify</span>
         </button>
+        @endif
     </div>
     @else
     <div class="d-flex justify-content-center">

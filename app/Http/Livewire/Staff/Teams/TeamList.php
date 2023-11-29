@@ -27,7 +27,7 @@ class TeamList extends Component
         return [
             'name' => "required|unique:teams,name,{$this->teamEditId}",
             'editSelectedServiceDepartment' => 'required',
-            'editSelectedBranches' => 'required'
+            'editSelectedBranches' => 'required',
         ];
     }
 
@@ -35,7 +35,7 @@ class TeamList extends Component
     {
         return [
             'editSelectedServiceDepartment.required' => 'The service department field is required.',
-            'editSelectedBranches.required' => 'The branch field is requied.'
+            'editSelectedBranches.required' => 'The branch field is requied.',
         ];
     }
 
@@ -103,7 +103,7 @@ class TeamList extends Component
     public function delete()
     {
         try {
-            Team::find($this->teamDeleteId)->delete();
+            Team::findOrFail($this->teamDeleteId)->delete();
             sleep(1);
             $this->teamDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');

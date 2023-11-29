@@ -24,14 +24,14 @@ class BUDepartmentList extends Component
     {
         return [
             'name' => "required|unique:departments,name,{$this->buDepartmentEditId}",
-            'editSelectedBranches' => 'required'
+            'editSelectedBranches' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'editSelectedBranches.required' => 'The branch field is required.'
+            'editSelectedBranches.required' => 'The branch field is required.',
         ];
     }
 
@@ -86,9 +86,9 @@ class BUDepartmentList extends Component
     public function delete()
     {
         try {
-            Department::find($this->buDepartmentDeleteId)->delete();
-            sleep(1);
+            Department::findOrFail($this->buDepartmentDeleteId)->delete();
             $this->buDepartmentDeleteId = null;
+            sleep(1);
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('BU/Department successfully deleted');
 

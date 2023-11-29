@@ -26,7 +26,7 @@ class ServiceDeptAdminList extends Component
     public function delete()
     {
         try {
-            User::find($this->serviceDeptAdminDeleteId)->delete();
+            User::findOrFail($this->serviceDeptAdminDeleteId)->delete();
             $this->serviceDeptAdminDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Service department admin account has been deleted');
@@ -57,7 +57,7 @@ class ServiceDeptAdminList extends Component
             );
 
         return view('livewire.staff.accounts.service-department-admin.service-dept-admin-list', [
-            'serviceDepartmentAdmins' => $this->serviceDepartmentAdmins
+            'serviceDepartmentAdmins' => $this->serviceDepartmentAdmins,
         ]);
     }
 }

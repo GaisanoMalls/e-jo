@@ -60,7 +60,7 @@ class FromRequesterClarificationMail extends Mailable implements ShouldQueue
                 'ticketSubject' => "Requester's Clarification",
                 'message' => "{$this->clarificationDescription}",
                 'sender' => auth()->user()->profile->getFullName(),
-                'url' => "http://10.10.99.81/staff/ticket/{$this->ticket->id}/clarifications"
+                'url' => "http://10.10.99.81/staff/ticket/{$this->ticket->id}/clarifications",
             ]
         );
     }

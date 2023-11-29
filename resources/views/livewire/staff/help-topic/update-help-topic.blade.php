@@ -171,10 +171,10 @@
     });
 
     const teamOption = [
-        @foreach ($teams as $team)
+        @foreach ($teams as $t)
             {
-                label: "{{ $team->name }}",
-                value: "{{ $team->id }}"
+                label: "{{ $t->name }}",
+                value: "{{ $t->id }}"
             },
         @endforeach
     ];
@@ -185,7 +185,7 @@
         options: teamOption,
         search: true,
         markSearchResults: true,
-        selectedValue: '{{ $helpTopic->team_id }}'
+        selectedValue: @json($team)
     });
 
     const levelOfApprovalOption = [

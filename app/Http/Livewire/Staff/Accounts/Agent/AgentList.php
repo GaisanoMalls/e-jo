@@ -26,7 +26,7 @@ class AgentList extends Component
     public function delete()
     {
         try {
-            User::find($this->agentDeleteId)->delete();
+            User::findOrFail($this->agentDeleteId)->delete();
             $this->agentDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Requester account has been deleted');
@@ -57,7 +57,7 @@ class AgentList extends Component
             );
 
         return view('livewire.staff.accounts.agent.agent-list', [
-            'agents' => $this->agents
+            'agents' => $this->agents,
         ]);
     }
 }

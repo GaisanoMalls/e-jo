@@ -76,11 +76,11 @@
         </div>
         <p class=" sidebar__userdepartment">
             {{ auth()->user()->role(App\Models\Role::SERVICE_DEPARTMENT_ADMIN)
-            ? Str::limit(auth()->user()->getServiceDepartments() , 30) . " -"
+            ? auth()->user()->getServiceDepartments() . " -"
             : (auth()->user()->role(App\Models\Role::SYSTEM_ADMIN)
             ? auth()->user()->serviceDepartment->name . " -" : '')
             ?? '' }}
-            {{ auth()->user()->branch->name ?? '' }}
+            {{ auth()->user()->getBranches() ?? '' }}
         </p>
         <div class="mt-3 d-flex staff__ticket__count justify-content-center">
             <li>

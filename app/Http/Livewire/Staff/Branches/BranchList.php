@@ -21,7 +21,7 @@ class BranchList extends Component
     protected function rules()
     {
         return [
-            'name' => "required|unique:branches,name,{$this->branchEditId}"
+            'name' => "required|unique:branches,name,{$this->branchEditId}",
         ];
     }
 
@@ -51,7 +51,7 @@ class BranchList extends Component
         try {
             Branch::find($this->branchEditId)->update([
                 'name' => $this->name,
-                'slug' => \Str::slug($this->name)
+                'slug' => \Str::slug($this->name),
             ]);
 
             sleep(1);
@@ -76,7 +76,7 @@ class BranchList extends Component
     public function delete()
     {
         try {
-            Branch::find($this->branchDeleteId)->delete();
+            Branch::findOrFail($this->branchDeleteId)->delete();
             sleep(1);
             $this->branchDeleteId = '';
             $this->fetchBranches();

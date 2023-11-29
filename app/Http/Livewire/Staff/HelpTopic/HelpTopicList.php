@@ -27,12 +27,13 @@ class HelpTopicList extends Component
     {
         try {
             $helpTopic = HelpTopic::find($this->helpTopicDeleteId);
-            $helpTopic->delete();
-            sleep(1);
-            $this->helpTopicDeleteId = null;
-            $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('Help topic successfully deleted');
-
+            if ($helpTopic) {
+                $helpTopic->delete();
+                sleep(1);
+                $this->helpTopicDeleteId = null;
+                $this->dispatchBrowserEvent('close-modal');
+                flash()->addSuccess('Help topic successfully deleted');
+            }
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Oops, something went wrong');

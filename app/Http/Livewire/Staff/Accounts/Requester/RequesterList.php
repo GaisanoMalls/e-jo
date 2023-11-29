@@ -26,7 +26,7 @@ class RequesterList extends Component
     public function delete()
     {
         try {
-            User::find($this->requesterDeleteId)->delete();
+            User::findOrFail($this->requesterDeleteId)->delete();
             sleep(1);
             $this->requesterDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
@@ -57,7 +57,7 @@ class RequesterList extends Component
             );
 
         return view('livewire.staff.accounts.requester.requester-list', [
-            'users' => $this->users
+            'users' => $this->users,
         ]);
     }
 }

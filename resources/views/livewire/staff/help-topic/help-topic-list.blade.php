@@ -81,28 +81,31 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
-                <div class="modal-body border-0 text-center pt-4 pb-1">
-                    <h6 class="fw-bold mb-4" style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
-                        Confirm Delete
-                    </h6>
-                    <p class="mb-1" style="font-weight: 500; font-size: 15px;">
-                        Are you sure you want to delete this help topic?
-                    </p>
-                    <strong>{{ $helpTopicName }}</strong>
-                </div>
-                <hr>
-                <div class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
-                    <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
-                        data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit"
-                        class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
-                        wire:click="delete">
-                        <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm" role="status"
-                            aria-hidden="true">
-                        </span>
-                        Yes, delete
-                    </button>
-                </div>
+                <form wire:submit.prevent="delete">
+                    <div class="modal-body border-0 text-center pt-4 pb-1">
+                        <h6 class="fw-bold mb-4"
+                            style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                            Confirm Delete
+                        </h6>
+                        <p class="mb-1" style="font-weight: 500; font-size: 15px;">
+                            Are you sure you want to delete this help topic?
+                        </p>
+                        <strong>{{ $helpTopicName }}</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
+                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
+                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit"
+                            class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
+                            wire:click="delete">
+                            <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm"
+                                role="status" aria-hidden="true">
+                            </span>
+                            Yes, delete
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

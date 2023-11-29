@@ -21,7 +21,7 @@ class ServiceDepartmentList extends Component
     protected function rules()
     {
         return [
-            'name' => "required|unique:service_departments,name,{$this->serviceDepartmentEditId}"
+            'name' => "required|unique:service_departments,name,{$this->serviceDepartmentEditId}",
         ];
     }
 
@@ -52,7 +52,7 @@ class ServiceDepartmentList extends Component
             ServiceDepartment::find($this->serviceDepartmentEditId)
                 ->update([
                     'name' => $this->name,
-                    'slug' => \Str::slug($this->name)
+                    'slug' => \Str::slug($this->name),
                 ]);
 
             sleep(1);
@@ -77,7 +77,7 @@ class ServiceDepartmentList extends Component
     public function delete()
     {
         try {
-            ServiceDepartment::find($this->serviceDepartmentDeleteId)->delete();
+            ServiceDepartment::findOrFail($this->serviceDepartmentDeleteId)->delete();
             sleep(1);
             $this->serviceDepartmentDeleteId = null;
             $this->fetchServiceDepartments();

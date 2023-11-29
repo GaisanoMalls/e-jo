@@ -26,7 +26,7 @@ class ApproverList extends Component
     public function delete()
     {
         try {
-            User::find($this->approverDeleteId)->delete();
+            User::findOrFail($this->approverDeleteId)->delete();
             $this->approverDeleteId = null;
             sleep(1);
             $this->dispatchBrowserEvent('close-modal');
@@ -57,7 +57,7 @@ class ApproverList extends Component
             );
 
         return view('livewire.staff.accounts.approver.approver-list', [
-            'approvers' => $this->approvers
+            'approvers' => $this->approvers,
         ]);
     }
 }

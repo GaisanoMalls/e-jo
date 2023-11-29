@@ -239,8 +239,6 @@
 
     serviceDeptAdminBranchSelect.addEventListener('reset', () => {
         serviceDeptAdminBUDepartmentSelect.reset();
-        serviceDeptAdminBUDepartmentSelect.disable();
-        serviceDeptAdminBUDepartmentSelect.setOptions([]);
     });
 
     const serviceDeptAdminBUDepartmentOption = [
@@ -296,8 +294,6 @@
         serviceDeptAdminBranchSelect.reset();
         agentTeamSelect.reset();
         serviceDeptAdminBUDepartmentSelect.reset();
-        serviceDeptAdminBUDepartmentSelect.disable();
-        serviceDeptAdminBUDepartmentSelect.setOptions([]);
         serviceDeptAdminSeviceDepartmentSelect.reset();
     });
 </script>
