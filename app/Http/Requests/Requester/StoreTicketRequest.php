@@ -33,11 +33,12 @@ class StoreTicketRequest extends FormRequest
             'subject' => ['required'],
             'description' => ['required'],
             'priorityLevel' => ['required'],
-            // 'fileAttachments.*' => [
-            //     'nullable',
-            //     File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
-            //         ->max(25 * 1024) //25600 (25 MB)
-            // ],
+            'fileAttachments.*' => [
+                'nullable',
+                File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
+                    ->max(1) //25600 (25 MB)
+                // ->max(25 * 1024) //25600 (25 MB)
+            ],
         ];
     }
 
@@ -49,7 +50,7 @@ class StoreTicketRequest extends FormRequest
             'priorityLevel.required' => 'Please select a priority level.',
             'fileAttachments.*.file' => 'The uploaded file is not valid.',
             'fileAttachments.*.mimes' => 'Invalid file type. File must be of type: jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv',
-            'fileAttachments.*.max' => 'The file size must not exceed 25 MB.'
+            'fileAttachments.*.max' => 'The file size must not exceed 25 MB.',
         ];
     }
 }

@@ -19,7 +19,7 @@
                                         unchecked to send this ticket to your currently assigned branch -
                                         <span class="fw-bold text-muted">
                                             <i class="fa-solid fa-location-dot"></i>
-                                            {{ auth()->user()->branch->name }}
+                                            {{ auth()->user()->getBranches() }}
                                         </span>.
                                     </p>
                                 </div>

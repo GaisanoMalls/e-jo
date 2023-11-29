@@ -13,9 +13,7 @@ use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\Team;
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -86,8 +84,7 @@ class User extends Authenticatable
 
     public function levels(): BelongsToMany
     {
-        return $this->belongsToMany(Level::class, 'level_approver', 'user_id', 'level_id')
-            ->withTimestamps();
+        return $this->belongsToMany(Level::class, 'level_approver', 'user_id', 'level_id')->withTimestamps();
     }
 
     public function serviceDepartments(): BelongsToMany
@@ -245,30 +242,25 @@ class User extends Authenticatable
 
     public static function serviceDepartmentAdmins()
     {
-        return self::with(['profile', 'serviceDepartment'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
+        return self::with(['profile'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
             ->orderByDesc('created_at')
             ->get();
     }
 
     public static function approvers()
     {
-        return self::with(['profile', 'branch'])->role(Role::APPROVER)
-            ->orderByDesc('created_at')
+        return self::with(['profile'])->role(Role::APPROVER)->orderByDesc('created_at')
             ->get();
     }
 
     public static function agents()
     {
-        return self::with(['profile', 'branch'])->role(Role::AGENT)
-            ->orderByDesc('created_at')
-            ->get();
+        return self::with(['profile'])->role(Role::AGENT)->orderByDesc('created_at')->get();
     }
 
     public static function requesters()
     {
-        return self::with(['profile', 'department', 'branch'])->role(Role::USER)
-            ->orderByDesc('created_at')
-            ->get();
+        return self::with(['profile'])->role(Role::USER)->orderByDesc('created_at')->get();
     }
 
     public function dateCreated(): string

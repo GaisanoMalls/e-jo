@@ -59,6 +59,14 @@ class CreateTicket extends Component
     public function updated($fields)
     {
         $this->validateOnly($fields);
+        $this->validate([
+            'fileAttachments.*' => [
+                'nullable',
+                File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
+                    ->max(2) //25600 (25 MB)
+                // ->max(25 * 1024) //25600 (25 MB)
+            ],
+        ]);
     }
 
     public function clearErrorMessage()
@@ -197,7 +205,7 @@ class CreateTicket extends Component
         return view('livewire.requester.ticket.create-ticket', [
             'priorityLevels' => $this->queryPriorityLevels(),
             'serviceDepartments' => $this->queryServiceDepartments(),
-            'branches' => Branch::where('id', '!=', auth()->user()->branch_id)->get()
+            'branches' => Branch::where('id', '!=', auth()->user()->branch_id)->get(),
         ]);
     }
 }
