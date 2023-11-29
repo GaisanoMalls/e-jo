@@ -41,7 +41,7 @@ class CreateAgent extends Component
         $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments-and-teams', [
             'BUDepartments' => $this->BUDepartments,
-            'teams' => $this->teams
+            'teams' => $this->teams,
         ]);
     }
 
@@ -61,22 +61,22 @@ class CreateAgent extends Component
         try {
             DB::transaction(function () {
                 $agent = User::create([
-                    'branch_id' => $this->branch,
-                    'department_id' => $this->bu_department,
-                    'service_department_id' => $this->service_department,
                     'email' => $this->email,
                     'password' => \Hash::make('agent'),
                 ]);
                 $agent->assignRole(Role::AGENT);
-                $fullname = $this->first_name . $this->middle_name ?? "" . $this->last_name;
+                $agent->branches()->attach($this->branch);
+                $agent->buDepartments()->attach($this->bu_department);
+                $agent->serviceDepartments()->attach($this->service_department);
 
+                $fullname = $this->first_name . $this->middle_name ?? "" . $this->last_name;
                 Profile::create([
                     'user_id' => $agent->id,
                     'first_name' => $this->first_name,
                     'middle_name' => $this->middle_name,
                     'last_name' => $this->last_name,
                     'suffix' => $this->suffix,
-                    'slug' => $this->slugify($fullname)
+                    'slug' => $this->slugify($fullname),
                 ]);
 
                 $agent->teams()->attach($this->selectedTeams);

@@ -62,17 +62,17 @@
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $agent->serviceDepartment->name ?? '----' }}</span>
+                                <span>{{ $agent->getServiceDepartments() }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $agent->branch->name }}</span>
+                                <span>{{ $agent->getBranches() }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $agent->department->name }}</span>
+                                <span>{{ $agent->getBUDepartments() }}</span>
                             </div>
                         </td>
                         <td>

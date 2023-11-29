@@ -40,18 +40,18 @@ class AgentList extends Component
 
     private function getInitialQuery()
     {
-        return User::with(['department', 'branch'])->role(Role::AGENT)
+        return User::role(Role::AGENT)
             ->take(5)->orderByDesc('created_at')->get();
     }
 
     public function render()
     {
         $this->agents = (Route::is('staff.manage.user_account.index'))
-            ? User::with(['profile', 'department', 'branch'])->role(Role::AGENT)
+            ? User::with(['profile'])->role(Role::AGENT)
                 ->take(5)->orderByDesc('created_at')->get()
             : (
                 (Route::is('staff.manage.user_account.agents'))
-                ? User::with(['profile', 'department', 'branch'])->role(Role::AGENT)
+                ? User::with(['profile'])->role(Role::AGENT)
                     ->orderByDesc('created_at')->get()
                 : $this->getInitialQuery()
             );

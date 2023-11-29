@@ -81,7 +81,6 @@ class UpdateRequester extends Component
                 sleep(1);
                 flash()->addSuccess("You have successfully updated the account for {$this->user->profile->getFullName()}.");
             });
-
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Failed to update the account.');

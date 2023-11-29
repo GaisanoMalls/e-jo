@@ -37,9 +37,9 @@ class UpdateAgent extends Component
         $this->last_name = $agent->profile->last_name;
         $this->suffix = $agent->profile->suffix;
         $this->email = $agent->email;
-        $this->branch = $agent->branch_id;
-        $this->bu_department = $agent->department_id;
-        $this->service_department = $agent->service_department_id;
+        $this->branch = $agent->branches->pluck('id');
+        $this->bu_department = $agent->buDepartments->pluck('id');
+        $this->service_department = $agent->serviceDepartments->pluck('id');
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->currentTeams = $agent->teams->pluck('id')->toArray();
@@ -88,12 +88,11 @@ class UpdateAgent extends Component
 
         try {
             DB::transaction(function () {
-                $this->agent->update([
-                    'branch_id' => $this->branch,
-                    'department_id' => $this->bu_department,
-                    'service_department_id' => $this->service_department,
-                    'email' => $this->email,
-                ]);
+                $this->agent->update(['email' => $this->email]);
+                $this->agent->branches()->sync($this->branch);
+                $this->agent->teams()->sync($this->selectedTeams);
+                $this->agent->buDepartments()->sync($this->bu_department);
+                $this->agent->serviceDepartments()->sync($this->service_department);
 
                 $this->agent->profile()->update([
                     'first_name' => $this->first_name,
@@ -108,10 +107,9 @@ class UpdateAgent extends Component
                     ])),
                 ]);
 
-                $this->agent->teams()->sync($this->selectedTeams);
+                flash()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName()}.");
             });
 
-            flash()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName()}.");
 
         } catch (Exception $e) {
             dump($e->getMessage());

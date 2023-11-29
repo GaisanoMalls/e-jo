@@ -222,10 +222,10 @@
     });
 
     const agentBranchOption = [
-        @foreach ($agentBranches as $branch)
+        @foreach ($agentBranches as $br)
             {
-                label: "{{ $branch->name }}",
-                value: "{{ $branch->id }}"
+                label: "{{ $br->name }}",
+                value: "{{ $br->id }}"
             },
         @endforeach
     ];
@@ -236,7 +236,7 @@
         options: agentBranchOption,
         search: true,
         markSearchResults: true,
-        selectedValue: '{{ $agent->branch_id }}'
+        selectedValue: @json($branch)
     });
 
     agentBranchSelect.addEventListener('reset', () => {
@@ -312,7 +312,7 @@
         options: agentBUDepartmentOption,
         search: true,
         markSearchResults: true,
-        selectedValue: '{{ $agent->department_id }}'
+        selectedValue: @json($bu_department)
     });
 
     agentBUDepartmentSelect.addEventListener('change', () => {
@@ -358,7 +358,7 @@
         options: agentServiceDepartmentOption,
         search: true,
         markSearchResults: true,
-        selectedValue: '{{ $agent->service_department_id }}'
+        selectedValue: @json($service_department)
     });
 
       agentServiceDepartmentSelect.addEventListener('change', () => {
