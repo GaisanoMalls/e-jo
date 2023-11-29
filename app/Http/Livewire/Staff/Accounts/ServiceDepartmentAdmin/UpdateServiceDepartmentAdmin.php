@@ -30,7 +30,7 @@ class UpdateServiceDepartmentAdmin extends Component
         $this->serviceDeptAdmin = $serviceDeptAdmin;
         $this->branches = $serviceDeptAdmin->branches->pluck('id')->toArray();
         $this->service_departments = $serviceDeptAdmin->serviceDepartments->pluck('id')->toArray();
-        $this->bu_department = $serviceDeptAdmin->department_id;
+        $this->bu_department = $serviceDeptAdmin->buDepartments->pluck('id');
         $this->first_name = $serviceDeptAdmin->profile->first_name;
         $this->middle_name = $serviceDeptAdmin->profile->middle_name;
         $this->last_name = $serviceDeptAdmin->profile->last_name;
@@ -48,7 +48,7 @@ class UpdateServiceDepartmentAdmin extends Component
             'middle_name' => 'nullable|min:2|max:100',
             'last_name' => 'required|min:2|max:100',
             'suffix' => 'nullable|min:1|max:4',
-            'email' => "required|max:80|unique:users,email,{$this->serviceDeptAdmin->id}"
+            'email' => "required|max:80|unique:users,email,{$this->serviceDeptAdmin->id}",
         ];
     }
 
@@ -58,10 +58,10 @@ class UpdateServiceDepartmentAdmin extends Component
 
         try {
             DB::transaction(function () {
-                $this->serviceDeptAdmin->update([
-                    'department_id' => $this->bu_department,
-                    'email' => $this->email
-                ]);
+                $this->serviceDeptAdmin->update(['email' => $this->email]);
+                $this->serviceDeptAdmin->branches()->sync($this->branches);
+                $this->serviceDeptAdmin->buDepartments()->sync($this->bu_department);
+                $this->serviceDeptAdmin->serviceDepartments()->sync($this->service_departments);
 
                 $this->serviceDeptAdmin->profile()->update([
                     'first_name' => $this->first_name,
@@ -72,16 +72,11 @@ class UpdateServiceDepartmentAdmin extends Component
                         $this->first_name,
                         $this->middle_name,
                         $this->last_name,
-                        $this->suffix
-                    ]))
+                        $this->suffix,
+                    ])),
                 ]);
-
-                $this->serviceDeptAdmin->branches()->sync($this->branches);
-                $this->serviceDeptAdmin->serviceDepartments()->sync($this->service_departments);
+                flash()->addSuccess("You have successfully updated the account for {$this->serviceDeptAdmin->profile->getFullName()}.");
             });
-
-            flash()->addSuccess("You have successfully updated the account for {$this->serviceDeptAdmin->profile->getFullName()}.");
-
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Failed to update the account.');

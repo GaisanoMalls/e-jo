@@ -71,7 +71,7 @@
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $serviceDepartmentAdmin->department->name }}</span>
+                                <span>{{ $serviceDepartmentAdmin->getBUDepartments() }}</span>
                             </div>
                         </td>
                         <td>

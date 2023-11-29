@@ -60,7 +60,7 @@ class SendClarification extends Component
                 $clarification = Clarification::create([
                     'user_id' => auth()->user()->id,
                     'ticket_id' => $this->ticket->id,
-                    'description' => $this->description
+                    'description' => $this->description,
                 ]);
 
                 if ($this->clarificationFiles) {
@@ -95,7 +95,6 @@ class SendClarification extends Component
 
                 ActivityLog::make($this->ticket->id, $logDescription);
                 // Mail::to($ticket->user)->send(new FromApproverClarificationMail($ticket, $request->description));
-
             });
 
             $this->actionOnSubmit();

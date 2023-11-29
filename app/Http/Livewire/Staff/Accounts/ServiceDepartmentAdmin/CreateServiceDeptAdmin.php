@@ -48,14 +48,14 @@ class CreateServiceDeptAdmin extends Component
         try {
             DB::transaction(function () {
                 $serviceDeptAdmin = User::create([
-                    'department_id' => $this->bu_department,
-                    'role_id' => Role::SERVICE_DEPARTMENT_ADMIN,
                     'email' => $this->email,
-                    'password' => \Hash::make('departmentadmin')
+                    'password' => \Hash::make('departmentadmin'),
                 ]);
 
-                $serviceDeptAdmin->branches()->attach(array_map('intval', $this->branches));
                 $serviceDeptAdmin->assignRole(Role::SERVICE_DEPARTMENT_ADMIN);
+                $serviceDeptAdmin->buDepartments()->attach($this->bu_department);
+                $serviceDeptAdmin->branches()->attach(array_map('intval', $this->branches));
+                $serviceDeptAdmin->serviceDepartments()->attach($this->service_departments);
 
                 Profile::create([
                     'user_id' => $serviceDeptAdmin->id,
@@ -67,16 +67,12 @@ class CreateServiceDeptAdmin extends Component
                         $this->first_name,
                         $this->middle_name,
                         $this->last_name,
-                        $this->suffix
-                    ]))
+                        $this->suffix,
+                    ])),
                 ]);
-
-                $serviceDeptAdmin->serviceDepartments()->attach($this->service_departments);
+                $this->actionOnSubmit();
+                flash()->addSuccess('Account successfully created');
             });
-
-            $this->actionOnSubmit();
-            flash()->addSuccess('Account successfully created');
-
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addSuccess('Failed to save a new service department admin');

@@ -40,18 +40,17 @@ class ServiceDeptAdminList extends Component
 
     private function getInitialQuery()
     {
-        return User::with(['department', 'branch'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
-            ->orderByDesc('created_at')->get();
+        return User::role(Role::SERVICE_DEPARTMENT_ADMIN)->orderByDesc('created_at')->get();
     }
 
     public function render()
     {
         $this->serviceDepartmentAdmins = (Route::is('staff.manage.user_account.index'))
-            ? User::with(['profile', 'department', 'branch'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
+            ? User::with(['profile'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
                 ->take(5)->orderByDesc('created_at')->get()
             : (
                 (Route::is('staff.manage.user_account.service_department_admins'))
-                ? User::with(['profile', 'department', 'branch'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
+                ? User::with(['profile'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
                     ->orderByDesc('created_at')->get()
                 : $this->getInitialQuery()
             );

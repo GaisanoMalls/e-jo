@@ -49,6 +49,8 @@ class CreateApprover extends Component
                     'password' => \Hash::make('approver'),
                 ]);
                 $approver->assignRole(Role::APPROVER);
+                $approver->buDepartments()->attach(array_map('intval', $this->bu_departments));
+                $approver->branches()->attach(array_map('intval', $this->branches));
 
                 Profile::create([
                     'user_id' => $approver->id,
@@ -60,17 +62,12 @@ class CreateApprover extends Component
                         $this->first_name,
                         $this->middle_name,
                         $this->last_name,
-                        $this->suffix
-                    ]))
+                        $this->suffix,
+                    ])),
                 ]);
-
-                $approver->branches()->attach(array_map('intval', $this->branches));
-                $approver->buDepartments()->attach($this->bu_departments);
+                $this->actionOnSubmit();
+                flash()->addSuccess('Account successfully created');
             });
-
-            $this->actionOnSubmit();
-            flash()->addSuccess('Account successfully created');
-
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Failed to save a new approver');

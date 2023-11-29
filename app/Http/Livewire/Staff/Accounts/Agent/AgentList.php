@@ -40,8 +40,7 @@ class AgentList extends Component
 
     private function getInitialQuery()
     {
-        return User::role(Role::AGENT)
-            ->take(5)->orderByDesc('created_at')->get();
+        return User::role(Role::AGENT)->take(5)->orderByDesc('created_at')->get();
     }
 
     public function render()
