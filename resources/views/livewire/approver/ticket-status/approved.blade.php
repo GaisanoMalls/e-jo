@@ -43,7 +43,7 @@
                                 <p class="mb-0">{{ $ticket->ticket_number }}</p>
                             </td>
                             <td class="custom__table__data">
-                                <p class="mb-0">{{ $ticket->user->department->name }}</p>
+                                <p class="mb-0">{{ $ticket->user->getBUDepartments() }}</p>
                             </td>
                             <td class="custom__table__data">
                                 <p class="mb-0">{{ Str::limit($ticket->subject, 30) }}</p>

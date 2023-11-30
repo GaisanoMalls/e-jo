@@ -100,14 +100,16 @@ class SendClarification extends Component
                     : 'replied a clarification to ' . $latestStaff->user->profile->getFullName();
 
                 // Get the department admin (approver) when there is no latest staff in the clarifications
-                $initialServiceDepartmentAdmin = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->whereHas('branches', fn($branch) => $branch->where('branches.id', auth()->user()->branch_id))
-                    ->whereHas('buDepartments', fn($query) => $query->where('department_id', auth()->user()->department_id))->get();
+                $initialServiceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
+                    ->whereHas('branches', fn($branch) => $branch->where('branches.id', auth()->user()->branches->pluck('id')->first()))
+                    ->whereHas('buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))->get();
 
-                dump($initialServiceDepartmentAdmin);
-                // ActivityLog::make($this->ticket->id, $logClarificationDescription);
-                // Notification::send($latestStaff->user ?? $initialServiceDepartmentAdmin, new TicketClarificationFromRequesterNotification($this->ticket));
-                // Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
+                foreach ($initialServiceDepartmentAdmins as $initialServiceDepartmentAdmin) {
+                    Notification::send($latestStaff->user ?? $initialServiceDepartmentAdmin, new TicketClarificationFromRequesterNotification($this->ticket));
+                    Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
+                }
+
+                ActivityLog::make($this->ticket->id, $logClarificationDescription);
                 $this->actionOnSubmit();
             });
         } catch (Exception $e) {

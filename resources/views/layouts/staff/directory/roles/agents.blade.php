@@ -111,7 +111,7 @@ Agents Directory
                         </td>
                         <td>
                             <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $agent->department->name }} Department</span>
+                                <span>{{ $agent->getBUDepartments() }} Department</span>
                             </div>
                         </td>
                         <td>

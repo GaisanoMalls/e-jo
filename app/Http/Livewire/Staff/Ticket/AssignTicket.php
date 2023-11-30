@@ -46,7 +46,7 @@ class AssignTicket extends Component
                 if (!is_null($this->ticket->agent_id)) {
                     $this->ticket->update([
                         'status_id' => Status::CLAIMED,
-                        'approval_status' => ApprovalStatus::APPROVED
+                        'approval_status' => ApprovalStatus::APPROVED,
                     ]);
 
                     Notification::send($this->ticket->agent, new AssignedAgentNotification($this->ticket));
@@ -68,8 +68,8 @@ class AssignTicket extends Component
     public function updatedTeam()
     {
         $this->agents = User::with('profile')->role(Role::AGENT)
-            ->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->ticket->serviceDepartment->id))
-            ->whereHas('branch', fn($branch) => $branch->where('branch_id', $this->ticket->branch->id))
+            ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->serviceDepartment->id))
+            ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
             ->whereHas('teams', fn($team) => $team->where('teams.id', $this->team))->get();
 
         $this->dispatchBrowserEvent('get-agents-from-team', ['agents' => $this->agents->toArray()]);
@@ -80,7 +80,7 @@ class AssignTicket extends Component
         return view('livewire.staff.ticket.assign-ticket', [
             'agents' => $this->agents,
             'teams' => Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->ticket->serviceDepartment->id))
-                ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))->get()
+                ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))->get(),
         ]);
     }
 }

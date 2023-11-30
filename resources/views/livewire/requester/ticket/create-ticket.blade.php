@@ -144,7 +144,8 @@
                                         x-on:livewire-upload-progress="progress = $event.detail.progress">
                                         <input class=" form-control form-control-sm border-0 ticket__file" type="file"
                                             accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
-                                            wire:model="fileAttachments" multiple id="upload-{{ $upload }}">
+                                            wire:model="fileAttachments" multiple id="upload-{{ $upload }}"
+                                            onchange="validateFile()">
                                         <div x-transition.duration.500ms x-show="isUploading"
                                             class="progress progress-sm mt-1" style="height: 10px;">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated"
@@ -164,6 +165,7 @@
                                             </span>
                                         </div>
                                     </div>
+                                    <span class="error__message" id="excludeEXEfileMessage"></span>
                                     @error('fileAttachments.*')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -331,6 +333,27 @@
             userCreateTicketBranchSelectionContainer.style.display = 'none';
         }
     });
+
+    // Validate file
+    function validateFile() {
+        const excludeEXEfileMessage = document.querySelector('#excludeEXEfileMessage');
+        const fileInput = document.querySelector(`#upload-{{ $upload }}`);
+
+        excludeEXEfileMessage.style.display = "none";
+
+        const fileName = fileInput.value.split('\\').pop(); // Get the file name
+        const allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+
+        // Check if the file extension is .exe
+        if (!allowedExtensions.includes(fileExtension)) {
+            excludeEXEfileMessage.style.display = "block";
+            excludeEXEfileMessage.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Invalid file type. File must be one of the following types: jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv';
+            fileInput.value = ''; // Clear the file input
+        } else {
+            fileValidationMessage.innerHTML = '';
+        }
+    }
 </script>
 @endpush
 

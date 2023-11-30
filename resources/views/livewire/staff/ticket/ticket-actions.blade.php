@@ -16,7 +16,7 @@
                 </ul>
                 <button class="btn btn-block bg-dark btn__ticket__set__action" data-bs-toggle="modal"
                     data-bs-target="#assignTicketModal" wire:click="getCurrentTeamOrAgent">
-                    Set Action
+                    Assign to team/agent
                 </button>
             </div>
         </div>

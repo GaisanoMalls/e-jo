@@ -92,7 +92,7 @@ trait Tickets
             ->get();
     }
 
-    public function getLatestReply(int $id): ?Reply
+    public function getLatestReply(int $id)
     {
         return Reply::where('ticket_id', $id)
             ->where('user_id', '!=', auth()->user()->id)
@@ -100,7 +100,7 @@ trait Tickets
             ->first();
     }
 
-    public function getLatestClarification(int $id): ?Clarification
+    public function getLatestClarification(int $id)
     {
         return Clarification::where('ticket_id', $id)
             ->where('user_id', '!=', auth()->user()->id)

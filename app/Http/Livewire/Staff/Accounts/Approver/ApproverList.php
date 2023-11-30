@@ -5,22 +5,37 @@ namespace App\Http\Livewire\Staff\Accounts\Approver;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 
 class ApproverList extends Component
 {
+    public $allPermissions;
     public $approvers;
     public $approverDeleteId;
+    public $approverAssignPermissionId;
     public $approverFullName;
+    public $approverPermissions = [];
 
     protected $listeners = ['loadApproverList' => '$refresh'];
+
+    private function getAllPermissions()
+    {
+        return $this->allPermissions = Permission::all();
+    }
+
+    private function actionOnSubmit()
+    {
+        sleep(1);
+        $this->dispatchBrowserEvent('close-modal');
+    }
 
     public function deleteApprover(User $approver)
     {
         $this->approverDeleteId = $approver->id;
         $this->approverFullName = $approver->profile->getFullName();
-        $this->dispatchBrowserEvent('show-delete-apprvoer-modal');
     }
 
     public function delete()
@@ -28,8 +43,7 @@ class ApproverList extends Component
         try {
             User::findOrFail($this->approverDeleteId)->delete();
             $this->approverDeleteId = null;
-            sleep(1);
-            $this->dispatchBrowserEvent('close-modal');
+            $this->actionOnSubmit();
             flash()->addSuccess('Approver account has been deleted');
 
         } catch (Exception $e) {
@@ -58,6 +72,7 @@ class ApproverList extends Component
 
         return view('livewire.staff.accounts.approver.approver-list', [
             'approvers' => $this->approvers,
+            'allPermissions' => $this->getAllPermissions(),
         ]);
     }
 }

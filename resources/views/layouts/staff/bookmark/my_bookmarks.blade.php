@@ -96,8 +96,8 @@
                                     <td>
                                         <div class="d-flex align-items-center text-start td__content">
                                             <span>
-                                                {{ $ticket->user->department->name }} -
-                                                {{ $ticket->user->branch->name }}
+                                                {{ $ticket->user->getBUDepartments() }} -
+                                                {{ $ticket->user->getBranches() }}
                                             </span>
                                         </div>
                                     </td>

@@ -139,6 +139,25 @@
                             </div>
                         </div>
                         <div class="col-12">
+                            <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Assigned Permissions</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label form__field__label">Permissions</label>
+                                        <div>
+                                            <div id="select-approver-permissions" wire:ignore></div>
+                                        </div>
+                                        @error('permissions')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
                             <div class="d-flex align-items-center gap-2">
                                 <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"
                                     data-bs-dismiss="modal"
@@ -228,6 +247,34 @@
     });
     approverBUDepartmentSelect.addEventListener('change', () => {
         @this.set('bu_departments', approverBUDepartmentSelect.value);
+    });
+
+    const approverPermissionOption = [
+        @foreach ($allPermissions as $permission)
+        {
+            label: "{{ $permission->name }}",
+            value: "{{ $permission->name }}"
+        },
+        @endforeach
+    ];
+
+    const approverPermissionSelect = document.querySelector('#select-approver-permissions');
+    VirtualSelect.init({
+        ele: approverPermissionSelect,
+        options: approverPermissionOption,
+        search: true,
+        multiple: true,
+        showValueAsTags: true,
+        markSearchResults: true,
+        selectedValue: @json($currentPermissions)
+    });
+
+    approverPermissionSelect.addEventListener('change', () => {
+        @this.set('permissions', approverPermissionSelect.value);
+    });
+
+    approverPermissionSelect.addEventListener('reset', () => {
+        @this.set('permissions', []);
     });
 </script>
 @endpush

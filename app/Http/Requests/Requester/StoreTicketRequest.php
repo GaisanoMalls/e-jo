@@ -36,7 +36,7 @@ class StoreTicketRequest extends FormRequest
             'fileAttachments.*' => [
                 'nullable',
                 File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
-                    ->max(25600) //25600 (25 MB)
+                    ->max(15) //25600 (25 MB)
             ],
         ];
     }
@@ -49,7 +49,7 @@ class StoreTicketRequest extends FormRequest
             'priorityLevel.required' => 'Please select a priority level.',
             'fileAttachments.*.file' => 'The uploaded file is not valid.',
             'fileAttachments.*.mimes' => 'Invalid file type. File must be one of the following types: jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv',
-            'fileAttachments.*.max' => 'The file size must not exceed 25 MB.',
+            'fileAttachments.*.max' => 'The file size must not exceed to 25 MB.',
         ];
     }
 }

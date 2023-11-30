@@ -9,7 +9,7 @@
                 </h6>
                 <p class="mb-0 user__department d-flex gap-2">
                     <i class="bi bi-buildings-fill"></i>
-                    {{ auth()->user()->department->name ?? '' }}
+                    {{ auth()->user()->getBUDepartments() }}
                 </p>
             </div>
         </div>

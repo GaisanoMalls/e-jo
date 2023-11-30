@@ -119,6 +119,54 @@
     </div>
     @endif
 
+    {{-- Assign Permission --}}
+    <div wire:ignore.self class="modal fade assign__user__permission__modal" id="assignApproverPermissionModal"
+        tabindex="-1" aria-labelledby="assignApproverPermissionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal__content">
+                <div class="modal-header modal__header p-0 border-0">
+                    <h1 class="modal-title modal__title" id="addNewTagModalLabel">Assign Permission</h1>
+                    <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
+                        <i class="fa-sharp fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <h6 class="mb-0 mt-3">Approver: {{ $approverFullName }}</h6>
+                <form wire:submit.prevent="assignApproverPermission">
+                    <div class="modal-body modal__body">
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <div>
+                                    <div id="select-assign-approver-permission" placeholder="Select permission"
+                                        wire:ignore>
+                                    </div>
+                                </div>
+                                @error('permissions')
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="submit"
+                                class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__modal__footer btn__send">
+                                <span wire:loading wire:target="assignApproverPermission"
+                                    class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                </span>
+                                Assign
+                            </button>
+                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
+                                data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     {{-- Delete Approver Modal --}}
     <div wire:ignore.self class="modal fade modal__confirm__delete__user__account" id="confirmDeleteApproverModal"
         tabindex="-1" aria-labelledby="confirmDeleteApproverModalLabel" aria-hidden="true">
@@ -154,15 +202,53 @@
 </div>
 
 {{-- Modal Scripts --}}
+@push('livewire-select')
+<script>
+    const permissionOption = [
+        @foreach ($allPermissions as $permission)
+        {
+            label: "{{ $permission->name }}",
+            value: "{{ $permission->name }}"
+        },
+        @endforeach
+    ];
+
+    const selectApproverPermission = document.querySelector('#select-assign-approver-permission');
+    VirtualSelect.init({
+        ele: selectApproverPermission,
+        options: permissionOption,
+        search: true,
+        required: true,
+        multiple: true,
+        showValueAsTags: true,
+        markSearchResults: true,
+        popupDropboxBreakpoint: '3000px',
+    });
+
+    window.addEventListener('refresh-approver-permission-select', (event) => {
+        const refreshPermissionOption = [];
+        const refreshPermissions = event.detail.allPermissions;
+
+        refreshPermissions.forEach((permission) => {
+            refreshPermissionOption.push({
+                label: permission.name,
+                value: permission.name
+            });
+        });
+
+        selectApproverPermission.setOptions(refreshPermissionOption);
+    });
+
+    selectApproverPermission.addEventListener('change', () => {
+        @this.set('approverPermissions', selectApproverPermission.value);
+    });
+</script>
+@endpush
+
 @push('livewire-modal')
 <script>
     window.addEventListener('close-modal', () => {
-        $('#confirmDeleteApproverModal').modal('hide');
+        $('#assignApproverPermissionModal').modal('hide');
     });
-
-    window.addEventListener('show-delete-approver-modal', () => {
-        $('#confirmDeleteApproverModal').modal('show');
-    });
-
 </script>
 @endpush

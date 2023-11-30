@@ -59,7 +59,7 @@
                             <ol class="breadcrumb mb-0">
                                 <li class="breadcrumb-item d-flex align-items-center gap-2">
                                     <i class="fa-solid fa-building-circle-check"></i>
-                                    {{ $announcement->department->name }}
+                                    {{ $announcement->getBUDepartments() }}
                                 </li>
                             </ol>
                         </nav>

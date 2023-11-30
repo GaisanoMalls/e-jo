@@ -40,36 +40,36 @@
             <small class="fw-semibold px-3 py-2 rounded-5" style="font-size: 12px; background-color:
                 #9DA85C; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
                 0.25rem -0.0625rem rgba(20, 20, 20,
-                0.07);" title="{{ auth()->user()->department->name ?? '' }}"">
-                {{ Str::limit(auth()->user()->department->name, '30') ?? '' }}
+                0.07);" title="{{ auth()->user()->getBUDepartments() }}">
+                {{ Str::limit(auth()->user()->getBUDepartments(), '30') ?? '' }}
             </small>
             @elseif(auth()->user()->hasRole(App\Models\Role::APPROVER))
             <small class=" fw-semibold px-3 py-2 rounded-5" style="font-size: 12px; background-color:
                 #3B4053; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
                 0.25rem -0.0625rem rgba(20, 20, 20,
-                0.07);" title="{{ auth()->user()->department->name ?? '' }}"">
-                {{ Str::limit(auth()->user()->department->name, '30') ?? '' }}
+                0.07);" title="{{ auth()->user()->getBUDepartments() }}">
+                {{ Str::limit(auth()->user()->getBUDepartments(), '30') ?? '' }}
             </small>
             @elseif(auth()->user()->hasRole(App\Models\Role::AGENT))
             <small class=" fw-semibold px-3 py-2 rounded-5" style="font-size: 12px; background-color:
                 #196837; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
                 0.25rem -0.0625rem rgba(20, 20, 20,
-                0.07);" title="{{ auth()->user()->department->name ?? '' }}">
-                {{ Str::limit(auth()->user()->department->name, '30') ?? '' }}
+                0.07);" title="{{ auth()->user()->getBUDepartments() }}">
+                {{ Str::limit(auth()->user()->getBUDepartments(), '30') ?? '' }}
             </small>
             @elseif(auth()->user()->hasRole(App\Models\Role::USER))
             <small class="fw-semibold px-3 py-2 rounded-5" style="font-size: 12px; background-color:
                 #24695C; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
                 0.25rem -0.0625rem rgba(20, 20, 20,
-                0.07);" title="{{ auth()->user()->department->name ?? '' }}"">
-                {{ Str::limit(auth()->user()->department->name, '30') ?? '' }}
+                0.07);" title="{{ auth()->user()->getBUDepartments() }}">
+                {{ Str::limit(auth()->user()->getBUDepartments(), '30') ?? '' }}
             </small>
             @else
             <small class=" fw-semibold px-3 py-2 rounded-5" style="font-size: 12px; background-color:
                 #F2F2F2; color: #5b5943; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
                 0.25rem -0.0625rem rgba(20, 20, 20,
                 0.07);">
-                {{ Str::limit(auth()->user()->department->name, '30') ?? '' }}
+                {{ Str::limit(auth()->user()->getBUDepartments(), '30') ?? '' }}
             </small>
             @endif
             @endif

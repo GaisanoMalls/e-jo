@@ -14,8 +14,6 @@
     <link rel="stylesheet" href="{{ asset('css/select/custom-virtual-select.css') }}">
     <link rel="stylesheet" href="{{ asset('css/vanilla-dataTables.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roles/user.css') }}">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>{{ $title ?? 'Dashboard' }}</title>
     @livewireStyles
 </head>
@@ -49,6 +47,7 @@
     <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
+    <script src="{{ asset('js/alpine.js') }}"></script>
     @stack('livewire-textarea')
     @stack('livewire-modal')
     @stack('livewire-select')

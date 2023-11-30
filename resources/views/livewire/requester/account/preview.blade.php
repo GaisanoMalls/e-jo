@@ -11,7 +11,7 @@
             <div class="d-flex flex-column mt-3 text-center">
                 <h6 class="mb-0 user__full__name">{{ auth()->user()->profile->getFullName() }}</h6>
                 <small>{{ auth()->user()->email }}</small>
-                <p class="mb-0 mt-3">{{ auth()->user()->department->name ?? '' }}</p>
+                <p class="mb-0 mt-3">{{ auth()->user()->getBUDepartments() }}</p>
                 <p class="mb-0 mt-4 user__date__joined">
                     Date Joined:
                     <span class="date">{{ auth()->user()->created_at->format('M d, Y') }}</span>

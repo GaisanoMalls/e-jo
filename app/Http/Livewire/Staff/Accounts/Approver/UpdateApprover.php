@@ -8,6 +8,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 
 class UpdateApprover extends Component
 {
@@ -21,6 +22,8 @@ class UpdateApprover extends Component
     public $last_name;
     public $email;
     public $suffix;
+    public $permissions = [];
+    public $currentPermissions = [];
 
     public function mount(User $approver)
     {
@@ -32,6 +35,7 @@ class UpdateApprover extends Component
         $this->suffix = $approver->profile->suffix;
         $this->branches = $approver->branches->pluck("id")->toArray();
         $this->bu_departments = $approver->buDepartments->pluck("id")->toArray();
+        $this->currentPermissions = $approver->getAllPermissions()->pluck('name')->toArray();
     }
 
     public function rules(): array
@@ -43,7 +47,8 @@ class UpdateApprover extends Component
             'middle_name' => 'nullable|min:2|max:100',
             'last_name' => 'required|min:2|max:100',
             'suffix' => 'nullable|min:1|max:4',
-            'email' => "required|max:80|unique:users,email,{$this->approver->id}"
+            'permissions' => 'nullable',
+            'email' => "required|max:80|unique:users,email,{$this->approver->id}",
         ];
     }
 
@@ -63,11 +68,12 @@ class UpdateApprover extends Component
                         $this->first_name,
                         $this->middle_name,
                         $this->last_name,
-                        $this->suffix
-                    ]))
+                        $this->suffix,
+                    ])),
                 ]);
 
                 $this->approver->branches()->sync($this->branches);
+                $this->approver->syncPermissions($this->permissions);
                 $this->approver->buDepartments()->sync($this->bu_departments);
             });
 
@@ -86,6 +92,7 @@ class UpdateApprover extends Component
             'approverSuffixes' => $this->querySuffixes(),
             'approverBranches' => $this->queryBranches(),
             'approverBUDepartments' => $this->queryBUDepartments(),
+            'allPermissions' => Permission::all(),
         ]);
     }
 }

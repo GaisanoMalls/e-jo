@@ -96,6 +96,25 @@ Approver Details
                     </div>
                 </div>
                 <div class="col-12">
+                    <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Assigned Permissions</h6>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label form__field__label">Permissions</label>
+                                <div class="rounded-3 d-flex align-items-center gap-2"
+                                    style="background-color: #E9ECEF; padding: 0.75rem 1rem;">
+                                    @foreach ($approver->getPermissionNames() as $permission)
+                                    <span class="rounded-4 d-flex align-items-center gap-1 text-white"
+                                        style="font-size: 0.74rem; background-color: #3B4053; padding: 0.1rem 0.6rem;">
+                                        {{ $permission }}
+                                    </span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
                     <div class="d-flex align-items-center gap-2">
                         <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"
                             data-bs-dismiss="modal"

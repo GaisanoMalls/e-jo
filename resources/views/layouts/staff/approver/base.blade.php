@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="{{ asset('css/select/custom-virtual-select.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roles/approver.css') }}">
     <link rel="stylesheet" href="{{ asset('css/vanilla-dataTables.css') }}">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <title>{{ $title ?? '' }}</title>
     @livewireStyles
 </head>
@@ -40,6 +39,7 @@
     <script src="{{ asset('js/roles/staff/approver.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
+    <script src="{{ asset('js/alpine.js') }}"></script>
 
     @stack('livewire-modal')
     @stack('livewire-textarea')

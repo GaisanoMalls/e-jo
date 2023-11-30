@@ -59,9 +59,6 @@ class CreateTicket extends Component
     public function updated($fields)
     {
         $this->validateOnly($fields);
-        $this->validate([
-            'fileAttachments.*' => [File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])->max(25600)],
-        ]);
     }
 
     public function clearErrorMessage()
@@ -166,7 +163,7 @@ class CreateTicket extends Component
             'fileAttachments.*' => [
                 'nullable',
                 File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
-                    ->max(25 * 1024) //25600 (25 MB)
+                    ->max(15) //25600 (25 MB)
             ],
         ]);
     }
