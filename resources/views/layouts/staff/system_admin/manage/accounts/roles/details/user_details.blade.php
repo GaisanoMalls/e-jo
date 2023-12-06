@@ -82,7 +82,7 @@ Requester's Details
                             <div class="mb-3">
                                 <label class="form-label form__field__label">Branch</label>
                                 <input type="text" name="email" class="form-control form__field" id="email"
-                                    value="{{ $user->branch->name }}" readonly disabled>
+                                    value="{{ $user->getBranches() }}" readonly disabled>
                             </div>
                         </div>
                         <div class="col-md-6">

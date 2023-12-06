@@ -39,6 +39,15 @@ class SlaList extends Component
         $this->resetValidation();
     }
 
+    public function actionOnSubmit()
+    {
+        sleep(1);
+        $this->clearFormFields();
+        $this->fetchServiceLevelAgreements();
+        $this->dispatchBrowserEvent('close-modal');
+        flash()->addSuccess('SLA successfully updated');
+    }
+
     public function editSLA(ServiceLevelAgreement $serviceLevelAgreement)
     {
         $this->slaEditId = $serviceLevelAgreement->id;
@@ -53,12 +62,8 @@ class SlaList extends Component
         $validatedData = $this->validate();
 
         try {
-            ServiceLevelAgreement::find($this->slaEditId)->update($validatedData);
-            sleep(1);
-            $this->clearFormFields();
-            $this->fetchServiceLevelAgreements();
-            $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('SLA successfully updated');
+            ServiceLevelAgreement::findOrFail($this->slaEditId)->update($validatedData);
+            $this->actionOnSubmit();
 
         } catch (Exception $e) {
             dump($e->getMessage());
@@ -83,7 +88,6 @@ class SlaList extends Component
             $this->fetchServiceLevelAgreements();
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('SLA successfully deleted');
-
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Oops, something went wrong');

@@ -22,8 +22,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="first_name" class="form-label form__field__label">First
-                                            name</label>
+                                        <label for="first_name" class="form-label form__field__label">
+                                            First name
+                                        </label>
                                         <input type="text" wire:model="first_name" class="form-control form__field"
                                             id="first_name" placeholder="Enter first name (required)">
                                         @error('first_name')
@@ -36,8 +37,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="middle_name" class="form-label form__field__label">Middle
-                                            name</label>
+                                        <label for="middle_name" class="form-label form__field__label">
+                                            Middle name
+                                        </label>
                                         <input type="text" wire:model="middle_name" class="form-control form__field"
                                             id="middle_name" placeholder="Enter middle name (optional)">
                                         @error('middle_name')
@@ -50,7 +52,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="last_name" class="form-label form__field__label">Last name</label>
+                                        <label for="last_name" class="form-label form__field__label">
+                                            Last name
+                                        </label>
                                         <input type="text" wire:model="last_name" class="form-control form__field"
                                             id="last_name" placeholder="Enter last name (required)">
                                         @error('last_name')

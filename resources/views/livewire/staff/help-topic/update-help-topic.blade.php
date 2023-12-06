@@ -56,6 +56,7 @@
                                         @enderror
                                     </div>
                                 </div>
+                                @if (!$helpTopic->specialProject)
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label form__field__label">
@@ -76,19 +77,38 @@
                                         @enderror
                                     </div>
                                 </div>
-                                @if (!is_null($helpTopic->specialProject))
-                                <div class="col-md-3">
-                                    <div class="mb-3">
-                                        <label for="amount" class="form-label form__field__label">Amount</label>
-                                        <input type="text" wire:model="amount"
-                                            class="form-control form__field amount__field" id="amount"
-                                            placeholder="Enter amount">
-                                        @error('amount')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                        @enderror
+                                @endif
+                                @if ($helpTopic->specialProject && !is_null($helpTopic->specialProject))
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="amount" class="form-label form__field__label">Amount</label>
+                                            <input type="text" wire:model="amount"
+                                                class="form-control form__field amount__field" id="amount"
+                                                placeholder="Enter amount">
+                                            @error('amount')
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" id="editCOOSelectApproverContainer">
+                                        <div class="mb-2">
+                                            <label class="form-label form__field__label">
+                                                SPM COO Approver
+                                            </label>
+                                            <div>
+                                                <div id="select-fpm-coo-approver" wire:ignore></div>
+                                            </div>
+                                            @error('level_of_approval')
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                                 <small class="fw-bold my-3">Approvals</small>
@@ -121,7 +141,13 @@
                                     <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"
                                         data-bs-dismiss="modal"
                                         onclick="window.location.href='{{ route('staff.manage.help_topic.index') }}'">Cancel</button>
-                                    <button type="submit" class="btn m-0 btn__details btn__send">Update</button>
+                                    <button type="submit"
+                                        class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__details btn__send">
+                                        <span wire:loading wire:target="updateHelpTopic"
+                                            class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                        </span>
+                                        Update
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -171,10 +197,10 @@
     });
 
     const teamOption = [
-        @foreach ($teams as $t)
+        @foreach ($teams as $tm)
             {
-                label: "{{ $t->name }}",
-                value: "{{ $t->id }}"
+                label: "{{ $tm->name }}",
+                value: "{{ $tm->id }}"
             },
         @endforeach
     ];
@@ -197,13 +223,40 @@
         @endforeach
     ];
 
+
+    const cooApprovers = @json($approvers);
+    const cooApproverOption = [];
+    cooApprovers.forEach(function (cooApprover) {
+        const middleName = `${cooApprover.profile.middle_name ?? ''}`;
+        const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+
+        cooApproverOption.push({
+            value: cooApprover.id,
+            label: `${cooApprover.profile.first_name} ${firstLetter} ${cooApprover.profile.last_name}`,
+        });
+    });
+
+    const fpmCOOApproverSelect = document.querySelector('#select-fpm-coo-approver');
+    VirtualSelect.init({
+        ele: fpmCOOApproverSelect,
+        options: cooApproverOption,
+        search: true,
+        markSearchResults: true,
+        selectedValue: @json($fpmCOOApprover)
+    });
+
+    fpmCOOApproverSelect.addEventListener('change', () => {
+        @this.set('fpmCOOApprover', parseInt(fpmCOOApproverSelect.value));
+    });
+
+
     const levelOfApprovalSelect = document.querySelector('#select-help-topic-level-of-approval');
     VirtualSelect.init({
         ele: levelOfApprovalSelect,
         options: levelOfApprovalOption,
         search: true,
         markSearchResults: true,
-        selectedValue: {{ $helpTopic->levels->pluck('id')->last() ?? 0 }}
+        selectedValue: @json($helpTopic->levels->pluck('id')->last() ?? 0)
     });
 
     // Load approval upon page load.
@@ -276,68 +329,68 @@
                     });
                 }
             }
+
+
+            levelOfApprovalSelect.addEventListener('change', () => {
+                const levelOfApproval = parseInt(levelOfApprovalSelect.value);
+                const approvers = @json($approvers);
+                selectApproverContainer.innerHTML = '';
+
+                if (levelOfApproval) {
+                    @this.set('level_of_approval', levelOfApproval);
+                    for (let count = 1; count <= levelOfApproval; count++) {
+                        const approverOption = [];
+                        const selectOptionHTML = `
+                            <div class="col-md-6">
+                                <div class="mb-2">
+                                    <label class="form-label form__field__label">Level ${count} approver/s</label>
+                                    <div>
+                                        <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
+                                    </div>
+                                    @error('level${count}Approvers')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>`;
+
+                        selectApproverContainer.insertAdjacentHTML('beforeend', selectOptionHTML);
+                        const levelApproverSelect = document.querySelector(`#level${count}Approver`);
+
+                        if (approvers.length > 0) {
+                            approvers.forEach(function (approver) {
+                                const middleName = `${approver.profile.middle_name ?? ''}`;
+                                const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+
+                                approverOption.push({
+                                    value: approver.id,
+                                    label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                                });
+                            });
+                        }
+
+                        VirtualSelect.init({
+                            ele: levelApproverSelect,
+                            options: approverOption,
+                            showValueAsTags: true,
+                            markSearchResults: true,
+                            multiple: true,
+                            required: true
+                        });
+
+                        // Select option by level (Level 1-5)
+                        let levelApprover = document.querySelector(`#level${count}Approver`);
+                        levelApprover.addEventListener('change', () => {
+                            @this.set(`level${count}Approvers`, levelApprover.value);
+                        });
+                    }
+                }
+            });
         }
     }
 
-    if (levelOfApprovalSelect) {
-        levelOfApprovalSelect.addEventListener('change', () => {
-            const levelOfApproval = parseInt(levelOfApprovalSelect.value);
-            const approvers = @json($approvers);
-            selectApproverContainer.innerHTML = '';
-
-            if (levelOfApproval) {
-                @this.set('level_of_approval', levelOfApproval);
-                for (let count = 1; count <= levelOfApproval; count++) {
-                    const approverOption = [];
-                    const selectOptionHTML = `
-                        <div class="col-md-6">
-                            <div class="mb-2">
-                                <label class="form-label form__field__label">Level ${count} approver/s</label>
-                                <div>
-                                    <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
-                                </div>
-                                @error('level${count}Approvers')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
-                                @enderror
-                            </div>
-                        </div>`;
-
-                    selectApproverContainer.insertAdjacentHTML('beforeend', selectOptionHTML);
-                    const levelApproverSelect = document.querySelector(`#level${count}Approver`);
-
-                    if (approvers.length > 0) {
-                        approvers.forEach(function (approver) {
-                            const middleName = `${approver.profile.middle_name ?? ''}`;
-                            const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
-
-                            approverOption.push({
-                                value: approver.id,
-                                label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
-                            });
-                        });
-                    }
-
-                    VirtualSelect.init({
-                        ele: levelApproverSelect,
-                        options: approverOption,
-                        showValueAsTags: true,
-                        markSearchResults: true,
-                        multiple: true,
-                        required: true
-                    });
-
-                    // Select option by level (Level 1-5)
-                    let levelApprover = document.querySelector(`#level${count}Approver`);
-                    levelApprover.addEventListener('change', () => {
-                        @this.set(`level${count}Approvers`, levelApprover.value);
-                    });
-                }
-            }
-        });
-    }
 
     serviceDepartmentSelect.addEventListener('change', () => {
         const serviceDepartmentId = parseInt(serviceDepartmentSelect.value);
@@ -360,6 +413,7 @@
                         });
                     });
                     teamSelect.setOptions(teamOption);
+                    teamSelect.setValue(@json($team));
                 } else {
                     teamSelect.setOptions([]);
                     teamSelect.disable();

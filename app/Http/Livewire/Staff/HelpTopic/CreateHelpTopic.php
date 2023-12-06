@@ -9,6 +9,7 @@ use App\Models\HelpTopic;
 use App\Models\LevelApprover;
 use App\Models\SpecialProject;
 use App\Models\Team;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -17,6 +18,8 @@ class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
     public $checked = false;
+    public $showAmountError = false;
+    public $COOApprovers = [];
     public $teams = [];
     public $level1Approvers = [];
     public $level2Approvers = [];
@@ -29,6 +32,8 @@ class CreateHelpTopic extends Component
     public $team;
     public $level_of_approval;
     public $amount; // For Special project
+    public $max_amount = 50000;
+    public $COOApprover;
 
     public function rules()
     {
@@ -41,11 +46,15 @@ class CreateHelpTopic extends Component
                 $rules['level_of_approval'] = ['nullable'];
             }
 
-            if (is_null($this->amount)) {
-                $rules['amount'] = ['required'];
-            } else {
-                $rules['amount'] = ['nullable'];
-            }
+            // if (is_null($this->amount)) {
+            //     flash()->addError('Please enter an amount.');
+            //     $rules['amount'] = ['required'];
+            // } else {
+            //     $this->showAmountError = false;
+            //     $rules['amount'] = ['nullable'];
+            // }
+
+
         }
 
         return $rules;
@@ -66,18 +75,26 @@ class CreateHelpTopic extends Component
 
         try {
             DB::transaction(function () {
-                if ($this->checked) {
-                    $helpTopic = HelpTopic::create([
-                        'service_department_id' => $this->service_department,
-                        'team_id' => $this->team,
-                        'service_level_agreement_id' => $this->sla,
-                        'name' => $this->name,
-                        'slug' => \Str::slug($this->name),
-                    ]);
+                $helpTopic = HelpTopic::create([
+                    'service_department_id' => $this->service_department,
+                    'team_id' => $this->team,
+                    'service_level_agreement_id' => $this->sla,
+                    'name' => $this->name,
+                    'slug' => \Str::slug($this->name),
+                ]);
 
+                if ($this->checked) {
                     SpecialProject::create([
                         'help_topic_id' => $helpTopic->id,
                         'amount' => $this->amount,
+                        'fmp_coo_approver' => [
+                            'approver_id' => User::where('id', $this->COOApprover)->exists() ? $this->COOApprover : null,
+                            'is_approved' => false,
+                        ],
+                        // 'service_department_admin_approver' => [
+                        //     'service_department_admin_id' => UserServiceDepartment::where('service_department_id', $this->serviceDepartment)->pluck('user_id')->first(),
+                        //     'is_approved' => false
+                        // ]
                     ]);
 
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
@@ -91,14 +108,6 @@ class CreateHelpTopic extends Component
                             ]);
                         }
                     }
-                } else {
-                    HelpTopic::create([
-                        'service_department_id' => $this->service_department,
-                        'team_id' => $this->team,
-                        'service_level_agreement_id' => $this->sla,
-                        'name' => $this->name,
-                        'slug' => \Str::slug($this->name),
-                    ]);
                 }
             });
 
@@ -111,18 +120,19 @@ class CreateHelpTopic extends Component
         }
     }
 
+    public function updatedAmount()
+    {
+        if ((int) $this->amount >= $this->max_amount) {
+            $this->dispatchBrowserEvent('show-select-fmp-coo-approver');
+        } else {
+            $this->dispatchBrowserEvent('hide-select-fmp-coo-approver');
+        }
+    }
+
     public function updatedServiceDepartment()
     {
         $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->service_department))->get();
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
-    }
-
-    public function updatedName()
-    {
-        ($this->name === 'Special Project' || $this->name === 'special project')
-            ? $this->dispatchBrowserEvent('checkAndShowContainer')
-            : $this->dispatchBrowserEvent('checkAndHideContainer');
-
     }
 
     public function showSpecialProjectContainer()

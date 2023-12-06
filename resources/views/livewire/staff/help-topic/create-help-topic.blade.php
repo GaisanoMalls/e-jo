@@ -26,10 +26,10 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="mb-2">
-                                            <label for="specialProjectName"
+                                            <label for="helpTopicName"
                                                 class="form-label form__field__label">Name</label>
                                             <input type="text" wire:model="name" class="form-control form__field"
-                                                id="specialProjectName" placeholder="Enter help topic name">
+                                                placeholder="Enter help topic name">
                                             @error('name')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -70,13 +70,14 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" id="teamSelectContainer" wire:ignore>
                                         <div class="mb-2">
                                             <label for="team" class="form-label form__field__label">
                                                 Team
                                                 @if ($teams)
                                                 <span class="fw-normal" style="font-size: 13px;">
-                                                    ({{ $teams->count() }})</span>
+                                                    ({{ $teams->count() }})
+                                                </span>
                                                 @endif
                                             </label>
                                             <div>
@@ -95,18 +96,31 @@
                                         <div class="py-2">
                                             <hr>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="mb-3">
-                                                <label for="amount" class="form-label form__field__label">Amount</label>
-                                                <input type="text" wire:model="amount"
-                                                    class="form-control form__field amount__field" id="amount"
-                                                    placeholder="Enter amount">
-                                                @error('amount')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
-                                                @enderror
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="amount"
+                                                        class="form-label form__field__label">Amount</label>
+                                                    <input type="text" wire:model="amount"
+                                                        class="form-control form__field amount__field" id="amount"
+                                                        placeholder="Enter amount" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" id="cooSelectApproverContainer">
+                                                <div class="mb-2">
+                                                    <label class="form-label form__field__label">
+                                                        COO Approver
+                                                    </label>
+                                                    <div>
+                                                        <div id="select-fpm-coo-approver" wire:ignore></div>
+                                                    </div>
+                                                    @error('level_of_approval')
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                         <small class="fw-bold">Approvals</small>
@@ -162,9 +176,10 @@
 
 @push('extra')
 <script>
-    const specialProjectContainer = document.getElementById('specialProjectContainer');
-    const specialProjectCheck = document.getElementById('specialProjectCheck');
-    const specialProjectName = document.getElementById('specialProjectName');
+    const teamSelectContainer = document.querySelector('#teamSelectContainer');
+    const cooSelectApproverContainer = document.querySelector('#cooSelectApproverContainer');
+    const specialProjectCheck = document.querySelector('#specialProjectCheck');
+    const specialProjectContainer = document.querySelector('#specialProjectContainer');
     const levelOfApprovalSelect = document.querySelector('#select-help-topic-level-of-approval');
 
     const levelOfApprovalOption = [
@@ -180,20 +195,20 @@
         ele: levelOfApprovalSelect,
         options: levelOfApprovalOption,
         search: true,
+        required: true,
         markSearchResults: true,
-        required: true
     });
 
     if (specialProjectCheck && specialProjectContainer) {
         specialProjectContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
-        const name = 'Special Project';
 
         specialProjectCheck.addEventListener('change', () => {
             if (specialProjectCheck.checked) {
                 window.addEventListener('show-special-project-container', (event) => {
+                    @this.set('team', null);
+                    teamSelect.disable();
+                    teamSelectContainer.style.display = 'none';
                     specialProjectContainer.style.display = 'block';
-                    specialProjectName.value = name;
-                    @this.set('name', name);
                     const approvers = event.detail.approvers;
                     const selectApproverContainer = document.querySelector('#selectApproverContainer');
 
@@ -256,11 +271,46 @@
                     });
                 });
 
+                const fmpCOOApproverSelect = document.querySelector('#select-fpm-coo-approver');
+                VirtualSelect.init({
+                    ele: fmpCOOApproverSelect,
+                    search: true,
+                    autofocus: false,
+                    markSearchResults: true,
+                });
+
+                cooSelectApproverContainer.style.display = 'none';
+                window.addEventListener('show-select-fmp-coo-approver', () => {
+                    cooSelectApproverContainer.style.display = 'block';
+                });
+
+                const cooApprovers = @json($approvers);
+                const cooApproverOption = [];
+                cooApprovers.forEach(function (cooApprover) {
+                    const middleName = `${cooApprover.profile.middle_name ?? ''}`;
+                    const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+
+                    cooApproverOption.push({
+                        value: cooApprover.id,
+                        label: `${cooApprover.profile.first_name} ${firstLetter} ${cooApprover.profile.last_name}`,
+                    });
+                });
+                fmpCOOApproverSelect.setOptions(cooApproverOption);
+                fmpCOOApproverSelect.addEventListener('change', () => {
+                    @this.set('COOApprover', parseInt(fmpCOOApproverSelect.value));
+                });
+
+                window.addEventListener('hide-select-fmp-coo-approver', () => {
+                    cooSelectApproverContainer.style.display = 'none';
+                    fmpCOOApproverSelect.reset();
+
+                });
+
             } else {
                 window.addEventListener('hide-special-project-container', () => {
-                    @this.set('name', null);
-                    specialProjectName.value = null;
+                    teamSelectContainer.style.display = 'block';
                     levelOfApprovalSelect.reset();
+                    teamSelect.enable();
                     specialProjectContainer.style.display = 'none';
                 });
             }
@@ -331,7 +381,9 @@
         const serviceDepartmentId = serviceDepartmentSelect.value;
         if (serviceDepartmentId) {
             @this.set('service_department', serviceDepartmentId);
-            teamSelect.enable();
+            if (!specialProjectCheck.checked) {
+                teamSelect.enable();
+            }
             window.addEventListener('get-teams-from-selected-service-department', (event) => {
                 const teams = event.detail.teams;
                 const teamOption = [];
@@ -348,14 +400,16 @@
                         });
                     });
                     teamSelect.setOptions(teamOption);
+
                 } else {
-                    teamSelect.setOptions([]);
                     teamSelect.disable();
+                    teamSelect.setOptions([]);
                 }
             });
+
         } else {
             teamSelect.reset();
-            teamSelect.disable()
+            teamSelect.disable();
             teamSelect.setOptions([]);
         }
     });

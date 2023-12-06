@@ -17,6 +17,10 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained()->cascadeOnDelete();
             $table->decimal('amount', 10, 2);
+            $table->json('fmp_coo_approver')->nullable();
+            $table->json('service_department_approver')->nullable();
+            $table->json('bu_department_approver')->nullable();
+            $table->boolean('is_approved')->default(false);
             $table->timestamps();
         });
     }

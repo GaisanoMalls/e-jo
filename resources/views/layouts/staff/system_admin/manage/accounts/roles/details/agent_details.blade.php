@@ -82,7 +82,7 @@ Agent Details
                             <div class="mb-3">
                                 <label class="form-label form__field__label">Branch</label>
                                 <input type="text" name="email" class="form-control form__field" id="email"
-                                    value="{{ $agent->branch->name }}" readonly disabled>
+                                    value="{{ $agent->getBranches() }}" readonly disabled>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -109,7 +109,7 @@ Agent Details
                                     Service Department
                                 </label>
                                 <input type="text" name="email" class="form-control form__field" id="email"
-                                    value="{{ $agent->serviceDepartment->name }}" readonly disabled>
+                                    value="{{ $agent->getServiceDepartments() }}" readonly disabled>
                             </div>
                         </div>
                     </div>

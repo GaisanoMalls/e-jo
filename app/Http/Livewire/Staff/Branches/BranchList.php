@@ -78,11 +78,10 @@ class BranchList extends Component
         try {
             Branch::findOrFail($this->branchDeleteId)->delete();
             sleep(1);
-            $this->branchDeleteId = '';
+            $this->branchDeleteId = null;
             $this->fetchBranches();
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Branch successfully deleted');
-
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Oops, something went wrong');

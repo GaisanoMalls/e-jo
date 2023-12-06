@@ -6,10 +6,11 @@
                 <form wire:submit.prevent="sendTicket">
                     <h1 class="modal-title modal__title fs-5 px-3">Create New Ticket</h1>
                     <div class="modal-body modal__body">
-                        <div class="row">
+                        <div class="row" x-data="{ showBranchSelect: @entangle('showBranchSelect').defer }">
                             <div class="col-12">
                                 <div class="form-check mt-2 mb-4">
-                                    <input class="form-check-input" type="checkbox" value="" id="checkOtherBranch">
+                                    <input class="form-check-input" type="checkbox" id="checkOtherBranch"
+                                        wire:model="showBranchSelect">
                                     <label class="form-check-label labelCheckOtherBranch" for="checkOtherBranch">
                                         This ticket is intended to other branch
                                     </label>
@@ -24,9 +25,9 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-12" x-show="showBranchSelect" x-transition.duration.400ms>
                                 <div class="col-lg-6 col-md-12">
-                                    <div wire:ignore.self class="mb-3" id="userCreateTicketBranchSelectionContainer">
+                                    <div wire:ignore.self class="mb-3">
                                         <label class="form-label input__field__label">
                                             To which branch will this ticket be sent?
                                         </label>
@@ -297,17 +298,13 @@
     });
 
     const selectOtherBranch = document.querySelector('#checkOtherBranch');
-    const userCreateTicketBranchSelectionContainer = document.querySelector('#userCreateTicketBranchSelectionContainer');
     branchSelect.disable();
-    userCreateTicketBranchSelectionContainer.style.display = 'none';
 
     if (selectOtherBranch) {
         selectOtherBranch.addEventListener('change', (e) => {
             if (e.target.checked) {
-                userCreateTicketBranchSelectionContainer.style.display = 'block';
                 branchSelect.enable();
             } else {
-                userCreateTicketBranchSelectionContainer.style.display = 'none';
                 branchSelect.reset();
                 branchSelect.disable();
             }
@@ -316,7 +313,6 @@
         window.addEventListener('clear-branch-dropdown-select', () => {
             if (selectOtherBranch.checked) {
                 selectOtherBranch.checked = false;
-                userCreateTicketBranchSelectionContainer.style.display = 'none';
             }
         });
     }
@@ -330,7 +326,6 @@
 
         if (selectOtherBranch.checked) {
             selectOtherBranch.checked = false;
-            userCreateTicketBranchSelectionContainer.style.display = 'none';
         }
     });
 

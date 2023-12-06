@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Staff\HelpTopic;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\HelpTopic;
 use App\Models\LevelApprover;
-use App\Models\SpecialProject;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +28,7 @@ class UpdateHelpTopic extends Component
     public $level_of_approval;
     public $amount;
     public $max_amount = 50000;
+    public $fpmCOOApprover;
 
     public function mount(HelpTopic $helpTopic)
     {
@@ -38,6 +38,7 @@ class UpdateHelpTopic extends Component
         $this->team = $helpTopic->team_id;
         $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
         $this->level_of_approval = $helpTopic->levels->pluck('id')->last();
+        $this->fpmCOOApprover = $this->helpTopic->specialProject->fmp_coo_approver['approver_id'] ?? null;
         $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
         for ($count = 1; $count <= 5; $count++) {
             $this->{"level{$count}Approvers"} = $this->{"getLevel{$count}Approvers"}();
@@ -56,16 +57,16 @@ class UpdateHelpTopic extends Component
             'teams' => '',
         ];
 
-        if (!is_null($this->helpTopic->specialProject)) {
-            $rules['amount'] = 'required';
-            $rules['level_of_approval'] = 'required';
+        // if (!is_null($this->helpTopic->specialProject)) {
+        //     $rules['amount'] = 'required';
+        //     $rules['level_of_approval'] = 'required';
 
-            for ($count = 1; $count <= 5; $count++) {
-                if (empty($this->{"level{$count}Approvers"})) {
-                    $rules["level{$count}Approvers"] = 'required';
-                }
-            }
-        }
+        //     for ($count = 1; $count <= 5; $count++) {
+        //         if (empty($this->{"level{$count}Approvers"})) {
+        //             $rules["level{$count}Approvers"] = 'required';
+        //         }
+        //     }
+        // }
 
         return $rules;
     }
@@ -86,13 +87,10 @@ class UpdateHelpTopic extends Component
 
                 if (!is_null($this->helpTopic->specialProject)) {
                     $this->helpTopic->specialProject->update(['amount' => $this->amount]);
-
                     // Sync all levels first
                     $this->helpTopic->levels()->sync(range(1, $this->level_of_approval));
-
                     // Delete existing level approvers for the current topic
                     LevelApprover::where(['help_topic_id' => $this->helpTopic->id])->delete();
-
                     // Iterate through selected level approvers
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
                         foreach ($this->{"level{$level}Approvers"} as $approver) {
