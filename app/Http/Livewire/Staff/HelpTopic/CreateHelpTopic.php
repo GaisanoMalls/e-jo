@@ -18,7 +18,6 @@ class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
     public $checked = false;
-    public $showAmountError = false;
     public $COOApprovers = [];
     public $teams = [];
     public $level1Approvers = [];
@@ -34,6 +33,7 @@ class CreateHelpTopic extends Component
     public $amount; // For Special project
     public $max_amount = 50000;
     public $COOApprover;
+    public $serviceDepartmentAdminApprover;
 
     public function rules()
     {
@@ -62,7 +62,6 @@ class CreateHelpTopic extends Component
 
     public function actionOnSubmit()
     {
-        sleep(1);
         $this->reset();
         $this->resetValidation();
         $this->emit('loadHelpTopics');
@@ -71,6 +70,7 @@ class CreateHelpTopic extends Component
 
     public function saveHelpTopic()
     {
+        dd($this->COOApprover);
         $this->validate();
 
         try {
@@ -89,6 +89,10 @@ class CreateHelpTopic extends Component
                         'amount' => $this->amount,
                         'fmp_coo_approver' => [
                             'approver_id' => User::where('id', $this->COOApprover)->exists() ? $this->COOApprover : null,
+                            'is_approved' => false,
+                        ],
+                        'service_department_approver' => [
+                            'approver_id' => User::where('id', $this->serviceDepartmentAdminApprover)->exists() ? $this->serviceDepartmentAdminApprover : null,
                             'is_approved' => false,
                         ],
                         // 'service_department_admin_approver' => [
@@ -125,7 +129,7 @@ class CreateHelpTopic extends Component
         if ((int) $this->amount >= $this->max_amount) {
             $this->dispatchBrowserEvent('show-select-fmp-coo-approver');
         } else {
-            $this->dispatchBrowserEvent('hide-select-fmp-coo-approver');
+            $this->dispatchBrowserEvent('show-select-service-departmetn-admin-approver');
         }
     }
 

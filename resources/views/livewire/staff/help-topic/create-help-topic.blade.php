@@ -106,13 +106,30 @@
                                                         placeholder="Enter amount" required>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4" id="cooSelectApproverContainer">
+                                            <div class="col-md-4" id="cooApproverSelectContainer">
                                                 <div class="mb-2">
                                                     <label class="form-label form__field__label">
                                                         COO Approver
                                                     </label>
                                                     <div>
                                                         <div id="select-fpm-coo-approver" wire:ignore></div>
+                                                    </div>
+                                                    @error('level_of_approval')
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" id="serviceDepartmentAdminApproverSelectContainer">
+                                                <div class="mb-2">
+                                                    <label class="form-label form__field__label">
+                                                        Service Department Admin Approver
+                                                    </label>
+                                                    <div>
+                                                        <div id="select-service-department-admin-approver" wire:ignore>
+                                                        </div>
                                                     </div>
                                                     @error('level_of_approval')
                                                     <span class="error__message">
@@ -177,7 +194,6 @@
 @push('extra')
 <script>
     const teamSelectContainer = document.querySelector('#teamSelectContainer');
-    const cooSelectApproverContainer = document.querySelector('#cooSelectApproverContainer');
     const specialProjectCheck = document.querySelector('#specialProjectCheck');
     const specialProjectContainer = document.querySelector('#specialProjectContainer');
     const levelOfApprovalSelect = document.querySelector('#select-help-topic-level-of-approval');
@@ -272,38 +288,59 @@
                 });
 
                 const fmpCOOApproverSelect = document.querySelector('#select-fpm-coo-approver');
+                const serviceDepartmentAdminApproverSelect = document.querySelector('#select-service-department-admin-approver');
+                const cooApproverSelectContainer = document.querySelector('#cooApproverSelectContainer');
+                const serviceDepartmentAdminApproverSelectContainer = document.querySelector('#serviceDepartmentAdminApproverSelectContainer');
+                const cooApprovers = @json($approvers);
+                const approverOption = [];
+
                 VirtualSelect.init({
                     ele: fmpCOOApproverSelect,
                     search: true,
                     autofocus: false,
                     markSearchResults: true,
                 });
-
-                cooSelectApproverContainer.style.display = 'none';
-                window.addEventListener('show-select-fmp-coo-approver', () => {
-                    cooSelectApproverContainer.style.display = 'block';
+                VirtualSelect.init({
+                    ele: serviceDepartmentAdminApproverSelect,
+                    search: true,
+                    autofocus: false,
+                    markSearchResults: true,
                 });
 
-                const cooApprovers = @json($approvers);
-                const cooApproverOption = [];
+                cooApproverSelectContainer.style.display = 'none';
+                window.addEventListener('show-select-fmp-coo-approver', () => {
+                    serviceDepartmentAdminApproverSelectContainer.style.display = 'none';
+                    cooApproverSelectContainer.style.display = 'block';
+                    serviceDepartmentAdminApproverSelect.reset();
+                    @this.set('serviceDepartmentAdminApprover', null);
+                });
+
                 cooApprovers.forEach(function (cooApprover) {
                     const middleName = `${cooApprover.profile.middle_name ?? ''}`;
                     const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
 
-                    cooApproverOption.push({
+                    approverOption.push({
                         value: cooApprover.id,
                         label: `${cooApprover.profile.first_name} ${firstLetter} ${cooApprover.profile.last_name}`,
                     });
                 });
-                fmpCOOApproverSelect.setOptions(cooApproverOption);
+
+                fmpCOOApproverSelect.setOptions(approverOption);
+                serviceDepartmentAdminApproverSelect.setOptions(approverOption);
+
                 fmpCOOApproverSelect.addEventListener('change', () => {
                     @this.set('COOApprover', parseInt(fmpCOOApproverSelect.value));
                 });
 
-                window.addEventListener('hide-select-fmp-coo-approver', () => {
-                    cooSelectApproverContainer.style.display = 'none';
-                    fmpCOOApproverSelect.reset();
+                serviceDepartmentAdminApproverSelect.addEventListener('change', () => {
+                    @this.set('serviceDepartmentAdminApprover', parseInt(serviceDepartmentAdminApproverSelect.value));
+                });
 
+                window.addEventListener('show-select-service-departmetn-admin-approver', () => {
+                    cooApproverSelectContainer.style.display = 'none';
+                    serviceDepartmentAdminApproverSelectContainer.style.display = 'block';
+                    fmpCOOApproverSelect.reset();
+                    @this.set('COOApprover', null);
                 });
 
             } else {
