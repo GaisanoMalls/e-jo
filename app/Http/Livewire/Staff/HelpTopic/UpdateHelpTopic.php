@@ -130,7 +130,7 @@ class UpdateHelpTopic extends Component
                     if ($levelApprover->user_id == $approver->id && $levelApprover->level_id == $level->id) {
                         array_push($currentApprovers, [
                             'id' => $approver->id,
-                            'level' => intval($level->value),
+                            'level' => (int) $level->value,
                         ]);
                     }
                 }

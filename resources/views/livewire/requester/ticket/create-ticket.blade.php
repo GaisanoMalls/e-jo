@@ -6,11 +6,10 @@
                 <form wire:submit.prevent="sendTicket">
                     <h1 class="modal-title modal__title fs-5 px-3">Create New Ticket</h1>
                     <div class="modal-body modal__body">
-                        <div class="row" x-data="{ showBranchSelect: @entangle('showBranchSelect').defer }">
+                        <div class="row">
                             <div class="col-12">
                                 <div class="form-check mt-2 mb-4">
-                                    <input class="form-check-input" type="checkbox" id="checkOtherBranch"
-                                        wire:model="showBranchSelect">
+                                    <input class="form-check-input" type="checkbox" id="checkOtherBranch">
                                     <label class="form-check-label labelCheckOtherBranch" for="checkOtherBranch">
                                         This ticket is intended to other branch
                                     </label>
@@ -25,7 +24,7 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="col-12" x-show="showBranchSelect" x-transition.duration.400ms>
+                            <div class="col-12" id="branchSelectContainer" wire:ignore.self>
                                 <div class="col-lg-6 col-md-12">
                                     <div wire:ignore.self class="mb-3">
                                         <label class="form-label input__field__label">
@@ -298,21 +297,27 @@
     });
 
     const selectOtherBranch = document.querySelector('#checkOtherBranch');
+    const branchSelectContainer = document.querySelector('#branchSelectContainer');
     branchSelect.disable();
+    branchSelectContainer.style.display = 'none';
 
     if (selectOtherBranch) {
         selectOtherBranch.addEventListener('change', (e) => {
             if (e.target.checked) {
                 branchSelect.enable();
+                branchSelectContainer.style.display = 'block';
             } else {
                 branchSelect.reset();
                 branchSelect.disable();
+                branchSelectContainer.style.display = 'none';
+                @this.set('branch', null);
             }
         });
 
         window.addEventListener('clear-branch-dropdown-select', () => {
             if (selectOtherBranch.checked) {
                 selectOtherBranch.checked = false;
+                @this.set('branch', null);
             }
         });
     }
@@ -326,6 +331,8 @@
 
         if (selectOtherBranch.checked) {
             selectOtherBranch.checked = false;
+            branchSelectContainer.style.display = 'none';
+            @this.set('branch', null);
         }
     });
 

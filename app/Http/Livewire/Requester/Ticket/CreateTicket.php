@@ -32,7 +32,6 @@ class CreateTicket extends Component
 {
     use Utils, BasicModelQueries, WithFileUploads;
 
-    public $showBranchSelect = false;
     public $upload = 0;
     public $fileAttachments = [];
     public $helpTopics = [];
