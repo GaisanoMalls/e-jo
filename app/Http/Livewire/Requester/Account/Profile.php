@@ -50,7 +50,6 @@ class Profile extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->resetValidation();
         $this->emit('loadProfilePreview');
         $this->emit('loadNavProfilePic');
@@ -91,7 +90,7 @@ class Profile extends Component
                     'last_name',
                     'suffix',
                     'mobile_number',
-                    'picture'
+                    'picture',
                 ]))
                     ? flash()->addSuccess('Profile successfully updated.')
                     : flash()->addInfo('No changes have been made in your profile.');

@@ -24,7 +24,6 @@ class DisapproveTicket extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->emit('loadReason');
         $this->emit('loadTicketLogs');
         $this->emit('loadTicketDetails');
@@ -43,13 +42,13 @@ class DisapproveTicket extends Component
             DB::transaction(function () {
                 $reason = Reason::create([
                     'ticket_id' => $this->ticket->id,
-                    'description' => $this->reasonDescription
+                    'description' => $this->reasonDescription,
                 ]);
 
                 $reason->ticket()->where('id', $this->ticket->id)
                     ->update([
                         'status_id' => Status::CLOSED,
-                        'approval_status' => ApprovalStatus::DISAPPROVED
+                        'approval_status' => ApprovalStatus::DISAPPROVED,
                     ]);
 
                 ActivityLog::make($this->ticket->id, 'disapproved the ticket');

@@ -17,7 +17,6 @@ class ClaimTicket extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->emit('loadTicketLogs');
         $this->emit('loadClaimTicket');
         $this->emit('loadTicketDetails');
@@ -38,7 +37,7 @@ class ClaimTicket extends Component
 
                 $this->ticket->update([
                     'agent_id' => auth()->user()->id,
-                    'status_id' => Status::CLAIMED
+                    'status_id' => Status::CLAIMED,
                 ]);
 
                 ActivityLog::make($this->ticket->id, 'claimed the ticket');

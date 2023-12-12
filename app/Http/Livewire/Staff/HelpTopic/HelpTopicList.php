@@ -29,7 +29,6 @@ class HelpTopicList extends Component
             $helpTopic = HelpTopic::find($this->helpTopicDeleteId);
             if ($helpTopic) {
                 $helpTopic->delete();
-                sleep(1);
                 $this->helpTopicDeleteId = null;
                 $this->dispatchBrowserEvent('close-modal');
                 flash()->addSuccess('Help topic successfully deleted');

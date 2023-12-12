@@ -7,7 +7,6 @@ use Illuminate\Validation\Rules\File;
 
 class StoreTicketRequest extends FormRequest
 {
-    protected $errorBag = 'storeTicket';
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -36,7 +35,7 @@ class StoreTicketRequest extends FormRequest
             'fileAttachments.*' => [
                 'nullable',
                 File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
-                    ->max(15) //25600 (25 MB)
+                    ->max(25600) //25600 (25 MB)
             ],
         ];
     }

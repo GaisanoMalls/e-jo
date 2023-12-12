@@ -55,7 +55,6 @@ class ServiceDepartmentList extends Component
                     'slug' => \Str::slug($this->name),
                 ]);
 
-            sleep(1);
             $this->clearFormField();
             $this->fetchServiceDepartments();
             $this->dispatchBrowserEvent('close-modal');
@@ -78,7 +77,6 @@ class ServiceDepartmentList extends Component
     {
         try {
             ServiceDepartment::findOrFail($this->serviceDepartmentDeleteId)->delete();
-            sleep(1);
             $this->serviceDepartmentDeleteId = null;
             $this->fetchServiceDepartments();
             $this->dispatchBrowserEvent('close-modal');

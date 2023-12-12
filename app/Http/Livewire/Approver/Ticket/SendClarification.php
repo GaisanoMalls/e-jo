@@ -36,7 +36,6 @@ class SendClarification extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->clarificationFiles = [];
         $this->upload++;
         $this->reset('description');

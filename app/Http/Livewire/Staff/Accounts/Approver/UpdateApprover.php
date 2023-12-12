@@ -77,7 +77,6 @@ class UpdateApprover extends Component
                 $this->approver->buDepartments()->sync($this->bu_departments);
             });
 
-            sleep(1);
             flash()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName()}.");
 
         } catch (Exception $e) {

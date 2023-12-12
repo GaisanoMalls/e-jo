@@ -41,7 +41,6 @@ class SlaList extends Component
 
     public function actionOnSubmit()
     {
-        sleep(1);
         $this->clearFormFields();
         $this->fetchServiceLevelAgreements();
         $this->dispatchBrowserEvent('close-modal');
@@ -83,7 +82,6 @@ class SlaList extends Component
     {
         try {
             ServiceLevelAgreement::findOrFail($this->slaDeleteId)->delete();
-            sleep(1);
             $this->slaDeleteId = null;
             $this->fetchServiceLevelAgreements();
             $this->dispatchBrowserEvent('close-modal');

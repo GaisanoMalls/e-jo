@@ -88,7 +88,6 @@ class BUDepartmentList extends Component
         try {
             Department::findOrFail($this->buDepartmentDeleteId)->delete();
             $this->buDepartmentDeleteId = null;
-            sleep(1);
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('BU/Department successfully deleted');
 
@@ -106,7 +105,6 @@ class BUDepartmentList extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->reset();
         $this->resetValidation();
         $this->dispatchBrowserEvent('close-modal');

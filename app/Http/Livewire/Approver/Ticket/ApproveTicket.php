@@ -14,7 +14,6 @@ class ApproveTicket extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->emit('loadTicketLogs');
         $this->emit('loadTicketDetails');
         $this->emit('loadBackButtonHeader');
@@ -27,7 +26,7 @@ class ApproveTicket extends Component
     {
         $this->ticket->update([
             'status_id' => Status::APPROVED,
-            'approval_status' => ApprovalStatus::APPROVED
+            'approval_status' => ApprovalStatus::APPROVED,
         ]);
 
         ActivityLog::make($this->ticket->id, 'approved the ticket');

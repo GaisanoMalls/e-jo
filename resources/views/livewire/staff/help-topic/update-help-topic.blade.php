@@ -56,7 +56,6 @@
                                         @enderror
                                     </div>
                                 </div>
-                                @if (!$helpTopic->specialProject)
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label form__field__label">
@@ -77,7 +76,6 @@
                                         @enderror
                                     </div>
                                 </div>
-                                @endif
                                 @if ($helpTopic->specialProject && !is_null($helpTopic->specialProject))
                                 <div class="row">
                                     <div class="col-md-3">
@@ -274,7 +272,10 @@
                     const selectOptionHTML = `
                         <div class="col-md-6">
                             <div class="mb-2">
-                                <label class="form-label form__field__label">Level ${count} approver/s</label>
+                                <div class="mb-2 d-flex gap-2">
+                                    <label class="form-label form__field__label">Level ${count} approver/s</label>
+                                    <small class="text-muted" style="font-size: 13px; margin-top: 2px;">(In order)</small>
+                                </div>
                                 <div>
                                     <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
                                 </div>
@@ -330,7 +331,6 @@
                 }
             }
 
-
             levelOfApprovalSelect.addEventListener('change', () => {
                 const levelOfApproval = parseInt(levelOfApprovalSelect.value);
                 const approvers = @json($approvers);
@@ -343,7 +343,10 @@
                         const selectOptionHTML = `
                             <div class="col-md-6">
                                 <div class="mb-2">
-                                    <label class="form-label form__field__label">Level ${count} approver/s</label>
+                                    <div class="mb-2 d-flex gap-2">
+                                        <label class="form-label form__field__label">Level ${count} approver/s</label>
+                                        <small class="text-muted" style="font-size: 13px; margin-top: 2px;">(In order)</small>
+                                    </div>
                                     <div>
                                         <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
                                     </div>

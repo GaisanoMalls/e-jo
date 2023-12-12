@@ -47,7 +47,6 @@ class CreateAgent extends Component
 
     public function actionOnSubmit()
     {
-        sleep(1);
         $this->reset();
         $this->resetValidation();
         $this->emit('loadAgentList');

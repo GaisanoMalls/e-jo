@@ -22,7 +22,6 @@ class UpdatePriorityLevel extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->emit('loadPriorityLevel');
         $this->emit('loadTicketLogs');
         $this->dispatchBrowserEvent('close-modal');

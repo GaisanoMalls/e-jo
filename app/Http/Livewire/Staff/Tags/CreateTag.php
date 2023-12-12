@@ -27,7 +27,6 @@ class CreateTag extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->emit('loadTags');
         $this->clearFormField();
     }
@@ -39,7 +38,7 @@ class CreateTag extends Component
         try {
             Tag::create([
                 'name' => $this->name,
-                'slug' => \Str::slug($this->name)
+                'slug' => \Str::slug($this->name),
             ]);
 
             $this->actionOnSubmit();

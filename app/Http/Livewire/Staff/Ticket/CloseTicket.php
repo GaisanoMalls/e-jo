@@ -13,7 +13,6 @@ class CloseTicket extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->emit('loadTicketTags');
         $this->emit('loadTicketLogs');
         $this->emit('loadPriorityLevel');

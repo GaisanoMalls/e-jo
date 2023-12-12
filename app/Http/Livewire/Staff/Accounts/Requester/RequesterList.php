@@ -27,7 +27,6 @@ class RequesterList extends Component
     {
         try {
             User::findOrFail($this->requesterDeleteId)->delete();
-            sleep(1);
             $this->requesterDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Requester account has been deleted');

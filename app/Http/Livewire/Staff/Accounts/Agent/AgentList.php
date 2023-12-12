@@ -30,7 +30,6 @@ class AgentList extends Component
             $this->agentDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Requester account has been deleted');
-            sleep(1);
 
         } catch (Exception $e) {
             dump($e->getMessage());
