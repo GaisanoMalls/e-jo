@@ -46,7 +46,6 @@ class TeamList extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->reset();
         $this->resetValidation();
         $this->dispatchBrowserEvent('close-modal');
@@ -104,7 +103,6 @@ class TeamList extends Component
     {
         try {
             Team::findOrFail($this->teamDeleteId)->delete();
-            sleep(1);
             $this->teamDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Team successfully deleted');

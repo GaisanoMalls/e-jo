@@ -37,7 +37,6 @@ class SendTicketReply extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->replyFiles = null;
         $this->upload++;
         $this->reset('description');
@@ -61,7 +60,7 @@ class SendTicketReply extends Component
                 $reply = Reply::create([
                     'user_id' => auth()->user()->id,
                     'ticket_id' => $this->ticket->id,
-                    'description' => $this->description
+                    'description' => $this->description,
                 ]);
 
                 if ($this->replyFiles) {

@@ -15,12 +15,12 @@ class BranchSeeder extends Seeder
      */
     public function run()
     {
-        $branch_names = ['Bajada', 'Digos'];
+        $branch_names = ['Bajada', 'Toril', 'Tagum', 'Digos'];
 
         foreach ($branch_names as $branch_name) {
             Branch::firstOrCreate([
                 'name' => $branch_name,
-                'slug' => \Str::slug($branch_name)
+                'slug' => \Str::slug($branch_name),
             ]);
         }
     }

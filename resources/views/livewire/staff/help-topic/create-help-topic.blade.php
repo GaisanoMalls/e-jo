@@ -29,7 +29,7 @@
                                             <label for="helpTopicName"
                                                 class="form-label form__field__label">Name</label>
                                             <input type="text" wire:model="name" class="form-control form__field"
-                                                placeholder="Enter help topic name">
+                                                id="helpTopicName" placeholder="Enter help topic name">
                                             @error('name')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -193,6 +193,7 @@
 
 @push('extra')
 <script>
+    const amountField = document.querySelector('#amount');
     const teamSelectContainer = document.querySelector('#teamSelectContainer');
     const specialProjectCheck = document.querySelector('#specialProjectCheck');
     const specialProjectContainer = document.querySelector('#specialProjectContainer');
@@ -220,6 +221,8 @@
 
         specialProjectCheck.addEventListener('change', () => {
             if (specialProjectCheck.checked) {
+                amountField.required = true;
+
                 window.addEventListener('show-special-project-container', (event) => {
                     @this.set('team', null);
                     teamSelect.disable();
@@ -240,7 +243,10 @@
                                 const selectOptionHTML = `
                                     <div class="col-md-6">
                                         <div class="mb-2">
-                                            <label class="form-label form__field__label">Level ${count} approver/s</label>
+                                            <div class="mb-2 d-flex gap-2">
+                                                <label class="form-label form__field__label">Level ${count} approver/s</label>
+                                                <small class="text-muted" style="font-size: 13px; margin-top: 2px;">(In order)</small>
+                                            </div>
                                             <div>
                                                 <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
                                             </div>
@@ -344,6 +350,7 @@
                 });
 
             } else {
+                amountField.required = false;
                 window.addEventListener('hide-special-project-container', () => {
                     teamSelectContainer.style.display = 'block';
                     levelOfApprovalSelect.reset();
@@ -418,9 +425,11 @@
         const serviceDepartmentId = serviceDepartmentSelect.value;
         if (serviceDepartmentId) {
             @this.set('service_department', serviceDepartmentId);
+
             if (!specialProjectCheck.checked) {
                 teamSelect.enable();
             }
+
             window.addEventListener('get-teams-from-selected-service-department', (event) => {
                 const teams = event.detail.teams;
                 const teamOption = [];

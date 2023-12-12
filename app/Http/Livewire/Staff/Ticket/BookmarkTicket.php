@@ -14,10 +14,9 @@ class BookmarkTicket extends Component
 
     public function bookmark()
     {
-        sleep(1);
         Bookmark::firstOrCreate([
             'ticket_id' => $this->ticket->id,
-            'user_id' => auth()->user()->id
+            'user_id' => auth()->user()->id,
         ]);
     }
 
@@ -36,7 +35,7 @@ class BookmarkTicket extends Component
     public function render()
     {
         return view('livewire.staff.ticket.bookmark-ticket', [
-            'isBookmarked' => $this->isBookmarked()
+            'isBookmarked' => $this->isBookmarked(),
         ]);
     }
 }

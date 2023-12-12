@@ -24,7 +24,6 @@ class CreateBranch extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->clearFormField();
         $this->emit('loadBranches');
     }

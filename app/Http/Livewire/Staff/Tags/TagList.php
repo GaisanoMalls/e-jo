@@ -55,7 +55,6 @@ class TagList extends Component
                     'slug' => \Str::slug($this->name),
                 ]);
 
-            sleep(1);
             $this->fetchTags();
             $this->clearFormField();
             $this->dispatchBrowserEvent('close-modal');
@@ -78,7 +77,6 @@ class TagList extends Component
     {
         try {
             Tag::findOrFail($this->tagDeleteId)->delete();
-            sleep(1);
             $this->tagDeleteId = null;
             $this->fetchTags();
             $this->dispatchBrowserEvent('close-modal');

@@ -40,7 +40,6 @@ class SendClarification extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->replyFiles = null;
         $this->upload++;
         $this->reset('description');
@@ -65,7 +64,7 @@ class SendClarification extends Component
                 $clarification = Clarification::create([
                     'user_id' => auth()->user()->id,
                     'ticket_id' => $this->ticket->id,
-                    'description' => $this->description
+                    'description' => $this->description,
                 ]);
 
                 if ($this->clarificationFiles) {

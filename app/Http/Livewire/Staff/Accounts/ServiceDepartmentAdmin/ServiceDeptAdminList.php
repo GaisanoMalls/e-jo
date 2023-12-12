@@ -30,7 +30,6 @@ class ServiceDeptAdminList extends Component
             $this->serviceDeptAdminDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             flash()->addSuccess('Service department admin account has been deleted');
-            sleep(1);
 
         } catch (Exception $e) {
             dump($e->getMessage());

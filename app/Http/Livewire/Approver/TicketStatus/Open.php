@@ -19,12 +19,13 @@ class Open extends Component
 
         return view('livewire.approver.ticket-status.open', [
             'openTickets' => $openTickets,
-            'forApprovalTickets' => $forApprovalTickets
+            'forApprovalTickets' => $forApprovalTickets,
         ]);
     }
 
     public function seenTicket($id)
     {
+        dd(Ticket::findOrFail($id)->update(['status_id' => Status::VIEWED]));
         Ticket::findOrFail($id)->update(['status_id' => Status::VIEWED]);
         ActivityLog::make($id, 'seen the ticket');
 

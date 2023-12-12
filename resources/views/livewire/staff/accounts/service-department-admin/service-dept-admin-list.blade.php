@@ -3,8 +3,7 @@
     <div
         class="card account__type__card {{ Route::is('staff.manage.user_account.service_department_admins') ? 'card__rounded__and__no__border' : '' }}">
         <div class="table-responsive custom__table">
-            <table @if (Route::is('staff.manage.user_account.service_department_admins')) id="table" @endif
-                class="table table-striped mb-0">
+            <table class="table table-striped mb-0">
                 <thead>
                     <tr>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">

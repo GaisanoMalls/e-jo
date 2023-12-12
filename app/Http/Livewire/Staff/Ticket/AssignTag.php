@@ -21,7 +21,6 @@ class AssignTag extends Component
         try {
             $this->ticket->tags()->sync($this->selectedTags);
 
-            sleep(1);
             $this->emit('loadTicketTags');
             $this->dispatchBrowserEvent('close-modal');
 
@@ -34,7 +33,7 @@ class AssignTag extends Component
     public function render()
     {
         return view('livewire.staff.ticket.assign-tag', [
-            'tags' => $this->queryTags()
+            'tags' => $this->queryTags(),
         ]);
     }
 }

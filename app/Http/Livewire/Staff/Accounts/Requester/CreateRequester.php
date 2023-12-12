@@ -39,7 +39,6 @@ class CreateRequester extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->reset();
         $this->resetValidation();
         $this->emit('loadRequesterList');

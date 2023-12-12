@@ -10,7 +10,6 @@ class NotificationCanvas extends Component
 
     public function markAllAsRead()
     {
-        sleep(1);
         auth()->user()->unreadNotifications->markAsRead();
         $this->emit('loadNotificationList');
         $this->emit('loadNavlinkNotification');
@@ -19,7 +18,6 @@ class NotificationCanvas extends Component
 
     public function clearNotifications()
     {
-        sleep(1);
         auth()->user()->notifications->each(fn($notification) => $notification->delete());
         $this->emit('loadNotificationList');
         $this->emit('loadNotificationCanvas');
@@ -36,7 +34,7 @@ class NotificationCanvas extends Component
             $hasUnreadNotifications = true;
         }
         return view('livewire.requester.notification.notification-canvas', [
-            'hasUnreadNotifications' => $hasUnreadNotifications
+            'hasUnreadNotifications' => $hasUnreadNotifications,
         ]);
     }
 }

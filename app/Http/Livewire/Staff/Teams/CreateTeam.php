@@ -29,7 +29,6 @@ class CreateTeam extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->reset();
         $this->resetValidation();
         $this->emit('loadTeams');
@@ -45,7 +44,7 @@ class CreateTeam extends Component
                 $team = Team::create([
                     'service_department_id' => $this->selectedServiceDepartment,
                     'name' => $this->name,
-                    'slug' => \Str::slug($this->name)
+                    'slug' => \Str::slug($this->name),
                 ]);
 
                 $team->branches()->attach($this->selectedBranches);

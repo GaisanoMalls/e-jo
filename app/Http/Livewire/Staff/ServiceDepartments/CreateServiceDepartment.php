@@ -24,7 +24,6 @@ class CreateServiceDepartment extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->clearFormField();
         $this->emit('loadServiceDepartments');
     }
@@ -36,7 +35,7 @@ class CreateServiceDepartment extends Component
         try {
             ServiceDepartment::create([
                 'name' => $this->name,
-                'slug' => \Str::slug($this->name)
+                'slug' => \Str::slug($this->name),
             ]);
 
             $this->actionOnSubmit();

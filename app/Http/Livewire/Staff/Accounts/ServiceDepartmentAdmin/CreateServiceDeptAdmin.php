@@ -34,7 +34,6 @@ class CreateServiceDeptAdmin extends Component
 
     public function actionOnSubmit()
     {
-        sleep(1);
         $this->reset();
         $this->resetValidation();
         $this->emit('loadServiceDeptAdminList');

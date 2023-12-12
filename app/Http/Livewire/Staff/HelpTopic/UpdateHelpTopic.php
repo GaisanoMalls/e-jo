@@ -6,6 +6,7 @@ use App\Http\Traits\BasicModelQueries;
 use App\Models\HelpTopic;
 use App\Models\LevelApprover;
 use App\Models\Team;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;

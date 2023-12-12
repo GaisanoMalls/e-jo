@@ -18,7 +18,8 @@ class LevelApprover extends Model
         'level_id',
         'user_id',
         'help_topic_id',
-        'is_done'
+        'approval_order',
+        'is_done',
     ];
 
     public function level(): BelongsTo

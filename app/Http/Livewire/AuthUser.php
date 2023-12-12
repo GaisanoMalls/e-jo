@@ -30,7 +30,6 @@ class AuthUser extends Component
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password, 'is_active' => true])) {
             session()->regenerate();
-            sleep(1);
             return $this->redirectAuthenticatedWithRole();
         }
 

@@ -30,7 +30,6 @@ class GivePermissionList extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->reset();
         $this->resetValidation();
         $this->dispatchBrowserEvent('close-modal');
@@ -59,7 +58,7 @@ class GivePermissionList extends Component
         $this->roleName = $role->name;
         $this->dispatchBrowserEvent('refresh-permission-select', [
             'allPermissions' => $this->getAllPermissions(),
-            'currentPermissions' => $role->permissions->pluck('name')->toArray()
+            'currentPermissions' => $role->permissions->pluck('name')->toArray(),
         ]);
     }
 
@@ -83,7 +82,7 @@ class GivePermissionList extends Component
         $roles = Role::all();
         return view('livewire.staff.roles-and-permissions.give-permission-list', [
             'roles' => $roles,
-            'allPermissions' => $this->getAllPermissions()
+            'allPermissions' => $this->getAllPermissions(),
         ]);
     }
 }

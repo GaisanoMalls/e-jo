@@ -26,7 +26,6 @@ class UpdateApproverPassword extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->clearFormFields();
         $this->dispatchBrowserEvent('close-modal');
     }

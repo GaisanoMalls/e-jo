@@ -68,7 +68,6 @@ class CreateTicket extends Component
 
     private function actionOnSubmit()
     {
-        sleep(1);
         $this->reset();
         $this->resetValidation();
         $this->fileAttachments = null;
@@ -117,34 +116,16 @@ class CreateTicket extends Component
                     }
                 }
 
-                // ! TEMPORARY
-                // Notify approvers through email and app based notification.
-                // $levelApprovers = LevelApprover::where('help_topic_id', $ticket->helpTopic->id)->get();
-                // $approvers = User::approvers();
-
-                // foreach ($ticket->helpTopic->levels as $level) {
-                //     foreach ($levelApprovers as $levelApprover) {
-                //         foreach ($approvers as $approver) {
-                //             if ($approver->id === $levelApprover->user_id) {
-                //                 if ($levelApprover->level_id === $level->id) {
-                //                     if ($approver->buDepartments->pluck('id')->first() === $ticket->user->department_id) {
-                //                         Notification::send($approver, new TicketCreatedNotification($ticket));
-                //                         // Mail::to($approver)->send(new TicketCreatedMail($ticket));
-                //                     }
-                //                 }
-                //             }
-                //         }
-                //     }
-                // }
-
                 // Email the first approver (Service Department Admin)
-                $serviceDepartmentAdmin = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->whereHas('branches', fn($query) => $query->where('branches.id', $ticket->user->branches->pluck('id')->first()))
-                    ->whereHas('buDepartments', fn($query) => $query->where('departments.id', $ticket->user->buDepartments->pluck('id')->first()))->first();
+                $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
+                    // ->whereHas('branches', fn($query) => $query->whereIn('branches.id', $ticket->user->branches->pluck('id')->toArray()))
+                    ->whereHas('buDepartments', fn($query) => $query->whereIn('departments.id', $ticket->user->buDepartments->pluck('id')->toArray()))->get();
 
-                if ($serviceDepartmentAdmin) {
-                    Notification::send($serviceDepartmentAdmin, new TicketCreatedNotification($ticket));
-                    Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin));
+                if (!empty($serviceDepartmentAdmins)) {
+                    foreach ($serviceDepartmentAdmins as $serviceDepartmentAdmin) {
+                        Notification::send($serviceDepartmentAdmin, new TicketCreatedNotification($ticket));
+                        Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin));
+                    }
                 }
 
                 ActivityLog::make($ticket->id, 'created a ticket');
@@ -163,7 +144,7 @@ class CreateTicket extends Component
             'fileAttachments.*' => [
                 'nullable',
                 File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
-                    ->max(15) //25600 (25 MB)
+                    ->max(25600) //25600 (25 MB)
             ],
         ]);
     }

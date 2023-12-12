@@ -70,7 +70,6 @@ class CreateHelpTopic extends Component
 
     public function saveHelpTopic()
     {
-        dd($this->COOApprover);
         $this->validate();
 
         try {
@@ -104,11 +103,12 @@ class CreateHelpTopic extends Component
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
                         $helpTopic->levels()->attach($level);
                         $levelApprovers = $this->{'level' . $level . 'Approvers'};
-                        foreach ($levelApprovers as $approver) {
+                        foreach ($levelApprovers as $key => $approver) {
                             LevelApprover::create([
                                 'level_id' => $level,
                                 'user_id' => $approver,
                                 'help_topic_id' => $helpTopic->id,
+                                'approval_order' => $key + 1
                             ]);
                         }
                     }
@@ -141,11 +141,15 @@ class CreateHelpTopic extends Component
 
     public function showSpecialProjectContainer()
     {
-        $this->dispatchBrowserEvent('show-special-project-container', ['approvers' => $this->queryApprovers()]);
+        $this->name = 'Special Project';
+        $this->dispatchBrowserEvent('show-special-project-container', [
+            'approvers' => $this->queryApprovers(),
+        ]);
     }
 
     public function hideSpecialProjectContainer()
     {
+        $this->name = null;
         $this->dispatchBrowserEvent('hide-special-project-container');
     }
 
