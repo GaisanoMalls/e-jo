@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Staff\Notification;
+namespace App\Http\Livewire\Approver\Notification;
 
 use App\Models\ActivityLog;
 use App\Models\Role;
@@ -12,7 +12,7 @@ use Livewire\Component;
 
 class NotificationList extends Component
 {
-    protected $listeners = ['staffLoadNotificationList' => '$refresh'];
+    protected $listeners = ['approverLoadNotificationList' => '$refresh'];
 
     public function readNotification($notificationId)
     {
@@ -21,7 +21,7 @@ class NotificationList extends Component
                 $notification = auth()->user()->notifications->find($notificationId);
                 (!$notification->read()) ? $notification->markAsRead() : null;
 
-                if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+                if (auth()->user()->hasRole(Role::APPROVER)) {
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
 
                     if ($ticket->status_id != Status::VIEWED) {
@@ -30,12 +30,10 @@ class NotificationList extends Component
                     }
                 }
 
-                $this->emit('staffLoadNotificationCanvas');
-                $this->emit('staffLoadNavlinkNotification');
+                $this->emit('approverLoadNotificationCanvas');
+                $this->emit('approverLoadNavlinkNotification');
 
-                return (array_key_exists('for_clarification', $notification->data)) && $notification->data['for_clarification']
-                    ? redirect()->route('staff.ticket.ticket_clarifications', $notification->data['ticket']['id'])
-                    : redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
+                redirect()->route('approver.ticket.view_ticket_details', $notification->data['ticket']['id']);
             });
 
         } catch (Exception $e) {
@@ -47,8 +45,8 @@ class NotificationList extends Component
     public function deleteNotification($notificationId)
     {
         auth()->user()->notifications->find($notificationId)->delete();
-        $this->emit('staffLoadNotificationCanvas');
-        $this->emit('staffLoadNavlinkNotification');
+        $this->emit('approverLoadNotificationCanvas');
+        $this->emit('approverLoadNavlinkNotification');
     }
 
     public function render()
@@ -57,8 +55,8 @@ class NotificationList extends Component
             fn($notification) => Ticket::where('id', data_get($notification->data, 'ticket.id'))->exists()
         );
 
-        return view('livewire.staff.notification.notification-list', [
-            'userNotifications' => $notifications,
+        return view('livewire.approver.notification.notification-list', [
+            'approverNotifications' => $notifications,
         ]);
     }
 }

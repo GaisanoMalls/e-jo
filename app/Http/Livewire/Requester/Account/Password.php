@@ -18,6 +18,7 @@ class Password extends Component
         return (new UpdatePasswordRequest())->rules();
     }
 
+    /** Perform livewire events upon form submission. */
     public function actionOnSubmit()
     {
         $this->reset();
@@ -26,6 +27,7 @@ class Password extends Component
 
     public function savePassword()
     {
+        // Save password of the current/authenticated user (requester/sender).
         $this->validate();
         auth()->user()->update(['password' => Hash::make($this->new_password)]);
         $this->actionOnSubmit();

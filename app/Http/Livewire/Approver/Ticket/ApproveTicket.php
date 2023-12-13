@@ -12,6 +12,7 @@ class ApproveTicket extends Component
 {
     public Ticket $ticket;
 
+    /** Perform livewire events upon form submission. */
     private function actionOnSubmit()
     {
         $this->emit('loadTicketLogs');

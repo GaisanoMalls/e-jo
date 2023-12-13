@@ -19,7 +19,7 @@ class HelpTopic extends Model
         'team_id',
         'service_level_agreement_id',
         'name',
-        'slug'
+        'slug',
     ];
 
     public function department(): BelongsTo

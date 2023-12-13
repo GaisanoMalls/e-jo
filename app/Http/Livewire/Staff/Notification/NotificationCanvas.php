@@ -6,24 +6,24 @@ use Livewire\Component;
 
 class NotificationCanvas extends Component
 {
-    protected $listeners = ['loadNotificationCanvas' => '$refresh'];
+    protected $listeners = ['staffLoadNotificationCanvas' => '$refresh'];
 
     public function markAllAsRead()
     {
         auth()->user()->unreadNotifications->markAsRead();
-        $this->emit('loadNotificationList');
-        $this->emit('loadNotificationCanvas');
-        $this->emit('loadNavlinkNotification');
-        $this->emit('loadUnreadNotificationCount');
+        $this->emit('staffLoadNotificationList');
+        $this->emit('staffLoadNotificationCanvas');
+        $this->emit('staffLoadNavlinkNotification');
+        $this->emit('staffLoadUnreadNotificationCount');
     }
 
     public function clearNotifications()
     {
         auth()->user()->notifications->each(fn($notification) => $notification->delete());
-        $this->emit('loadNotificationList');
-        $this->emit('loadNotificationCanvas');
-        $this->emit('loadNavlinkNotification');
-        $this->emit('loadUnreadNotificationCount');
+        $this->emit('staffLoadNotificationList');
+        $this->emit('staffLoadNotificationCanvas');
+        $this->emit('staffLoadNavlinkNotification');
+        $this->emit('staffLoadUnreadNotificationCount');
     }
 
     public function render()
@@ -32,6 +32,7 @@ class NotificationCanvas extends Component
         if (auth()->user()->unreadNotifications->count() > 0) {
             $hasUnreadNotifications = true;
         }
+
         return view('livewire.staff.notification.notification-canvas', [
             'hasUnreadNotifications' => $hasUnreadNotifications,
         ]);

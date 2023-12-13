@@ -33,8 +33,8 @@ class DirectoryController extends Controller
         return view('layouts.staff.directory.roles.requesters', compact('requesters'));
     }
 
-    public function teams()
-    {
-        $teams = $this->queryTeams();
-    }
+    // public function teams()
+    // {
+    //     $teams = $this->queryTeams();
+    // }
 }

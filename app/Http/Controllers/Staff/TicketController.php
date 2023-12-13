@@ -97,8 +97,7 @@ class TicketController extends Controller
             ->orderByDesc('created_at')
             ->first();
 
-        return view(
-            'layouts.staff.ticket.view_ticket',
+        return view('layouts.staff.ticket.view_ticket',
             compact([
                 'ticket',
                 'departments',

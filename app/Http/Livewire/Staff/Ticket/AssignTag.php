@@ -16,11 +16,13 @@ class AssignTag extends Component
 
     protected $listeners = ['loadAssignTicketForm' => '$refresh'];
 
+    /**
+     * Assign ticket tags
+     */
     public function saveAssignTicketTag()
     {
         try {
             $this->ticket->tags()->sync($this->selectedTags);
-
             $this->emit('loadTicketTags');
             $this->dispatchBrowserEvent('close-modal');
 

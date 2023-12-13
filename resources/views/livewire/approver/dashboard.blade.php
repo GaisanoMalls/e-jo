@@ -9,9 +9,7 @@
                     </div>
                     <div class="d-flex flex-column">
                         <p class="mb-0 ticket__count">{{ $openTickets->count() }}</p>
-                        <h6 class="card__title">
-                            Open
-                        </h6>
+                        <h6 class="card__title">Open</h6>
                     </div>
                 </div>
             </div>
@@ -25,9 +23,7 @@
                     </div>
                     <div class="d-flex flex-column">
                         <p class="mb-0 ticket__count">{{ $viewedTickets->count() }}</p>
-                        <h6 class="card__title">
-                            Viewed
-                        </h6>
+                        <h6 class="card__title">Viewed</h6>
                     </div>
                 </div>
             </div>
@@ -40,10 +36,8 @@
                         <i class="fa-solid fa-thumbs-up"></i>
                     </div>
                     <div class="d-flex flex-column">
-                        <p class="mb-0 ticket__count">{{ $viewedTickets->count() }}</p>
-                        <h6 class="card__title">
-                            Approved
-                        </h6>
+                        <p class="mb-0 ticket__count">{{ $approvedTickets->count() }}</p>
+                        <h6 class="card__title">Approved</h6>
                     </div>
                 </div>
             </div>
@@ -57,9 +51,7 @@
                     </div>
                     <div class="d-flex flex-column">
                         <p class="mb-0 ticket__count">{{ $disapprovedTickets->count() }}</p>
-                        <h6 class="card__title">
-                            Disapproved
-                        </h6>
+                        <h6 class="card__title">Disapproved</h6>
                     </div>
                 </div>
             </div>
@@ -73,9 +65,7 @@
                     </div>
                     <div class="d-flex flex-column">
                         <p class="mb-0 ticket__count">{{ $onProcessTickets->count() }}</p>
-                        <h6 class="card__title">
-                            On Process
-                        </h6>
+                        <h6 class="card__title">On Process</h6>
                     </div>
                 </div>
             </div>
