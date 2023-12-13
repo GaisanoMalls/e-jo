@@ -15,7 +15,7 @@ class Profile extends Component
 {
     use WithFileUploads, Utils;
 
-    public $imageUpload = 0;
+    public $imageUpload = 0; // This property is required to re-render the field resulting in "No File Chosen".
     public $first_name;
     public $middle_name;
     public $last_name;
@@ -42,12 +42,14 @@ class Profile extends Component
         return (new UpdateProfileRequest())->rules();
     }
 
+    /** Reset the file input field after form submission. */
     public function resetFileField()
     {
         $this->picture = null;
         $this->imageUpload++;
     }
 
+    /** Perform livewire events upon form submission. */
     private function actionOnSubmit()
     {
         $this->resetValidation();
@@ -84,6 +86,7 @@ class Profile extends Component
                         : $user->profile->picture
                 ]);
 
+                // Check if the user attributes has changes, then show a message.
                 ($user->wasChanged('email') || $user->profile->wasChanged([
                     'first_name',
                     'middle_name',

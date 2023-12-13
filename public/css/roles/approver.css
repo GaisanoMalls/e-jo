@@ -8115,7 +8115,7 @@ nav .nav__user__picture {
 }
 
 .notification__canvas {
-  min-width: 30% !important;
+  min-width: 25% !important;
 }
 .notification__canvas .notification__count {
   background-color: #d32839;
@@ -8163,9 +8163,24 @@ nav .nav__user__picture {
 .notification__canvas .notification__card {
   transition: 0.3s;
 }
+.notification__canvas .notification__card.unread__border {
+  border-left: 2px solid #d32839;
+}
 .notification__canvas .notification__card:hover {
-  cursor: pointer;
   background-color: #F2F2F2;
+}
+.notification__canvas .notification__card .btn__view__notification {
+  font-size: 0.875rem;
+  color: #d32839;
+}
+.notification__canvas .notification__card .btn__view__notification:hover {
+  cursor: pointer;
+}
+.notification__canvas .notification__card .btn__delete__notification {
+  height: 25px;
+  width: 25px;
+  font-size: 0.75rem;
+  background-color: #E9ECEF;
 }
 .notification__canvas .no__notification .notification__bell__container {
   width: 50px;
@@ -8176,6 +8191,18 @@ nav .nav__user__picture {
 }
 .notification__canvas .no__notification .message__2 {
   font-size: 0.875rem;
+}
+.notification__canvas .btn__close__notification__canvas {
+  box-shadow: none;
+  font-size: 1.25rem;
+  padding: 10px;
+  height: 30px;
+  width: 30px;
+  border-radius: 3.125rem;
+  border: none;
+}
+.notification__canvas .btn__close__notification__canvas:hover {
+  background-color: #F8F9FA;
 }
 
 @media (max-width: 990px) {

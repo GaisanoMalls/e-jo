@@ -1115,7 +1115,7 @@ nav {
 
 // Notification Canvas
 .notification__canvas {
-    min-width: 30% !important;
+    min-width: 25% !important;
 
     .notification__count {
         background-color: $color-1;
@@ -1169,9 +1169,28 @@ nav {
     .notification__card {
         transition: 0.3s;
 
+        &.unread__border {
+            border-left: 2px solid $color-1;
+        }
+
         &:hover {
-            cursor: pointer;
             background-color: #F2F2F2;
+        }
+
+        .btn__view__notification {
+            font-size: $fs-14;
+            color: $color-1;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        .btn__delete__notification {
+            height: 25px;
+            width: 25px;
+            font-size: $fs-12;
+            background-color: #E9ECEF;
         }
     }
 
@@ -1189,8 +1208,21 @@ nav {
             font-size: $fs-14;
         }
     }
-}
 
+    .btn__close__notification__canvas {
+        box-shadow: none;
+        font-size: $fs-20;
+        padding: 10px;
+        height: 30px;
+        width: 30px;
+        border-radius: $border-radius-50;
+        border: none;
+
+        &:hover {
+            background-color: #F8F9FA;
+        }
+    }
+}
 
 @media (max-width: 990px) {
     .custom__reply__ticket__offcanvas {

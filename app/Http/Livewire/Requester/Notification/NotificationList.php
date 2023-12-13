@@ -2,20 +2,21 @@
 
 namespace App\Http\Livewire\Requester\Notification;
 
+use App\Models\ActivityLog;
 use App\Models\Ticket;
 use Livewire\Component;
 
 class NotificationList extends Component
 {
-    protected $listeners = ['loadNotificationList' => '$refresh'];
+    protected $listeners = ['requesterLoadNotificationList' => '$refresh'];
 
     public function readNotification($notificationId)
     {
         $notification = auth()->user()->notifications->find($notificationId);
         (!$notification->read()) ? $notification->markAsRead() : null;
 
-        $this->emit('loadNotificationCanvas');
-        $this->emit('loadNavlinkNotification');
+        $this->emit('requesterLoadNotificationCanvas');
+        $this->emit('requesterLoadNavlinkNotification');
 
         return (array_key_exists('for_clarification', $notification->data)) && $notification->data['for_clarification']
             ? redirect()->route('user.ticket.ticket_clarifications', $notification->data['ticket']['id'])
@@ -25,8 +26,8 @@ class NotificationList extends Component
     public function deleteNotification($notificationId)
     {
         auth()->user()->notifications->find($notificationId)->delete();
-        $this->emit('loadNotificationCanvas');
-        $this->emit('loadNavlinkNotification');
+        $this->emit('requesterLoadNotificationCanvas');
+        $this->emit('requesterLoadNavlinkNotification');
     }
 
     public function render()
@@ -35,7 +36,7 @@ class NotificationList extends Component
             fn($notification) => Ticket::where('id', data_get($notification->data, 'ticket.id'))->exists()
         );
         return view('livewire.requester.notification.notification-list', [
-            'userNotifications' => $notifications
+            'userNotifications' => $notifications,
         ]);
     }
 }

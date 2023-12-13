@@ -20,7 +20,7 @@
 
 <body>
     @include('layouts.staff.approver.includes.navbar')
-    @include('layouts.staff.approver.includes.notification_canvas')
+    @livewire('approver.notification.notification-canvas')
     @include('layouts.staff.approver.includes.modal.confirm_logout')
     <div class="container mb-5 approver__section">
         @livewire('offline')

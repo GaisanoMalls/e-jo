@@ -14,6 +14,7 @@ class TicketClarifications extends Component
 
     public function loadClarifications(): void
     {
+        // Load the ticket clarifications and show the loading icon.
         $this->clarifications = $this->ticket->clarifications;
     }
 

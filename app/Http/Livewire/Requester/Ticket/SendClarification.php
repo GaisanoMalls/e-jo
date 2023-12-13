@@ -89,8 +89,7 @@ class SendClarification extends Component
                 // Get the latest staff
                 $latestStaff = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
                     ->where('ticket_id', $this->ticket->id)
-                    ->latest('created_at')
-                    ->first();
+                    ->latest('created_at')->first();
 
                 // Create a log description
                 $logClarificationDescription = $this->ticket->clarifications()

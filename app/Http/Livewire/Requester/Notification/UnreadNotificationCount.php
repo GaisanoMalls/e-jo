@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class UnreadNotificationCount extends Component
 {
-    protected $listeners = ['loadUnreadNotificationCount' => '$refresh'];
+    protected $listeners = ['requesterLoadUnreadNotificationCount' => '$refresh'];
 
     public function render()
     {

@@ -30,14 +30,7 @@
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-4">
                 <li class="nav-item my-auto dropdown">
-                    <a class="nav-link icon__nav__link position-relative" type="button" data-bs-toggle="offcanvas"
-                        data-bs-target="#notificationCanvas">
-                        <i class="bi bi-bell-fill"></i>
-                        @if (!auth()->user()->unreadNotifications->isEmpty())
-                        <i class='bx bxs-circle position-absolute'
-                            style="top: 8px; right: 6px; color: #D32839; font-size: 11px;"></i>
-                        @endif
-                    </a>
+                    @livewire('approver.notification.navlink-notification')
                 </li>
                 <li class="nav-item my-auto dropdown">
                     <a class="nav-link icon__nav__link" href="" role="button" data-bs-toggle="dropdown"
