@@ -30,6 +30,7 @@ class NotificationList extends Component
                     }
                 }
 
+                $this->emit('staffLoadNotificationList');
                 $this->emit('staffLoadNotificationCanvas');
                 $this->emit('staffLoadNavlinkNotification');
 

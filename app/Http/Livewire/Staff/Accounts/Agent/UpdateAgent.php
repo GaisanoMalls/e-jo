@@ -38,7 +38,7 @@ class UpdateAgent extends Component
         $this->suffix = $agent->profile->suffix;
         $this->email = $agent->email;
         $this->branch = $agent->branches->pluck('id');
-        $this->bu_department = $agent->buDepartments->pluck('id');
+        $this->bu_department = $agent->buDepartments->pluck('id')->first();
         $this->service_department = $agent->serviceDepartments->pluck('id');
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();

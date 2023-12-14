@@ -20,7 +20,7 @@ trait ActiveWithRole
     {
         $user = $request->user();
 
-        return ($user && $user->isActive() && in_array($user->role_id, $role))
+        return ($user && $user->isActive() && in_array($user->roles()->pluck('name'), $role))
             ? $next($request)
             : $this->doLogout($request)
                 ->with('error', 'Invalid permission. Please try again.');

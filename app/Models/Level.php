@@ -27,4 +27,9 @@ class Level extends Model
     {
         return $this->belongsToMany(HelpTopic::class, 'help_topic_level');
     }
+
+    public function levelApprovers(): BelongsToMany
+    {
+        return $this->belongsToMany(LevelApprover::class);
+    }
 }

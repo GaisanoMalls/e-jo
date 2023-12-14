@@ -82,6 +82,11 @@ class User extends Authenticatable
         return $this->hasMany(Bookmark::class);
     }
 
+    public function levelApprovers()
+    {
+        return $this->hasMany(LevelApprover::class);
+    }
+
     public function levels(): BelongsToMany
     {
         return $this->belongsToMany(Level::class, 'level_approver', 'user_id', 'level_id')->withTimestamps();
@@ -273,7 +278,7 @@ class User extends Authenticatable
         return $this->updatedAt($this->created_at, $this->updated_at);
     }
 
-    public function getUserRoles(): string
+    public function getUserRoles()
     {
         $userRoles = [];
 
@@ -286,5 +291,20 @@ class User extends Authenticatable
         }
 
         return '----';
+    }
+
+    public function getUserPermissions()
+    {
+        $userPermissions = [];
+
+        foreach ($this->getPermissionsViaRoles()->pluck('name') as $permission) {
+            $userPermissions[] = $permission;
+        }
+
+        if (!empty($userPermissions)) {
+            return implode(', ', $userPermissions);
+        }
+
+        return;
     }
 }

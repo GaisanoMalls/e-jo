@@ -47,6 +47,11 @@ class HelpTopic extends Model
         return $this->hasMany(Ticket::class);
     }
 
+    public function levelApprovers()
+    {
+        return $this->hasMany(LevelApprover::class);
+    }
+
     public function specialProject(): HasOne
     {
         return $this->hasOne(SpecialProject::class);

@@ -228,7 +228,6 @@
         options: requesterBUDepartmentOption,
         search: true,
         markSearchResults: true,
-        selectedValue: @json($bu_department)
     });
 
     requesterBranchSelect.addEventListener('change', () => {
@@ -236,12 +235,13 @@
         if (requesterBranchId) {
             @this.set('branch', parseInt(requesterBranchId));
             requesterBUDepartmentSelect.enable();
+
             window.addEventListener('get-branch-bu-departments', (event) => {
                 const requesterBUDepartments = event.detail.BUDepartments;
                 const requesterBUDepartmentOption = [];
 
                 if (requesterBUDepartments.length > 0) {
-                        requesterBUDepartments.forEach(function (requesterBUDepartment) {
+                    requesterBUDepartments.forEach(function (requesterBUDepartment) {
                         VirtualSelect.init({
                             ele: requesterBUDepartmentSelect
                         });
@@ -252,6 +252,7 @@
                         });
                     });
                     requesterBUDepartmentSelect.setOptions(requesterBUDepartmentOption);
+                    requesterBUDepartmentSelect.setValue(@json($bu_department));
                 } else {
                     requesterBUDepartmentSelect.close();
                     requesterBUDepartmentSelect.setOptions([]);

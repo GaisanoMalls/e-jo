@@ -80,7 +80,7 @@
         </div>
         @else
         <div class="py-3 px-4 rounded-3" style="background-color: #e9ecef;">
-            <small style="font-size: 14px;">No tickets.</small>
+            <small style="font-size: 14px;">No on process tickets.</small>
         </div>
         @endif
     </div>

@@ -30,6 +30,7 @@ class NotificationList extends Component
                     }
                 }
 
+                $this->emit('approverLoadNotificationList');
                 $this->emit('approverLoadNotificationCanvas');
                 $this->emit('approverLoadNavlinkNotification');
 
