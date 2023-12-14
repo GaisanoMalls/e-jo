@@ -103,12 +103,14 @@ Approver Details
                                 <label class="form-label form__field__label">Permissions</label>
                                 <div class="rounded-3 d-flex align-items-center gap-2"
                                     style="background-color: #E9ECEF; padding: 0.75rem 1rem;">
-                                    @foreach ($approver->getPermissionNames() as $permission)
+                                    @if ($approver->getPermissionsViaRoles()->isNotEmpty())
                                     <span class="rounded-4 d-flex align-items-center gap-1 text-white"
                                         style="font-size: 0.74rem; background-color: #3B4053; padding: 0.1rem 0.6rem;">
-                                        {{ $permission }}
+                                        {{ $approver->getUserPermissions() }}
                                     </span>
-                                    @endforeach
+                                    @else
+                                    N/A
+                                    @endif
                                 </div>
                             </div>
                         </div>

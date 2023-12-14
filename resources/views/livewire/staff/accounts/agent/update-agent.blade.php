@@ -258,6 +258,7 @@
             @this.set('branch', parseInt(agentBranchId));
             agentBUDepartmentSelect.enable();
             agentTeamSelect.enable();
+
             window.addEventListener('get-branch-bu-departments-and-teams', (event) => {
                 const agentBUDepartments = event.detail.BUDepartments;
                 const agentTeams = event.detail.teams;
@@ -277,6 +278,7 @@
                         });
                     });
                     agentBUDepartmentSelect.setOptions(agentBUDepartmentOption);
+                    agentBUDepartmentSelect.setValue(@json($bu_department));
                 }
 
                 // Teams Select
@@ -292,6 +294,7 @@
                         });
                     });
                     agentTeamSelect.setOptions(agentTeamOption);
+                    agentTeamSelect.setValue(@json($currentTeams));
                 }
             })
         }
@@ -312,7 +315,6 @@
         options: agentBUDepartmentOption,
         search: true,
         markSearchResults: true,
-        selectedValue: @json($bu_department)
     });
 
     agentBUDepartmentSelect.addEventListener('change', () => {
@@ -336,7 +338,6 @@
         multiple: true,
         showValueAsTags: true,
         markSearchResults: true,
-        selectedValue: @json($currentTeams)
     });
 
     agentTeamSelect.addEventListener('change', () => {
