@@ -1,4 +1,4 @@
-<div class="card w-100 border-0 p-0 card__settings settings__tab__container">
+<div class="card w-100 border-0 p-0 card__settings settings__tab__container" id="settingsTabContainer">
     <ul
         class="list-unstyled ps-0 mb-0 d-flex justify-content-lg-start justify-content-md-between border-bottom overflow-scroll ul__tab">
         <li>

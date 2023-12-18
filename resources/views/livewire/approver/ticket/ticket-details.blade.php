@@ -57,7 +57,7 @@
                     </small>
                     <small class="ticket__details__info">
                         <i class="bi bi-question-circle-fill me-1 text-muted" style="font-size: 11px;"></i>
-                        {{ $ticket->helpTopic->name }}
+                        {{ $ticket->helpTopic->name ?? '----' }}
                     </small>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">

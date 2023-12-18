@@ -1,4 +1,7 @@
-<div class="sidebar" id="sidebar__toggle">
+<div class="sidebar" id="sidebar__toggle"
+    x-data="{ scrollPosition: localStorage.getItem('sidebarScrollPosition') || 0 }"
+    x-init="() => { $el.scrollTop = scrollPosition }"
+    @scroll="scrollPosition = $el.scrollTop; localStorage.setItem('sidebarScrollPosition', scrollPosition)">
     @livewire('staff.sidebar-account')
     <nav style="margin-bottom: 80px;">
         <div class="main__navbar mx-4">

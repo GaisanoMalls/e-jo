@@ -298,16 +298,41 @@
                 const cooApproverSelectContainer = document.querySelector('#cooApproverSelectContainer');
                 const serviceDepartmentAdminApproverSelectContainer = document.querySelector('#serviceDepartmentAdminApproverSelectContainer');
                 const cooApprovers = @json($approvers);
-                const approverOption = [];
+                const serviceDepartmentAdminApprovers = @json($serviceDepartmentAdmins);
+                const COOApproverOption = [];
+                const serviceDepartmentAdminApproverOption = [];
+
+                cooApprovers.forEach(function (cooApprover) {
+                    const middleName = `${cooApprover.profile.middle_name ?? ''}`;
+                    const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+
+                    COOApproverOption.push({
+                        value: cooApprover.id,
+                        label: `${cooApprover.profile.first_name} ${firstLetter} ${cooApprover.profile.last_name}`,
+                    });
+                });
+
+                serviceDepartmentAdminApprovers.forEach(function (serviceDepartmentAdmin) {
+                    const middleName = `${serviceDepartmentAdmin.profile.middle_name ?? ''}`;
+                    const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+
+                    serviceDepartmentAdminApproverOption.push({
+                        value: serviceDepartmentAdmin.id,
+                        label: `${serviceDepartmentAdmin.profile.first_name} ${firstLetter} ${serviceDepartmentAdmin.profile.last_name}`,
+                    });
+                });
 
                 VirtualSelect.init({
                     ele: fmpCOOApproverSelect,
+                    options: COOApproverOption,
                     search: true,
                     autofocus: false,
                     markSearchResults: true,
                 });
+
                 VirtualSelect.init({
                     ele: serviceDepartmentAdminApproverSelect,
+                    options: serviceDepartmentAdminApproverOption,
                     search: true,
                     autofocus: false,
                     markSearchResults: true,
@@ -320,19 +345,6 @@
                     serviceDepartmentAdminApproverSelect.reset();
                     @this.set('serviceDepartmentAdminApprover', null);
                 });
-
-                cooApprovers.forEach(function (cooApprover) {
-                    const middleName = `${cooApprover.profile.middle_name ?? ''}`;
-                    const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
-
-                    approverOption.push({
-                        value: cooApprover.id,
-                        label: `${cooApprover.profile.first_name} ${firstLetter} ${cooApprover.profile.last_name}`,
-                    });
-                });
-
-                fmpCOOApproverSelect.setOptions(approverOption);
-                serviceDepartmentAdminApproverSelect.setOptions(approverOption);
 
                 fmpCOOApproverSelect.addEventListener('change', () => {
                     @this.set('COOApprover', parseInt(fmpCOOApproverSelect.value));

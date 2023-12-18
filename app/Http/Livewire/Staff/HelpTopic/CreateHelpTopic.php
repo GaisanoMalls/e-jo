@@ -86,18 +86,19 @@ class CreateHelpTopic extends Component
                     SpecialProject::create([
                         'help_topic_id' => $helpTopic->id,
                         'amount' => $this->amount,
+                        // Assign approver
                         'fmp_coo_approver' => [
                             'approver_id' => User::where('id', $this->COOApprover)->exists() ? $this->COOApprover : null,
                             'is_approved' => false,
                         ],
-                        'service_department_approver' => [
+                        'service_department_admin_approver' => [
                             'approver_id' => User::where('id', $this->serviceDepartmentAdminApprover)->exists() ? $this->serviceDepartmentAdminApprover : null,
                             'is_approved' => false,
                         ],
-                        // 'service_department_admin_approver' => [
-                        //     'service_department_admin_id' => UserServiceDepartment::where('service_department_id', $this->serviceDepartment)->pluck('user_id')->first(),
-                        //     'is_approved' => false
-                        // ]
+                        'bu_head_approver' => [
+                            'apprrover_id' => null,
+                            'is_approved' => false,
+                        ],
                     ]);
 
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
@@ -170,6 +171,7 @@ class CreateHelpTopic extends Component
     public function render()
     {
         return view('livewire.staff.help-topic.create-help-topic', [
+            'serviceDepartmentAdmins' => $this->queryServiceDepartmentAdmins(),
             'serviceLevelAgreements' => $this->queryServiceLevelAgreements(),
             'serviceDepartments' => $this->queryServiceDepartments(),
             'levelOfApprovals' => $this->queryLevelOfApprovals(),

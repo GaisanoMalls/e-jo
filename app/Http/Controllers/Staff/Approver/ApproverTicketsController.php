@@ -44,8 +44,7 @@ class ApproverTicketsController extends Controller
             ->orderByDesc('created_at')
             ->first();
 
-        return view(
-            'layouts.staff.approver.ticket.view_ticket',
+        return view('layouts.staff.approver.ticket.view_ticket',
             compact([
                 'ticket',
                 'latestClarification',
