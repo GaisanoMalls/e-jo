@@ -104,7 +104,7 @@ class SendClarification extends Component
 
                 foreach ($initialServiceDepartmentAdmins as $initialServiceDepartmentAdmin) {
                     Notification::send($latestStaff->user ?? $initialServiceDepartmentAdmin, new TicketClarificationFromRequesterNotification($this->ticket));
-                    Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
+                    // Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
                 }
 
                 ActivityLog::make($this->ticket->id, $logClarificationDescription);

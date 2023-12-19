@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Models\ActivityLog;
+use App\Models\ApprovalStatus;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -50,8 +51,18 @@ class TicketDetails extends Component
         }
     }
 
+    public function isApprovedForSLA()
+    {
+        return ($this->ticket->status_id == Status::APPROVED &&
+        $this->ticket->approval_status == ApprovalStatus::APPROVED)
+        ? true
+        : false;
+    }
+
     public function render()
     {
-        return view('livewire.staff.ticket.ticket-details');
+        return view('livewire.staff.ticket.ticket-details', [
+            'isApprovedForSLA' => $this->isApprovedForSLA()
+        ]);
     }
 }

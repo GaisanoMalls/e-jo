@@ -49,7 +49,7 @@ class AssignTicket extends Component
                     ]);
 
                     Notification::send($this->ticket->agent, new AssignedAgentNotification($this->ticket));
-                    Mail::to($this->ticket->agent)->send(new AssignedAgentMail($this->ticket, $this->ticket->agent));
+                    // Mail::to($this->ticket->agent)->send(new AssignedAgentMail($this->ticket, $this->ticket->agent));
                 }
 
                 $this->emit('loadBackButtonHeader');

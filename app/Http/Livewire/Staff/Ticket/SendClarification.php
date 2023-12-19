@@ -94,7 +94,7 @@ class SendClarification extends Component
 
                 ActivityLog::make($this->ticket->id, $logDescription);
                 Notification::send($this->ticket->user, new TicketClarificationFromServiceDeptAdminNotification($this->ticket));
-                Mail::to($this->ticket->user)->send(new FromApproverClarificationMail($this->ticket, $this->ticket->user, $this->description));
+                // Mail::to($this->ticket->user)->send(new FromApproverClarificationMail($this->ticket, $this->ticket->user, $this->description));
 
             });
 

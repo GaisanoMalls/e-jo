@@ -16,6 +16,7 @@ use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketFile;
+use App\Models\TicketTeam;
 use App\Models\User;
 use App\Notifications\Requester\TicketCreatedNotification;
 use Exception;
@@ -98,7 +99,11 @@ class CreateTicket extends Component
                     'approval_status' => ApprovalStatus::FOR_APPROVAL,
                 ]);
 
-                $ticket->teams()->attach($this->team != 'undefined' ? $this->team : null);
+                TicketTeam::create([
+                    'ticket_id' => $ticket->id,
+                    'team_id' => $this->team != 'undefined' ? $this->team : null
+                ]);
+                // $ticket->teams()->attach($this->team != 'undefined' ? $this->team : null);
 
                 if ($this->fileAttachments) {
                     foreach ($this->fileAttachments as $uploadedFile) {
@@ -124,7 +129,7 @@ class CreateTicket extends Component
                 if (!empty($serviceDepartmentAdmins)) {
                     foreach ($serviceDepartmentAdmins as $serviceDepartmentAdmin) {
                         Notification::send($serviceDepartmentAdmin, new TicketCreatedNotification($ticket));
-                        Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin));
+                        // Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin));
                     }
                 }
 

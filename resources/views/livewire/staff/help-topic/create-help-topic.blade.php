@@ -155,13 +155,115 @@
         </div>
     </div>
 
-    @push('extra')
-        <script>
+    @push('livewire-select')
+    <script>
             const amountField = document.querySelector('#amount');
             const teamSelectContainer = document.querySelector('#teamSelectContainer');
             const specialProjectCheck = document.querySelector('#specialProjectCheck');
             const specialProjectContainer = document.querySelector('#specialProjectContainer');
             const levelOfApprovalSelect = document.querySelector('#select-help-topic-level-of-approval');
+            const slaSelect = document.querySelector('#select-help-topic-sla');
+            const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
+
+            const serviceLevelAgreementOption = [
+                @foreach ($serviceLevelAgreements as $sla)
+                    {
+                        label: "{{ $sla->time_unit }}",
+                        value: "{{ $sla->id }}"
+                    },
+                @endforeach
+            ];
+
+            VirtualSelect.init({
+                ele: slaSelect,
+                options: serviceLevelAgreementOption,
+                search: true,
+                markSearchResults: true,
+            });
+
+            slaSelect.addEventListener('change', () => {
+                const slaId = parseInt(slaSelect.value);
+                @this.set('sla', slaId);
+            });
+
+            const serviceDepartmentOption = [
+                @foreach ($serviceDepartments as $serviceDepartment)
+                    {
+                        label: "{{ $serviceDepartment->name }}",
+                        value: "{{ $serviceDepartment->id }}"
+                    },
+                @endforeach
+            ];
+
+            VirtualSelect.init({
+                ele: serviceDepartmentSelect,
+                options: serviceDepartmentOption,
+                search: true,
+                markSearchResults: true,
+            });
+
+            const teamSelect = document.querySelector('#select-help-topic-team');
+            VirtualSelect.init({
+                ele: teamSelect,
+                search: true,
+                markSearchResults: true,
+            });
+            teamSelect.disable();
+
+            serviceDepartmentSelect.addEventListener('change', () => {
+                const serviceDepartmentId = serviceDepartmentSelect.value;
+
+                if (serviceDepartmentId) {
+                    @this.set('service_department', serviceDepartmentId);
+
+                    if (!specialProjectCheck.checked) {
+                        teamSelect.enable();
+                    }
+
+                    window.addEventListener('get-teams-from-selected-service-department', (event) => {
+                        const teams = event.detail.teams;
+                        const teamOption = [];
+
+                        if (teams.length > 0) {
+                            teams.forEach(function(team) {
+                                VirtualSelect.init({
+                                    ele: teamSelect,
+                                });
+
+                                teamOption.push({
+                                    label: team.name,
+                                    value: team.id
+                                });
+                            });
+                            teamSelect.setOptions(teamOption);
+
+                            const countTeams = document.querySelector('#countTeams');
+                            countTeams.textContent = `(${event.detail.teams.length})`;
+
+                        } else {
+                            teamSelect.disable();
+                            teamSelect.setOptions([]);
+                        }
+                    });
+
+                } else {
+                    teamSelect.reset();
+                    teamSelect.disable();
+                    teamSelect.setOptions([]);
+                }
+            });
+
+            teamSelect.addEventListener('change', () => {
+                const teamId = parseInt(teamSelect.value);
+                if (teamId) @this.set('team', teamId);
+            });
+
+            serviceDepartmentSelect.addEventListener('reset', () => {
+                @this.set('teams', []); // Clear teams count when service department is resetted.
+                @this.set('name', 'Special Project');
+                const countTeams = document.querySelector('#countTeams');
+                countTeams.textContent = '';
+            });
 
             const levelOfApprovalOption = [
                 @foreach ($levelOfApprovals as $approval)
@@ -186,6 +288,18 @@
                 specialProjectCheck.addEventListener('change', () => {
                     if (specialProjectCheck.checked) {
                         amountField.required = true;
+
+                        // TO BE FIXED - IN PROGRESS
+                        serviceDepartmentSelect.addEventListener('change', () => {
+                            const serviceDepartments = @json($serviceDepartments);
+
+                            serviceDepartments.forEach((department) => {
+                                if (serviceDepartmentSelect.value == department.id) {
+                                    @this.set('name', `Special Project (${department.name})`);
+                                }
+                            });
+                        });
+                        // END
 
                         window.addEventListener('show-special-project-container', (event) => {
                             @this.set('team', null);
@@ -263,7 +377,9 @@
                             });
                         });
                     } else {
+                        @this.set('name', null);
                         amountField.required = false;
+
                         window.addEventListener('hide-special-project-container', () => {
                             teamSelectContainer.style.display = 'block';
                             levelOfApprovalSelect.reset();
@@ -283,118 +399,8 @@
                     specialProjectContainer.style.display = 'none';
                 });
             }
-        </script>
-    @endpush
 
-    @push('livewire-select')
-        <script>
-            const serviceLevelAgreementOption = [
-                @foreach ($serviceLevelAgreements as $sla)
-                    {
-                        label: "{{ $sla->time_unit }}",
-                        value: "{{ $sla->id }}"
-                    },
-                @endforeach
-            ];
 
-            const slaSelect = document.querySelector('#select-help-topic-sla');
-            VirtualSelect.init({
-                ele: slaSelect,
-                options: serviceLevelAgreementOption,
-                search: true,
-                markSearchResults: true,
-            });
-
-            slaSelect.addEventListener('change', () => {
-                const slaId = parseInt(slaSelect.value);
-                @this.set('sla', slaId);
-            });
-
-            const serviceDepartmentOption = [
-                @foreach ($serviceDepartments as $serviceDepartment)
-                    {
-                        label: "{{ $serviceDepartment->name }}",
-                        value: "{{ $serviceDepartment->id }}"
-                    },
-                @endforeach
-            ];
-
-            const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
-            VirtualSelect.init({
-                ele: serviceDepartmentSelect,
-                options: serviceDepartmentOption,
-                search: true,
-                markSearchResults: true,
-            });
-
-            const teamSelect = document.querySelector('#select-help-topic-team');
-            VirtualSelect.init({
-                ele: teamSelect,
-                search: true,
-                markSearchResults: true,
-            });
-            teamSelect.disable();
-
-            serviceDepartmentSelect.addEventListener('change', () => {
-                const serviceDepartmentId = serviceDepartmentSelect.value;
-                const serviceDepartments = @json($serviceDepartments);
-
-                serviceDepartments.forEach((department) => {
-                    if (serviceDepartmentSelect.value == department.id) {
-                        @this.set('name', `Special Project (${department.name})`);
-                    }
-                });
-
-                if (serviceDepartmentId) {
-                    @this.set('service_department', serviceDepartmentId);
-
-                    if (!specialProjectCheck.checked) {
-                        teamSelect.enable();
-                    }
-
-                    window.addEventListener('get-teams-from-selected-service-department', (event) => {
-                        const teams = event.detail.teams;
-                        const teamOption = [];
-
-                        if (teams.length > 0) {
-                            teams.forEach(function(team) {
-                                VirtualSelect.init({
-                                    ele: teamSelect,
-                                });
-
-                                teamOption.push({
-                                    label: team.name,
-                                    value: team.id
-                                });
-                            });
-                            teamSelect.setOptions(teamOption);
-
-                            const countTeams = document.querySelector('#countTeams');
-                            countTeams.textContent = `(${event.detail.teams.length})`;
-
-                        } else {
-                            teamSelect.disable();
-                            teamSelect.setOptions([]);
-                        }
-                    });
-
-                } else {
-                    teamSelect.reset();
-                    teamSelect.disable();
-                    teamSelect.setOptions([]);
-                }
-            });
-
-            teamSelect.addEventListener('change', () => {
-                const teamId = parseInt(teamSelect.value);
-                if (teamId) @this.set('team', teamId);
-            });
-
-            serviceDepartmentSelect.addEventListener('reset', () => {
-                @this.set('teams', []); // Clear teams count when service department is resetted.
-                const countTeams = document.querySelector('#countTeams');
-                countTeams.textContent = '';
-            });
         </script>
     @endpush
 

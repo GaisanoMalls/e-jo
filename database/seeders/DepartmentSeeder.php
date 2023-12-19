@@ -19,6 +19,7 @@ class DepartmentSeeder extends Seeder
             'HR',
             'SPE',
             'SPM',
+            'FPM',
             'DPS',
         ];
 
