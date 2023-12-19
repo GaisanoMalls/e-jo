@@ -88,7 +88,6 @@ class CreateTicket extends Component
                     'user_id' => Auth::user()->id,
                     'branch_id' => $this->branch ?: Auth::user()->branches->pluck('id')->first(),
                     'service_department_id' => $this->serviceDepartment,
-                    'team_id' => $this->team != 'undefined' ? $this->team : null,
                     'help_topic_id' => $this->helpTopic,
                     'status_id' => Status::OPEN,
                     'priority_level_id' => $this->priorityLevel,
@@ -98,6 +97,8 @@ class CreateTicket extends Component
                     'description' => $this->description,
                     'approval_status' => ApprovalStatus::FOR_APPROVAL,
                 ]);
+
+                $ticket->teams()->attach($this->team != 'undefined' ? $this->team : null);
 
                 if ($this->fileAttachments) {
                     foreach ($this->fileAttachments as $uploadedFile) {
@@ -118,7 +119,6 @@ class CreateTicket extends Component
 
                 // Email the first approver (Service Department Admin)
                 $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    // ->whereHas('branches', fn($query) => $query->whereIn('branches.id', $ticket->user->branches->pluck('id')->toArray()))
                     ->whereHas('buDepartments', fn($query) => $query->whereIn('departments.id', $ticket->user->buDepartments->pluck('id')->toArray()))->get();
 
                 if (!empty($serviceDepartmentAdmins)) {

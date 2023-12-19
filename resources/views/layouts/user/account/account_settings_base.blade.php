@@ -1,19 +1,19 @@
 @extends('layouts.user.base', [
-'title' =>
-$title ??
-'User Profile - ' .
-auth()->user()->profile->getFullName(),
+    'title' =>
+        $title ??
+        'User Profile - ' .
+            auth()->user()->profile->getFullName(),
 ])
 
 @section('main-content')
-<div class="row account__settings">
-    @livewire('requester.account.preview')
-    <div class="col-xl-8 col-md-8">
-        <div class="card custom__card p-0">
-            <div class="account__content__header">
-                <h5 class="mb-0 account__content__header__title">
+    <div class="row account__settings">
+        @livewire('requester.account.preview')
+        <div class="col-xl-8 col-md-8">
+            <div class="card custom__card p-0">
+                <div class="account__content__header">
+                    <h5 class="mb-0 account__content__header__title">
                     @section('account-content-header-title')
-                    Edit Profile
+                        Edit Profile
                     @show
                 </h5>
                 <ul class="list-unstyled d-flex gap-4 border-bottom overflow-scroll account__content__tab">
@@ -33,7 +33,7 @@ auth()->user()->profile->getFullName(),
             </div>
             <div class="account__content">
                 @section('account-content')
-                @livewire('requester.account.profile')
+                    @livewire('requester.account.profile')
                 @show
             </div>
         </div>

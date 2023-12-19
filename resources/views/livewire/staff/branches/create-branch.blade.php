@@ -18,10 +18,10 @@
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
                                     placeholder="Enter branch name">
                                 @error('name')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>
@@ -35,8 +35,8 @@
                                 </span>
                                 Add new
                             </button>
-                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" data-bs-dismiss="modal"
-                                wire:click="clearFormField">Cancel</button>
+                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel"
+                                data-bs-dismiss="modal" wire:click="clearFormField">Cancel</button>
                         </div>
                     </div>
                 </form>

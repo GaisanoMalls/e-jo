@@ -8,28 +8,29 @@
                 </div>
             </div>
             <div class="d-flex flex-column">
-                @foreach ( $ticket->activityLogs as $log)
-                <div class="d-flex justify-content-between py-3 log__list
+                @foreach ($ticket->activityLogs as $log)
+                    <div
+                        class="d-flex justify-content-between py-3 log__list
                     {{ $ticket->activityLogs->count() > 1 ? 'border-bottom' : '' }}">
-                    <div class="d-flex gap-3">
-                        <i class="bi bi-clock-history log__icon"></i>
-                        <div class="d-flex align-items-start flex-column">
-                            <h6 class="mb-1 log__description">
-                                <strong class="causer__details">
-                                    {{ $log->causerDetails() }}
-                                </strong>
-                                {{ $log->description }}
-                            </h6>
-                            <small class="log__date">
-                                {{ $log->dateCreated() }}
-                            </small>
+                        <div class="d-flex gap-3">
+                            <i class="bi bi-clock-history log__icon"></i>
+                            <div class="d-flex align-items-start flex-column">
+                                <h6 class="mb-1 log__description">
+                                    <strong class="causer__details">
+                                        {{ $log->causerDetails() }}
+                                    </strong>
+                                    {{ $log->description }}
+                                </h6>
+                                <small class="log__date">
+                                    {{ $log->dateCreated() }}
+                                </small>
+                            </div>
                         </div>
+                        <small class="log__time">
+                            {{ $log->created_at->diffForHumans(null, true) }}
+                            ago
+                        </small>
                     </div>
-                    <small class="log__time">
-                        {{ $log->created_at->diffForHumans(null, true) }}
-                        ago
-                    </small>
-                </div>
                 @endforeach
             </div>
         </div>

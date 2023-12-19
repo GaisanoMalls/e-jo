@@ -1,6 +1,5 @@
 <div>
-    @livewire('staff.accounts.service-department-admin.update-service-dept-admin-password', ['serviceDeptAdmin' =>
-    $serviceDeptAdmin])
+    @livewire('staff.accounts.service-department-admin.update-service-dept-admin-password', ['serviceDeptAdmin' => $serviceDeptAdmin])
     <div class="row accounts__section justify-content-center">
         <div class="col-xxl-9 col-lg-12">
             <div class="card d-flex flex-column gap-2 users__account__card">
@@ -9,9 +8,9 @@
                     <small class="text-muted" style="font-size: 12px;">
                         Last updated:
                         @if ($serviceDeptAdmin->dateUpdated() > $serviceDeptAdmin->profile->dateUpdated())
-                        {{ $serviceDeptAdmin->dateUpdated() }}
+                            {{ $serviceDeptAdmin->dateUpdated() }}
                         @else
-                        {{ $serviceDeptAdmin->profile->dateUpdated() }}
+                            {{ $serviceDeptAdmin->profile->dateUpdated() }}
                         @endif
                     </small>
                 </div>
@@ -28,10 +27,10 @@
                                         <input type="text" wire:model="first_name" class="form-control form__field"
                                             id="first_name" placeholder="Enter first name (required)">
                                         @error('first_name')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -42,10 +41,10 @@
                                         <input type="text" wire:model="middle_name" class="form-control form__field"
                                             id="middle_name" placeholder="Enter middle name (optional)">
                                         @error('middle_name')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -55,10 +54,10 @@
                                         <input type="text" wire:model="last_name" class="form-control form__field"
                                             id="last_name" placeholder="Enter last name (required)">
                                         @error('last_name')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -69,10 +68,10 @@
                                             <div id="select-service-dept-admin-suffix" wire:ignore></div>
                                         </div>
                                         @error('suffix')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -87,10 +86,10 @@
                                         <input type="email" wire:model="email" class="form-control form__field"
                                             id="email" placeholder="Enter email (required)">
                                         @error('email')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                     <div class="d-flex align-items-center">
@@ -114,10 +113,10 @@
                                             <div id="select-service-dept-admin-branch" wire:ignore></div>
                                         </div>
                                         @error('branches')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -128,18 +127,18 @@
                                         <label for="branch" class="form-label form__field__label">
                                             BU/Department
                                             @if ($BUDepartments)
-                                            <span class="fw-normal" style="font-size: 13px;">
-                                                ({{ $BUDepartments->count() }})</span>
+                                                <span class="fw-normal" style="font-size: 13px;">
+                                                    ({{ $BUDepartments->count() }})</span>
                                             @endif
                                         </label>
                                         <div>
                                             <div id="select-service-dept-admin-bu-department" wire:ignore></div>
                                         </div>
                                         @error('bu_department')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -153,10 +152,10 @@
                                             </div>
                                         </div>
                                         @error('service_departments')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -183,136 +182,137 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const serviceDeptAdminSuffixOption = [
-        @foreach ($serviceDeptAdminSuffixes as $suffix)
-            {
-                label: "{{ $suffix->name }}",
-                value: "{{ $suffix->name }}"
-            },
-        @endforeach
-    ];
+    <script>
+        const serviceDeptAdminSuffixOption = [
+            @foreach ($serviceDeptAdminSuffixes as $suffix)
+                {
+                    label: "{{ $suffix->name }}",
+                    value: "{{ $suffix->name }}"
+                },
+            @endforeach
+        ];
 
-    const serviceDeptAdminSuffixSelect = document.querySelector('#select-service-dept-admin-suffix');
-    VirtualSelect.init({
-        ele: serviceDeptAdminSuffixSelect,
-        options: serviceDeptAdminSuffixOption,
-        search: true,
-        markSearchResults: true,
-        selectedValue: '{{ $serviceDeptAdmin->profile->suffix }}'
-    });
+        const serviceDeptAdminSuffixSelect = document.querySelector('#select-service-dept-admin-suffix');
+        VirtualSelect.init({
+            ele: serviceDeptAdminSuffixSelect,
+            options: serviceDeptAdminSuffixOption,
+            search: true,
+            markSearchResults: true,
+            selectedValue: '{{ $serviceDeptAdmin->profile->suffix }}'
+        });
 
-    serviceDeptAdminSuffixSelect.addEventListener('change', () => {
-        @this.set('suffix', serviceDeptAdminSuffixSelect.value)
-    });
+        serviceDeptAdminSuffixSelect.addEventListener('change', () => {
+            @this.set('suffix', serviceDeptAdminSuffixSelect.value)
+        });
 
-    const serviceDeptAdminBranchOption = [
-        @foreach ($serviceDeptAdminBranches as $branch)
-        {
-            label: "{{ $branch->name }}",
-            value: "{{ $branch->id }}"
-        },
-        @endforeach
-    ];
+        const serviceDeptAdminBranchOption = [
+            @foreach ($serviceDeptAdminBranches as $branch)
+                {
+                    label: "{{ $branch->name }}",
+                    value: "{{ $branch->id }}"
+                },
+            @endforeach
+        ];
 
-    const serviceDeptAdminBranchSelect = document.querySelector('#select-service-dept-admin-branch');
-    VirtualSelect.init({
-        ele: serviceDeptAdminBranchSelect,
-        options: serviceDeptAdminBranchOption,
-        search: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-        selectedValue: @json($branches)
-    });
+        const serviceDeptAdminBranchSelect = document.querySelector('#select-service-dept-admin-branch');
+        VirtualSelect.init({
+            ele: serviceDeptAdminBranchSelect,
+            options: serviceDeptAdminBranchOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            selectedValue: @json($branches)
+        });
 
-    serviceDeptAdminBranchSelect.addEventListener('reset', () => {
-        @this.set('branches', null);
-        @this.set('bu_department', null);
-        serviceDeptAdminBUDepartmentSelect.reset();
-        serviceDeptAdminBUDepartmentSelect.disable();
-        serviceDeptAdminBUDepartmentSelect.setOptions([]);
-    });
+        serviceDeptAdminBranchSelect.addEventListener('reset', () => {
+            @this.set('branches', null);
+            @this.set('bu_department', null);
+            serviceDeptAdminBUDepartmentSelect.reset();
+            serviceDeptAdminBUDepartmentSelect.disable();
+            serviceDeptAdminBUDepartmentSelect.setOptions([]);
+        });
 
-    serviceDeptAdminBranchSelect.addEventListener('change', () => {
-        const serviceDeptAdminBranchIds = serviceDeptAdminBranchSelect.value;
-        if (serviceDeptAdminBranchIds) {
-            @this.set('branches', serviceDeptAdminBranchIds);
-            serviceDeptAdminBUDepartmentSelect.enable();
-            window.addEventListener('get-branch-bu-departments', (event) => {
-                const serviceDeptAdminBUDepartments = event.detail.BUDepartments;
-                const serviceDeptAdminBUDepartmentOption = [];
+        serviceDeptAdminBranchSelect.addEventListener('change', () => {
+            const serviceDeptAdminBranchIds = serviceDeptAdminBranchSelect.value;
+            if (serviceDeptAdminBranchIds) {
+                @this.set('branches', serviceDeptAdminBranchIds);
+                serviceDeptAdminBUDepartmentSelect.enable();
+                window.addEventListener('get-branch-bu-departments', (event) => {
+                    const serviceDeptAdminBUDepartments = event.detail.BUDepartments;
+                    const serviceDeptAdminBUDepartmentOption = [];
 
-                if (serviceDeptAdminBUDepartments.length > 0) {
-                     serviceDeptAdminBUDepartments.forEach(function (serviceDeptAdminBUDepartment) {
-                        VirtualSelect.init({
-                            ele: serviceDeptAdminBUDepartmentSelect
+                    if (serviceDeptAdminBUDepartments.length > 0) {
+                        serviceDeptAdminBUDepartments.forEach(function(serviceDeptAdminBUDepartment) {
+                            VirtualSelect.init({
+                                ele: serviceDeptAdminBUDepartmentSelect
+                            });
+
+                            serviceDeptAdminBUDepartmentOption.push({
+                                label: serviceDeptAdminBUDepartment.name,
+                                value: serviceDeptAdminBUDepartment.id
+                            });
                         });
+                        serviceDeptAdminBUDepartmentSelect.setOptions(serviceDeptAdminBUDepartmentOption);
+                    }
+                })
+            }
+        })
 
-                        serviceDeptAdminBUDepartmentOption.push({
-                            label: serviceDeptAdminBUDepartment.name,
-                            value: serviceDeptAdminBUDepartment.id
-                        });
-                    });
-                    serviceDeptAdminBUDepartmentSelect.setOptions(serviceDeptAdminBUDepartmentOption);
-                }
-            })
-        }
-    })
+        const serviceDeptAdminBUDepartmentOption = [
+            @foreach ($serviceDeptAdminBUDepartments as $department)
+                {
+                    label: "{{ $department->name }}",
+                    value: "{{ $department->id }}"
+                },
+            @endforeach
+        ];
 
-     const serviceDeptAdminBUDepartmentOption = [
-        @foreach ($serviceDeptAdminBUDepartments as $department)
-        {
-            label: "{{ $department->name }}",
-            value: "{{ $department->id }}"
-        },
-        @endforeach
-    ];
+        const serviceDeptAdminBUDepartmentSelect = document.querySelector('#select-service-dept-admin-bu-department');
+        VirtualSelect.init({
+            ele: serviceDeptAdminBUDepartmentSelect,
+            options: serviceDeptAdminBUDepartmentOption,
+            search: true,
+            markSearchResults: true,
+            selectedValue: @json($bu_department)
+        });
 
-    const serviceDeptAdminBUDepartmentSelect = document.querySelector('#select-service-dept-admin-bu-department');
-    VirtualSelect.init({
-        ele: serviceDeptAdminBUDepartmentSelect,
-        options: serviceDeptAdminBUDepartmentOption,
-        search: true,
-        markSearchResults: true,
-        selectedValue: @json($bu_department)
-    });
+        serviceDeptAdminBUDepartmentSelect.addEventListener('change', () => {
+            @this.set('bu_department', parseInt(serviceDeptAdminBUDepartmentSelect.value));
+        });
 
-    serviceDeptAdminBUDepartmentSelect.addEventListener('change', () => {
-        @this.set('bu_department', parseInt(serviceDeptAdminBUDepartmentSelect.value));
-    });
+        const serviceDeptAdminServiceDepartmentOption = [
+            @foreach ($serviceDeptAdminServiceDepartments as $serviceDepartment)
+                {
+                    label: "{{ $serviceDepartment->name }}",
+                    value: "{{ $serviceDepartment->id }}"
+                },
+            @endforeach
+        ];
 
-    const serviceDeptAdminServiceDepartmentOption = [
-        @foreach ($serviceDeptAdminServiceDepartments as $serviceDepartment)
-        {
-            label: "{{ $serviceDepartment->name }}",
-            value: "{{ $serviceDepartment->id }}"
-        },
-        @endforeach
-    ];
+        const serviceDeptAdminSeviceDepartmentSelect = document.querySelector(
+            '#select-service-dept-admin-service-department');
+        VirtualSelect.init({
+            ele: serviceDeptAdminSeviceDepartmentSelect,
+            options: serviceDeptAdminServiceDepartmentOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            selectedValue: @json($service_departments)
+        });
 
-    const serviceDeptAdminSeviceDepartmentSelect = document.querySelector('#select-service-dept-admin-service-department');
-    VirtualSelect.init({
-        ele: serviceDeptAdminSeviceDepartmentSelect,
-        options: serviceDeptAdminServiceDepartmentOption,
-        search: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-        selectedValue: @json($service_departments)
-    });
-
-    serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', () => {
-        @this.set('service_departments', serviceDeptAdminSeviceDepartmentSelect.value);
-    });
-</script>
+        serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', () => {
+            @this.set('service_departments', serviceDeptAdminSeviceDepartmentSelect.value);
+        });
+    </script>
 @endpush
 
 {{-- Modal Scripts --}}
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#editPasswordModal').modal('hide');
-    });
-</script>
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#editPasswordModal').modal('hide');
+        });
+    </script>
 @endpush

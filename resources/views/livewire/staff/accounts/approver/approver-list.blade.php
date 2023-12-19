@@ -1,121 +1,121 @@
 <div>
     @if (!$approvers->isEmpty())
-    <div
-        class="card account__type__card {{ Route::is('staff.manage.user_account.approvers') ? 'card__rounded__and__no__border' : '' }}">
-        <div class="table-responsive custom__table">
-            <table class="table table-striped mb-0">
-                <thead>
-                    <tr>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;;">Name
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Branch
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            BU/Department
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Status
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Permissions
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Date
-                            Added
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Last
-                            Active
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($approvers as $approver)
-                    <tr>
-                        <td>
-                            <a href="{{ route('staff.manage.user_account.approver.view_details', $approver->id) }}">
-                                <div class="media d-flex align-items-center user__account__media">
-                                    <div class="flex-shrink-0">
-                                        @if ($approver->profile->picture)
-                                        <img src="{{ Storage::url($approver->profile->picture) }}" alt=""
-                                            class="image-fluid user__picture">
-                                        @else
-                                        <div class="user__name__initial" style="background-color: #3B4053;">
-                                            {{ $approver->profile->getNameInitial() }}
+        <div
+            class="card account__type__card {{ Route::is('staff.manage.user_account.approvers') ? 'card__rounded__and__no__border' : '' }}">
+            <div class="table-responsive custom__table">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;;">Name
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">Branch
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                BU/Department
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                Status
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                Permissions
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">Date
+                                Added
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">Last
+                                Active
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($approvers as $approver)
+                            <tr>
+                                <td>
+                                    <a
+                                        href="{{ route('staff.manage.user_account.approver.view_details', $approver->id) }}">
+                                        <div class="media d-flex align-items-center user__account__media">
+                                            <div class="flex-shrink-0">
+                                                @if ($approver->profile->picture)
+                                                    <img src="{{ Storage::url($approver->profile->picture) }}"
+                                                        alt="" class="image-fluid user__picture">
+                                                @else
+                                                    <div class="user__name__initial" style="background-color: #3B4053;">
+                                                        {{ $approver->profile->getNameInitial() }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="d-flex flex-column gap-1 ms-3 w-100">
+                                                <span class="user__name">{{ $approver->profile->getFullName() }}</span>
+                                                <small>{{ $approver->email }}</small>
+                                            </div>
                                         </div>
-                                        @endif
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ $approver->getBranches() }}</span>
                                     </div>
-                                    <div class="d-flex flex-column gap-1 ms-3 w-100">
-                                        <span class="user__name">{{
-                                            $approver->profile->getFullName() }}</span>
-                                        <small>{{ $approver->email }}</small>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ $approver->getBUDepartments() }}</span>
                                     </div>
-                                </div>
-                            </a>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $approver->getBranches() }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $approver->getBUDepartments() }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $approver->isActive() ? 'Active' : 'Inactive' }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start gap-1 td__content">
-                                <span><i class="bi bi-person-lock text-muted"></i></span>
-                                <span>{{ $approver->getAllPermissions()->count() }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $approver->dateCreated() }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start td__content">
-                                <span>
-                                    @if ($approver->dateUpdated() >
-                                    $approver->profile->dateUpdated())
-                                    {{ $approver->dateUpdated() }}
-                                    @else
-                                    {{ $approver->profile->dateUpdated() }}
-                                    @endif
-                                </span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                                <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
-                                    onclick="window.location.href='{{ route('staff.manage.user_account.approver.edit_details', $approver->id) }}'"
-                                    type="button" class="btn action__button">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button data-tooltip="Delete" data-tooltip-position="top" data-tooltip-font-size="11px"
-                                    type="button" class="btn action__button" data-bs-toggle="modal"
-                                    data-bs-target="#confirmDeleteApproverModal"
-                                    wire:click="deleteApprover({{ $approver->id }})">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ $approver->isActive() ? 'Active' : 'Inactive' }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start gap-1 td__content">
+                                        <span><i class="bi bi-person-lock text-muted"></i></span>
+                                        <span>{{ $approver->getAllPermissions()->count() }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ $approver->dateCreated() }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>
+                                            @if ($approver->dateUpdated() > $approver->profile->dateUpdated())
+                                                {{ $approver->dateUpdated() }}
+                                            @else
+                                                {{ $approver->profile->dateUpdated() }}
+                                            @endif
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
+                                        <button data-tooltip="Edit" data-tooltip-position="top"
+                                            data-tooltip-font-size="11px"
+                                            onclick="window.location.href='{{ route('staff.manage.user_account.approver.edit_details', $approver->id) }}'"
+                                            type="button" class="btn action__button">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button data-tooltip="Delete" data-tooltip-position="top"
+                                            data-tooltip-font-size="11px" type="button" class="btn action__button"
+                                            data-bs-toggle="modal" data-bs-target="#confirmDeleteApproverModal"
+                                            wire:click="deleteApprover({{ $approver->id }})">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
     @else
-    <div class="alert text-center d-flex align-items-center justify-content-center gap-2" role="alert"
-        style="background-color: #F5F7F9; font-size: 14px;">
-        <i class="fa-solid fa-circle-info"></i>
-        Empty records for approvers.
-    </div>
+        <div class="alert text-center d-flex align-items-center justify-content-center gap-2" role="alert"
+            style="background-color: #F5F7F9; font-size: 14px;">
+            <i class="fa-solid fa-circle-info"></i>
+            Empty records for approvers.
+        </div>
     @endif
 
     {{-- Assign Permission --}}
@@ -140,10 +140,10 @@
                                     </div>
                                 </div>
                                 @error('permissions')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>
@@ -202,52 +202,52 @@
 
 {{-- Modal Scripts --}}
 @push('livewire-select')
-<script>
-    const permissionOption = [
-        @foreach ($allPermissions as $permission)
-        {
-            label: "{{ $permission->name }}",
-            value: "{{ $permission->name }}"
-        },
-        @endforeach
-    ];
+    <script>
+        const permissionOption = [
+            @foreach ($allPermissions as $permission)
+                {
+                    label: "{{ $permission->name }}",
+                    value: "{{ $permission->name }}"
+                },
+            @endforeach
+        ];
 
-    const selectApproverPermission = document.querySelector('#select-assign-approver-permission');
-    VirtualSelect.init({
-        ele: selectApproverPermission,
-        options: permissionOption,
-        search: true,
-        required: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-        popupDropboxBreakpoint: '3000px',
-    });
-
-    window.addEventListener('refresh-approver-permission-select', (event) => {
-        const refreshPermissionOption = [];
-        const refreshPermissions = event.detail.allPermissions;
-
-        refreshPermissions.forEach((permission) => {
-            refreshPermissionOption.push({
-                label: permission.name,
-                value: permission.name
-            });
+        const selectApproverPermission = document.querySelector('#select-assign-approver-permission');
+        VirtualSelect.init({
+            ele: selectApproverPermission,
+            options: permissionOption,
+            search: true,
+            required: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            popupDropboxBreakpoint: '3000px',
         });
 
-        selectApproverPermission.setOptions(refreshPermissionOption);
-    });
+        window.addEventListener('refresh-approver-permission-select', (event) => {
+            const refreshPermissionOption = [];
+            const refreshPermissions = event.detail.allPermissions;
 
-    selectApproverPermission.addEventListener('change', () => {
-        @this.set('approverPermissions', selectApproverPermission.value);
-    });
-</script>
+            refreshPermissions.forEach((permission) => {
+                refreshPermissionOption.push({
+                    label: permission.name,
+                    value: permission.name
+                });
+            });
+
+            selectApproverPermission.setOptions(refreshPermissionOption);
+        });
+
+        selectApproverPermission.addEventListener('change', () => {
+            @this.set('approverPermissions', selectApproverPermission.value);
+        });
+    </script>
 @endpush
 
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#assignApproverPermissionModal').modal('hide');
-    });
-</script>
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#assignApproverPermissionModal').modal('hide');
+        });
+    </script>
 @endpush

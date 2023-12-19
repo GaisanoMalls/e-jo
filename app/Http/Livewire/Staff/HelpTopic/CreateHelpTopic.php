@@ -53,8 +53,6 @@ class CreateHelpTopic extends Component
             //     $this->showAmountError = false;
             //     $rules['amount'] = ['nullable'];
             // }
-
-
         }
 
         return $rules;
@@ -122,15 +120,6 @@ class CreateHelpTopic extends Component
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Oops, something went wrong.');
-        }
-    }
-
-    public function updatedAmount()
-    {
-        if ((int) $this->amount >= $this->max_amount) {
-            $this->dispatchBrowserEvent('show-select-fmp-coo-approver');
-        } else {
-            $this->dispatchBrowserEvent('show-select-service-departmetn-admin-approver');
         }
     }
 

@@ -4,10 +4,10 @@
             <div class="d-flex flex-wrap align-items-center gap-3">
                 <div class="mr-2">
                     @if ($picture)
-                    <img src="{{ $picture->temporaryUrl() }}" class="upload__new__photo" alt="">
+                        <img src="{{ $picture->temporaryUrl() }}" class="upload__new__photo" alt="">
                     @elseif (auth()->user()->profile->picture)
-                    <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="upload__new__photo"
-                        id="uploadedNewPhoto" alt="">
+                        <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="upload__new__photo"
+                            id="uploadedNewPhoto" alt="">
                     @endif
                 </div>
                 <div class="d-flex flex-wrap flex-column">
@@ -25,7 +25,7 @@
                     </div>
                     <small class="text-danger" id="inputFileErrorMsg"></small>
                     @error('picture')
-                    <span class="text-danger custom__field__message">{{ $message }}</span>
+                        <span class="text-danger custom__field__message">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
@@ -38,7 +38,7 @@
                                 class="form-control @error('first_name') is-invalid @enderror input__field "
                                 id="firstName">
                             @error('first_name')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                                <span class="text-danger custom__field__message">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                                 class="form-control @error('middle_name') is-invalid @enderror input__field"
                                 id="middleName">
                             @error('middle_name')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                                <span class="text-danger custom__field__message">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                                 class="form-control @error('last_name') is-invalid @enderror input__field"
                                 id="lastName">
                             @error('last_name')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                                <span class="text-danger custom__field__message">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                             <input type="text" wire:model="suffix"
                                 class="form-control @error('suffix') is-invalid @enderror input__field" id="suffix">
                             @error('suffix')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                                <span class="text-danger custom__field__message">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                             <input type="text" wire:model="email"
                                 class="form-control @error('email') is-invalid @enderror input__field" id="email">
                             @error('email')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                                <span class="text-danger custom__field__message">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                                 class="form-control @error('mobile_number') is-invalid @enderror input__field"
                                 maxlength="11" id="mobileNumber">
                             @error('mobile_number')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                                <span class="text-danger custom__field__message">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>

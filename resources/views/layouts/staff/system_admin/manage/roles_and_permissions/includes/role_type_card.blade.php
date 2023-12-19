@@ -22,19 +22,20 @@
                         <h6 class="mb-0 account__number">{{ $approvers->count() }} Accounts</h6>
                         <div class="d-flex align-items-center flex-nowrap user__picture__container">
                             @foreach ($approvers->take($profilePicLimit) as $approver)
-                            @if ($approver->profile->picture)
-                            <img src="{{ Storage::url($approver->profile->picture) }}" class="picture" alt="">
-                            @else
-                            <div class="picture initial__as__picture" style="background-color: #3B4053;">
-                                {{ $approver->profile->getNameInitial() }}
-                            </div>
-                            @endif
+                                @if ($approver->profile->picture)
+                                    <img src="{{ Storage::url($approver->profile->picture) }}" class="picture"
+                                        alt="">
+                                @else
+                                    <div class="picture initial__as__picture" style="background-color: #3B4053;">
+                                        {{ $approver->profile->getNameInitial() }}
+                                    </div>
+                                @endif
                             @endforeach
                             @php
-                            $restAccounts = $approvers->count() - $approvers->take($profilePicLimit)->count();
+                                $restAccounts = $approvers->count() - $approvers->take($profilePicLimit)->count();
                             @endphp
                             @if ($restAccounts !== 0)
-                            <small class="count__rest">+{{ $restAccounts }}</small>
+                                <small class="count__rest">+{{ $restAccounts }}</small>
                             @endif
                         </div>
                     </div>
@@ -52,20 +53,20 @@
                         <h6 class="mb-0 account__number">{{ $serviceDeptAdmins->count() }} Accounts</h6>
                         <div class="d-flex align-items-center flex-nowrap user__picture__container">
                             @foreach ($serviceDeptAdmins->take($profilePicLimit) as $serviceDeptAdmin)
-                            @if ($serviceDeptAdmin->profile->picture)
-                            <img src="{{ Storage::url($serviceDeptAdmin->profile->picture) }}" class="picture" alt="">
-                            @else
-                            <div class="picture initial__as__picture" style="background-color: #9DA85C;">
-                                {{ $serviceDeptAdmin->profile->getNameInitial() }}
-                            </div>
-                            @endif
+                                @if ($serviceDeptAdmin->profile->picture)
+                                    <img src="{{ Storage::url($serviceDeptAdmin->profile->picture) }}" class="picture"
+                                        alt="">
+                                @else
+                                    <div class="picture initial__as__picture" style="background-color: #9DA85C;">
+                                        {{ $serviceDeptAdmin->profile->getNameInitial() }}
+                                    </div>
+                                @endif
                             @endforeach
                             @php
-                            $restAccounts = $serviceDeptAdmins->count() -
-                            $serviceDeptAdmins->take($profilePicLimit)->count();
+                                $restAccounts = $serviceDeptAdmins->count() - $serviceDeptAdmins->take($profilePicLimit)->count();
                             @endphp
                             @if ($restAccounts !== 0)
-                            <small class="count__rest">+{{ $restAccounts }}</small>
+                                <small class="count__rest">+{{ $restAccounts }}</small>
                             @endif
                         </div>
                     </div>
@@ -83,19 +84,20 @@
                         <h6 class="mb-0 account__number">{{ $agents->count() }} Accounts</h6>
                         <div class="d-flex align-items-center flex-nowrap user__picture__container">
                             @foreach ($agents->take($profilePicLimit) as $agent)
-                            @if ($agent->profile->picture)
-                            <img src="{{ Storage::url($agent->profile->picture) }}" class="picture" alt="">
-                            @else
-                            <div class="picture initial__as__picture" style="background-color: #196837;">
-                                {{ $agent->profile->getNameInitial() }}
-                            </div>
-                            @endif
+                                @if ($agent->profile->picture)
+                                    <img src="{{ Storage::url($agent->profile->picture) }}" class="picture"
+                                        alt="">
+                                @else
+                                    <div class="picture initial__as__picture" style="background-color: #196837;">
+                                        {{ $agent->profile->getNameInitial() }}
+                                    </div>
+                                @endif
                             @endforeach
                             @php
-                            $restAccounts = $agents->count() - $agents->take($profilePicLimit)->count();
+                                $restAccounts = $agents->count() - $agents->take($profilePicLimit)->count();
                             @endphp
                             @if ($restAccounts !== 0)
-                            <small class="count__rest">+{{ $restAccounts }}</small>
+                                <small class="count__rest">+{{ $restAccounts }}</small>
                             @endif
                         </div>
                     </div>
@@ -113,19 +115,20 @@
                         <h6 class="mb-0 account__number">{{ $users->count() }} Accounts</h6>
                         <div class="d-flex align-items-center flex-nowrap user__picture__container">
                             @foreach ($users->take($profilePicLimit) as $user)
-                            @if ($user->profile->picture)
-                            <img src="{{ Storage::url($user->profile->picture) }}" class="picture" alt="">
-                            @else
-                            <div class="picture initial__as__picture" style="background-color: #24695C;">
-                                {{ $user->profile->getNameInitial() }}
-                            </div>
-                            @endif
+                                @if ($user->profile->picture)
+                                    <img src="{{ Storage::url($user->profile->picture) }}" class="picture"
+                                        alt="">
+                                @else
+                                    <div class="picture initial__as__picture" style="background-color: #24695C;">
+                                        {{ $user->profile->getNameInitial() }}
+                                    </div>
+                                @endif
                             @endforeach
                             @php
-                            $restAccounts = $users->count() - $users->take($profilePicLimit)->count();
+                                $restAccounts = $users->count() - $users->take($profilePicLimit)->count();
                             @endphp
                             @if ($restAccounts !== 0)
-                            <small class="count__rest">+{{ $restAccounts }}</small>
+                                <small class="count__rest">+{{ $restAccounts }}</small>
                             @endif
                         </div>
                     </div>

@@ -18,10 +18,10 @@
                                 <div id="select-tag" wire:ignore></div>
                             </div>
                             @error('team')
-                            <span class="error__message">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ $message }}
-                            </span>
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
                             @enderror
                         </div>
                         <button type="submit"
@@ -39,47 +39,47 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const tagOption = [
-        @foreach ($tags as $tag)
-            {
-                label: "{{ $tag->name }}",
-                value: "{{ $tag->id }}"
-            },
-        @endforeach
-    ];
+    <script>
+        const tagOption = [
+            @foreach ($tags as $tag)
+                {
+                    label: "{{ $tag->name }}",
+                    value: "{{ $tag->id }}"
+                },
+            @endforeach
+        ];
 
-    VirtualSelect.init({
-        ele: '#select-tag',
-        options: tagOption,
-        search: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-        hasOptionDescription: true,
-        popupDropboxBreakpoint: '3000px',
-    });
+        VirtualSelect.init({
+            ele: '#select-tag',
+            options: tagOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            hasOptionDescription: true,
+            popupDropboxBreakpoint: '3000px',
+        });
 
-    const tagSelect = document.querySelector('#select-tag')
-    tagSelect.setValue({{ $ticket->tags->pluck('id') }});
+        const tagSelect = document.querySelector('#select-tag')
+        tagSelect.setValue({{ $ticket->tags->pluck('id') }});
 
-    tagSelect.addEventListener('change', () => {
-        @this.set('selectedTags', tagSelect.value);
-    });
+        tagSelect.addEventListener('change', () => {
+            @this.set('selectedTags', tagSelect.value);
+        });
 
-    // Clear all selected tags in the select option when clear button is clicked.
-    window.addEventListener('clear-tag-select-option', () => {
-        tagSelect.reset();
-    });
+        // Clear all selected tags in the select option when clear button is clicked.
+        window.addEventListener('clear-tag-select-option', () => {
+            tagSelect.reset();
+        });
 
-    // Update the selected tags after removing specific tag.
-    window.addEventListener('update-tag-select-option', (event) => {
-        tagSelect.setValue(event.detail.tagIds);
-    });
+        // Update the selected tags after removing specific tag.
+        window.addEventListener('update-tag-select-option', (event) => {
+            tagSelect.setValue(event.detail.tagIds);
+        });
 
-    // Get the current assigned tags when button "Add/Remove" is clicked.
-    window.addEventListener('get-current-assigned-tags', (event) => {
-        tagSelect.setValue(event.detail.tagIds);
-    });
-</script>
+        // Get the current assigned tags when button "Add/Remove" is clicked.
+        window.addEventListener('get-current-assigned-tags', (event) => {
+            tagSelect.setValue(event.detail.tagIds);
+        });
+    </script>
 @endpush

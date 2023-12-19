@@ -31,10 +31,10 @@
                                                     class="form-control form__field" id="first_name"
                                                     placeholder="Enter first name (required)">
                                                 @error('first_name')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -47,10 +47,10 @@
                                                     class="form-control form__field" id="middle_name"
                                                     placeholder="Enter middle name (optional)">
                                                 @error('middle_name')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -62,10 +62,10 @@
                                                     class="form-control form__field" id="last_name"
                                                     placeholder="Enter last name (required)">
                                                 @error('last_name')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -78,10 +78,10 @@
                                                     <div id="select-service-dept-admin-suffix" wire:ignore></div>
                                                 </div>
                                                 @error('suffix')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -89,13 +89,14 @@
                                             <div class="mb-2">
                                                 <label for="email" class="form-label form__field__label">Email
                                                     address</label>
-                                                <input type="email" wire:model="email" class="form-control form__field"
-                                                    id="email" placeholder="Enter email (required)">
+                                                <input type="email" wire:model="email"
+                                                    class="form-control form__field" id="email"
+                                                    placeholder="Enter email (required)">
                                                 @error('email')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -112,15 +113,16 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="mb-2">
-                                                <label for="branch" class="form-label form__field__label">Branch</label>
+                                                <label for="branch"
+                                                    class="form-label form__field__label">Branch</label>
                                                 <div>
                                                     <div id="select-service-dept-admin-branch" wire:ignore></div>
                                                 </div>
                                                 @error('branches')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -129,18 +131,18 @@
                                                 <label for="department" class="form-label form__field__label">
                                                     BU/Department
                                                     @if ($BUDepartments)
-                                                    <span class="fw-normal" style="font-size: 13px;">
-                                                        ({{ $BUDepartments->count() }})</span>
+                                                        <span class="fw-normal" style="font-size: 13px;">
+                                                            ({{ $BUDepartments->count() }})</span>
                                                     @endif
                                                 </label>
                                                 <div>
                                                     <div id="select-service-dept-admin-bu-department" wire:ignore></div>
                                                 </div>
                                                 @error('bu_department')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -154,10 +156,10 @@
                                                     </div>
                                                 </div>
                                                 @error('service_departments')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -191,110 +193,111 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const serviceDeptAdminSuffixOption = [
-        @foreach ($serviceDeptAdminSuffixes as $suffix)
-            {
-                label: "{{ $suffix->name }}",
-                value: "{{ $suffix->name }}"
-            },
-        @endforeach
-    ];
+    <script>
+        const serviceDeptAdminSuffixOption = [
+            @foreach ($serviceDeptAdminSuffixes as $suffix)
+                {
+                    label: "{{ $suffix->name }}",
+                    value: "{{ $suffix->name }}"
+                },
+            @endforeach
+        ];
 
-    const serviceDeptAdminSuffixSelect = document.querySelector('#select-service-dept-admin-suffix');
-    VirtualSelect.init({
-        ele: serviceDeptAdminSuffixSelect,
-        options: serviceDeptAdminSuffixOption,
-        search: true,
-        markSearchResults: true,
-    });
+        const serviceDeptAdminSuffixSelect = document.querySelector('#select-service-dept-admin-suffix');
+        VirtualSelect.init({
+            ele: serviceDeptAdminSuffixSelect,
+            options: serviceDeptAdminSuffixOption,
+            search: true,
+            markSearchResults: true,
+        });
 
-    serviceDeptAdminSuffixSelect.addEventListener('change', () => {
-        @this.set('suffix', serviceDeptAdminSuffixSelect.value)
-    });
+        serviceDeptAdminSuffixSelect.addEventListener('change', () => {
+            @this.set('suffix', serviceDeptAdminSuffixSelect.value)
+        });
 
-    const serviceDeptAdminBranchOption = [
-        @foreach ($serviceDeptAdminBranches as $branch)
-        {
-            label: "{{ $branch->name }}",
-            value: "{{ $branch->id }}"
-        },
-        @endforeach
-    ];
+        const serviceDeptAdminBranchOption = [
+            @foreach ($serviceDeptAdminBranches as $branch)
+                {
+                    label: "{{ $branch->name }}",
+                    value: "{{ $branch->id }}"
+                },
+            @endforeach
+        ];
 
-    const serviceDeptAdminBranchSelect = document.querySelector('#select-service-dept-admin-branch');
-    VirtualSelect.init({
-        ele: serviceDeptAdminBranchSelect,
-        options: serviceDeptAdminBranchOption,
-        search: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-    });
+        const serviceDeptAdminBranchSelect = document.querySelector('#select-service-dept-admin-branch');
+        VirtualSelect.init({
+            ele: serviceDeptAdminBranchSelect,
+            options: serviceDeptAdminBranchOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+        });
 
-    serviceDeptAdminBranchSelect.addEventListener('change', () => {
-        const branchIds = serviceDeptAdminBranchSelect.value;
-        @this.set('branches', branchIds);
-    });
+        serviceDeptAdminBranchSelect.addEventListener('change', () => {
+            const branchIds = serviceDeptAdminBranchSelect.value;
+            @this.set('branches', branchIds);
+        });
 
-    serviceDeptAdminBranchSelect.addEventListener('reset', () => {
-        serviceDeptAdminBUDepartmentSelect.reset();
-    });
+        serviceDeptAdminBranchSelect.addEventListener('reset', () => {
+            serviceDeptAdminBUDepartmentSelect.reset();
+        });
 
-    const serviceDeptAdminBUDepartmentOption = [
-        @foreach ($buDepartments as $buDepartment)
-        {
-            label: "{{ $buDepartment->name }}",
-            value: "{{ $buDepartment->id }}"
-        },
-        @endforeach
-    ];
-    const serviceDeptAdminBUDepartmentSelect = document.querySelector('#select-service-dept-admin-bu-department');
-    VirtualSelect.init({
-        ele: serviceDeptAdminBUDepartmentSelect,
-        options: serviceDeptAdminBUDepartmentOption,
-        search: true,
-        markSearchResults: true,
-    });
+        const serviceDeptAdminBUDepartmentOption = [
+            @foreach ($buDepartments as $buDepartment)
+                {
+                    label: "{{ $buDepartment->name }}",
+                    value: "{{ $buDepartment->id }}"
+                },
+            @endforeach
+        ];
+        const serviceDeptAdminBUDepartmentSelect = document.querySelector('#select-service-dept-admin-bu-department');
+        VirtualSelect.init({
+            ele: serviceDeptAdminBUDepartmentSelect,
+            options: serviceDeptAdminBUDepartmentOption,
+            search: true,
+            markSearchResults: true,
+        });
 
-    serviceDeptAdminBUDepartmentSelect.addEventListener('change', () => {
-        @this.set('bu_department', parseInt(serviceDeptAdminBUDepartmentSelect.value));
-    });
+        serviceDeptAdminBUDepartmentSelect.addEventListener('change', () => {
+            @this.set('bu_department', parseInt(serviceDeptAdminBUDepartmentSelect.value));
+        });
 
-    const serviceDeptAdminServiceDepartmentOption = [
-        @foreach ($serviceDeptAdminServiceDepartments as $serviceDepartment)
-        {
-            label: "{{ $serviceDepartment->name }}",
-            value: "{{ $serviceDepartment->id }}"
-        },
-        @endforeach
-    ];
+        const serviceDeptAdminServiceDepartmentOption = [
+            @foreach ($serviceDeptAdminServiceDepartments as $serviceDepartment)
+                {
+                    label: "{{ $serviceDepartment->name }}",
+                    value: "{{ $serviceDepartment->id }}"
+                },
+            @endforeach
+        ];
 
-    const serviceDeptAdminSeviceDepartmentSelect = document.querySelector('#select-service-dept-admin-service-department');
-    VirtualSelect.init({
-        ele: serviceDeptAdminSeviceDepartmentSelect,
-        options: serviceDeptAdminServiceDepartmentOption,
-        search: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-    });
+        const serviceDeptAdminSeviceDepartmentSelect = document.querySelector(
+            '#select-service-dept-admin-service-department');
+        VirtualSelect.init({
+            ele: serviceDeptAdminSeviceDepartmentSelect,
+            options: serviceDeptAdminServiceDepartmentOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+        });
 
-    serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', () => {
-        @this.set('service_departments', serviceDeptAdminSeviceDepartmentSelect.value);
-    });
-</script>
+        serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', () => {
+            @this.set('service_departments', serviceDeptAdminSeviceDepartmentSelect.value);
+        });
+    </script>
 @endpush
 
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () =>{
-        $('#addNewServiceDeptAdminModal').modal('hide');
-        serviceDeptAdminSuffixSelect.reset();
-        serviceDeptAdminBranchSelect.reset();
-        agentTeamSelect.reset();
-        serviceDeptAdminBUDepartmentSelect.reset();
-        serviceDeptAdminSeviceDepartmentSelect.reset();
-    });
-</script>
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#addNewServiceDeptAdminModal').modal('hide');
+            serviceDeptAdminSuffixSelect.reset();
+            serviceDeptAdminBranchSelect.reset();
+            agentTeamSelect.reset();
+            serviceDeptAdminBUDepartmentSelect.reset();
+            serviceDeptAdminSeviceDepartmentSelect.reset();
+        });
+    </script>
 @endpush

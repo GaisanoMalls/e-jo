@@ -22,17 +22,17 @@
         <div class="container-fluid">
             <div class="row">
                 @if (Route::is('forgot_password.index'))
-                <div class="col-xl-6 b-center bg-size"
-                    style="background-image: url({{ asset('images/auth/forgot-password.jpg') }}); background-size: cover; background-repeat: no-repeat; display: block;">
-                    <img class="bg-img-cover bg-center" src="{{ asset('images/auth/forgot-password.jpg') }}"
-                        alt="looginpage" style="display: none;">
-                </div>
+                    <div class="col-xl-6 b-center bg-size"
+                        style="background-image: url({{ asset('images/auth/forgot-password.jpg') }}); background-size: cover; background-repeat: no-repeat; display: block;">
+                        <img class="bg-img-cover bg-center" src="{{ asset('images/auth/forgot-password.jpg') }}"
+                            alt="looginpage" style="display: none;">
+                    </div>
                 @else
-                <div class="col-xl-6 b-center bg-size"
-                    style="background-image: url({{ asset('images/auth/auth-pic.jpg') }}); background-size: cover; background-repeat: no-repeat; display: block;">
-                    <img class="bg-img-cover bg-center" src="{{ asset('images/auth/auth-pic.jpg') }}" alt="looginpage"
-                        style="display: none;">
-                </div>
+                    <div class="col-xl-6 b-center bg-size"
+                        style="background-image: url({{ asset('images/auth/auth-pic.jpg') }}); background-size: cover; background-repeat: no-repeat; display: block;">
+                        <img class="bg-img-cover bg-center" src="{{ asset('images/auth/auth-pic.jpg') }}"
+                            alt="looginpage" style="display: none;">
+                    </div>
                 @endif
                 <div class="col-xl-6 p-0">
                     <div class="login__card">
@@ -40,7 +40,7 @@
                             @include('layouts.auth.includes.app_name')
                             @yield('form-title')
                             @section('form-section')
-                            @livewire('auth-user')
+                                @livewire('auth-user')
                             @show
                         </div>
                     </div>

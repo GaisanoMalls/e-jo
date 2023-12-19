@@ -16,13 +16,13 @@
                                 <div class="mb-2">
                                     <label for="name" class="form-label form__field__label">Name</label>
                                     <input type="text"
-                                        class="form-control @error('name') is-invalid @enderror form__field" id="name"
-                                        placeholder="Enter tag name" wire:model="name">
+                                        class="form-control @error('name') is-invalid @enderror form__field"
+                                        id="name" placeholder="Enter tag name" wire:model="name">
                                     @error('name')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
                                     @enderror
                                 </div>
                             </div>

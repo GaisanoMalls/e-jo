@@ -1,53 +1,55 @@
 <div>
     <div class="table-responsive custom__table">
         @if (!$branches->isEmpty())
-        <table class="table table-striped mb-0">
-            <thead>
-                <tr>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Branch</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($branches as $branch)
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $branch->name }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $branch->dateCreated() }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $branch->dateUpdated() }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                            <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
-                                type="button" class="btn action__button" data-bs-toggle="modal"
-                                data-bs-target="#editBranchModal" wire:click="editBranch({{ $branch->id }})">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
-                                data-bs-target="#deleteBranchModal" wire:click="deleteBranch({{ $branch->id }})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Branch</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($branches as $branch)
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $branch->name }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $branch->dateCreated() }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $branch->dateUpdated() }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
+                                    <button data-tooltip="Edit" data-tooltip-position="top"
+                                        data-tooltip-font-size="11px" type="button" class="btn action__button"
+                                        data-bs-toggle="modal" data-bs-target="#editBranchModal"
+                                        wire:click="editBranch({{ $branch->id }})">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
+                                        data-bs-target="#deleteBranchModal"
+                                        wire:click="deleteBranch({{ $branch->id }})">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         @else
-        <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-            <small style="font-size: 14px;">No records for branches.</small>
-        </div>
+            <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
+                <small style="font-size: 14px;">No records for branches.</small>
+            </div>
         @endif
     </div>
 
@@ -68,10 +70,10 @@
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
                                     placeholder="Enter branch name">
                                 @error('name')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>
@@ -85,8 +87,8 @@
                                 </span>
                                 Update
                             </button>
-                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" data-bs-dismiss="modal"
-                                wire:click="clearFormField">
+                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel"
+                                data-bs-dismiss="modal" wire:click="clearFormField">
                                 Cancel
                             </button>
                         </div>
@@ -130,18 +132,18 @@
 
 {{-- Modal Scripts --}}
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#editBranchModal').modal('hide');
-        $('#deleteBranchModal').modal('hide');
-    });
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#editBranchModal').modal('hide');
+            $('#deleteBranchModal').modal('hide');
+        });
 
-    window.addEventListener('show-edit-branch-modal', () => {
-        $('#editBranchModal').modal('show');
-    });
+        window.addEventListener('show-edit-branch-modal', () => {
+            $('#editBranchModal').modal('show');
+        });
 
-    window.addEventListener('show-delete-branch-modal', () => {
-        $('#deleteBranchModal').modal('show');
-    });
-</script>
+        window.addEventListener('show-delete-branch-modal', () => {
+            $('#deleteBranchModal').modal('show');
+        });
+    </script>
 @endpush

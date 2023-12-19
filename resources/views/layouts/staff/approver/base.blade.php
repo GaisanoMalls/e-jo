@@ -25,7 +25,7 @@
     <div class="container mb-5 approver__section">
         @livewire('offline')
         @if (Route::is('approver.tickets.*'))
-        @livewire('approver.ticket-tab')
+            @livewire('approver.ticket-tab')
         @endif
         @yield('main-content')
     </div>
@@ -85,7 +85,6 @@
 
         };
         var dataTable = new DataTable(table, options);
-
     </script>
 </body>
 
