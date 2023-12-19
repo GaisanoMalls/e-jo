@@ -12,7 +12,7 @@ use Livewire\Component;
 
 class NotificationList extends Component
 {
-    protected $listeners = ['loadNotificationList' => '$refresh'];
+    protected $listeners = ['staffLoadNotificationList' => '$refresh'];
 
     public function readNotification($notificationId)
     {
@@ -23,14 +23,16 @@ class NotificationList extends Component
 
                 if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
+
                     if ($ticket->status_id != Status::VIEWED) {
                         $ticket->update(['status_id' => Status::VIEWED]);
                         ActivityLog::make($ticket->id, 'seen the ticket');
                     }
                 }
 
-                $this->emit('loadNotificationCanvas');
-                $this->emit('loadNavlinkNotification');
+                $this->emit('staffLoadNotificationList');
+                $this->emit('staffLoadNotificationCanvas');
+                $this->emit('staffLoadNavlinkNotification');
 
                 return (array_key_exists('for_clarification', $notification->data)) && $notification->data['for_clarification']
                     ? redirect()->route('staff.ticket.ticket_clarifications', $notification->data['ticket']['id'])
@@ -46,8 +48,8 @@ class NotificationList extends Component
     public function deleteNotification($notificationId)
     {
         auth()->user()->notifications->find($notificationId)->delete();
-        $this->emit('loadNotificationCanvas');
-        $this->emit('loadNavlinkNotification');
+        $this->emit('staffLoadNotificationCanvas');
+        $this->emit('staffLoadNavlinkNotification');
     }
 
     public function render()
@@ -55,8 +57,9 @@ class NotificationList extends Component
         $notifications = auth()->user()->notifications->filter(
             fn($notification) => Ticket::where('id', data_get($notification->data, 'ticket.id'))->exists()
         );
+
         return view('livewire.staff.notification.notification-list', [
-            'userNotifications' => $notifications
+            'userNotifications' => $notifications,
         ]);
     }
 }

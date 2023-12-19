@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class NavlinkNotification extends Component
 {
-    protected $listeners = ['loadNavlinkNotification' => '$refresh'];
+    protected $listeners = ['staffLoadNavlinkNotification' => '$refresh'];
 
     public function render()
     {

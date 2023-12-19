@@ -53,8 +53,6 @@ class CreateHelpTopic extends Component
             //     $this->showAmountError = false;
             //     $rules['amount'] = ['nullable'];
             // }
-
-
         }
 
         return $rules;
@@ -86,18 +84,21 @@ class CreateHelpTopic extends Component
                     SpecialProject::create([
                         'help_topic_id' => $helpTopic->id,
                         'amount' => $this->amount,
+                        // Assign approver
                         'fmp_coo_approver' => [
                             'approver_id' => null,
                             'is_approved' => false,
                         ],
                         'service_department_approver' => [
                             'approver_id' => null,
+                        'service_department_admin_approver' => [
+                            'approver_id' => null,
                             'is_approved' => false,
                         ],
-                        // 'service_department_admin_approver' => [
-                        //     'service_department_admin_id' => UserServiceDepartment::where('service_department_id', $this->serviceDepartment)->pluck('user_id')->first(),
-                        //     'is_approved' => false
-                        // ]
+                        'bu_head_approver' => [
+                            'apprrover_id' => null,
+                            'is_approved' => false,
+                        ],
                     ]);
 
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
@@ -121,15 +122,6 @@ class CreateHelpTopic extends Component
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Oops, something went wrong.');
-        }
-    }
-
-    public function updatedAmount()
-    {
-        if ((int) $this->amount >= $this->max_amount) {
-            $this->dispatchBrowserEvent('show-select-fmp-coo-approver');
-        } else {
-            $this->dispatchBrowserEvent('show-select-service-departmetn-admin-approver');
         }
     }
 
@@ -170,6 +162,7 @@ class CreateHelpTopic extends Component
     public function render()
     {
         return view('livewire.staff.help-topic.create-help-topic', [
+            'serviceDepartmentAdmins' => $this->queryServiceDepartmentAdmins(),
             'serviceLevelAgreements' => $this->queryServiceLevelAgreements(),
             'serviceDepartments' => $this->queryServiceDepartments(),
             'levelOfApprovals' => $this->queryLevelOfApprovals(),

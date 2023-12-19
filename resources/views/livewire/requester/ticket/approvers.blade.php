@@ -8,19 +8,19 @@
                 </small>
             </div>
             @foreach ($ticket->helpTopic->levels as $level)
-            Level: {{ $level->value }}
-            Approvers:
-            <ul>
-                @foreach ($levelApprovers as $levelApprover)
-                @foreach ($approvers as $approver)
-                @if ($levelApprover->user_id === $approver->id)
-                @if ($levelApprover->level_id === $level->id)
-                <li>{{ $approver->profile->getFullName() }}</li>
-                @endif
-                @endif
-                @endforeach
-                @endforeach
-            </ul>
+                Level: {{ $level->value }}
+                Approvers:
+                <ul>
+                    @foreach ($levelApprovers as $levelApprover)
+                        @foreach ($approvers as $approver)
+                            @if ($levelApprover->user_id === $approver->id)
+                                @if ($levelApprover->level_id === $level->id)
+                                    <li>{{ $approver->profile->getFullName() }}</li>
+                                @endif
+                            @endif
+                        @endforeach
+                    @endforeach
+                </ul>
             @endforeach
         </div>
     </div>

@@ -179,8 +179,12 @@ return [
 
             // laravel-permission package
         Spatie\Permission\PermissionServiceProvider::class,
+            // Laravel Debug Bar
+        Barryvdh\Debugbar\ServiceProvider::class,
 
     ],
+
+    'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
 
     /*
     |--------------------------------------------------------------------------

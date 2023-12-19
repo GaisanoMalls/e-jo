@@ -17,10 +17,10 @@
                                 class="form-control form__field @error('new_password') is-invalid @enderror"
                                 id="new_password" placeholder="Enter the new password">
                             @error('new_password')
-                            <span class="error__message">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ $message }}
-                            </span>
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
                             @enderror
                         </div>
                         <div class="mb-2">
@@ -30,10 +30,10 @@
                                 class="form-control form__field @error('confirm_password') is-invalid @enderror"
                                 id="confirm_password" placeholder="Re-type the new password to confirm">
                             @error('confirm_password')
-                            <span class="error__message">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ $message }}
-                            </span>
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
                             @enderror
                         </div>
                     </div>

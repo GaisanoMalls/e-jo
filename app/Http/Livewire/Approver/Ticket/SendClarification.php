@@ -34,6 +34,7 @@ class SendClarification extends Component
         return (new StoreClarificationRequest())->messages();
     }
 
+    /** Perform livewire events upon form submission. */
     private function actionOnSubmit()
     {
         $this->clarificationFiles = [];
@@ -54,14 +55,17 @@ class SendClarification extends Component
 
         try {
             DB::transaction(function () {
+                //  Update ticket status
                 $this->ticket->update(['status_id' => Status::ON_PROCESS]);
 
+                // Create and save the clarification.
                 $clarification = Clarification::create([
                     'user_id' => auth()->user()->id,
                     'ticket_id' => $this->ticket->id,
                     'description' => $this->description,
                 ]);
 
+                // Check if clarification has file attachment/s.
                 if ($this->clarificationFiles) {
                     foreach ($this->clarificationFiles as $uploadedClarificationFile) {
                         $fileName = $uploadedClarificationFile->getClientOriginalName();
@@ -75,19 +79,17 @@ class SendClarification extends Component
                         $clarificationFile->file_attachment = $fileAttachment;
                         $clarificationFile->clarification_id = $clarification->id;
 
+                        // Save file attachment/s.
                         $clarification->fileAttachments()->save($clarificationFile);
                     }
                 }
 
-                // * GET THE REQUESTER
-                $requester = $clarification->whereHas('user', function ($user) {
-                    $user->where('id', '!=', auth()->user()->id);
-                })
+                // Get the current requester (Sender of the ticket clarification).
+                $requester = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
                     ->where('ticket_id', $this->ticket->id)
-                    ->latest('created_at')
-                    ->first();
+                    ->latest('created_at')->first();
 
-                // * CONSTRUCT A LOG DESCRIPTION
+                // Make a log message.
                 $logDescription = $this->ticket->clarifications()->where('user_id', '!=', auth()->user()->id)->count() == 0
                     ? 'sent a clarification'
                     : 'replied a clarification to ' . $requester->user->profile->getFullName();

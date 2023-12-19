@@ -23,6 +23,9 @@ class ApproveTicket extends Component
 {
     public Ticket $ticket;
 
+    /**
+     * Perform livewire events upon form submission.
+     */
     private function actionOnSubmit()
     {
         $this->emit('loadTicketTags');
@@ -44,15 +47,18 @@ class ApproveTicket extends Component
     {
         try {
             DB::transaction(function () {
+                // Update the ticket status if approved.
                 $this->ticket->update([
                     'status_id' => Status::APPROVED,
                     'approval_status' => ApprovalStatus::APPROVED,
                 ]);
 
+                // Get the agents with specific conditions.
                 $agents = User::withWhereHas('teams', fn($query) => $query->where('teams.id', $this->ticket->team_id))
                     ->whereHas('branches', fn($query) => $query->where('branches.id', $this->ticket->branch_id))
                     ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->service_department_id))->get();
 
+                // Notify agents through email and app based notification.
                 foreach ($agents as $agent) {
                     Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
                     Notification::send($agent, new ApprovedTicketForAgentNotification($this->ticket));
@@ -61,14 +67,17 @@ class ApproveTicket extends Component
                 // Notify approvers through email and app based notification.
                 $levelApprovers = LevelApprover::where('help_topic_id', $this->ticket->helpTopic->id)->get();
                 $approvers = User::approvers();
-                foreach ($this->ticket->helpTopic->levels as $level) {
-                    foreach ($levelApprovers as $levelApprover) {
-                        foreach ($approvers as $approver) {
-                            if ($approver->id == $levelApprover->user_id) {
-                                if ($levelApprover->level_id == $level->id) {
-                                    if ($approver->buDepartments->pluck('id')->first() == $this->ticket->user->buDepartments->pluck('id')->first()) {
-                                        Notification::send($approver, new TicketCreatedNotification($this->ticket));
-                                        Mail::to($approver)->send(new TicketCreatedMail($this->ticket, $approver));
+
+                if (!is_null($this->ticket->helpTopic)) {
+                    foreach ($this->ticket->helpTopic->levels as $level) {
+                        foreach ($levelApprovers as $levelApprover) {
+                            foreach ($approvers as $approver) {
+                                if ($approver->id == $levelApprover->user_id) {
+                                    if ($levelApprover->level_id == $level->id) {
+                                        if ($approver->buDepartments->pluck('id')->first() == $this->ticket->user->buDepartments->pluck('id')->first()) {
+                                            Mail::to($approver)->send(new TicketCreatedMail($this->ticket, $approver));
+                                            Notification::send($approver, new TicketCreatedNotification($this->ticket));
+                                        }
                                     }
                                 }
                             }
@@ -76,6 +85,7 @@ class ApproveTicket extends Component
                     }
                 }
 
+                // Notify the ticket sender.
                 Notification::send($this->ticket->user, new ApprovedTicketForRequesterNotification($this->ticket));
                 ActivityLog::make($this->ticket->id, 'approved the ticket');
             });

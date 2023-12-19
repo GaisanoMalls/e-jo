@@ -26,12 +26,12 @@ trait AuthRedirect
     {
         if (Auth::check()) {
             return match (true) {
-                Auth::user()->hasRole(Role::SYSTEM_ADMIN) => redirect()->intended(RouteServiceProvider::SUPERADMIN_REDIRECT_URL),
-                Auth::user()->hasRole(Role::APPROVER) => redirect()->intended(RouteServiceProvider::APPROVER_REDIRECT_URL),
+                Auth::user()->hasRole(Role::SYSTEM_ADMIN)             => redirect()->intended(RouteServiceProvider::SUPERADMIN_REDIRECT_URL),
+                Auth::user()->hasRole(Role::APPROVER)                 => redirect()->intended(RouteServiceProvider::APPROVER_REDIRECT_URL),
                 Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => redirect()->intended(RouteServiceProvider::DEPARTMENT_ADMIN_REDIRECT_URL),
-                Auth::user()->hasRole(Role::AGENT) => redirect()->intended(RouteServiceProvider::AGENT_REDIRECT_URL),
-                Auth::user()->hasRole(Role::USER) => redirect()->intended(RouteServiceProvider::USER_REDIRECT_URL),
-                default => $this->default()
+                Auth::user()->hasRole(Role::AGENT)                    => redirect()->intended(RouteServiceProvider::AGENT_REDIRECT_URL),
+                Auth::user()->hasRole(Role::USER)                     => redirect()->intended(RouteServiceProvider::USER_REDIRECT_URL),
+                default                                               => $this->default()
             };
         }
     }

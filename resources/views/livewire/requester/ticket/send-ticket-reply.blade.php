@@ -1,6 +1,5 @@
 <div>
-    <div wire:ignore.self class="modal fade reply__ticket__modal" id="ticketReplyModal" tabindex="-1"
-        aria-hidden="true">
+    <div wire:ignore.self class="modal fade reply__ticket__modal" id="ticketReplyModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered custom__modal">
             <div class="modal-content d-flex flex-column custom__modal__content">
                 <div class="modal__header d-flex justify-content-between align-items-center">
@@ -18,10 +17,10 @@
                                 <textarea wire:model="description" id="discussionDescription"></textarea>
                             </div>
                             @error('description')
-                            <span class="error__message">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ $message }}
-                            </span>
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
                             @enderror
                         </div>
                         <div class="mt-4">
@@ -39,10 +38,10 @@
                             <input class="form-control ticket__file__input w-auto my-3" type="file"
                                 wire:model="replyFiles" multiple id="upload-{{ $upload }}">
                             @error('replyFiles.*')
-                            <span class="error__message">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ $message }}
-                            </span>
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
                             @enderror
                         </div>
                         <button type="submit"
@@ -60,32 +59,32 @@
 </div>
 
 @push('livewire-textarea')
-<script>
-    tinymce.init({
-        selector: '#discussionDescription',
-        plugins: 'lists',
-        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
-        height: 350,
-        setup: function (editor) {
-            editor.on('init change', function () {
-                editor.save();
-            });
-            editor.on('change', function (e) {
-                @this.set('description', editor.getContent());
-            });
-        }
-    });
-</script>
+    <script>
+        tinymce.init({
+            selector: '#discussionDescription',
+            plugins: 'lists',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
+            height: 350,
+            setup: function(editor) {
+                editor.on('init change', function() {
+                    editor.save();
+                });
+                editor.on('change', function(e) {
+                    @this.set('description', editor.getContent());
+                });
+            }
+        });
+    </script>
 @endpush
 
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#ticketReplyModal').modal('hide');
-    });
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#ticketReplyModal').modal('hide');
+        });
 
-    window.addEventListener('reload-modal', () =>{
-        tinymce.get("discussionDescription").setContent("");
-    });
-</script>
+        window.addEventListener('reload-modal', () => {
+            tinymce.get("discussionDescription").setContent("");
+        });
+    </script>
 @endpush

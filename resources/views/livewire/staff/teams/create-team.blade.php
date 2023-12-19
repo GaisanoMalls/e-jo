@@ -18,10 +18,10 @@
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
                                     placeholder="Enter team name">
                                 @error('name')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                             <div class="mb-2">
@@ -30,10 +30,10 @@
                                     <div id="select-service-department" wire:ignore></div>
                                 </div>
                                 @error('selectedServiceDepartment')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                             <div class="mb-2">
@@ -42,10 +42,10 @@
                                     <div id="select-branch" wire:ignore></div>
                                 </div>
                                 @error('selectedBranches')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>
@@ -70,59 +70,59 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const serviceDepartmentOption = [
-        @foreach ($serviceDepartments as $serviceDepartment)
-            {
-                label: "{{ $serviceDepartment->name }}",
-                value: "{{ $serviceDepartment->id }}"
-            },
-        @endforeach
-    ];
+    <script>
+        const serviceDepartmentOption = [
+            @foreach ($serviceDepartments as $serviceDepartment)
+                {
+                    label: "{{ $serviceDepartment->name }}",
+                    value: "{{ $serviceDepartment->id }}"
+                },
+            @endforeach
+        ];
 
-    VirtualSelect.init({
-        ele: '#select-service-department',
-        options: serviceDepartmentOption,
-        search: true,
-        required: true,
-        markSearchResults: true,
-    });
+        VirtualSelect.init({
+            ele: '#select-service-department',
+            options: serviceDepartmentOption,
+            search: true,
+            required: true,
+            markSearchResults: true,
+        });
 
-    const branchOption = [
-        @foreach ($branches as $branch)
-        {
-            label: "{{ $branch->name }}",
-            value: "{{ $branch->id }}"
-        },
-        @endforeach
-    ];
+        const branchOption = [
+            @foreach ($branches as $branch)
+                {
+                    label: "{{ $branch->name }}",
+                    value: "{{ $branch->id }}"
+                },
+            @endforeach
+        ];
 
-    VirtualSelect.init({
-        ele: '#select-branch',
-        options: branchOption,
-        search: true,
-        required: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-        popupDropboxBreakpoint: '3000px',
-    });
+        VirtualSelect.init({
+            ele: '#select-branch',
+            options: branchOption,
+            search: true,
+            required: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            popupDropboxBreakpoint: '3000px',
+        });
 
-    const serviceDepartmentSelect = document.querySelector('#select-service-department');
-    const branchSelect = document.querySelector('#select-branch');
+        const serviceDepartmentSelect = document.querySelector('#select-service-department');
+        const branchSelect = document.querySelector('#select-branch');
 
-    serviceDepartmentSelect.addEventListener('change', () => {
-        @this.set('selectedServiceDepartment', serviceDepartmentSelect.value);
-    });
+        serviceDepartmentSelect.addEventListener('change', () => {
+            @this.set('selectedServiceDepartment', serviceDepartmentSelect.value);
+        });
 
-    branchSelect.addEventListener('change', () => {
-        @this.set('selectedBranches', branchSelect.value);
-    });
+        branchSelect.addEventListener('change', () => {
+            @this.set('selectedBranches', branchSelect.value);
+        });
 
-    // Clear all selected branches in the select option.
-    window.addEventListener('clear-select-options', () => {
-        branchSelect.reset();
-        serviceDepartmentSelect.reset();
-    });
-</script>
+        // Clear all selected branches in the select option.
+        window.addEventListener('clear-select-options', () => {
+            branchSelect.reset();
+            serviceDepartmentSelect.reset();
+        });
+    </script>
 @endpush

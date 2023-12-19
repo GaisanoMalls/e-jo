@@ -31,10 +31,10 @@
                                             <input type="text" wire:model="name" class="form-control form__field"
                                                 id="helpTopicName" placeholder="Enter help topic name">
                                             @error('name')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
                                             @enderror
                                         </div>
                                     </div>
@@ -47,10 +47,10 @@
                                                 <div id="select-help-topic-sla" wire:ignore></div>
                                             </div>
                                             @error('sla')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
                                             @enderror
                                         </div>
                                     </div>
@@ -63,10 +63,10 @@
                                                 <div id="select-help-topic-service-department" wire:ignore></div>
                                             </div>
                                             @error('service_department')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
                                             @enderror
                                         </div>
                                     </div>
@@ -75,9 +75,9 @@
                                             <label for="team" class="form-label form__field__label">
                                                 Team
                                                 @if ($teams)
-                                                <span class="fw-normal" style="font-size: 13px;">
-                                                    ({{ $teams->count() }})
-                                                </span>
+                                                    <span class="fw-normal" style="font-size: 13px;">
+                                                        ({{ $teams->count() }})
+                                                    </span>
                                                 @endif
                                             </label>
                                             <div>
@@ -85,10 +85,10 @@
                                                     wire:ignore></div>
                                             </div>
                                             @error('team')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
                                             @enderror
                                         </div>
                                     </div>
@@ -103,42 +103,10 @@
                                                         class="form-label form__field__label">Amount</label>
                                                     <input type="text" wire:model="amount"
                                                         class="form-control form__field amount__field" id="amount"
-                                                        placeholder="Enter amount" required>
+                                                        placeholder="Enter amount">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4" id="cooApproverSelectContainer">
-                                                <div class="mb-2">
-                                                    <label class="form-label form__field__label">
-                                                        COO Approver
-                                                    </label>
-                                                    <div>
-                                                        <div id="select-fpm-coo-approver" wire:ignore></div>
-                                                    </div>
-                                                    @error('level_of_approval')
-                                                    <span class="error__message">
-                                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                                        {{ $message }}
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4" id="serviceDepartmentAdminApproverSelectContainer">
-                                                <div class="mb-2">
-                                                    <label class="form-label form__field__label">
-                                                        Service Department Admin Approver
-                                                    </label>
-                                                    <div>
-                                                        <div id="select-service-department-admin-approver" wire:ignore>
-                                                        </div>
-                                                    </div>
-                                                    @error('level_of_approval')
-                                                    <span class="error__message">
-                                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                                        {{ $message }}
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
+
                                         </div>
                                         <small class="fw-bold">Approvals</small>
                                         <div class="col-md-4 mt-2">
@@ -150,17 +118,18 @@
                                                     <div id="select-help-topic-level-of-approval" wire:ignore></div>
                                                 </div>
                                                 @error('level_of_approval')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
-                                                @endif
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
+                                                    @endif
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-12 mt-3">
-                                            <div class="mb-2">
-                                                <div>
-                                                    <div wire:ignore class="row" id="selectApproverContainer">
+                                            <div class="col-md-12 mt-3">
+                                                <div class="mb-2">
+                                                    <div>
+                                                        <div wire:ignore class="row" id="selectApproverContainer">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -169,322 +138,268 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
-                        <div class="d-flex align-items-center gap-2">
-                            <button type="submit"
-                                class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send">
-                                <span wire:loading wire:target="saveHelpTopic" class="spinner-border spinner-border-sm"
-                                    role="status" aria-hidden="true">
-                                </span>
-                                Add new
-                            </button>
-                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
-                                data-bs-dismiss="modal" wire:click="cancel">
-                                Cancel
-                            </button>
+                        <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit"
+                                    class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send">
+                                    <span wire:loading wire:target="saveHelpTopic" class="spinner-border spinner-border-sm"
+                                        role="status" aria-hidden="true">
+                                    </span>
+                                    Add new
+                                </button>
+                                <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
+                                    data-bs-dismiss="modal" wire:click="cancel">
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@push('extra')
-<script>
-    const amountField = document.querySelector('#amount');
-    const teamSelectContainer = document.querySelector('#teamSelectContainer');
-    const specialProjectCheck = document.querySelector('#specialProjectCheck');
-    const specialProjectContainer = document.querySelector('#specialProjectContainer');
-    const levelOfApprovalSelect = document.querySelector('#select-help-topic-level-of-approval');
+    @push('extra')
+        <script>
+            const amountField = document.querySelector('#amount');
+            const teamSelectContainer = document.querySelector('#teamSelectContainer');
+            const specialProjectCheck = document.querySelector('#specialProjectCheck');
+            const specialProjectContainer = document.querySelector('#specialProjectContainer');
+            const levelOfApprovalSelect = document.querySelector('#select-help-topic-level-of-approval');
 
-    const levelOfApprovalOption = [
-        @foreach ($levelOfApprovals as $approval)
-        {
-            label: "{{ $approval->description }}",
-            value: "{{ $approval->value }}"
-        },
-        @endforeach
-    ];
+            const levelOfApprovalOption = [
+                @foreach ($levelOfApprovals as $approval)
+                    {
+                        label: "{{ $approval->description }}",
+                        value: "{{ $approval->value }}"
+                    },
+                @endforeach
+            ];
 
-    VirtualSelect.init({
-        ele: levelOfApprovalSelect,
-        options: levelOfApprovalOption,
-        search: true,
-        required: true,
-        markSearchResults: true,
-    });
+            VirtualSelect.init({
+                ele: levelOfApprovalSelect,
+                options: levelOfApprovalOption,
+                search: true,
+                required: true,
+                markSearchResults: true,
+            });
 
-    if (specialProjectCheck && specialProjectContainer) {
-        specialProjectContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
+            if (specialProjectCheck && specialProjectContainer) {
+                specialProjectContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
 
-        specialProjectCheck.addEventListener('change', () => {
-            if (specialProjectCheck.checked) {
-                amountField.required = true;
+                specialProjectCheck.addEventListener('change', () => {
+                    if (specialProjectCheck.checked) {
+                        amountField.required = true;
 
-                window.addEventListener('show-special-project-container', (event) => {
-                    @this.set('team', null);
-                    teamSelect.disable();
-                    teamSelectContainer.style.display = 'none';
-                    specialProjectContainer.style.display = 'block';
-                    const approvers = event.detail.approvers;
-                    const selectApproverContainer = document.querySelector('#selectApproverContainer');
+                        window.addEventListener('show-special-project-container', (event) => {
+                            @this.set('team', null);
+                            teamSelect.disable();
+                            teamSelectContainer.style.display = 'none';
+                            specialProjectContainer.style.display = 'block';
+                            const approvers = event.detail.approvers;
+                            const selectApproverContainer = document.querySelector('#selectApproverContainer');
 
-                    levelOfApprovalSelect.addEventListener('change', () => {
-                        const levelOfApproval = parseInt(levelOfApprovalSelect.value);
-                        selectApproverContainer.innerHTML = '';
+                            levelOfApprovalSelect.addEventListener('change', () => {
+                                const levelOfApproval = parseInt(levelOfApprovalSelect.value);
+                                selectApproverContainer.innerHTML = '';
 
-                        if (levelOfApproval) {
-                            @this.set('level_of_approval', levelOfApproval);
-                            for (let count = 1; count <= levelOfApproval; count++) {
-                                const approverOption = [];
+                                if (levelOfApproval) {
+                                    @this.set('level_of_approval', levelOfApproval);
+                                    for (let count = 1; count <= levelOfApproval; count++) {
+                                        const approverOption = [];
 
-                                const selectOptionHTML = `
-                                    <div class="col-md-6">
-                                        <div class="mb-2">
-                                            <div class="mb-2 d-flex gap-2">
-                                                <label class="form-label form__field__label">Level ${count} approver/s</label>
-                                                <small class="text-muted" style="font-size: 13px; margin-top: 2px;">(In order)</small>
-                                            </div>
-                                            <div>
-                                                <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
-                                            </div>
-                                            @error('level${count}Approver')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                            @enderror
-                                        </div>
-                                    </div>`;
+                                        const selectOptionHTML = `
+                                            <div class="col-md-6">
+                                                <div class="mb-2">
+                                                    <div class="mb-2 d-flex gap-2">
+                                                        <label class="form-label form__field__label">Level ${count} approver/s</label>
+                                                        <small class="text-muted" style="font-size: 13px; margin-top: 2px;">(In order)</small>
+                                                    </div>
+                                                    <div>
+                                                        <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
+                                                    </div>
+                                                    @error('level${count}Approver')
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
+                                                    @enderror
+                                                </div>
+                                            </div>`;
 
-                                selectApproverContainer.insertAdjacentHTML('beforeend', selectOptionHTML);
-                                const levelApproverSelect = document.querySelector(`#level${count}Approver`);
+                                        selectApproverContainer.insertAdjacentHTML('beforeend',
+                                            selectOptionHTML);
+                                        const levelApproverSelect = document.querySelector(
+                                            `#level${count}Approver`);
 
-                                if (approvers.length > 0) {
-                                    approvers.forEach(function (approver) {
-                                        const middleName = `${approver.profile.middle_name ?? ''}`;
-                                        const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+                                        if (approvers.length > 0) {
+                                            approvers.forEach(function(approver) {
+                                                const middleName =
+                                                    `${approver.profile.middle_name ?? ''}`;
+                                                const firstLetter = middleName.length > 0 ?
+                                                    middleName[0] + '.' : '';
 
-                                        approverOption.push({
-                                            value: approver.id,
-                                            label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                                                approverOption.push({
+                                                    value: approver.id,
+                                                    label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                                                });
+                                            });
+                                        }
+
+                                        VirtualSelect.init({
+                                            ele: levelApproverSelect,
+                                            options: approverOption,
+                                            showValueAsTags: true,
+                                            markSearchResults: true,
+                                            multiple: true,
+                                            required: true
                                         });
-                                    });
+
+                                        // Select option by level (Level 1-5)
+                                        let levelApprover = document.querySelector(
+                                            `#level${count}Approver`);
+                                        levelApprover.addEventListener('change', () => {
+                                            @this.set(`level${count}Approvers`, levelApprover
+                                                .value);
+                                        });
+                                    }
                                 }
-
-                                VirtualSelect.init({
-                                    ele: levelApproverSelect,
-                                    options: approverOption,
-                                    showValueAsTags: true,
-                                    markSearchResults: true,
-                                    multiple: true,
-                                    required: true
-                                });
-
-                                // Select option by level (Level 1-5)
-                                let levelApprover = document.querySelector(`#level${count}Approver`);
-                                levelApprover.addEventListener('change', () => {
-                                    @this.set(`level${count}Approvers`, levelApprover.value);
-                                });
-                            }
-                        }
-                    });
+                            });
+                        });
+                    } else {
+                        amountField.required = false;
+                        window.addEventListener('hide-special-project-container', () => {
+                            teamSelectContainer.style.display = 'block';
+                            levelOfApprovalSelect.reset();
+                            teamSelect.enable();
+                            specialProjectContainer.style.display = 'none';
+                        });
+                    }
                 });
 
-                const fmpCOOApproverSelect = document.querySelector('#select-fpm-coo-approver');
-                const serviceDepartmentAdminApproverSelect = document.querySelector('#select-service-department-admin-approver');
-                const cooApproverSelectContainer = document.querySelector('#cooApproverSelectContainer');
-                const serviceDepartmentAdminApproverSelectContainer = document.querySelector('#serviceDepartmentAdminApproverSelectContainer');
-                const cooApprovers = @json($approvers);
-                const approverOption = [];
-
-                VirtualSelect.init({
-                    ele: fmpCOOApproverSelect,
-                    search: true,
-                    autofocus: false,
-                    markSearchResults: true,
-                });
-                VirtualSelect.init({
-                    ele: serviceDepartmentAdminApproverSelect,
-                    search: true,
-                    autofocus: false,
-                    markSearchResults: true,
+                window.addEventListener('checkAndShowContainer', () => {
+                    specialProjectCheck.checked = true;
+                    specialProjectContainer.style.display = 'block';
                 });
 
-                cooApproverSelectContainer.style.display = 'none';
-                window.addEventListener('show-select-fmp-coo-approver', () => {
-                    serviceDepartmentAdminApproverSelectContainer.style.display = 'none';
-                    cooApproverSelectContainer.style.display = 'block';
-                    serviceDepartmentAdminApproverSelect.reset();
-                    @this.set('serviceDepartmentAdminApprover', null);
-                });
-
-                cooApprovers.forEach(function (cooApprover) {
-                    const middleName = `${cooApprover.profile.middle_name ?? ''}`;
-                    const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
-
-                    approverOption.push({
-                        value: cooApprover.id,
-                        label: `${cooApprover.profile.first_name} ${firstLetter} ${cooApprover.profile.last_name}`,
-                    });
-                });
-
-                fmpCOOApproverSelect.setOptions(approverOption);
-                serviceDepartmentAdminApproverSelect.setOptions(approverOption);
-
-                fmpCOOApproverSelect.addEventListener('change', () => {
-                    @this.set('COOApprover', parseInt(fmpCOOApproverSelect.value));
-                });
-
-                serviceDepartmentAdminApproverSelect.addEventListener('change', () => {
-                    @this.set('serviceDepartmentAdminApprover', parseInt(serviceDepartmentAdminApproverSelect.value));
-                });
-
-                window.addEventListener('show-select-service-departmetn-admin-approver', () => {
-                    cooApproverSelectContainer.style.display = 'none';
-                    serviceDepartmentAdminApproverSelectContainer.style.display = 'block';
-                    fmpCOOApproverSelect.reset();
-                    @this.set('COOApprover', null);
-                });
-
-            } else {
-                amountField.required = false;
-                window.addEventListener('hide-special-project-container', () => {
-                    teamSelectContainer.style.display = 'block';
-                    levelOfApprovalSelect.reset();
-                    teamSelect.enable();
+                window.addEventListener('checkAndHideContainer', () => {
+                    specialProjectCheck.checked = false;
                     specialProjectContainer.style.display = 'none';
                 });
             }
-        });
+        </script>
+    @endpush
 
-        window.addEventListener('checkAndShowContainer', () => {
-            specialProjectCheck.checked = true;
-            specialProjectContainer.style.display = 'block';
-        });
+    @push('livewire-select')
+        <script>
+            const serviceLevelAgreementOption = [
+                @foreach ($serviceLevelAgreements as $sla)
+                    {
+                        label: "{{ $sla->time_unit }}",
+                        value: "{{ $sla->id }}"
+                    },
+                @endforeach
+            ];
 
-        window.addEventListener('checkAndHideContainer', () => {
-            specialProjectCheck.checked = false;
-            specialProjectContainer.style.display = 'none';
-        });
-    }
-</script>
-@endpush
+            const slaSelect = document.querySelector('#select-help-topic-sla');
+            VirtualSelect.init({
+                ele: slaSelect,
+                options: serviceLevelAgreementOption,
+                search: true,
+                markSearchResults: true,
+            });
+            slaSelect.addEventListener('change', () => {
+                const slaId = parseInt(slaSelect.value);
+                @this.set('sla', slaId);
+            });
 
-@push('livewire-select')
-<script>
-    const serviceLevelAgreementOption = [
-        @foreach ($serviceLevelAgreements as $sla)
-        {
-            label: "{{ $sla->time_unit }}",
-            value: "{{ $sla->id }}"
-        },
-        @endforeach
-    ];
+            const serviceDepartmentOption = [
+                @foreach ($serviceDepartments as $serviceDepartment)
+                    {
+                        label: "{{ $serviceDepartment->name }}",
+                        value: "{{ $serviceDepartment->id }}"
+                    },
+                @endforeach
+            ];
 
-    const slaSelect = document.querySelector('#select-help-topic-sla');
-    VirtualSelect.init({
-        ele: slaSelect,
-        options: serviceLevelAgreementOption,
-        search: true,
-        markSearchResults: true,
-    });
-    slaSelect.addEventListener('change', () => {
-        const slaId = parseInt(slaSelect.value);
-        @this.set('sla', slaId);
-    });
+            const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
+            VirtualSelect.init({
+                ele: serviceDepartmentSelect,
+                options: serviceDepartmentOption,
+                search: true,
+                markSearchResults: true,
+            });
 
-    const serviceDepartmentOption = [
-        @foreach ($serviceDepartments as $serviceDepartment)
-        {
-            label: "{{ $serviceDepartment->name }}",
-            value: "{{ $serviceDepartment->id }}"
-        },
-        @endforeach
-    ];
+            const teamSelect = document.querySelector('#select-help-topic-team');
+            VirtualSelect.init({
+                ele: teamSelect,
+                search: true,
+                markSearchResults: true,
+            });
+            teamSelect.disable();
 
-    const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
-    VirtualSelect.init({
-        ele: serviceDepartmentSelect,
-        options: serviceDepartmentOption,
-        search: true,
-        markSearchResults: true,
-    });
+            serviceDepartmentSelect.addEventListener('change', () => {
+                const serviceDepartmentId = serviceDepartmentSelect.value;
+                if (serviceDepartmentId) {
+                    @this.set('service_department', serviceDepartmentId);
 
-    const teamSelect = document.querySelector('#select-help-topic-team');
-    VirtualSelect.init({
-        ele: teamSelect,
-        search: true,
-        markSearchResults: true,
-    });
-    teamSelect.disable();
+                    if (!specialProjectCheck.checked) {
+                        teamSelect.enable();
+                    }
 
-    serviceDepartmentSelect.addEventListener('change', () => {
-        const serviceDepartmentId = serviceDepartmentSelect.value;
-        if (serviceDepartmentId) {
-            @this.set('service_department', serviceDepartmentId);
+                    window.addEventListener('get-teams-from-selected-service-department', (event) => {
+                        const teams = event.detail.teams;
+                        const teamOption = [];
 
-            if (!specialProjectCheck.checked) {
-                teamSelect.enable();
-            }
+                        if (teams.length > 0) {
+                            teams.forEach(function(team) {
+                                VirtualSelect.init({
+                                    ele: teamSelect,
+                                });
 
-            window.addEventListener('get-teams-from-selected-service-department', (event) => {
-                const teams = event.detail.teams;
-                const teamOption = [];
+                                teamOption.push({
+                                    label: team.name,
+                                    value: team.id
+                                });
+                            });
+                            teamSelect.setOptions(teamOption);
 
-                if (teams.length > 0) {
-                    teams.forEach(function (team) {
-                        VirtualSelect.init({
-                            ele: teamSelect,
-                        });
-
-                        teamOption.push({
-                            label: team.name,
-                            value: team.id
-                        });
+                        } else {
+                            teamSelect.disable();
+                            teamSelect.setOptions([]);
+                        }
                     });
-                    teamSelect.setOptions(teamOption);
 
                 } else {
+                    teamSelect.reset();
                     teamSelect.disable();
                     teamSelect.setOptions([]);
                 }
             });
 
-        } else {
-            teamSelect.reset();
-            teamSelect.disable();
-            teamSelect.setOptions([]);
-        }
-    });
+            teamSelect.addEventListener('change', () => {
+                const teamId = parseInt(teamSelect.value);
+                if (teamId) @this.set('team', teamId);
+            });
 
-    teamSelect.addEventListener('change', () => {
-        const teamId = parseInt(teamSelect.value);
-        if (teamId) @this.set('team', teamId);
-    });
+            serviceDepartmentSelect.addEventListener('reset', () => {
+                @this.set('teams', []); // Clear teams count when service department is resetted.
+            });
+        </script>
+    @endpush
 
-    serviceDepartmentSelect.addEventListener('reset', () => {
-        @this.set('teams', []); // Clear teams count when service department is resetted.
-    });
+    @push('livewire-modal')
+        <script>
+            window.addEventListener('close-modal', () => {
+                serviceDepartmentSelect.reset();
+                slaSelect.reset();
+                levelOfApprovalSelect.reset();
+                teamSelect.reset();
+                teamSelect.disable();
+                teamSelect.setOptions([]);
 
-</script>
-
-@endpush
-
-@push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        serviceDepartmentSelect.reset();
-        slaSelect.reset();
-        levelOfApprovalSelect.reset();
-        teamSelect.reset();
-        teamSelect.disable();
-        teamSelect.setOptions([]);
-
-        @this.set('name', null);
-        specialProjectContainer.style.display = 'none';
-    });
-</script>
-@endpush
+                @this.set('name', null);
+                specialProjectContainer.style.display = 'none';
+            });
+        </script>
+    @endpush

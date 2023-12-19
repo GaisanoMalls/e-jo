@@ -22,6 +22,7 @@ class DisapproveTicket extends Component
         return (new StoreDisapproveTicketRequest())->rules();
     }
 
+    /** Perform livewire events upon form submission. */
     private function actionOnSubmit()
     {
         $this->emit('loadReason');
@@ -40,11 +41,13 @@ class DisapproveTicket extends Component
 
         try {
             DB::transaction(function () {
+                // Create and save the reason of disapproval.
                 $reason = Reason::create([
                     'ticket_id' => $this->ticket->id,
                     'description' => $this->reasonDescription,
                 ]);
 
+                // Update the ticket status when ticket has been disapproved.
                 $reason->ticket()->where('id', $this->ticket->id)
                     ->update([
                         'status_id' => Status::CLOSED,

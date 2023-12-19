@@ -18,28 +18,28 @@
                                 <div id="select-team" wire:ignore></div>
                             </div>
                             @error('team')
-                            <span class="error__message">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ $message }}
-                            </span>
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
                             @enderror
                         </div>
                         <div class="my-2">
                             <label class="ticket__actions__label mb-2">
                                 Assign to agent
                                 @if ($agents)
-                                <span class="fw-normal" style="font-size: 13px;">
-                                    ({{ $agents->count() }})</span>
+                                    <span class="fw-normal" style="font-size: 13px;">
+                                        ({{ $agents->count() }})</span>
                                 @endif
                             </label>
                             <div>
                                 <div id="select-agent" placeholder="Select (optional)" wire:ignore></div>
                             </div>
                             @error('agent')
-                            <span class="error__message">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ $message }}
-                            </span>
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
                             @enderror
                         </div>
                         <button type="submit"
@@ -57,83 +57,82 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const teamOption = [
-        @foreach ($teams as $team)
-            {
-                label: "{{ $team->name }}",
-                value: "{{ $team->id }}"
-            },
-        @endforeach
-    ];
+    <script>
+        const teamOption = [
+            @foreach ($teams as $team)
+                {
+                    label: "{{ $team->name }}",
+                    value: "{{ $team->id }}"
+                },
+            @endforeach
+        ];
 
-    const teamSelect = document.querySelector('#select-team');
-    VirtualSelect.init({
-        ele: '#select-team',
-        options: teamOption,
-        search: true,
-        markSearchResults: true,
-        hasOptionDescription: true,
-    });
+        const teamSelect = document.querySelector('#select-team');
+        VirtualSelect.init({
+            ele: '#select-team',
+            options: teamOption,
+            search: true,
+            markSearchResults: true,
+            hasOptionDescription: true,
+        });
 
-    const agentSelect = document.querySelector('#select-agent');
-    // Initialize the agent select dropdown
-    VirtualSelect.init({
-        ele: agentSelect,
-        search: true,
-        markSearchResults: true,
-        hasOptionDescription: true
-    });
-    agentSelect.disable();
+        const agentSelect = document.querySelector('#select-agent');
+        // Initialize the agent select dropdown
+        VirtualSelect.init({
+            ele: agentSelect,
+            search: true,
+            markSearchResults: true,
+            hasOptionDescription: true
+        });
+        agentSelect.disable();
 
-    window.addEventListener('get-current-team-or-agent', (event) => {
-        teamSelect.setValue(event.detail.ticket.team_id);
-    });
+        window.addEventListener('get-current-team-or-agent', (event) => {
+            teamSelect.setValue(event.detail.ticket.team_id);
+        });
 
-    teamSelect.addEventListener('change', () => {
-        const teamId = teamSelect.value;
-        @this.set('team', teamId);
+        teamSelect.addEventListener('change', () => {
+            const teamId = teamSelect.value;
+            @this.set('team', teamId);
 
-        if (teamId) {
-            agentSelect.enable();
-            window.addEventListener('get-agents-from-team', (event) => {
-                const agents = event.detail.agents;
-                const agentOption = [];
+            if (teamId) {
+                agentSelect.enable();
+                window.addEventListener('get-agents-from-team', (event) => {
+                    const agents = event.detail.agents;
+                    const agentOption = [];
 
-                if (agents.length > 0) {
-                    agents.forEach(function (agent) {
-                        VirtualSelect.init({
-                            ele: agentSelect,
-                            search: true,
-                            markSearchResults: true,
-                            hasOptionDescription: true
+                    if (agents.length > 0) {
+                        agents.forEach(function(agent) {
+                            VirtualSelect.init({
+                                ele: agentSelect,
+                                search: true,
+                                markSearchResults: true,
+                                hasOptionDescription: true
+                            });
+
+                            const middleName = `${agent.profile.middle_name ?? ''}`;
+                            const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+
+                            agentOption.push({
+                                label: `${agent.profile.first_name} ${firstLetter} ${agent.profile.last_name}`,
+                                value: agent.id
+                            })
                         });
+                        agentSelect.setOptions(agentOption);
+                    } else {
+                        agentSelect.reset();
+                        agentSelect.disable()
+                    }
+                });
+            }
+        });
 
-                        const middleName = `${agent.profile.middle_name ?? ''}`;
-                        const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+        teamSelect.addEventListener('reset', () => {
+            agentSelect.setOptions([]);
+            agentSelect.close();
+        });
 
-                        agentOption.push({
-                            label: `${agent.profile.first_name} ${firstLetter} ${agent.profile.last_name}`,
-                            value: agent.id
-                        })
-                    });
-                    agentSelect.setOptions(agentOption);
-                } else {
-                    agentSelect.reset();
-                    agentSelect.disable()
-                }
-            });
-        }
-    });
-
-    teamSelect.addEventListener('reset', () => {
-        agentSelect.setOptions([]);
-        agentSelect.close();
-    });
-
-    agentSelect.addEventListener('change', () => {
-        @this.set('agent', agentSelect.value);
-    });
-
-</script>
+        agentSelect.addEventListener('change', () => {
+            @this.set('agent', agentSelect.value);
+        });
+    </script>
 @endpush

@@ -6,8 +6,7 @@
             <div class="modal-content modal__content">
                 <form wire:submit.prevent="closeTicket">
                     <div class="modal-body border-0 text-center pt-4 pb-1">
-                        <h6 class="fw-bold mb-4"
-                            style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                        <h6 class="fw-bold mb-4" style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
                             Confirm
                         </h6>
                         <p class="mb-1" style="font-weight: 500; font-size: 15px;">

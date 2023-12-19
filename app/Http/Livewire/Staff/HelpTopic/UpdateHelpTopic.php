@@ -30,6 +30,7 @@ class UpdateHelpTopic extends Component
     public $amount;
     public $max_amount = 50000;
     public $fpmCOOApprover;
+    public $currentLevelOfApproval;
 
     public function mount(HelpTopic $helpTopic)
     {
@@ -40,6 +41,7 @@ class UpdateHelpTopic extends Component
         $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
         $this->level_of_approval = $helpTopic->levels->pluck('id')->last();
         $this->fpmCOOApprover = $this->helpTopic->specialProject->fmp_coo_approver['approver_id'] ?? null;
+        $this->currentLevelOfApproval = $helpTopic->levels->pluck('id')->last();
         $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
         for ($count = 1; $count <= 5; $count++) {
             $this->{"level{$count}Approvers"} = $this->{"getLevel{$count}Approvers"}();
@@ -90,15 +92,17 @@ class UpdateHelpTopic extends Component
                     $this->helpTopic->specialProject->update(['amount' => $this->amount]);
                     // Sync all levels first
                     $this->helpTopic->levels()->sync(range(1, $this->level_of_approval));
-                    // Delete existing level approvers for the current topic
+                    // Delete existing level approvers from the current help topic
                     LevelApprover::where(['help_topic_id' => $this->helpTopic->id])->delete();
                     // Iterate through selected level approvers
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
-                        foreach ($this->{"level{$level}Approvers"} as $approver) {
+                        foreach ($this->{"level{$level}Approvers"} as $key => $approver) {
+                            // Create new level approver
                             LevelApprover::create([
                                 'help_topic_id' => $this->helpTopic->id,
                                 'level_id' => $level,
                                 'user_id' => $approver,
+                                'approval_order' => $key + 1
                             ]);
                         }
                     }

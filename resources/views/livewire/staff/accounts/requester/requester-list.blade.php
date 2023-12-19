@@ -1,122 +1,122 @@
 <div>
     @if (!$users->isEmpty())
-    <div
-        class="card account__type__card {{ Route::is('staff.manage.user_account.users') ? 'card__rounded__and__no__border' : '' }}">
-        <div class="table-responsive custom__table">
-            <table class="table table-striped mb-0">
-                <thead>
-                    <tr>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Name
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Branch
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            BU/Department
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Status
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Permissions
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Date Added
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Date Updated
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($users as $user)
-                    <tr>
-                        <td>
-                            <a href="{{ route('staff.manage.user_account.user.view_details', $user->id) }}">
-                                <div class="media d-flex align-items-center user__account__media">
-                                    <div class="flex-shrink-0">
-                                        @if ($user->profile->picture)
-                                        <img src="{{ Storage::url($user->profile->picture) }}" alt=""
-                                            class="image-fluid user__picture">
-                                        @else
-                                        <div class="user__name__initial" style="background-color: #24695C;">
-                                            {{ $user->profile->getNameInitial() }}
+        <div
+            class="card account__type__card {{ Route::is('staff.manage.user_account.users') ? 'card__rounded__and__no__border' : '' }}">
+            <div class="table-responsive custom__table">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                Name
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                Branch
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                BU/Department
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                Status
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                Permissions
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                Date Added
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                Date Updated
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($users as $user)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('staff.manage.user_account.user.view_details', $user->id) }}">
+                                        <div class="media d-flex align-items-center user__account__media">
+                                            <div class="flex-shrink-0">
+                                                @if ($user->profile->picture)
+                                                    <img src="{{ Storage::url($user->profile->picture) }}"
+                                                        alt="" class="image-fluid user__picture">
+                                                @else
+                                                    <div class="user__name__initial" style="background-color: #24695C;">
+                                                        {{ $user->profile->getNameInitial() }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="d-flex flex-column gap-1 ms-3 w-100">
+                                                <span class="user__name">{{ $user->profile->getFullName() }}</span>
+                                                <small>{{ $user->email }}</small>
+                                            </div>
                                         </div>
-                                        @endif
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ $user->getBranches() }}</span>
                                     </div>
-                                    <div class="d-flex flex-column gap-1 ms-3 w-100">
-                                        <span class="user__name">{{
-                                            $user->profile->getFullName() }}</span>
-                                        <small>{{ $user->email }}</small>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ $user->getBUDepartments() }}</span>
                                     </div>
-                                </div>
-                            </a>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->getBranches() }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->getBUDepartments() }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->isActive() ? 'Active' : 'Inactive' }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start gap-1 td__content">
-                                <span><i class="bi bi-person-lock text-muted"></i></span>
-                                <span>{{ $user->getAllPermissions()->count() }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $user->dateCreated() }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start td__content">
-                                <span>
-                                    @if ($user->dateUpdated() > $user->profile->dateUpdated())
-                                    {{ $user->dateUpdated() }}
-                                    @else
-                                    {{ $user->profile->dateUpdated() }}
-                                    @endif
-                                </span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                                <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
-                                    onclick="window.location.href='{{ route('staff.manage.user_account.user.edit_details', $user->id) }}'"
-                                    type="button" class="btn action__button">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button data-tooltip="Delete" data-tooltip-position="top" data-tooltip-font-size="11px"
-                                    type="button" class="btn action__button" data-bs-toggle="modal"
-                                    data-bs-target="#confirmDeleteUserModal"
-                                    wire:click="deleteRequester({{ $user->id }})">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ $user->isActive() ? 'Active' : 'Inactive' }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start gap-1 td__content">
+                                        <span><i class="bi bi-person-lock text-muted"></i></span>
+                                        <span>{{ $user->getAllPermissions()->count() }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ $user->dateCreated() }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>
+                                            @if ($user->dateUpdated() > $user->profile->dateUpdated())
+                                                {{ $user->dateUpdated() }}
+                                            @else
+                                                {{ $user->profile->dateUpdated() }}
+                                            @endif
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
+                                        <button data-tooltip="Edit" data-tooltip-position="top"
+                                            data-tooltip-font-size="11px"
+                                            onclick="window.location.href='{{ route('staff.manage.user_account.user.edit_details', $user->id) }}'"
+                                            type="button" class="btn action__button">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button data-tooltip="Delete" data-tooltip-position="top"
+                                            data-tooltip-font-size="11px" type="button" class="btn action__button"
+                                            data-bs-toggle="modal" data-bs-target="#confirmDeleteUserModal"
+                                            wire:click="deleteRequester({{ $user->id }})">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
     @else
-    <div class="alert text-center d-flex align-items-center justify-content-center gap-2" role="alert"
-        style="background-color: #F5F7F9; font-size: 14px;">
-        <i class="fa-solid fa-circle-info"></i>
-        Empty records for requesters.
-    </div>
+        <div class="alert text-center d-flex align-items-center justify-content-center gap-2" role="alert"
+            style="background-color: #F5F7F9; font-size: 14px;">
+            <i class="fa-solid fa-circle-info"></i>
+            Empty records for requesters.
+        </div>
     @endif
 
     {{-- Delete Requester Modal --}}
@@ -155,14 +155,13 @@
 
 {{-- Modal Scripts --}}
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#confirmDeleteUserModal').modal('hide');
-    });
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#confirmDeleteUserModal').modal('hide');
+        });
 
-    window.addEventListener('show-delete-requester-modal', () => {
-        $('#confirmDeleteUserModal').modal('show');
-    });
-
-</script>
+        window.addEventListener('show-delete-requester-modal', () => {
+            $('#confirmDeleteUserModal').modal('show');
+        });
+    </script>
 @endpush

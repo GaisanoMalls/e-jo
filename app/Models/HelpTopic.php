@@ -19,7 +19,7 @@ class HelpTopic extends Model
         'team_id',
         'service_level_agreement_id',
         'name',
-        'slug'
+        'slug',
     ];
 
     public function department(): BelongsTo
@@ -45,6 +45,11 @@ class HelpTopic extends Model
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    public function levelApprovers()
+    {
+        return $this->hasMany(LevelApprover::class);
     }
 
     public function specialProject(): HasOne

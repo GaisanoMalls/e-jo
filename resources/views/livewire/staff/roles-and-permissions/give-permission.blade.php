@@ -9,10 +9,10 @@
                     <div id="select-permission-action" placeholder="Select action" wire:ignore></div>
                 </div>
                 @error('permissionAction')
-                <span class="error__message">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    {{ $message }}
-                </span>
+                    <span class="error__message">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        {{ $message }}
+                    </span>
                 @enderror
             </div>
             <div class="col-md-5 p-0">
@@ -20,10 +20,10 @@
                     <div id="select-module-name" placeholder="Select module" wire:ignore></div>
                 </div>
                 @error('permissionModules')
-                <span class="error__message">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    {{ $message }}
-                </span>
+                    <span class="error__message">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        {{ $message }}
+                    </span>
                 @enderror
             </div>
             <div class="col-md-2 p-0">
@@ -41,60 +41,60 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const actionOptions = [
-        @foreach ($actions as $action)
-        {
-            label: @json($action->icon) + "{{ $action->name }}",
-            value: "{{ $action->name }}"
-        },
-        @endforeach
+    <script>
+        const actionOptions = [
+            @foreach ($actions as $action)
+                {
+                    label: @json($action->icon) + "{{ $action->name }}",
+                    value: "{{ $action->name }}"
+                },
+            @endforeach
 
-    ];
+        ];
 
-    const selectPermissionAction = document.querySelector('#select-permission-action');
-    VirtualSelect.init({
-        ele: selectPermissionAction,
-        options: actionOptions,
-        search: true,
-        required: true,
-        markSearchResults: true,
-    });
+        const selectPermissionAction = document.querySelector('#select-permission-action');
+        VirtualSelect.init({
+            ele: selectPermissionAction,
+            options: actionOptions,
+            search: true,
+            required: true,
+            markSearchResults: true,
+        });
 
-    const moduleOption = [
-        @foreach ($modules as $module)
-        {
-            label: "{{ $module->name }}",
-            value: "{{ $module->name }}"
-        },
-        @endforeach
-    ];
+        const moduleOption = [
+            @foreach ($modules as $module)
+                {
+                    label: "{{ $module->name }}",
+                    value: "{{ $module->name }}"
+                },
+            @endforeach
+        ];
 
-    const selectPermissionModule = document.querySelector('#select-module-name');
-    VirtualSelect.init({
-        ele: selectPermissionModule,
-        options: moduleOption,
-        search: true,
-        required: true,
-        multiple: true,
-        allowNewOption: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-    });
+        const selectPermissionModule = document.querySelector('#select-module-name');
+        VirtualSelect.init({
+            ele: selectPermissionModule,
+            options: moduleOption,
+            search: true,
+            required: true,
+            multiple: true,
+            allowNewOption: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+        });
 
-    // Set Value
-    selectPermissionAction.addEventListener('change', () => {
-        @this.set('permissionAction', selectPermissionAction.value);
-    });
+        // Set Value
+        selectPermissionAction.addEventListener('change', () => {
+            @this.set('permissionAction', selectPermissionAction.value);
+        });
 
-    selectPermissionModule.addEventListener('change', () => {
-        @this.set('permissionModules', selectPermissionModule.value);
-    });
+        selectPermissionModule.addEventListener('change', () => {
+            @this.set('permissionModules', selectPermissionModule.value);
+        });
 
-    // Reset select options
-    window.addEventListener('clear-select-options', () => {
-        selectPermissionAction.reset();
-        selectPermissionModule.reset();
-    });
-</script>
+        // Reset select options
+        window.addEventListener('clear-select-options', () => {
+            selectPermissionAction.reset();
+            selectPermissionModule.reset();
+        });
+    </script>
 @endpush

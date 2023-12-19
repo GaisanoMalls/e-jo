@@ -12,13 +12,13 @@
             <a class="nav-link d-flex align-items-center justify-content-center p-1 rounded-5 bg-white" href="#"
                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 @if (auth()->user()->profile->picture)
-                <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="feedback__user__picture me-1"
-                    alt="">
+                    <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="feedback__user__picture me-1"
+                        alt="">
                 @else
-                <div class="d-flex align-items-center p-2 me-2 justify-content-center rounded-circle
+                    <div class="d-flex align-items-center p-2 me-2 justify-content-center rounded-circle
                                                      text-white"
-                    style="background-color: #24695C; font-size: 14px; height: 35px; width: 35px;">
-                    {{ auth()->user()->profile->getNameInitial() }}</div>
+                        style="background-color: #24695C; font-size: 14px; height: 35px; width: 35px;">
+                        {{ auth()->user()->profile->getNameInitial() }}</div>
                 @endif
                 <small class="pe-2 fw-semibold">{{ auth()->user()->profile->first_name }}</small>
             </a>

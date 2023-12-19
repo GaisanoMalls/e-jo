@@ -58,7 +58,7 @@
     @stack('livewire-textarea')
     @stack('modal-with-error')
     @stack('extra')
-    <script>
+    {{-- <script>
         var table = document.getElementById('table');
         var options = {
             // how many rows per page
@@ -100,7 +100,7 @@
         };
         var dataTable = new DataTable(table, options);
 
-    </script>
+    </script> --}}
 </body>
 
 </html>

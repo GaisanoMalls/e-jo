@@ -26,14 +26,14 @@
     <div class="container mb-5 requester__section">
         @livewire('offline')
         @if (Route::is('user.tickets.*'))
-        @livewire('requester.ticket-tab')
-        <div class="row mx-0 ticket__content header user">
-            <div class="d-flex flex-wrap px-0 align-items-center justify-content-between">
-                @section('ticket-list-header')
-                <h5 class="mb-0 content__title">All Tickets</h5>
-                @show
+            @livewire('requester.ticket-tab')
+            <div class="row mx-0 ticket__content header user">
+                <div class="d-flex flex-wrap px-0 align-items-center justify-content-between">
+                    @section('ticket-list-header')
+                        <h5 class="mb-0 content__title">All Tickets</h5>
+                    @show
+                </div>
             </div>
-        </div>
         @endif
         @yield('main-content')
     </div>
