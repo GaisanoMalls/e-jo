@@ -86,11 +86,13 @@ class CreateHelpTopic extends Component
                         'amount' => $this->amount,
                         // Assign approver
                         'fmp_coo_approver' => [
-                            'approver_id' => User::where('id', $this->COOApprover)->exists() ? $this->COOApprover : null,
+                            'approver_id' => null,
                             'is_approved' => false,
                         ],
+                        'service_department_approver' => [
+                            'approver_id' => null,
                         'service_department_admin_approver' => [
-                            'approver_id' => User::where('id', $this->serviceDepartmentAdminApprover)->exists() ? $this->serviceDepartmentAdminApprover : null,
+                            'approver_id' => null,
                             'is_approved' => false,
                         ],
                         'bu_head_approver' => [
