@@ -87,11 +87,11 @@ class CreateHelpTopic extends Component
                         'help_topic_id' => $helpTopic->id,
                         'amount' => $this->amount,
                         'fmp_coo_approver' => [
-                            'approver_id' => User::where('id', $this->COOApprover)->exists() ? $this->COOApprover : null,
+                            'approver_id' => null,
                             'is_approved' => false,
                         ],
                         'service_department_approver' => [
-                            'approver_id' => User::where('id', $this->serviceDepartmentAdminApprover)->exists() ? $this->serviceDepartmentAdminApprover : null,
+                            'approver_id' => null,
                             'is_approved' => false,
                         ],
                         // 'service_department_admin_approver' => [
