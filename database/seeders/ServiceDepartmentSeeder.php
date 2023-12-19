@@ -20,6 +20,7 @@ class ServiceDepartmentSeeder extends Seeder
             'HR',
             'SPE',
             'SPM',
+            'FPM',
             'DPS',
         ];
 
