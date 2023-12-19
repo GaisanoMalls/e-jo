@@ -94,10 +94,11 @@ class CreateHelpTopic extends Component
                             'approver_id' => null,
                             'is_approved' => false,
                         ],
-                        // 'service_department_admin_approver' => [
-                        //     'service_department_admin_id' => UserServiceDepartment::where('service_department_id', $this->serviceDepartment)->pluck('user_id')->first(),
-                        //     'is_approved' => false
-                        // ]
+                        'bu_head_approver' => [
+                            'approver_id' => null,
+                            'is_approved' => false,
+                        ],
+
                     ]);
 
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
@@ -121,15 +122,6 @@ class CreateHelpTopic extends Component
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Oops, something went wrong.');
-        }
-    }
-
-    public function updatedAmount()
-    {
-        if ((int) $this->amount >= $this->max_amount) {
-            $this->dispatchBrowserEvent('show-select-fmp-coo-approver');
-        } else {
-            $this->dispatchBrowserEvent('show-select-service-departmetn-admin-approver');
         }
     }
 
