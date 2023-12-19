@@ -74,11 +74,7 @@
                                         <div class="mb-2">
                                             <label for="team" class="form-label form__field__label">
                                                 Team
-                                                @if ($teams)
-                                                    <span class="fw-normal" style="font-size: 13px;">
-                                                        ({{ $teams->count() }})
-                                                    </span>
-                                                @endif
+                                                <span class="fw-normal" style="font-size: 13px;" id="countTeams"></span>
                                             </label>
                                             <div>
                                                 <div id="select-help-topic-team" placeholder="Select (optional)"
@@ -308,6 +304,7 @@
                 search: true,
                 markSearchResults: true,
             });
+
             slaSelect.addEventListener('change', () => {
                 const slaId = parseInt(slaSelect.value);
                 @this.set('sla', slaId);
@@ -340,6 +337,14 @@
 
             serviceDepartmentSelect.addEventListener('change', () => {
                 const serviceDepartmentId = serviceDepartmentSelect.value;
+                const serviceDepartments = @json($serviceDepartments);
+
+                serviceDepartments.forEach((department) => {
+                    if (serviceDepartmentSelect.value == department.id) {
+                        @this.set('name', `Special Project (${department.name})`);
+                    }
+                });
+
                 if (serviceDepartmentId) {
                     @this.set('service_department', serviceDepartmentId);
 
@@ -364,6 +369,9 @@
                             });
                             teamSelect.setOptions(teamOption);
 
+                            const countTeams = document.querySelector('#countTeams');
+                            countTeams.textContent = `(${event.detail.teams.length})`;
+
                         } else {
                             teamSelect.disable();
                             teamSelect.setOptions([]);
@@ -384,6 +392,8 @@
 
             serviceDepartmentSelect.addEventListener('reset', () => {
                 @this.set('teams', []); // Clear teams count when service department is resetted.
+                const countTeams = document.querySelector('#countTeams');
+                countTeams.textContent = '';
             });
         </script>
     @endpush

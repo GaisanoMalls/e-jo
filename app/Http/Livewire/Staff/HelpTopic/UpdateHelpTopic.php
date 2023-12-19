@@ -43,9 +43,9 @@ class UpdateHelpTopic extends Component
         $this->fpmCOOApprover = $this->helpTopic->specialProject->fmp_coo_approver['approver_id'] ?? null;
         $this->currentLevelOfApproval = $helpTopic->levels->pluck('id')->last();
         $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
-        for ($count = 1; $count <= 5; $count++) {
-            $this->{"level{$count}Approvers"} = $this->{"getLevel{$count}Approvers"}();
-        }
+        // for ($count = 1; $count <= 2; $count++) {
+        //     $this->{"level{$count}Approvers"} = $this->{"getLevel{$count}Approvers"}();
+        // }
     }
 
     public function rules()
@@ -151,7 +151,7 @@ class UpdateHelpTopic extends Component
         $levelApprovers = LevelApprover::where('help_topic_id', $this->helpTopic->id)->get();
 
         foreach ($levelApprovers as $levelApprover) {
-            if ($levelApprover->level_id === 1) {
+            if ($levelApprover->level_id == 1) {
                 array_push($level1Approvers, [
                     'user_id' => $levelApprover->user_id,
                     'level_id' => $levelApprover->level_id,
@@ -168,7 +168,7 @@ class UpdateHelpTopic extends Component
         $levelApprovers = LevelApprover::where('help_topic_id', $this->helpTopic->id)->get();
 
         foreach ($levelApprovers as $levelApprover) {
-            if ($levelApprover->level_id === 2) {
+            if ($levelApprover->level_id == 2) {
                 array_push($level2Approvers, [
                     'user_id' => $levelApprover->user_id,
                     'level_id' => $levelApprover->level_id,
@@ -177,57 +177,6 @@ class UpdateHelpTopic extends Component
         }
 
         return $level2Approvers;
-    }
-
-    public function getLevel3Approvers()
-    {
-        $level3Approvers = [];
-        $levelApprovers = LevelApprover::where('help_topic_id', $this->helpTopic->id)->get();
-
-        foreach ($levelApprovers as $levelApprover) {
-            if ($levelApprover->level_id === 3) {
-                array_push($level3Approvers, [
-                    'user_id' => $levelApprover->user_id,
-                    'level_id' => $levelApprover->level_id,
-                ]);
-            }
-        }
-
-        return $level3Approvers;
-    }
-
-    public function getLevel4Approvers()
-    {
-        $level4Approvers = [];
-        $levelApprovers = LevelApprover::where('help_topic_id', $this->helpTopic->id)->get();
-
-        foreach ($levelApprovers as $levelApprover) {
-            if ($levelApprover->level_id === 4) {
-                array_push($level4Approvers, [
-                    'user_id' => $levelApprover->user_id,
-                    'level_id' => $levelApprover->level_id,
-                ]);
-            }
-        }
-
-        return $level4Approvers;
-    }
-
-    public function getLevel5Approvers()
-    {
-        $level5Approvers = [];
-        $levelApprovers = LevelApprover::where('help_topic_id', $this->helpTopic->id)->get();
-
-        foreach ($levelApprovers as $levelApprover) {
-            if ($levelApprover->level_id === 5) {
-                array_push($level5Approvers, [
-                    'user_id' => $levelApprover->user_id,
-                    'level_id' => $levelApprover->level_id,
-                ]);
-            }
-        }
-
-        return $level5Approvers;
     }
 
     public function render()

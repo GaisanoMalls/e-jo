@@ -25,7 +25,7 @@ class PriorityLevelsSeeder extends Seeder
             PriorityLevel::firstOrCreate([
                 'name' => $level['name'],
                 'color' => $level['color'],
-                'slug' => \Str::slug($level['name'])
+                'slug' => \Str::slug($level['name']),
             ]);
         }
     }

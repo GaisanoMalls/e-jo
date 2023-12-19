@@ -16,24 +16,17 @@ class ServiceDepartmentSeeder extends Seeder
     public function run()
     {
         $serviceDepartments = [
-            [
-                'id' => 1,
-                'name' => 'Maintenance'
-            ],
-            [
-                'id' => 2,
-                'name' => 'Facilities'
-            ],
-            [
-                'id' => 3,
-                'name' => 'ICT'
-            ],
+            'ICT',
+            'HR',
+            'SPE',
+            'SPM',
+            'DPS',
         ];
 
         foreach ($serviceDepartments as $serviceDepartment) {
             ServiceDepartment::firstOrCreate([
-                'name' => $serviceDepartment['name'],
-                'slug' => \Str::slug($serviceDepartment['name'])
+                'name' => $serviceDepartment,
+                'slug' => \Str::slug($serviceDepartment),
             ]);
         }
     }

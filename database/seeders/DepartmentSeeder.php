@@ -16,15 +16,16 @@ class DepartmentSeeder extends Seeder
     {
         $departments = [
             'ICT',
-            'Accounting',
-            'Supermarket',
-            'Department Store',
+            'HR',
+            'SPE',
+            'SPM',
+            'DPS',
         ];
 
         foreach ($departments as $department) {
             Department::firstOrCreate([
                 'name' => $department,
-                'slug' => \Str::slug($department)
+                'slug' => \Str::slug($department),
             ]);
         }
     }

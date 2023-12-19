@@ -56,26 +56,29 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label form__field__label">
-                                            Team
-                                            @if ($teams)
-                                                <span class="fw-normal" style="font-size: 13px;">
-                                                    ({{ $teams->count() }})</span>
-                                            @endif
-                                        </label>
-                                        <div>
-                                            <div id="select-help-topic-team" wire:ignore></div>
+                                @if (!$helpTopic->specialProject && !is_null($helpTopic->specialProject))
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label form__field__label">
+                                                Team
+                                                @if ($teams)
+                                                    <span class="fw-normal" style="font-size: 13px;">
+                                                        ({{ $teams->count() }})
+                                                    </span>
+                                                @endif
+                                            </label>
+                                            <div>
+                                                <div id="select-help-topic-team" wire:ignore></div>
+                                            </div>
+                                            @error('team')
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
                                         </div>
-                                        @error('team')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
                                     </div>
-                                </div>
+                                @endif
                                 @if ($helpTopic->specialProject && !is_null($helpTopic->specialProject))
                                     <div class="row">
                                         <div class="col-md-3">

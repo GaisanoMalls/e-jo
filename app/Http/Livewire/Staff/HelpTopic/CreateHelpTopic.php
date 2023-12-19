@@ -53,8 +53,6 @@ class CreateHelpTopic extends Component
             //     $this->showAmountError = false;
             //     $rules['amount'] = ['nullable'];
             // }
-
-
         }
 
         return $rules;
@@ -98,7 +96,6 @@ class CreateHelpTopic extends Component
                             'approver_id' => null,
                             'is_approved' => false,
                         ],
-
                     ]);
 
                     for ($level = 1; $level <= $this->level_of_approval; $level++) {
