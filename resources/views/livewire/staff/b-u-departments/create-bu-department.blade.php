@@ -18,10 +18,10 @@
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
                                     placeholder="Enter BU/department name">
                                 @error('name')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                             <div class="col-12 mb-3">
@@ -40,11 +40,11 @@
                                 <div>
                                     <div id="select-branch" wire:ignore></div>
                                 </div>
-                                @error ('selectedBranches')
-                                <div class="error__message mt-1">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </div>
+                                @error('selectedBranches')
+                                    <div class="error__message mt-1">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </div>
                                 @enderror
                             </div>
                         </div>
@@ -69,36 +69,36 @@
 </div>
 
 @push('livewire-select')
-<script>
-    let branchOption = [
-        @foreach ($branches as $branch)
-            {
-                label: "{{ $branch->name }}",
-                value: "{{ $branch->id }}"
-            },
-        @endforeach
-    ];
+    <script>
+        let branchOption = [
+            @foreach ($branches as $branch)
+                {
+                    label: "{{ $branch->name }}",
+                    value: "{{ $branch->id }}"
+                },
+            @endforeach
+        ];
 
-    VirtualSelect.init({
-        ele: '#select-branch',
-        options: branchOption,
-        search: true,
-        multiple: true,
-        required: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-        popupDropboxBreakpoint: '3000px',
-    });
+        VirtualSelect.init({
+            ele: '#select-branch',
+            options: branchOption,
+            search: true,
+            multiple: true,
+            required: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            popupDropboxBreakpoint: '3000px',
+        });
 
-    let branchSelect = document.querySelector('#select-branch')
+        let branchSelect = document.querySelector('#select-branch')
 
-    branchSelect.addEventListener('change', () => {
-        @this.set('selectedBranches', branchSelect.value);
-    });
+        branchSelect.addEventListener('change', () => {
+            @this.set('selectedBranches', branchSelect.value);
+        });
 
-    // Clear all selected branches in the select option.
-    window.addEventListener('clear-branch-select-option', () => {
-        branchSelect.reset();
-    });
-</script>
+        // Clear all selected branches in the select option.
+        window.addEventListener('clear-branch-select-option', () => {
+            branchSelect.reset();
+        });
+    </script>
 @endpush

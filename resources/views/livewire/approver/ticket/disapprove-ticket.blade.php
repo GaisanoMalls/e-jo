@@ -12,10 +12,10 @@
                             <textarea wire:model="reasonDescription" id="reasonDescription"></textarea>
                         </div>
                         @error('reasonDescription')
-                        <span class="error__message">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                            {{ $message }}
-                        </span>
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ $message }}
+                            </span>
                         @enderror
                     </div>
                     <div class="d-flex align-items-center gap-3 pb-4 px-4">
@@ -36,29 +36,29 @@
 </div>
 
 @push('livewire-textarea')
-<script>
-    tinymce.init({
-        selector: '#reasonDescription',
-        plugins: 'lists',
-        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
-        height: 350,
-        forced_root_block: false,
-        setup: function (editor) {
-            editor.on('init change', function () {
-                editor.save();
-            });
-            editor.on('change', function (e) {
-                @this.set('reasonDescription', editor.getContent());
-            });
-        }
-    });
-</script>
+    <script>
+        tinymce.init({
+            selector: '#reasonDescription',
+            plugins: 'lists',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
+            height: 350,
+            forced_root_block: false,
+            setup: function(editor) {
+                editor.on('init change', function() {
+                    editor.save();
+                });
+                editor.on('change', function(e) {
+                    @this.set('reasonDescription', editor.getContent());
+                });
+            }
+        });
+    </script>
 @endpush
 
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#disapproveTicketModal').modal('hide');
-    });
-</script>
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#disapproveTicketModal').modal('hide');
+        });
+    </script>
 @endpush

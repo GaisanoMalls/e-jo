@@ -1,5 +1,5 @@
-<div class="modal fade announcement__modal" id="addNewAnnouncement" tabindex="-1"
-    aria-labelledby="addNewAnnouncementLabel" aria-hidden="true">
+<div class="modal fade announcement__modal" id="addNewAnnouncement" tabindex="-1" aria-labelledby="addNewAnnouncementLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content modal__content">
             <div class="modal-header modal__header p-0 border-0">
@@ -23,10 +23,10 @@
                                 <input type="text" name="title" class="form-control form__field" id="title"
                                     value="{{ old('title') }}" placeholder="Type here...">
                                 @error('title', 'storeAnnouncement')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>
@@ -37,17 +37,17 @@
                                     data-silent-initial-value-set="true">
                                     <option value="" selected disabled>Choose a department</option>
                                     @foreach ($departments as $department)
-                                    <option value="{{ $department->id }}" {{ old('department')==$department->id ?
-                                        'selected' : '' }}>
-                                        {{ $department->name }}
-                                    </option>
+                                        <option value="{{ $department->id }}"
+                                            {{ old('department') == $department->id ? 'selected' : '' }}>
+                                            {{ $department->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('department', 'storeAnnouncement')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>
@@ -58,10 +58,10 @@
                                 {{ old('description') }}
                                 </textarea>
                                 @error('description', 'storeAnnouncement')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>

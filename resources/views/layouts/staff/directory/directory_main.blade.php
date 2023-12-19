@@ -1,16 +1,16 @@
 @extends('layouts.staff.base', ['title' => $title ?? 'Directories'])
 
 @section('page-header')
-<div class="justify-content-between d-flex flex-wrap ticket__content__top">
-    <div class="w-100 d-flex flex-wrap justify-content-between">
-        <h3 class="page__header__title">
-            @yield('directory-header-title')
-        </h3>
+    <div class="justify-content-between d-flex flex-wrap ticket__content__top">
+        <div class="w-100 d-flex flex-wrap justify-content-between">
+            <h3 class="page__header__title">
+                @yield('directory-header-title')
+            </h3>
         @section('directory-breadcrumbs')
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">Directory</li>
-            <li class="breadcrumb-item active">Home</li>
-        </ol>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Directory</li>
+                <li class="breadcrumb-item active">Home</li>
+            </ol>
         @show
     </div>
 </div>

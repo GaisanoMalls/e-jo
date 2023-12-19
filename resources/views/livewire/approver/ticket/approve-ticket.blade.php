@@ -1,12 +1,11 @@
 <div>
-    <div wire:ignore.self class="modal fade modal__confirm__approve__ticket" id="confirmTicketApproveModal"
-        tabindex="-1" aria-hidden="true">
+    <div wire:ignore.self class="modal fade modal__confirm__approve__ticket" id="confirmTicketApproveModal" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <form wire:submit.prevent="approveTicket">
                     <div class="modal-body border-0 text-center pt-4 pb-1">
-                        <h6 class="fw-bold mb-4"
-                            style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                        <h6 class="fw-bold mb-4" style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
                             Confirm Approval
                         </h6>
                         <p class="mb-1" style="font-weight: 500; font-size: 15px;">
@@ -33,9 +32,9 @@
 </div>
 
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#confirmTicketApproveModal').modal('hide');
-    });
-</script>
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#confirmTicketApproveModal').modal('hide');
+        });
+    </script>
 @endpush

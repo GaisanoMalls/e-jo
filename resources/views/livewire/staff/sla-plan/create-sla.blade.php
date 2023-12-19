@@ -15,14 +15,15 @@
                             <div class="col-md-12">
                                 <div class="mb-2">
                                     <label for="countdown_approach" class="form-label form__field__label">Hours</label>
-                                    <input type="text" wire:model="countdown_approach" class="form-control form__field
-                                    @error('countdown_approach') is-invalid @enderror" id="countdown_approach"
-                                        placeholder="e.g. 24">
+                                    <input type="text" wire:model="countdown_approach"
+                                        class="form-control form__field
+                                    @error('countdown_approach') is-invalid @enderror"
+                                        id="countdown_approach" placeholder="e.g. 24">
                                     @error('countdown_approach')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
                                     @enderror
                                 </div>
                             </div>
@@ -31,13 +32,15 @@
                                     <label for="time_unit" class="form-label form__field__label">
                                         Time unit
                                     </label>
-                                    <input type="text" wire:model="time_unit" class="form-control form__field
-                                    @error('time_unit') is-invalid @enderror" id=" time_unit" placeholder="e.g. 1 Day">
+                                    <input type="text" wire:model="time_unit"
+                                        class="form-control form__field
+                                    @error('time_unit') is-invalid @enderror"
+                                        id=" time_unit" placeholder="e.g. 1 Day">
                                     @error('time_unit')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
                                     @enderror
                                 </div>
                             </div>
@@ -52,8 +55,8 @@
                                 </span>
                                 Add new
                             </button>
-                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" data-bs-dismiss="modal"
-                                wire:click="clearFormFields">Cancel</button>
+                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel"
+                                data-bs-dismiss="modal" wire:click="clearFormFields">Cancel</button>
                         </div>
                     </div>
                 </form>

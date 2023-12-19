@@ -30,6 +30,7 @@ class UpdateHelpTopic extends Component
     public $amount;
     public $max_amount = 50000;
     public $fpmCOOApprover;
+    public $currentLevelOfApproval;
 
     public function mount(HelpTopic $helpTopic)
     {
@@ -40,6 +41,7 @@ class UpdateHelpTopic extends Component
         $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
         $this->level_of_approval = $helpTopic->levels->pluck('id')->last();
         $this->fpmCOOApprover = $this->helpTopic->specialProject->fmp_coo_approver['approver_id'] ?? null;
+        $this->currentLevelOfApproval = $helpTopic->levels->pluck('id')->last();
         $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
         for ($count = 1; $count <= 5; $count++) {
             $this->{"level{$count}Approvers"} = $this->{"getLevel{$count}Approvers"}();

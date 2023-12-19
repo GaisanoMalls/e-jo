@@ -23,7 +23,7 @@ class Team extends Model
     protected $fillable = [
         'service_department_id',
         'name',
-        'slug'
+        'slug',
     ];
 
     public function serviceDepartment(): BelongsTo

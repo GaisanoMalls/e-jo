@@ -30,10 +30,10 @@
                                                     class="form-control form__field" id="first_name"
                                                     placeholder="Enter first name (required)">
                                                 @error('first_name')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -46,10 +46,10 @@
                                                     class="form-control form__field" id="middle_name"
                                                     placeholder="Enter middle name (optional)">
                                                 @error('middle_name')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -61,10 +61,10 @@
                                                     class="form-control form__field" id="last_name"
                                                     placeholder="Enter last name (required)">
                                                 @error('last_name')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -77,10 +77,10 @@
                                                     <div id="select-agent-suffix" wire:ignore></div>
                                                 </div>
                                                 @error('suffix')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -88,13 +88,14 @@
                                             <div class="mb-2">
                                                 <label for="email" class="form-label form__field__label">Email
                                                     address</label>
-                                                <input type="email" wire:model="email" class="form-control form__field"
-                                                    id="email" placeholder="Enter email (required)">
+                                                <input type="email" wire:model="email"
+                                                    class="form-control form__field" id="email"
+                                                    placeholder="Enter email (required)">
                                                 @error('email')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -118,10 +119,10 @@
                                                     <div id="select-agent-branch" wire:ignore></div>
                                                 </div>
                                                 @error('branch')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -130,18 +131,18 @@
                                                 <label for="bu_department" class="form-label form__field__label">
                                                     BU/Department
                                                     @if ($BUDepartments)
-                                                    <span class="fw-normal" style="font-size: 13px;">
-                                                        ({{ $BUDepartments->count() }})</span>
+                                                        <span class="fw-normal" style="font-size: 13px;">
+                                                            ({{ $BUDepartments->count() }})</span>
                                                     @endif
                                                 </label>
                                                 <div>
                                                     <div id="select-agent-bu-department" wire:ignore></div>
                                                 </div>
                                                 @error('bu_department')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -150,18 +151,18 @@
                                                 <label class="form-label form__field__label">
                                                     Team
                                                     @if ($teams)
-                                                    <span class="fw-normal" style="font-size: 13px;">
-                                                        ({{ $teams->count() }})</span>
+                                                        <span class="fw-normal" style="font-size: 13px;">
+                                                            ({{ $teams->count() }})</span>
                                                     @endif
                                                 </label>
                                                 <div>
                                                     <div id="select-agent-team" wire:ignore></div>
                                                 </div>
                                                 @error('teams')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -174,10 +175,10 @@
                                                     <div id="select-agent-service-department" wire:ignore></div>
                                                 </div>
                                                 @error('service_department')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -211,165 +212,165 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const agentSuffixOption = [
-        @foreach ($agentSuffixes as $suffix)
-            {
-                label: "{{ $suffix->name }}",
-                value: "{{ $suffix->name }}"
-            },
-        @endforeach
-    ];
+    <script>
+        const agentSuffixOption = [
+            @foreach ($agentSuffixes as $suffix)
+                {
+                    label: "{{ $suffix->name }}",
+                    value: "{{ $suffix->name }}"
+                },
+            @endforeach
+        ];
 
-    const agentSuffixSelect = document.querySelector('#select-agent-suffix');
-    VirtualSelect.init({
-        ele: agentSuffixSelect,
-        options: agentSuffixOption,
-        search: true,
-        markSearchResults: true,
-    });
+        const agentSuffixSelect = document.querySelector('#select-agent-suffix');
+        VirtualSelect.init({
+            ele: agentSuffixSelect,
+            options: agentSuffixOption,
+            search: true,
+            markSearchResults: true,
+        });
 
-    agentSuffixSelect.addEventListener('change', () => {
-        @this.set('suffix', agentSuffixSelect.value)
-    });
+        agentSuffixSelect.addEventListener('change', () => {
+            @this.set('suffix', agentSuffixSelect.value)
+        });
 
-    const agentBranchOption = [
-        @foreach ($agentBranches as $branch)
-            {
-                label: "{{ $branch->name }}",
-                value: "{{ $branch->id }}"
-            },
-        @endforeach
-    ];
+        const agentBranchOption = [
+            @foreach ($agentBranches as $branch)
+                {
+                    label: "{{ $branch->name }}",
+                    value: "{{ $branch->id }}"
+                },
+            @endforeach
+        ];
 
-    const agentBranchSelect = document.querySelector('#select-agent-branch')
-    VirtualSelect.init({
-        ele: agentBranchSelect,
-        options: agentBranchOption,
-        search: true,
-        markSearchResults: true,
-    });
+        const agentBranchSelect = document.querySelector('#select-agent-branch')
+        VirtualSelect.init({
+            ele: agentBranchSelect,
+            options: agentBranchOption,
+            search: true,
+            markSearchResults: true,
+        });
 
-    const agentBUDepartmentSelect = document.querySelector('#select-agent-bu-department')
-    VirtualSelect.init({
-        ele: agentBUDepartmentSelect,
-        search: true,
-        markSearchResults: true,
-    });
-    agentBUDepartmentSelect.disable();
-
-    const agentTeamSelect = document.querySelector('#select-agent-team')
-    VirtualSelect.init({
-        ele: agentTeamSelect,
-        multiple: true,
-        search: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-    });
-    agentTeamSelect.disable();
-
-    agentBranchSelect.addEventListener('change', () => {
-        const agentBranchId = agentBranchSelect.value;
-        if (agentBranchId) {
-            @this.set('branch', parseInt(agentBranchId));
-            agentBUDepartmentSelect.enable();
-            agentTeamSelect.enable();
-            window.addEventListener('get-branch-bu-departments-and-teams', (event) => {
-                const agentBUDepartments = event.detail.BUDepartments;
-                const agentTeams = event.detail.teams;
-                const agentBUDepartmentOption = [];
-                const agentTeamOption = [];
-
-                //  BU/Department Select
-                if (agentBUDepartments.length > 0) {
-                    agentBUDepartments.forEach(function (agentBUDepartment) {
-                        VirtualSelect.init({
-                            ele: agentBUDepartmentSelect
-                        });
-
-                        agentBUDepartmentOption.push({
-                            label: agentBUDepartment.name,
-                            value: agentBUDepartment.id
-                        });
-                    });
-                    agentBUDepartmentSelect.setOptions(agentBUDepartmentOption);
-                } else {
-                    agentBUDepartmentSelect.close();
-                    agentBUDepartmentSelect.setOptions();
-                    agentBUDepartmentSelect.disable();
-                }
-
-                // Team Select
-                if (agentTeams.length > 0) {
-                    agentTeams.forEach(function (agentTeam) {
-                        VirtualSelect.init({
-                            ele: agentTeamSelect
-                        });
-
-                        agentTeamOption.push({
-                            label: agentTeam.name,
-                            value: agentTeam.id
-                        });
-                    });
-                    agentTeamSelect.setOptions(agentTeamOption);
-                } else {
-                    agentTeamSelect.close();
-                    agentTeamSelect.setOptions();
-                    agentTeamSelect.disable();
-                }
-            });
-        }
-    })
-
-    const agentServiceDepartmentOption = [
-        @foreach ($agentServiceDepartments as $serviceDepartment)
-            {
-                label: "{{ $serviceDepartment->name }}",
-                value: "{{ $serviceDepartment->id }}"
-            },
-        @endforeach
-    ];
-
-    const agentServiceDepartmentSelect = document.querySelector('#select-agent-service-department');
-    VirtualSelect.init({
-        ele: agentServiceDepartmentSelect,
-        options: agentServiceDepartmentOption,
-        search: true,
-        markSearchResults: true,
-    });
-
-    agentBranchSelect.addEventListener('reset', () => {
-        agentTeamSelect.reset();
-        agentBUDepartmentSelect.reset();
-        agentTeamSelect.disable();
+        const agentBUDepartmentSelect = document.querySelector('#select-agent-bu-department')
+        VirtualSelect.init({
+            ele: agentBUDepartmentSelect,
+            search: true,
+            markSearchResults: true,
+        });
         agentBUDepartmentSelect.disable();
-        agentTeamSelect.setOptions([]);
-        agentBUDepartmentSelect.setOptions([]);
-    });
 
-    agentBUDepartmentSelect.addEventListener('change', () => {
-        @this.set('bu_department', parseInt(agentBUDepartmentSelect.value));
-    });
-    agentTeamSelect.addEventListener('change', () => {
-        @this.set('selectedTeams', agentTeamSelect.value);
-    });
-    agentServiceDepartmentSelect.addEventListener('change', () => {
-        @this.set('service_department', parseInt(agentServiceDepartmentSelect.value));
-    });
-</script>
+        const agentTeamSelect = document.querySelector('#select-agent-team')
+        VirtualSelect.init({
+            ele: agentTeamSelect,
+            multiple: true,
+            search: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+        });
+        agentTeamSelect.disable();
+
+        agentBranchSelect.addEventListener('change', () => {
+            const agentBranchId = agentBranchSelect.value;
+            if (agentBranchId) {
+                @this.set('branch', parseInt(agentBranchId));
+                agentBUDepartmentSelect.enable();
+                agentTeamSelect.enable();
+                window.addEventListener('get-branch-bu-departments-and-teams', (event) => {
+                    const agentBUDepartments = event.detail.BUDepartments;
+                    const agentTeams = event.detail.teams;
+                    const agentBUDepartmentOption = [];
+                    const agentTeamOption = [];
+
+                    //  BU/Department Select
+                    if (agentBUDepartments.length > 0) {
+                        agentBUDepartments.forEach(function(agentBUDepartment) {
+                            VirtualSelect.init({
+                                ele: agentBUDepartmentSelect
+                            });
+
+                            agentBUDepartmentOption.push({
+                                label: agentBUDepartment.name,
+                                value: agentBUDepartment.id
+                            });
+                        });
+                        agentBUDepartmentSelect.setOptions(agentBUDepartmentOption);
+                    } else {
+                        agentBUDepartmentSelect.close();
+                        agentBUDepartmentSelect.setOptions();
+                        agentBUDepartmentSelect.disable();
+                    }
+
+                    // Team Select
+                    if (agentTeams.length > 0) {
+                        agentTeams.forEach(function(agentTeam) {
+                            VirtualSelect.init({
+                                ele: agentTeamSelect
+                            });
+
+                            agentTeamOption.push({
+                                label: agentTeam.name,
+                                value: agentTeam.id
+                            });
+                        });
+                        agentTeamSelect.setOptions(agentTeamOption);
+                    } else {
+                        agentTeamSelect.close();
+                        agentTeamSelect.setOptions();
+                        agentTeamSelect.disable();
+                    }
+                });
+            }
+        })
+
+        const agentServiceDepartmentOption = [
+            @foreach ($agentServiceDepartments as $serviceDepartment)
+                {
+                    label: "{{ $serviceDepartment->name }}",
+                    value: "{{ $serviceDepartment->id }}"
+                },
+            @endforeach
+        ];
+
+        const agentServiceDepartmentSelect = document.querySelector('#select-agent-service-department');
+        VirtualSelect.init({
+            ele: agentServiceDepartmentSelect,
+            options: agentServiceDepartmentOption,
+            search: true,
+            markSearchResults: true,
+        });
+
+        agentBranchSelect.addEventListener('reset', () => {
+            agentTeamSelect.reset();
+            agentBUDepartmentSelect.reset();
+            agentTeamSelect.disable();
+            agentBUDepartmentSelect.disable();
+            agentTeamSelect.setOptions([]);
+            agentBUDepartmentSelect.setOptions([]);
+        });
+
+        agentBUDepartmentSelect.addEventListener('change', () => {
+            @this.set('bu_department', parseInt(agentBUDepartmentSelect.value));
+        });
+        agentTeamSelect.addEventListener('change', () => {
+            @this.set('selectedTeams', agentTeamSelect.value);
+        });
+        agentServiceDepartmentSelect.addEventListener('change', () => {
+            @this.set('service_department', parseInt(agentServiceDepartmentSelect.value));
+        });
+    </script>
 @endpush
 
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () =>{
-        $('#addNewAgentModal').modal('hide');
-        agentSuffixSelect.reset();
-        agentBranchSelect.reset();
-        agentTeamSelect.reset();
-        agentBUDepartmentSelect.reset();
-        agentServiceDepartmentSelect.reset();
-        agentTeamSelect.disable();
-        agentBUDepartmentSelect.disable();
-    });
-</script>
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#addNewAgentModal').modal('hide');
+            agentSuffixSelect.reset();
+            agentBranchSelect.reset();
+            agentTeamSelect.reset();
+            agentBUDepartmentSelect.reset();
+            agentServiceDepartmentSelect.reset();
+            agentTeamSelect.disable();
+            agentBUDepartmentSelect.disable();
+        });
+    </script>
 @endpush

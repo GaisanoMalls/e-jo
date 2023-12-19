@@ -14,18 +14,16 @@
                     </small>
                     <small class="ticket__details__info">
                         @if ($ticket->approval_status == App\Models\ApprovalStatus::APPROVED)
-                        <i class="fa-solid fa-circle-check me-1" style="color: green; font-size: 11px;"></i>
-                        Approved
-                        @elseif ($ticket->approval_status ==
-                        App\Models\ApprovalStatus::FOR_APPROVAL)
-                        <i class="fa-solid fa-paper-plane me-1" style="color: orange; font-size: 11px;"></i>
-                        For Approval
-                        @elseif ($ticket->approval_status ==
-                        App\Models\ApprovalStatus::DISAPPROVED)
-                        <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
-                        Disapproved
+                            <i class="fa-solid fa-circle-check me-1" style="color: green; font-size: 11px;"></i>
+                            Approved
+                        @elseif ($ticket->approval_status == App\Models\ApprovalStatus::FOR_APPROVAL)
+                            <i class="fa-solid fa-paper-plane me-1" style="color: orange; font-size: 11px;"></i>
+                            For Approval
+                        @elseif ($ticket->approval_status == App\Models\ApprovalStatus::DISAPPROVED)
+                            <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
+                            Disapproved
                         @else
-                        ----
+                            ----
                         @endif
                     </small>
                 </div>
@@ -49,9 +47,11 @@
                     <small class="position-relative ticket__details__info">
                         <i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->team->name ?? '----' }}
-                        @if ($ticket->team_id && auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
-                        <i wire:click="removeAssignedTeam" class="bi bi-x ms-2 text-danger position-absolute"
-                            style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
+                        @if (
+                            $ticket->team_id &&
+                                auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+                            <i wire:click="removeAssignedTeam" class="bi bi-x ms-2 text-danger position-absolute"
+                                style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
                         @endif
                     </small>
                 </div>
@@ -69,14 +69,14 @@
                         Assigned agent:
                     </small>
                     <small
-                        class="position-relative ticket__details__info {{ $ticket->agent_id != null ? '' : 'not__set'}}">
+                        class="position-relative ticket__details__info {{ $ticket->agent_id != null ? '' : 'not__set' }}">
                         <i class="fa-solid fa-user-check me-1 text-muted" style="font-size: 11px;"></i>
-                        {{ $ticket->agent_id != null
-                        ? $ticket->agent->profile->getFullName()
-                        : '----' }}
-                        @if ($ticket->agent_id && auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
-                        <i wire:click="removeAssignedAgent" class="bi bi-x ms-2 text-danger position-absolute"
-                            style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
+                        {{ $ticket->agent_id != null ? $ticket->agent->profile->getFullName() : '----' }}
+                        @if (
+                            $ticket->agent_id &&
+                                auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+                            <i wire:click="removeAssignedAgent" class="bi bi-x ms-2 text-danger position-absolute"
+                                style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
                         @endif
                     </small>
                 </div>
@@ -94,9 +94,9 @@
 
 {{-- Modal Scripts --}}
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#assignTicketModal').modal('hide');
-    });
-</script>
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#assignTicketModal').modal('hide');
+        });
+    </script>
 @endpush

@@ -10,7 +10,7 @@
                                 class="form-control input__field @error('current_password') is-invalid @enderror"
                                 id="currentPassword">
                             @error('current_password')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                                <span class="text-danger custom__field__message">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                                 class="form-control input__field @error('new_password') is-invalid @enderror"
                                 id="newPassword">
                             @error('new_password')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                                <span class="text-danger custom__field__message">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                                 class="form-control input__field @error('confirm_password') is-invalid @enderror"
                                 id="confirmPassword">
                             @error('confirm_password')
-                            <span class="text-danger custom__field__message">{{ $message }}</span>
+                                <span class="text-danger custom__field__message">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
