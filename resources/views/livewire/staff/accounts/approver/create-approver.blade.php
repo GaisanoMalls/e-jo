@@ -31,10 +31,10 @@
                                                     class="form-control form__field" id="first_name"
                                                     placeholder="Enter first name (required)">
                                                 @error('first_name')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -47,10 +47,10 @@
                                                     class="form-control form__field" id="middle_name"
                                                     placeholder="Enter middle name (optional)">
                                                 @error('middle_name')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -62,10 +62,10 @@
                                                     class="form-control form__field" id="last_name"
                                                     placeholder="Enter last name (required)">
                                                 @error('last_name')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -78,10 +78,10 @@
                                                     <div id="select-approver-suffix" wire:ignore></div>
                                                 </div>
                                                 @error('suffix')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -91,13 +91,14 @@
                                             <div class="mb-2">
                                                 <label for="email" class="form-label form__field__label">Email
                                                     address</label>
-                                                <input type="email" wire:model="email" class="form-control form__field"
-                                                    id="email" placeholder="Enter email (required)">
+                                                <input type="email" wire:model="email"
+                                                    class="form-control form__field" id="email"
+                                                    placeholder="Enter email (required)">
                                                 @error('email')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -112,15 +113,16 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="mb-2">
-                                                <label for="branch" class="form-label form__field__label">Branch</label>
+                                                <label for="branch"
+                                                    class="form-label form__field__label">Branch</label>
                                                 <div>
                                                     <div id="select-approver-branch" wire:ignore></div>
                                                 </div>
                                                 @error('branches')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -133,10 +135,10 @@
                                                     <div id="select-approver-bu-department" wire:ignore></div>
                                                 </div>
                                                 @error('bu_departments')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -169,81 +171,81 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const approverSuffixOption = [
-        @foreach ($approverSuffixes as $suffix)
-            {
-                label: "{{ $suffix->name }}",
-                value: "{{ $suffix->name }}"
-            },
-        @endforeach
-    ];
+    <script>
+        const approverSuffixOption = [
+            @foreach ($approverSuffixes as $suffix)
+                {
+                    label: "{{ $suffix->name }}",
+                    value: "{{ $suffix->name }}"
+                },
+            @endforeach
+        ];
 
-    const approverSuffixSelect = document.querySelector('#select-approver-suffix');
-    VirtualSelect.init({
-        ele: approverSuffixSelect,
-        options: approverSuffixOption,
-        search: true,
-        markSearchResults: true,
-    });
+        const approverSuffixSelect = document.querySelector('#select-approver-suffix');
+        VirtualSelect.init({
+            ele: approverSuffixSelect,
+            options: approverSuffixOption,
+            search: true,
+            markSearchResults: true,
+        });
 
-    approverSuffixSelect.addEventListener('change', () => {
-        @this.set('suffix', approverSuffixSelect.value);
-    });
+        approverSuffixSelect.addEventListener('change', () => {
+            @this.set('suffix', approverSuffixSelect.value);
+        });
 
-    const approverBranchOption = [
-        @foreach ($approverBranches as $branch)
-        {
-            label: "{{ $branch->name }}",
-            value: "{{ $branch->id }}"
-        },
-        @endforeach
-    ];
+        const approverBranchOption = [
+            @foreach ($approverBranches as $branch)
+                {
+                    label: "{{ $branch->name }}",
+                    value: "{{ $branch->id }}"
+                },
+            @endforeach
+        ];
 
-    const approverBranchSelect = document.querySelector('#select-approver-branch');
-    VirtualSelect.init({
-        ele: approverBranchSelect,
-        options: approverBranchOption,
-        search: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-    });
+        const approverBranchSelect = document.querySelector('#select-approver-branch');
+        VirtualSelect.init({
+            ele: approverBranchSelect,
+            options: approverBranchOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+        });
 
-    approverBranchSelect.addEventListener('change', () => {
-        @this.set('branches', approverBranchSelect.value);
-    });
+        approverBranchSelect.addEventListener('change', () => {
+            @this.set('branches', approverBranchSelect.value);
+        });
 
-    const approverBUDepartmentOption = [
-        @foreach ($approverBUDepartments as $department)
-        {
-            label: "{{ $department->name }}",
-            value: "{{ $department->id }}"
-        },
-        @endforeach
-    ];
+        const approverBUDepartmentOption = [
+            @foreach ($approverBUDepartments as $department)
+                {
+                    label: "{{ $department->name }}",
+                    value: "{{ $department->id }}"
+                },
+            @endforeach
+        ];
 
-    const approverBUDepartmentSelect = document.querySelector('#select-approver-bu-department');
-    VirtualSelect.init({
-        ele: approverBUDepartmentSelect,
-        options: approverBUDepartmentOption,
-        search: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-    });
-    approverBUDepartmentSelect.addEventListener('change', () => {
-        @this.set('bu_departments', approverBUDepartmentSelect.value);
-    });
-</script>
+        const approverBUDepartmentSelect = document.querySelector('#select-approver-bu-department');
+        VirtualSelect.init({
+            ele: approverBUDepartmentSelect,
+            options: approverBUDepartmentOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+        });
+        approverBUDepartmentSelect.addEventListener('change', () => {
+            @this.set('bu_departments', approverBUDepartmentSelect.value);
+        });
+    </script>
 @endpush
 
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () =>{
-        $('#addNewApproverModal').modal('hide');
-        approverBranchSelect.reset();
-        approverBUDepartmentSelect.reset();
-    });
-</script>
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#addNewApproverModal').modal('hide');
+            approverBranchSelect.reset();
+            approverBUDepartmentSelect.reset();
+        });
+    </script>
 @endpush

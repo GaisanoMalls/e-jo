@@ -8,9 +8,9 @@
                     <small class="text-muted" style="font-size: 12px;">
                         Last updated:
                         @if ($user->dateUpdated() > $user->profile->dateUpdated())
-                        {{ $user->dateUpdated() }}
+                            {{ $user->dateUpdated() }}
                         @else
-                        {{ $user->profile->dateUpdated() }}
+                            {{ $user->profile->dateUpdated() }}
                         @endif
                     </small>
                 </div>
@@ -27,10 +27,10 @@
                                         <input type="text" wire:model="first_name" class="form-control form__field"
                                             id="first_name" placeholder="Enter first name (required)">
                                         @error('first_name')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -41,10 +41,10 @@
                                         <input type="text" wire:model="middle_name" class="form-control form__field"
                                             id="middle_name" placeholder="Enter middle name (optional)">
                                         @error('middle_name')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -54,10 +54,10 @@
                                         <input type="text" wire:model="last_name" class="form-control form__field"
                                             id="last_name" placeholder="Enter last name (required)">
                                         @error('last_name')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -68,10 +68,10 @@
                                             <div id="select-requester-suffix" wire:ignore></div>
                                         </div>
                                         @error('suffix')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -86,10 +86,10 @@
                                         <input type="email" wire:model="email" class="form-control form__field"
                                             id="email" placeholder="Enter email (required)">
                                         @error('email')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                     <div class="d-flex align-items-center">
@@ -113,10 +113,10 @@
                                             <div id="select-requester-branch" wire:ignore></div>
                                         </div>
                                         @error('branch')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -125,18 +125,18 @@
                                         <label for="branch" class="form-label form__field__label">
                                             BU/Department
                                             @if ($BUDepartments)
-                                            <span class="fw-normal" style="font-size: 13px;">
-                                                ({{ $BUDepartments->count() }})</span>
+                                                <span class="fw-normal" style="font-size: 13px;">
+                                                    ({{ $BUDepartments->count() }})</span>
                                             @endif
                                         </label>
                                         <div>
                                             <div id="select-requester-bu-department" wire:ignore></div>
                                         </div>
                                         @error('bu_department')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -164,116 +164,115 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const requesterSuffixOption = [
-        @foreach ($requesterSuffixes as $suffix)
-            {
-                label: "{{ $suffix->name }}",
-                value: "{{ $suffix->name }}"
-            },
-        @endforeach
-    ];
+    <script>
+        const requesterSuffixOption = [
+            @foreach ($requesterSuffixes as $suffix)
+                {
+                    label: "{{ $suffix->name }}",
+                    value: "{{ $suffix->name }}"
+                },
+            @endforeach
+        ];
 
-    const requesterSuffixSelect = document.querySelector('#select-requester-suffix');
-    VirtualSelect.init({
-        ele: requesterSuffixSelect,
-        options: requesterSuffixOption,
-        search: true,
-        markSearchResults: true,
-        selectedValue: '{{ $user->profile->suffix }}'
-    });
+        const requesterSuffixSelect = document.querySelector('#select-requester-suffix');
+        VirtualSelect.init({
+            ele: requesterSuffixSelect,
+            options: requesterSuffixOption,
+            search: true,
+            markSearchResults: true,
+            selectedValue: '{{ $user->profile->suffix }}'
+        });
 
-    requesterSuffixSelect.addEventListener('change', () => {
-        @this.set('suffix', requesterSuffixSelect.value);
-    })
+        requesterSuffixSelect.addEventListener('change', () => {
+            @this.set('suffix', requesterSuffixSelect.value);
+        })
 
-    const requesterBranchOption = [
-        @foreach ($requesterBranches as $br)
-            {
-                label: "{{ $br->name }}",
-                value: "{{ $br->id }}"
-            },
-        @endforeach
-    ];
+        const requesterBranchOption = [
+            @foreach ($requesterBranches as $br)
+                {
+                    label: "{{ $br->name }}",
+                    value: "{{ $br->id }}"
+                },
+            @endforeach
+        ];
 
-    const requesterBranchSelect = document.querySelector('#select-requester-branch');
-    VirtualSelect.init({
-        ele: requesterBranchSelect,
-        options: requesterBranchOption,
-        search: true,
-        markSearchResults: true,
-        selectedValue: @json($branch)
-    });
+        const requesterBranchSelect = document.querySelector('#select-requester-branch');
+        VirtualSelect.init({
+            ele: requesterBranchSelect,
+            options: requesterBranchOption,
+            search: true,
+            markSearchResults: true,
+            selectedValue: @json($branch)
+        });
 
-    requesterBranchSelect.addEventListener('reset', () => {
-        @this.set('branch', null);
-        @this.set('bu_department', null);
-        requesterBUDepartmentSelect.reset();
-        requesterBUDepartmentSelect.disable();
-        requesterBUDepartmentSelect.setOptions([]);
-    });
+        requesterBranchSelect.addEventListener('reset', () => {
+            @this.set('branch', null);
+            @this.set('bu_department', null);
+            requesterBUDepartmentSelect.reset();
+            requesterBUDepartmentSelect.disable();
+            requesterBUDepartmentSelect.setOptions([]);
+        });
 
-    const requesterBUDepartmentOption = [
-        @foreach ($requesterBUDepartments as $department)
-            {
-                label: "{{ $department->name }}",
-                value: "{{ $department->id }}"
-            },
-        @endforeach
-    ];
+        const requesterBUDepartmentOption = [
+            @foreach ($requesterBUDepartments as $department)
+                {
+                    label: "{{ $department->name }}",
+                    value: "{{ $department->id }}"
+                },
+            @endforeach
+        ];
 
-    const requesterBUDepartmentSelect = document.querySelector('#select-requester-bu-department')
-    VirtualSelect.init({
-        ele: requesterBUDepartmentSelect,
-        options: requesterBUDepartmentOption,
-        search: true,
-        markSearchResults: true,
-    });
+        const requesterBUDepartmentSelect = document.querySelector('#select-requester-bu-department')
+        VirtualSelect.init({
+            ele: requesterBUDepartmentSelect,
+            options: requesterBUDepartmentOption,
+            search: true,
+            markSearchResults: true,
+        });
 
-    requesterBranchSelect.addEventListener('change', () => {
-        const requesterBranchId = requesterBranchSelect.value;
-        if (requesterBranchId) {
-            @this.set('branch', parseInt(requesterBranchId));
-            requesterBUDepartmentSelect.enable();
+        requesterBranchSelect.addEventListener('change', () => {
+            const requesterBranchId = requesterBranchSelect.value;
+            if (requesterBranchId) {
+                @this.set('branch', parseInt(requesterBranchId));
+                requesterBUDepartmentSelect.enable();
 
-            window.addEventListener('get-branch-bu-departments', (event) => {
-                const requesterBUDepartments = event.detail.BUDepartments;
-                const requesterBUDepartmentOption = [];
+                window.addEventListener('get-branch-bu-departments', (event) => {
+                    const requesterBUDepartments = event.detail.BUDepartments;
+                    const requesterBUDepartmentOption = [];
 
-                if (requesterBUDepartments.length > 0) {
-                    requesterBUDepartments.forEach(function (requesterBUDepartment) {
-                        VirtualSelect.init({
-                            ele: requesterBUDepartmentSelect
+                    if (requesterBUDepartments.length > 0) {
+                        requesterBUDepartments.forEach(function(requesterBUDepartment) {
+                            VirtualSelect.init({
+                                ele: requesterBUDepartmentSelect
+                            });
+
+                            requesterBUDepartmentOption.push({
+                                label: requesterBUDepartment.name,
+                                value: requesterBUDepartment.id
+                            });
                         });
+                        requesterBUDepartmentSelect.setOptions(requesterBUDepartmentOption);
+                        requesterBUDepartmentSelect.setValue(@json($bu_department));
+                    } else {
+                        requesterBUDepartmentSelect.close();
+                        requesterBUDepartmentSelect.setOptions([]);
+                        requesterBUDepartmentSelect.disable();
+                    }
+                });
+            }
+        });
 
-                        requesterBUDepartmentOption.push({
-                            label: requesterBUDepartment.name,
-                            value: requesterBUDepartment.id
-                        });
-                    });
-                    requesterBUDepartmentSelect.setOptions(requesterBUDepartmentOption);
-                    requesterBUDepartmentSelect.setValue(@json($bu_department));
-                } else {
-                    requesterBUDepartmentSelect.close();
-                    requesterBUDepartmentSelect.setOptions([]);
-                    requesterBUDepartmentSelect.disable();
-                }
-            });
-        }
-    });
-
-    requesterBUDepartmentSelect.addEventListener('change', () => {
-        @this.set('bu_department', parseInt(requesterBUDepartmentSelect.value));
-    });
-
-</script>
+        requesterBUDepartmentSelect.addEventListener('change', () => {
+            @this.set('bu_department', parseInt(requesterBUDepartmentSelect.value));
+        });
+    </script>
 @endpush
 
 {{-- Modal Scripts --}}
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#editPasswordModal').modal('hide');
-    });
-</script>
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#editPasswordModal').modal('hide');
+        });
+    </script>
 @endpush

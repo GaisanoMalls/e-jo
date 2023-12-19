@@ -1,59 +1,60 @@
 <div>
     <div class="table-responsive custom__table">
         @if (!$serviceLevelAgreements->isEmpty())
-        <table class="table table-striped mb-0">
-            <thead>
-                <tr>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Hours</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Time Unit</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($serviceLevelAgreements as $sla)
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $sla->countdown_approach }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $sla->time_unit }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $sla->dateCreated() }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $sla->dateUpdated() }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                            <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
-                                type="button" class="btn action__button" data-bs-toggle="modal"
-                                data-bs-target="#editSLAModal" wire:click="editSLA({{ $sla->id }})">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
-                                data-bs-target="#deleteSLAModal" wire:click="deleteSLA({{ $sla->id }})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Hours</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Time Unit</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($serviceLevelAgreements as $sla)
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $sla->countdown_approach }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $sla->time_unit }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $sla->dateCreated() }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $sla->dateUpdated() }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
+                                    <button data-tooltip="Edit" data-tooltip-position="top"
+                                        data-tooltip-font-size="11px" type="button" class="btn action__button"
+                                        data-bs-toggle="modal" data-bs-target="#editSLAModal"
+                                        wire:click="editSLA({{ $sla->id }})">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
+                                        data-bs-target="#deleteSLAModal" wire:click="deleteSLA({{ $sla->id }})">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         @else
-        <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-            <small style="font-size: 14px;">No SLA records.</small>
-        </div>
+            <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
+                <small style="font-size: 14px;">No SLA records.</small>
+            </div>
         @endif
     </div>
 
@@ -74,20 +75,21 @@
                             <div class="col-md-12">
                                 <div class="mb-2">
                                     <label for="countdown_approach" class="form-label form__field__label">Hours</label>
-                                    <input type="text" wire:model="countdown_approach" class="form-control form__field
-                                        @error('countdown_approach') is-invalid @enderror" id="countdown_approach"
-                                        placeholder="e.g. 24">
+                                    <input type="text" wire:model="countdown_approach"
+                                        class="form-control form__field
+                                        @error('countdown_approach') is-invalid @enderror"
+                                        id="countdown_approach" placeholder="e.g. 24">
                                     @error('countdown_approach')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
                                     @enderror
                                     @if (session()->has('duplicate_name_error'))
-                                    <div class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ session()->get('duplicate_name_error') }}
-                                    </div>
+                                        <div class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ session()->get('duplicate_name_error') }}
+                                        </div>
                                     @endif
                                 </div>
                             </div>
@@ -96,14 +98,15 @@
                                     <label for="time_unit" class="form-label form__field__label">
                                         Time unit
                                     </label>
-                                    <input type="text" wire:model="time_unit" class="form-control form__field
-                                        @error('time_unit') is-invalid @enderror" id="time_unit"
-                                        placeholder="e.g. 1 Day">
+                                    <input type="text" wire:model="time_unit"
+                                        class="form-control form__field
+                                        @error('time_unit') is-invalid @enderror"
+                                        id="time_unit" placeholder="e.g. 1 Day">
                                     @error('time_unit')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
                                     @enderror
                                 </div>
                             </div>
@@ -118,8 +121,8 @@
                                 </span>
                                 Update
                             </button>
-                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" data-bs-dismiss="modal"
-                                wire:click="clearFormFields">Cancel</button>
+                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel"
+                                data-bs-dismiss="modal" wire:click="clearFormFields">Cancel</button>
                         </div>
                     </div>
                 </form>
@@ -148,8 +151,8 @@
                     <button type="submit"
                         class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
                         wire:click="delete">
-                        <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm" role="status"
-                            aria-hidden="true">
+                        <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm"
+                            role="status" aria-hidden="true">
                         </span>
                         Yes, delete
                     </button>
@@ -161,19 +164,18 @@
 
 {{-- Modal Scripts --}}
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#editSLAModal').modal('hide');
-        $('#deleteSLAModal').modal('hide');
-    });
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#editSLAModal').modal('hide');
+            $('#deleteSLAModal').modal('hide');
+        });
 
-    window.addEventListener('show-edit-sla-modal', () => {
-        $('#editSLAModal').modal('show');
-    });
+        window.addEventListener('show-edit-sla-modal', () => {
+            $('#editSLAModal').modal('show');
+        });
 
-    window.addEventListener('show-delete-sla-modal', () => {
-        $('#deleteSLAModal').modal('show');
-    });
-
-</script>
+        window.addEventListener('show-delete-sla-modal', () => {
+            $('#deleteSLAModal').modal('show');
+        });
+    </script>
 @endpush

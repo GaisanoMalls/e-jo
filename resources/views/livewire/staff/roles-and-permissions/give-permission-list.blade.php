@@ -2,58 +2,59 @@
     <div class="roles__permissions__type__card">
         <div class="table-responsive custom__table">
             @if (!$roles->isEmpty())
-            <table class="table table-striped mb-0">
-                <thead>
-                    <tr>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Role
-                        </th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                            Permissions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($roles as $role)
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center text-start td__content">
-                                <span>{{ $role->name }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center text-start gap-1 td__content">
-                                @if ($role->permissions()->count() !== 0)
-                                @foreach ($role->permissions->map->only('id', 'name') as $permission)
-                                <span class="rounded-4 ps-2 pe-1 d-flex align-items-center gap-1 role__permission">
-                                    {{ $permission['name'] }}
-                                    <i class="bi bi-x remove__permission__icon"
-                                        wire:click="removePermission({{ $role->id }}, {{ $permission['id'] }})"></i>
-                                </span>
-                                @endforeach
-                                @else
-                                <span>----</span>
-                                @endif
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                                <button data-tooltip="Assign Permission" data-tooltip-position="top"
-                                    data-tooltip-font-size="11px" type="button" class="btn action__button"
-                                    data-bs-toggle="modal" data-bs-target="#assignPermissionToRoleModal"
-                                    wire:click="assignPermissionToRole({{ $role->id }})">
-                                    <i class="bi bi-person-lock"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                Role
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                Permissions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($roles as $role)
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ $role->name }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start gap-1 td__content">
+                                        @if ($role->permissions()->count() !== 0)
+                                            @foreach ($role->permissions->map->only('id', 'name') as $permission)
+                                                <span
+                                                    class="rounded-4 ps-2 pe-1 d-flex align-items-center gap-1 role__permission">
+                                                    {{ $permission['name'] }}
+                                                    <i class="bi bi-x remove__permission__icon"
+                                                        wire:click="removePermission({{ $role->id }}, {{ $permission['id'] }})"></i>
+                                                </span>
+                                            @endforeach
+                                        @else
+                                            <span>----</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
+                                        <button data-tooltip="Assign Permission" data-tooltip-position="top"
+                                            data-tooltip-font-size="11px" type="button" class="btn action__button"
+                                            data-bs-toggle="modal" data-bs-target="#assignPermissionToRoleModal"
+                                            wire:click="assignPermissionToRole({{ $role->id }})">
+                                            <i class="bi bi-person-lock"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             @else
-            <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                <small style="font-size: 14px;">Empty</small>
-            </div>
+                <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
+                    <small style="font-size: 14px;">Empty</small>
+                </div>
             @endif
         </div>
     </div>
@@ -79,10 +80,10 @@
                                     </div>
                                 </div>
                                 @error('permissions')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>
@@ -107,58 +108,57 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const permissionOption = [
-        @foreach ($allPermissions as $permission)
-        {
-            label: "{{ $permission->name }}",
-            value: "{{ $permission->name }}"
-        },
-        @endforeach
-    ];
+    <script>
+        const permissionOption = [
+            @foreach ($allPermissions as $permission)
+                {
+                    label: "{{ $permission->name }}",
+                    value: "{{ $permission->name }}"
+                },
+            @endforeach
+        ];
 
-    const selectPermission = document.querySelector('#select-assign-permission');
-    VirtualSelect.init({
-        ele: selectPermission,
-        options: permissionOption,
-        search: true,
-        required: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-        popupDropboxBreakpoint: '3000px',
-    });
-
-    window.addEventListener('refresh-permission-select', (event) => {
-        const refreshPermissionOption = [];
-        const refreshPermissions = event.detail.allPermissions;
-        const currentPermissions = event.detail.currentPermissions;
-
-        refreshPermissions.forEach((permission) => {
-            refreshPermissionOption.push({
-                label: permission.name,
-                value: permission.name
-            });
+        const selectPermission = document.querySelector('#select-assign-permission');
+        VirtualSelect.init({
+            ele: selectPermission,
+            options: permissionOption,
+            search: true,
+            required: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            popupDropboxBreakpoint: '3000px',
         });
 
-        selectPermission.setOptions(refreshPermissionOption)
-        selectPermission.setValue(currentPermissions)
-    });
+        window.addEventListener('refresh-permission-select', (event) => {
+            const refreshPermissionOption = [];
+            const refreshPermissions = event.detail.allPermissions;
+            const currentPermissions = event.detail.currentPermissions;
 
-    // Set value for permissions
-    selectPermission.addEventListener('change', () => {
-        @this.set('permissions', selectPermission.value);
-    });
-</script>
+            refreshPermissions.forEach((permission) => {
+                refreshPermissionOption.push({
+                    label: permission.name,
+                    value: permission.name
+                });
+            });
+
+            selectPermission.setOptions(refreshPermissionOption)
+            selectPermission.setValue(currentPermissions)
+        });
+
+        // Set value for permissions
+        selectPermission.addEventListener('change', () => {
+            @this.set('permissions', selectPermission.value);
+        });
+    </script>
 @endpush
 
 {{-- Modal Scripts --}}
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#assignPermissionToRoleModal').modal('hide');
-        selectPermission.reset();
-    });
-</script>
-
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#assignPermissionToRoleModal').modal('hide');
+            selectPermission.reset();
+        });
+    </script>
 @endpush

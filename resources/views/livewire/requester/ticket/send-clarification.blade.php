@@ -18,10 +18,10 @@
                                 <textarea wire:model="description" id="clarificationDescription"></textarea>
                             </div>
                             @error('description')
-                            <span class="error__message">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ $message }}
-                            </span>
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
                             @enderror
                         </div>
                         <div class="mt-4">
@@ -39,10 +39,10 @@
                             <input class="form-control ticket__file__input w-auto my-3" type="file"
                                 wire:model="clarificationFiles" multiple id="upload-{{ $upload }}">
                             @error('clarificationFiles.*')
-                            <span class="error__message">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ $message }}
-                            </span>
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
                             @enderror
                         </div>
                         <button type="submit"
@@ -60,32 +60,32 @@
 </div>
 
 @push('livewire-textarea')
-<script>
-    tinymce.init({
-        selector: '#clarificationDescription',
-        plugins: 'lists',
-        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
-        height: 350,
-        setup: function (editor) {
-            editor.on('init change', function () {
-                editor.save();
-            });
-            editor.on('change', function (e) {
-                @this.set('description', editor.getContent());
-            });
-        }
-    });
-</script>
+    <script>
+        tinymce.init({
+            selector: '#clarificationDescription',
+            plugins: 'lists',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
+            height: 350,
+            setup: function(editor) {
+                editor.on('init change', function() {
+                    editor.save();
+                });
+                editor.on('change', function(e) {
+                    @this.set('description', editor.getContent());
+                });
+            }
+        });
+    </script>
 @endpush
 
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#ticketClarificationModal').modal('hide');
-    });
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#ticketClarificationModal').modal('hide');
+        });
 
-    window.addEventListener('reload-modal', () =>{
-        tinymce.get("clarificationDescription").setContent("");
-    });
-</script>
+        window.addEventListener('reload-modal', () => {
+            tinymce.get("clarificationDescription").setContent("");
+        });
+    </script>
 @endpush

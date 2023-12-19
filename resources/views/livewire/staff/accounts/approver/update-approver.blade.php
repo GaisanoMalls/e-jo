@@ -8,9 +8,9 @@
                     <small class="text-muted" style="font-size: 12px;">
                         Last updated:
                         @if ($approver->dateUpdated() > $approver->profile->dateUpdated())
-                        {{ $approver->dateUpdated() }}
+                            {{ $approver->dateUpdated() }}
                         @else
-                        {{ $approver->profile->dateUpdated() }}
+                            {{ $approver->profile->dateUpdated() }}
                         @endif
                     </small>
                 </div>
@@ -28,10 +28,10 @@
                                         <input type="text" wire:model="first_name" class="form-control form__field"
                                             id="first_name" placeholder="Enter first name (required)">
                                         @error('first_name')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -43,10 +43,10 @@
                                         <input type="text" wire:model="middle_name" class="form-control form__field"
                                             id="middle_name" placeholder="Enter middle name (optional)">
                                         @error('middle_name')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -58,10 +58,10 @@
                                         <input type="text" wire:model="last_name" class="form-control form__field"
                                             id="last_name" placeholder="Enter last name (required)">
                                         @error('last_name')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -72,10 +72,10 @@
                                             <div id="select-approver-suffix" wire:ignore></div>
                                         </div>
                                         @error('suffix')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -90,10 +90,10 @@
                                         <input type="email" wire:model="email" class="form-control form__field"
                                             id="email" placeholder="Enter email (required)">
                                         @error('email')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                     <div class="d-flex align-items-center">
@@ -117,10 +117,10 @@
                                             <div id="select-approver-branch" wire:ignore></div>
                                         </div>
                                         @error('branches')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -133,10 +133,10 @@
                                             <div id="select-approver-bu-department" wire:ignore></div>
                                         </div>
                                         @error('bu_departments')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -152,10 +152,10 @@
                                             <div id="select-approver-permissions" wire:ignore></div>
                                         </div>
                                         @error('permissions')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -183,111 +183,111 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const approverSuffixOption = [
-        @foreach ($approverSuffixes as $suffix)
-            {
-                label: "{{ $suffix->name }}",
-                value: "{{ $suffix->name }}"
-            },
-        @endforeach
-    ];
+    <script>
+        const approverSuffixOption = [
+            @foreach ($approverSuffixes as $suffix)
+                {
+                    label: "{{ $suffix->name }}",
+                    value: "{{ $suffix->name }}"
+                },
+            @endforeach
+        ];
 
-    const approverSuffixSelect = document.querySelector('#select-approver-suffix');
-    VirtualSelect.init({
-        ele: approverSuffixSelect,
-        options: approverSuffixOption,
-        search: true,
-        markSearchResults: true,
-        selectedValue: '{{ $approver->profile->suffix }}'
-    });
+        const approverSuffixSelect = document.querySelector('#select-approver-suffix');
+        VirtualSelect.init({
+            ele: approverSuffixSelect,
+            options: approverSuffixOption,
+            search: true,
+            markSearchResults: true,
+            selectedValue: '{{ $approver->profile->suffix }}'
+        });
 
-    approverSuffixSelect.addEventListener('change', () => {
-        @this.set('suffix', approverSuffixSelect.value);
-    });
+        approverSuffixSelect.addEventListener('change', () => {
+            @this.set('suffix', approverSuffixSelect.value);
+        });
 
-    const approverBranchOption = [
-        @foreach ($approverBranches as $branch)
-        {
-            label: "{{ $branch->name }}",
-            value: "{{ $branch->id }}"
-        },
-        @endforeach
-    ];
+        const approverBranchOption = [
+            @foreach ($approverBranches as $branch)
+                {
+                    label: "{{ $branch->name }}",
+                    value: "{{ $branch->id }}"
+                },
+            @endforeach
+        ];
 
-    const approverBranchSelect = document.querySelector('#select-approver-branch');
-    VirtualSelect.init({
-        ele: approverBranchSelect,
-        options: approverBranchOption,
-        search: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-        selectedValue: @json($branches)
-    });
+        const approverBranchSelect = document.querySelector('#select-approver-branch');
+        VirtualSelect.init({
+            ele: approverBranchSelect,
+            options: approverBranchOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            selectedValue: @json($branches)
+        });
 
-    approverBranchSelect.addEventListener('change', () => {
-        @this.set('branches', approverBranchSelect.value);
-    });
+        approverBranchSelect.addEventListener('change', () => {
+            @this.set('branches', approverBranchSelect.value);
+        });
 
-    const approverBUDepartmentOption = [
-        @foreach ($approverBUDepartments as $department)
-        {
-            label: "{{ $department->name }}",
-            value: "{{ $department->id }}"
-        },
-        @endforeach
-    ];
+        const approverBUDepartmentOption = [
+            @foreach ($approverBUDepartments as $department)
+                {
+                    label: "{{ $department->name }}",
+                    value: "{{ $department->id }}"
+                },
+            @endforeach
+        ];
 
-    const approverBUDepartmentSelect = document.querySelector('#select-approver-bu-department');
-    VirtualSelect.init({
-        ele: approverBUDepartmentSelect,
-        options: approverBUDepartmentOption,
-        search: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-        selectedValue: @json($bu_departments)
-    });
-    approverBUDepartmentSelect.addEventListener('change', () => {
-        @this.set('bu_departments', approverBUDepartmentSelect.value);
-    });
+        const approverBUDepartmentSelect = document.querySelector('#select-approver-bu-department');
+        VirtualSelect.init({
+            ele: approverBUDepartmentSelect,
+            options: approverBUDepartmentOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            selectedValue: @json($bu_departments)
+        });
+        approverBUDepartmentSelect.addEventListener('change', () => {
+            @this.set('bu_departments', approverBUDepartmentSelect.value);
+        });
 
-    const approverPermissionOption = [
-        @foreach ($allPermissions as $permission)
-        {
-            label: "{{ $permission->name }}",
-            value: "{{ $permission->name }}"
-        },
-        @endforeach
-    ];
+        const approverPermissionOption = [
+            @foreach ($allPermissions as $permission)
+                {
+                    label: "{{ $permission->name }}",
+                    value: "{{ $permission->name }}"
+                },
+            @endforeach
+        ];
 
-    const approverPermissionSelect = document.querySelector('#select-approver-permissions');
-    VirtualSelect.init({
-        ele: approverPermissionSelect,
-        options: approverPermissionOption,
-        search: true,
-        multiple: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-        selectedValue: @json($currentPermissions)
-    });
+        const approverPermissionSelect = document.querySelector('#select-approver-permissions');
+        VirtualSelect.init({
+            ele: approverPermissionSelect,
+            options: approverPermissionOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            selectedValue: @json($currentPermissions)
+        });
 
-    approverPermissionSelect.addEventListener('change', () => {
-        @this.set('permissions', approverPermissionSelect.value);
-    });
+        approverPermissionSelect.addEventListener('change', () => {
+            @this.set('permissions', approverPermissionSelect.value);
+        });
 
-    approverPermissionSelect.addEventListener('reset', () => {
-        @this.set('permissions', []);
-    });
-</script>
+        approverPermissionSelect.addEventListener('reset', () => {
+            @this.set('permissions', []);
+        });
+    </script>
 @endpush
 
 {{-- Modal Scripts --}}
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#editPasswordModal').modal('hide');
-    });
-</script>
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#editPasswordModal').modal('hide');
+        });
+    </script>
 @endpush

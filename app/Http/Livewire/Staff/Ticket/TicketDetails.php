@@ -41,7 +41,7 @@ class TicketDetails extends Component
         if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
             $this->ticket->update([
                 'agent_id' => null,
-                'status_id' => Status::APPROVED
+                'status_id' => Status::APPROVED,
             ]);
             $this->actionOnSubmit();
             ActivityLog::make($this->ticket->id, 'removed the agent assigned on this ticket');

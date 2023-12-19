@@ -1,60 +1,62 @@
 <div>
     <div class="table-responsive custom__table">
         @if (!$tags->isEmpty())
-        <table class="table table-striped mb-0">
-            <thead>
-                <tr>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Name</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Tickets</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($tags as $tag)
-                <tr wire:key="{{ $tag->id }}">
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $tag->name }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            {{-- <span>{{ $tag->tickets->count() }}</span> --}}
-                            <span>----</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $tag->dateCreated() }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $tag->dateUpdated() }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                            <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
-                                type="button" class="btn action__button" data-bs-toggle="modal"
-                                data-bs-target="#updateTagModal" wire:click="editTag({{ $tag->id }})">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button data-bs-toggle="modal" data-bs-target="#deleteTagModal"
-                                class="btn btn-sm action__button mt-0" wire:click="deleteTag({{ $tag->id }})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Name</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Tickets</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($tags as $tag)
+                        <tr wire:key="{{ $tag->id }}">
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $tag->name }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    {{-- <span>{{ $tag->tickets->count() }}</span> --}}
+                                    <span>----</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $tag->dateCreated() }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $tag->dateUpdated() }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
+                                    <button data-tooltip="Edit" data-tooltip-position="top"
+                                        data-tooltip-font-size="11px" type="button" class="btn action__button"
+                                        data-bs-toggle="modal" data-bs-target="#updateTagModal"
+                                        wire:click="editTag({{ $tag->id }})">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button data-bs-toggle="modal" data-bs-target="#deleteTagModal"
+                                        class="btn btn-sm action__button mt-0"
+                                        wire:click="deleteTag({{ $tag->id }})">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         @else
-        <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-            <small style="font-size: 14px;">No records for departments.</small>
-        </div>
+            <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
+                <small style="font-size: 14px;">No records for departments.</small>
+            </div>
         @endif
     </div>
 
@@ -78,10 +80,10 @@
                                     <input type="text" class="form-control form__field" id="name"
                                         placeholder="Enter tag name" wire:model="name">
                                     @error('name')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
                                     @enderror
                                 </div>
                             </div>
@@ -139,18 +141,18 @@
 
 {{-- Modal Scripts --}}
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#updateTagModal').modal('hide');
-        $('#deleteTagModal').modal('hide');
-    });
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#updateTagModal').modal('hide');
+            $('#deleteTagModal').modal('hide');
+        });
 
-    window.addEventListener('show-edit-tag-modal', () => {
-        $('#updateTagModal').modal('show');
-    });
+        window.addEventListener('show-edit-tag-modal', () => {
+            $('#updateTagModal').modal('show');
+        });
 
-    window.addEventListener('show-delete-tag-modal', () => {
-        $('#deleteTagModal').modal('show');
-    });
-</script>
+        window.addEventListener('show-delete-tag-modal', () => {
+            $('#deleteTagModal').modal('show');
+        });
+    </script>
 @endpush

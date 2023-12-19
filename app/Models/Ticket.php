@@ -33,7 +33,6 @@ class Ticket extends Model
         'agent_id',
         'branch_id',
         'service_department_id',
-        'team_id',
         'help_topic_id',
         'status_id',
         'priority_level_id',
@@ -68,11 +67,6 @@ class Ticket extends Model
         return $this->belongsTo(ServiceDepartment::class, 'service_department_id');
     }
 
-    public function team(): BelongsTo
-    {
-        return $this->belongsTo(Team::class, 'team_id');
-    }
-
     public function helpTopic(): BelongsTo
     {
         return $this->belongsTo(HelpTopic::class, 'help_topic_id');
@@ -93,9 +87,9 @@ class Ticket extends Model
         return $this->belongsTo(ServiceLevelAgreement::class, 'service_level_agreement');
     }
 
-    public function tags(): BelongsToMany
+    public function bookmark(): HasOne
     {
-        return $this->belongsToMany(Tag::class, 'ticket_tag');
+        return $this->hasOne(Bookmark::class);
     }
 
     public function fileAttachments(): HasMany
@@ -123,9 +117,14 @@ class Ticket extends Model
         return $this->hasMany(ActivityLog::class)->orderByDesc('created_at');
     }
 
-    public function bookmark(): HasOne
+    public function tags(): BelongsToMany
     {
-        return $this->hasOne(Bookmark::class);
+        return $this->belongsToMany(Tag::class, 'ticket_tag');
+    }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'ticket_team');
     }
 
     public function dateCreated(): string

@@ -43,8 +43,8 @@
                 </li>
                 <li class="nav-item custom__nav__item text-center">
                     <a class="nav-link custom__nav__link
-                    {{ Route::is('user.tickets.*') ? 'active' : '' }}" aria-current="page"
-                        href="{{ route('user.tickets.open_tickets') }}">Tickets</a>
+                    {{ Route::is('user.tickets.*') ? 'active' : '' }}"
+                        aria-current="page" href="{{ route('user.tickets.open_tickets') }}">Tickets</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-4">

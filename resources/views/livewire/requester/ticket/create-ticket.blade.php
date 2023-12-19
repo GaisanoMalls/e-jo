@@ -34,10 +34,10 @@
                                             <div id="userCreateTicketBranchesDropdown" wire:ignore></div>
                                         </div>
                                         @error('branch')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>
@@ -49,10 +49,10 @@
                                         <div id="userCreateTicketServiceDepartmentDropdown" wire:ignore></div>
                                     </div>
                                     @error('serviceDepartment')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
                                     @enderror
                                 </div>
                             </div>
@@ -61,18 +61,18 @@
                                     <label class="form-label input__field__label">
                                         Help Topic
                                         @if ($helpTopics)
-                                        <span class="fw-normal" style="font-size: 13px;">
-                                            ({{ $helpTopics->count() }})</span>
+                                            <span class="fw-normal" style="font-size: 13px;">
+                                                ({{ $helpTopics->count() }})</span>
                                         @endif
                                     </label>
                                     <div>
                                         <div id="userCreateTicketHelpTopicDropdown" wire:ignore></div>
                                     </div>
                                     @error('helpTopic')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
                                     @enderror
                                 </div>
                             </div>
@@ -86,10 +86,10 @@
                                 <input type="text" wire:model="subject" class="form-control input__field"
                                     placeholder="Tell us about your concern">
                                 @error('subject')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                             <div class="mb-3">
@@ -103,10 +103,10 @@
                                     <textarea wire:model="description" id="createTicketDescription"></textarea>
                                 </div>
                                 @error('description')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                             <div class="row">
@@ -116,19 +116,20 @@
                                     </label>
                                     <div class="d-flex">
                                         @foreach ($priorityLevels as $priority)
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" wire:model="priorityLevel"
-                                                id="rbnt{{ $priority->name }}" value="{{ $priority->id }}">
-                                            <label class="form-check-label radio__button__label"
-                                                for="rbnt{{ $priority->name }}">{{ $priority->name }}</label>
-                                        </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio"
+                                                    wire:model="priorityLevel" id="rbnt{{ $priority->name }}"
+                                                    value="{{ $priority->id }}">
+                                                <label class="form-check-label radio__button__label"
+                                                    for="rbnt{{ $priority->name }}">{{ $priority->name }}</label>
+                                            </div>
                                         @endforeach
                                     </div>
                                     @error('priorityLevel')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
                                     @enderror
                                 </div>
                                 <div class="col-md-4 mt-auto">
@@ -137,13 +138,13 @@
                                             Attachment
                                         </label>
                                     </div>
-                                    <div x-data="{isUploading: false, progress: 1}"
+                                    <div x-data="{ isUploading: false, progress: 1 }"
                                         x-on:livewire-upload-start="isUploading = true; progress = 1"
                                         x-on:livewire-upload-finish="isUploading = false"
                                         x-on:livewire-upload-error="isUploading = false"
                                         x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                        <input class=" form-control form-control-sm border-0 ticket__file" type="file"
-                                            accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
+                                        <input class=" form-control form-control-sm border-0 ticket__file"
+                                            type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
                                             wire:model="fileAttachments" multiple id="upload-{{ $upload }}"
                                             onchange="validateFile()">
                                         <div x-transition.duration.500ms x-show="isUploading"
@@ -156,7 +157,8 @@
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between"
                                             x-transition.duration.500ms>
-                                            <span x-show="isUploading" x-text="progress + '%'" style="font-size: 12px;">
+                                            <span x-show="isUploading" x-text="progress + '%'"
+                                                style="font-size: 12px;">
                                             </span>
                                             <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
                                                 <i x-show="isUploading" class='bx bx-loader-circle bx-spin'
@@ -167,10 +169,10 @@
                                     </div>
                                     <span class="error__message" id="excludeEXEfileMessage"></span>
                                     @error('fileAttachments.*')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
                                     @enderror
 
                                 </div>
@@ -194,190 +196,191 @@
     </div>
 </div>
 @push('livewire-textarea')
-<script>
-    tinymce.init({
-        selector: '#createTicketDescription',
-        plugins: 'lists',
-        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
-        height: 350,
-        setup: function (editor) {
-            editor.on('init change', function () {
-                editor.save();
-            });
-            editor.on('change', function (e) {
-                @this.set('description', editor.getContent());
-            });
-        }
-    });
-</script>
+    <script>
+        tinymce.init({
+            selector: '#createTicketDescription',
+            plugins: 'lists',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
+            height: 350,
+            setup: function(editor) {
+                editor.on('init change', function() {
+                    editor.save();
+                });
+                editor.on('change', function(e) {
+                    @this.set('description', editor.getContent());
+                });
+            }
+        });
+    </script>
 @endpush
 
 @push('livewire-select')
-<script>
-    const serviceDepartmentOption = [
-        @foreach ($serviceDepartments as $serviceDepartment)
-            {
-                label: "{{ $serviceDepartment->name }}",
-                value: "{{ $serviceDepartment->id }}"
-            },
-        @endforeach
-    ];
-    const serviceDepartmentSelect = document.querySelector('#userCreateTicketServiceDepartmentDropdown');
-    VirtualSelect.init({
-        ele: serviceDepartmentSelect,
-        options: serviceDepartmentOption,
-        search: true,
-        markSearchResults: true,
-    });
+    <script>
+        const serviceDepartmentOption = [
+            @foreach ($serviceDepartments as $serviceDepartment)
+                {
+                    label: "{{ $serviceDepartment->name }}",
+                    value: "{{ $serviceDepartment->id }}"
+                },
+            @endforeach
+        ];
+        const serviceDepartmentSelect = document.querySelector('#userCreateTicketServiceDepartmentDropdown');
+        VirtualSelect.init({
+            ele: serviceDepartmentSelect,
+            options: serviceDepartmentOption,
+            search: true,
+            markSearchResults: true,
+        });
 
-    const helpTopicSelect = document.querySelector('#userCreateTicketHelpTopicDropdown');
-    VirtualSelect.init({
-        ele: helpTopicSelect,
-        search: true,
-        markSearchResults: true,
-    });
-    helpTopicSelect.disable();
+        const helpTopicSelect = document.querySelector('#userCreateTicketHelpTopicDropdown');
+        VirtualSelect.init({
+            ele: helpTopicSelect,
+            search: true,
+            markSearchResults: true,
+        });
+        helpTopicSelect.disable();
 
-    const team = document.querySelector('#team');
-    const sla = document.querySelector('#sla');
+        const team = document.querySelector('#team');
+        const sla = document.querySelector('#sla');
 
-    serviceDepartmentSelect.addEventListener('change', () => {
-        const serviceDepartmentId = serviceDepartmentSelect.value;
-        if (serviceDepartmentId) {
-            @this.set('serviceDepartment', parseInt(serviceDepartmentId));
-            helpTopicSelect.enable();
-            window.addEventListener('get-help-topics-from-service-department', (event) => {
-                const helpTopics = event.detail.helpTopics;
-                const helpTopicOption = [];
+        serviceDepartmentSelect.addEventListener('change', () => {
+            const serviceDepartmentId = serviceDepartmentSelect.value;
+            if (serviceDepartmentId) {
+                @this.set('serviceDepartment', parseInt(serviceDepartmentId));
+                helpTopicSelect.enable();
+                window.addEventListener('get-help-topics-from-service-department', (event) => {
+                    const helpTopics = event.detail.helpTopics;
+                    const helpTopicOption = [];
 
-                if (helpTopics.length > 0) {
-                    helpTopicSelect.open();
-                    helpTopics.forEach(function (helpTopic) {
-                        VirtualSelect.init({
-                            ele: helpTopicSelect
+                    if (helpTopics.length > 0) {
+                        helpTopicSelect.open();
+                        helpTopics.forEach(function(helpTopic) {
+                            VirtualSelect.init({
+                                ele: helpTopicSelect
+                            });
+
+                            helpTopicOption.push({
+                                label: helpTopic.name,
+                                value: helpTopic.id
+                            });
                         });
+                        helpTopicSelect.setOptions(helpTopicOption);
+                    } else {
+                        helpTopicSelect.close();
+                        helpTopicSelect.setOptions([]);
+                        helpTopicSelect.disable();
+                    }
+                });
+            }
+        });
 
-                        helpTopicOption.push({
-                            label: helpTopic.name,
-                            value: helpTopic.id
-                        });
-                    });
-                    helpTopicSelect.setOptions(helpTopicOption);
+        helpTopicSelect.addEventListener('change', () => {
+            @this.set('helpTopic', parseInt(helpTopicSelect.value))
+        });
+
+        const branchSelect = document.querySelector('#userCreateTicketBranchesDropdown');
+        const branchOption = [
+            @foreach ($branches as $branch)
+                {
+                    label: "{{ $branch->name }}",
+                    value: "{{ $branch->id }}"
+                },
+            @endforeach
+        ];
+        VirtualSelect.init({
+            ele: '#userCreateTicketBranchesDropdown',
+            options: branchOption,
+            search: true,
+            markSearchResults: true,
+        });
+
+        branchSelect.addEventListener('change', () => {
+            @this.set('branch', parseInt(branchSelect.value));
+        });
+
+        const selectOtherBranch = document.querySelector('#checkOtherBranch');
+        const branchSelectContainer = document.querySelector('#branchSelectContainer');
+        branchSelect.disable();
+        branchSelectContainer.style.display = 'none';
+
+        if (selectOtherBranch) {
+            selectOtherBranch.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    branchSelect.enable();
+                    branchSelectContainer.style.display = 'block';
                 } else {
-                    helpTopicSelect.close();
-                    helpTopicSelect.setOptions([]);
-                    helpTopicSelect.disable();
+                    branchSelect.reset();
+                    branchSelect.disable();
+                    branchSelectContainer.style.display = 'none';
+                    @this.set('branch', null);
+                }
+            });
+
+            window.addEventListener('clear-branch-dropdown-select', () => {
+                if (selectOtherBranch.checked) {
+                    selectOtherBranch.checked = false;
+                    @this.set('branch', null);
                 }
             });
         }
-    });
 
-    helpTopicSelect.addEventListener('change', () => {
-        @this.set('helpTopic', parseInt(helpTopicSelect.value))
-    });
+        window.addEventListener('clear-select-dropdown', () => {
+            branchSelect.reset();
+            helpTopicSelect.reset();
+            serviceDepartmentSelect.reset();
+            helpTopicSelect.disable();
+            tinymce.get("createTicketDescription").setContent("");
 
-    const branchSelect = document.querySelector('#userCreateTicketBranchesDropdown');
-    const branchOption = [
-        @foreach ($branches as $branch)
-            {
-                label: "{{ $branch->name }}",
-                value: "{{ $branch->id }}"
-            },
-        @endforeach
-    ];
-    VirtualSelect.init({
-        ele: '#userCreateTicketBranchesDropdown',
-        options: branchOption,
-        search: true,
-        markSearchResults: true,
-    });
-
-    branchSelect.addEventListener('change', () => {
-        @this.set('branch', parseInt(branchSelect.value));
-    });
-
-    const selectOtherBranch = document.querySelector('#checkOtherBranch');
-    const branchSelectContainer = document.querySelector('#branchSelectContainer');
-    branchSelect.disable();
-    branchSelectContainer.style.display = 'none';
-
-    if (selectOtherBranch) {
-        selectOtherBranch.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                branchSelect.enable();
-                branchSelectContainer.style.display = 'block';
-            } else {
-                branchSelect.reset();
-                branchSelect.disable();
+            if (selectOtherBranch.checked) {
+                selectOtherBranch.checked = false;
                 branchSelectContainer.style.display = 'none';
                 @this.set('branch', null);
             }
         });
 
-        window.addEventListener('clear-branch-dropdown-select', () => {
-            if (selectOtherBranch.checked) {
-                selectOtherBranch.checked = false;
-                @this.set('branch', null);
+        // Validate file
+        function validateFile() {
+            const excludeEXEfileMessage = document.querySelector('#excludeEXEfileMessage');
+            const fileInput = document.querySelector(`#upload-{{ $upload }}`);
+
+            excludeEXEfileMessage.style.display = "none";
+
+            const fileName = fileInput.value.split('\\').pop(); // Get the file name
+            const allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
+            const fileExtension = fileName.split('.').pop().toLowerCase();
+
+            // Check if the file extension is .exe
+            if (!allowedExtensions.includes(fileExtension)) {
+                excludeEXEfileMessage.style.display = "block";
+                excludeEXEfileMessage.innerHTML =
+                    '<i class="fa-solid fa-triangle-exclamation"></i> Invalid file type. File must be one of the following types: jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv';
+                fileInput.value = ''; // Clear the file input
+            } else {
+                fileValidationMessage.innerHTML = '';
             }
-        });
-    }
-
-    window.addEventListener('clear-select-dropdown', () => {
-        branchSelect.reset();
-        helpTopicSelect.reset();
-        serviceDepartmentSelect.reset();
-        helpTopicSelect.disable();
-        tinymce.get("createTicketDescription").setContent("");
-
-        if (selectOtherBranch.checked) {
-            selectOtherBranch.checked = false;
-            branchSelectContainer.style.display = 'none';
-            @this.set('branch', null);
         }
-    });
-
-    // Validate file
-    function validateFile() {
-        const excludeEXEfileMessage = document.querySelector('#excludeEXEfileMessage');
-        const fileInput = document.querySelector(`#upload-{{ $upload }}`);
-
-        excludeEXEfileMessage.style.display = "none";
-
-        const fileName = fileInput.value.split('\\').pop(); // Get the file name
-        const allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
-        const fileExtension = fileName.split('.').pop().toLowerCase();
-
-        // Check if the file extension is .exe
-        if (!allowedExtensions.includes(fileExtension)) {
-            excludeEXEfileMessage.style.display = "block";
-            excludeEXEfileMessage.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Invalid file type. File must be one of the following types: jpeg, jpg, png, pdf, doc, docx, xlsx, xls, csv';
-            fileInput.value = ''; // Clear the file input
-        } else {
-            fileValidationMessage.innerHTML = '';
-        }
-    }
-</script>
+    </script>
 @endpush
 
 
 @push('livewire-modal')
-<script>
-    const refreshServiceDepartmentOption = [
-        @foreach ($serviceDepartments as $serviceDepartment)
-            {
-                label: "{{ $serviceDepartment->name }}",
-                value: "{{ $serviceDepartment->id }}"
-            },
-        @endforeach
-    ];
-    window.addEventListener('close-modal', () =>{
-        $('#createTicketModal').modal('hide');
-        tinymce.get("createTicketDescription").setContent("");
-        serviceDepartmentSelect.reset();
-        helpTopicSelect.reset();
-        branchSelect.reset();
-        helpTopicSelect.disable();
-        helpTopicSelect.setOptions([]);
-    });
-</script>
+    <script>
+        const refreshServiceDepartmentOption = [
+            @foreach ($serviceDepartments as $serviceDepartment)
+                {
+                    label: "{{ $serviceDepartment->name }}",
+                    value: "{{ $serviceDepartment->id }}"
+                },
+            @endforeach
+        ];
+        window.addEventListener('close-modal', () => {
+            $('#createTicketModal').modal('hide');
+            tinymce.get("createTicketDescription").setContent("");
+            serviceDepartmentSelect.reset();
+            helpTopicSelect.reset();
+            branchSelect.reset();
+            helpTopicSelect.disable();
+            helpTopicSelect.setOptions([]);
+        });
+    </script>
 @endpush

@@ -1,55 +1,55 @@
 <div>
     <div class="table-responsive custom__table">
         @if (!$serviceDepartments->isEmpty())
-        <table class="table table-striped mb-0">
-            <thead>
-                <tr>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($serviceDepartments as $serviceDepartment)
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $serviceDepartment->name }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $serviceDepartment->dateCreated() }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $serviceDepartment->dateUpdated() }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                            <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
-                                type="button" class="btn action__button" data-bs-toggle="modal"
-                                data-bs-target="#editServiceDepartmentModal"
-                                wire:click="editServiceDepartment({{ $serviceDepartment->id }})">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
-                                data-bs-target="#deleteServiceDepartmentModal"
-                                wire:click="deleteServiceDepartment({{ $serviceDepartment->id }})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($serviceDepartments as $serviceDepartment)
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $serviceDepartment->name }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $serviceDepartment->dateCreated() }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $serviceDepartment->dateUpdated() }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
+                                    <button data-tooltip="Edit" data-tooltip-position="top"
+                                        data-tooltip-font-size="11px" type="button" class="btn action__button"
+                                        data-bs-toggle="modal" data-bs-target="#editServiceDepartmentModal"
+                                        wire:click="editServiceDepartment({{ $serviceDepartment->id }})">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
+                                        data-bs-target="#deleteServiceDepartmentModal"
+                                        wire:click="deleteServiceDepartment({{ $serviceDepartment->id }})">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         @else
-        <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-            <small style="font-size: 14px;">No records for departments.</small>
-        </div>
+            <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
+                <small style="font-size: 14px;">No records for departments.</small>
+            </div>
         @endif
     </div>
 
@@ -73,10 +73,10 @@
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
                                     placeholder="Enter service department name">
                                 @error('name')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>
@@ -133,19 +133,18 @@
 
 {{-- Modal Scripts --}}
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#editServiceDepartmentModal').modal('hide');
-        $('#deleteServiceDepartmentModal').modal('hide');
-    });
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#editServiceDepartmentModal').modal('hide');
+            $('#deleteServiceDepartmentModal').modal('hide');
+        });
 
-    window.addEventListener('show-edit-service-department-modal', () => {
-        $('#editServiceDepartmentModal').modal('show');
-    });
+        window.addEventListener('show-edit-service-department-modal', () => {
+            $('#editServiceDepartmentModal').modal('show');
+        });
 
-    window.addEventListener('show-delete-service-department-modal', () => {
-        $('#deleteServiceDepartmentModal').modal('show');
-    });
-
-</script>
+        window.addEventListener('show-delete-service-department-modal', () => {
+            $('#deleteServiceDepartmentModal').modal('show');
+        });
+    </script>
 @endpush

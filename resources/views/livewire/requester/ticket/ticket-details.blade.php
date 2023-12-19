@@ -15,18 +15,16 @@
                     <small class="ticket__details__info">
                         <small class="ticket__details__info">
                             @if ($ticket->approval_status === App\Models\ApprovalStatus::APPROVED)
-                            <i class="fa-solid fa-circle-check me-1" style="color: green; font-size: 11px;"></i>
-                            Approved
-                            @elseif ($ticket->approval_status ===
-                            App\Models\ApprovalStatus::FOR_APPROVAL)
-                            <i class="fa-solid fa-paper-plane me-1" style="color: orange; font-size: 11px;"></i>
-                            For Approval
-                            @elseif ($ticket->approval_status ===
-                            App\Models\ApprovalStatus::DISAPPROVED)
-                            <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
-                            Disapproved
+                                <i class="fa-solid fa-circle-check me-1" style="color: green; font-size: 11px;"></i>
+                                Approved
+                            @elseif ($ticket->approval_status === App\Models\ApprovalStatus::FOR_APPROVAL)
+                                <i class="fa-solid fa-paper-plane me-1" style="color: orange; font-size: 11px;"></i>
+                                For Approval
+                            @elseif ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
+                                <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
+                                Disapproved
                             @else
-                            ----
+                                ----
                             @endif
                         </small>
                     </small>
@@ -66,12 +64,12 @@
                     <small class="ticket__details__info__label" style="font-weight: 500;">
                         Assigned agent:
                     </small>
-                    <small class="ticket__details__info {{ $ticket->agent_id !== null ? '' : 'not__set'}}">
+                    <small class="ticket__details__info {{ $ticket->agent_id !== null ? '' : 'not__set' }}">
                         <i class="fa-solid fa-user-check me-1 text-muted" style="font-size: 11px;"></i>
                         @if ($ticket->agent)
-                        {{ $ticket->agent->profile->getFullName() }}
+                            {{ $ticket->agent->profile->getFullName() }}
                         @else
-                        ----
+                            ----
                         @endif
                     </small>
                 </div>

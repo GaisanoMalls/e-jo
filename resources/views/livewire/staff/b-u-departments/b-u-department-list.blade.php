@@ -2,53 +2,53 @@
     <div class="table-responsive custom__table">
         <table class="table table-striped mb-0">
             @if (!$buDepartments->isEmpty())
-            <thead>
-                <tr>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">BU/Department</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Branches</th>
-                    <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($buDepartments as $department)
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $department->name }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $department->getBranches() }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center text-start td__content">
-                            <span>{{ $department->dateCreated() }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                            <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
-                                type="button" class="btn action__button" data-bs-toggle="modal"
-                                data-bs-target="#editBUDepartmentModal"
-                                wire:click="editBUDepartment({{ $department->id }})">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
-                                data-bs-target="#deleteBUDepartmentModal"
-                                wire:click="deleteBUDepartment({{ $department->id }})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
+                <thead>
+                    <tr>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">BU/Department</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Branches</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($buDepartments as $department)
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $department->name }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $department->getBranches() }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $department->dateCreated() }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
+                                    <button data-tooltip="Edit" data-tooltip-position="top"
+                                        data-tooltip-font-size="11px" type="button" class="btn action__button"
+                                        data-bs-toggle="modal" data-bs-target="#editBUDepartmentModal"
+                                        wire:click="editBUDepartment({{ $department->id }})">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
+                                        data-bs-target="#deleteBUDepartmentModal"
+                                        wire:click="deleteBUDepartment({{ $department->id }})">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
             @else
-            <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                <small style="font-size: 14px;">No records for BU/Departments.</small>
-            </div>
+                <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
+                    <small style="font-size: 14px;">No records for BU/Departments.</small>
+                </div>
             @endif
         </table>
     </div>
@@ -73,10 +73,10 @@
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
                                     placeholder="Enter BU/department name">
                                 @error('name')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                             <div class="mb-2">
@@ -84,11 +84,11 @@
                                 <div>
                                     <div id="edit-select-branch" wire:ignore></div>
                                 </div>
-                                @error ('editSelectedBranches')
-                                <div class="error__message mt-1">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </div>
+                                @error('editSelectedBranches')
+                                    <div class="error__message mt-1">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </div>
                                 @enderror
                             </div>
                         </div>
@@ -144,61 +144,59 @@
 </div>
 
 @push('livewire-select')
-<script>
-    const editBranchOption = [
-        @foreach ($branches as $branch)
-            {
-                label: "{{ $branch->name }}",
-                value: "{{ $branch->id }}"
-            },
-        @endforeach
-    ];
+    <script>
+        const editBranchOption = [
+            @foreach ($branches as $branch)
+                {
+                    label: "{{ $branch->name }}",
+                    value: "{{ $branch->id }}"
+                },
+            @endforeach
+        ];
 
-    VirtualSelect.init({
-        ele: '#edit-select-branch',
-        options: editBranchOption,
-        search: true,
-        multiple: true,
-        required: true,
-        showValueAsTags: true,
-        markSearchResults: true,
-        hasOptionDescription: true,
-        popupDropboxBreakpoint: '3000px',
-    });
+        VirtualSelect.init({
+            ele: '#edit-select-branch',
+            options: editBranchOption,
+            search: true,
+            multiple: true,
+            required: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            hasOptionDescription: true,
+            popupDropboxBreakpoint: '3000px',
+        });
 
-    const editBranchSelect = document.querySelector('#edit-select-branch')
-    editBranchSelect.addEventListener('change', () => {
-        @this.set('editSelectedBranches', editBranchSelect.value);
-    });
+        const editBranchSelect = document.querySelector('#edit-select-branch')
+        editBranchSelect.addEventListener('change', () => {
+            @this.set('editSelectedBranches', editBranchSelect.value);
+        });
 
-    // Check the current branches assigned to the selected BU/Department.
-    window.addEventListener('update-branch-select-option', (event) => {
-        editBranchSelect.setValue(event.detail.branchIds);
-    });
+        // Check the current branches assigned to the selected BU/Department.
+        window.addEventListener('update-branch-select-option', (event) => {
+            editBranchSelect.setValue(event.detail.branchIds);
+        });
 
-    // Clear the branch select option after update.
-    window.addEventListener('clear-branch-select-option', () => {
-        editBranchSelect.reset();
-    });
-
-</script>
+        // Clear the branch select option after update.
+        window.addEventListener('clear-branch-select-option', () => {
+            editBranchSelect.reset();
+        });
+    </script>
 @endpush
 
 {{-- Modal Scripts --}}
 @push('livewire-modal')
-<script>
-    window.addEventListener('close-modal', () => {
-        $('#editBUDepartmentModal').modal('hide');
-        $('#deleteBUDepartmentModal').modal('hide');
-    });
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#editBUDepartmentModal').modal('hide');
+            $('#deleteBUDepartmentModal').modal('hide');
+        });
 
-    window.addEventListener('show-edit-bu-department-modal', () => {
-        $('#editBUDepartmentModal').modal('show');
-    });
+        window.addEventListener('show-edit-bu-department-modal', () => {
+            $('#editBUDepartmentModal').modal('show');
+        });
 
-    window.addEventListener('show-delete-bu-department-modal', () => {
-        $('#deleteBUDepartmentModal').modal('show');
-    });
-
-</script>
+        window.addEventListener('show-delete-bu-department-modal', () => {
+            $('#deleteBUDepartmentModal').modal('show');
+        });
+    </script>
 @endpush

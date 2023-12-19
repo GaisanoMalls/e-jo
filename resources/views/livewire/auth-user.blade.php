@@ -6,16 +6,17 @@
 
     <form wire:submit.prevent="login" novalidate>
         @if (session()->has('error'))
-        <ul class='form__errors mb-2 text-center'>
-            <li>{{ session('error') }}</li>
-        </ul>
+            <ul class='form__errors mb-2 text-center'>
+                <li>{{ session('error') }}</li>
+            </ul>
         @endif
         <div class="my-2">
             <label class="form-label input__login__label" for="email">Email address</label>
-            <input type="email" id="email" class="form-control login__input__field @error('email') is-invalid @enderror"
+            <input type="email" id="email"
+                class="form-control login__input__field @error('email') is-invalid @enderror"
                 placeholder="Enter your email" wire:model="email">
             @error('email')
-            <span class="text-danger custom__field__message">{{ $message }}</span>
+                <span class="text-danger custom__field__message">{{ $message }}</span>
             @enderror
         </div>
         <div class="my-2">
@@ -24,7 +25,7 @@
                 class="form-control login__input__field @error('password') is-invalid @enderror"
                 placeholder="Enter your password" wire:model="password">
             @error('password')
-            <span class="text-danger custom__field__message">{{ $message }}</span>
+                <span class="text-danger custom__field__message">{{ $message }}</span>
             @enderror
         </div>
         <button type="submit"

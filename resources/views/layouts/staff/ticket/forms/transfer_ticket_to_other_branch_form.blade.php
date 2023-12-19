@@ -35,13 +35,13 @@
                 <div class="input-group">
                     <select class="form-select p-0 border-0 ticket__dropdown__select" data-search="true"
                         id="transferTicketDepartmentsDropdown">
-                        <option value="{{ $ticket->service_department_id }}" selected>{{
-                            $ticket->serviceDepartment->name }}
+                        <option value="{{ $ticket->service_department_id }}" selected>
+                            {{ $ticket->serviceDepartment->name }}
                         </option>
                         @foreach ($departments as $department)
-                        @if ($department->id !== $ticket->service_department_id)
-                        <option value="{{ $department->id }}">{{ $department->name }}</option>
-                        @endif
+                            @if ($department->id !== $ticket->service_department_id)
+                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -59,9 +59,9 @@
                     id="transferTicketTeamsDropdown">
                     <option value="{{ $ticket->team->id }}" selected>{{ $ticket->team->name }}</option>
                     @foreach ($teams as $team)
-                    @if ($team->id !== $ticket->team->id)
-                    <option value="{{ $team->id }}">{{ $team->name }}</option>
-                    @endif
+                        @if ($team->id !== $ticket->team->id)
+                            <option value="{{ $team->id }}">{{ $team->name }}</option>
+                        @endif
                     @endforeach
                 </select>
             </div>

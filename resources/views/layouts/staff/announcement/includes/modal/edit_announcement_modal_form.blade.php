@@ -19,10 +19,10 @@
                                 <input type="text" name="title" class="form-control form__field" id="title"
                                     value="{{ $announcement->title }}" placeholder="Type here...">
                                 @error('title', 'editAnnouncement')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>
@@ -32,17 +32,17 @@
                                 <select name="department" name="department" placeholder="Choose a department"
                                     data-search="true" data-silent-initial-value-set="true">
                                     @foreach ($departments as $department)
-                                    <option value="{{ $department->id }}" {{ old('department')==$department->id ?
-                                        'selected' : '' }}>
-                                        {{ $department->name }}
-                                    </option>
+                                        <option value="{{ $department->id }}"
+                                            {{ old('department') == $department->id ? 'selected' : '' }}>
+                                            {{ $department->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('department', 'editAnnouncement')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>
@@ -53,10 +53,10 @@
                                 {{ $announcement->description }}
                                 </textarea>
                                 @error('description', 'editAnnouncement')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
                                 @enderror
                             </div>
                         </div>
@@ -73,7 +73,8 @@
                         </div>
                         <div class="form-check form-switch" style="white-space: nowrap;">
                             <input class="form-check-input is__urgent__check" name="is_important" type="checkbox"
-                                role="switch" id="markAsImportant" {{ $announcement->isImportant() ? 'checked' : '' }}>
+                                role="switch" id="markAsImportant"
+                                {{ $announcement->isImportant() ? 'checked' : '' }}>
                             <label class="form-check-label is__urgent__check__label" for="markAsImportant">
                                 Mark as Important
                             </label>
