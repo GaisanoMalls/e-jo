@@ -29,8 +29,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label class="form-label form__field__label">Service Level Agreements
-                                            (SLA)</label>
+                                        <label class="form-label form__field__label">
+                                            Service Level Agreements (SLA)
+                                        </label>
                                         <div>
                                             <div id="select-help-topic-sla" wire:ignore></div>
                                         </div>
@@ -325,10 +326,10 @@
                                             <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
                                         </div>
                                         @error('level${count}Approvers')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
                                         @enderror
                                     </div>
                                 </div>`;
@@ -368,7 +369,6 @@
                 });
             }
         }
-
 
         serviceDepartmentSelect.addEventListener('change', () => {
             const serviceDepartmentId = parseInt(serviceDepartmentSelect.value);

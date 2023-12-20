@@ -95,8 +95,9 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="mb-3">
-                                                    <label for="amount"
-                                                        class="form-label form__field__label">Amount</label>
+                                                    <label for="amount" class="form-label form__field__label">
+                                                        Amount
+                                                    </label>
                                                     <input type="text" wire:model="amount"
                                                         class="form-control form__field amount__field" id="amount"
                                                         placeholder="Enter amount">

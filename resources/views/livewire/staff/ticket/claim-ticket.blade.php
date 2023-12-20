@@ -9,8 +9,7 @@
         @else
             @if (is_null($ticket->agent_id))
                 <button type="submit"
-                    class="btn bx-burst btn-sm border-0 m-auto ticket__detatails__btn__claim d-flex
-                                        align-items-center justify-content-center"
+                    class="btn bx-burst btn-sm border-0 m-auto ticket__detatails__btn__claim d-flex align-items-center justify-content-center"
                     wire:click="claimTicket">
                     <i wire:loading.remove class="fa-regular fa-flag"></i>
                     <div wire:loading wire:target="claimTicket">

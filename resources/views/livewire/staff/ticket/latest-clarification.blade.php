@@ -7,10 +7,10 @@
                         <img src="{{ Storage::url($latestClarification->user->profile->picture) }}"
                             class="me-2 sender__profile" alt="">
                     @else
-                        <div class="user__name__initial d-flex align-items-center p-2 me-2 rounded-3 justify-content-center
-                                                            text-white"
+                        <div class="user__name__initial d-flex align-items-center p-2 me-2 rounded-3 justify-content-center ext-white"
                             style="background-color: #24695C; height: 30px; width: 30px; border: 2px solid #d9ddd9; font-size: 12px;">
-                            {{ $latestClarification->user->profile->getNameInitial() }}</div>
+                            {{ $latestClarification->user->profile->getNameInitial() }}
+                        </div>
                     @endif
                     <p class="mb-0" style="font-size: 14px; font-weight: 500;">
                         {{ $latestClarification->user->profile->first_name }}

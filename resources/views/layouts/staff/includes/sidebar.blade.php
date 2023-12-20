@@ -27,6 +27,17 @@
                             Ticket Assigning
                         </a>
                     </li>
+                    <li class="mb-1">
+                        <a href="{{ route('staff.ticket_level_approval') }}"
+                            class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons -bottom-3
+                            {{ Route::is('staff.ticket_level_approval') ? 'sidebar__btn__active active' : '' }}">
+                            <div
+                                class=" d-flex align-items-center justify-content-center sidebar__button__icon__container fade__in__sidebar__icon__container">
+                                <i class="bi bi-check-lg"></i>
+                            </div>
+                            Level Approval
+                        </a>
+                    </li>
                 @endif
                 <li class="mb-1">
                     @livewire('staff.collapse-ticket-status')

@@ -24,24 +24,26 @@
                                 </span>
                             @enderror
                         </div>
-                        <div class="my-2">
-                            <label class="ticket__actions__label mb-2">
-                                Assign to agent
-                                @if ($agents)
-                                    <span class="fw-normal" style="font-size: 13px;">
-                                        ({{ $agents->count() }})</span>
-                                @endif
-                            </label>
-                            <div>
-                                <div id="select-agent" placeholder="Select (optional)" wire:ignore></div>
+                        @if (!$isSpecialProject)
+                            <div class="my-2">
+                                <label class="ticket__actions__label mb-2">
+                                    Assign to agent
+                                    @if ($agents)
+                                        <span class="fw-normal" style="font-size: 13px;">
+                                            ({{ $agents->count() }})</span>
+                                    @endif
+                                </label>
+                                <div>
+                                    <div id="select-agent" placeholder="Select (optional)" wire:ignore></div>
+                                </div>
+                                @error('agent')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
                             </div>
-                            @error('agent')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div>
+                        @endif
                         <button type="submit"
                             class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
                             <span wire:loading wire:target="saveAssignTicket" class="spinner-border spinner-border-sm"

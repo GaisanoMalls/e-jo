@@ -51,6 +51,9 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
                 Route::get('/', 'ticketsToAssign')->name('to_assign');
             });
         });
+        Route::controller(StaffTicketController::class)->group(function () {
+            Route::get('/level-approval', 'ticketLevelApproval')->name('ticket_level_approval');
+        });
         Route::prefix('tickets')->name('tickets.')->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
                 Route::get('/approved', 'approvedTickets')->name('approved_tickets');
