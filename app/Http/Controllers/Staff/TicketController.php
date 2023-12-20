@@ -90,6 +90,7 @@ class TicketController extends Controller
         $departments = $this->queryBUDepartments();
         $priorityLevels = $this->queryPriorityLevels();
         $serviceDepartments = $this->queryServiceDepartments();
+        
         $approvers = User::whereHas('teams', fn($query) => $query->where('teams.id', $ticket->team_id))
             ->whereHas('branches', fn($query) => $query->where('branches.id', $ticket->branch_id))
             ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $ticket->service_department_id))
