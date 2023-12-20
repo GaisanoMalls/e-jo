@@ -96,10 +96,7 @@ class TicketController extends Controller
             ->where('id', '!=', $ticket->agent_id)
             ->get();
 
-        $latestReply = Reply::where('ticket_id', $ticket->id)
-            ->where('user_id', '!=', auth()->user()->id)
-            ->orderByDesc('created_at')
-            ->first();
+        $latestReply = Reply::where('ticket_id', $ticket->id)->where('user_id', '!=', auth()->user()->id)->orderByDesc('created_at')->first();
 
         return view('layouts.staff.ticket.view_ticket',
             compact([
