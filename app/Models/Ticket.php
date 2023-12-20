@@ -122,7 +122,7 @@ class Ticket extends Model
         return $this->belongsToMany(Tag::class, 'ticket_tag');
     }
 
-    public function teams()
+    public function teams(): BelongsToMany
     {
         return $this->belongsToMany(Team::class, 'ticket_team');
     }
@@ -131,4 +131,20 @@ class Ticket extends Model
     {
         return $this->createdAt($this->created_at);
     }
+
+    public function getTeams(): string
+    {
+        $teamNames = [];
+
+        foreach ($this->teams as $team) {
+            $teamNames[] = $team->name;
+        }
+
+        if (!empty($teamNames)) {
+            return implode(', ', $teamNames);
+        }
+
+        return '----';
+    }
+
 }

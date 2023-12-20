@@ -28,6 +28,7 @@ class ApproveTicket extends Component
      */
     private function actionOnSubmit()
     {
+        $this->emit('loadSlaTimer');
         $this->emit('loadTicketTags');
         $this->emit('loadTicketLogs');
         $this->emit('loadTicketDetails');

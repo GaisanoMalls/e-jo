@@ -156,7 +156,7 @@
     </div>
 
     @push('livewire-select')
-    <script>
+        <script>
             const amountField = document.querySelector('#amount');
             const teamSelectContainer = document.querySelector('#teamSelectContainer');
             const specialProjectCheck = document.querySelector('#specialProjectCheck');
@@ -399,8 +399,6 @@
                     specialProjectContainer.style.display = 'none';
                 });
             }
-
-
         </script>
     @endpush
 

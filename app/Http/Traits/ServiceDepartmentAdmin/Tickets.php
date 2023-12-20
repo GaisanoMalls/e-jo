@@ -13,7 +13,7 @@ trait Tickets
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatus::APPROVED)->where('status_id', '!=', Status::CLAIMED))
             ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
-            ->whereNull('team_id')->orWhereNull('team_id')->orderByDesc('created_at')->get();
+            ->withWhereHas('teams', fn($team) => $team->whereNull('teams.id'))->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetApprovedTickets()

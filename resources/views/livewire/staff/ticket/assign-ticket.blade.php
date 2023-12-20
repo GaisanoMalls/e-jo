@@ -68,13 +68,24 @@
         ];
 
         const teamSelect = document.querySelector('#select-team');
-        VirtualSelect.init({
-            ele: '#select-team',
-            options: teamOption,
-            search: true,
-            markSearchResults: true,
-            hasOptionDescription: true,
-        });
+        if (@json($isSpecialProject)) {
+            VirtualSelect.init({
+                ele: '#select-team',
+                options: teamOption,
+                search: true,
+                multiple: true, // Select multiple teams if ticket has special project
+                markSearchResults: true,
+                hasOptionDescription: true,
+            });
+        } else {
+            VirtualSelect.init({
+                ele: '#select-team',
+                options: teamOption,
+                search: true,
+                markSearchResults: true,
+                hasOptionDescription: true,
+            });
+        }
 
         const agentSelect = document.querySelector('#select-agent');
         // Initialize the agent select dropdown

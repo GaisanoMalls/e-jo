@@ -25,6 +25,12 @@ class AssignTicket extends Component
     public $agents = [];
     public $team;
     public $agent;
+    public $isSpecialProject;
+
+    public function mount()
+    {
+        $this->isSpecialProject = !is_null($this->ticket->helpTopic->specialProject);
+    }
 
     private function actionOnSubmit()
     {
@@ -37,9 +43,9 @@ class AssignTicket extends Component
         try {
             DB::transaction(function () {
                 $this->ticket->update([
-                    'team_id' => $this->team ?: null,
                     'agent_id' => $this->agent ?: null,
                 ]);
+                $this->ticket->teams()->sync($this->team ?: null);
 
                 $this->ticket->refresh();
                 if (!is_null($this->ticket->agent_id)) {
