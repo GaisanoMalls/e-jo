@@ -16,20 +16,13 @@ class Level extends Model
 
     protected $fillable = ['value'];
 
-    public function approvers(): Builder|BelongsToMany
+    public function approver()
     {
-        return $this->belongsToMany(User::class, 'level_approver')->role(Role::APPROVER)
-            ->withPivot(['level_id', 'user_id', 'help_topic_id'])
-            ->withTimestamps();
+        return $this->hasOne(User::class);
     }
 
     public function helpTopics(): BelongsToMany
     {
         return $this->belongsToMany(HelpTopic::class, 'help_topic_level');
-    }
-
-    public function levelApprovers(): BelongsToMany
-    {
-        return $this->belongsToMany(LevelApprover::class);
     }
 }

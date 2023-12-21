@@ -26,7 +26,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ProfileSeeder::class,
             SuffixesSeeder::class,
-            ApprovalLevelSeeder::class,
             LevelSeeder::class,
             ServiceLevelAgreementSeeder::class,
             PermissionModuleSeeder::class,

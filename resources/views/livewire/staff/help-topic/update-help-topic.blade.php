@@ -57,7 +57,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                @if (!$helpTopic->specialProject && !is_null($helpTopic->specialProject))
+                                @if (!$helpTopic->specialProject)
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label form__field__label">
@@ -80,7 +80,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                @if ($helpTopic->specialProject && !is_null($helpTopic->specialProject))
+                                @if ($helpTopic->specialProject)
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="mb-3">
@@ -95,29 +95,6 @@
                                                         {{ $message }}
                                                     </span>
                                                 @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <small class="fw-bold my-3">Approvals</small>
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label class="form-label form__field__label">Level of Approval</label>
-                                            <div>
-                                                <div id="select-help-topic-level-of-approval" wire:ignore></div>
-                                            </div>
-                                            @error('level_of_approval')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div wire:ignore>
-                                        <div class="col-md-12">
-                                            <div class="mb-2">
-                                                <div class="row" id="editSelectApproverContainer">
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -200,175 +177,6 @@
             markSearchResults: true,
             selectedValue: @json($team)
         });
-
-        const levelOfApprovalOption = [
-            @foreach ($levelOfApprovals as $approval)
-                {
-                    label: "{{ $approval->description }}",
-                    value: "{{ $approval->value }}"
-                },
-            @endforeach
-        ];
-
-
-        const cooApprovers = @json($approvers);
-        const cooApproverOption = [];
-        cooApprovers.forEach(function(cooApprover) {
-            const middleName = `${cooApprover.profile.middle_name ?? ''}`;
-            const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
-
-            cooApproverOption.push({
-                value: cooApprover.id,
-                label: `${cooApprover.profile.first_name} ${firstLetter} ${cooApprover.profile.last_name}`,
-            });
-        });
-
-        const levelOfApprovalSelect = document.querySelector('#select-help-topic-level-of-approval');
-        VirtualSelect.init({
-            ele: levelOfApprovalSelect,
-            options: levelOfApprovalOption,
-            search: true,
-            markSearchResults: true,
-            selectedValue: @json($currentLevelOfApproval ?? 0)
-        });
-
-        // Load approval upon page load.
-        const selectApproverContainer = document.querySelector('#editSelectApproverContainer');
-        window.onload = () => {
-            if (levelOfApprovalSelect) {
-                const levelOfApproval = parseInt(levelOfApprovalSelect.value);
-                const approvers = @json($approvers);
-                const currentApprovers = @json($currentApprovers);
-
-                if (levelOfApproval) {
-                    @this.set('level_of_approval', levelOfApproval);
-                    for (let count = 1; count <= levelOfApproval; count++) {
-                        const approverOption = [];
-                        const selectOptionHTML = `
-                            <div class="col-md-6">
-                                <div class="mb-2">
-                                    <div class="mb-2 d-flex gap-2">
-                                        <label class="form-label form__field__label">Level ${count} approver/s</label>
-                                        <small class="text-muted" style="font-size: 13px; margin-top: 2px;">(In order)</small>
-                                    </div>
-                                    <div>
-                                        <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
-                                    </div>
-                                    @error('level${count}Approver')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>`;
-
-                        selectApproverContainer.insertAdjacentHTML('beforeend', selectOptionHTML);
-
-                        if (approvers.length > 0) {
-                            approvers.forEach((approver) => {
-                                const middleName = `${approver.profile.middle_name ?? ''}`;
-                                const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
-
-                                approverOption.push({
-                                    value: approver.id,
-                                    label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
-                                });
-                            });
-                        }
-
-                        VirtualSelect.init({
-                            ele: `#level${count}Approver`,
-                            options: approverOption,
-                            showValueAsTags: true,
-                            markSearchResults: true,
-                            multiple: true,
-                            required: true,
-                        });
-
-                        const levelApprovers = currentApprovers.filter(approver => approver.level == count);
-                        const editLevelOfApproverSelect = document.querySelector(`#level${count}Approver`);
-
-                        if (editLevelOfApproverSelect) {
-                            const selectedApprovers = levelApprovers.map(approver => approver.id);
-                            editLevelOfApproverSelect.setValue(selectedApprovers);
-                        }
-                    }
-                }
-
-                // To set the array for udpate help topic (level1Approvers to level5Approvers)
-                for (let count = 1; count <= 5; count++) {
-                    let levelApprover = document.querySelector(`#level${count}Approver`);
-                    if (levelApprover) {
-                        levelApprover.addEventListener('change', () => {
-                            @this.set(`level${count}Approvers`, levelApprover.value);
-                        });
-                    }
-                }
-
-                levelOfApprovalSelect.addEventListener('change', () => {
-                    const levelOfApproval = parseInt(levelOfApprovalSelect.value);
-                    const approvers = @json($approvers);
-                    selectApproverContainer.innerHTML = '';
-
-                    if (levelOfApproval) {
-                        @this.set('level_of_approval', levelOfApproval);
-                        for (let count = 1; count <= levelOfApproval; count++) {
-                            const approverOption = [];
-                            const selectOptionHTML = `
-                                <div class="col-md-6">
-                                    <div class="mb-2">
-                                        <div class="mb-2 d-flex gap-2">
-                                            <label class="form-label form__field__label">Level ${count} approver/s</label>
-                                            <small class="text-muted" style="font-size: 13px; margin-top: 2px;">(In order)</small>
-                                        </div>
-                                        <div>
-                                            <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
-                                        </div>
-                                        @error('level${count}Approvers')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>`;
-
-                            selectApproverContainer.insertAdjacentHTML('beforeend', selectOptionHTML);
-                            const levelApproverSelect = document.querySelector(`#level${count}Approver`);
-
-                            if (approvers.length > 0) {
-                                approvers.forEach(function(approver) {
-                                    const middleName = `${approver.profile.middle_name ?? ''}`;
-                                    const firstLetter = middleName.length > 0 ?
-                                        middleName[0] + '.' : '';
-
-                                    approverOption.push({
-                                        value: approver.id,
-                                        label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
-                                    });
-                                });
-                            }
-
-                            VirtualSelect.init({
-                                ele: levelApproverSelect,
-                                options: approverOption,
-                                showValueAsTags: true,
-                                markSearchResults: true,
-                                multiple: true,
-                                required: true
-                            });
-
-                            // Select option by level (Level 1-5)
-                            let levelApprover = document.querySelector(`#level${count}Approver`);
-                            levelApprover.addEventListener('change', () => {
-                                @this.set(`level${count}Approvers`, levelApprover.value);
-                            });
-                        }
-                    }
-                });
-            }
-        }
 
         serviceDepartmentSelect.addEventListener('change', () => {
             const serviceDepartmentId = parseInt(serviceDepartmentSelect.value);

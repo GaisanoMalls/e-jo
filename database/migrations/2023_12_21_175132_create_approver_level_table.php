@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\HelpTopic;
 use App\Models\Level;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -15,13 +14,11 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('level_approver', function (Blueprint $table) {
+        Schema::create('approver_level', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Level::class, 'level_id')->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'user_id')->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained()->cascadeOnDelete();
-            $table->integer('approval_order');
-            $table->boolean('is_done')->default(false);
+            $table->foreignIdFor(Level::class, 'level_id')->constrained()->cascadeOnDelete();
+            $table->boolean('is_current')->default(false);
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('level_approver');
+        Schema::dropIfExists('approver_levels');
     }
 };

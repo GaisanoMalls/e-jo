@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
-use App\Models\LevelApprover;
 
 class HelpTopicsController extends Controller
 {
@@ -15,7 +14,6 @@ class HelpTopicsController extends Controller
     public function index()
     {
         $serviceDepartments = $this->queryServiceDepartments();
-        $levelOfApprovals = $this->queryLevelOfApprovals();
         $approvers = $this->queryApprovers();
         $slas = $this->queryServiceLevelAgreements();
 
@@ -24,7 +22,6 @@ class HelpTopicsController extends Controller
         return view('layouts.staff.system_admin.manage.help_topics.help_topics_index',
             compact([
                 'serviceDepartments',
-                'levelOfApprovals',
                 'approvers',
                 'slas',
                 'helpTopics',
@@ -35,17 +32,12 @@ class HelpTopicsController extends Controller
     public function editDetails(HelpTopic $helpTopic)
     {
         $approvers = $this->queryApprovers();
-        $levelOfApprovals = $this->queryLevelOfApprovals();
         $serviceDepartments = $this->queryServiceDepartments();
         $serviceLevelAgreements = $this->queryServiceLevelAgreements();
 
-        $levelApprovers = LevelApprover::where('help_topic_id', $helpTopic->id)->get();
-
-        return view(
-            'layouts.staff.system_admin.manage.help_topics.edit_help_topic',
+        return view('layouts.staff.system_admin.manage.help_topics.edit_help_topic',
             compact([
                 'helpTopic',
-                'levelOfApprovals',
                 'serviceDepartments',
                 'serviceLevelAgreements',
                 'levelApprovers',

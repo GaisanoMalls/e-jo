@@ -6,7 +6,6 @@ use App\Mail\Requester\TicketCreatedMail;
 use App\Mail\Staff\ApprovedTicketMail;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
-use App\Models\LevelApprover;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
@@ -63,27 +62,6 @@ class ApproveTicket extends Component
                 foreach ($agents as $agent) {
                     Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
                     Notification::send($agent, new ApprovedTicketForAgentNotification($this->ticket));
-                }
-
-                // Notify approvers through email and app based notification.
-                $levelApprovers = LevelApprover::where('help_topic_id', $this->ticket->helpTopic->id)->get();
-                $approvers = User::approvers();
-
-                if (!is_null($this->ticket->helpTopic)) {
-                    foreach ($this->ticket->helpTopic->levels as $level) {
-                        foreach ($levelApprovers as $levelApprover) {
-                            foreach ($approvers as $approver) {
-                                if ($approver->id == $levelApprover->user_id) {
-                                    if ($levelApprover->level_id == $level->id) {
-                                        if ($approver->buDepartments->pluck('id')->first() == $this->ticket->user->buDepartments->pluck('id')->first()) {
-                                            Mail::to($approver)->send(new TicketCreatedMail($this->ticket, $approver));
-                                            Notification::send($approver, new TicketCreatedNotification($this->ticket));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
 
                 // Notify the ticket sender.

@@ -28,7 +28,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that are mass assignable.
-     *
      * @var array<int, string>
      */
     protected $fillable = [
@@ -40,7 +39,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be hidden for serialization.
-     *
      * @var array<int, string>
      */
     protected $hidden = [
@@ -50,7 +48,6 @@ class User extends Authenticatable
 
     /**
      * The attributes that should be cast.
-     *
      * @var array<string, string>
      */
     protected $casts = [
@@ -60,6 +57,11 @@ class User extends Authenticatable
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
+    }
+
+    public function level()
+    {
+        return $this->hasOne(Level::class);
     }
 
     public function tickets(): HasMany
@@ -82,14 +84,10 @@ class User extends Authenticatable
         return $this->hasMany(Bookmark::class);
     }
 
-    public function levelApprovers()
+    // For Level 1 & 2 Approver
+    public function ticketApprovals()
     {
-        return $this->hasMany(LevelApprover::class);
-    }
-
-    public function levels(): BelongsToMany
-    {
-        return $this->belongsToMany(Level::class, 'level_approver', 'user_id', 'level_id')->withTimestamps();
+        return $this->hasMany(TicketApproval::class, 'level_1_approver->approver_id', 'id');
     }
 
     public function serviceDepartments(): BelongsToMany
@@ -111,8 +109,7 @@ class User extends Authenticatable
     // For Agents Only
     public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class, 'user_team')
-            ->withPivot(['user_id', 'team_id']);
+        return $this->belongsToMany(Team::class, 'user_team')->withPivot(['user_id', 'team_id']);
     }
 
     public function getServiceDepartments(): string
@@ -240,22 +237,17 @@ class User extends Authenticatable
     // Filter user types by roles
     public static function systemAdmins()
     {
-        return self::with(['profile', 'branch'])->role(Role::SYSTEM_ADMIN)
-            ->orderByDesc('created_at')
-            ->get();
+        return self::with(['profile', 'branch'])->role(Role::SYSTEM_ADMIN)->orderByDesc('created_at')->get();
     }
 
     public static function serviceDepartmentAdmins()
     {
-        return self::with(['profile'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
-            ->orderByDesc('created_at')
-            ->get();
+        return self::with(['profile'])->role(Role::SERVICE_DEPARTMENT_ADMIN)->orderByDesc('created_at')->get();
     }
 
     public static function approvers()
     {
-        return self::with(['profile'])->role(Role::APPROVER)->orderByDesc('created_at')
-            ->get();
+        return self::with(['profile'])->role(Role::APPROVER)->orderByDesc('created_at')->get();
     }
 
     public static function agents()
@@ -305,6 +297,6 @@ class User extends Authenticatable
             return implode(', ', $userPermissions);
         }
 
-        return;
+        return '----';
     }
 }

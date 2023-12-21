@@ -2,7 +2,6 @@
 
 namespace App\Http\Traits;
 
-use App\Models\ApprovalLevel;
 use App\Models\Branch;
 use App\Models\Department;
 use App\Models\HelpTopic;
@@ -22,11 +21,6 @@ trait BasicModelQueries
     public function queryServiceDepartments()
     {
         return ServiceDepartment::orderByDesc('created_at')->get();
-    }
-
-    public function queryLevelOfApprovals()
-    {
-        return ApprovalLevel::orderBy('description', 'asc')->get();
     }
 
     public function queryHelpTopics()

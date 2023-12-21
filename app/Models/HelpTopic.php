@@ -47,19 +47,9 @@ class HelpTopic extends Model
         return $this->hasMany(Ticket::class);
     }
 
-    public function levelApprovers()
-    {
-        return $this->hasMany(LevelApprover::class);
-    }
-
     public function specialProject(): HasOne
     {
         return $this->hasOne(SpecialProject::class);
-    }
-
-    public function levels(): BelongsToMany
-    {
-        return $this->belongsToMany(Level::class, 'help_topic_level', 'help_topic_id', 'level_id');
     }
 
     public function dateCreated(): string

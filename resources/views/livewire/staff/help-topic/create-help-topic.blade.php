@@ -103,33 +103,6 @@
                                                         placeholder="Enter amount">
                                                 </div>
                                             </div>
-
-                                        </div>
-                                        <small class="fw-bold">Approvals</small>
-                                        <div class="col-md-4 mt-2">
-                                            <div class="mb-2">
-                                                <label class="form-label form__field__label">
-                                                    Level of approval
-                                                </label>
-                                                <div>
-                                                    <div id="select-help-topic-level-of-approval" wire:ignore></div>
-                                                </div>
-                                                @error('level_of_approval')
-                                                    <span class="error__message">
-                                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                                        {{ $message }}
-                                                    </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12 mt-3">
-                                                <div class="mb-2">
-                                                    <div>
-                                                        <div wire:ignore class="row" id="selectApproverContainer">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -139,8 +112,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <button type="submit"
                                     class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send">
-                                    <span wire:loading wire:target="saveHelpTopic" class="spinner-border spinner-border-sm"
-                                        role="status" aria-hidden="true">
+                                    <span wire:loading wire:target="saveHelpTopic"
+                                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                                     </span>
                                     Add new
                                 </button>
@@ -150,271 +123,184 @@
                                 </button>
                             </div>
                         </div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    @push('livewire-select')
-        <script>
-            const amountField = document.querySelector('#amount');
-            const teamSelectContainer = document.querySelector('#teamSelectContainer');
-            const specialProjectCheck = document.querySelector('#specialProjectCheck');
-            const specialProjectContainer = document.querySelector('#specialProjectContainer');
-            const levelOfApprovalSelect = document.querySelector('#select-help-topic-level-of-approval');
-            const slaSelect = document.querySelector('#select-help-topic-sla');
-            const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
+@push('livewire-select')
+    <script>
+        const amountField = document.querySelector('#amount');
+        const teamSelectContainer = document.querySelector('#teamSelectContainer');
+        const specialProjectCheck = document.querySelector('#specialProjectCheck');
+        const specialProjectContainer = document.querySelector('#specialProjectContainer');
+        const slaSelect = document.querySelector('#select-help-topic-sla');
+        const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
 
-            const serviceLevelAgreementOption = [
-                @foreach ($serviceLevelAgreements as $sla)
-                    {
-                        label: "{{ $sla->time_unit }}",
-                        value: "{{ $sla->id }}"
-                    },
-                @endforeach
-            ];
+        const serviceLevelAgreementOption = [
+            @foreach ($serviceLevelAgreements as $sla)
+                {
+                    label: "{{ $sla->time_unit }}",
+                    value: "{{ $sla->id }}"
+                },
+            @endforeach
+        ];
 
-            VirtualSelect.init({
-                ele: slaSelect,
-                options: serviceLevelAgreementOption,
-                search: true,
-                markSearchResults: true,
-            });
+        VirtualSelect.init({
+            ele: slaSelect,
+            options: serviceLevelAgreementOption,
+            search: true,
+            markSearchResults: true,
+        });
 
-            slaSelect.addEventListener('change', () => {
-                const slaId = parseInt(slaSelect.value);
-                @this.set('sla', slaId);
-            });
+        slaSelect.addEventListener('change', () => {
+            const slaId = parseInt(slaSelect.value);
+            @this.set('sla', slaId);
+        });
 
-            const serviceDepartmentOption = [
-                @foreach ($serviceDepartments as $serviceDepartment)
-                    {
-                        label: "{{ $serviceDepartment->name }}",
-                        value: "{{ $serviceDepartment->id }}"
-                    },
-                @endforeach
-            ];
+        const serviceDepartmentOption = [
+            @foreach ($serviceDepartments as $serviceDepartment)
+                {
+                    label: "{{ $serviceDepartment->name }}",
+                    value: "{{ $serviceDepartment->id }}"
+                },
+            @endforeach
+        ];
 
-            VirtualSelect.init({
-                ele: serviceDepartmentSelect,
-                options: serviceDepartmentOption,
-                search: true,
-                markSearchResults: true,
-            });
+        VirtualSelect.init({
+            ele: serviceDepartmentSelect,
+            options: serviceDepartmentOption,
+            search: true,
+            markSearchResults: true,
+        });
 
-            const teamSelect = document.querySelector('#select-help-topic-team');
-            VirtualSelect.init({
-                ele: teamSelect,
-                search: true,
-                markSearchResults: true,
-            });
-            teamSelect.disable();
+        const teamSelect = document.querySelector('#select-help-topic-team');
+        VirtualSelect.init({
+            ele: teamSelect,
+            search: true,
+            markSearchResults: true,
+        });
+        teamSelect.disable();
 
-            serviceDepartmentSelect.addEventListener('change', () => {
-                const serviceDepartmentId = serviceDepartmentSelect.value;
+        serviceDepartmentSelect.addEventListener('change', () => {
+            const serviceDepartmentId = serviceDepartmentSelect.value;
 
-                if (serviceDepartmentId) {
-                    @this.set('service_department', serviceDepartmentId);
+            if (serviceDepartmentId) {
+                @this.set('service_department', serviceDepartmentId);
 
-                    if (!specialProjectCheck.checked) {
-                        teamSelect.enable();
-                    }
-
-                    window.addEventListener('get-teams-from-selected-service-department', (event) => {
-                        const teams = event.detail.teams;
-                        const teamOption = [];
-
-                        if (teams.length > 0) {
-                            teams.forEach(function(team) {
-                                VirtualSelect.init({
-                                    ele: teamSelect,
-                                });
-
-                                teamOption.push({
-                                    label: team.name,
-                                    value: team.id
-                                });
-                            });
-                            teamSelect.setOptions(teamOption);
-
-                            const countTeams = document.querySelector('#countTeams');
-                            countTeams.textContent = `(${event.detail.teams.length})`;
-
-                        } else {
-                            teamSelect.disable();
-                            teamSelect.setOptions([]);
-                        }
-                    });
-
-                } else {
-                    teamSelect.reset();
-                    teamSelect.disable();
-                    teamSelect.setOptions([]);
+                if (!specialProjectCheck.checked) {
+                    teamSelect.enable();
                 }
-            });
 
-            teamSelect.addEventListener('change', () => {
-                const teamId = parseInt(teamSelect.value);
-                if (teamId) @this.set('team', teamId);
-            });
+                window.addEventListener('get-teams-from-selected-service-department', (event) => {
+                    const teams = event.detail.teams;
+                    const teamOption = [];
 
-            serviceDepartmentSelect.addEventListener('reset', () => {
-                @this.set('teams', []); // Clear teams count when service department is resetted.
-                @this.set('name', 'Special Project');
-                const countTeams = document.querySelector('#countTeams');
-                countTeams.textContent = '';
-            });
+                    if (teams.length > 0) {
+                        teams.forEach(function(team) {
+                            VirtualSelect.init({
+                                ele: teamSelect,
+                            });
 
-            const levelOfApprovalOption = [
-                @foreach ($levelOfApprovals as $approval)
-                    {
-                        label: "{{ $approval->description }}",
-                        value: "{{ $approval->value }}"
-                    },
-                @endforeach
-            ];
-
-            VirtualSelect.init({
-                ele: levelOfApprovalSelect,
-                options: levelOfApprovalOption,
-                search: true,
-                required: true,
-                markSearchResults: true,
-            });
-
-            if (specialProjectCheck && specialProjectContainer) {
-                specialProjectContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
-
-                specialProjectCheck.addEventListener('change', () => {
-                    if (specialProjectCheck.checked) {
-                        amountField.required = true;
-
-                        // TO BE FIXED - IN PROGRESS
-                        serviceDepartmentSelect.addEventListener('change', () => {
-                            const serviceDepartments = @json($serviceDepartments);
-
-                            serviceDepartments.forEach((department) => {
-                                if (serviceDepartmentSelect.value == department.id) {
-                                    @this.set('name', `Special Project (${department.name})`);
-                                }
+                            teamOption.push({
+                                label: team.name,
+                                value: team.id
                             });
                         });
-                        // END
+                        teamSelect.setOptions(teamOption);
 
-                        window.addEventListener('show-special-project-container', (event) => {
-                            @this.set('team', null);
-                            teamSelect.disable();
-                            teamSelectContainer.style.display = 'none';
-                            specialProjectContainer.style.display = 'block';
-                            const approvers = event.detail.approvers;
-                            const selectApproverContainer = document.querySelector('#selectApproverContainer');
+                        const countTeams = document.querySelector('#countTeams');
+                        countTeams.textContent = `(${event.detail.teams.length})`;
 
-                            levelOfApprovalSelect.addEventListener('change', () => {
-                                const levelOfApproval = parseInt(levelOfApprovalSelect.value);
-                                selectApproverContainer.innerHTML = '';
-
-                                if (levelOfApproval) {
-                                    @this.set('level_of_approval', levelOfApproval);
-                                    for (let count = 1; count <= levelOfApproval; count++) {
-                                        const approverOption = [];
-
-                                        const selectOptionHTML = `
-                                            <div class="col-md-6">
-                                                <div class="mb-2">
-                                                    <div class="mb-2 d-flex gap-2">
-                                                        <label class="form-label form__field__label">Level ${count} approver/s</label>
-                                                        <small class="text-muted" style="font-size: 13px; margin-top: 2px;">(In order)</small>
-                                                    </div>
-                                                    <div>
-                                                        <div wire:ignore id="level${count}Approver" placeholder="Choose an approver"></div>
-                                                    </div>
-                                                    @error('level${count}Approver')
-                                                    <span class="error__message">
-                                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                                        {{ $message }}
-                                                    </span>
-                                                    @enderror
-                                                </div>
-                                            </div>`;
-
-                                        selectApproverContainer.insertAdjacentHTML('beforeend',
-                                            selectOptionHTML);
-                                        const levelApproverSelect = document.querySelector(
-                                            `#level${count}Approver`);
-
-                                        if (approvers.length > 0) {
-                                            approvers.forEach(function(approver) {
-                                                const middleName =
-                                                    `${approver.profile.middle_name ?? ''}`;
-                                                const firstLetter = middleName.length > 0 ?
-                                                    middleName[0] + '.' : '';
-
-                                                approverOption.push({
-                                                    value: approver.id,
-                                                    label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
-                                                });
-                                            });
-                                        }
-
-                                        VirtualSelect.init({
-                                            ele: levelApproverSelect,
-                                            options: approverOption,
-                                            showValueAsTags: true,
-                                            markSearchResults: true,
-                                            multiple: true,
-                                            required: true
-                                        });
-
-                                        // Select option by level (Level 1-5)
-                                        let levelApprover = document.querySelector(
-                                            `#level${count}Approver`);
-                                        levelApprover.addEventListener('change', () => {
-                                            @this.set(`level${count}Approvers`, levelApprover
-                                                .value);
-                                        });
-                                    }
-                                }
-                            });
-                        });
                     } else {
-                        @this.set('name', null);
-                        amountField.required = false;
-
-                        window.addEventListener('hide-special-project-container', () => {
-                            teamSelectContainer.style.display = 'block';
-                            levelOfApprovalSelect.reset();
-                            teamSelect.enable();
-                            specialProjectContainer.style.display = 'none';
-                        });
+                        teamSelect.disable();
+                        teamSelect.setOptions([]);
                     }
                 });
 
-                window.addEventListener('checkAndShowContainer', () => {
-                    specialProjectCheck.checked = true;
-                    specialProjectContainer.style.display = 'block';
-                });
-
-                window.addEventListener('checkAndHideContainer', () => {
-                    specialProjectCheck.checked = false;
-                    specialProjectContainer.style.display = 'none';
-                });
-            }
-        </script>
-    @endpush
-
-    @push('livewire-modal')
-        <script>
-            window.addEventListener('close-modal', () => {
-                serviceDepartmentSelect.reset();
-                slaSelect.reset();
-                levelOfApprovalSelect.reset();
+            } else {
                 teamSelect.reset();
                 teamSelect.disable();
                 teamSelect.setOptions([]);
+            }
+        });
 
-                @this.set('name', null);
+        teamSelect.addEventListener('change', () => {
+            const teamId = parseInt(teamSelect.value);
+            if (teamId) @this.set('team', teamId);
+        });
+
+        serviceDepartmentSelect.addEventListener('reset', () => {
+            @this.set('teams', []); // Clear teams count when service department is resetted.
+            @this.set('name', 'Special Project');
+            const countTeams = document.querySelector('#countTeams');
+            countTeams.textContent = '';
+        });
+
+        if (specialProjectCheck && specialProjectContainer) {
+            specialProjectContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
+
+            specialProjectCheck.addEventListener('change', () => {
+                if (specialProjectCheck.checked) {
+                    amountField.required = true;
+
+                    // TO BE FIXED - IN PROGRESS
+                    serviceDepartmentSelect.addEventListener('change', () => {
+                        const serviceDepartments = @json($serviceDepartments);
+
+                        serviceDepartments.forEach((department) => {
+                            if (serviceDepartmentSelect.value == department.id) {
+                                @this.set('name', `Special Project (${department.name})`);
+                            }
+                        });
+                    });
+                    // END
+
+                    window.addEventListener('show-special-project-container', (event) => {
+                        @this.set('team', null);
+                        teamSelect.disable();
+                        teamSelectContainer.style.display = 'none';
+                        specialProjectContainer.style.display = 'block';
+                        const approvers = event.detail.approvers;
+                        const selectApproverContainer = document.querySelector('#selectApproverContainer');
+                    });
+                } else {
+                    @this.set('name', null);
+                    amountField.required = false;
+
+                    window.addEventListener('hide-special-project-container', () => {
+                        teamSelectContainer.style.display = 'block';
+                        teamSelect.enable();
+                        specialProjectContainer.style.display = 'none';
+                    });
+                }
+            });
+
+            window.addEventListener('checkAndShowContainer', () => {
+                specialProjectCheck.checked = true;
+                specialProjectContainer.style.display = 'block';
+            });
+
+            window.addEventListener('checkAndHideContainer', () => {
+                specialProjectCheck.checked = false;
                 specialProjectContainer.style.display = 'none';
             });
-        </script>
-    @endpush
+        }
+    </script>
+@endpush
+
+@push('livewire-modal')
+    <script>
+        window.addEventListener('close-modal', () => {
+            serviceDepartmentSelect.reset();
+            slaSelect.reset();
+            teamSelect.reset();
+            teamSelect.disable();
+            teamSelect.setOptions([]);
+
+            @this.set('name', null);
+            specialProjectContainer.style.display = 'none';
+        });
+    </script>
+@endpush

@@ -6,10 +6,8 @@ use App\Http\Requests\SysAdmin\Manage\HelpTopic\StoreHelpTopicRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
-use App\Models\LevelApprover;
 use App\Models\SpecialProject;
 use App\Models\Team;
-use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -20,16 +18,10 @@ class CreateHelpTopic extends Component
     public $checked = false;
     public $COOApprovers = [];
     public $teams = [];
-    public $level1Approvers = [];
-    public $level2Approvers = [];
-    public $level3Approvers = [];
-    public $level4Approvers = [];
-    public $level5Approvers = [];
     public $name;
     public $sla;
     public $service_department;
     public $team;
-    public $level_of_approval;
     public $amount; // For Special project
     public $max_amount = 50000;
     public $COOApprover;
@@ -97,19 +89,6 @@ class CreateHelpTopic extends Component
                             'is_approved' => false,
                         ],
                     ]);
-
-                    for ($level = 1; $level <= $this->level_of_approval; $level++) {
-                        $helpTopic->levels()->attach($level);
-                        $levelApprovers = $this->{'level' . $level . 'Approvers'};
-                        foreach ($levelApprovers as $key => $approver) {
-                            LevelApprover::create([
-                                'level_id' => $level,
-                                'user_id' => $approver,
-                                'help_topic_id' => $helpTopic->id,
-                                'approval_order' => $key + 1
-                            ]);
-                        }
-                    }
                 }
             });
 
@@ -161,7 +140,6 @@ class CreateHelpTopic extends Component
         return view('livewire.staff.help-topic.create-help-topic', [
             'serviceLevelAgreements' => $this->queryServiceLevelAgreements(),
             'serviceDepartments' => $this->queryServiceDepartments(),
-            'levelOfApprovals' => $this->queryLevelOfApprovals(),
             'approvers' => $this->queryApprovers(),
         ]);
     }
