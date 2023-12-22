@@ -59,11 +59,6 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
-    public function level()
-    {
-        return $this->hasOne(Level::class);
-    }
-
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
@@ -104,6 +99,11 @@ class User extends Authenticatable
     public function buDepartments(): BelongsToMany
     {
         return $this->belongsToMany(Department::class, 'user_department', 'user_id', 'department_id');
+    }
+
+    public function levels()
+    {
+        return $this->belongsToMany(Level::class, 'approver_level')->withPivot(['user_id', 'level_id']);
     }
 
     // For Agents Only

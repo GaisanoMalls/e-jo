@@ -15,9 +15,10 @@ class LevelSeeder extends Seeder
      */
     public function run()
     {
-        for ($val = 1; $val <= 5; $val++) {
+        for ($val = 1; $val <= 2; $val++) {
             Level::firstOrCreate([
-                'value' => $val
+                'value' => $val,
+                'description' => "Level ${val}",
             ]);
         }
     }

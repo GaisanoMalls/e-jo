@@ -2323,6 +2323,12 @@ input[type="checkbox"] {
                 }
             }
         }
+
+        // Service Department Admin
+        .check__add__level1__approver,
+        .check__remove__level1__approver {
+            margin-right: 10px !important;
+        }
     }
 
     .modal__confirm__delete__user__account {

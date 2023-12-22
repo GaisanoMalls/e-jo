@@ -14,15 +14,20 @@ class Level extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['value'];
+    protected $fillable = ['value', 'description'];
 
-    public function approver()
+    public function approvers()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsToMany(User::class, 'approver_level');
     }
 
-    public function helpTopics(): BelongsToMany
+    public function helpTopics()
     {
-        return $this->belongsToMany(HelpTopic::class, 'help_topic_level');
+        return $this->belongsToMany(HelpTopic::class);
+    }
+
+    public function getLevelDescription()
+    {
+        return $this->pluck('description')->implode(', ');
     }
 }

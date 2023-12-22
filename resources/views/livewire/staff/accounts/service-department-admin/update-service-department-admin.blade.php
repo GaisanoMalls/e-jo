@@ -22,8 +22,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="first_name" class="form-label form__field__label">First
-                                            name</label>
+                                        <label for="first_name" class="form-label form__field__label">
+                                            First name
+                                        </label>
                                         <input type="text" wire:model="first_name" class="form-control form__field"
                                             id="first_name" placeholder="Enter first name (required)">
                                         @error('first_name')
@@ -36,8 +37,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="middle_name" class="form-label form__field__label">Middle
-                                            name</label>
+                                        <label for="middle_name" class="form-label form__field__label">
+                                            Middle name
+                                        </label>
                                         <input type="text" wire:model="middle_name" class="form-control form__field"
                                             id="middle_name" placeholder="Enter middle name (optional)">
                                         @error('middle_name')
@@ -157,6 +159,22 @@
                                                 {{ $message }}
                                             </span>
                                         @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="branch" class="form-label form__field__label">
+                                            Level of Approval
+                                        </label>
+                                        <div class="form-check mt-2 mb-4">
+                                            <input class="form-check-input" type="checkbox"
+                                                wire:model="checkAsLevel1Approver" id="removeAsLevel1Approver">
+                                            <label class="form-check-label check__remove__level1__approver"
+                                                for="removeAsLevel1Approver">
+                                                Add as <strong>Level 1 Approver</strong>
+                                                <small>(Optional)</small>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

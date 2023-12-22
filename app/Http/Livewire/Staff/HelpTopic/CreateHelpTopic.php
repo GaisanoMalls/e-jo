@@ -29,25 +29,7 @@ class CreateHelpTopic extends Component
 
     public function rules()
     {
-        $rules = (new StoreHelpTopicRequest())->rules();
-
-        if ($this->checked) {
-            if (is_null($this->level_of_approval)) {
-                $rules['level_of_approval'] = ['required'];
-            } else {
-                $rules['level_of_approval'] = ['nullable'];
-            }
-
-            // if (is_null($this->amount)) {
-            //     flash()->addError('Please enter an amount.');
-            //     $rules['amount'] = ['required'];
-            // } else {
-            //     $this->showAmountError = false;
-            //     $rules['amount'] = ['nullable'];
-            // }
-        }
-
-        return $rules;
+        return (new StoreHelpTopicRequest())->rules();
     }
 
     public function actionOnSubmit()

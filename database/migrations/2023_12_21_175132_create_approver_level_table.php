@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(User::class, 'user_id')->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Level::class, 'level_id')->constrained()->cascadeOnDelete();
-            $table->boolean('is_current')->default(false);
             $table->timestamps();
         });
     }

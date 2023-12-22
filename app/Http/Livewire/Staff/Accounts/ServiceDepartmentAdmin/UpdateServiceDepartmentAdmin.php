@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
-use App\Models\Department;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +14,7 @@ class UpdateServiceDepartmentAdmin extends Component
     use BasicModelQueries, Utils;
 
     public User $serviceDeptAdmin;
+    public $checkAsLevel1Approver = false;
     public $branches = [];
     public $BUDepartments = [];
     public $service_departments = [];
@@ -35,7 +35,9 @@ class UpdateServiceDepartmentAdmin extends Component
         $this->middle_name = $serviceDeptAdmin->profile->middle_name;
         $this->last_name = $serviceDeptAdmin->profile->last_name;
         $this->suffix = $serviceDeptAdmin->profile->suffix;
-        $this->email = $serviceDeptAdmin->email;
+        $this->checkAsLevel1Approver = $serviceDeptAdmin->levels->contains(
+            fn($level) => $level->pivot->user_id == $serviceDeptAdmin->id
+        );
     }
 
     public function rules()

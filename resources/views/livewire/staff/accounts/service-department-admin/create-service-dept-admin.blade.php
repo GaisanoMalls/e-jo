@@ -164,6 +164,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <hr>
+                                        <div class="mb-2">
+                                            <label for="department" class="form-label form__field__label">
+                                                Ticket Approval
+                                            </label>
+                                            <div class="form-check" style="white-space: nowrap;">
+                                                <input wire:model="checkedAsLevel1Approver"
+                                                    class="form-check-input check__add__level1__approver"
+                                                    type="checkbox" role="switch" id="addAsLevel1Approver"
+                                                    wire:loading.attr="disabled">
+                                                <label class="form-check-label" for="addAsLevel1Approver">
+                                                    Add as <strong>Level 1 Approver</strong>
+                                                    <small>(Optional)</small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-5 px-2 mt-3">
                                         <div
                                             class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">

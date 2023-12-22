@@ -5,7 +5,9 @@ namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 use App\Http\Requests\SysAdmin\Manage\Account\StoreServiceDeptAdminRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
+use App\Models\ApproverLevel;
 use App\Models\Department;
+use App\Models\Level;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
@@ -17,6 +19,7 @@ class CreateServiceDeptAdmin extends Component
 {
     use BasicModelQueries, Utils;
 
+    public $checkedAsLevel1Approver = false;
     public $branches = [];
     public $BUDepartments = [];
     public $service_departments = [];
@@ -48,7 +51,7 @@ class CreateServiceDeptAdmin extends Component
             DB::transaction(function () {
                 $serviceDeptAdmin = User::create([
                     'email' => $this->email,
-                    'password' => \Hash::make('departmentadmin'),
+                    'password' => \Hash::make('deptadmin'),
                 ]);
 
                 $serviceDeptAdmin->assignRole(Role::SERVICE_DEPARTMENT_ADMIN);
@@ -69,6 +72,14 @@ class CreateServiceDeptAdmin extends Component
                         $this->suffix,
                     ])),
                 ]);
+
+                if ($this->checkedAsLevel1Approver) {
+                    ApproverLevel::create([
+                        'user_id' => $serviceDeptAdmin->id,
+                        'level_id' => Level::where('value', 1)->pluck('value')->first(),
+                    ]);
+                }
+
                 $this->actionOnSubmit();
                 flash()->addSuccess('Account successfully created');
             });

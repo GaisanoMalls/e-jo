@@ -13,7 +13,6 @@ class ApproverLevel extends Model
     protected $fillable = [
         'user_id',
         'level_id',
-        'is_current',
     ];
 
     public function approver()
@@ -24,10 +23,5 @@ class ApproverLevel extends Model
     public function level()
     {
         return $this->belongsTo(Level::class, 'level_id');
-    }
-
-    public function isCurrent()
-    {
-        return $this->is_current === 1;
     }
 }
