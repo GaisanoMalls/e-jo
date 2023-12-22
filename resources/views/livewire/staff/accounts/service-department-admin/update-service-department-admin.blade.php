@@ -172,7 +172,7 @@
                                             <label class="form-check-label check__remove__level1__approver"
                                                 for="removeAsLevel1Approver">
                                                 Add as <strong>Level 1 Approver</strong>
-                                                <small>(Optional)</small>
+                                                {{-- <small>(Optional)</small> --}}
                                             </label>
                                         </div>
                                     </div>

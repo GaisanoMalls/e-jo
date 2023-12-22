@@ -35,6 +35,7 @@ class UpdateServiceDepartmentAdmin extends Component
         $this->middle_name = $serviceDeptAdmin->profile->middle_name;
         $this->last_name = $serviceDeptAdmin->profile->last_name;
         $this->suffix = $serviceDeptAdmin->profile->suffix;
+        $this->email = $serviceDeptAdmin->email;
         $this->checkAsLevel1Approver = $serviceDeptAdmin->levels->contains(
             fn($level) => $level->pivot->user_id == $serviceDeptAdmin->id
         );

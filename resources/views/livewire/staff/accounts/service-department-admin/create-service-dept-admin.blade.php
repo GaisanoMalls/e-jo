@@ -177,7 +177,7 @@
                                                     wire:loading.attr="disabled">
                                                 <label class="form-check-label" for="addAsLevel1Approver">
                                                     Add as <strong>Level 1 Approver</strong>
-                                                    <small>(Optional)</small>
+                                                    {{-- <small>(Optional)</small> --}}
                                                 </label>
                                             </div>
                                         </div>

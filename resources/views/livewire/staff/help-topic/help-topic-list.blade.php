@@ -38,7 +38,7 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
-                                    <span>{{ $helpTopic->levels->count() }}</span>
+                                    <span>{{ $helpTopic->levels?->count() }}</span>
                                 </div>
                             </td>
                             <td>
