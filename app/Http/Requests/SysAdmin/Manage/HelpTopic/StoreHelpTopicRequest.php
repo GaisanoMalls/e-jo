@@ -28,9 +28,8 @@ class StoreHelpTopicRequest extends FormRequest
             'sla' => ['required'],
             'service_department' => ['required'],
             'team' => ['nullable'],
-            'level_of_approval' => ['nullable'],
             'amount' => ['nullable'],
-            'teams' => ''
+            'teams' => '',
         ];
     }
 }

@@ -15,7 +15,7 @@ use Livewire\Component;
 class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
-    public $checked = false;
+    public $isSpecialProject = false;
     public $COOApprovers = [];
     public $teams = [];
     public $name;
@@ -38,6 +38,7 @@ class CreateHelpTopic extends Component
         $this->resetValidation();
         $this->emit('loadHelpTopics');
         $this->dispatchBrowserEvent('close-modal');
+        $this->hideSpecialProjectContainer();
     }
 
     public function saveHelpTopic()
@@ -54,7 +55,7 @@ class CreateHelpTopic extends Component
                     'slug' => \Str::slug($this->name),
                 ]);
 
-                if ($this->checked) {
+                if ($this->isSpecialProject) {
                     SpecialProject::create([
                         'help_topic_id' => $helpTopic->id,
                         'amount' => $this->amount,
@@ -92,9 +93,7 @@ class CreateHelpTopic extends Component
     public function showSpecialProjectContainer()
     {
         $this->name = 'Special Project';
-        $this->dispatchBrowserEvent('show-special-project-container', [
-            'approvers' => $this->queryApprovers(),
-        ]);
+        $this->dispatchBrowserEvent('show-special-project-container');
     }
 
     public function hideSpecialProjectContainer()
@@ -105,7 +104,7 @@ class CreateHelpTopic extends Component
 
     public function specialProject()
     {
-        ($this->checked)
+        ($this->isSpecialProject)
             ? $this->showSpecialProjectContainer()
             : $this->hideSpecialProjectContainer();
     }
@@ -122,7 +121,6 @@ class CreateHelpTopic extends Component
         return view('livewire.staff.help-topic.create-help-topic', [
             'serviceLevelAgreements' => $this->queryServiceLevelAgreements(),
             'serviceDepartments' => $this->queryServiceDepartments(),
-            'approvers' => $this->queryApprovers(),
         ]);
     }
 }

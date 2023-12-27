@@ -14,16 +14,14 @@ class UpdateHelpTopic extends Component
     use BasicModelQueries;
 
     public HelpTopic $helpTopic;
+    public $isSpecialProject = false;
     public $teams = [];
     public $name;
     public $sla;
     public $service_department;
     public $team;
-    public $level_of_approval;
     public $amount;
     public $max_amount = 50000;
-    public $fpmCOOApprover;
-    public $currentLevelOfApproval;
 
     public function mount(HelpTopic $helpTopic)
     {
@@ -32,10 +30,8 @@ class UpdateHelpTopic extends Component
         $this->service_department = $helpTopic->service_department_id;
         $this->team = $helpTopic->team_id;
         $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
-        $this->level_of_approval = $helpTopic->levels->pluck('id')->last();
-        $this->fpmCOOApprover = $this->helpTopic->specialProject->fmp_coo_approver['approver_id'] ?? null;
-        $this->currentLevelOfApproval = $helpTopic->levels->pluck('id')->last();
         $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
+        $this->isSpecialProject = $helpTopic->specialProject ? true : false;
     }
 
     public function rules()
@@ -45,21 +41,9 @@ class UpdateHelpTopic extends Component
             'sla' => 'required',
             'service_department' => 'required',
             'team' => 'nullable',
-            'level_of_approval' => 'nullable',
             'amount' => 'nullable',
             'teams' => '',
         ];
-
-        // if (!is_null($this->helpTopic->specialProject)) {
-        //     $rules['amount'] = 'required';
-        //     $rules['level_of_approval'] = 'required';
-
-        //     for ($count = 1; $count <= 5; $count++) {
-        //         if (empty($this->{"level{$count}Approvers"})) {
-        //             $rules["level{$count}Approvers"] = 'required';
-        //         }
-        //     }
-        // }
 
         return $rules;
     }

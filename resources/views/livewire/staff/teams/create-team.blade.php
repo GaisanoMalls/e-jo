@@ -57,7 +57,7 @@
                                 <span wire:loading wire:target="saveTeam" class="spinner-border spinner-border-sm"
                                     role="status" aria-hidden="true">
                                 </span>
-                                Add new
+                                Add New
                             </button>
                             <button type="button" class="btn m-0 btn__modal__footer btn__cancel" wire:click="cancel"
                                 data-bs-dismiss="modal">Cancel</button>

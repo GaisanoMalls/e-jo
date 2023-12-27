@@ -53,7 +53,7 @@
                                 <span wire:loading wire:target="saveSLA" class="spinner-border spinner-border-sm"
                                     role="status" aria-hidden="true">
                                 </span>
-                                Add new
+                                Add New
                             </button>
                             <button type="button" class="btn m-0 btn__modal__footer btn__cancel"
                                 data-bs-dismiss="modal" wire:click="clearFormFields">Cancel</button>

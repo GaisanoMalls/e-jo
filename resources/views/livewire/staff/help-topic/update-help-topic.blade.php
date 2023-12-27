@@ -182,7 +182,7 @@
             const serviceDepartmentId = parseInt(serviceDepartmentSelect.value);
             if (serviceDepartmentId) {
                 @this.set('service_department', serviceDepartmentId);
-                teamSelect.enable();
+                if (teamSelect) teamSelect.enable();
                 window.addEventListener('get-teams-from-selected-service-department', (event) => {
                     const teams = event.detail.teams;
                     const teamOption = [];
@@ -198,8 +198,10 @@
                                 value: team.id
                             });
                         });
-                        teamSelect.setOptions(teamOption);
-                        teamSelect.setValue(@json($team));
+                        if (teamSelect) {
+                            teamSelect.setOptions(teamOption);
+                            teamSelect.setValue(@json($team));
+                        }
                     } else {
                         teamSelect.setOptions([]);
                         teamSelect.disable();
@@ -211,6 +213,19 @@
                 teamSelect.setOptions([]);
             }
         });
+
+        const isSpecialProject = @json($isSpecialProject);
+        if (isSpecialProject) {
+            serviceDepartmentSelect.addEventListener('change', () => {
+                const serviceDepartments = @json($serviceDepartments);
+
+                serviceDepartments.forEach((department) => {
+                    if (serviceDepartmentSelect.value == department.id) {
+                        @this.set('name', `Special Project (${department.name})`);
+                    }
+                });
+            });
+        }
 
         slaSelect.addEventListener('reset', () => {
             @this.set('sla', null);
@@ -226,9 +241,11 @@
             @this.set('sla', slaId);
         });
 
-        teamSelect.addEventListener('change', () => {
-            const teamId = parseInt(teamSelect.value);
-            @this.set('team', teamId);
-        });
+        if (teamSelect) {
+            teamSelect.addEventListener('change', () => {
+                const teamId = parseInt(teamSelect.value);
+                @this.set('team', teamId);
+            });
+        }
     </script>
 @endpush

@@ -8,4 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class HelpTopicField extends Model
 {
     use HasFactory;
+
+
+    protected $table = 'help_topic_field';
+    protected $fillable = [
+        'help_topic_id',
+        'field_id',
+        'is_enabled',
+    ];
+
+    public function helpTopic()
+    {
+        return $this->belongsTo(HelpTopic::class);
+    }
+
+    public function field()
+    {
+        return $this->belongsTo(Field::class);
+    }
 }

@@ -1,15 +1,15 @@
 <div>
-    <div wire:ignore.self class="modal fade help__topic__modal" id="addNewHelpTopicModal" tabindex="-1"
-        aria-labelledby="addNewHelpTopicModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade help__topic__modal" id="customFieldModal" tabindex="-1"
+        aria-labelledby="customFieldModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0">
-                    <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">Add new help topic</h1>
+                    <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">Add custom field</h1>
                     <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
                         <i class="fa-sharp fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <form wire:submit.prevent="saveHelpTopic">
+                {{-- <form wire:submit.prevent="saveHelpTopic">
                     <div class="modal-body modal__body">
                         <div class="row mb-2">
                             <div class="col-md-12">
@@ -124,175 +124,8 @@
                             </div>
                         </div>
                     </div>
-                </form>
+                </form> --}}
             </div>
         </div>
     </div>
 </div>
-
-@push('livewire-select')
-    <script>
-        const amountField = document.querySelector('#amount');
-        const teamSelectContainer = document.querySelector('#teamSelectContainer');
-        const specialProjectCheck = document.querySelector('#specialProjectCheck');
-        const specialProjectContainer = document.querySelector('#specialProjectContainer');
-        const slaSelect = document.querySelector('#select-help-topic-sla');
-        const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
-
-        const serviceLevelAgreementOption = [
-            @foreach ($serviceLevelAgreements as $sla)
-                {
-                    label: "{{ $sla->time_unit }}",
-                    value: "{{ $sla->id }}"
-                },
-            @endforeach
-        ];
-
-        VirtualSelect.init({
-            ele: slaSelect,
-            options: serviceLevelAgreementOption,
-            search: true,
-            markSearchResults: true,
-        });
-
-        slaSelect.addEventListener('change', () => {
-            const slaId = parseInt(slaSelect.value);
-            @this.set('sla', slaId);
-        });
-
-        const serviceDepartmentOption = [
-            @foreach ($serviceDepartments as $serviceDepartment)
-                {
-                    label: "{{ $serviceDepartment->name }}",
-                    value: "{{ $serviceDepartment->id }}"
-                },
-            @endforeach
-        ];
-
-        VirtualSelect.init({
-            ele: serviceDepartmentSelect,
-            options: serviceDepartmentOption,
-            search: true,
-            markSearchResults: true,
-        });
-
-        const teamSelect = document.querySelector('#select-help-topic-team');
-        VirtualSelect.init({
-            ele: teamSelect,
-            search: true,
-            markSearchResults: true,
-        });
-        teamSelect.disable();
-
-        serviceDepartmentSelect.addEventListener('change', () => {
-            const serviceDepartmentId = serviceDepartmentSelect.value;
-
-            if (serviceDepartmentId) {
-                @this.set('service_department', serviceDepartmentId);
-
-                if (!specialProjectCheck.checked) {
-                    teamSelect.enable();
-                }
-
-                window.addEventListener('get-teams-from-selected-service-department', (event) => {
-                    const teams = event.detail.teams;
-                    const teamOption = [];
-
-                    if (teams.length > 0) {
-                        teams.forEach(function(team) {
-                            VirtualSelect.init({
-                                ele: teamSelect,
-                            });
-
-                            teamOption.push({
-                                label: team.name,
-                                value: team.id
-                            });
-                        });
-                        teamSelect.setOptions(teamOption);
-
-                        const countTeams = document.querySelector('#countTeams');
-                        countTeams.textContent = `(${event.detail.teams.length})`;
-
-                    } else {
-                        teamSelect.disable();
-                        teamSelect.setOptions([]);
-                    }
-                });
-
-            } else {
-                teamSelect.reset();
-                teamSelect.disable();
-                teamSelect.setOptions([]);
-            }
-        });
-
-        teamSelect.addEventListener('change', () => {
-            const teamId = parseInt(teamSelect.value);
-            if (teamId) @this.set('team', teamId);
-        });
-
-        serviceDepartmentSelect.addEventListener('reset', () => {
-            @this.set('teams', []); // Clear teams count when service department is resetted.
-            @this.set('name', null);
-            const countTeams = document.querySelector('#countTeams');
-            countTeams.textContent = '';
-        });
-
-        if (specialProjectCheck && specialProjectContainer) {
-            specialProjectContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
-            specialProjectCheck.addEventListener('change', () => {
-                helpTopicNameContainer = document.querySelector('#helpTopicNameContainer');
-                if (specialProjectCheck.checked) {
-                    serviceDepartmentSelect.reset();
-                }
-
-                window.addEventListener('show-special-project-container', (event) => {
-                    helpTopicNameContainer.style.display = 'none';
-                    amountField.required = true;
-                    @this.set('team', null);
-                    teamSelect.disable();
-                    teamSelectContainer.style.display = 'none';
-                    specialProjectContainer.style.display = 'block';
-
-                    serviceDepartmentSelect.addEventListener('change', () => {
-                        const serviceDepartments = @json($serviceDepartments);
-
-                        serviceDepartments.forEach((department) => {
-                            if (serviceDepartmentSelect.value == department.id) {
-                                if (specialProjectCheck.checked) {
-                                    @this.set('name',
-                                        `Special Project (${department.name})`);
-                                }
-                            }
-                        });
-                    });
-                });
-
-                window.addEventListener('hide-special-project-container', () => {
-                    helpTopicNameContainer.style.display = 'block';
-                    amountField.required = false;
-                    teamSelect.enable();
-                    teamSelectContainer.style.display = 'block';
-                    specialProjectContainer.style.display = 'none';
-                    serviceDepartmentSelect.reset();
-                });
-            });
-        }
-    </script>
-@endpush
-
-@push('livewire-modal')
-    <script>
-        window.addEventListener('close-modal', () => {
-            serviceDepartmentSelect.reset();
-            slaSelect.reset();
-            teamSelect.reset();
-            teamSelect.disable();
-            teamSelect.setOptions([]);
-
-            @this.set('name', null);
-            specialProjectContainer.style.display = 'none';
-        });
-    </script>
-@endpush

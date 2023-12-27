@@ -19,7 +19,8 @@ class HelpTopicsController extends Controller
 
         $helpTopics = HelpTopic::with(['serviceDepartment', 'department', 'sla'])->orderByDesc('created_at')->get();
 
-        return view('layouts.staff.system_admin.manage.help_topics.help_topics_index',
+        return view(
+            'layouts.staff.system_admin.manage.help_topics.help_topics_index',
             compact([
                 'serviceDepartments',
                 'approvers',
@@ -35,12 +36,12 @@ class HelpTopicsController extends Controller
         $serviceDepartments = $this->queryServiceDepartments();
         $serviceLevelAgreements = $this->queryServiceLevelAgreements();
 
-        return view('layouts.staff.system_admin.manage.help_topics.edit_help_topic',
+        return view(
+            'layouts.staff.system_admin.manage.help_topics.edit_help_topic',
             compact([
                 'helpTopic',
                 'serviceDepartments',
                 'serviceLevelAgreements',
-                'levelApprovers',
                 'approvers',
             ])
         );

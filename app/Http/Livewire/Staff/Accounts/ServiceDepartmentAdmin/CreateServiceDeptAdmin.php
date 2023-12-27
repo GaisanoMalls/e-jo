@@ -19,7 +19,6 @@ class CreateServiceDeptAdmin extends Component
 {
     use BasicModelQueries, Utils;
 
-    public $checkedAsLevel1Approver = false;
     public $branches = [];
     public $BUDepartments = [];
     public $service_departments = [];
@@ -73,12 +72,10 @@ class CreateServiceDeptAdmin extends Component
                     ])),
                 ]);
 
-                if ($this->checkedAsLevel1Approver) {
-                    ApproverLevel::create([
-                        'user_id' => $serviceDeptAdmin->id,
-                        'level_id' => Level::where('value', 1)->pluck('value')->first(),
-                    ]);
-                }
+                ApproverLevel::create([
+                    'user_id' => $serviceDeptAdmin->id,
+                    'level_id' => Level::where('value', 1)->pluck('value')->first(),
+                ]);
 
                 $this->actionOnSubmit();
                 flash()->addSuccess('Account successfully created');

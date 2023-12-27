@@ -24,7 +24,7 @@
                                 class="btn d-flex align-items-center justify-content-center gap-2 button__header"
                                 data-bs-toggle="modal" data-bs-target="#addNewTeamModal">
                                 <i class="fa-solid fa-plus"></i>
-                                <span class="button__name">Add new</span>
+                                <span class="button__name">Add New</span>
                             </button>
                         </div>
                     </div>

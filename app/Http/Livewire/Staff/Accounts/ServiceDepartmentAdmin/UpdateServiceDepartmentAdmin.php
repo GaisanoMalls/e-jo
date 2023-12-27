@@ -14,7 +14,6 @@ class UpdateServiceDepartmentAdmin extends Component
     use BasicModelQueries, Utils;
 
     public User $serviceDeptAdmin;
-    public $checkAsLevel1Approver = false;
     public $branches = [];
     public $BUDepartments = [];
     public $service_departments = [];
@@ -36,9 +35,6 @@ class UpdateServiceDepartmentAdmin extends Component
         $this->last_name = $serviceDeptAdmin->profile->last_name;
         $this->suffix = $serviceDeptAdmin->profile->suffix;
         $this->email = $serviceDeptAdmin->email;
-        $this->checkAsLevel1Approver = $serviceDeptAdmin->levels->contains(
-            fn($level) => $level->pivot->user_id == $serviceDeptAdmin->id
-        );
     }
 
     public function rules()
