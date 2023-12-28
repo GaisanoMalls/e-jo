@@ -1,7 +1,7 @@
 <div wire:init="loadClarifications">
     @if (!is_null($clarifications))
         <div wire:poll.visible.7s>
-            @if (!$ticket->clarifications->isEmpty())
+            @if ($ticket->clarifications->isNotEmpty())
                 @foreach ($ticket->clarifications as $clarification)
                     <div class="card border-0 p-0 card__ticket__details"
                         style="width: fit-content; max-width: 70%;

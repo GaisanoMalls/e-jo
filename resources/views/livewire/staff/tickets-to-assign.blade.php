@@ -1,7 +1,7 @@
 <div wire:poll.visible.7s>
     <div class="tickets__table__card">
         <div class="table-responsive custom__table">
-            @if (!$ticketsToAssign->isEmpty())
+            @if ($ticketsToAssign->isNotEmpty())
                 <table class="table table-striped mb-0">
                     <thead>
                         <tr>

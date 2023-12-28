@@ -118,10 +118,10 @@
                                         @foreach ($priorityLevels as $priority)
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio"
-                                                    wire:model="priorityLevel" id="rbnt{{ $priority->name }}"
+                                                    wire:model="priorityLevel" id="rbtn{{ $priority->name }}"
                                                     value="{{ $priority->id }}">
                                                 <label class="form-check-label radio__button__label"
-                                                    for="rbnt{{ $priority->name }}">{{ $priority->name }}</label>
+                                                    for="rbtn{{ $priority->name }}">{{ $priority->name }}</label>
                                             </div>
                                         @endforeach
                                     </div>

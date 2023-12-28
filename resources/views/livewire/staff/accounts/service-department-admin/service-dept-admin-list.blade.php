@@ -1,5 +1,5 @@
 <div>
-    @if (!$serviceDepartmentAdmins->isEmpty())
+    @if ($serviceDepartmentAdmins->isNotEmpty())
         <div
             class="card account__type__card {{ Route::is('staff.manage.user_account.service_department_admins') ? 'card__rounded__and__no__border' : '' }}">
             <div class="table-responsive custom__table">

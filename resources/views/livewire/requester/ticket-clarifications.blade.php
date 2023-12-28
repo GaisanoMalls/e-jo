@@ -1,7 +1,7 @@
 <div wire:init="loadClarifications">
     @if (!is_null($clarifications))
         <div wire:poll.visible.7s>
-            @if (!$ticket->clarifications->isEmpty())
+            @if ($ticket->clarifications->isNotEmpty())
                 @foreach ($ticket->clarifications as $clarification)
                     @include('layouts.user.ticket.includes.modal.preview_clarification_ticket_files_modal')
                     <div class="card border-0 p-0 card__ticket__details"
@@ -44,7 +44,7 @@
                             <div class="ticket__reply__content">
                                 <div class="ticket__description reply__ticket__description">{!! $clarification->description !!}
                                 </div>
-                                @if (!$clarification->fileAttachments->isEmpty())
+                                @if ($clarification->fileAttachments->isNotEmpty())
                                     <div class="ticket__attachments d-inline-flex gap-1" data-bs-toggle="modal"
                                         data-bs-target="#replyTicketFilesModalForm{{ $clarification->id }}">
                                         <i class="fa-solid fa-file-image"></i>

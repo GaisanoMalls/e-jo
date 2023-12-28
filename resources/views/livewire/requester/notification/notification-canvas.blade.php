@@ -1,7 +1,7 @@
 <div wire:poll.7s>
     <div wire:ignore.self class="offcanvas offcanvas-end rounded-3 shadow border-0 notification__canvas"
         data-bs-backdrop="false" tabindex="-1" id="notificationCanvas">
-        @if (!auth()->user()->notifications->isEmpty())
+        @if (auth()->user()->notifications->isNotEmpty())
             <div class="offcanvas-header align-items-baseline p-4">
                 <div class="d-flex flex-column gap-1">
                     <div class="d-flex align-items-center gap-2">

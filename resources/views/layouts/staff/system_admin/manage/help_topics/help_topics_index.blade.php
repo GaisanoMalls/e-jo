@@ -15,7 +15,7 @@
     <div class="row gap-4">
         <div class="help__topics__section">
             @livewire('staff.help-topic.create-help-topic')
-            @livewire('staff.help-topic.custom-field')
+            @livewire('staff.help-topic.custom-field.custom-field-modal')
             <div class="col-12 content__container">
                 <div class="card card__rounded__and__no__border">
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-1 table__header">

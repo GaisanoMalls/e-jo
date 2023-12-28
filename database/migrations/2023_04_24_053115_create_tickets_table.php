@@ -36,6 +36,7 @@ class CreateTicketsTable extends Migration
             $table->longText('description');
             $table->longText('issue_summary')->nullable();
             $table->enum('approval_status', ['for_approval', 'approved', 'disapproved']);
+            $table->dateTime('svcdept_date_approved')->nullable();
             $table->timestamps();
         });
     }

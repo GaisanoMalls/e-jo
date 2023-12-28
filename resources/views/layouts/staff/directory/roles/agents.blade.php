@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        @if (!$agents->isEmpty())
+        @if ($agents->isNotEmpty())
             <div class="directory__type__card">
                 <div class="table-responsive custom__table">
                     <table class="table table-striped mb-0">

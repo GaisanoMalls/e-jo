@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="row mx-0">
-        @if (!$approvedTickets->isEmpty())
+        @if ($approvedTickets->isNotEmpty())
             <div class="card ticket__card" id="userTicketCard">
                 <div class="table-responsive">
                     <table class="table mb-0 custom__table">

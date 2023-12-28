@@ -1,7 +1,7 @@
 <div>
     <div class="roles__permissions__type__card">
         <div class="table-responsive custom__table">
-            @if (!$permissions->isEmpty())
+            @if ($permissions->isNotEmpty())
                 <table class="table table-striped mb-0">
                     <thead>
                         <tr>

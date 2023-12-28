@@ -8,7 +8,7 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                @if (!$ticketLogs->isEmpty() || ($isAll || $isMyLogsOnly))
+                @if ($ticketLogs->isNotEmpty() || ($isAll || $isMyLogsOnly))
                     <div class="btn-group">
                         <button type="button"
                             class="btn btn-sm d-flex align-items-center gap-2 px-2 py-1 rounded-2 dropdown-toggle my__logs"
@@ -39,7 +39,7 @@
                 @endif
             </div>
             <div class="d-flex flex-column">
-                @if (!$ticketLogs->isEmpty())
+                @if ($ticketLogs->isNotEmpty())
                     @foreach ($ticketLogs as $log)
                         <div wire:loading.class="text-muted"
                             class="d-flex justify-content-between py-3 log__list {{ $ticketLogs->count() > 1 ? 'border-bottom' : '' }}">

@@ -1,6 +1,6 @@
 <div>
     <div class="table-responsive custom__table">
-        @if (!$teams->isEmpty())
+        @if ($teams->isNotEmpty())
             <table class="table table-striped mb-0">
                 <thead>
                     <tr>

@@ -1,7 +1,7 @@
 <div wire:init="loadReplies">
     @if (!is_null($replies))
         <div wire:poll.visible.7s>
-            @if (!$ticket->replies->isEmpty())
+            @if ($ticket->replies->isNotEmpty())
                 @foreach ($ticket->replies as $reply)
                     <div class="card border-0 p-0 card__ticket__details"
                         style="width: fit-content; max-width: 70%;
@@ -43,7 +43,7 @@
                             <div class="ticket__reply__content">
                                 <div class="ticket__description reply__ticket__description">{!! $reply->description !!}
                                 </div>
-                                @if (!$reply->fileAttachments->isEmpty())
+                                @if ($reply->fileAttachments->isNotEmpty())
                                     <div class="ticket__attachments d-inline-flex gap-1" data-bs-toggle="modal"
                                         data-bs-target="#replyTicketFilesModalForm{{ $reply->id }}">
                                         <i class="fa-solid fa-file-image"></i>

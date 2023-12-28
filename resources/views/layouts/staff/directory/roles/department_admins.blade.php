@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        @if (!$departmentAdmins->isEmpty())
+        @if ($departmentAdmins->isNotEmpty())
             <div class="directory__type__card">
                 <div class="table-responsive custom__table">
                     <table class="table table-striped mb-0">

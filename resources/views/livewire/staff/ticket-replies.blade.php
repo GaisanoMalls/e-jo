@@ -1,7 +1,7 @@
 <div wire:init="loadReplies">
     @if (!is_null($replies))
         <div wire:poll.visible.7s>
-            @if (!$ticket->replies->isEmpty())
+            @if ($ticket->replies->isNotEmpty())
                 @foreach ($ticket->replies as $reply)
                     {{-- @include('layouts.staff.ticket.modal.preview_reply_ticket_files_modal') --}}
                     <div class="card border-0 p-0 card__ticket__details"
@@ -70,7 +70,7 @@
                                         {{ $reply->fileAttachments->count() > 1
                                             ? 'Reply file attachments'
                                             : 'Reply file
-                                                                    attachment' }}
+                                                                                                                                                                                                                                                                            attachment' }}
                                         ({{ $reply->fileAttachments->count() }})
                                     </h6>
                                 </div>

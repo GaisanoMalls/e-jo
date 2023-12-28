@@ -1,5 +1,5 @@
 <div>
-    @if (!$users->isEmpty())
+    @if ($users->isNotEmpty())
         <div
             class="card account__type__card {{ Route::is('staff.manage.user_account.users') ? 'card__rounded__and__no__border' : '' }}">
             <div class="table-responsive custom__table">

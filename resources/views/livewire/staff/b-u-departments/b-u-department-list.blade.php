@@ -1,7 +1,7 @@
 <div>
     <div class="table-responsive custom__table">
         <table class="table table-striped mb-0">
-            @if (!$buDepartments->isEmpty())
+            @if ($buDepartments->isNotEmpty())
                 <thead>
                     <tr>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">BU/Department</th>

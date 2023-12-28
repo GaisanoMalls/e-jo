@@ -14,10 +14,11 @@ return new class extends Migration {
     {
         Schema::create('fields', function (Blueprint $table) {
             $table->id();
-            $table->boolean('is_required')->default(true);
             $table->string('name');
             $table->string('label');
             $table->string('type');
+            $table->string('variable_name');
+            $table->boolean('is_required')->default(true);
             $table->timestamps();
         });
     }

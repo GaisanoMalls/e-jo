@@ -34,7 +34,7 @@
             <div class="col-12 content__container">
                 <div class="card card__rounded__and__no__border pt-4">
                     <div class="table-responsive custom__table">
-                        @if (!$statuses->isEmpty())
+                        @if ($statuses->isNotEmpty())
                             <table class="table table-striped mb-0">
                                 <thead>
                                     <tr>

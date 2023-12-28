@@ -1,5 +1,5 @@
 <div wire:poll.visible.7s class="row mx-0">
-    @if (!$disapprovedTickets->isEmpty())
+    @if ($disapprovedTickets->isNotEmpty())
         <div class="card ticket__card" id="userTicketCard">
             <div class="table-responsive">
                 <table class="table mb-0 custom__table">
