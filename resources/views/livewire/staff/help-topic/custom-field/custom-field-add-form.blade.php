@@ -119,7 +119,7 @@
                     value: "{{ $fieldRequired['value'] }}"
                 },
             @endforeach
-        ]
+        ];
 
         VirtualSelect.init({
             ele: selectRequired,

@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select/virtual-select.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select/custom-virtual-select.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/vanilla-dataTables.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roles/user.css') }}">
     <title>{{ $title ?? 'Dashboard' }}</title>
     @livewireStyles
@@ -40,59 +39,16 @@
 
     @livewireScripts
     @yield('action-js')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="{{ asset('js/select/virtual-select.min.js') }}"></script>
     <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
-    <script src="{{ asset('js/vanilla-dataTables.js') }}"></script>
     <script src="{{ asset('js/alpine.js') }}"></script>
     @stack('livewire-textarea')
     @stack('livewire-modal')
     @stack('livewire-select')
-    <script>
-        var table = document.getElementById('userTable');
-        var options = {
-            // how many rows per page
-            perPage: 10,
-            perPageSelect: [5, 10, 15, 20, 25],
-            fixedColumns: true,
-            fixedHeight: false,
-            // Pagination
-            nextPrev: true,
-            firstLast: false,
-            prevText: "&lsaquo;",
-            nextText: "&rsaquo;",
-            firstText: "&laquo;",
-            lastText: "&raquo;",
-            ellipsisText: "&hellip;",
-            ascText: "▴",
-            descText: "▾",
-            truncatePager: true,
-            pagerDelta: 3,
-            // enables sorting
-            sortable: true,
-            // enables live search
-            searchable: true,
-            header: true,
-            footer: false,
-            // Customise the display text
-            labels: {
-                placeholder: "Search...", // The search input placeholder
-                perPage: "{select}", // per-page dropdown label
-                noRows: "No entries found", // Message shown when there are no search results
-                info: "Showing {start} to {end} of {rows} entries" //
-            },
-            // Customise the layout
-            layout: {
-                top: "{select}{search}",
-                bottom: "{info}{pager}"
-            }
-
-        };
-        var dataTable = new DataTable(table, options);
-    </script>
 </body>
 
 </html>

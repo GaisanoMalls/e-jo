@@ -14,7 +14,6 @@ class HelpTopicField extends Model
     protected $fillable = [
         'help_topic_id',
         'field_id',
-        'is_enabled',
     ];
 
     public function helpTopic()

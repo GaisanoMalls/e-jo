@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained();
             $table->foreignIdFor(Field::class, 'field_id')->constrained();
-            $table->boolean('is_enabled')->default(false);
             $table->timestamps();
         });
     }

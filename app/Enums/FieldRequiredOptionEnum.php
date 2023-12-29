@@ -2,8 +2,8 @@
 
 namespace App\Enums;
 
-enum FieldRequiredOptionEnum: int
+enum FieldRequiredOptionEnum: string
 {
-    case No  = 0;
-    case Yes = 1;
+    case NO  = "No";
+    case YES = "Yes";
 }

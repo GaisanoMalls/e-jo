@@ -231,7 +231,7 @@ class User extends Authenticatable
      */
     public function isActive(): bool
     {
-        return $this->is_active === 1;
+        return $this->is_active;
     }
 
     // Filter user types by roles

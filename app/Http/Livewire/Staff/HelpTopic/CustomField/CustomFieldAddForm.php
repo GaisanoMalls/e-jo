@@ -60,7 +60,9 @@ class CustomFieldAddForm extends Component
                 'variable_name' => $this->variable_name,
                 'is_required' => $this->is_required,
             ]);
+
             $this->actionOnSubmit();
+
         } catch (Exception $e) {
             dump($e->getMessage());
             flash()->addError('Oops, something went wrong.');

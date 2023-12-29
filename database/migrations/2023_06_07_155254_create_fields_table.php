@@ -18,7 +18,8 @@ return new class extends Migration {
             $table->string('label');
             $table->string('type');
             $table->string('variable_name');
-            $table->boolean('is_required')->default(true);
+            $table->string('is_required');
+            $table->boolean('is_enabled')->default(false);
             $table->timestamps();
         });
     }

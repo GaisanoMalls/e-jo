@@ -11,20 +11,23 @@ class Field extends Model
     use HasFactory;
 
     protected $fillable = [
-        'is_required',
         'name',
         'label',
         'type',
         'variable_name',
+        'is_required',
+        'is_enabled',
     ];
+
+    protected $casts = ['is_required' => FieldRequiredOptionEnum::class];
 
     public function helpTopics()
     {
         return $this->belongsToMany(HelpTopic::class, 'help_topic_field');
     }
 
-    public function isRequired(): string
+    public function isEnabled()
     {
-        return $this->is_required ? 'Yes' : 'No';
+        return $this->is_enabled;
     }
 }
