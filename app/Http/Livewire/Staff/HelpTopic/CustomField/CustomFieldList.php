@@ -63,6 +63,7 @@ class CustomFieldList extends Component
             ]);
 
         $this->editingFieldId = null;
+        // Happy New Year!!
     }
 
     public function render()
