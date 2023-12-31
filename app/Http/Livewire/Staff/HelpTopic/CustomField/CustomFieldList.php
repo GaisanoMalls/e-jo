@@ -12,6 +12,8 @@ use Spatie\LaravelOptions\Options;
 class CustomFieldList extends Component
 {
     public $name;
+    public $type;
+    public $is_required;
     public $variable_name;
     public $editingFieldId;
 
@@ -47,6 +49,20 @@ class CustomFieldList extends Component
     public function updatedName($value)
     {
         $this->variable_name = preg_replace('/\s+/', '_', strtolower(trim($value)));
+    }
+
+    public function updateCustomeField()
+    {
+        Field::where('id', $this->editingFieldId)
+            ->update([
+                'name' => $this->name,
+                'label' => $this->name,
+                'type' => $this->type,
+                'variable_name' => $this->variable_name,
+                'is_required' => $this->is_required,
+            ]);
+
+        $this->editingFieldId = null;
     }
 
     public function render()
