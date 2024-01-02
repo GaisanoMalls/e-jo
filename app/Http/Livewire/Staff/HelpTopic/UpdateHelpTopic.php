@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\HelpTopic;
 
 use App\Http\Traits\BasicModelQueries;
 use App\Models\HelpTopic;
+use App\Models\SpecialProject;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +42,7 @@ class UpdateHelpTopic extends Component
             'sla' => 'required',
             'service_department' => 'required',
             'team' => 'nullable',
-            'amount' => 'nullable',
+            'amount' => $this->helpTopic->specialProject ? 'required' : 'nullable',
             'teams' => '',
         ];
 
@@ -61,6 +62,10 @@ class UpdateHelpTopic extends Component
                     'name' => $this->name,
                     'slug' => \Str::slug($this->name),
                 ]);
+
+                if ($this->helpTopic->specialProject) {
+                    SpecialProject::where('help_topic_id', $this->helpTopic->id)->update(['amount' => $this->amount]);
+                }
             });
 
             flash()->addSuccess('Help topic successfully updated.');

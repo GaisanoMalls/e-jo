@@ -146,9 +146,6 @@
                     options: editFieldRequiredOption,
                 });
 
-                selectEditFieldType.reset();
-                selectEditRequiredField.reset();
-
                 selectEditFieldType.setValue(event.detail.currentFieldType);
                 selectEditRequiredField.setValue(event.detail.currentRequiredField);
             }

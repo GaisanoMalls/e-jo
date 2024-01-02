@@ -15,6 +15,7 @@ use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
+use App\Models\TicketApproval;
 use App\Models\TicketFile;
 use App\Models\TicketTeam;
 use App\Models\User;
@@ -123,14 +124,31 @@ class CreateTicket extends Component
                 }
 
                 // Email the first approver (Service Department Admin)
-                $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
+                $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->with(['branches', 'buDepartments'])
                     ->whereHas('buDepartments', fn($query) => $query->whereIn('departments.id', $ticket->user->buDepartments->pluck('id')->toArray()))->get();
 
                 if (!empty($serviceDepartmentAdmins)) {
-                    foreach ($serviceDepartmentAdmins as $serviceDepartmentAdmin) {
+                    $currentRequester = Auth::user();
+
+                    $filteredServiceDepartmentAdmins = $serviceDepartmentAdmins->filter(function ($user) use ($currentRequester) {
+                        return $user->buDepartments->contains('id', $currentRequester->buDepartments->pluck('id')->first())
+                            && $user->branches->contains('id', $currentRequester->branches->pluck('id')->first());
+                    });
+
+                    $filteredServiceDepartmentAdmins->each(function ($user) use ($ticket) {
+                        TicketApproval::create([
+                            'ticket_id' => $ticket->id,
+                            'level_1_approver' => [
+                                'approver_id' => $user->id,
+                                'is_approved' => false,
+                            ],
+                        ]);
+                    });
+
+                    $serviceDepartmentAdmins->each(function ($serviceDepartmentAdmin) use ($ticket) {
                         Notification::send($serviceDepartmentAdmin, new TicketCreatedNotification($ticket));
                         // Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin));
-                    }
+                    });
                 }
 
                 ActivityLog::make($ticket->id, 'created a ticket');

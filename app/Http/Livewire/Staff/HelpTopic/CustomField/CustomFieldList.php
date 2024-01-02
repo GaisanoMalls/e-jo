@@ -42,7 +42,6 @@ class CustomFieldList extends Component
 
     public function toggleField(Field $field)
     {
-        sleep(1);
         $field->update(['is_enabled' => !$field->is_enabled]);
     }
 

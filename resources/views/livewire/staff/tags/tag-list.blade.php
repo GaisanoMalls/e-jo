@@ -20,8 +20,11 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
-                                    {{-- <span>{{ $tag->tickets->count() }}</span> --}}
-                                    <span>----</span>
+                                    @if ($tag->tickets->count() > 1)
+                                        <span>{{ $tag->tickets->count() }}</span>
+                                    @else
+                                        <span>----</span>
+                                    @endif
                                 </div>
                             </td>
                             <td>
