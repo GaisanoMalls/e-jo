@@ -48,7 +48,7 @@
                     <small class="ticket__details__info__label" style="font-weight: 500;">Team:</small>
                     <small class="ticket__details__info">
                         <i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>
-                        {{ $ticket->team->name ?? '----' }}
+                        {{ $ticket->getTeams() }}
                     </small>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">

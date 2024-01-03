@@ -104,7 +104,6 @@ class CreateTicket extends Component
                     'ticket_id' => $ticket->id,
                     'team_id' => $this->team != 'undefined' ? $this->team : null
                 ]);
-                // $ticket->teams()->attach($this->team != 'undefined' ? $this->team : null);
 
                 if ($this->fileAttachments) {
                     foreach ($this->fileAttachments as $uploadedFile) {
@@ -127,7 +126,7 @@ class CreateTicket extends Component
                 $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->with(['branches', 'buDepartments'])
                     ->whereHas('buDepartments', fn($query) => $query->whereIn('departments.id', $ticket->user->buDepartments->pluck('id')->toArray()))->get();
 
-                if (!empty($serviceDepartmentAdmins)) {
+                if ($serviceDepartmentAdmins->isNotEmpty()) {
                     $currentRequester = Auth::user();
 
                     $filteredServiceDepartmentAdmins = $serviceDepartmentAdmins->filter(function ($user) use ($currentRequester) {
@@ -135,15 +134,15 @@ class CreateTicket extends Component
                             && $user->branches->contains('id', $currentRequester->branches->pluck('id')->first());
                     });
 
-                    $filteredServiceDepartmentAdmins->each(function ($user) use ($ticket) {
+                    if ($ticket->helpTopic->specialProject) {
                         TicketApproval::create([
                             'ticket_id' => $ticket->id,
                             'level_1_approver' => [
-                                'approver_id' => $user->id,
+                                'approver_id' => $filteredServiceDepartmentAdmins->map(fn($user) => $user->id)->toArray(),
                                 'is_approved' => false,
                             ],
                         ]);
-                    });
+                    }
 
                     $serviceDepartmentAdmins->each(function ($serviceDepartmentAdmin) use ($ticket) {
                         Notification::send($serviceDepartmentAdmin, new TicketCreatedNotification($ticket));

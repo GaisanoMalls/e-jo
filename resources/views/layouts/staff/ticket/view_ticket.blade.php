@@ -52,7 +52,8 @@
                                         @else
                                             <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
                                                 style="background-color: #24695C;">
-                                                {{ $ticket->user->profile->getNameInitial() }}</div>
+                                                {{ $ticket->user->profile->getNameInitial() }}
+                                            </div>
                                         @endif
                                         <div class="d-flex flex-column">
                                             <small class="ticket__details__user__fullname">
@@ -112,6 +113,9 @@
                         <div class="col-md-4">
                             <div class="container__ticket__details__right">
                                 @livewire('staff.ticket.ticket-details', ['ticket' => $ticket])
+                                @if ($ticket->helpTopic->specialProject)
+                                    @livewire('staff.ticket.ticket-level-approval', ['ticket' => $ticket])
+                                @endif
                                 @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
                                 @livewire('staff.ticket.ticket-tag', ['ticket' => $ticket])
                                 @livewire('ticket-activity-logs', ['ticket' => $ticket])
@@ -120,18 +124,14 @@
                     </div>
                 </div>
             </div>
-
             @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
                 @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
             @endif
             @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])
-
         </div>
-
         @if (Route::is('staff.ticket.view_ticket'))
             @livewire('staff.ticket.reply-ticket', ['ticket' => $ticket])
         @endif
-
         @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
             @if (Route::is('staff.ticket.ticket_clarifications'))
                 @livewire('staff.ticket.send-clarification', ['ticket' => $ticket])
@@ -139,7 +139,6 @@
             @livewire('staff.ticket.approve-ticket', ['ticket' => $ticket])
             @livewire('staff.ticket.disapprove-ticket', ['ticket' => $ticket])
         @endif
-
         @livewire('staff.ticket.assign-tag', ['ticket' => $ticket])
         @livewire('staff.ticket.close-ticket', ['ticket' => $ticket])
         @include('layouts.staff.ticket.modal.preview_ticket_files_modal')

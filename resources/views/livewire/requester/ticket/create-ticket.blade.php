@@ -253,7 +253,6 @@
                     const helpTopicOption = [];
 
                     if (helpTopics.length > 0) {
-                        helpTopicSelect.open();
                         helpTopics.forEach(function(helpTopic) {
                             VirtualSelect.init({
                                 ele: helpTopicSelect
@@ -266,7 +265,6 @@
                         });
                         helpTopicSelect.setOptions(helpTopicOption);
                     } else {
-                        helpTopicSelect.close();
                         helpTopicSelect.setOptions([]);
                         helpTopicSelect.disable();
                     }

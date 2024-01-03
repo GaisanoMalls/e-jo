@@ -16,6 +16,7 @@ class TicketApproval extends Model
         'level_1_approver',
         'level_2_approver',
         'is_all_approved',
+        'approved_by',
     ];
 
     /**
@@ -31,15 +32,15 @@ class TicketApproval extends Model
         return $this->belongsTo(Ticket::class);
     }
 
-    public function level1Approver()
-    {
-        return $this->belongsTo(User::class, 'level_1_approver->approver_id');
-    }
+    // public function level1Approver()
+    // {
+    //     return $this->belongsTo(User::class, 'level_1_approver->approver_id');
+    // }
 
-    public function level2Approver()
-    {
-        return $this->belongsTo(User::class, 'level_2_approver->approver_id');
-    }
+    // public function level2Approver()
+    // {
+    //     return $this->belongsTo(User::class, 'level_2_approver->approver_id');
+    // }
 
     public function isAllApproved()
     {
