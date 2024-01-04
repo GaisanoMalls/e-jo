@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.visible.7s>
     <div class="card border-0 p-0 card__ticket__details">
         <div class="d-flex flex-column gap-3 ticket__details__card__body__right">
             <label class="ticket__actions__label">Level of Approval</label>
@@ -36,19 +36,26 @@
                                     @if ($level1Approver->id == auth()->user()->id)
                                         <span class="text-muted">(You)</span>
                                     @endif
+                                    @if ($currentTicketApprover == $level1Approver->id)
+                                        <i class="bi bi-check-lg text-muted"></i>
+                                    @endif
                                 </small>
                             </div>
                             @if ($level1Approver->id == auth()->user()->id)
                                 @if ($isTicketApprovalApproved)
-                                    <button wire:click="undoLevel1Approve" wire:loading.class="disabled" type="button"
-                                        class="btn border-0 fw-semibold d-flex align-items-center gap-2"
-                                        style="color: #D32839; font-size: 0.75rem;">
-                                        <div wire:loading wire:target="undoLevel1Approve"
-                                            class="spinner-border spinner-border-sm loading__spinner" role="status">
-                                            <span class="sr-only">Loading...</span>
-                                        </div>
-                                        Undo
-                                    </button>
+                                    @if ($currentTicketApprover == auth()->user()->id)
+                                        <button wire:click="undoLevel1Approve" wire:loading.class="disabled"
+                                            type="button"
+                                            class="btn border-0 fw-semibold d-flex align-items-center gap-2"
+                                            style="color: #D32839; font-size: 0.75rem;">
+                                            <div wire:loading wire:target="undoLevel1Approve"
+                                                class="spinner-border spinner-border-sm loading__spinner"
+                                                role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                            Undo
+                                        </button>
+                                    @endif
                                 @else
                                     <button wire:click="level1Approve" wire:loading.class="disabled"
                                         class="btn btn-sm d-flex align-items-center gap-2 btn__approve" type="button">

@@ -44,11 +44,18 @@ class TicketLevelApproval extends Component
         return $this->ticket->ticketApprovals->filter(fn($approval) => data_get($approval->level_1_approver, 'is_approved') === true)->isNotEmpty();
     }
 
+    public function currentTicketApprover()
+    {
+        return TicketApproval::whereHas('ticket', fn($query) => $query->where('tickets.id', $this->ticket->id))
+            ->pluck('approved_by')->first();
+    }
+
     public function render()
     {
         return view('livewire.staff.ticket.ticket-level-approval', [
             'level1Approvers' => $this->getLevel1Approver(),
             'isTicketApprovalApproved' => $this->isTicketApprovalApproved(),
+            'currentTicketApprover' => $this->currentTicketApprover(),
         ]);
     }
 }
