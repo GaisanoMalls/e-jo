@@ -8458,6 +8458,45 @@ a:hover {
 .ticket__section .card__ticket__details .ticket__dropdown__select:focus {
   border: 1px solid #1d5c63;
 }
+.ticket__section .card__ticket__details .level__approval__container .level__number__label {
+  font-weight: 500;
+}
+.ticket__section .card__ticket__details .level__approval__container .level__approver__container {
+  border-left: 0.08rem solid #d1d3d3;
+}
+.ticket__section .card__ticket__details .level__approval__container .level__approver__container .level__approval__approver__dot {
+  height: 8px;
+  width: 8px;
+  left: -0.264rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #ffffff;
+  border: 0.11rem solid #d1d3d3;
+}
+.ticket__section .card__ticket__details .level__approval__container .level__approver__container .level__approval__approver__picture {
+  height: 30px;
+  width: 30px;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  margin-right: 0.7rem;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+.ticket__section .card__ticket__details .level__approval__container .level__approver__container .level__approval__approver__name__initial {
+  height: 24px;
+  width: 24px;
+  font-size: 9px;
+  border-radius: 0.5rem;
+}
+.ticket__section .card__ticket__details .level__approval__container .level__approver__container .approver__name {
+  font-size: 0.813rem;
+}
+.ticket__section .card__ticket__details .level__approval__container .level__approver__container .btn__approve {
+  font-size: 0.75rem;
+  color: #ffffff;
+  border-radius: 0.563rem;
+  background-color: #d32839;
+}
 .ticket__section .container__ticket__details__right {
   top: 235px;
   position: sticky;

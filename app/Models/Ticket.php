@@ -117,6 +117,11 @@ class Ticket extends Model
         return $this->hasMany(ActivityLog::class)->orderByDesc('created_at');
     }
 
+    public function ticketApprovals(): HasMany
+    {
+        return $this->hasMany(TicketApproval::class);
+    }
+
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'ticket_tag');
