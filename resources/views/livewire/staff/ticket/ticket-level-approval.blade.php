@@ -29,7 +29,8 @@
                                     <div class="level__approval__approver__name__initial d-flex align-items-center p-2 me-2 justify-content-center
                                         text-white"
                                         style="background-color: #3B4053;">
-                                        {{ $level1Approver->profile->getNameInitial() }}</div>
+                                        {{ $level1Approver->profile->getNameInitial() }}
+                                    </div>
                                 @endif
                                 <small class="approver__name">
                                     {{ $level1Approver->profile->getFullName() }}

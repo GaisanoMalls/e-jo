@@ -17,8 +17,6 @@
                     <tbody>
                         @foreach ($fields as $index => $field)
                             <form wire:submit.prevent="updateCustomeField">
-
-
                                 <tr wire:key="field-{{ $index + 1 }}">
                                     <td>
                                         <div class="form-check">

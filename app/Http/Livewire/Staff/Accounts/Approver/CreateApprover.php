@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Accounts\Approver;
 use App\Http\Requests\SysAdmin\Manage\Account\StoreApproverRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
+use App\Models\Level2Approver;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
@@ -47,6 +48,7 @@ class CreateApprover extends Component
                     'email' => $this->email,
                     'password' => \Hash::make('approver'),
                 ]);
+
                 $approver->assignRole(Role::APPROVER);
                 $approver->buDepartments()->attach(array_map('intval', $this->bu_departments));
                 $approver->branches()->attach(array_map('intval', $this->branches));
@@ -64,6 +66,9 @@ class CreateApprover extends Component
                         $this->suffix,
                     ])),
                 ]);
+
+                Level2Approver::create(['user_id' => $approver->id]);
+
                 $this->actionOnSubmit();
                 flash()->addSuccess('Account successfully created');
             });

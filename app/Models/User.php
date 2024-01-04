@@ -79,6 +79,11 @@ class User extends Authenticatable
         return $this->hasMany(Bookmark::class);
     }
 
+    public function level2Approvers()
+    {
+        return $this->hasMany(Level2Approver::class, 'user_id');
+    }
+
     public function serviceDepartments(): BelongsToMany
     {
         return $this->belongsToMany(ServiceDepartment::class, 'user_service_department', 'user_id', 'service_department_id');
