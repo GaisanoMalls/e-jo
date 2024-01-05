@@ -53,19 +53,16 @@ class ApproverList extends Component
 
     private function getInitialQuery()
     {
-        return $this->approvers = User::role(Role::APPROVER)
-            ->orderByDesc('created_at')->get();
+        return $this->approvers = User::role(Role::APPROVER)->orderByDesc('created_at')->get();
     }
 
     public function render()
     {
         $this->approvers = (Route::is('staff.manage.user_account.index'))
-            ? User::with(['profile'])->role(Role::APPROVER)
-                ->take(5)->orderByDesc('created_at')->get()
+            ? User::with(['profile'])->role(Role::APPROVER)->take(5)->orderByDesc('created_at')->get()
             : (
                 (Route::is('staff.manage.user_account.approvers'))
-                ? User::with(['profile'])->role(Role::APPROVER)
-                    ->orderByDesc('created_at')->get()
+                ? User::with(['profile'])->role(Role::APPROVER)->orderByDesc('created_at')->get()
                 : $this->getInitialQuery()
             );
 

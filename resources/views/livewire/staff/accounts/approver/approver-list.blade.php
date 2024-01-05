@@ -248,6 +248,7 @@
     <script>
         window.addEventListener('close-modal', () => {
             $('#assignApproverPermissionModal').modal('hide');
+            $('#confirmDeleteApproverModal').modal('hide');
         });
     </script>
 @endpush
