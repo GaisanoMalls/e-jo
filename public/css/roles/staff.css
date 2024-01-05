@@ -8459,7 +8459,9 @@ a:hover {
   border: 1px solid #1d5c63;
 }
 .ticket__section .card__ticket__details .level__approval__container .level__number__label {
-  font-weight: 500;
+  color: #7b6c6c;
+  font-size: 0.813rem;
+  font-weight: 600;
 }
 .ticket__section .card__ticket__details .level__approval__container .level__approver__container {
   border-left: 0.08rem solid #d1d3d3;

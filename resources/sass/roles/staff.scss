@@ -1508,7 +1508,9 @@ a {
 
         .level__approval__container {
             .level__number__label {
-                font-weight: $fw-500;
+                color: #7b6c6c;
+                font-size: $fs-13;
+                font-weight: $fw-600;
             }
 
             .level__approver__container {

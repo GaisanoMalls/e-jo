@@ -32,6 +32,7 @@ class ApproveTicket extends Component
         $this->emit('loadTicketLogs');
         $this->emit('loadTicketDetails');
         $this->emit('loadTicketActions');
+        $this->emit('loadLevelOfApproval');
         $this->emit('loadBackButtonHeader');
         $this->emit('loadReplyButtonHeader');
         $this->emit('loadDisapprovalReason');

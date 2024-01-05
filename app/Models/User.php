@@ -97,7 +97,8 @@ class User extends Authenticatable
 
     public function buDepartments(): BelongsToMany
     {
-        return $this->belongsToMany(Department::class, 'user_department', 'user_id', 'department_id');
+        return $this->belongsToMany(Department::class, 'user_department', 'user_id', 'department_id')
+            ->withPivot('user_id', 'department_id');
     }
 
     public function levels()

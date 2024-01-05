@@ -10,6 +10,7 @@ use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
 use App\Models\Branch;
 use App\Models\HelpTopic;
+use App\Models\Level2Approver;
 use App\Models\Role;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
@@ -134,11 +135,28 @@ class CreateTicket extends Component
                             && $user->branches->contains('id', $currentRequester->branches->pluck('id')->first());
                     });
 
+                    $filteredLevel2Approvers = Level2Approver::with('approver.profile')
+                        ->withWhereHas(
+                            'approver.buDepartments',
+                            fn($query) => $query->whereIn('departments.id', auth()->user()->buDepartments()->pluck('departments.id')->toArray())
+                        )->withWhereHas(
+                            'approver.branches',
+                            fn($query) => $query->whereIn('branches.id', auth()->user()->branches()->pluck('branches.id')->toArray())
+                        )->get();
+
                     if ($ticket->helpTopic->specialProject) {
                         TicketApproval::create([
                             'ticket_id' => $ticket->id,
                             'level_1_approver' => [
-                                'approver_id' => $filteredServiceDepartmentAdmins->map(fn($user) => $user->id)->toArray(),
+                                'approver_id' => $filteredServiceDepartmentAdmins->isNotEmpty()
+                                    ? $filteredServiceDepartmentAdmins->map(fn($approver) => $approver->id)->toArray()
+                                    : null,
+                                'is_approved' => false,
+                            ],
+                            'level_2_approver' => [
+                                'approver_id' => $filteredLevel2Approvers->isNotEmpty()
+                                    ? $filteredLevel2Approvers->map(fn($approver) => $approver->id)->toArray()
+                                    : null,
                                 'is_approved' => false,
                             ],
                         ]);
@@ -182,7 +200,6 @@ class CreateTicket extends Component
         $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
         $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
     }
-
 
     public function cancel()
     {
