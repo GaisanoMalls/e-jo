@@ -78,11 +78,11 @@ class UpdateRequester extends Component
                         $this->suffix,
                     ])),
                 ]);
-                flash()->addSuccess("You have successfully updated the account for {$this->user->profile->getFullName()}.");
+                noty()->addSuccess("You have successfully updated the account for {$this->user->profile->getFullName()}.");
             });
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Failed to update the account.');
+            noty()->addError('Failed to update the account.');
         }
     }
 

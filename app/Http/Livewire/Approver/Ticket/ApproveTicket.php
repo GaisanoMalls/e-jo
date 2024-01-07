@@ -33,7 +33,7 @@ class ApproveTicket extends Component
         ActivityLog::make($this->ticket->id, 'approved the ticket');
 
         $this->actionOnSubmit();
-        flash()->addSuccess('Ticket has been approved');
+        noty()->addSuccess('Ticket has been approved');
     }
 
     public function render()

@@ -37,11 +37,11 @@ class UpdateRequesterPassword extends Component
         try {
             $user->update(['user' => $this->new_password]);
             $this->actionOnSubmit();
-            flash()->addSuccess('Password has been updated.');
+            noty()->addSuccess('Password has been updated.');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

@@ -31,7 +31,7 @@ class Password extends Component
         $this->validate();
         auth()->user()->update(['password' => Hash::make($this->new_password)]);
         $this->actionOnSubmit();
-        flash()->addSuccess('Your password has been updated.');
+        noty()->addSuccess('Your password has been updated.');
 
     }
 

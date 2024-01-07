@@ -38,11 +38,11 @@ class UpdateAgentPassword extends Component
         try {
             $agent->update(['password' => Hash::make($this->new_password)]);
             $this->actionOnSubmit();
-            flash()->addSuccess('Password has been updated.');
+            noty()->addSuccess('Password has been updated.');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

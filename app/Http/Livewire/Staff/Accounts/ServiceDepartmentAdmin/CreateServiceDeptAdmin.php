@@ -78,11 +78,11 @@ class CreateServiceDeptAdmin extends Component
                 ]);
 
                 $this->actionOnSubmit();
-                flash()->addSuccess('Account successfully created');
+                noty()->addSuccess('Account successfully created');
             });
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addSuccess('Failed to save a new service department admin');
+            noty()->addSuccess('Failed to save a new service department admin');
         }
     }
 

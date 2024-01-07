@@ -31,11 +31,11 @@ class HelpTopicList extends Component
                 $helpTopic->delete();
                 $this->helpTopicDeleteId = null;
                 $this->dispatchBrowserEvent('close-modal');
-                flash()->addSuccess('Help topic successfully deleted');
+                noty()->addSuccess('Help topic successfully deleted');
             }
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

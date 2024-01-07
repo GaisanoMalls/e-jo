@@ -58,11 +58,11 @@ class ServiceDepartmentList extends Component
             $this->clearFormField();
             $this->fetchServiceDepartments();
             $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('Service department successfully updated');
+            noty()->addSuccess('Service department successfully updated');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 
@@ -80,11 +80,11 @@ class ServiceDepartmentList extends Component
             $this->serviceDepartmentDeleteId = null;
             $this->fetchServiceDepartments();
             $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('Service department successfully deleted');
+            noty()->addSuccess('Service department successfully deleted');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

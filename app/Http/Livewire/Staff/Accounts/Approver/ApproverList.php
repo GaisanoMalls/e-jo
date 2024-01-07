@@ -43,11 +43,11 @@ class ApproverList extends Component
             User::findOrFail($this->approverDeleteId)->delete();
             $this->approverDeleteId = null;
             $this->actionOnSubmit();
-            flash()->addSuccess('Approver account has been deleted');
+            noty()->addSuccess('Approver account has been deleted');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addSuccess('Oops, something went wrong');
+            noty()->addSuccess('Oops, something went wrong');
         }
     }
 

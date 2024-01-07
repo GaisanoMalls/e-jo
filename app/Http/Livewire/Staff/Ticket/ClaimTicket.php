@@ -32,7 +32,7 @@ class ClaimTicket extends Component
                 $existingAgentId = Ticket::where('id', $this->ticket->id)->value('agent_id');
 
                 if (!is_null($existingAgentId)) {
-                    flash()->addError('Ticket has already been claimed by another agent. Select another ticket to claim.');
+                    noty()->addError('Ticket has already been claimed by another agent. Select another ticket to claim.');
                 }
 
                 $this->ticket->update([
@@ -44,11 +44,11 @@ class ClaimTicket extends Component
             });
 
             $this->actionOnSubmit();
-            flash()->addSuccess("You have claimed the ticket - {$this->ticket->ticket_number}.");
+            noty()->addSuccess("You have claimed the ticket - {$this->ticket->ticket_number}.");
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Failed to claim the ticket.');
+            noty()->addError('Failed to claim the ticket.');
         }
     }
 

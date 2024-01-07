@@ -39,11 +39,11 @@ class CreateServiceDepartment extends Component
             ]);
 
             $this->actionOnSubmit();
-            flash()->addSuccess('A new service department has been created.');
+            noty()->addSuccess('A new service department has been created.');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

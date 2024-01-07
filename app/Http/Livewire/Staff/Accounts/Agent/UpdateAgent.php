@@ -107,13 +107,13 @@ class UpdateAgent extends Component
                     ])),
                 ]);
 
-                flash()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName()}.");
+                noty()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName()}.");
             });
 
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Failed to update the agent.');
+            noty()->addError('Failed to update the agent.');
         }
     }
 

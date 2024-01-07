@@ -95,15 +95,15 @@ class Profile extends Component
                     'mobile_number',
                     'picture',
                 ]))
-                    ? flash()->addSuccess('Profile successfully updated.')
-                    : flash()->addInfo('No changes have been made in your profile.');
+                    ? noty()->addSuccess('Profile successfully updated.')
+                    : noty()->addInfo('No changes have been made in your profile.');
             });
 
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Something went wrong while updating your profile.');
+            noty()->addError('Something went wrong while updating your profile.');
         }
     }
 

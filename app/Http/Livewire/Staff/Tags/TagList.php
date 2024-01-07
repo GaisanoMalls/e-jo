@@ -58,11 +58,11 @@ class TagList extends Component
             $this->fetchTags();
             $this->clearFormField();
             $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('Tag updated');
+            noty()->addSuccess('Tag updated');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 
@@ -80,11 +80,11 @@ class TagList extends Component
             $this->tagDeleteId = null;
             $this->fetchTags();
             $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('Tag successfully deleted');
+            noty()->addSuccess('Tag successfully deleted');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

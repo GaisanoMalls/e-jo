@@ -76,11 +76,11 @@ class CreateHelpTopic extends Component
             });
 
             $this->actionOnSubmit();
-            flash()->addSuccess('A new help topic has been created.');
+            noty()->addSuccess('A new help topic has been created.');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong.');
+            noty()->addError('Oops, something went wrong.');
         }
     }
 

@@ -58,11 +58,11 @@ class DisapproveTicket extends Component
             });
 
             $this->actionOnSubmit();
-            flash()->addSuccess('The ticket has been disapproved.');
+            noty()->addSuccess('The ticket has been disapproved.');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Faild to disapprove the ticket.');
+            noty()->addError('Faild to disapprove the ticket.');
         }
     }
 

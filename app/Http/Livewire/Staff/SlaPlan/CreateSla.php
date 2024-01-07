@@ -36,11 +36,11 @@ class CreateSla extends Component
         try {
             ServiceLevelAgreement::create($validatedData);
             $this->actionOnSubmit();
-            flash()->addSuccess('A new SLA has been created.');
+            noty()->addSuccess('A new SLA has been created.');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

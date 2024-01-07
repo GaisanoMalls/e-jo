@@ -102,7 +102,7 @@ class SendClarification extends Component
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Failed to send ticket clarification. Please try again.');
+            noty()->addError('Failed to send ticket clarification. Please try again.');
         }
     }
 

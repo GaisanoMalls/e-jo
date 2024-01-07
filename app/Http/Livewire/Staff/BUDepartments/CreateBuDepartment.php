@@ -54,16 +54,16 @@ class CreateBuDepartment extends Component
                         'name' => $this->name,
                         'slug' => \Str::slug($this->name),
                     ]);
-                    flash()->addSuccess('The service department has also been created.');
+                    noty()->addSuccess('The service department has also been created.');
                 }
             });
 
             $this->actionOnSubmit();
-            flash()->addSuccess('New BU\Department has been created.');
+            noty()->addSuccess('New BU\Department has been created.');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

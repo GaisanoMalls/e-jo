@@ -37,11 +37,11 @@ class UpdateServiceDeptAdminPassword extends Component
         try {
             $serviceDeptAdmin->update(['password' => $this->new_password]);
             $this->actionOnSubmit();
-            flash()->addSuccess('Password has been updated.');
+            noty()->addSuccess('Password has been updated.');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
     public function render()

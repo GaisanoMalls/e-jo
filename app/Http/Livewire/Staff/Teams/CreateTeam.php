@@ -51,11 +51,11 @@ class CreateTeam extends Component
             });
 
             $this->actionOnSubmit();
-            flash()->addSuccess('New team has been created.');
+            noty()->addSuccess('New team has been created.');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong.');
+            noty()->addError('Oops, something went wrong.');
         }
     }
 

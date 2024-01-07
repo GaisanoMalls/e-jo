@@ -74,11 +74,11 @@ class UpdateServiceDepartmentAdmin extends Component
                         $this->suffix,
                     ])),
                 ]);
-                flash()->addSuccess("You have successfully updated the account for {$this->serviceDeptAdmin->profile->getFullName()}.");
+                noty()->addSuccess("You have successfully updated the account for {$this->serviceDeptAdmin->profile->getFullName()}.");
             });
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Failed to update the account.');
+            noty()->addError('Failed to update the account.');
         }
     }
 

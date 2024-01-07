@@ -33,7 +33,7 @@ class TicketDetails extends Component
             $this->actionOnSubmit();
             ActivityLog::make($this->ticket->id, 'removed the team assigned on this ticket');
         } else {
-            flash()->addError('You are not allowed to remove the assigned team');
+            noty()->addError('You are not allowed to remove the assigned team');
         }
     }
 
@@ -47,7 +47,7 @@ class TicketDetails extends Component
             $this->actionOnSubmit();
             ActivityLog::make($this->ticket->id, 'removed the agent assigned on this ticket');
         } else {
-            flash()->addError('You are not allowed to remove the assigned agent');
+            noty()->addError('You are not allowed to remove the assigned agent');
         }
     }
 

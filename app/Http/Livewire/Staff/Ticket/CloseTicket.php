@@ -32,7 +32,7 @@ class CloseTicket extends Component
         $this->ticket->update(['status_id' => Status::CLOSED]);
         ActivityLog::make($this->ticket->id, 'closed the ticket');
         $this->actionOnSubmit();
-        flash()->addSuccess('Ticket has been closed');
+        noty()->addSuccess('Ticket has been closed');
     }
 
     public function render()

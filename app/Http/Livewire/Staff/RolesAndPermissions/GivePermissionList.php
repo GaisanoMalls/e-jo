@@ -47,7 +47,7 @@ class GivePermissionList extends Component
         $role = Role::find($this->assignPermissionRoleId);
         if (!empty($this->permissions)) {
             $role->syncPermissions($this->permissions);
-            flash()->addSuccess('Permission assigned.');
+            noty()->addSuccess('Permission assigned.');
         }
         $this->actionOnSubmit();
     }
@@ -68,12 +68,12 @@ class GivePermissionList extends Component
             $permission = Permission::find($permission->id);
             if ($permission) {
                 $role->revokePermissionTo($permission);
-                flash()->addInfo('Permission revoked.');
+                noty()->addInfo('Permission revoked.');
             } else {
-                flash()->addError('Permission not found');
+                noty()->addError('Permission not found');
             }
         } catch (\Exception $e) {
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

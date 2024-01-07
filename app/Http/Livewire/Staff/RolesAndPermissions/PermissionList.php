@@ -14,9 +14,9 @@ class PermissionList extends Component
         try {
             $permission->delete();
             $this->emit('loadAssignPermissionList');
-            flash()->addSuccess('Permission successfully deleted');
+            noty()->addSuccess('Permission successfully deleted');
         } catch (\Exception $e) {
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

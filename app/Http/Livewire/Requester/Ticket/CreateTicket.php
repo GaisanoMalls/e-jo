@@ -170,11 +170,11 @@ class CreateTicket extends Component
 
                 ActivityLog::make($ticket->id, 'created a ticket');
                 $this->actionOnSubmit();
-                flash()->addSuccess('Ticket successfully created.');
+                noty()->addSuccess('Ticket successfully created.');
             });
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong.');
+            noty()->addError('Oops, something went wrong.');
         }
     }
 

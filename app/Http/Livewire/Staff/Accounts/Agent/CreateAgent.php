@@ -85,7 +85,7 @@ class CreateAgent extends Component
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong.');
+            noty()->addError('Oops, something went wrong.');
         }
     }
 

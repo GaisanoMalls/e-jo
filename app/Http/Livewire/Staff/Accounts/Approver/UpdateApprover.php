@@ -77,11 +77,11 @@ class UpdateApprover extends Component
                 $this->approver->buDepartments()->sync($this->bu_departments);
             });
 
-            flash()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName()}.");
+            noty()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName()}.");
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Failed to update the account');
+            noty()->addError('Failed to update the account');
         }
     }
 

@@ -57,11 +57,11 @@ class BranchList extends Component
             $this->clearFormField();
             $this->fetchBranches();
             $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('Branch successfully updated');
+            noty()->addSuccess('Branch successfully updated');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 
@@ -79,10 +79,10 @@ class BranchList extends Component
             $this->branchDeleteId = null;
             $this->fetchBranches();
             $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('Branch successfully deleted');
+            noty()->addSuccess('Branch successfully deleted');
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

@@ -74,11 +74,11 @@ class CreateRequester extends Component
                     ])),
                 ]);
                 $this->actionOnSubmit();
-                flash()->addSuccess('Account successfully created');
+                noty()->addSuccess('Account successfully created');
             });
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

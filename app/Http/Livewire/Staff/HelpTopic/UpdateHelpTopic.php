@@ -68,11 +68,11 @@ class UpdateHelpTopic extends Component
                 }
             });
 
-            flash()->addSuccess('Help topic successfully updated.');
+            noty()->addSuccess('Help topic successfully updated.');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong.');
+            noty()->addError('Oops, something went wrong.');
         }
     }
 

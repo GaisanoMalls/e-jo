@@ -29,11 +29,11 @@ class AgentList extends Component
             User::findOrFail($this->agentDeleteId)->delete();
             $this->agentDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('Requester account has been deleted');
+            noty()->addSuccess('Requester account has been deleted');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addSuccess('Oops, something went wrong');
+            noty()->addSuccess('Oops, something went wrong');
         }
     }
 

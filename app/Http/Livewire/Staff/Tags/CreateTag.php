@@ -42,11 +42,11 @@ class CreateTag extends Component
             ]);
 
             $this->actionOnSubmit();
-            flash()->addSuccess('Tag created');
+            noty()->addSuccess('Tag created');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

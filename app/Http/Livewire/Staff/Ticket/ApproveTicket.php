@@ -71,11 +71,11 @@ class ApproveTicket extends Component
             });
 
             $this->actionOnSubmit();
-            flash()->addSuccess('Ticket has been approved');
+            noty()->addSuccess('Ticket has been approved');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

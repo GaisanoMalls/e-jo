@@ -72,7 +72,7 @@ class BUDepartmentList extends Component
             }
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 
@@ -89,11 +89,11 @@ class BUDepartmentList extends Component
             Department::findOrFail($this->buDepartmentDeleteId)->delete();
             $this->buDepartmentDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('BU/Department successfully deleted');
+            noty()->addSuccess('BU/Department successfully deleted');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

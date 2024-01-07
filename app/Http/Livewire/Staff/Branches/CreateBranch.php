@@ -39,11 +39,11 @@ class CreateBranch extends Component
             ]);
 
             $this->actionOnSubmit();
-            flash()->addSuccess('New branch has been created.');
+            noty()->addSuccess('New branch has been created.');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

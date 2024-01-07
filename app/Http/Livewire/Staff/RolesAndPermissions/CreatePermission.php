@@ -36,7 +36,7 @@ class CreatePermission extends Component
                 if (!Permission::where('name', $permissionName)->exists()) {
                     Permission::create(['name' => $permissionName]);
                 } else {
-                    flash()->addError('Permission name "' . $permissionName . '" already exists');
+                    noty()->addError('Permission name "' . $permissionName . '" already exists');
                 }
             }
         }

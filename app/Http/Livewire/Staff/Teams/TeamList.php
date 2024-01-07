@@ -88,7 +88,7 @@ class TeamList extends Component
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 
@@ -105,11 +105,11 @@ class TeamList extends Component
             Team::findOrFail($this->teamDeleteId)->delete();
             $this->teamDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
-            flash()->addSuccess('Team successfully deleted');
+            noty()->addSuccess('Team successfully deleted');
 
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong');
         }
     }
 

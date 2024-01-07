@@ -70,11 +70,11 @@ class CreateApprover extends Component
                 Level2Approver::create(['user_id' => $approver->id]);
 
                 $this->actionOnSubmit();
-                flash()->addSuccess('Account successfully created');
+                noty()->addSuccess('Account successfully created');
             });
         } catch (Exception $e) {
             dump($e->getMessage());
-            flash()->addError('Failed to save a new approver');
+            noty()->addError('Failed to save a new approver');
         }
     }
 
