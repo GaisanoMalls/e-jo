@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Staff\Ticket;
+namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Models\ActivityLog;
 use App\Models\Ticket;
@@ -11,7 +11,6 @@ use Livewire\Component;
 class TicketLevelApproval extends Component
 {
     public Ticket $ticket;
-    public $isNeedLevelOfApproval = false;
 
     protected $listeners = ['loadLevelOfApproval' => '$refresh'];
 
@@ -33,14 +32,14 @@ class TicketLevelApproval extends Component
         return User::with('profile')->whereIn('id', $ticketApproval->pluck('level_2_approver.approver_id')->flatten()->toArray())->get();
     }
 
-    public function level1Approve()
+    public function level2Approve()
     {
         TicketApproval::where('ticket_id', $this->ticket->id)->update([
-            'level_1_approver->is_approved' => true,
-            'level_1_approver->approved_by' => auth()->user()->id,
+            'level_2_approver->is_approved' => true,
+            'level_2_approver->approved_by' => auth()->user()->id,
         ]);
 
-        ActivityLog::make($this->ticket->id, 'approved the level 1 approval');
+        ActivityLog::make($this->ticket->id, 'approved the level 2 approval');
         $this->actionOnSubmit();
     }
 
@@ -80,7 +79,7 @@ class TicketLevelApproval extends Component
 
     public function render()
     {
-        return view('livewire.staff.ticket.ticket-level-approval', [
+        return view('livewire.approver.ticket.ticket-level-approval', [
             'level1Approvers' => $this->getLevel1Approvers(),
             'level2Approvers' => $this->getLevel2Approvers(),
             'isTicketLevel1Approved' => $this->isTicketLevel1Approved(),

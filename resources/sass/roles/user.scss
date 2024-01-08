@@ -125,6 +125,10 @@ $color-1: #d32839;
     background: #D32839;
 }
 
+.tooltip{
+   font-size: $fs-11;
+}
+
 .btn__see__reason {
     color: black;
     text-decoration: underline !important;
@@ -136,8 +140,6 @@ $color-1: #d32839;
         color: black;
     }
 }
-
-
 
 .reason__modal,
 .clarification__modal,

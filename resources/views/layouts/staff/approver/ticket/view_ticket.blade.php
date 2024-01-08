@@ -1,7 +1,6 @@
 @extends('layouts.staff.approver.base', ['title' => $ticket->subject])
 
 @section('main-content')
-    @livewire('approver.ticket.disapprove-ticket', ['ticket' => $ticket])
     @livewire('approver.ticket.load-reason', ['ticket' => $ticket])
     <div class="row mx-0">
         <div class="card ticket__card" id="userTicketCard">
@@ -25,7 +24,6 @@
                             <small class="ticket__details__datetime">{{ $ticket->dateCreated() }},
                                 {{ $ticket->created_at->format('D') }} @ {{ $ticket->created_at->format('g:i A') }}</small>
                         </div>
-                        @livewire('approver.ticket.load-approval-buttons-header', ['ticket' => $ticket])
                     </div>
                 </div>
                 <div class="row">
@@ -88,6 +86,7 @@
                     <div class="col-md-5">
                         <div class="container__ticket__details__right">
                             @livewire('approver.ticket.ticket-details', ['ticket' => $ticket])
+                            @livewire('approver.ticket.ticket-level-approval', ['ticket' => $ticket])
                             @livewire('approver.ticket.ticket-logs', ['ticket' => $ticket])
                         </div>
                     </div>
@@ -95,7 +94,6 @@
             </div>
         </div>
     </div>
-    @livewire('approver.ticket.approve-ticket', ['ticket' => $ticket])
     @livewire('approver.ticket.send-clarification', ['ticket' => $ticket])
     @include('layouts.staff.approver.ticket.includes.modal.preview_ticket_files_modal')
 @endsection

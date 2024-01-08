@@ -147,6 +147,10 @@ $color-1: #d32839;
     box-shadow: 0px 1px 4px 0px rgba(132, 132, 132, 0.25);
 }
 
+.tooltip{
+   font-size: $fs-11;
+}
+
 .btn__see__reason {
     color: black;
     text-decoration: underline !important;
@@ -868,6 +872,55 @@ nav {
                     width: 30px !important;
                 }
 
+                .level__approval__container {
+                    .level__number__label {
+                        color: #7b6c6c;
+                        font-size: $fs-13;
+                        font-weight: $fw-600;
+                    }
+
+                    .level__approver__container {
+                        border-left: 0.08rem solid #d1d3d3;
+
+                        .level__approval__approver__dot {
+                            height: 8px;
+                            width: 8px;
+                            left: -0.264rem;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            background-color: $white;
+                            border: 0.11rem solid #d1d3d3;
+                        }
+
+                        .level__approval__approver__picture {
+                            height: 30px;
+                            width: 30px;
+                            border-radius: $border-radius-8;
+                            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+                            margin-right: 0.7rem;
+                            -o-object-fit: cover;
+                            object-fit: cover;
+                        }
+
+                        .level__approval__approver__name__initial {
+                            height: 24px;
+                            width: 24px;
+                            font-size: 9px;
+                            border-radius: $border-radius-8;
+                        }
+
+                        .approver__name {
+                            font-size: $fs-13;
+                        }
+
+                        .btn__approve {
+                            font-size: $fs-12;
+                            color: $white;
+                            border-radius: $border-radius-9;
+                            background-color: $color-1;
+                        }
+                    }
+                }
             }
 
             .ticket__discussions {

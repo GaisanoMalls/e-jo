@@ -13,10 +13,10 @@ class TicketApproval extends Model
     protected $table = 'ticket_approval';
     protected $fillable = [
         'ticket_id',
+        'is_need_level_of_approval',
         'level_1_approver',
         'level_2_approver',
         'is_all_approved',
-        'approved_by',
     ];
 
     /**

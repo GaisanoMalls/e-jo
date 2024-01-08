@@ -18,7 +18,8 @@ class TicketTab extends Component
         $onProcessTickets = $this->getOnProcessTickets();
         $forApprovalTickets = $this->getForApprovalTickets();
 
-        return view('livewire.approver.ticket-tab',
+        return view(
+            'livewire.approver.ticket-tab',
             compact(
                 [
                     'openTickets',

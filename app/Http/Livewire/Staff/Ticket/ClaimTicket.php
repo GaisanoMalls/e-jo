@@ -40,6 +40,8 @@ class ClaimTicket extends Component
                     'status_id' => Status::CLAIMED,
                 ]);
 
+                $this->ticket->teams()->attach($this->ticket->agent->teams->pluck('id')->toArray());
+
                 ActivityLog::make($this->ticket->id, 'claimed the ticket');
             });
 

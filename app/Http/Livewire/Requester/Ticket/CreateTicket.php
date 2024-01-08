@@ -152,12 +152,14 @@ class CreateTicket extends Component
                                     ? $filteredServiceDepartmentAdmins->map(fn($approver) => $approver->id)->toArray()
                                     : null,
                                 'is_approved' => false,
+                                'approved_by' => null,
                             ],
                             'level_2_approver' => [
                                 'approver_id' => $filteredLevel2Approvers->isNotEmpty()
                                     ? $filteredLevel2Approvers->map(fn($approver) => $approver->id)->toArray()
                                     : null,
                                 'is_approved' => false,
+                                'approved_by' => null,
                             ],
                         ]);
                     }

@@ -19,12 +19,8 @@ trait Tickets
             ->withWhereHas(
                 'ticketApprovals',
                 fn($approval) =>
-                $approval->whereJsonContains([
-                    'level_1_approver->approver_id' => !null,
-                    'level_1_approver->is_approved' => true,
-                ])
-            )
-            ->orderByDesc('created_at')->get();
+                $approval->whereJsonContains('level_2_approver->approver_id', auth()->user()->id)
+            )->orderByDesc('created_at')->get();
     }
 
     public function getDisapprovedTickets()
@@ -32,7 +28,10 @@ trait Tickets
         return Ticket::has('helpTopic.specialProject')
             ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->where('approval_status', ApprovalStatus::DISAPPROVED))
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
-            ->orderByDesc('created_at')->get();
+            ->withWhereHas(
+                'ticketApprovals',
+                fn($approval) => $approval->whereJsonContains('level_2_approver->approver_id', auth()->user()->id)
+            )->orderByDesc('created_at')->get();
     }
 
     public function getOpenTickets()
@@ -40,7 +39,10 @@ trait Tickets
         return Ticket::has('helpTopic.specialProject')
             ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]))
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
-            ->orderByDesc('created_at')->get();
+            ->withWhereHas(
+                'ticketApprovals',
+                fn($approval) => $approval->whereJsonContains('level_2_approver->approver_id', auth()->user()->id)
+            )->orderByDesc('created_at')->get();
     }
 
     public function getViewedTickets()
@@ -48,7 +50,10 @@ trait Tickets
         return Ticket::has('helpTopic.specialProject')
             ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::VIEWED)->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]))
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
-            ->orderByDesc('created_at')->get();
+            ->withWhereHas(
+                'ticketApprovals',
+                fn($approval) => $approval->whereJsonContains('level_2_approver->approver_id', auth()->user()->id)
+            )->orderByDesc('created_at')->get();
     }
 
     public function getApprovedTickets()
@@ -56,7 +61,10 @@ trait Tickets
         return Ticket::has('helpTopic.specialProject')
             ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::APPROVED)->where('approval_status', ApprovalStatus::APPROVED))
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
-            ->orderByDesc('created_at')->get();
+            ->withWhereHas(
+                'ticketApprovals',
+                fn($approval) => $approval->whereJsonContains('level_2_approver->approver_id', auth()->user()->id)
+            )->orderByDesc('created_at')->get();
     }
 
     public function getOnProcessTickets()
@@ -64,6 +72,9 @@ trait Tickets
         return Ticket::has('helpTopic.specialProject')
             ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::ON_PROCESS)->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]))
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
-            ->orderByDesc('created_at')->get();
+            ->withWhereHas(
+                'ticketApprovals',
+                fn($approval) => $approval->whereJsonContains('level_2_approver->approver_id', auth()->user()->id)
+            )->orderByDesc('created_at')->get();
     }
 }

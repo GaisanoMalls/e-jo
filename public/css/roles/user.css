@@ -7275,6 +7275,10 @@ url(/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?4753c5ba57962b4d7bf8248a6
   background: #D32839;
 }
 
+.tooltip {
+  font-size: 0.688rem;
+}
+
 .btn__see__reason {
   color: black;
   text-decoration: underline !important;

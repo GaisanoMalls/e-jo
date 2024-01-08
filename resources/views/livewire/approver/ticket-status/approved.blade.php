@@ -23,7 +23,6 @@
                                 <th class="table__head__label">Subject</th>
                                 <th class="table__head__label">Assigned To</th>
                                 <th class="table__head__label">Priority Level</th>
-                                <th class="table__head__label">Approval Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,13 +58,6 @@
                                         <p class="mb-0" style="color: {{ $ticket->priorityLevel->color }};">
                                             {{ $ticket->priorityLevel->name ?? '' }}
                                         </p>
-                                    </td>
-                                    <td class="custom__table__data py-0">
-                                        <small class="rounded-5"
-                                            style="background-color: #243C44; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
-                                            <i class="fa-solid fa-check me-1"></i>
-                                            Approved
-                                        </small>
                                     </td>
                                 </tr>
                             @endforeach

@@ -13,7 +13,6 @@ trait Tickets
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::APPROVED)->where('approval_status', ApprovalStatus::APPROVED))
             ->where(fn($byUserQuery) => $byUserQuery->where('branch_id', auth()->user()->branches->pluck('id')->first())
                 ->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first()))
-            ->whereHas('teams', fn($team) => $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray()))
             ->orderByDesc('created_at')->get();
     }
 
