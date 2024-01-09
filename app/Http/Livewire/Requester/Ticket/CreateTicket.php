@@ -162,7 +162,7 @@ class CreateTicket extends Component
 
                     $filteredLevel1Approvers->each(function ($serviceDepartmentAdmin) use ($ticket) {
                         Notification::send($serviceDepartmentAdmin->approver, new TicketCreatedNotification($ticket));
-                        Mail::to($serviceDepartmentAdmin->approver)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin->approver));
+                        // Mail::to($serviceDepartmentAdmin->approver)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin->approver));
                     });
                 }
 

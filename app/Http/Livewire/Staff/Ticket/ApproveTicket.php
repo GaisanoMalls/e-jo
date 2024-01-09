@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Notifications\Requester\TicketCreatedNotification;
 use App\Notifications\ServiceDepartmentAdmin\ApprovedTicketForAgentNotification;
 use App\Notifications\ServiceDepartmentAdmin\ApprovedTicketForRequesterNotification;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -52,6 +53,7 @@ class ApproveTicket extends Component
                 $this->ticket->update([
                     'status_id' => Status::APPROVED,
                     'approval_status' => ApprovalStatus::APPROVED,
+                    'svcdept_date_approved' => Carbon::now(),
                 ]);
 
                 // Get the agents with specific conditions.

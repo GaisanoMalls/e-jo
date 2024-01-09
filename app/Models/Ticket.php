@@ -41,6 +41,7 @@ class Ticket extends Model
         'subject',
         'description',
         'approval_status',
+        'svcdept_date_approved'
     ];
 
     protected $casts = [

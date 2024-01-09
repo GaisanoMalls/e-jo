@@ -84,11 +84,11 @@
                     <small class="ticket__details__info__label">
                         SLA:</small>
                     <div class="d-flex align-items-center gap-2">
-                        @livewire('staff.ticket.sla-timer', ['ticket' => $ticket])
                         <small class="ticket__details__info" id="slaDays">
                             <i class="fa-solid fa-clock me-1 text-muted" style="font-size: 11px;"></i>
                             {{ $ticket->sla->time_unit ?? '----' }}
                         </small>
+                        @livewire('staff.ticket.sla-timer', ['ticket' => $ticket])
                     </div>
                 </div>
             </div>
