@@ -10,7 +10,7 @@
                         <div
                             class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
                             <div class="d-flex align-items-center w-100">
-                                @if ($clarification->user->hasRole(App\Models\Role::USER))
+                                @if (!$clarification->user->hasRole(App\Models\Role::USER))
                                     @if ($clarification->user->profile->picture)
                                         <img src="{{ Storage::url($clarification->user->profile->picture) }}"
                                             alt=""
@@ -24,7 +24,7 @@
                                     @endif
                                 @endif
                                 <div class="d-flex flex-wrap justify-content-between w-100">
-                                    @if ($clarification->user->hasRole(App\Models\Role::USER))
+                                    @if (!$clarification->user->hasRole(App\Models\Role::USER))
                                         <small
                                             class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                                             {{ $clarification->user->profile->getFullName() }}

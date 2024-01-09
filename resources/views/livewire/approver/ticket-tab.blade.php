@@ -5,7 +5,7 @@
                 class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
                 {{ Route::is('approver.tickets.open') ? 'ticket__tab__link active' : '' }}"
                 wire:ignore.self>
-                <span class="ticket__count__tab">{{ $openTickets->count() }}</span>
+                <span class="ticket__count__tab">{{ $openTickets->count() + $forApprovalTickets->count() }}</span>
                 Open
             </a>
         </li>

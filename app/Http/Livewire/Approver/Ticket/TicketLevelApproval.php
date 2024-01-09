@@ -34,10 +34,14 @@ class TicketLevelApproval extends Component
 
     public function level2Approve()
     {
-        TicketApproval::where('ticket_id', $this->ticket->id)->update([
-            'level_2_approver->is_approved' => true,
-            'level_2_approver->approved_by' => auth()->user()->id,
-        ]);
+        TicketApproval::where('ticket_id', $this->ticket->id)
+            ->whereNotNull('level_1_approver->approver_id')
+            ->whereJsonContains('level_1_approver->is_approved', true)
+            ->update([
+                'level_2_approver->is_approved' => true,
+                'level_2_approver->approved_by' => auth()->user()->id,
+                'is_all_approved' => true,
+            ]);
 
         ActivityLog::make($this->ticket->id, 'approved the level 2 approval');
         $this->actionOnSubmit();

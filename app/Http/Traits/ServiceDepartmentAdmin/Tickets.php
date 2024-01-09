@@ -16,14 +16,6 @@ trait Tickets
             ->withWhereHas('teams', fn($team) => $team->whereNull('teams.id'))->orderByDesc('created_at')->get();
     }
 
-    public function ticketLevelApprovals()
-    {
-        return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::APPROVED)->where('approval_status', ApprovalStatus::APPROVED))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
-            ->orderByDesc('created_at')->get();
-    }
-
     public function serviceDeptAdminGetApprovedTickets()
     {
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::APPROVED)->where('approval_status', ApprovalStatus::APPROVED))

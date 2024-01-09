@@ -23,7 +23,7 @@
                                 <th class="table__head__label">Subject</th>
                                 <th class="table__head__label">Assigned To</th>
                                 <th class="table__head__label">Priority Level</th>
-                                <th class="table__head__label">Status</th>
+                                <th class="table__head__label">Approval Level</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,11 +57,17 @@
                                         <p class="mb-0" style="color: {{ $ticket->priorityLevel->color }};">
                                             {{ $ticket->priorityLevel->name ?? '' }}</p>
                                     </td>
-                                    <td class="custom__table__data py-0">
-                                        @if ($ticket->approval_status === App\Models\ApprovalStatus::FOR_APPROVAL)
+                                    <td class="custom__table__data">
+                                        @if ($this->isTicketNeedLevelOfApproval($ticket))
                                             <small class="rounded-5 my-auto"
                                                 style="background-color: #9DA85C; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
                                                 For Approval
+                                            </small>
+                                        @endif
+                                        @if ($this->isTicketIsAllApproved($ticket))
+                                            <small class="rounded-5 my-auto"
+                                                style="background-color: #9DA85C; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
+                                                Approved
                                             </small>
                                         @endif
                                     </td>

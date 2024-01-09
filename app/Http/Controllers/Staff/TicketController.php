@@ -19,12 +19,6 @@ class TicketController extends Controller
         return view('layouts.staff.ticket.tickets_to_assign');
     }
 
-    public function ticketLevelApproval()
-    {
-        $ticketLevelApprovals = $this->getTicketLevelApprovals();
-        return view('layouts.staff.ticket.tickets_level_approval', compact('ticketLevelApprovals'));
-    }
-
     public function approvedTickets()
     {
         $approvedTickets = $this->getApprovedTickets();
@@ -99,7 +93,8 @@ class TicketController extends Controller
 
         $latestReply = Reply::where('ticket_id', $ticket->id)->where('user_id', '!=', auth()->user()->id)->orderByDesc('created_at')->first();
 
-        return view('layouts.staff.ticket.view_ticket',
+        return view(
+            'layouts.staff.ticket.view_ticket',
             compact([
                 'ticket',
                 'departments',

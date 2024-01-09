@@ -30,7 +30,7 @@
             @else
                 <div class="alert mb-0 border-0 py-2 px-3" style="font-size: 13px; background-color: #F5F7F9;"
                     role="alert">
-                    There is no assigned agent for this ticket.
+                    No designated agent has been assigned at this time.
                 </div>
             @endif
         </div>

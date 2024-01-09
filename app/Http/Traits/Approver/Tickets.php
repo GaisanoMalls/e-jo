@@ -13,20 +13,8 @@ trait Tickets
 
     public function getForApprovalTickets()
     {
-        return Ticket::has('helpTopic.specialProject')
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatus::FOR_APPROVAL))
-            ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
-            ->withWhereHas(
-                'ticketApprovals',
-                fn($approval) =>
-                $approval->whereJsonContains('level_2_approver->approver_id', auth()->user()->id)
-            )->orderByDesc('created_at')->get();
-    }
-
-    public function getDisapprovedTickets()
-    {
-        return Ticket::has('helpTopic.specialProject')
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->where('approval_status', ApprovalStatus::DISAPPROVED))
+        return Ticket::has('helpTopic.specialProject')->where('approval_status', ApprovalStatus::APPROVED)
+            ->whereNotIn('status_id', [Status::VIEWED, Status::DISAPPROVED, Status::APPROVED, Status::ON_PROCESS])
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
             ->withWhereHas(
                 'ticketApprovals',
@@ -38,6 +26,17 @@ trait Tickets
     {
         return Ticket::has('helpTopic.specialProject')
             ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]))
+            ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
+            ->withWhereHas(
+                'ticketApprovals',
+                fn($approval) => $approval->whereJsonContains('level_2_approver->approver_id', auth()->user()->id)
+            )->orderByDesc('created_at')->get();
+    }
+
+    public function getDisapprovedTickets()
+    {
+        return Ticket::has('helpTopic.specialProject')
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->where('approval_status', ApprovalStatus::DISAPPROVED))
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
             ->withWhereHas(
                 'ticketApprovals',

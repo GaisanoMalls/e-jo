@@ -1510,6 +1510,21 @@ a {
             }
         }
 
+        .check__need__level__of__approval {
+            margin-right: 5px !important;
+        }
+
+        .form-check-label {
+            font-size: $fs-13 !important;
+            margin-top: 0px !important;
+        }
+
+        .reload__section {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
         .level__approval__container {
             .level__number__label {
                 color: #7b6c6c;

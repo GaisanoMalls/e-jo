@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div wire:loading.class="text-muted" class="d-flex flex-column gap-2">
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex flex-wrap align-items-center gap-2">
                     <small class="ticket__details__info__label">
                         Approval status:
                     </small>
@@ -27,14 +27,14 @@
                         @endif
                     </small>
                 </div>
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex flex-wrap align-items-center gap-2">
                     <small class="ticket__details__info__label">Branch:</small>
                     <small class="ticket__details__info">
                         <i class="fa-solid fa-location-dot me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->branch->name }}
                     </small>
                 </div>
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex flex-wrap align-items-center gap-2">
                     <small class="ticket__details__info__label">
                         Service department:</small>
                     <small class="ticket__details__info">
@@ -42,7 +42,7 @@
                         {{ $ticket->serviceDepartment->name }}
                     </small>
                 </div>
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex flex-wrap align-items-center gap-2">
                     <small class="ticket__details__info__label">Team:</small>
                     <small class="position-relative ticket__details__info">
                         <i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>
@@ -55,7 +55,7 @@
                         @endif
                     </small>
                 </div>
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex flex-wrap align-items-center gap-2">
                     <small class="ticket__details__info__label">
                         Help topic:
                     </small>
@@ -64,7 +64,7 @@
                         {{ $ticket->helpTopic->name ?? '----' }}
                     </small>
                 </div>
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex flex-wrap align-items-center gap-2">
                     <small class="ticket__details__info__label">
                         Assigned agent:
                     </small>
@@ -80,7 +80,7 @@
                         @endif
                     </small>
                 </div>
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex flex-wrap align-items-center gap-2">
                     <small class="ticket__details__info__label">
                         SLA:</small>
                     <div class="d-flex align-items-center gap-2">

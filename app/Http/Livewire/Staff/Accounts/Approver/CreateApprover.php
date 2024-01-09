@@ -5,7 +5,8 @@ namespace App\Http\Livewire\Staff\Accounts\Approver;
 use App\Http\Requests\SysAdmin\Manage\Account\StoreApproverRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
-use App\Models\Level2Approver;
+use App\Models\ApproverLevel;
+use App\Models\Level;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
@@ -67,7 +68,10 @@ class CreateApprover extends Component
                     ])),
                 ]);
 
-                Level2Approver::create(['user_id' => $approver->id]);
+                ApproverLevel::create([
+                    'user_id' => $approver->id,
+                    'level_id' => Level::where('value', 2)->pluck('value')->first(),
+                ]);
 
                 $this->actionOnSubmit();
                 noty()->addSuccess('Account successfully created');

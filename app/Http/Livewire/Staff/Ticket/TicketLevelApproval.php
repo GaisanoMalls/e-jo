@@ -6,6 +6,8 @@ use App\Models\ActivityLog;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\User;
+use App\Notifications\ServiceDepartmentAdmin\ApprovedLevel1ApproverNotification;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
 class TicketLevelApproval extends Component
@@ -13,12 +15,39 @@ class TicketLevelApproval extends Component
     public Ticket $ticket;
     public $isNeedLevelOfApproval = false;
 
-    protected $listeners = ['loadLevelOfApproval' => '$refresh'];
+    public function mount()
+    {
+        $this->isNeedLevelOfApproval = $this->isTicketNeedLevelOfApproval();
+    }
+
+    protected $listeners = ['loadLevelOfApproval' => 'render'];
 
     public function actionOnSubmit()
     {
         $this->emit('loadLevelOfApproval');
         $this->emit('loadTicketLogs');
+    }
+
+    public function showLevelApproval()
+    {
+        TicketApproval::where('ticket_id', $this->ticket->id)->update([
+            'is_need_level_of_approval' => true,
+        ]);
+    }
+
+    public function hideLevelApproval()
+    {
+        TicketApproval::where('ticket_id', $this->ticket->id)->update([
+            'is_need_level_of_approval' => false,
+        ]);
+    }
+
+    public function toggleAssignLevelOfApproval()
+    {
+        ($this->isNeedLevelOfApproval)
+            ? $this->showLevelApproval()
+            : $this->hideLevelApproval();
+        $this->emit('loadLevelOfApproval');
     }
 
     public function getLevel1Approvers()
@@ -40,9 +69,25 @@ class TicketLevelApproval extends Component
             'level_1_approver->approved_by' => auth()->user()->id,
         ]);
 
-        ActivityLog::make($this->ticket->id, 'approved the level 1 approval');
-        $this->actionOnSubmit();
+        // Retrieve the updated record.
+        $filteredLevel2Approvers = TicketApproval::where('ticket_id', $this->ticket->id)
+            ->whereNotNull('level_1_approver->approver_id')
+            ->whereJsonContains('level_1_approver->is_approved', true)->get();
+
+        if ($filteredLevel2Approvers->isNotEmpty()) {
+            $level2Approvers = User::with('profile')->whereIn('id', $filteredLevel2Approvers->pluck('level_2_approver.approver_id')->flatten()->toArray())->get();
+
+            if ($level2Approvers->isNotEmpty()) {
+                foreach ($level2Approvers as $level2Approver) {
+                    Notification::send($level2Approver, new ApprovedLevel1ApproverNotification($this->ticket));
+                }
+            }
+
+            ActivityLog::make($this->ticket->id, 'approved the level 1 approval');
+            $this->actionOnSubmit();
+        }
     }
+
 
     public function isTicketLevel1Approved()
     {
@@ -68,6 +113,13 @@ class TicketLevelApproval extends Component
         )->isNotEmpty();
     }
 
+    public function isTicketNeedLevelOfApproval()
+    {
+        return $this->ticket->ticketApprovals->filter(
+            fn($approval) => data_get($approval, 'is_need_level_of_approval') == true
+        )->isNotEmpty();
+    }
+
     public function ticketLevel1ApprovalApprovedBy()
     {
         return TicketApproval::where('ticket_id', $this->ticket->id)->first()->level_1_approver['approved_by'];
@@ -86,6 +138,7 @@ class TicketLevelApproval extends Component
             'isTicketLevel1Approved' => $this->isTicketLevel1Approved(),
             'isTicketLevel2Approved' => $this->isTicketLevel2Approved(),
             'isApprovedByLevel2Approver' => $this->isApprovedByLevel2Approver(),
+            'isTicketNeedLevelOfApproval' => $this->isTicketNeedLevelOfApproval(),
             'ticketLevel1ApprovalApprovedBy' => $this->ticketLevel1ApprovalApprovedBy(),
             'ticketLevel2ApprovalApprovedBy' => $this->ticketLevel2ApprovalApprovedBy(),
         ]);

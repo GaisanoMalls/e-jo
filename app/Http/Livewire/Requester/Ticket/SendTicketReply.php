@@ -80,7 +80,10 @@ class SendTicketReply extends Component
                     }
                 }
 
-                $latestReply = Reply::where('ticket_id', $this->ticket->id)->role(Role::USER)->latest('created_at')->first();
+                $latestReply = Reply::where('ticket_id', $this->ticket->id)
+                    ->withWhereHas('user', fn($user) => $user->role(Role::USER))
+                    ->latest('created_at')->first();
+
                 ActivityLog::make($this->ticket->id, 'replied to ' . $latestReply->user->profile->getFullName());
             });
 

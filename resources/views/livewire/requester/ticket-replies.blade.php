@@ -9,7 +9,7 @@
                         <div
                             class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
                             <div class="d-flex align-items-center w-100">
-                                @if ($reply->user->hasRole(App\Models\Role::USER))
+                                @if (!$reply->user->hasRole(App\Models\Role::USER))
                                     @if ($reply->user->profile->picture)
                                         <img src="{{ Storage::url($reply->user->profile->picture) }}" alt=""
                                             class="image-fluid ticket__details__user__picture reply__ticket__details__user__picture">
@@ -21,7 +21,7 @@
                                     @endif
                                 @endif
                                 <div class="d-flex flex-wrap justify-content-between w-100">
-                                    @if ($reply->user->hasRole(App\Models\Role::USER))
+                                    @if (!$reply->user->hasRole(App\Models\Role::USER))
                                         <small
                                             class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                                             {{ $reply->user->profile->getFullName() }}

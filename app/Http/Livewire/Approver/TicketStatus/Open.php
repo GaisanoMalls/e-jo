@@ -3,14 +3,18 @@
 namespace App\Http\Livewire\Approver\TicketStatus;
 
 use App\Http\Traits\Approver\Tickets;
-use App\Models\ActivityLog;
-use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\TicketApproval;
 use Livewire\Component;
 
 class Open extends Component
 {
     use Tickets;
+
+    public function isTicketNeedLevelOfApproval(Ticket $ticket)
+    {
+        return TicketApproval::where('ticket_id', $ticket->id)->where('is_need_level_of_approval', true)->exists();
+    }
 
     public function render()
     {
@@ -21,14 +25,5 @@ class Open extends Component
             'openTickets' => $openTickets,
             'forApprovalTickets' => $forApprovalTickets,
         ]);
-    }
-
-    public function seenTicket($id)
-    {
-        dd(Ticket::findOrFail($id)->update(['status_id' => Status::VIEWED]));
-        Ticket::findOrFail($id)->update(['status_id' => Status::VIEWED]);
-        ActivityLog::make($id, 'seen the ticket');
-
-        return redirect()->route('approver.ticket.view_ticket_details', $id);
     }
 }

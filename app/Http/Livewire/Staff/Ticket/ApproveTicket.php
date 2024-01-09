@@ -65,7 +65,7 @@ class ApproveTicket extends Component
                     Notification::send($agent, new ApprovedTicketForAgentNotification($this->ticket));
                 }
 
-                // Notify the ticket sender.
+                // Notify the ticket sender/requester.
                 Notification::send($this->ticket->user, new ApprovedTicketForRequesterNotification($this->ticket));
                 ActivityLog::make($this->ticket->id, 'approved the ticket');
             });

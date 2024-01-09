@@ -8462,6 +8462,16 @@ a:hover {
 .ticket__section .card__ticket__details .ticket__dropdown__select:focus {
   border: 1px solid #1d5c63;
 }
+.ticket__section .card__ticket__details .check__need__level__of__approval {
+  margin-right: 5px !important;
+}
+.ticket__section .card__ticket__details .form-check-label {
+  font-size: 0.813rem !important;
+  margin-top: 0px !important;
+}
+.ticket__section .card__ticket__details .reload__section:hover {
+  cursor: pointer;
+}
 .ticket__section .card__ticket__details .level__approval__container .level__number__label {
   color: #7b6c6c;
   font-size: 0.813rem;

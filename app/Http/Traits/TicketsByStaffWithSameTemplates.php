@@ -19,13 +19,6 @@ trait TicketsByStaffWithSameTemplates
             : [];
     }
 
-    public function getTicketLevelApprovals()
-    {
-        return (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
-            ? $this->ticketLevelApprovals()
-            : [];
-    }
-
     public function getApprovedTickets()
     {
         return match (true) {

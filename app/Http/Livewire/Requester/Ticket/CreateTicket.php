@@ -8,10 +8,10 @@ use App\Http\Traits\Utils;
 use App\Mail\Requester\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\ApprovalStatus;
+use App\Models\ApproverLevel;
 use App\Models\Branch;
 use App\Models\HelpTopic;
-use App\Models\Level2Approver;
-use App\Models\Role;
+use App\Models\Level;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
 use App\Models\Team;
@@ -19,7 +19,6 @@ use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\TicketFile;
 use App\Models\TicketTeam;
-use App\Models\User;
 use App\Notifications\Requester\TicketCreatedNotification;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -123,50 +122,47 @@ class CreateTicket extends Component
                     }
                 }
 
-                // Email the first approver (Service Department Admin)
-                $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->with(['branches', 'buDepartments'])
-                    ->whereHas('buDepartments', fn($query) => $query->whereIn('departments.id', $ticket->user->buDepartments->pluck('id')->toArray()))->get();
+                $approverLevel = ApproverLevel::with('approver.profile')
+                    ->withWhereHas(
+                        'approver.buDepartments',
+                        fn($query) => $query->whereIn('departments.id', auth()->user()->buDepartments()->pluck('departments.id')->toArray())
+                    )->withWhereHas(
+                        'approver.branches',
+                        fn($query) => $query->whereIn('branches.id', auth()->user()->branches()->pluck('branches.id')->toArray())
+                    )->get();
 
-                if ($serviceDepartmentAdmins->isNotEmpty()) {
-                    $currentRequester = Auth::user();
+                $filteredLevel1Approvers = $approverLevel->where('level_id', Level::where('value', 1)->pluck('value')->first());
+                $filteredLevel2Approvers = $approverLevel->where('level_id', Level::where('value', 2)->pluck('value')->first());
 
-                    $filteredServiceDepartmentAdmins = $serviceDepartmentAdmins->filter(function ($user) use ($currentRequester) {
-                        return $user->buDepartments->contains('id', $currentRequester->buDepartments->pluck('id')->first())
-                            && $user->branches->contains('id', $currentRequester->branches->pluck('id')->first());
-                    });
-
-                    $filteredLevel2Approvers = Level2Approver::with('approver.profile')
-                        ->withWhereHas(
-                            'approver.buDepartments',
-                            fn($query) => $query->whereIn('departments.id', auth()->user()->buDepartments()->pluck('departments.id')->toArray())
-                        )->withWhereHas(
-                            'approver.branches',
-                            fn($query) => $query->whereIn('branches.id', auth()->user()->branches()->pluck('branches.id')->toArray())
-                        )->get();
-
+                if ($filteredLevel1Approvers->isNotEmpty() && $filteredLevel2Approvers->isNotEmpty()) {
                     if ($ticket->helpTopic->specialProject) {
+                        // Filter approver ids by level
+                        $level1ApproverIds = $filteredLevel1Approvers->isNotEmpty()
+                            ? $filteredLevel1Approvers->pluck('user_id')->toArray()
+                            : null;
+
+                        $level2ApproverIds = $filteredLevel2Approvers->isNotEmpty()
+                            ? $filteredLevel2Approvers->pluck('user_id')->toArray()
+                            : null;
+
                         TicketApproval::create([
                             'ticket_id' => $ticket->id,
                             'level_1_approver' => [
-                                'approver_id' => $filteredServiceDepartmentAdmins->isNotEmpty()
-                                    ? $filteredServiceDepartmentAdmins->map(fn($approver) => $approver->id)->toArray()
-                                    : null,
+                                'approver_id' => $level1ApproverIds,
                                 'is_approved' => false,
                                 'approved_by' => null,
                             ],
                             'level_2_approver' => [
-                                'approver_id' => $filteredLevel2Approvers->isNotEmpty()
-                                    ? $filteredLevel2Approvers->map(fn($approver) => $approver->id)->toArray()
-                                    : null,
+                                'approver_id' => $level2ApproverIds,
                                 'is_approved' => false,
                                 'approved_by' => null,
                             ],
                         ]);
                     }
 
-                    $serviceDepartmentAdmins->each(function ($serviceDepartmentAdmin) use ($ticket) {
-                        Notification::send($serviceDepartmentAdmin, new TicketCreatedNotification($ticket));
-                        // Mail::to($serviceDepartmentAdmin)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin));
+                    $filteredLevel1Approvers->each(function ($serviceDepartmentAdmin) use ($ticket) {
+                        Notification::send($serviceDepartmentAdmin->approver, new TicketCreatedNotification($ticket));
+                        Mail::to($serviceDepartmentAdmin->approver)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin->approver));
                     });
                 }
 
