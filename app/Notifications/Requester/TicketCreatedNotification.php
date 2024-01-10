@@ -44,7 +44,7 @@ class TicketCreatedNotification extends Notification implements ShouldQueue
         return [
             'ticket' => $this->ticket,
             'title' => "New ticket created {$this->ticket->ticket_number}",
-            'message' => 'created a ticket',
+            'message' => "{$this->ticket->user->profile->getFullName()} created a ticket",
         ];
     }
 }

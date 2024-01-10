@@ -1,4 +1,4 @@
-<div wire:poll.7s>
+<div>
     <div wire:ignore.self class="offcanvas offcanvas-end rounded-3 shadow border-0 notification__canvas"
         data-bs-backdrop="false" tabindex="-1" id="notificationCanvas">
         @if (auth()->user()->notifications->isNotEmpty())

@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire\Requester\Ticket;
 
+use App\Enums\ApprovalStatusEnum;
 use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Mail\Requester\TicketCreatedMail;
 use App\Models\ActivityLog;
-use App\Models\ApprovalStatus;
 use App\Models\ApproverLevel;
 use App\Models\Branch;
 use App\Models\HelpTopic;
@@ -97,7 +97,7 @@ class CreateTicket extends Component
                     'ticket_number' => $this->generatedTicketNumber(),
                     'subject' => $this->subject,
                     'description' => $this->description,
-                    'approval_status' => ApprovalStatus::FOR_APPROVAL,
+                    'approval_status' => ApprovalStatusEnum::FOR_APPROVAL,
                 ]);
 
                 TicketTeam::create([
@@ -148,11 +148,41 @@ class CreateTicket extends Component
                         TicketApproval::create([
                             'ticket_id' => $ticket->id,
                             'level_1_approver' => [
+                                'approval_order' => [
+                                    'approval_1' => [
+                                        'approver_id' => null, // int
+                                        'approved_by' => null, // int
+                                        'is_approved' => false,
+                                    ],
+                                    'approval_2' => [
+                                        'approver_id' => null, // array<int>
+                                        'approved_by' => null, // int
+                                        'is_approved' => false,
+                                    ],
+                                    'is_all_approved' => false,
+                                ],
+
+                                // to be removed once finalized.
                                 'approver_id' => $level1ApproverIds,
                                 'is_approved' => false,
                                 'approved_by' => null,
                             ],
                             'level_2_approver' => [
+                                'approval_order' => [
+                                    'approval_1' => [
+                                        'approver_id' => null, // array<int>
+                                        'approved_by' => null, // int
+                                        'is_approved' => false,
+                                    ],
+                                    'approval_2' => [
+                                        'approver_id' => null, // array<int>
+                                        'approved_by' => null, // int
+                                        'is_approved' => false,
+                                    ],
+                                    'is_all_approved' => false,
+                                ],
+
+                                // to be removed once finalized.
                                 'approver_id' => $level2ApproverIds,
                                 'is_approved' => false,
                                 'approved_by' => null,

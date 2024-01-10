@@ -44,7 +44,7 @@
     @endif
     @if (
         $ticket->status->id == App\Models\Status::CLOSED &&
-            $ticket->approval_status == App\Models\ApprovalStatus::DISAPPROVED)
+            $ticket->approval_status == App\Enums\ApprovalStatusEnum::DISAPPROVED)
         <a href="{{ route('staff.tickets.disapproved_tickets') }}" type="button"
             class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
             <i class="fa-solid fa-arrow-left"></i>
@@ -52,8 +52,8 @@
     @endif
     @if (
         $ticket->status->id == App\Models\Status::CLOSED ||
-            ($ticket->approval_status == App\Models\ApprovalStatus::APPROVED &&
-                $ticket->approval_status == App\Models\ApprovalStatus::DISAPPROVED))
+            ($ticket->approval_status == App\Enums\ApprovalStatusEnum::APPROVED &&
+                $ticket->approval_status == App\Enums\ApprovalStatusEnum::DISAPPROVED))
         <a href="{{ route('staff.tickets.closed_tickets') }}" type="button"
             class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
             <i class="fa-solid fa-arrow-left"></i>

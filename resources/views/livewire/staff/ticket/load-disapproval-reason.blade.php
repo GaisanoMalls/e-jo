@@ -17,7 +17,7 @@
             </div>
         </div>
     @endif
-    @if ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
+    @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::DISAPPROVED)
         <div class="alert alert-warning p-3 rounded-3 mx-1 mt-2 mb-4 d-flex align-items-center justify-content-between"
             role="alert" style="font-size: 13px;">
             <span style="font-size: 13px;">

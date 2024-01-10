@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\BasicModelQueries;
 use App\Mail\Staff\AssignedAgentMail;
-use App\Models\ApprovalStatus;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Team;
@@ -51,7 +51,7 @@ class AssignTicket extends Component
                 if (!is_null($this->ticket->agent_id)) {
                     $this->ticket->update([
                         'status_id' => Status::CLAIMED,
-                        'approval_status' => ApprovalStatus::APPROVED,
+                        'approval_status' => ApprovalStatusEnum::APPROVED,
                     ]);
 
                     Notification::send($this->ticket->agent, new AssignedAgentNotification($this->ticket));

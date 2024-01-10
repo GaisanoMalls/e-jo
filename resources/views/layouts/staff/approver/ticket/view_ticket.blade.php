@@ -69,7 +69,8 @@
                         </div>
                         @if (
                             $ticket->status_id !== App\Models\Status::CLOSED ||
-                                ($ticket->approval_status !== App\Models\ApprovalStatus::DISAPPROVED && $ticket->clarifications->count() !== 0))
+                                ($ticket->approval_status !== App\Enums\ApprovalStatusEnum::DISAPPROVED &&
+                                    $ticket->clarifications->count() !== 0))
                             {{-- Replies/Comments --}}
                             @livewire('approver.ticket-clarifications', ['ticket' => $ticket])
                         @else

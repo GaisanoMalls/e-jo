@@ -6,7 +6,7 @@
         </div>
         @if (
             $ticket->status_id != App\Models\Status::CLOSED &&
-                $ticket->approval_status != App\Models\ApprovalStatus::DISAPPROVED)
+                $ticket->approval_status != App\Enums\ApprovalStatusEnum::DISAPPROVED)
             <button class="btn btn-sm p-0 btn__change__priority__level"
                 style="font-size: 12px; color: blue; text-decoration: underline !important;" data-bs-toggle="modal"
                 data-bs-target="#changePriorityLevelModal">Change</button>

@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Enums\ApprovalStatusEnum;
 use App\Mail\Requester\TicketCreatedMail;
 use App\Mail\Staff\ApprovedTicketMail;
 use App\Models\ActivityLog;
-use App\Models\ApprovalStatus;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
@@ -28,6 +28,9 @@ class ApproveTicket extends Component
      */
     private function actionOnSubmit()
     {
+        $this->emit('loadDropdownApprovalButton');
+        $this->emit('loadTicketStatusTextHeader');
+        $this->emit('loadTicketStatusButtonHeader');
         $this->emit('loadSlaTimer');
         $this->emit('loadTicketTags');
         $this->emit('loadTicketLogs');
@@ -37,9 +40,6 @@ class ApproveTicket extends Component
         $this->emit('loadBackButtonHeader');
         $this->emit('loadReplyButtonHeader');
         $this->emit('loadDisapprovalReason');
-        $this->emit('loadDropdownApprovalButton');
-        $this->emit('loadTicketStatusTextHeader');
-        $this->emit('loadTicketStatusButtonHeader');
         $this->emit('loadClarificationButtonHeader');
         $this->emit('loadSidebarCollapseTicketStatus');
         $this->dispatchBrowserEvent('close-modal');
@@ -52,7 +52,7 @@ class ApproveTicket extends Component
                 // Update the ticket status if approved.
                 $this->ticket->update([
                     'status_id' => Status::APPROVED,
-                    'approval_status' => ApprovalStatus::APPROVED,
+                    'approval_status' => ApprovalStatusEnum::APPROVED,
                     'svcdept_date_approved' => Carbon::now(),
                 ]);
 

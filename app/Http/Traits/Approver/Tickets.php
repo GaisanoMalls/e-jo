@@ -2,8 +2,8 @@
 
 namespace App\Http\Traits\Approver;
 
+use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\BasicModelQueries;
-use App\Models\ApprovalStatus;
 use App\Models\Status;
 use App\Models\Ticket;
 
@@ -13,7 +13,7 @@ trait Tickets
 
     public function getForApprovalTickets()
     {
-        return Ticket::has('helpTopic.specialProject')->where('approval_status', ApprovalStatus::APPROVED)
+        return Ticket::has('helpTopic.specialProject')->where('approval_status', ApprovalStatusEnum::APPROVED)
             ->whereNotIn('status_id', [Status::VIEWED, Status::DISAPPROVED, Status::APPROVED, Status::ON_PROCESS])
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
             ->withWhereHas(
@@ -25,7 +25,7 @@ trait Tickets
     public function getOpenTickets()
     {
         return Ticket::has('helpTopic.specialProject')
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]))
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
             ->withWhereHas(
                 'ticketApprovals',
@@ -36,7 +36,7 @@ trait Tickets
     public function getDisapprovedTickets()
     {
         return Ticket::has('helpTopic.specialProject')
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->where('approval_status', ApprovalStatus::DISAPPROVED))
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->where('approval_status', ApprovalStatusEnum::DISAPPROVED))
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
             ->withWhereHas(
                 'ticketApprovals',
@@ -47,7 +47,7 @@ trait Tickets
     public function getViewedTickets()
     {
         return Ticket::has('helpTopic.specialProject')
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::VIEWED)->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]))
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::VIEWED)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
             ->withWhereHas(
                 'ticketApprovals',
@@ -58,7 +58,7 @@ trait Tickets
     public function getApprovedTickets()
     {
         return Ticket::has('helpTopic.specialProject')
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::APPROVED)->where('approval_status', ApprovalStatus::APPROVED))
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::APPROVED)->where('approval_status', ApprovalStatusEnum::APPROVED))
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
             ->withWhereHas(
                 'ticketApprovals',
@@ -69,7 +69,7 @@ trait Tickets
     public function getOnProcessTickets()
     {
         return Ticket::has('helpTopic.specialProject')
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::ON_PROCESS)->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]))
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::ON_PROCESS)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
             ->withWhereHas(
                 'ticketApprovals',

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Branch;
@@ -41,11 +42,7 @@ class Ticket extends Model
         'subject',
         'description',
         'approval_status',
-        'svcdept_date_approved'
-    ];
-
-    protected $casts = [
-        //
+        'svcdept_date_approved',
     ];
 
     public function user(): BelongsTo|Builder

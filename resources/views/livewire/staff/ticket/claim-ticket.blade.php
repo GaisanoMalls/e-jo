@@ -1,4 +1,6 @@
-@if ($ticket->status_id != App\Models\Status::CLOSED && $ticket->approval_status == App\Models\ApprovalStatus::APPROVED)
+@if (
+    $ticket->status_id != App\Models\Status::CLOSED &&
+        $ticket->approval_status == App\Enums\ApprovalStatusEnum::APPROVED)
     <div class="d-flex flex-column">
         @if ($ticket->status_id == App\Models\Status::CLAIMED)
             <button style="background-color: {{ $ticket->status->color }} !important;"

@@ -1,14 +1,14 @@
 <div>
     <div class="btn-group">
         <div class="d-flex flex-column">
-            @if ($ticket->approval_status === App\Models\ApprovalStatus::APPROVED)
+            @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::APPROVED)
                 <button type="button"
                     class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false"
                     style="background-color: #FF8B8B !important; color: white !important">
                     <i class="bi bi-check-lg"></i>
                 </button>
-            @elseif ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
+            @elseif ($ticket->approval_status === App\Enums\ApprovalStatusEnum::DISAPPROVED)
                 <button type="button"
                     class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false"
@@ -23,17 +23,17 @@
                 </button>
             @endif
 
-            @if ($ticket->approval_status === App\Models\ApprovalStatus::APPROVED)
+            @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::APPROVED)
                 <small class="ticket__details__topbuttons__label">Approved</small>
-            @elseif ($ticket->approval_status === App\Models\ApprovalStatus::DISAPPROVED)
+            @elseif ($ticket->approval_status === App\Enums\ApprovalStatusEnum::DISAPPROVED)
                 <small class="ticket__details__topbuttons__label">Disapproved</small>
             @else
                 <small class="ticket__details__topbuttons__label">Approval</small>
             @endif
 
             @if (
-                $ticket->approval_status !== App\Models\ApprovalStatus::APPROVED &&
-                    $ticket->approval_status !== App\Models\ApprovalStatus::DISAPPROVED)
+                $ticket->approval_status !== App\Enums\ApprovalStatusEnum::APPROVED &&
+                    $ticket->approval_status !== App\Enums\ApprovalStatusEnum::DISAPPROVED)
                 <ul class="dropdown-menu dropdown-menu-end approval__dropdown__menu slideIn animate">
                     <li>
                         <button type="button"

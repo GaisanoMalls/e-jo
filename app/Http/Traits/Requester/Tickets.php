@@ -2,7 +2,7 @@
 
 namespace App\Http\Traits\Requester;
 
-use App\Models\ApprovalStatus;
+use App\Enums\ApprovalStatusEnum;
 use App\Models\Clarification;
 use App\Models\Reply;
 use App\Models\Status;
@@ -18,7 +18,7 @@ trait Tickets
     public function getOnProcessTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::ON_PROCESS)->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]))
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::ON_PROCESS)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
             ->where('user_id', auth()->user()->id)
             ->orderByDesc('created_at')->get();
     }
@@ -26,7 +26,7 @@ trait Tickets
     public function getViewedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::VIEWED)->whereIn('approval_status', [ApprovalStatus::APPROVED, ApprovalStatus::FOR_APPROVAL]))
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::VIEWED)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
             ->where('user_id', auth()->user()->id)
             ->orderByDesc('created_at')->get();
     }
@@ -34,7 +34,7 @@ trait Tickets
     public function getApprovedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::APPROVED)->where('approval_status', ApprovalStatus::APPROVED))
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::APPROVED)->where('approval_status', ApprovalStatusEnum::APPROVED))
             ->where('user_id', auth()->user()->id)
             ->orderByDesc('created_at')->get();
     }
@@ -42,7 +42,7 @@ trait Tickets
     public function getClaimedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLAIMED)->where('approval_status', ApprovalStatus::APPROVED))
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLAIMED)->where('approval_status', ApprovalStatusEnum::APPROVED))
             ->whereNotNull('agent_id')->where('user_id', auth()->user()->id)
             ->orderByDesc('created_at')->get();
     }
@@ -50,7 +50,7 @@ trait Tickets
     public function getDisapprovedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::DISAPPROVED)->where('approval_status', ApprovalStatus::DISAPPROVED))
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::DISAPPROVED)->where('approval_status', ApprovalStatusEnum::DISAPPROVED))
             ->where('user_id', auth()->user()->id)
             ->orderByDesc('created_at')->get();
     }
@@ -58,7 +58,7 @@ trait Tickets
     public function getClosedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->where('approval_status', ApprovalStatus::APPROVED))
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->where('approval_status', ApprovalStatusEnum::APPROVED))
             ->where('user_id', auth()->user()->id)
             ->orderByDesc('created_at')->get();
     }

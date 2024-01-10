@@ -13,13 +13,13 @@
                         Approval status:
                     </small>
                     <small class="ticket__details__info">
-                        @if ($ticket->approval_status == App\Models\ApprovalStatus::APPROVED)
+                        @if ($ticket->approval_status == App\Enums\ApprovalStatusEnum::APPROVED)
                             <i class="fa-solid fa-circle-check me-1" style="color: green; font-size: 11px;"></i>
                             Approved
-                        @elseif ($ticket->approval_status == App\Models\ApprovalStatus::FOR_APPROVAL)
+                        @elseif ($ticket->approval_status == App\Enums\ApprovalStatusEnum::FOR_APPROVAL)
                             <i class="fa-solid fa-paper-plane me-1" style="color: orange; font-size: 11px;"></i>
                             For Approval
-                        @elseif ($ticket->approval_status == App\Models\ApprovalStatus::DISAPPROVED)
+                        @elseif ($ticket->approval_status == App\Enums\ApprovalStatusEnum::DISAPPROVED)
                             <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
                             Disapproved
                         @else
@@ -85,10 +85,13 @@
                         SLA:</small>
                     <div class="d-flex align-items-center gap-2">
                         <small class="ticket__details__info" id="slaDays">
-                            <i class="fa-solid fa-clock me-1 text-muted" style="font-size: 11px;"></i>
+                            <i class="fa-solid fa-clock me-1 text-muted {{ $isApprovedForSLA ? 'bx-flashing' : '' }}"
+                                style="font-size: 11px;"></i>
                             {{ $ticket->sla->time_unit ?? '----' }}
                         </small>
-                        @livewire('staff.ticket.sla-timer', ['ticket' => $ticket])
+                        @if ($isApprovedForSLA)
+                            @livewire('sla-timer', ['ticket' => $ticket])
+                        @endif
                     </div>
                 </div>
             </div>

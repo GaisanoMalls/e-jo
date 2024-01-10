@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Enums\ApprovalStatusEnum;
 use App\Http\Requests\Approver\StoreDisapproveTicketRequest;
 use App\Models\ActivityLog;
-use App\Models\ApprovalStatus;
 use App\Models\Reason;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -57,7 +57,7 @@ class DisapproveTicket extends Component
 
                 $reason->ticket()->where('id', $this->ticket->id)->update([
                     'status_id' => Status::DISAPPROVED,
-                    'approval_status' => ApprovalStatus::DISAPPROVED,
+                    'approval_status' => ApprovalStatusEnum::DISAPPROVED,
                 ]);
 
                 Notification::send($this->ticket->user, new DisapprovedTicketNotification($this->ticket));
