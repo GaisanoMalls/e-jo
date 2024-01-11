@@ -45,12 +45,10 @@ class AgentList extends Component
     public function render()
     {
         $this->agents = (Route::is('staff.manage.user_account.index'))
-            ? User::with(['profile'])->role(Role::AGENT)
-                ->take(5)->orderByDesc('created_at')->get()
+            ? User::with(['profile'])->role(Role::AGENT)->take(5)->orderByDesc('created_at')->get()
             : (
                 (Route::is('staff.manage.user_account.agents'))
-                ? User::with(['profile'])->role(Role::AGENT)
-                    ->orderByDesc('created_at')->get()
+                ? User::with(['profile'])->role(Role::AGENT)->orderByDesc('created_at')->get()
                 : $this->getInitialQuery()
             );
 

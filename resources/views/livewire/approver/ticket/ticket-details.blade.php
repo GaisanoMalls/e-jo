@@ -77,7 +77,8 @@
                     </small>
                     <div class="d-flex align-items-center gap-2">
                         <small class="ticket__details__info">
-                            <i class="fa-solid fa-clock me-1 text-muted" style="font-size: 11px;"></i>
+                            <i class="fa-solid fa-clock me-1 text-muted {{ $isApprovedForSLA ? 'bx-flashing' : '' }}"
+                                style="font-size: 11px;"></i>
                             {{ $ticket->sla->time_unit ?? '----' }}
                         </small>
                         @if ($isApprovedForSLA)

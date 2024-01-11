@@ -110,7 +110,6 @@ class UpdateAgent extends Component
                 noty()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName()}.");
             });
 
-
         } catch (Exception $e) {
             dump($e->getMessage());
             noty()->addError('Failed to update the agent.');

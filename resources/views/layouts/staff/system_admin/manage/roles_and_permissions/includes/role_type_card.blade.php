@@ -31,11 +31,8 @@
                                     </div>
                                 @endif
                             @endforeach
-                            @php
-                                $restAccounts = $approvers->count() - $approvers->take($profilePicLimit)->count();
-                            @endphp
-                            @if ($restAccounts !== 0)
-                                <small class="count__rest">+{{ $restAccounts }}</small>
+                            @if ($restApproverAccounts !== 0)
+                                <small class="count__rest">+{{ $restApproverAccounts }}</small>
                             @endif
                         </div>
                     </div>
@@ -62,17 +59,14 @@
                                     </div>
                                 @endif
                             @endforeach
-                            @php
-                                $restAccounts = $serviceDeptAdmins->count() - $serviceDeptAdmins->take($profilePicLimit)->count();
-                            @endphp
-                            @if ($restAccounts !== 0)
-                                <small class="count__rest">+{{ $restAccounts }}</small>
+                            @if ($restServiceDeptAdminAccounts !== 0)
+                                <small class="count__rest">+{{ $restServiceDeptAdminAccounts }}</small>
                             @endif
                         </div>
                     </div>
                     <a href="{{ route('staff.manage.user_account.service_department_admins') }}"
                         class="d-flex align-items-center gap-2 card__name">
-                        Service Department Admin
+                        Service Dept. Admin
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
@@ -93,11 +87,8 @@
                                     </div>
                                 @endif
                             @endforeach
-                            @php
-                                $restAccounts = $agents->count() - $agents->take($profilePicLimit)->count();
-                            @endphp
-                            @if ($restAccounts !== 0)
-                                <small class="count__rest">+{{ $restAccounts }}</small>
+                            @if ($restAgentAccounts !== 0)
+                                <small class="count__rest">+{{ $restAgentAccounts }}</small>
                             @endif
                         </div>
                     </div>
@@ -124,11 +115,8 @@
                                     </div>
                                 @endif
                             @endforeach
-                            @php
-                                $restAccounts = $users->count() - $users->take($profilePicLimit)->count();
-                            @endphp
-                            @if ($restAccounts !== 0)
-                                <small class="count__rest">+{{ $restAccounts }}</small>
+                            @if ($restUserAccounts !== 0)
+                                <small class="count__rest">+{{ $restUserAccounts }}</small>
                             @endif
                         </div>
                     </div>

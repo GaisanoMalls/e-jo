@@ -19,6 +19,11 @@ class RolesAndPermissionsController extends Controller
         $serviceDeptAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->get();
         $profilePicLimit = 5;
 
+        $restApproverAccounts = $approvers->count() - $approvers->take($profilePicLimit)->count();
+        $restServiceDeptAdminAccounts = $serviceDeptAdmins->count() - $serviceDeptAdmins->take($profilePicLimit)->count();
+        $restAgentAccounts = $agents->count() - $agents->take($profilePicLimit)->count();
+        $restUserAccounts = $users->count() - $users->take($profilePicLimit)->count();
+
         return view(
             'layouts.staff.system_admin.manage.roles_and_permissions.roles_and_permissions_index',
             compact([
@@ -27,7 +32,11 @@ class RolesAndPermissionsController extends Controller
                 'serviceDeptAdmins',
                 'agents',
                 'users',
-                'profilePicLimit'
+                'profilePicLimit',
+                'restApproverAccounts',
+                'restServiceDeptAdminAccounts',
+                'restAgentAccounts',
+                'restUserAccounts',
             ])
         );
     }
