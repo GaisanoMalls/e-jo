@@ -13,7 +13,6 @@ class ServiceLevelAgreement extends Model
     use HasFactory, Utils;
 
     /**
-     *
      * countdown_approach: 72
      * time_unit: 3 Days
      */

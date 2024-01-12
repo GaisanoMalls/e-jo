@@ -81,7 +81,8 @@ class SlaList extends Component
     public function delete()
     {
         try {
-            ServiceLevelAgreement::findOrFail($this->slaDeleteId)->delete();
+            $sla = ServiceLevelAgreement::with(['helpTopics', 'tickets'])->find($this->slaDeleteId);
+            dd($sla->getRelations());
             $this->slaDeleteId = null;
             $this->fetchServiceLevelAgreements();
             $this->dispatchBrowserEvent('close-modal');

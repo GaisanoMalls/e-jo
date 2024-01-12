@@ -93,7 +93,7 @@ class CreateTicket extends Component
                     'help_topic_id' => $this->helpTopic,
                     'status_id' => Status::OPEN,
                     'priority_level_id' => $this->priorityLevel,
-                    'service_level_agreement' => $this->sla,
+                    'service_level_agreement_id' => $this->sla,
                     'ticket_number' => $this->generatedTicketNumber(),
                     'subject' => $this->subject,
                     'description' => $this->description,

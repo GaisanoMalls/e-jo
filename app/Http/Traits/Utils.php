@@ -146,9 +146,7 @@ trait Utils
         $currentDate = now()->timestamp;
 
         // Get the target date from the server or any other data source
-        $targetDate = Carbon::parse($ticket->svcdept_date_approved)
-            ->addHours($slaDays * 24)
-            ->timestamp;
+        $targetDate = Carbon::parse($ticket->svcdept_date_approved)->addHours($slaDays * 24)->timestamp;
 
         // Calculate the time remaining
         $timeRemaining = $targetDate - $currentDate;
@@ -177,5 +175,4 @@ trait Utils
             ? true
             : false;
     }
-
 }
