@@ -114,6 +114,7 @@ class CreateHelpTopic extends Component
         $this->reset();
         $this->resetValidation();
         $this->dispatchBrowserEvent('close-modal');
+        $this->hideSpecialProjectContainer();
     }
 
     public function render()

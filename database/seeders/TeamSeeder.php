@@ -18,24 +18,31 @@ class TeamSeeder extends Seeder
     public function run()
     {
         $teams = [
-            [
-                'id' => 2,
-                'name' => 'ICT Support'
-            ],
-            [
-                'id' => 3,
-                'name' => 'System Development'
-            ],
-            [
-                'id' => 5,
-                'name' => 'Sales Audit'
-            ],
+            'Product Maint.',
+            'Price Mgmt.',
+            'POS',
+            'MMS',
+            'Inventory',
+            'Concessionaire',
+            'Electrical',
+            'Merchandise',
+            'Plumbing',
+            'RAC',
+            'ICT Support',
+            'System Development',
+            'Carpentry',
+            'Tiling',
+            'Painting',
+            'Welding',
+            'Maintenance SU',
+            'Labor',
+            'Elevator & Escalators',
         ];
 
         foreach ($teams as $team) {
             Team::firstOrCreate([
-                'name' => $team['name'],
-                'slug' => \Str::slug($team['name'])
+                'name' => $team,
+                'slug' => \Str::slug($team),
             ]);
         }
     }

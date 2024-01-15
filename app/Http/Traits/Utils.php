@@ -66,8 +66,7 @@ trait Utils
      */
     private static function alphaNum()
     {
-        $generatedValues = []; // Array to store previously generated values
-        $maxAttempts = 10; // Maximum number of attempts to generate a unique value
+        $maxAttempts = 20; // Maximum number of attempts to generate a unique value
         $letters = 'abcdefghijklmnopqrstuvwxyz';
 
         for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
@@ -75,14 +74,15 @@ trait Utils
             $num = mt_rand(100, 999);
             $value = $alpha[0] . $num;
 
-            if (!in_array($value, $generatedValues)) {
-                $generatedValues[] = $value;
+            $ticketNumberDoesNotExists = Ticket::whereNot('ticket_number', $value)->exists();
+            if ($ticketNumberDoesNotExists) {
                 return $value;
             }
         }
 
-        throw new Exception('Unable to generate a unique value after ' . $maxAttempts . ' attempts.');
+        return self::alphaNum();
     }
+
 
     /**
      * Slug Generator
