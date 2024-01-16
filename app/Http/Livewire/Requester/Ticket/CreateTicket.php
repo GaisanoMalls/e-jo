@@ -12,6 +12,7 @@ use App\Models\ApproverLevel;
 use App\Models\Branch;
 use App\Models\HelpTopic;
 use App\Models\Level;
+use App\Models\PriorityLevel;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
 use App\Models\Team;
@@ -47,6 +48,11 @@ class CreateTicket extends Component
     public $helpTopic;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
+
+    public function mount()
+    {
+        $this->priorityLevel = (int) PriorityLevel::where('value', 1)->pluck('id')->first();
+    }
 
     public function rules()
     {
@@ -148,44 +154,22 @@ class CreateTicket extends Component
                         TicketApproval::create([
                             'ticket_id' => $ticket->id,
                             'level_1_approver' => [
-                                'approval_order' => [
-                                    'approval_1' => [
-                                        'approver_id' => null, // int
-                                        'approved_by' => null, // int
-                                        'is_approved' => false,
-                                    ],
-                                    'approval_2' => [
-                                        'approver_id' => null, // array<int>
-                                        'approved_by' => null, // int
-                                        'is_approved' => false,
-                                    ],
-                                    'is_all_approved' => false,
-                                ],
-
-                                // to be removed once finalized.
-                                'approver_id' => $level1ApproverIds,
+                                'approver_id' => $level1ApproverIds, // array<int>
                                 'is_approved' => false,
                                 'approved_by' => null,
                             ],
                             'level_2_approver' => [
-                                'approval_order' => [
-                                    'approval_1' => [
-                                        'approver_id' => null, // array<int>
-                                        'approved_by' => null, // int
-                                        'is_approved' => false,
-                                    ],
-                                    'approval_2' => [
-                                        'approver_id' => null, // array<int>
-                                        'approved_by' => null, // int
-                                        'is_approved' => false,
-                                    ],
-                                    'is_all_approved' => false,
-                                ],
-
-                                // to be removed once finalized.
-                                'approver_id' => $level2ApproverIds,
+                                'approver_id' => $level2ApproverIds, // array<int>
                                 'is_approved' => false,
                                 'approved_by' => null,
+                            ],
+                            'level_3_approver' => [
+                                'approver_id' => null, // int
+                                'is_approved' => false,
+                            ],
+                            'level_4_approver' => [
+                                'approver_id' => null,
+                                'is_approved' => false,
                             ],
                         ]);
                     }
@@ -211,8 +195,7 @@ class CreateTicket extends Component
         $this->validate([
             'fileAttachments.*' => [
                 'nullable',
-                File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
-                    ->max(25600) //25600 (25 MB)
+                File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])->max(25600) //25600 (25 MB)
             ],
         ]);
     }

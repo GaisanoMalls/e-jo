@@ -15,14 +15,31 @@ class PriorityLevelsSeeder extends Seeder
     public function run()
     {
         $levels = [
-            ['name' => 'Low', 'color' => '#5A5A5A'],
-            ['name' => 'Medium', 'color' => '#FFA500'],
-            ['name' => 'High', 'color' => '#1E4620'],
-            ['name' => 'Urgent', 'color' => '#FF0000'],
+            [
+                'value' => 1,
+                'name' => 'Low',
+                'color' => '#5A5A5A',
+            ],
+            [
+                'value' => 2,
+                'name' => 'Medium',
+                'color' => '#FFA500',
+            ],
+            [
+                'value' => 3,
+                'name' => 'High',
+                'color' => '#1E4620',
+            ],
+            [
+                'value' => 4,
+                'name' => 'Urgent',
+                'color' => '#FF0000',
+            ],
         ];
 
         foreach ($levels as $level) {
             PriorityLevel::firstOrCreate([
+                'value' => $level['value'],
                 'name' => $level['name'],
                 'color' => $level['color'],
                 'slug' => \Str::slug($level['name']),

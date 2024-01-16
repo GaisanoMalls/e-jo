@@ -74,8 +74,8 @@ trait Utils
             $num = mt_rand(100, 999);
             $value = $alpha[0] . $num;
 
-            $ticketNumberDoesNotExists = Ticket::whereNot('ticket_number', $value)->exists();
-            if ($ticketNumberDoesNotExists) {
+            $ticketExists = Ticket::where('ticket_number', $value)->exists();
+            if (!$ticketExists) {
                 return $value;
             }
         }

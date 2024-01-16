@@ -121,7 +121,9 @@
                                                     wire:model="priorityLevel" id="rbtn{{ $priority->name }}"
                                                     value="{{ $priority->id }}">
                                                 <label class="form-check-label radio__button__label"
-                                                    for="rbtn{{ $priority->name }}">{{ $priority->name }}</label>
+                                                    for="rbtn{{ $priority->name }}">
+                                                    {{ $priority->name }}
+                                                </label>
                                             </div>
                                         @endforeach
                                     </div>

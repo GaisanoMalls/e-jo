@@ -38,7 +38,6 @@ class UpdatePriorityLevel extends Component
 
                 ActivityLog::make($this->ticket->id, "changed the priority level from {$currentLevel} to {$newLevel}");
                 $this->actionOnSubmit();
-
             }
         } catch (Exception $e) {
             dump($e->getMessage());

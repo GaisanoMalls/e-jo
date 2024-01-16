@@ -11,7 +11,12 @@ class PriorityLevel extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'color', 'slug'];
+    protected $fillable = [
+        'value',
+        'name',
+        'color',
+        'slug',
+    ];
     public $timestamps = false;
 
     const LOW = 'Low';
@@ -22,7 +27,7 @@ class PriorityLevel extends Model
         self::LOW => '#5A5A5A',
         self::MEDIUM => '#FFA500',
         self::HIGH => '#1E4620',
-        self::URGENT => 'FF0000'
+        self::URGENT => 'FF0000',
     ];
 
     public function tickets(): HasMany

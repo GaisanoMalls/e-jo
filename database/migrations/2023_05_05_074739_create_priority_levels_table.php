@@ -15,6 +15,7 @@ class CreatePriorityLevelsTable extends Migration
     {
         Schema::create('priority_levels', function (Blueprint $table) {
             $table->id();
+            $table->integer('value');
             $table->string('name', 10)->unique();
             $table->string('color');
             $table->string('slug')->unique();
