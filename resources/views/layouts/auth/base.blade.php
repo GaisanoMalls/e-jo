@@ -36,7 +36,7 @@
                 @endif
                 <div class="col-xl-6 p-0">
                     <div class="login__card">
-                        <div class="login__form__container my-3 position-relative d-flex flex-column">
+                        <div class="login__form__container mb-3 mt-5 position-relative d-flex flex-column">
                             @include('layouts.auth.includes.app_name')
                             @yield('form-title')
                             @section('form-section')
@@ -48,7 +48,6 @@
             </div>
         </div>
     </section>
-
     @livewireScripts
 </body>
 

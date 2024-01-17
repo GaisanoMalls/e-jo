@@ -106,19 +106,12 @@ class CreateTicket extends Component
                     'approval_status' => ApprovalStatusEnum::FOR_APPROVAL,
                 ]);
 
-                TicketTeam::create([
-                    'ticket_id' => $ticket->id,
-                    'team_id' => $this->team != 'undefined' ? $this->team : null
-                ]);
+                TicketTeam::create(['ticket_id' => $ticket->id, 'team_id' => $this->team != 'undefined' ? $this->team : null]);
 
                 if ($this->fileAttachments) {
                     foreach ($this->fileAttachments as $uploadedFile) {
                         $fileName = $uploadedFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs(
-                            "public/ticket/$ticket->ticket_number/creation_attachments",
-                            $uploadedFile,
-                            $fileName
-                        );
+                        $fileAttachment = Storage::putFileAs("public/ticket/$ticket->ticket_number/creation_attachments", $uploadedFile, $fileName);
 
                         $ticketFile = new TicketFile();
                         $ticketFile->file_attachment = $fileAttachment;
@@ -129,13 +122,9 @@ class CreateTicket extends Component
                 }
 
                 $approverLevel = ApproverLevel::with('approver.profile')
-                    ->withWhereHas(
-                        'approver.buDepartments',
-                        fn($query) => $query->whereIn('departments.id', auth()->user()->buDepartments()->pluck('departments.id')->toArray())
-                    )->withWhereHas(
-                        'approver.branches',
-                        fn($query) => $query->whereIn('branches.id', auth()->user()->branches()->pluck('branches.id')->toArray())
-                    )->get();
+                    ->withWhereHas('approver.buDepartments', fn($query) => $query->whereIn('departments.id', auth()->user()->buDepartments()->pluck('departments.id')->toArray()))
+                    ->withWhereHas('approver.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches()->pluck('branches.id')->toArray()))
+                    ->get();
 
                 $filteredLevel1Approvers = $approverLevel->where('level_id', Level::where('value', 1)->pluck('value')->first());
                 $filteredLevel2Approvers = $approverLevel->where('level_id', Level::where('value', 2)->pluck('value')->first());
@@ -153,24 +142,12 @@ class CreateTicket extends Component
 
                         TicketApproval::create([
                             'ticket_id' => $ticket->id,
-                            'level_1_approver' => [
+                            'approver' => [
                                 'approver_id' => $level1ApproverIds, // array<int>
-                                'is_approved' => false,
                                 'approved_by' => null,
                             ],
-                            'level_2_approver' => [
-                                'approver_id' => $level2ApproverIds, // array<int>
-                                'is_approved' => false,
-                                'approved_by' => null,
-                            ],
-                            'level_3_approver' => [
-                                'approver_id' => null, // int
-                                'is_approved' => false,
-                            ],
-                            'level_4_approver' => [
-                                'approver_id' => null,
-                                'is_approved' => false,
-                            ],
+                            'is_for_approval' => true,
+                            'is_approved' => false,
                         ]);
                     }
 

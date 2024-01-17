@@ -96,17 +96,6 @@ trait Utils
     }
 
     /**
-     * Multi Select
-     * Method:
-     * - getSelectedValue()
-     * @return array
-     */
-    public function getSelectedValue($field)
-    {
-        return array_map('intval', explode(',', $field[0]));
-    }
-
-    /**
      * File Upload Dir.
      * Method:
      * - fileDirByUserType()

@@ -47,41 +47,37 @@ class ApproveTicket extends Component
 
     public function approveTicket()
     {
-        if ($this->ticket->specialProject) {
-            //
-        } else {
-            try {
-                DB::transaction(function () {
-                    // Update the ticket status if approved.
-                    $this->ticket->update([
-                        'status_id' => Status::APPROVED,
-                        'approval_status' => ApprovalStatusEnum::APPROVED,
-                        'svcdept_date_approved' => Carbon::now(),
-                    ]);
+        try {
+            DB::transaction(function () {
+                // Update the ticket status if approved.
+                $this->ticket->update([
+                    'status_id' => Status::APPROVED,
+                    'approval_status' => ApprovalStatusEnum::APPROVED,
+                    'svcdept_date_approved' => Carbon::now(),
+                ]);
 
-                    // Get the agents with specific conditions.
-                    $agents = User::withWhereHas('teams', fn($query) => $query->where('teams.id', $this->ticket->team_id))
-                        ->whereHas('branches', fn($query) => $query->where('branches.id', $this->ticket->branch_id))
-                        ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->service_department_id))->get();
+                // Get the agents with specific conditions.
+                $agents = User::withWhereHas('teams', fn($query) => $query->where('teams.id', $this->ticket->team_id))
+                    ->whereHas('branches', fn($query) => $query->where('branches.id', $this->ticket->branch_id))
+                    ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->service_department_id))->get();
 
-                    // Notify agents through email and app based notification.
-                    foreach ($agents as $agent) {
-                        Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
-                        Notification::send($agent, new ApprovedTicketForAgentNotification($this->ticket));
-                    }
+                // Notify agents through email and app based notification.
+                foreach ($agents as $agent) {
+                    Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
+                    Notification::send($agent, new ApprovedTicketForAgentNotification($this->ticket));
+                }
 
-                    // Notify the ticket sender/requester.
-                    Notification::send($this->ticket->user, new ApprovedTicketForRequesterNotification($this->ticket));
-                    ActivityLog::make($this->ticket->id, 'approved the ticket');
-                });
+                // Notify the ticket sender/requester.
+                Notification::send($this->ticket->user, new ApprovedTicketForRequesterNotification($this->ticket));
+                ActivityLog::make($this->ticket->id, 'approved the ticket');
+            });
 
-                $this->actionOnSubmit();
-                noty()->addSuccess('Ticket has been approved');
+            $this->actionOnSubmit();
+            noty()->addSuccess('Ticket has been approved');
 
-            } catch (Exception $e) {
-                dump($e->getMessage());
-                noty()->addError('Oops, something went wrong');
-            }
+        } catch (Exception $e) {
+            dump($e->getMessage());
+            noty()->addError('Oops, something went wrong');
         }
     }
 
