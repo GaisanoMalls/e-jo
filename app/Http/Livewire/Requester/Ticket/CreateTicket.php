@@ -23,6 +23,8 @@ use App\Models\TicketTeam;
 use App\Notifications\Requester\TicketCreatedNotification;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -127,17 +129,12 @@ class CreateTicket extends Component
                     ->get();
 
                 $filteredLevel1Approvers = $approverLevel->where('level_id', Level::where('value', 1)->pluck('value')->first());
-                $filteredLevel2Approvers = $approverLevel->where('level_id', Level::where('value', 2)->pluck('value')->first());
 
-                if ($filteredLevel1Approvers->isNotEmpty() && $filteredLevel2Approvers->isNotEmpty()) {
+                if ($filteredLevel1Approvers->isNotEmpty()) {
                     if ($ticket->helpTopic->specialProject) {
                         // Filter approver ids by level
                         $level1ApproverIds = $filteredLevel1Approvers->isNotEmpty()
                             ? $filteredLevel1Approvers->pluck('user_id')->toArray()
-                            : null;
-
-                        $level2ApproverIds = $filteredLevel2Approvers->isNotEmpty()
-                            ? $filteredLevel2Approvers->pluck('user_id')->toArray()
                             : null;
 
                         TicketApproval::create([
@@ -146,7 +143,7 @@ class CreateTicket extends Component
                                 'approver_id' => $level1ApproverIds, // array<int>
                                 'approved_by' => null,
                             ],
-                            'is_for_approval' => true,
+                            'is_currently_for_approval' => true,
                             'is_approved' => false,
                         ]);
                     }
@@ -162,7 +159,7 @@ class CreateTicket extends Component
                 noty()->addSuccess('Ticket successfully created.');
             });
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong.');
         }
     }

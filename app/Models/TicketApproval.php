@@ -14,7 +14,7 @@ class TicketApproval extends Model
     protected $fillable = [
         'ticket_id',
         'approver',
-        'is_for_approval',
+        'is_currently_for_approval',
         'is_approved',
     ];
 

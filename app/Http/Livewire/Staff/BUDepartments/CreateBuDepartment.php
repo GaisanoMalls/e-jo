@@ -8,6 +8,7 @@ use App\Models\Department;
 use App\Models\ServiceDepartment;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class CreateBuDepartment extends Component
@@ -62,7 +63,7 @@ class CreateBuDepartment extends Component
             noty()->addSuccess('New BU\Department has been created.');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

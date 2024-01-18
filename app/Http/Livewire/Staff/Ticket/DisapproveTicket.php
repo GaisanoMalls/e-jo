@@ -11,6 +11,7 @@ use App\Models\Ticket;
 use App\Notifications\ServiceDepartmentAdmin\DisapprovedTicketNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
@@ -68,7 +69,7 @@ class DisapproveTicket extends Component
             noty()->addSuccess('Ticket has been approved');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Ooos, something went wrong');
         }
     }

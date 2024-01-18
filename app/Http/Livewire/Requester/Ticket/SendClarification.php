@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Notifications\Requester\TicketClarificationFromRequesterNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -111,7 +112,7 @@ class SendClarification extends Component
                 $this->actionOnSubmit();
             });
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

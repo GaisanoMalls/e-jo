@@ -7,6 +7,7 @@ use App\Http\Traits\BasicModelQueries;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class CreateTeam extends Component
@@ -54,7 +55,7 @@ class CreateTeam extends Component
             noty()->addSuccess('New team has been created.');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong.');
         }
     }

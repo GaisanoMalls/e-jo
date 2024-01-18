@@ -6,6 +6,7 @@ use App\Http\Requests\SysAdmin\Manage\Tag\StoreTagRequest;
 use App\Http\Traits\Utils;
 use App\Models\Tag;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class CreateTag extends Component
@@ -45,7 +46,7 @@ class CreateTag extends Component
             noty()->addSuccess('Tag created');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
@@ -32,7 +33,7 @@ class ServiceDeptAdminList extends Component
             noty()->addSuccess('Service department admin account has been deleted');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addSuccess('Oops, something went wrong');
         }
     }

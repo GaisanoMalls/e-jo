@@ -8,6 +8,7 @@ use App\Models\SpecialProject;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class UpdateHelpTopic extends Component
@@ -71,7 +72,7 @@ class UpdateHelpTopic extends Component
             noty()->addSuccess('Help topic successfully updated.');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong.');
         }
     }

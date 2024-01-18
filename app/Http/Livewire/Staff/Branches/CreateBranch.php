@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Branches;
 use App\Http\Requests\SysAdmin\Manage\Branch\StoreBranchRequest;
 use App\Models\Branch;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class CreateBranch extends Component
@@ -42,7 +43,7 @@ class CreateBranch extends Component
             noty()->addSuccess('New branch has been created.');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

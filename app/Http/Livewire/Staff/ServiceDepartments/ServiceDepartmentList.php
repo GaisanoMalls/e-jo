@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\ServiceDepartments;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\ServiceDepartment;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class ServiceDepartmentList extends Component
@@ -61,7 +62,7 @@ class ServiceDepartmentList extends Component
             noty()->addSuccess('Service department successfully updated');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }
@@ -83,7 +84,7 @@ class ServiceDepartmentList extends Component
             noty()->addSuccess('Service department successfully deleted');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

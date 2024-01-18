@@ -7,6 +7,7 @@ use App\Http\Traits\Utils;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class UpdateServiceDepartmentAdmin extends Component
@@ -77,7 +78,7 @@ class UpdateServiceDepartmentAdmin extends Component
                 noty()->addSuccess("You have successfully updated the account for {$this->serviceDeptAdmin->profile->getFullName()}.");
             });
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Failed to update the account.');
         }
     }

@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Notifications\ServiceDepartmentAdmin\AssignedAgentNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
@@ -65,7 +66,7 @@ class AssignTicket extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

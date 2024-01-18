@@ -1,4 +1,4 @@
-@use "../generic"as generic;
+@use "../generic" as generic;
 @import "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap";
 @import "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap";
 @import "../bootstrap-icons.scss";
@@ -65,7 +65,7 @@ $active-button-background-color: #1a3c40;
 $button-background-2: #3b8890;
 $search-button-background: #1a3c40;
 $button-box-shadow: 0 0.25rem 0.375rem -0.0625rem rgb(20 20 20 / 12%),
-0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
+    0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
 $gradient-background: linear-gradient(310deg, #d28b27 0%, #f7be44 100%);
 $sidebar-gradient-background: linear-gradient(310deg, #2c287f 0%, #9079ce 100%);
 $box-shadow-global: 0 20px 27px 0 rgb(0 0 0 / 5%);
@@ -101,8 +101,8 @@ $color-1: #d32839;
     background: #D32839;
 }
 
-.tooltip{
-   font-size: $fs-11;
+.tooltip {
+    font-size: $fs-11;
 }
 
 .slideIn {
@@ -851,7 +851,7 @@ a {
     }
 }
 
-.sidebar__active__dot{
+.sidebar__active__dot {
     height: 8px;
     width: 8px;
     left: -1.22rem;

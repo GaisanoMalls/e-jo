@@ -6,6 +6,7 @@ use App\Http\Traits\BasicModelQueries;
 use App\Models\Department;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class BUDepartmentList extends Component
@@ -71,7 +72,7 @@ class BUDepartmentList extends Component
                 $this->actionOnSubmit();
             }
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }
@@ -92,7 +93,7 @@ class BUDepartmentList extends Component
             noty()->addSuccess('BU/Department successfully deleted');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

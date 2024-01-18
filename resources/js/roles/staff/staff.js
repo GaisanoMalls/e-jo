@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (checkBoxTransferTicket) {
         checkBoxTransferTicket.addEventListener('change', (event) => {
             if (event.target.checked) {
-                selectAssignToAgent.setAttribute('disabled', '')
+                selectAssignToAgent.setAttribute('disabled', '');
                 btnSaveTransferTicket.removeAttribute('disabled');
                 transferDepartmentSection.style.display = 'block';
                 assignToAgentSection.style.display = 'none';
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const clearModalForm = () => {
         const modalForm = document.getElementById('modalForm');
         modalForm.reset();
-    }
+    };
 
     if (btnCloseModal) {
         btnCloseModal.addEventListener('click', clearModalForm);
@@ -47,5 +47,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Enable bootstrap tooltips
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));

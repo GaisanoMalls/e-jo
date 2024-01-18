@@ -10,6 +10,7 @@ use App\Models\Department;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AnnouncementController extends Controller
 {
@@ -31,7 +32,7 @@ class AnnouncementController extends Controller
                 'departments',
                 'today_announcements',
                 'yesterday_announcements',
-                'recent_announcements'
+                'recent_announcements',
             ])
         );
     }
@@ -67,7 +68,7 @@ class AnnouncementController extends Controller
             return back()->with('success', 'Announcement successfully deleted.');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             return back()->with('success', 'Announcemant cannot be deleted.');
         }
     }

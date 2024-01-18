@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Ticket;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class AssignTag extends Component
@@ -27,7 +28,7 @@ class AssignTag extends Component
             $this->dispatchBrowserEvent('close-modal');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

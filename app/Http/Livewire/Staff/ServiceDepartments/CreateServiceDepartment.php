@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\ServiceDepartments;
 use App\Http\Requests\SysAdmin\Manage\ServiceDepartment\StoreServiceDepartmentRequest;
 use App\Models\ServiceDepartment;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class CreateServiceDepartment extends Component
@@ -42,7 +43,7 @@ class CreateServiceDepartment extends Component
             noty()->addSuccess('A new service department has been created.');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

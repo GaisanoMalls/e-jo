@@ -64,7 +64,8 @@ class CustomFieldAddForm extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
+            ;
             noty()->addError('Oops, something went wrong.');
         }
     }

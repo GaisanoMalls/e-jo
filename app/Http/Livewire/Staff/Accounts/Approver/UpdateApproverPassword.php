@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Accounts\Approver;
 use App\Http\Requests\SysAdmin\Manage\Account\UpdatePasswordRequest;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class UpdateApproverPassword extends Component
@@ -40,7 +41,7 @@ class UpdateApproverPassword extends Component
             noty()->addSuccess('Password has been updated.');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

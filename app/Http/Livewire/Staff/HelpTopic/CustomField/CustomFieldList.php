@@ -6,6 +6,7 @@ use App\Enums\FieldRequiredOptionEnum;
 use App\Enums\FieldTypesEnum;
 use App\Models\Field;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
 
@@ -24,7 +25,7 @@ class CustomFieldList extends Component
         try {
             $field->delete();
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

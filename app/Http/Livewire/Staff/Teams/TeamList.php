@@ -7,6 +7,7 @@ use App\Models\Branch;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class TeamList extends Component
@@ -87,7 +88,7 @@ class TeamList extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }
@@ -108,7 +109,8 @@ class TeamList extends Component
             noty()->addSuccess('Team successfully deleted');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
+            ;
             noty()->addError('Oops, something went wrong');
         }
     }

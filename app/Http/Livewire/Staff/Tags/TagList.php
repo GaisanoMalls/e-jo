@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Tags;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Tag;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class TagList extends Component
@@ -61,7 +62,7 @@ class TagList extends Component
             noty()->addSuccess('Tag updated');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }
@@ -83,7 +84,7 @@ class TagList extends Component
             noty()->addSuccess('Tag successfully deleted');
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }

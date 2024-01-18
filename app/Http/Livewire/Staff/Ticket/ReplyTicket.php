@@ -11,6 +11,7 @@ use App\Models\Status;
 use App\Models\Ticket;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -86,7 +87,7 @@ class ReplyTicket extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Failed to send ticket clarification. Please try again.');
         }
     }

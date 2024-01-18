@@ -12,6 +12,7 @@ use App\Models\Role;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class CreateApprover extends Component
@@ -77,7 +78,7 @@ class CreateApprover extends Component
                 noty()->addSuccess('Account successfully created');
             });
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Failed to save a new approver');
         }
     }

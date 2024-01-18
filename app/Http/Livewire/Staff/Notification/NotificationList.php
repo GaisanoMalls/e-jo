@@ -8,6 +8,7 @@ use App\Models\Status;
 use App\Models\Ticket;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class NotificationList extends Component
@@ -40,7 +41,7 @@ class NotificationList extends Component
             });
 
         } catch (Exception $e) {
-            dump($e->getMessage());
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong');
         }
     }
