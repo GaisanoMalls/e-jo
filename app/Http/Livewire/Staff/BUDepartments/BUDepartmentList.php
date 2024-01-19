@@ -87,7 +87,7 @@ class BUDepartmentList extends Component
     public function delete()
     {
         try {
-            Department::findOrFail($this->buDepartmentDeleteId)->delete();
+            Department::find($this->buDepartmentDeleteId)->delete();
             $this->buDepartmentDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             noty()->addSuccess('BU/Department successfully deleted');

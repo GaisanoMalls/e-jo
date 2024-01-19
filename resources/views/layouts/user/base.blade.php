@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="turbo-visit-control" content="reload">
     <link rel="icon" href="{{ asset('images/gmall.png') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('images/gmall.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/icons/fontawesome.css') }}">
@@ -39,11 +38,6 @@
     </div>
 
     @livewireScripts
-    <script type="module">
-        import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
-    </script>
-    <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js"
-        data-turbolinks-eval="false"></script>
     @yield('action-js')
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="{{ asset('js/select/virtual-select.min.js') }}"></script>

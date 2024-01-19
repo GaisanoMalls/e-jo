@@ -76,7 +76,7 @@ class BranchList extends Component
     public function delete()
     {
         try {
-            Branch::findOrFail($this->branchDeleteId)->delete();
+            Branch::find($this->branchDeleteId)->delete();
             $this->branchDeleteId = null;
             $this->fetchBranches();
             $this->dispatchBrowserEvent('close-modal');

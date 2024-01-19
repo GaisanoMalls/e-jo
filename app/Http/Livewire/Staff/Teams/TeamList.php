@@ -71,7 +71,7 @@ class TeamList extends Component
         $this->validate();
 
         try {
-            $team = Team::findOrFail($this->teamEditId);
+            $team = Team::find($this->teamEditId);
 
             if ($team) {
                 DB::transaction(function () use ($team) {
@@ -103,7 +103,7 @@ class TeamList extends Component
     public function delete()
     {
         try {
-            Team::findOrFail($this->teamDeleteId)->delete();
+            Team::find($this->teamDeleteId)->delete();
             $this->teamDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             noty()->addSuccess('Team successfully deleted');

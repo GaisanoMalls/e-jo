@@ -77,7 +77,7 @@ class TagList extends Component
     public function delete()
     {
         try {
-            Tag::findOrFail($this->tagDeleteId)->delete();
+            Tag::find($this->tagDeleteId)->delete();
             $this->tagDeleteId = null;
             $this->fetchTags();
             $this->dispatchBrowserEvent('close-modal');

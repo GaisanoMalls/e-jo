@@ -9,6 +9,7 @@ use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\TicketApproval;
 use App\Models\User;
 use App\Notifications\Requester\TicketCreatedNotification;
 use App\Notifications\ServiceDepartmentAdmin\ApprovedTicketForAgentNotification;
@@ -59,6 +60,17 @@ class ApproveTicket extends Component
                         'approval_status' => ApprovalStatusEnum::APPROVED,
                         'svcdept_date_approved' => Carbon::now(),
                     ]);
+
+                    if ($this->ticket->helpTopic->specialProject) {
+                        TicketApproval::where([
+                            ['ticket_id', $this->ticket->id],
+                            ['approver_id', auth()->user()->id],
+                        ])->update([
+                                    'is_approved' => true,
+                                    'is_currently_for_approval' => false,
+                                    'approver->approved_by' => auth()->user()->id,
+                                ]);
+                    }
 
                     // Get the agents with specific conditions.
                     $agents = User::withWhereHas('teams', fn($query) => $query->where('teams.id', $this->ticket->team_id))

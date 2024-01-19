@@ -62,7 +62,7 @@ class SlaList extends Component
         $validatedData = $this->validate();
 
         try {
-            ServiceLevelAgreement::findOrFail($this->slaEditId)->update($validatedData);
+            ServiceLevelAgreement::find($this->slaEditId)->update($validatedData);
             $this->actionOnSubmit();
 
         } catch (Exception $e) {

@@ -27,7 +27,7 @@ class ServiceDeptAdminList extends Component
     public function delete()
     {
         try {
-            User::findOrFail($this->serviceDeptAdminDeleteId)->delete();
+            User::find($this->serviceDeptAdminDeleteId)->delete();
             $this->serviceDeptAdminDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             noty()->addSuccess('Service department admin account has been deleted');

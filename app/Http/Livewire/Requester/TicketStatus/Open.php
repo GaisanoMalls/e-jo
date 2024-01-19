@@ -12,6 +12,7 @@ class Open extends Component
     public function render()
     {
         $openTickets = $this->getOpenTickets();
+
         return view('livewire.requester.ticket-status.open', compact('openTickets'));
     }
 }

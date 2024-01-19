@@ -73,8 +73,7 @@ class TicketLevelApproval extends Component
         $filteredLevel2Approvers = TicketApproval::where([
             ['ticket_id', $this->ticket->id],
             ['is_approved', true],
-        ])->whereNotNull('approver->approver_id')
-            ->get();
+        ])->whereNotNull('approver->approver_id')->get();
 
         if ($filteredLevel2Approvers->isNotEmpty()) {
             $level2Approvers = User::with('profile')->whereIn('id', $filteredLevel2Approvers->pluck('approver.approver_id')->flatten()->toArray())->get();

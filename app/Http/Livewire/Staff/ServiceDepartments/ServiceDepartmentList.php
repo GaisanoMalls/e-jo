@@ -77,7 +77,7 @@ class ServiceDepartmentList extends Component
     public function delete()
     {
         try {
-            ServiceDepartment::findOrFail($this->serviceDepartmentDeleteId)->delete();
+            ServiceDepartment::find($this->serviceDepartmentDeleteId)->delete();
             $this->serviceDepartmentDeleteId = null;
             $this->fetchServiceDepartments();
             $this->dispatchBrowserEvent('close-modal');

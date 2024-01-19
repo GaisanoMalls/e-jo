@@ -27,7 +27,7 @@ class AgentList extends Component
     public function delete()
     {
         try {
-            User::findOrFail($this->agentDeleteId)->delete();
+            User::find($this->agentDeleteId)->delete();
             $this->agentDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             noty()->addSuccess('Requester account has been deleted');

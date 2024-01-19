@@ -41,7 +41,7 @@ class ApproverList extends Component
     public function delete()
     {
         try {
-            User::findOrFail($this->approverDeleteId)->delete();
+            User::find($this->approverDeleteId)->delete();
             $this->approverDeleteId = null;
             $this->actionOnSubmit();
             noty()->addSuccess('Approver account has been deleted');
