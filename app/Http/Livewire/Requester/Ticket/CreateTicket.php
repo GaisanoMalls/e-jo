@@ -53,7 +53,7 @@ class CreateTicket extends Component
 
     public function mount()
     {
-        $this->priorityLevel = (int) PriorityLevel::where('value', 1)->pluck('id')->first();
+        $this->setDefaultPriorityLevel();
     }
 
     public function rules()
@@ -76,6 +76,11 @@ class CreateTicket extends Component
         $this->resetValidation();
     }
 
+    private function setDefaultPriorityLevel()
+    {
+        $this->priorityLevel = (int) PriorityLevel::where('value', 1)->pluck('id')->first();
+    }
+
     private function actionOnSubmit()
     {
         $this->reset();
@@ -86,6 +91,7 @@ class CreateTicket extends Component
         $this->emit('loadTicketTab');
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('clear-branch-dropdown-select');
+        $this->setDefaultPriorityLevel();
     }
 
     public function sendTicket()
@@ -129,6 +135,7 @@ class CreateTicket extends Component
                     ->get();
 
                 $filteredLevel1Approvers = $approverLevel->where('level_id', Level::where('value', 1)->pluck('value')->first());
+                $filteredLevel2Approvers = $approverLevel->where('level_id', Level::where('value', 2)->pluck('value')->first());
 
                 if ($filteredLevel1Approvers->isNotEmpty()) {
                     if ($ticket->helpTopic->specialProject) {
@@ -137,14 +144,23 @@ class CreateTicket extends Component
                             ? $filteredLevel1Approvers->pluck('user_id')->toArray()
                             : null;
 
+                        $level2ApproverIds = $filteredLevel2Approvers->isNotEmpty()
+                            ? $filteredLevel2Approvers->pluck('user_id')->toArray()
+                            : null;
+
                         TicketApproval::create([
                             'ticket_id' => $ticket->id,
-                            'approver' => [
+                            'level_1_approver' => [
                                 'approver_id' => $level1ApproverIds, // array<int>
                                 'approved_by' => null,
+                                'is_approved' => false,
                             ],
-                            'is_currently_for_approval' => true,
-                            'is_approved' => false,
+                            'level_2_approver' => [
+                                'approver_id' => $level2ApproverIds, // array<int>
+                                'approved_by' => null,
+                                'is_approved' => false,
+                            ],
+                            'is_all_approved' => false,
                         ]);
                     }
 

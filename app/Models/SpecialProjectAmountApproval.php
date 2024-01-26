@@ -6,33 +6,26 @@ use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TicketApproval extends Model
+class SpecialProjectAmountApproval extends Model
 {
     use HasFactory;
 
-    protected $table = 'ticket_approval';
     protected $fillable = [
         'ticket_id',
-        'level_1_approver',
-        'level_2_approver',
-        'is_all_approved',
+        'service_department_admin_approver',
+        'fpm_coo_approver',
     ];
 
     /**
      * Properties: approver_id, approved_by, and is_approved
      */
     protected $casts = [
-        'level_1_approver' => AsArrayObject::class,
-        'level_2_approver' => AsArrayObject::class,
+        'service_department_admin_approver' => AsArrayObject::class,
+        'fpm_coo_approver' => AsArrayObject::class,
     ];
 
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
-    }
-
-    public function isAllApproved()
-    {
-        return $this->is_all_approved === 1;
     }
 }

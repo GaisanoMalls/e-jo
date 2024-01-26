@@ -150,4 +150,9 @@ class Ticket extends Model
         return '----';
     }
 
+    public function isSpecialProject()
+    {
+        return !is_null($this->helpTopic?->specialProject);
+    }
+
 }

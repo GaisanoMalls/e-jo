@@ -8,6 +8,9 @@
                             <th class="border-0 table__head__label" style="padding: 17px 30px">
                                 Date Created
                             </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 10px;">
+                                Special Project
+                            </th>
                             <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                 Ticket Number
                             </th>
@@ -37,6 +40,15 @@
                                         <span>
                                             {{ $ticket->dateCreated() }} @
                                             {{ $ticket->created_at->format('g:i A') }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center text-start gap-3 td__content p-0">
+                                        <span>
+                                            {!! $ticket->isSpecialProject()
+                                                ? '<i class="bi bi-check-circle-fill "style="color: #FF0000;"></i>'
+                                                : '<i class="bi bi-x-circle-fill" style="color: #c2c2cf;"></i>' !!}
                                         </span>
                                     </div>
                                 </td>

@@ -15,7 +15,6 @@ class Viewed extends Component
     {
         return TicketApproval::where([
             ['ticket_id', $ticket->id],
-            ['is_need_level_of_approval', true],
             ['is_all_approved', false],
         ])->exists();
     }
@@ -24,7 +23,6 @@ class Viewed extends Component
     {
         return TicketApproval::where([
             ['ticket_id', $ticket->id],
-            ['is_need_level_of_approval', true],
             ['is_all_approved', true],
         ])->exists();
     }

@@ -8462,9 +8462,6 @@ a:hover {
 .ticket__section .card__ticket__details .ticket__dropdown__select:focus {
   border: 1px solid #1d5c63;
 }
-.ticket__section .card__ticket__details .check__need__level__of__approval {
-  margin-right: 5px !important;
-}
 .ticket__section .card__ticket__details .form-check-label {
   font-size: 0.813rem !important;
   margin-top: 0px !important;
@@ -8506,12 +8503,6 @@ a:hover {
 }
 .ticket__section .card__ticket__details .level__approval__container .level__approver__container .approver__name {
   font-size: 0.813rem;
-}
-.ticket__section .card__ticket__details .level__approval__container .level__approver__container .btn__approve {
-  font-size: 0.75rem;
-  color: #ffffff;
-  border-radius: 0.563rem;
-  background-color: #d32839;
 }
 .ticket__section .container__ticket__details__right {
   top: 235px;

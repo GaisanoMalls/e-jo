@@ -1510,10 +1510,6 @@ a {
             }
         }
 
-        .check__need__level__of__approval {
-            margin-right: 5px !important;
-        }
-
         .form-check-label {
             font-size: $fs-13 !important;
             margin-top: 0px !important;
@@ -1564,13 +1560,6 @@ a {
 
                 .approver__name {
                     font-size: $fs-13;
-                }
-
-                .btn__approve {
-                    font-size: $fs-12;
-                    color: $white;
-                    border-radius: $border-radius-9;
-                    background-color: $color-1;
                 }
             }
         }

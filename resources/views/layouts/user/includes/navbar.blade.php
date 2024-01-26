@@ -16,30 +16,9 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-4">
                 <li class="nav-item custom__nav__item text-center">
-                    <a class="nav-link custom__nav__link" href="#">Knowledge Base</a>
-                </li>
-                <li class="nav-item custom__nav__item text-center">
-                    <a class="nav-link custom__nav__link" target="_blank"
-                        href="{{ route('feedback.index') }}">Feedback</a>
-                </li>
-                <li class="nav-item custom__nav__item text-center dropdown">
-                    <a class="nav-link custom__nav__link dropdown-toggle" href="" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Approver
+                    <a class="nav-link custom__nav__link" target="_blank" href="{{ route('feedback.index') }}">
+                        Feedback
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end slideIn animate custom__dropdown__menu">
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center gap-3" href="#">
-                                <i class="fa-solid fa-check"></i>
-                                Approved
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center gap-3" href="#">
-                                <i class="fa-solid fa-xmark"></i>
-                                Disapproved</a>
-                        </li>
-                    </ul>
                 </li>
                 <li class="nav-item custom__nav__item text-center">
                     <a class="nav-link custom__nav__link
