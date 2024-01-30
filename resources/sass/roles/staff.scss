@@ -1909,6 +1909,24 @@ input[type="checkbox"] {
         width: 14px !important;
         margin-bottom: 2px;
     }
+
+    #checkAssignMultipleTeams {
+        height: 16px;
+        width: 16px;
+        border: 2px solid #CED4DA;
+        box-shadow: none !important;
+
+        &:checked {
+            background-color: #D32839;
+            border-color: #D32839;
+
+            &+.labelCheckOtherBranch {
+                color: $color-1;
+                font-weight: $fw-600;
+            }
+        }
+    }
+
 }
 
 #transferDepartmentSection {

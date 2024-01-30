@@ -27,6 +27,7 @@ class AssignTicket extends Component
     public $team;
     public $agent;
     public $isSpecialProject;
+    public $isMultipleTeams = false;
 
     public function mount()
     {
@@ -43,9 +44,7 @@ class AssignTicket extends Component
     {
         try {
             DB::transaction(function () {
-                $this->ticket->update([
-                    'agent_id' => $this->agent ?: null,
-                ]);
+                $this->ticket->update(['agent_id' => $this->agent ?: null]);
                 $this->ticket->teams()->sync($this->team ?: null);
 
                 $this->ticket->refresh();
@@ -77,8 +76,15 @@ class AssignTicket extends Component
             ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->serviceDepartment->id))
             ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
             ->whereHas('teams', fn($team) => $team->where('teams.id', $this->team))->get();
-
         $this->dispatchBrowserEvent('get-agents-from-team', ['agents' => $this->agents->toArray()]);
+    }
+
+    public function assignMultipleTeams()
+    {
+        ($this->isMultipleTeams)
+            ? $this->dispatchBrowserEvent('select-multiple-team')
+            : $this->dispatchBrowserEvent('select-single-team');
+
     }
 
     public function render()

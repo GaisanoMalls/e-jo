@@ -8816,6 +8816,20 @@ input[type=checkbox]:checked + .form-check-label {
   width: 14px !important;
   margin-bottom: 2px;
 }
+.ticket__actions__modal #checkAssignMultipleTeams {
+  height: 16px;
+  width: 16px;
+  border: 2px solid #CED4DA;
+  box-shadow: none !important;
+}
+.ticket__actions__modal #checkAssignMultipleTeams:checked {
+  background-color: #D32839;
+  border-color: #D32839;
+}
+.ticket__actions__modal #checkAssignMultipleTeams:checked + .labelCheckOtherBranch {
+  color: #d32839;
+  font-weight: 600;
+}
 
 #transferDepartmentSection {
   display: none;

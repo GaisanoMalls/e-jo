@@ -164,4 +164,25 @@ trait Utils
             ? true
             : false;
     }
+
+    /**
+     * @return bool
+     */
+    public function ticketHasSpecialProject()
+    {
+        $ticketHasAllApproved = Ticket::withWhereHas('ticketApprovals', fn($ticketApproval) =>
+            $ticketApproval->whereNotNull('level_1_approver->approver_id')
+                ->whereNotNull('level_2_approver->approver_id')
+                ->whereNotNull('level_1_approver->approved_by')
+                ->whereNotNull('level_2_approver->approved_by')
+                ->where([
+                    ['level_1_approver->is_approved', true],
+                    ['level_2_approver->is_approved', true],
+                    ['is_all_approved', true],
+                ]))->get();
+
+        return ($ticketHasAllApproved->isNotEmpty())
+            ? true
+            : false;
+    }
 }

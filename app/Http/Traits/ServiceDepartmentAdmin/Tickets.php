@@ -3,11 +3,14 @@
 namespace App\Http\Traits\ServiceDepartmentAdmin;
 
 use App\Enums\ApprovalStatusEnum;
+use App\Http\Traits\Utils;
 use App\Models\Status;
 use App\Models\Ticket;
 
 trait Tickets
 {
+    use Utils;
+
     public function serviceDeptAdminGetTicketsToAssign()
     {
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::APPROVED)->where('status_id', '!=', Status::CLAIMED))
@@ -80,38 +83,30 @@ trait Tickets
 
     public function serviceDeptAdminGetOnProcessTickets()
     {
-        $ticketHasAllApproved = Ticket::withWhereHas('ticketApprovals', fn($ticketApproval) =>
-            $ticketApproval->whereNotNull('level_1_approver->approver_id')
-                ->whereNotNull('level_2_approver->approver_id')
-                ->whereNotNull('level_1_approver->approved_by')
-                ->whereNotNull('level_2_approver->approved_by')
-                ->where([
-                    ['level_1_approver->is_approved', true],
-                    ['level_2_approver->is_approved', true],
-                    ['is_all_approved', true],
-                ]))->get();
+        return ($this->ticketHasSpecialProject())
+            ? Ticket::with(['replies', 'clarifications', 'helpTopic.specialProject'])
+                ->where(function ($query) {
+                    $query->whereHas('replies')
+                        ->orWhereHas('clarifications')
+                        ->orWhereHas('helpTopic.specialProject');
+                })->where(fn($query) => $query->where('status_id', Status::ON_PROCESS)
+                    ->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
+                ->where(fn($withSpecialProjQuery) => $withSpecialProjQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray()))
+                ->orderByDesc('created_at')->get()
 
-        $ticketQuery = Ticket::with(['replies', 'clarifications', 'helpTopic.specialProject'])
-            ->where(function ($query) {
-                $query->whereHas('replies')
-                    ->orWhereHas('clarifications')
-                    ->orWhereHas('helpTopic.specialProject');
-            })
-            ->where(function ($query) {
-                $query->where('status_id', Status::ON_PROCESS)
-                    ->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]);
-            })->orderByDesc('created_at')->get();
-
-        if ($ticketHasAllApproved->isNotEmpty()) {
-            return $ticketQuery->where(fn($nonSpecialProjQuery) => $nonSpecialProjQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray()));
-        } else {
-            return $ticketQuery->where(fn($withSpecialProjQuery) => $withSpecialProjQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
+            : Ticket::with(['replies', 'clarifications', 'helpTopic.specialProject'])
+                ->where(function ($query) {
+                    $query->whereHas('replies')
+                        ->orWhereHas('clarifications')
+                        ->orWhereHas('helpTopic.specialProject');
+                })->where(fn($query) => $query->where('status_id', Status::ON_PROCESS)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
+                ->where(fn($withSpecialProjQuery) => $withSpecialProjQuery->withWhereHas('user.branches', fn($query) =>
+                    $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
+                    ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
                 ->where(fn($nonSpecialProjQuery) => $nonSpecialProjQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray()));
-        }
-
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray()))
+                ->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetOverdueTickets()
