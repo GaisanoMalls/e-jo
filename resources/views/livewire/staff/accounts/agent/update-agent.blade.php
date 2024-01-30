@@ -184,7 +184,7 @@
                             <div class="d-flex align-items-center gap-2">
                                 <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"
                                     data-bs-dismiss="modal"
-                                    onclick="window.location.href='{{ route('staff.manage.user_account.agents') }}'">Cancel</button>
+                                    onclick="window.location.href='{{ route('staff.manage.user_account.agents') }}'">Back</button>
                                 <button type="submit"
                                     class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__details btn__send">
                                     <span wire:loading wire:target="updateAgentAccount"

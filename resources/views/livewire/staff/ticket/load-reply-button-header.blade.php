@@ -3,13 +3,13 @@
         <div class="d-flex flex-column">
             @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN) &&
                     $ticket->approval_status === App\Enums\ApprovalStatusEnum::FOR_APPROVAL)
-                <button type="submit"
+                <button type="button"
                     class="btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
                     {{ $ticket->approval_status === App\Enums\ApprovalStatusEnum::FOR_APPROVAL ? 'disabled' : '' }}>
                     <i class="fa-regular fa-pen-to-square"></i>
                 </button>
             @else
-                <button type="submit"
+                <button type="button"
                     class="btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
                     data-bs-toggle="modal" data-bs-target="#replyTicketModal" wire:click="getLatestReply">
                     <i class="fa-regular fa-pen-to-square"></i>

@@ -167,7 +167,7 @@
                             <div class="d-flex align-items-center gap-2">
                                 <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"
                                     data-bs-dismiss="modal"
-                                    onclick="window.location.href='{{ route('staff.manage.user_account.service_department_admins') }}'">Cancel</button>
+                                    onclick="window.location.href='{{ route('staff.manage.user_account.service_department_admins') }}'">Back</button>
                                 <button type="submit" class="btn m-0 btn__details btn__send">
                                     <span wire:loading wire:target="updateServiceDepartmentAdminAccount"
                                         class="spinner-border spinner-border-sm" role="status" aria-hidden="true">

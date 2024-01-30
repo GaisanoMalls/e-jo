@@ -12,14 +12,6 @@
                 </div>
                 <div class="modal__body">
                     <form wire:submit.prevent="saveAssignTicket">
-                        <div class="form-check my-2">
-                            <input class="form-check-input" type="checkbox" wire:model="isMultipleTeams"
-                                wire:change="assignMultipleTeams" id="checkAssignMultipleTeams">
-                            <label class="form-check-label labelCheckAssignMultipleTeams"
-                                for="checkAssignMultipleTeams">
-                                Assign to multiple teams
-                            </label>
-                        </div>
                         <div class="my-2">
                             <label class="ticket__actions__label mb-2">Assign to team</label>
                             <div>
@@ -35,7 +27,7 @@
                         @if (!$isSpecialProject)
                             <div class="my-2">
                                 <label class="ticket__actions__label mb-2">
-                                    Assign to agent
+                                    Assign to agent <span class="text-muted">(Optional)</span>
                                     @if ($agents)
                                         <span class="fw-normal" style="font-size: 13px;">
                                             ({{ $agents->count() }})
@@ -158,7 +150,7 @@
         });
 
         window.addEventListener('select-multiple-team', () => {
-            console.log("Croo");
+            teamSelect.disable();
         });
     </script>
 @endpush

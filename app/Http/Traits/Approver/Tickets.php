@@ -28,7 +28,7 @@ trait Tickets
             ->withWhereHas('ticketApprovals', fn($approval) =>
                 $approval->whereNotNull('level_1_approver->approver_id')
                     ->whereNotNull('level_1_approver->approved_by')
-                    ->where('level_1_approver->is_approved')
+                    ->where('level_1_approver->is_approved', true)
                     ->whereJsonContains('level_2_approver->approver_id', auth()->user()->id))
             ->orderByDesc('created_at')->get();
     }

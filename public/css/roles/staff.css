@@ -8249,6 +8249,21 @@ a:hover {
 .ticket__section .ticket__details__container .ticket__details__header .ticket__detatails__btn__close.closed:hover {
   cursor: not-allowed !important;
 }
+.ticket__section .ticket__details__container .ticket__details__header .ticket__detatails__btn__costing {
+  height: 33px;
+  width: 33px;
+  border-radius: 3.125rem;
+  background-color: #e9ecef;
+  border: 1px solid #dee2e6;
+  font-size: 1rem;
+  color: #212529;
+}
+.ticket__section .ticket__details__container .ticket__details__header .ticket__detatails__btn__costing:hover {
+  background-color: #e5e4e5;
+}
+.ticket__section .ticket__details__container .ticket__details__header .ticket__detatails__btn__costing.closed:hover {
+  cursor: not-allowed !important;
+}
 .ticket__section .ticket__details__container .ticket__details__header .ticket__detatails__btn__transfer {
   height: 33px;
   width: 33px;
@@ -8815,20 +8830,6 @@ input[type=checkbox]:checked + .form-check-label {
   height: 14px !important;
   width: 14px !important;
   margin-bottom: 2px;
-}
-.ticket__actions__modal #checkAssignMultipleTeams {
-  height: 16px;
-  width: 16px;
-  border: 2px solid #CED4DA;
-  box-shadow: none !important;
-}
-.ticket__actions__modal #checkAssignMultipleTeams:checked {
-  background-color: #D32839;
-  border-color: #D32839;
-}
-.ticket__actions__modal #checkAssignMultipleTeams:checked + .labelCheckOtherBranch {
-  color: #d32839;
-  font-weight: 600;
 }
 
 #transferDepartmentSection {

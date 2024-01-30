@@ -170,7 +170,7 @@ trait Utils
      */
     public function ticketHasSpecialProject()
     {
-        $ticketHasAllApproved = Ticket::withWhereHas('ticketApprovals', fn($ticketApproval) =>
+        $ticketHasAllApproved = Ticket::has('helpTopic.specialProject')->withWhereHas('ticketApprovals', fn($ticketApproval) =>
             $ticketApproval->whereNotNull('level_1_approver->approver_id')
                 ->whereNotNull('level_2_approver->approver_id')
                 ->whereNotNull('level_1_approver->approved_by')

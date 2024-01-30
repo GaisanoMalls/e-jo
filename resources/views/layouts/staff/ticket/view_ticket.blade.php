@@ -23,6 +23,11 @@
                                     {{ $ticket->created_at->format('g:i A') }}</small>
                             </div>
                             <div class="d-flex flex-wrap justify-content-center gap-3 gap-lg-4 gap-xl-4">
+                                @if (
+                                    $ticketHasSpecialProject &&
+                                        auth()->user()->hasRole(App\Models\Role::AGENT))
+                                    @livewire('staff.ticket.load-costing-button-header', ['ticket' => $ticket])
+                                @endif
                                 @if (Route::is('staff.ticket.view_ticket'))
                                     @livewire('staff.ticket.load-reply-button-header', ['ticket' => $ticket])
                                 @endif
@@ -60,7 +65,8 @@
                                                 <span>{{ $ticket->user->profile->getFullName() }}</span>
                                             </small>
                                             <small class="ticket__details__user__department">
-                                                {{ $ticket->user->getBUDepartments() }} - {{ $ticket->user->getBranches() }}
+                                                {{ $ticket->user->getBUDepartments() }} -
+                                                {{ $ticket->user->getBranches() }}
                                             </small>
                                         </div>
                                     </div>
@@ -116,7 +122,9 @@
                                 @if ($ticket->helpTopic->specialProject)
                                     @livewire('staff.ticket.ticket-level-approval', ['ticket' => $ticket])
                                 @endif
-                                @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
+                                @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::APPROVED)
+                                    @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
+                                @endif
                                 @livewire('staff.ticket.ticket-tag', ['ticket' => $ticket])
                                 @livewire('ticket-activity-logs', ['ticket' => $ticket])
                             </div>
@@ -124,11 +132,16 @@
                     </div>
                 </div>
             </div>
-            @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
-                @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
-            @endif
-            @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])
         </div>
+        @if (
+            $ticket->helpTopic->specialProject &&
+                auth()->user()->hasRole(App\Models\Role::AGENT))
+            @livewire('staff.ticket.add-costing', ['ticket' => $ticket])
+        @endif
+        @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+            @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
+        @endif
+        @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])
         @if (Route::is('staff.ticket.view_ticket'))
             @livewire('staff.ticket.reply-ticket', ['ticket' => $ticket])
         @endif

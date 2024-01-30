@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="d-flex flex-column gap-2">
-                <div class="d-flex flex-wrap align-items-center gap-2">
+                <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                     <small class="ticket__details__info__label" style="font-weight: 500;">
                         Approval status:
                     </small>
@@ -29,14 +29,14 @@
                         </small>
                     </small>
                 </div>
-                <div class="d-flex flex-wrap align-items-center gap-2">
+                <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                     <small class="ticket__details__info__label" style="font-weight: 500;">Branch:</small>
                     <small class="ticket__details__info">
                         <i class="fa-solid fa-location-dot me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->branch->name }}
                     </small>
                 </div>
-                <div class="d-flex flex-wrap align-items-center gap-2">
+                <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                     <small class="ticket__details__info__label" style="font-weight: 500;">
                         Service department:</small>
                     <small class="ticket__details__info">
@@ -44,14 +44,14 @@
                         {{ $ticket->serviceDepartment->name }}
                     </small>
                 </div>
-                <div class="d-flex flex-wrap align-items-center gap-2">
+                <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                     <small class="ticket__details__info__label" style="font-weight: 500;">Team:</small>
                     <small class="ticket__details__info">
                         <i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->getTeams() }}
                     </small>
                 </div>
-                <div class="d-flex flex-wrap align-items-center gap-2">
+                <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                     <small class="ticket__details__info__label" style="font-weight: 500;">
                         Help topic:
                     </small>
@@ -60,7 +60,7 @@
                         {{ $ticket->helpTopic->name ?? '----' }}
                     </small>
                 </div>
-                <div class="d-flex flex-wrap align-items-center gap-2">
+                <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                     <small class="ticket__details__info__label" style="font-weight: 500;">
                         Assigned agent:
                     </small>
@@ -73,18 +73,18 @@
                         @endif
                     </small>
                 </div>
-                <div class="d-flex flex-wrap align-items-center gap-2">
+                <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                     <small class="ticket__details__info__label" style="font-weight: 500;">
                         SLA:</small>
                     <div class="d-flex align-items-center gap-2">
+                        @if ($isApprovedForSLA)
+                            @livewire('sla-timer', ['ticket' => $ticket])
+                        @endif
                         <small class="ticket__details__info">
                             <i class="fa-solid fa-clock me-1 text-muted {{ $isApprovedForSLA ? 'bx-flashing' : '' }}"
                                 style="font-size: 11px;"></i>
                             {{ $ticket->sla->time_unit ?? '----' }}
                         </small>
-                        @if ($isApprovedForSLA)
-                            @livewire('sla-timer', ['ticket' => $ticket])
-                        @endif
                     </div>
                 </div>
             </div>

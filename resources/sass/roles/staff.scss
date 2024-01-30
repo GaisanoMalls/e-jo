@@ -1247,6 +1247,26 @@ a {
                 }
             }
 
+            .ticket__detatails__btn__costing {
+                height: 33px;
+                width: 33px;
+                border-radius: $border-radius-50-percent;
+                background-color: #e9ecef;
+                border: 1px solid #dee2e6;
+                font-size: $fs-16;
+                color: #212529;
+
+                &:hover {
+                    background-color: #e5e4e5;
+                }
+
+                &.closed {
+                    &:hover {
+                        cursor: not-allowed !important;
+                    }
+                }
+            }
+
             .ticket__detatails__btn__transfer {
                 height: 33px;
                 width: 33px;
@@ -1909,24 +1929,6 @@ input[type="checkbox"] {
         width: 14px !important;
         margin-bottom: 2px;
     }
-
-    #checkAssignMultipleTeams {
-        height: 16px;
-        width: 16px;
-        border: 2px solid #CED4DA;
-        box-shadow: none !important;
-
-        &:checked {
-            background-color: #D32839;
-            border-color: #D32839;
-
-            &+.labelCheckOtherBranch {
-                color: $color-1;
-                font-weight: $fw-600;
-            }
-        }
-    }
-
 }
 
 #transferDepartmentSection {

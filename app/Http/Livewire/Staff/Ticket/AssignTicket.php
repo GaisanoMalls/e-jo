@@ -79,20 +79,13 @@ class AssignTicket extends Component
         $this->dispatchBrowserEvent('get-agents-from-team', ['agents' => $this->agents->toArray()]);
     }
 
-    public function assignMultipleTeams()
-    {
-        ($this->isMultipleTeams)
-            ? $this->dispatchBrowserEvent('select-multiple-team')
-            : $this->dispatchBrowserEvent('select-single-team');
-
-    }
-
     public function render()
     {
         return view('livewire.staff.ticket.assign-ticket', [
             'agents' => $this->agents,
-            'teams' => Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->ticket->serviceDepartment->id))
-                ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))->get(),
+            'teams' => Team::where('service_department_id', $this->ticket->serviceDepartment->id)
+                ->withWhereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
+                ->get(),
         ]);
     }
 }

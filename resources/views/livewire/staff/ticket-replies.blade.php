@@ -70,7 +70,7 @@
                                         {{ $reply->fileAttachments->count() > 1
                                             ? 'Reply file attachments'
                                             : 'Reply file
-                                                                                                                                                                                                                                                                            attachment' }}
+                                                                                                                                                                                                                                                                                                                                                            attachment' }}
                                         ({{ $reply->fileAttachments->count() }})
                                     </h6>
                                 </div>

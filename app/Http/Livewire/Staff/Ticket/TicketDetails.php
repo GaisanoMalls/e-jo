@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
-use App\Models\ApprovalStatus;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;

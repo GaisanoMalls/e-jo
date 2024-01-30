@@ -78,11 +78,6 @@ class UpdateAgent extends Component
         ]);
     }
 
-    public function montain(string $name)
-    {
-        //
-    }
-
     public function updateAgentAccount()
     {
         $this->validate();
