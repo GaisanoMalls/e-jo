@@ -1583,6 +1583,18 @@ a {
                 }
             }
         }
+
+        .ticket__costing__container {
+            .currency {
+                font-size: 1.4rem !important;
+            }
+
+            .amount {
+                font-size: 1.4rem;
+                font-weight: $fw-600;
+                color: #212529;
+            }
+        }
     }
 
     .container__ticket__details__right {
@@ -1614,6 +1626,21 @@ a {
         }
     }
 
+    .form__field__label {
+        font-size: $fs-14;
+    }
+
+    .form__field {
+        padding: 0.75rem 1rem;
+        font-size: $fs-14;
+        border-radius: $border-radius-9;
+        border: 1px solid #e7e9eb;
+
+        &:focus {
+            box-shadow: none;
+            border-color: $color-1;
+        }
+    }
 }
 
 .modal__confirm__close__ticket {
@@ -1928,6 +1955,24 @@ input[type="checkbox"] {
         height: 14px !important;
         width: 14px !important;
         margin-bottom: 2px;
+    }
+}
+
+.ticket__costing__modal {
+    .costing__file__attachment {
+        border: 0;
+        border-radius: 0;
+        font-size: $fs-13;
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
+    .ticket__costing__label {
+        font-size: $fs-14;
+        color: #212529;
+        font-weight: 500;
     }
 }
 

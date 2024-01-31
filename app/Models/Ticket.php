@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Branch;
@@ -88,6 +87,11 @@ class Ticket extends Model
     public function bookmark(): HasOne
     {
         return $this->hasOne(Bookmark::class);
+    }
+
+    public function ticketCosting()
+    {
+        return $this->hasOne(TicketCosting::class);
     }
 
     public function fileAttachments(): HasMany

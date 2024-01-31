@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         Schema::create('reasons', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
             $table->longText('description');
             $table->timestamps();
         });

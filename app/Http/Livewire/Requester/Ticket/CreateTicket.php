@@ -48,6 +48,7 @@ class CreateTicket extends Component
     public $priorityLevel;
     public $serviceDepartment;
     public $helpTopic;
+    public $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
@@ -185,7 +186,7 @@ class CreateTicket extends Component
         $this->validate([
             'fileAttachments.*' => [
                 'nullable',
-                File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])->max(25600) //25600 (25 MB)
+                File::types($this->allowedExtensions)->max(25600) //25600 (25 MB)
             ],
         ]);
     }

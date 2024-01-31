@@ -17,7 +17,7 @@ class CreateChildTeamsTable extends Migration
     {
         Schema::create('child_teams', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Team::class, 'team_id')->constrained();
+            $table->foreignIdFor(Team::class, 'team_id')->constrained('teams')->cascadeOnDelete();
             $table->string('name')->unique();
             $table->string('slug')->unique();
         });

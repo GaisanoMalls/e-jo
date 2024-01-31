@@ -17,7 +17,7 @@ class CreateTeamsTable extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(ServiceDepartment::class, 'service_department_id')->nullable()->constrained();
+            $table->foreignIdFor(ServiceDepartment::class, 'service_department_id')->nullable()->constrained('service_departments')->cascadeOnDelete();
             $table->string('name')->unique();
             $table->string('slug')->unique();
             $table->timestamps();

@@ -16,8 +16,8 @@ return new class extends Migration {
     {
         Schema::create('help_topic_field', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained();
-            $table->foreignIdFor(Field::class, 'field_id')->constrained();
+            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained('help_topics')->cascadeOnDelete();
+            $table->foreignIdFor(Field::class, 'field_id')->constrained('fields')->cascadeOnDelete();
             $table->timestamps();
         });
     }

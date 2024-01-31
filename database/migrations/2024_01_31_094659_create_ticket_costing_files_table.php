@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Ticket;
+use App\Models\TicketCosting;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,11 +14,10 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('special_project_amount_approvals', function (Blueprint $table) {
+        Schema::create('ticket_costing_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
-            $table->json('service_department_admin_approver');
-            $table->json('fpm_coo_approver');
+            $table->foreignIdFor(TicketCosting::class, 'ticket_costing_id')->constrained('ticket_costings')->cascadeOnDelete();
+            $table->string('file_attachment')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('special_project_amount_approvals');
+        Schema::dropIfExists('ticket_costing_files');
     }
 };

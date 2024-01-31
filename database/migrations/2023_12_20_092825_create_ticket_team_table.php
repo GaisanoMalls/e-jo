@@ -16,8 +16,8 @@ return new class extends Migration {
     {
         Schema::create('ticket_team', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Team::class, 'team_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
+            $table->foreignIdFor(Team::class, 'team_id')->nullable()->constrained('teams')->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         Schema::create('ticket_approval', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
             $table->json('level_1_approver')->nullable();
             $table->json('level_2_approver')->nullable();
             $table->boolean('is_all_approved')->default(false);

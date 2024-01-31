@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         Schema::create('special_projects', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained('help_topics')->cascadeOnDelete();
             $table->decimal('amount', 10, 2);
             $table->json('fmp_coo_approver')->nullable();
             $table->json('service_department_approver')->nullable();

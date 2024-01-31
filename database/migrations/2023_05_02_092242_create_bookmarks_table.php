@@ -17,8 +17,8 @@ class CreateBookmarksTable extends Migration
     {
         Schema::create('bookmarks', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained();
-            $table->foreignIdFor(User::class, 'user_id')->constrained();
+            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

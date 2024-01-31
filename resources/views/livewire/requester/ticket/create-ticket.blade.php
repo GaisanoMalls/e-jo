@@ -145,8 +145,8 @@
                                         x-on:livewire-upload-finish="isUploading = false"
                                         x-on:livewire-upload-error="isUploading = false"
                                         x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                        <input class=" form-control form-control-sm border-0 ticket__file"
-                                            type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
+                                        <input class="form-control form-control-sm border-0 ticket__file" type="file"
+                                            accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
                                             wire:model="fileAttachments" multiple id="upload-{{ $upload }}"
                                             onchange="validateFile()">
                                         <div x-transition.duration.500ms x-show="isUploading"
@@ -176,7 +176,6 @@
                                             {{ $message }}
                                         </span>
                                     @enderror
-
                                 </div>
                             </div>
                         </div>
@@ -346,7 +345,7 @@
             excludeEXEfileMessage.style.display = "none";
 
             const fileName = fileInput.value.split('\\').pop(); // Get the file name
-            const allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
+            const allowedExtensions = @json($allowedExtensions);
             const fileExtension = fileName.split('.').pop().toLowerCase();
 
             // Check if the file extension is .exe

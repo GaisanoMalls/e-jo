@@ -8519,6 +8519,14 @@ a:hover {
 .ticket__section .card__ticket__details .level__approval__container .level__approver__container .approver__name {
   font-size: 0.813rem;
 }
+.ticket__section .card__ticket__details .ticket__costing__container .currency {
+  font-size: 1.4rem !important;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .amount {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #212529;
+}
 .ticket__section .container__ticket__details__right {
   top: 235px;
   position: sticky;
@@ -8543,6 +8551,19 @@ a:hover {
   height: 2.3rem;
   width: 2.3rem;
   border: none !important;
+}
+.ticket__section .form__field__label {
+  font-size: 0.875rem;
+}
+.ticket__section .form__field {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 0.563rem;
+  border: 1px solid #e7e9eb;
+}
+.ticket__section .form__field:focus {
+  box-shadow: none;
+  border-color: #d32839;
 }
 
 .modal__confirm__close__ticket .btn__confirm__modal {
@@ -8830,6 +8851,20 @@ input[type=checkbox]:checked + .form-check-label {
   height: 14px !important;
   width: 14px !important;
   margin-bottom: 2px;
+}
+
+.ticket__costing__modal .costing__file__attachment {
+  border: 0;
+  border-radius: 0;
+  font-size: 0.813rem;
+}
+.ticket__costing__modal .costing__file__attachment:focus {
+  box-shadow: none;
+}
+.ticket__costing__modal .ticket__costing__label {
+  font-size: 0.875rem;
+  color: #212529;
+  font-weight: 500;
 }
 
 #transferDepartmentSection {

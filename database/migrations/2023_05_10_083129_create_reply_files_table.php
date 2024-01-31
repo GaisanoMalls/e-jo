@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         Schema::create('reply_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Reply::class, 'reply_id')->constrained();
+            $table->foreignIdFor(Reply::class, 'reply_id')->constrained('replies')->cascadeOnDelete();
             $table->string('file_attachment');
         });
     }

@@ -49,6 +49,9 @@
                     <div class="row">
                         <div class="col-md-8 position-relative">
                             <div class="card border-0 p-0 card__ticket__details">
+                                @livewire('staff.ticket.ticket-costing', ['ticket' => $ticket])
+                            </div>
+                            <div class="card border-0 p-0 card__ticket__details">
                                 <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                                     <div class="d-flex align-items-center user__account__media">
                                         @if ($ticket->user->profile->picture)
@@ -132,16 +135,16 @@
                     </div>
                 </div>
             </div>
+            @if (
+                $ticket->helpTopic->specialProject &&
+                    auth()->user()->hasRole(App\Models\Role::AGENT))
+                @livewire('staff.ticket.add-costing', ['ticket' => $ticket])
+            @endif
+            @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+                @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
+            @endif
+            @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])
         </div>
-        @if (
-            $ticket->helpTopic->specialProject &&
-                auth()->user()->hasRole(App\Models\Role::AGENT))
-            @livewire('staff.ticket.add-costing', ['ticket' => $ticket])
-        @endif
-        @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
-            @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
-        @endif
-        @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])
         @if (Route::is('staff.ticket.view_ticket'))
             @livewire('staff.ticket.reply-ticket', ['ticket' => $ticket])
         @endif

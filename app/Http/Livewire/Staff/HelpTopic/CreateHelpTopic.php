@@ -24,7 +24,6 @@ class CreateHelpTopic extends Component
     public $service_department;
     public $team;
     public $amount; // For Special project
-    public $max_amount = 50000;
     public $COOApprover;
     public $serviceDepartmentAdminApprover;
 

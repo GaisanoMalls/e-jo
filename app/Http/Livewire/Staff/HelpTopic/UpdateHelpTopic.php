@@ -23,7 +23,6 @@ class UpdateHelpTopic extends Component
     public $service_department;
     public $team;
     public $amount;
-    public $max_amount = 50000;
 
     public function mount(HelpTopic $helpTopic)
     {

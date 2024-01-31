@@ -13,11 +13,10 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('special_project_amount_approvals', function (Blueprint $table) {
+        Schema::create('ticket_costings', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
-            $table->json('service_department_admin_approver');
-            $table->json('fpm_coo_approver');
+            $table->decimal('amount', 10, 2);
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('special_project_amount_approvals');
+        Schema::dropIfExists('ticket_costings');
     }
 };

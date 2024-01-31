@@ -23,14 +23,14 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'user_id')->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(User::class, 'agent_id')->nullable();
-            $table->foreignIdFor(Branch::class, 'branch_id')->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(ServiceDepartment::class, 'service_department_id')->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(HelpTopic::class, 'help_topic_id');
-            $table->foreignIdFor(Status::class, 'status_id');
-            $table->foreignIdFor(PriorityLevel::class, 'priority_level_id');
-            $table->foreignIdFor(ServiceLevelAgreement::class, 'service_level_agreement_id')->nullable();
+            $table->foreignIdFor(User::class, 'user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'agent_id')->nullable()->constrained('users')->cascadeOnDelete();
+            $table->foreignIdFor(Branch::class, 'branch_id')->constrained('branches')->cascadeOnDelete();
+            $table->foreignIdFor(ServiceDepartment::class, 'service_department_id')->constrained('service_departments')->cascadeOnDelete();
+            $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained('help_topics')->cascadeOnDelete();
+            $table->foreignIdFor(Status::class, 'status_id')->constrained('statuses')->cascadeOnDelete();
+            $table->foreignIdFor(PriorityLevel::class, 'priority_level_id')->constrained('priority_levels')->cascadeOnDelete();
+            $table->foreignIdFor(ServiceLevelAgreement::class, 'service_level_agreement_id')->nullable()->constrained('service_level_agreements')->cascadeOnDelete();
             $table->string('ticket_number')->unique();
             $table->string('subject');
             $table->longText('description');
