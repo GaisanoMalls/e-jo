@@ -1,4 +1,4 @@
-<div wire:poll.visible.7s>
+<div>
     <div class="row">
         <div class="mb-4 d-flex flex-wrap justify-content-between">
             <div class="d-flex align-items-center gap-4">

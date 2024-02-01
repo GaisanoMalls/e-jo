@@ -1,4 +1,4 @@
-<div wire:poll.visible.7s class="row mx-0">
+<div class="row mx-0">
     <ul class="nav nav-pills nav-fill flex-nowrap ticket__tab__header">
         <li class="nav-item">
             <a href="{{ route('user.tickets.open_tickets') }}"

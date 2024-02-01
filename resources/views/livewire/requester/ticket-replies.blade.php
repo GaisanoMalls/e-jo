@@ -1,6 +1,6 @@
 <div wire:init="loadReplies">
     @if (!is_null($replies))
-        <div wire:poll.visible.7s>
+        <div>
             @if ($ticket->replies->isNotEmpty())
                 @foreach ($ticket->replies as $reply)
                     <div class="card border-0 p-0 card__ticket__details"

@@ -1,4 +1,4 @@
-<div wire:poll.visible.7s>
+<div>
     <a wire:click="approverShowNotifications" class="nav-link icon__nav__link position-relative" type="button"
         data-bs-toggle="offcanvas" data-bs-target="#notificationCanvas">
         <i class="bi bi-bell-fill"></i>

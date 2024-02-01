@@ -38,6 +38,7 @@ class AddCosting extends Component
         $this->uploadCostingCount++;
         $this->reset('amount', 'costingFiles');
         $this->emit('loadTicketCosting');
+        $this->emit('loadCostingButtonHeader');
         $this->dispatchBrowserEvent('close-costing-modal');
     }
 
@@ -45,33 +46,36 @@ class AddCosting extends Component
     {
         $this->validate();
         try {
-            $ticketCosting = TicketCosting::where('ticket_id', $this->ticket->id)->first();
+            $existingTicketCosting = TicketCosting::where('ticket_id', $this->ticket->id)->first();
 
-            if ($ticketCosting) {
-                $ticketCosting->update(['amount' => $this->amount]);
+            if ($existingTicketCosting) {
+                $existingTicketCosting->update(['amount' => $this->amount]);
             } else {
-                TicketCosting::create([
+                $ticketCosting = TicketCosting::create([
                     'ticket_id' => $this->ticket->id,
                     'amount' => $this->amount,
                 ]);
-            }
 
-            if ($this->costingFiles) {
-                foreach ($this->costingFiles as $uploadedCostingFile) {
-                    $fileName = $uploadedCostingFile->getClientOriginalName();
-                    $fileAttachment = Storage::putFileAs(
-                        "public/ticket/{$this->ticket->ticket_number}/costing_attachments/" . $this->fileDirByUserType(),
-                        $uploadedCostingFile,
-                        $fileName
-                    );
+                if ($this->costingFiles) {
+                    foreach ($this->costingFiles as $uploadedCostingFile) {
+                        $fileName = $uploadedCostingFile->getClientOriginalName();
+                        $fileAttachment = Storage::putFileAs(
+                            "public/ticket/{$this->ticket->ticket_number}/costing_attachments/" . $this->fileDirByUserType(),
+                            $uploadedCostingFile,
+                            $fileName
+                        );
 
-                    $costingFile = new TicketCostingFile();
-                    $costingFile->ticket_costing_id = $ticketCosting->id;
-                    $costingFile->file_attachment = $fileAttachment;
+                        $costingFile = new TicketCostingFile();
+                        $costingFile->file_attachment = $fileAttachment;
+                        $costingFile->ticket_costing_id = $ticketCosting->id;
 
-                    $ticketCosting->fileAttachments()->save($costingFile);
+                        $ticketCosting->fileAttachments()->save($costingFile);
+                    }
                 }
+
+                $this->actionOnSubmit();
             }
+
         } catch (\Exception $e) {
             Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong.');

@@ -1,4 +1,4 @@
-<div wire:poll.visible.7s>
+<div>
     <a wire:click="staffShowNotifications" class="nav-link position-relative" type="button" aria-expanded="false"
         data-bs-toggle="offcanvas" data-bs-target="#notificationCanvas">
         <i class="fa-solid fa-bell"></i>

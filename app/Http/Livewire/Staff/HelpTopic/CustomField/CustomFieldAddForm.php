@@ -9,6 +9,7 @@ use App\Http\Traits\Utils;
 use App\Models\Field;
 use Exception;
 use Livewire\Component;
+use Illuminate\Support\Facades\Log;
 use Spatie\LaravelOptions\Options;
 
 class CustomFieldAddForm extends Component
@@ -65,7 +66,6 @@ class CustomFieldAddForm extends Component
 
         } catch (Exception $e) {
             Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            ;
             noty()->addError('Oops, something went wrong.');
         }
     }

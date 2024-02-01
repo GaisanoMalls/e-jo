@@ -1,4 +1,4 @@
-<div wire:poll.visible.7s class="row">
+<div class="row">
     <div class="col-xl-3 col-md-6">
         <div class="card custom__card dashboard__card"
             onclick="window.location.href='{{ route('user.tickets.open_tickets') }}'">

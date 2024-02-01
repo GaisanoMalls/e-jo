@@ -3,7 +3,6 @@
         <div wire:poll.visible.7s>
             @if ($ticket->replies->isNotEmpty())
                 @foreach ($ticket->replies as $reply)
-                    {{-- @include('layouts.staff.ticket.modal.preview_reply_ticket_files_modal') --}}
                     <div class="card border-0 p-0 card__ticket__details"
                         style="width: fit-content; max-width: 70%;
                             {{ $reply->user_id == auth()->user()->id ? 'background-color: #D0F0F7; margin-left: auto;' : 'background-color: #E9ECEF; margin-right: auto;' }}">
@@ -16,8 +15,7 @@
                                             class="image-fluid ticket__details__user__picture
                                             reply__ticket__details__user__picture">
                                     @else
-                                        <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center
-                                        text-white"
+                                        <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
                                             style="background-color: #24695C;">
                                             {{ $reply->user->profile->getNameInitial() }}</div>
                                     @endif
@@ -70,7 +68,7 @@
                                         {{ $reply->fileAttachments->count() > 1
                                             ? 'Reply file attachments'
                                             : 'Reply file
-                                                                                                                                                                                                                                                                                                                                                            attachment' }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            attachment' }}
                                         ({{ $reply->fileAttachments->count() }})
                                     </h6>
                                 </div>

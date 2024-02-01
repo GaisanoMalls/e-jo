@@ -1,4 +1,4 @@
-<div wire:poll.visible.7s class="row mx-0">
+<div class="row mx-0">
     <ul class="navbar-nav d-flex flex-row flex-nowrap gap-3 py-2 ticket__tab__header">
         <li class="nav-item">
             <a href="{{ route('approver.tickets.open') }}"

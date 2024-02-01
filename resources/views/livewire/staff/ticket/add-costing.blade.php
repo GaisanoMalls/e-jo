@@ -14,8 +14,8 @@
                     <form wire:submit.prevent="saveCosting">
                         <div class="my-2">
                             <label class="ticket__costing__label mb-2" for="amount">Enter project cost</label>
-                            <input type="text" wire:model="amount" class="form-control form__field" id="amount"
-                                placeholder="00.00">
+                            <input type="text" wire:model.defer="amount" class="form-control form__field"
+                                id="amount" placeholder="00.00">
                             @error('amount')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>

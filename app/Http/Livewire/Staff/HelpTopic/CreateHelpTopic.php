@@ -29,7 +29,14 @@ class CreateHelpTopic extends Component
 
     public function rules()
     {
-        return (new StoreHelpTopicRequest())->rules();
+        return [
+            'name' => ['required', 'unique:help_topics,name'],
+            'sla' => ['required'],
+            'service_department' => ['required'],
+            'team' => ['nullable'],
+            'amount' => ['numeric', $this->isSpecialProject ? 'required' : 'nullable'],
+            'teams' => '',
+        ];
     }
 
     public function actionOnSubmit()

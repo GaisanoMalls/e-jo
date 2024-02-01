@@ -1,4 +1,4 @@
-<div wire:poll.visible.7s class="row mx-0">
+<div class="row mx-0">
     @if ($onProcessTickets->isNotEmpty())
         <div class="card ticket__card" id="userTicketCard">
             <div class="table-responsive">

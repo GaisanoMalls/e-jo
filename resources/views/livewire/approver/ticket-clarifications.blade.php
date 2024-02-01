@@ -1,6 +1,6 @@
 <div wire:init="loadClarifications">
     @if (!is_null($clarifications))
-        <div wire:poll.visible.7s>
+        <div>
             <div class="mb-2 mt-4">
                 <small class="ticket__discussions text-muted">
                     {{ $ticket->clarifications->count() > 1 ? 'Discussions' : 'Discussion' }}

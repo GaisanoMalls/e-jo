@@ -125,15 +125,6 @@ body {
     @include generic.error-message;
 }
 
-.amount__field {
-    direction: rtl;
-    text-align: right;
-}
-
-.amount__field::before {
-    content: '₱';
-}
-
 // Notification Canvas
 .notification__canvas {
     min-width: 25% !important;
@@ -1585,14 +1576,61 @@ a {
         }
 
         .ticket__costing__container {
+            padding: 1.5rem;
+
             .currency {
-                font-size: 1.4rem !important;
+                font-size: 1.3rem !important;
             }
 
             .amount {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
                 font-weight: $fw-600;
                 color: #212529;
+            }
+
+            .btn__edit__costing,
+            .btn__update__costing {
+                height: 30px;
+                width: 30px;
+                border: 0 !important;
+                font-size: $fs-13;
+                color: #6C757D;
+
+                &:hover {
+                    background-color: #F5F7F9;
+                    color: #212529;
+                }
+            }
+
+            .costing__header__label {
+                font-size: $fs-13;
+            }
+
+            .costing__labels {
+                font-size: $fs-13;
+            }
+
+            .separator {
+                width: 1px;
+                height: 100%;
+                margin: 0 10px;
+                background-color: #d1d3d3;
+            }
+
+            .show__costing__attachments {
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .ticket__actual__cost {
+                font-size: 1.3rem !important;
+            }
+
+            .file__attachment__actions__container {
+                .file__attachment__action__button {
+                    font-size: $fs-15;
+                }
             }
         }
     }

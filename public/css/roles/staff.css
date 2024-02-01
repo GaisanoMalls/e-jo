@@ -7223,7 +7223,6 @@ url(/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?4753c5ba57962b4d7bf8248a6
     content: "\ef0b";
   }
   
-@charset "UTF-8";
 /* Keyframes */
 @keyframes slideIn {
   0% {
@@ -7301,15 +7300,6 @@ body {
   font-size: 0.75rem !important;
   font-weight: 500 !important;
   color: red !important;
-}
-
-.amount__field {
-  direction: rtl;
-  text-align: right;
-}
-
-.amount__field::before {
-  content: "₱";
 }
 
 .notification__canvas {
@@ -8519,13 +8509,50 @@ a:hover {
 .ticket__section .card__ticket__details .level__approval__container .level__approver__container .approver__name {
   font-size: 0.813rem;
 }
+.ticket__section .card__ticket__details .ticket__costing__container {
+  padding: 1.5rem;
+}
 .ticket__section .card__ticket__details .ticket__costing__container .currency {
-  font-size: 1.4rem !important;
+  font-size: 1.3rem !important;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .amount {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: #212529;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .btn__edit__costing,
+.ticket__section .card__ticket__details .ticket__costing__container .btn__update__costing {
+  height: 30px;
+  width: 30px;
+  border: 0 !important;
+  font-size: 0.813rem;
+  color: #6C757D;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .btn__edit__costing:hover,
+.ticket__section .card__ticket__details .ticket__costing__container .btn__update__costing:hover {
+  background-color: #F5F7F9;
+  color: #212529;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .costing__header__label {
+  font-size: 0.813rem;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .costing__labels {
+  font-size: 0.813rem;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .separator {
+  width: 1px;
+  height: 100%;
+  margin: 0 10px;
+  background-color: #d1d3d3;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .show__costing__attachments:hover {
+  cursor: pointer;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .ticket__actual__cost {
+  font-size: 1.3rem !important;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .file__attachment__actions__container .file__attachment__action__button {
+  font-size: 0.938rem;
 }
 .ticket__section .container__ticket__details__right {
   top: 235px;

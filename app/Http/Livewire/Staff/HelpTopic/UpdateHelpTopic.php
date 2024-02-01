@@ -42,7 +42,7 @@ class UpdateHelpTopic extends Component
             'sla' => 'required',
             'service_department' => 'required',
             'team' => 'nullable',
-            'amount' => $this->helpTopic->specialProject ? 'required' : 'nullable',
+            'amount' => $this->helpTopic->specialProject ? 'required|numeric' : 'nullable|numeric',
             'teams' => '',
         ];
 
