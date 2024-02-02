@@ -1617,9 +1617,21 @@ a {
                 background-color: #d1d3d3;
             }
 
-            .show__costing__attachments {
+            .show__costing__attachments,
+            .btn__show__add__costing__file__modal {
                 &:hover {
                     cursor: pointer;
+                }
+            }
+
+            .btn__show__add__costing__file__modal {
+                border-radius: $border-radius-8;
+                font-size: $fs-11;
+                padding: 0.3rem 0.5rem;
+                background-color: #F5F7F9;
+
+                &:hover {
+                    background-color: #E9ECEF;
                 }
             }
 

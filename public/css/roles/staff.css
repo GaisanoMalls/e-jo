@@ -8545,8 +8545,18 @@ a:hover {
   margin: 0 10px;
   background-color: #d1d3d3;
 }
-.ticket__section .card__ticket__details .ticket__costing__container .show__costing__attachments:hover {
+.ticket__section .card__ticket__details .ticket__costing__container .show__costing__attachments:hover,
+.ticket__section .card__ticket__details .ticket__costing__container .btn__show__add__costing__file__modal:hover {
   cursor: pointer;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .btn__show__add__costing__file__modal {
+  border-radius: 0.5rem;
+  font-size: 0.688rem;
+  padding: 0.3rem 0.5rem;
+  background-color: #F5F7F9;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .btn__show__add__costing__file__modal:hover {
+  background-color: #E9ECEF;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .ticket__actual__cost {
   font-size: 1.3rem !important;

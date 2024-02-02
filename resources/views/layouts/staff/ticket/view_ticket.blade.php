@@ -20,7 +20,8 @@
                                 <h6 class="ticket__details__title mb-0">{{ $ticket->subject }}</h6>
                                 <small class="ticket__details__datetime">{{ $ticket->dateCreated() }},
                                     {{ $ticket->created_at->format('D') }} @
-                                    {{ $ticket->created_at->format('g:i A') }}</small>
+                                    {{ $ticket->created_at->format('g:i A') }}
+                                </small>
                             </div>
                             <div class="d-flex flex-wrap justify-content-center gap-3 gap-lg-4 gap-xl-4">
                                 @if (
