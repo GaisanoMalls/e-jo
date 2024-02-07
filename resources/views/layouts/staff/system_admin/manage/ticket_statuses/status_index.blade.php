@@ -35,7 +35,7 @@
                 <div class="card card__rounded__and__no__border pt-4">
                     <div class="table-responsive custom__table">
                         @if ($statuses->isNotEmpty())
-                            <table class="table table-striped mb-0">
+                            <table class="table mb-0">
                                 <thead>
                                     <tr>
                                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Name</th>

@@ -1,6 +1,6 @@
 <div>
     <div class="table-responsive custom__table">
-        <table class="table table-striped mb-0">
+        <table class="table mb-0">
             @if ($buDepartments->isNotEmpty())
                 <thead>
                     <tr>

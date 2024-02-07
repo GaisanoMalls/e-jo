@@ -1,7 +1,7 @@
 <div>
     <div class="table-responsive custom__table">
         @if ($teams->isNotEmpty())
-            <table class="table table-striped mb-0">
+            <table class="table mb-0">
                 <thead>
                     <tr>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Team</th>
@@ -181,7 +181,6 @@
             ele: '#edit-select-service-department',
             options: editServiceDepartmentOption,
             search: true,
-            required: true,
             markSearchResults: true,
         });
 
@@ -198,7 +197,6 @@
             ele: '#edit-select-branch',
             options: editBranchOption,
             search: true,
-            required: true,
             multiple: true,
             showValueAsTags: true,
             markSearchResults: true,

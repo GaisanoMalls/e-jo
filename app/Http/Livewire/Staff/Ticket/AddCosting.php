@@ -45,6 +45,7 @@ class AddCosting extends Component
     public function saveCosting()
     {
         $this->validate();
+        
         try {
             $existingTicketCosting = TicketCosting::where('ticket_id', $this->ticket->id)->first();
 

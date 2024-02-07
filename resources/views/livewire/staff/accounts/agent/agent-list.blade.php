@@ -3,7 +3,7 @@
         <div
             class="card account__type__card {{ Route::is('staff.manage.user_account.agents') ? 'card__rounded__and__no__border' : '' }}">
             <div class="table-responsive custom__table">
-                <table class="table table-striped mb-0">
+                <table class="table mb-0">
                     <thead>
                         <tr>
                             <th class="border-0 table__head__label" style="padding: 17px 30px;">
@@ -75,7 +75,7 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center text-start td__content">
-                                        <span>{{ $agent->getTeams() }}</span>
+                                        <span>{{ Str::limit($agent->getTeams(), 30)  }}</span>
                                     </div>
                                 </td>
                                 <td>

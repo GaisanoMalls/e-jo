@@ -374,5 +374,11 @@
                 excludeEXEfileMessage.innerHTML = '';
             }
         }
+
+        window.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                @this.set('editingFieldId', null);
+            }
+        });
     </script>
 @endpush

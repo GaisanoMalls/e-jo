@@ -7752,7 +7752,7 @@ input:not(:focus)::placeholder {
 }
 .table tbody tr {
   padding: 0.75rem 1.5rem;
-  border-bottom: 1px solid transparent;
+  border-bottom: 0.08rem solid #e6edef;
 }
 .table:not(caption) > * > * {
   border-bottom-width: 0px;
@@ -9319,6 +9319,14 @@ input[type=checkbox]:checked + .form-check-label {
 .accounts__section .account__modal .modal__content .form__field:focus {
   box-shadow: none;
   border-color: #d32839;
+}
+.accounts__section .account__modal .check__special__project {
+  height: 16px;
+  width: 16px;
+  border: 2px solid #CED4DA;
+  box-shadow: none !important;
+  margin-right: 10px !important;
+  margin-top: 7px;
 }
 .accounts__section .modal__confirm__delete__user__account .btn__confirm__modal {
   padding: 0.6rem 1rem;

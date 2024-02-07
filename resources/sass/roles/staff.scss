@@ -613,7 +613,7 @@ input {
     tbody {
         tr {
             padding: 0.75rem 1.5rem;
-            border-bottom: 1px solid transparent;
+            border-bottom: 0.08rem solid #e6edef;
         }
     }
 
@@ -2495,6 +2495,15 @@ input[type="checkbox"] {
                     border-color: $color-1;
                 }
             }
+        }
+
+        .check__special__project {
+            height: 16px;
+            width: 16px;
+            border: 2px solid #CED4DA;
+            box-shadow: none !important;
+            margin-right: 10px !important;
+            margin-top: 7px;
         }
     }
 

@@ -15,9 +15,9 @@ return new class extends Migration {
     {
         Schema::create('special_project_amount_approvals', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
-            $table->json('service_department_admin_approver');
-            $table->json('fpm_coo_approver');
+            $table->foreignIdFor(Ticket::class, 'ticket_id')->nullable()->constrained('tickets')->cascadeOnDelete();
+            $table->json('service_department_admin_approver')->nullable();
+            $table->json('fpm_coo_approver')->nullable();
             $table->timestamps();
         });
     }

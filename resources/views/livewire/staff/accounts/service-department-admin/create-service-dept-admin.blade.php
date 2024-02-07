@@ -163,6 +163,14 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div class="col-12 mb-3 d-flex">
+                                            <input class="form-check-input check__special__project" type="checkbox"
+                                                role="switch" id="checkCostingApprover1"
+                                                wire:loading.attr="disabled">
+                                            <label class="form-check-label" for="checkCostingApprover1">
+                                                Add as costing approver 1
+                                            </label>
+                                        </div>
                                     </div>
                                     <div class="col-md-5 px-2 mt-3">
                                         <div
