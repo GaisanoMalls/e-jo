@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Department;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DepartmentSeeder extends Seeder
 {
@@ -24,9 +25,9 @@ class DepartmentSeeder extends Seeder
         ];
 
         foreach ($departments as $department) {
-            Department::firstOrCreate([
+            $department = Department::firstOrCreate([
                 'name' => $department,
-                'slug' => \Str::slug($department),
+                'slug' => Str::slug($department),
             ]);
         }
     }

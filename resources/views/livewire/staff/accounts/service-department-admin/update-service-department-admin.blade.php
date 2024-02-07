@@ -161,6 +161,20 @@
                                         @enderror
                                     </div>
                                 </div>
+                                @if ($currentUserAsCostingApprover1)
+                                    <div class="col-12 mb-3 d-flex">
+                                        <input wire:model="asCostingApprover1"
+                                            class="form-check-input check__special__project" type="checkbox"
+                                            role="switch" id="checkCostingApprover1" wire:loading.attr="disabled">
+                                        <label class="form-check-label" for="checkCostingApprover1">
+                                            @if ($asCostingApprover1)
+                                                Costing Approver 1
+                                            @else
+                                                Add as costing approver 1
+                                            @endif
+                                        </label>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div class="col-12">

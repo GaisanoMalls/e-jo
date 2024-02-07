@@ -58,38 +58,38 @@
                                         </div>
                                     </a>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $serviceDepartmentAdmin->getServiceDepartments() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $serviceDepartmentAdmin->getBranches() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $serviceDepartmentAdmin->getBUDepartments() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $serviceDepartmentAdmin->isActive() ? 'Active' : 'Inactive' }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span><i class="bi bi-person-lock text-muted"></i></span>
                                         <span>{{ $serviceDepartmentAdmin->getAllPermissions()->count() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $serviceDepartmentAdmin->dateCreated() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>
                                             @if ($serviceDepartmentAdmin->dateUpdated() > $serviceDepartmentAdmin->profile->dateUpdated())
@@ -100,7 +100,7 @@
                                         </span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                                         <button data-tooltip="Edit" data-tooltip-position="top"
                                             data-tooltip-font-size="11px"

@@ -51,33 +51,33 @@
                                         </div>
                                     </a>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $approver->getBranches() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $approver->getBUDepartments() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $approver->isActive() ? 'Active' : 'Inactive' }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start gap-1 td__content">
                                         <span><i class="bi bi-person-lock text-muted"></i></span>
                                         <span>{{ $approver->getAllPermissions()->count() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $approver->dateCreated() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>
                                             @if ($approver->dateUpdated() > $approver->profile->dateUpdated())
@@ -88,7 +88,7 @@
                                         </span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                                         <button data-tooltip="Edit" data-tooltip-position="top"
                                             data-tooltip-font-size="11px"

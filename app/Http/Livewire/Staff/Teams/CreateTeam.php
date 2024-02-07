@@ -8,6 +8,7 @@ use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class CreateTeam extends Component
@@ -45,7 +46,7 @@ class CreateTeam extends Component
                 $team = Team::create([
                     'service_department_id' => $this->selectedServiceDepartment,
                     'name' => $this->name,
-                    'slug' => \Str::slug($this->name),
+                    'slug' => Str::slug($this->name),
                 ]);
 
                 $team->branches()->attach($this->selectedBranches);

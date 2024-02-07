@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Status;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class StatusesSeeder extends Seeder
 {
@@ -29,7 +30,7 @@ class StatusesSeeder extends Seeder
             Status::firstOrCreate([
                 'name' => $status['name'],
                 'color' => $status['color'],
-                'slug' => \Str::slug($status['name'])
+                'slug' => Str::slug($status['name'])
             ]);
         }
     }

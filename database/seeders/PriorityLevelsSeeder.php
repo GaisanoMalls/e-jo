@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\PriorityLevel;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class PriorityLevelsSeeder extends Seeder
 {
@@ -42,7 +43,7 @@ class PriorityLevelsSeeder extends Seeder
                 'value' => $level['value'],
                 'name' => $level['name'],
                 'color' => $level['color'],
-                'slug' => \Str::slug($level['name']),
+                'slug' => Str::slug($level['name']),
             ]);
         }
     }

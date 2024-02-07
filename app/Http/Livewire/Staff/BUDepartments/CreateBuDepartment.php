@@ -9,6 +9,7 @@ use App\Models\ServiceDepartment;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class CreateBuDepartment extends Component
@@ -45,7 +46,7 @@ class CreateBuDepartment extends Component
             DB::transaction(function () {
                 $department = Department::create([
                     'name' => $this->name,
-                    'slug' => \Str::slug($this->name),
+                    'slug' => Str::slug($this->name),
                 ]);
                 $department->branches()->attach($this->selectedBranches);
 
@@ -53,7 +54,7 @@ class CreateBuDepartment extends Component
                 if ($this->checked) {
                     ServiceDepartment::create([
                         'name' => $this->name,
-                        'slug' => \Str::slug($this->name),
+                        'slug' => Str::slug($this->name),
                     ]);
                     noty()->addSuccess('The service department has also been created.');
                 }

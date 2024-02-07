@@ -6,6 +6,7 @@ use App\Http\Requests\SysAdmin\Manage\ServiceDepartment\StoreServiceDepartmentRe
 use App\Models\ServiceDepartment;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class CreateServiceDepartment extends Component
@@ -36,7 +37,7 @@ class CreateServiceDepartment extends Component
         try {
             ServiceDepartment::create([
                 'name' => $this->name,
-                'slug' => \Str::slug($this->name),
+                'slug' => Str::slug($this->name),
             ]);
 
             $this->actionOnSubmit();

@@ -7,6 +7,7 @@ use App\Models\Department;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class BUDepartmentList extends Component
@@ -63,7 +64,7 @@ class BUDepartmentList extends Component
                 DB::transaction(function () use ($buDepartment) {
                     $buDepartment->update([
                         'name' => $this->name,
-                        'slug' => \Str::slug($this->name),
+                        'slug' => Str::slug($this->name),
                     ]);
 
                     $buDepartment->branches()->sync($this->editSelectedBranches);

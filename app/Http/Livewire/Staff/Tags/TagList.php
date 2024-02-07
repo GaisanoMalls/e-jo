@@ -6,6 +6,7 @@ use App\Http\Traits\BasicModelQueries;
 use App\Models\Tag;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class TagList extends Component
@@ -53,7 +54,7 @@ class TagList extends Component
             Tag::find($this->tagUpdateId)
                 ->update([
                     'name' => $this->name,
-                    'slug' => \Str::slug($this->name),
+                    'slug' => Str::slug($this->name),
                 ]);
 
             $this->fetchTags();

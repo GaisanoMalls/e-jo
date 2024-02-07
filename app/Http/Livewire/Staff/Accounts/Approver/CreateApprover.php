@@ -12,6 +12,7 @@ use App\Models\Role;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -48,7 +49,7 @@ class CreateApprover extends Component
             DB::transaction(function () {
                 $approver = User::create([
                     'email' => $this->email,
-                    'password' => \Hash::make('approver'),
+                    'password' => Hash::make('approver'),
                 ]);
 
                 $approver->assignRole(Role::APPROVER);

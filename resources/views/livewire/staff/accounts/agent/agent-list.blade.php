@@ -58,43 +58,43 @@
                                         </div>
                                     </a>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $agent->getServiceDepartments() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $agent->getBranches() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $agent->getBUDepartments() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
-                                        <span>{{ Str::limit($agent->getTeams(), 30)  }}</span>
+                                        <span>{{ Str::limit($agent->getTeams(), 30) }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $agent->isActive() ? 'Active' : 'Inactive' }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start gap-1 td__content">
                                         <span><i class="bi bi-person-lock text-muted"></i></span>
                                         <span>{{ $agent->getAllPermissions()->count() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $agent->dateCreated() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>
                                             @if ($agent->dateUpdated() > $agent->profile->dateUpdated())
@@ -105,7 +105,7 @@
                                         </span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                                         <button data-tooltip="Edit" data-tooltip-position="top"
                                             data-tooltip-font-size="11px"

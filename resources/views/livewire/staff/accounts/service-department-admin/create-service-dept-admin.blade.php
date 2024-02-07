@@ -164,7 +164,8 @@
                                             </div>
                                         </div>
                                         <div class="col-12 mb-3 d-flex">
-                                            <input class="form-check-input check__special__project" type="checkbox"
+                                            <input wire:model="asCostingApprover1"
+                                                class="form-check-input check__special__project" type="checkbox"
                                                 role="switch" id="checkCostingApprover1"
                                                 wire:loading.attr="disabled">
                                             <label class="form-check-label" for="checkCostingApprover1">

@@ -210,11 +210,11 @@ class CreateTicket extends Component
     }
 
     public function render()
-    {
+    {   
         return view('livewire.requester.ticket.create-ticket', [
             'priorityLevels' => $this->queryPriorityLevels(),
             'serviceDepartments' => $this->queryServiceDepartments(),
-            'branches' => Branch::where('id', '!=', auth()->user()->branch_id)->get(),
+            'branches' => Branch::whereNotIn('id', auth()->user()->branches->pluck('id')->toArray())->get(),
         ]);
     }
 }

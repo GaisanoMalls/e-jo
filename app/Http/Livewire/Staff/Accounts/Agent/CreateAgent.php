@@ -12,6 +12,7 @@ use App\Models\Team;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -62,7 +63,7 @@ class CreateAgent extends Component
             DB::transaction(function () {
                 $agent = User::create([
                     'email' => $this->email,
-                    'password' => \Hash::make('agent'),
+                    'password' => Hash::make('agent'),
                 ]);
                 $agent->assignRole(Role::AGENT);
                 $agent->branches()->attach($this->branch);

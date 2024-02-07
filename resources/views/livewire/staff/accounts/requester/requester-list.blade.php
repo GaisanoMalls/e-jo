@@ -52,33 +52,33 @@
                                         </div>
                                     </a>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $user->getBranches() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $user->getBUDepartments() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $user->isActive() ? 'Active' : 'Inactive' }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start gap-1 td__content">
                                         <span><i class="bi bi-person-lock text-muted"></i></span>
                                         <span>{{ $user->getAllPermissions()->count() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $user->dateCreated() }}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>
                                             @if ($user->dateUpdated() > $user->profile->dateUpdated())
@@ -89,7 +89,7 @@
                                         </span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
                                         <button data-tooltip="Edit" data-tooltip-position="top"
                                             data-tooltip-font-size="11px"

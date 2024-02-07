@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -54,7 +55,7 @@ class CreateRequester extends Component
             DB::transaction(function () {
                 $user = User::create([
                     'email' => $this->email,
-                    'password' => \Hash::make('requester'),
+                    'password' => Hash::make('requester'),
                 ]);
 
                 $user->assignRole(Role::USER);

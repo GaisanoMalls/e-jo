@@ -6,6 +6,7 @@ use App\Http\Requests\SysAdmin\Manage\Branch\StoreBranchRequest;
 use App\Models\Branch;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class CreateBranch extends Component
@@ -36,7 +37,7 @@ class CreateBranch extends Component
         try {
             Branch::create([
                 'name' => $this->name,
-                'slug' => \Str::slug($this->name),
+                'slug' => Str::slug($this->name),
             ]);
 
             $this->actionOnSubmit();

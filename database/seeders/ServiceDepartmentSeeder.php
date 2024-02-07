@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\ServiceDepartment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ServiceDepartmentSeeder extends Seeder
 {
@@ -20,14 +21,18 @@ class ServiceDepartmentSeeder extends Seeder
             'HR',
             'SPE',
             'SPM',
-            'FPM',
             'DPS',
+            'FPM_BLDG. MAINTENANCE',
+            'FPM_ELEVATORS & ESCALATORS',
+            'FPM_RAC',
+            'FPM_PLUMBING',
+            'FPM_ELECTRICAL'
         ];
 
         foreach ($serviceDepartments as $serviceDepartment) {
             ServiceDepartment::firstOrCreate([
                 'name' => $serviceDepartment,
-                'slug' => \Str::slug($serviceDepartment),
+                'slug' => Str::slug($serviceDepartment),
             ]);
         }
     }

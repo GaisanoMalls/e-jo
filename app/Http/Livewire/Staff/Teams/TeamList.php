@@ -8,6 +8,7 @@ use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class TeamList extends Component
@@ -78,7 +79,7 @@ class TeamList extends Component
                     $team->update([
                         'name' => $this->name,
                         'service_department_id' => $this->editSelectedServiceDepartment,
-                        'slug' => \Str::slug($this->name),
+                        'slug' => Str::slug($this->name),
                     ]);
 
                     $team->branches()->sync($this->editSelectedBranches);

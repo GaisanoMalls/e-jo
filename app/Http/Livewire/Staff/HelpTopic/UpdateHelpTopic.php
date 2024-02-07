@@ -9,6 +9,7 @@ use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class UpdateHelpTopic extends Component
@@ -60,7 +61,7 @@ class UpdateHelpTopic extends Component
                     'team_id' => $this->team,
                     'service_level_agreement_id' => $this->sla,
                     'name' => $this->name,
-                    'slug' => \Str::slug($this->name),
+                    'slug' => Str::slug($this->name),
                 ]);
 
                 if ($this->helpTopic->specialProject) {

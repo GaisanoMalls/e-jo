@@ -7,6 +7,7 @@ use App\Models\ServiceDepartment;
 use App\Models\Team;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class TeamSeeder extends Seeder
 {
@@ -37,12 +38,13 @@ class TeamSeeder extends Seeder
             'Maintenance SU',
             'Labor',
             'Elevator & Escalators',
+            'DTR'
         ];
 
         foreach ($teams as $team) {
             Team::firstOrCreate([
                 'name' => $team,
-                'slug' => \Str::slug($team),
+                'slug' => Str::slug($team),
             ]);
         }
     }

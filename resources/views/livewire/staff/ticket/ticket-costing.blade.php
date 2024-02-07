@@ -375,8 +375,8 @@
             }
         }
 
-        window.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' || e.keyCode === 27) {
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' || event.keyCode === 27) {
                 @this.set('editingFieldId', null);
             }
         });

@@ -17,7 +17,7 @@ class SpecialProjectAmountApproval extends Model
     ];
 
     /**
-     * Properties: approver_id, approved_by, and is_approved
+     * Properties: approver_id, is_approved, and date_approved 
      */
     protected $casts = [
         'service_department_admin_approver' => AsArrayObject::class,

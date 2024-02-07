@@ -10,9 +10,11 @@ use App\Models\Department;
 use App\Models\Level;
 use App\Models\Profile;
 use App\Models\Role;
+use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -29,6 +31,7 @@ class CreateServiceDeptAdmin extends Component
     public $email;
     public $suffix;
     public $bu_department;
+    public $asCostingApprover1 = false;
 
     public function rules()
     {
@@ -51,7 +54,7 @@ class CreateServiceDeptAdmin extends Component
             DB::transaction(function () {
                 $serviceDeptAdmin = User::create([
                     'email' => $this->email,
-                    'password' => \Hash::make('deptadmin'),
+                    'password' => Hash::make('deptadmin'),
                 ]);
 
                 $serviceDeptAdmin->assignRole(Role::SERVICE_DEPARTMENT_ADMIN);
@@ -77,6 +80,16 @@ class CreateServiceDeptAdmin extends Component
                     'user_id' => $serviceDeptAdmin->id,
                     'level_id' => Level::where('value', 1)->pluck('value')->first(),
                 ]);
+
+                if ($this->asCostingApprover1) {
+                    SpecialProjectAmountApproval::create([
+                        'service_department_admin_approver' => [
+                            'approver_id' => $serviceDeptAdmin->id,
+                            'is_approved' => false,
+                            'date_approved' => null
+                        ]
+                    ]);
+                }
 
                 $this->actionOnSubmit();
                 noty()->addSuccess('Account successfully created');

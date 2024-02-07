@@ -6,6 +6,7 @@ use App\Http\Traits\BasicModelQueries;
 use App\Models\ServiceDepartment;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class ServiceDepartmentList extends Component
@@ -53,7 +54,7 @@ class ServiceDepartmentList extends Component
             ServiceDepartment::find($this->serviceDepartmentEditId)
                 ->update([
                     'name' => $this->name,
-                    'slug' => \Str::slug($this->name),
+                    'slug' => Str::slug($this->name),
                 ]);
 
             $this->clearFormField();

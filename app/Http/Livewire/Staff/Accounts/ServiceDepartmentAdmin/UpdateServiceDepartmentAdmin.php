@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
+use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,7 @@ class UpdateServiceDepartmentAdmin extends Component
     public $email;
     public $suffix;
     public $bu_department;
+    public $asCostingApprover1 = false;
 
     public function mount(User $serviceDeptAdmin)
     {
@@ -36,6 +38,7 @@ class UpdateServiceDepartmentAdmin extends Component
         $this->last_name = $serviceDeptAdmin->profile->last_name;
         $this->suffix = $serviceDeptAdmin->profile->suffix;
         $this->email = $serviceDeptAdmin->email;
+        $this->asCostingApprover1 = SpecialProjectAmountApproval::where('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->exists();
     }
 
     public function rules()
@@ -75,6 +78,28 @@ class UpdateServiceDepartmentAdmin extends Component
                         $this->suffix,
                     ])),
                 ]);
+
+                if ($this->asCostingApprover1) {
+                    $hasSpecialProjectAmountApproval = SpecialProjectAmountApproval::where('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->first();
+                    $hasNoSecialProjectAmountApproval = SpecialProjectAmountApproval::whereNull('service_department_admin_approver->approver_id')->first();
+
+                    if ($hasSpecialProjectAmountApproval) {
+                        $hasSpecialProjectAmountApproval->update([
+                            'service_department_admin_approver->is_approved' => false,
+                            'service_department_admin_approver->date_approved' => null
+                        ]);
+                    }
+                    if ($hasNoSecialProjectAmountApproval) {
+                        $hasNoSecialProjectAmountApproval->create([
+                            'service_department_admin_approver' => [
+                                'approver_id' => $this->serviceDeptAdmin->id,
+                                'is_approved' => false,
+                                'date_approved' => null
+                            ]
+                        ]);
+                    }
+                }
+
                 noty()->addSuccess("You have successfully updated the account for {$this->serviceDeptAdmin->profile->getFullName()}.");
             });
         } catch (Exception $e) {
@@ -83,14 +108,20 @@ class UpdateServiceDepartmentAdmin extends Component
         }
     }
 
+    public function currentUserAsCostingApprover1()
+    {
+        return SpecialProjectAmountApproval::whereJsonContains('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->first();
+    }
+
     public function render()
     {
+        // dd($this->currentUserAsCostingApprover1());
         return view('livewire.staff.accounts.service-department-admin.update-service-department-admin', [
             'serviceDeptAdminSuffixes' => $this->querySuffixes(),
             'serviceDeptAdminBranches' => $this->queryBranches(),
             'serviceDeptAdminBUDepartments' => $this->queryBUDepartments(),
             'serviceDeptAdminServiceDepartments' => $this->queryServiceDepartments(),
-
+            'currentUserAsCostingApprover1' => $this->currentUserAsCostingApprover1()
         ]);
     }
 }

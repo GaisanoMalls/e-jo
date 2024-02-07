@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Branch;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class BranchSeeder extends Seeder
 {
@@ -20,7 +21,7 @@ class BranchSeeder extends Seeder
         foreach ($branch_names as $branch_name) {
             Branch::firstOrCreate([
                 'name' => $branch_name,
-                'slug' => \Str::slug($branch_name),
+                'slug' => Str::slug($branch_name),
             ]);
         }
     }
