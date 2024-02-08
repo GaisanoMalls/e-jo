@@ -84,7 +84,7 @@ class UpdateServiceDepartmentAdmin extends Component
                     ])),
                 ]);
 
-                if ($this->asCostingApprover1 && $this->hasNoCostingApprover1()) {
+                if ($this->asCostingApprover1 && !$this->hasCostingApprover1()) {
                     SpecialProjectAmountApproval::create([
                         'service_department_admin_approver' => [
                             'approver_id' => $this->serviceDeptAdmin->id,
@@ -94,7 +94,7 @@ class UpdateServiceDepartmentAdmin extends Component
                     ]);
                 }
 
-                if (!$this->asCostingApprover1 && !$this->hasNoCostingApprover1()) {
+                if (!$this->asCostingApprover1 && $this->hasCostingApprover1()) {
                     SpecialProjectAmountApproval::query()->delete();
                 }
 
@@ -113,9 +113,9 @@ class UpdateServiceDepartmentAdmin extends Component
             ->exists();
     }
 
-    public function hasNoCostingApprover1()
+    public function hasCostingApprover1()
     {
-        return SpecialProjectAmountApproval::count() === 0;
+        return SpecialProjectAmountApproval::count() !== 0;
     }
 
     public function render()
@@ -126,7 +126,7 @@ class UpdateServiceDepartmentAdmin extends Component
             'serviceDeptAdminBUDepartments' => $this->queryBUDepartments(),
             'serviceDeptAdminServiceDepartments' => $this->queryServiceDepartments(),
             'currentUserAsCostingApprover1' => $this->currentUserAsCostingApprover1(),
-            'hasNoCostingApprover1' => $this->hasNoCostingApprover1()
+            'hasCostingApprover1' => $this->hasCostingApprover1()
         ]);
     }
 }

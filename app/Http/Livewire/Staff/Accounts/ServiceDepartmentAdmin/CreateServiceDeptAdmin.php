@@ -82,13 +82,17 @@ class CreateServiceDeptAdmin extends Component
                 ]);
 
                 if ($this->asCostingApprover1) {
-                    SpecialProjectAmountApproval::create([
-                        'service_department_admin_approver' => [
-                            'approver_id' => $serviceDeptAdmin->id,
-                            'is_approved' => false,
-                            'date_approved' => null
-                        ]
-                    ]);
+                    if (!$this->hasCostingApprover1()) {
+                        SpecialProjectAmountApproval::create([
+                            'service_department_admin_approver' => [
+                                'approver_id' => $serviceDeptAdmin->id,
+                                'is_approved' => false,
+                                'date_approved' => null
+                            ]
+                        ]);
+                    } else {
+                        noty()->warning('Unable to assign costing approver 1 since it has already been assigned');
+                    }
                 }
 
                 $this->actionOnSubmit();
@@ -107,6 +111,11 @@ class CreateServiceDeptAdmin extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
+    public function hasCostingApprover1()
+    {
+        return SpecialProjectAmountApproval::count() !== 0;
+    }
+
     public function render()
     {
         return view('livewire.staff.accounts.service-department-admin.create-service-dept-admin', [
@@ -114,6 +123,7 @@ class CreateServiceDeptAdmin extends Component
             'serviceDeptAdminBranches' => $this->queryBranches(),
             'buDepartments' => $this->queryBUDepartments(),
             'serviceDeptAdminServiceDepartments' => $this->queryServiceDepartments(),
+            'hasCostingApprover1' => $this->hasCostingApprover1()
         ]);
     }
 }

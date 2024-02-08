@@ -177,7 +177,7 @@
                                     </div>
                                 @endif
 
-                                @if ($hasNoCostingApprover1)
+                                @if (!$hasCostingApprover1)
                                     <div class="col-12 mb-3 d-flex">
                                         <input wire:model="asCostingApprover1"
                                             class="form-check-input check__special__project" type="checkbox"
