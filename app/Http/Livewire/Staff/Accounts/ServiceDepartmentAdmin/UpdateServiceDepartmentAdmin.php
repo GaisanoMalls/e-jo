@@ -38,7 +38,12 @@ class UpdateServiceDepartmentAdmin extends Component
         $this->last_name = $serviceDeptAdmin->profile->last_name;
         $this->suffix = $serviceDeptAdmin->profile->suffix;
         $this->email = $serviceDeptAdmin->email;
-        $this->asCostingApprover1 = SpecialProjectAmountApproval::where('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->exists();
+        $this->asCostingApprover1 = $this->isCostingApprover();
+    }
+
+    private function isCostingApprover()
+    {
+        return SpecialProjectAmountApproval::where('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->exists();
     }
 
     public function rules()
@@ -79,25 +84,18 @@ class UpdateServiceDepartmentAdmin extends Component
                     ])),
                 ]);
 
-                if ($this->asCostingApprover1) {
-                    $hasSpecialProjectAmountApproval = SpecialProjectAmountApproval::where('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->first();
-                    $hasNoSecialProjectAmountApproval = SpecialProjectAmountApproval::whereNull('service_department_admin_approver->approver_id')->first();
+                if ($this->asCostingApprover1 && $this->hasNoCostingApprover1()) {
+                    SpecialProjectAmountApproval::create([
+                        'service_department_admin_approver' => [
+                            'approver_id' => $this->serviceDeptAdmin->id,
+                            'is_approved' => false,
+                            'date_approved' => null
+                        ]
+                    ]);
+                }
 
-                    if ($hasSpecialProjectAmountApproval) {
-                        $hasSpecialProjectAmountApproval->update([
-                            'service_department_admin_approver->is_approved' => false,
-                            'service_department_admin_approver->date_approved' => null
-                        ]);
-                    }
-                    if ($hasNoSecialProjectAmountApproval) {
-                        $hasNoSecialProjectAmountApproval->create([
-                            'service_department_admin_approver' => [
-                                'approver_id' => $this->serviceDeptAdmin->id,
-                                'is_approved' => false,
-                                'date_approved' => null
-                            ]
-                        ]);
-                    }
+                if (!$this->asCostingApprover1 && !$this->hasNoCostingApprover1()) {
+                    SpecialProjectAmountApproval::query()->delete();
                 }
 
                 noty()->addSuccess("You have successfully updated the account for {$this->serviceDeptAdmin->profile->getFullName()}.");
@@ -110,18 +108,25 @@ class UpdateServiceDepartmentAdmin extends Component
 
     public function currentUserAsCostingApprover1()
     {
-        return SpecialProjectAmountApproval::whereJsonContains('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->first();
+        return SpecialProjectAmountApproval::whereJsonContains('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)
+            ->whereNotNull('service_department_admin_approver->approver_id')
+            ->exists();
+    }
+
+    public function hasNoCostingApprover1()
+    {
+        return SpecialProjectAmountApproval::count() === 0;
     }
 
     public function render()
     {
-        // dd($this->currentUserAsCostingApprover1());
         return view('livewire.staff.accounts.service-department-admin.update-service-department-admin', [
             'serviceDeptAdminSuffixes' => $this->querySuffixes(),
             'serviceDeptAdminBranches' => $this->queryBranches(),
             'serviceDeptAdminBUDepartments' => $this->queryBUDepartments(),
             'serviceDeptAdminServiceDepartments' => $this->queryServiceDepartments(),
-            'currentUserAsCostingApprover1' => $this->currentUserAsCostingApprover1()
+            'currentUserAsCostingApprover1' => $this->currentUserAsCostingApprover1(),
+            'hasNoCostingApprover1' => $this->hasNoCostingApprover1()
         ]);
     }
 }
