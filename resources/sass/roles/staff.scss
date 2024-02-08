@@ -1647,6 +1647,9 @@ a {
         }
     }
 
+
+
+
     .container__ticket__details__right {
         top: 235px;
         position: sticky;
@@ -1689,6 +1692,58 @@ a {
         &:focus {
             box-shadow: none;
             border-color: $color-1;
+        }
+    }
+}
+
+.reply__container {
+    z-index: 0;
+    position: relative;
+
+    .qoute__reply__action__container {
+        display: none !important;
+        position: absolute;
+        padding: 0.1rem;
+        border-color: #e6edef;
+        background-color: #ffffff;
+        z-index: 1;
+        top: 43%;
+        transform: translateY(-50%);
+
+        .btn__reply__qoute__action {
+            height: 30px;
+            width: 30px;
+            font-size: $fs-14;
+            color: #2b3135;
+            border: none;
+
+            &:hover {
+                background-color: #E9ECEF;
+            }
+        }
+
+        .btn__qoute__reply {
+            font-size: $fs-18 !important;
+        }
+    }
+
+    &:hover>.qoute__reply__action__container {
+        display: block !important;
+    }
+
+    .likes__container {
+        position: absolute;
+        padding: 0.1rem;
+        background-color: #ffffff;
+        z-index: 1;
+        bottom: 0;
+        transform: translateX(-50%);
+
+        .btn__display__reply__likes {
+            height: 20px;
+            width: 20px;
+            font-size: 0.75rem;
+            color: #c5b236;
         }
     }
 }

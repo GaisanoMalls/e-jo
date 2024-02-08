@@ -22,6 +22,11 @@ class Reply extends Model
         return $this->hasMany(ReplyFile::class);
     }
 
+    public function likes()
+    {
+        return $this->hasMany(ReplyLike::class);
+    }
+
     public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);

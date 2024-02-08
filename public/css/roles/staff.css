@@ -8603,6 +8603,51 @@ a:hover {
   border-color: #d32839;
 }
 
+.reply__container {
+  z-index: 0;
+  position: relative;
+}
+.reply__container .qoute__reply__action__container {
+  display: none !important;
+  position: absolute;
+  padding: 0.1rem;
+  border-color: #e6edef;
+  background-color: #ffffff;
+  z-index: 1;
+  top: 43%;
+  transform: translateY(-50%);
+}
+.reply__container .qoute__reply__action__container .btn__reply__qoute__action {
+  height: 30px;
+  width: 30px;
+  font-size: 0.875rem;
+  color: #2b3135;
+  border: none;
+}
+.reply__container .qoute__reply__action__container .btn__reply__qoute__action:hover {
+  background-color: #E9ECEF;
+}
+.reply__container .qoute__reply__action__container .btn__qoute__reply {
+  font-size: 1.125rem !important;
+}
+.reply__container:hover > .qoute__reply__action__container {
+  display: block !important;
+}
+.reply__container .likes__container {
+  position: absolute;
+  padding: 0.1rem;
+  background-color: #ffffff;
+  z-index: 1;
+  bottom: 0;
+  transform: translateX(-50%);
+}
+.reply__container .likes__container .btn__display__reply__likes {
+  height: 20px;
+  width: 20px;
+  font-size: 0.75rem;
+  color: #c5b236;
+}
+
 .modal__confirm__close__ticket .btn__confirm__modal {
   padding: 0.6rem 1rem;
   border-radius: 0.563rem;
