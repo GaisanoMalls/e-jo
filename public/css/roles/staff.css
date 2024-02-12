@@ -8327,6 +8327,15 @@ a:hover {
 .ticket__section .card__ticket__details .qouted__reply p {
   margin: 0 !important;
 }
+.ticket__section .card__ticket__details .reply__qoute__user__picture,
+.ticket__section .card__ticket__details .reply__qoute__user__name__initial {
+  height: 19px;
+  width: 19px;
+  border-radius: 3.125rem;
+}
+.ticket__section .card__ticket__details .reply__qoute__user__name__initial {
+  font-size: 0.57rem;
+}
 .ticket__section .card__ticket__details .ticket__details__card__header {
   padding: 1.5rem;
 }

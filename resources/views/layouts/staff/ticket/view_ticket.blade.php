@@ -6,13 +6,13 @@
         <div class="ticket__section" x-data="{ pinned: true }">
             <button :class="pinned ? 'd-none' : ''"
                 class="btn btn-sm p-0 bg-blue d-flex align-items-center rounded-circle text-white shadow justify-content-center position-fixed"
-                style="height: 30px; width: 30px; top: 90px; right: 43px; z-index: 5; background-color: #D32839;"
+                style="font-size: 1rem; height: 30px; width: 30px; top: 94px; right: 51px; z-index: 1; background-color: #D32839;"
                 @click="pinned = true">
                 <i class="bi bi-pin-angle-fill"></i>
             </button>
             <div class="row">
                 <div class="col-xl-12 ticket__details__container">
-                    <div class="mb-3 ticket__details__top" x-show="pinned" x-transition.duration.300ms>
+                    <div class="mb-3 ticket__details__top" x-show="pinned" x-transition.opacity.duration.300ms>
                         @livewire('staff.ticket.load-back-button-header', ['ticket' => $ticket])
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
                             <div class="d-flex align-items-center gap-3">
@@ -22,7 +22,8 @@
                             <div class="d-flex align-items-center gap-4">
                                 @livewire('staff.ticket.priority-level', ['ticket' => $ticket])
                                 <button class="btn btn-sm p-0 btn__change__priority__level"
-                                    style="font-size: 0.9rem; color: #D32839;" @click="pinned = false">
+                                    style="height: 30px; width: 30px; font-size: 1rem; color: #D32839;"
+                                    @click="pinned = false">
                                     <i class="bi bi-pin-angle-fill"></i>
                                 </button>
                             </div>

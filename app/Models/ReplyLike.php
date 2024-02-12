@@ -20,6 +20,6 @@ class ReplyLike extends Model
 
     public function likedBy()
     {
-
+        return $this->belongsTo(User::class, 'liked_by');
     }
 }

@@ -1347,6 +1347,17 @@ a {
             }
         }
 
+        .reply__qoute__user__picture,
+        .reply__qoute__user__name__initial {
+            height: 19px;
+            width: 19px;
+            border-radius: $border-radius-50;
+        }
+
+        .reply__qoute__user__name__initial {
+            font-size: 0.57rem;
+        }
+
         .ticket__details__card__header {
             padding: 1.5rem;
 

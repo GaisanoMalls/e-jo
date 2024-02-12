@@ -31,11 +31,23 @@
                         <div class="card border-0 p-0 card__ticket__details"
                             style="width: fit-content; max-width: 70%;
                             {{ $reply->user_id == auth()->user()->id ? 'background-color: #D0F0F7; margin-left: auto;' : 'background-color: #E9ECEF; margin-right: auto;' }}">
-                            @if ($reply->qoutedReply)
+                            @if ($reply->quotedReply)
                                 <div class="text-muted qouted__reply position-relative"
-                                    style="font-size: 12px; background-color: #FFFFFF;">
-                                    {!! Str::limit($reply->qoutedReply?->description, 200, '...') !!}
-                                    <a href="#reply-{{ $reply->qoutedReply->id }}" class="position-absolute"
+                                    style="font-size: 12px; background-color: #FFFFFF; border-radius: 0.625rem; {{ $reply->quotedReply && $reply->user_id == auth()->user()->id ? 'border: 0.15rem solid #D0F0F7;' : 'border: 0.15rem solid #E9ECEF;' }} ">
+                                    <div class="d-flex align-items-center mb-2">
+                                        @if ($reply->quotedReply->user->profile->picture)
+                                            <img src="{{ Storage::url($reply->quotedReply->user->profile->picture) }}"
+                                                alt="" class="image-fluid reply__qoute__user__picture me-2">
+                                        @else
+                                            <div class="reply__qoute__user__name__initial d-flex align-items-center me-2 justify-content-center text-white"
+                                                style="background-color: #24695C;">
+                                                {{ $reply->quotedReply->user->profile->getNameInitial() }}</div>
+                                        @endif
+                                        <small
+                                            style="font-size: 0.7rem;">{{ $reply->quotedReply->user->profile->getFullName() }}</small>
+                                    </div>
+                                    {!! Str::limit($reply->quotedReply?->description, 200, '...') !!}
+                                    <a href="#reply-{{ $reply->quotedReply->id }}" class="position-absolute"
                                         style="right: 4px; top: 4px;">
                                         <i class="bi bi-box-arrow-up-right"></i>
                                     </a>
@@ -46,7 +58,8 @@
                                 <div class="d-flex align-items-center w-100">
                                     @if ($reply->user->id !== auth()->user()->id)
                                         @if ($reply->user->profile->picture)
-                                            <img src="{{ Storage::url($reply->user->profile->picture) }}" alt=""
+                                            <img src="{{ Storage::url($reply->user->profile->picture) }}"
+                                                alt=""
                                                 class="image-fluid ticket__details__user__picture
                                             reply__ticket__details__user__picture">
                                         @else
@@ -200,12 +213,12 @@
                                 <div class="mb-0 ticket__description">{!! $qouteReplyMessage !!}</div>
                             </div>
                             <div class="modal__body">
-                                <form wire:submit.prevent="sendQouteReply">
+                                <form wire:submit.prevent="sendQuoteReply">
                                     <div class="my-2">
                                         <div wire:ignore>
-                                            <textarea wire:model="qouteReplyDescription" id="qouteReplyDescription"></textarea>
+                                            <textarea wire:model="quoteReplyDescription" id="quoteReplyDescription"></textarea>
                                         </div>
-                                        @error('qouteReplyDescription')
+                                        @error('quoteReplyDescription')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -215,7 +228,7 @@
                                     <div class="mt-4">
                                         <div class="d-flex align-items-center gap-3">
                                             <label class="ticket__actions__label">Attach file</label>
-                                            <div wire:loading wire:target="qouteReplyFiles">
+                                            <div wire:loading wire:target="quoteReplyFiles">
                                                 <div class="d-flex align-items-center gap-2">
                                                     <div class="spinner-border text-info"
                                                         style="height: 15px; width: 15px;" role="status">
@@ -225,8 +238,8 @@
                                             </div>
                                         </div>
                                         <input class="form-control ticket__file__input w-auto my-3" type="file"
-                                            wire:model="qouteReplyFiles" multiple id="upload-{{ $upload }}">
-                                        @error('qouteReplyFiles.*')
+                                            wire:model="quoteReplyFiles" multiple id="upload-{{ $upload }}">
+                                        @error('quoteReplyFiles.*')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -235,12 +248,12 @@
                                     </div>
                                     <button type="submit"
                                         class="btn mt-4 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
-                                        <span wire:loading wire:target="sendQouteReply"
+                                        <span wire:loading wire:target="sendQuoteReply"
                                             class="spinner-border spinner-border-sm" role="status"
                                             aria-hidden="true">
                                         </span>
                                         Send
-                                        <div wire:loading.remove wire:target="sendQouteReply">
+                                        <div wire:loading.remove wire:target="sendQuoteReply">
                                             <i class="bi bi-send-fill"></i>
                                         </div>
                                     </button>
@@ -267,7 +280,7 @@
 @push('qoutereply-textarea')
     <script>
         tinymce.init({
-            selector: '#qouteReplyDescription',
+            selector: '#quoteReplyDescription',
             plugins: 'lists',
             toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
             height: 350,
@@ -277,7 +290,7 @@
                     editor.save();
                 });
                 editor.on('change', function(e) {
-                    @this.set('qouteReplyDescription', editor.getContent());
+                    @this.set('quoteReplyDescription', editor.getContent());
                 });
             }
         });
@@ -289,7 +302,7 @@
     <script>
         window.addEventListener('close-modal', () => {
             $('#qouteReplyModal').modal('hide');
-            tinymce.get("qouteReplyDescription").setContent("");
+            tinymce.get("quoteReplyDescription").setContent("");
         });
     </script>
 @endpush

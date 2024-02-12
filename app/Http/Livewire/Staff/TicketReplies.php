@@ -28,8 +28,8 @@ class TicketReplies extends Component
 
     protected $listeners = ['loadTicketReplies' => 'loadReplies'];
     public $upload = 0;
-    public $qouteReplyDescription = '';
-    public $qouteReplyFiles = [];
+    public $quoteReplyDescription = '';
+    public $quoteReplyFiles = [];
     public $qouteReplyMessage = '';
     public $qouteReplyId = null;
 
@@ -81,13 +81,13 @@ class TicketReplies extends Component
 
     private function actionOnSubmit()
     {
-        $this->qouteReplyFiles = [];
+        $this->quoteReplyFiles = [];
         $this->upload++;
         $this->reset('qouteReplyDescription');
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function sendQouteReply()
+    public function sendQuoteReply()
     {
         $this->validate();
 
@@ -98,15 +98,15 @@ class TicketReplies extends Component
                 $reply = Reply::create([
                     'user_id' => auth()->user()->id,
                     'ticket_id' => $this->ticket->id,
-                    'description' => $this->qouteReplyDescription,
+                    'description' => $this->quoteReplyDescription,
                 ]);
 
                 if ($this->qouteReplyId) {
-                    $reply->update(['qouted_reply_id' => $this->qouteReplyId]);
+                    $reply->update(['quoted_reply_id' => $this->qouteReplyId]);
                 }
 
-                if ($this->qouteReplyFiles) {
-                    foreach ($this->qouteReplyFiles as $uploadedReplyFile) {
+                if ($this->quoteReplyFiles) {
+                    foreach ($this->quoteReplyFiles as $uploadedReplyFile) {
                         $fileName = $uploadedReplyFile->getClientOriginalName();
                         $fileAttachment = Storage::putFileAs(
                             "public/ticket/{$this->ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(),
