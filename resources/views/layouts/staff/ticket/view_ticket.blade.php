@@ -3,17 +3,29 @@
 @section('main-content')
     @livewire('staff.ticket.load-disapproval-reason', ['ticket' => $ticket])
     @if ($ticket)
-        <div class="ticket__section">
+        <div class="ticket__section" x-data="{ pinned: true }">
+            <button :class="pinned ? 'd-none' : ''"
+                class="btn btn-sm p-0 bg-blue d-flex align-items-center rounded-circle text-white shadow justify-content-center position-fixed"
+                style="height: 30px; width: 30px; top: 90px; right: 43px; z-index: 5; background-color: #D32839;"
+                @click="pinned = true">
+                <i class="bi bi-pin-angle-fill"></i>
+            </button>
             <div class="row">
                 <div class="col-xl-12 ticket__details__container">
-                    <div class="mb-3 ticket__details__top">
+                    <div class="mb-3 ticket__details__top" x-show="pinned" x-transition.duration.300ms>
                         @livewire('staff.ticket.load-back-button-header', ['ticket' => $ticket])
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
                             <div class="d-flex align-items-center gap-3">
                                 @livewire('staff.ticket.load-ticket-status-header-text', ['ticket' => $ticket])
                                 <h6 class="ticket__details__ticketnumber mb-0">Ticket: {{ $ticket->ticket_number }}</h6>
                             </div>
-                            @livewire('staff.ticket.priority-level', ['ticket' => $ticket])
+                            <div class="d-flex align-items-center gap-4">
+                                @livewire('staff.ticket.priority-level', ['ticket' => $ticket])
+                                <button class="btn btn-sm p-0 btn__change__priority__level"
+                                    style="font-size: 0.9rem; color: #D32839;" @click="pinned = false">
+                                    <i class="bi bi-pin-angle-fill"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="d-flex flex-wrap gap-2 justify-content-between ticket__details__header">
                             <div class="mb-2">
@@ -157,6 +169,5 @@
         @livewire('staff.ticket.assign-tag', ['ticket' => $ticket])
         @livewire('staff.ticket.close-ticket', ['ticket' => $ticket])
         @include('layouts.staff.ticket.modal.preview_ticket_files_modal')
-
     @endif
 @endsection

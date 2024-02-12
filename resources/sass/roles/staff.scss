@@ -1339,6 +1339,14 @@ a {
     }
 
     .card__ticket__details {
+        .qouted__reply {
+            padding: 1rem;
+
+            p {
+                margin: 0 !important;
+            }
+        }
+
         .ticket__details__card__header {
             padding: 1.5rem;
 
@@ -1432,7 +1440,7 @@ a {
             .ticket__reply__content {
                 border-left: 0.08rem solid #d8e0e2;
                 padding-left: 1.3rem;
-                padding-top: 1rem;
+                padding-top: 0.5rem;
                 margin-left: 0.8rem;
                 margin-top: 0.5rem;
                 position: relative;
@@ -1647,14 +1655,6 @@ a {
         }
     }
 
-
-
-
-    .container__ticket__details__right {
-        top: 235px;
-        position: sticky;
-    }
-
     .ticket__details__top {
         padding: 1.5rem 1.5rem 1.5rem 2.3rem;
         top: 70px;
@@ -1714,7 +1714,7 @@ a {
             height: 30px;
             width: 30px;
             font-size: $fs-14;
-            color: #2b3135;
+            color: #3e4549;
             border: none;
 
             &:hover {

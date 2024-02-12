@@ -3,7 +3,7 @@
         <div wire:poll.visible>
             @if ($ticket->replies->isNotEmpty())
                 @foreach ($ticket->replies as $reply)
-                    <div
+                    <div id="reply-{{ $reply->id }}"
                         class="d-flex mb-3 flex-row align-items-center gap-1 reply__container {{ $reply->user_id == auth()->user()->id ? 'flex-row-reverse' : '' }}">
                         <div class="d-flex flex-column qoute__reply__action__container rounded-5 shadow"
                             style="{{ $reply->user_id == auth()->user()->id ? 'right: -10px; ' : 'left: -10px;' }}">
@@ -22,7 +22,8 @@
                             @endif
                             <button
                                 class="btn btn-sm d-flex align-items-center justify-content-center rounded-circle btn__reply__qoute__action btn__qoute__reply"
-                                data-bs-toggle="modal" data-bs-target="#replyTicketModal">
+                                data-bs-toggle="modal" data-bs-target="#qouteReplyModal"
+                                wire:click="qouteReply({{ $reply->id }})">
                                 <i class="bi bi-reply-fill"
                                     style="{{ $reply->user_id != auth()->user()->id ? 'transform: scaleX(-1);' : '' }}"></i>
                             </button>
@@ -30,6 +31,16 @@
                         <div class="card border-0 p-0 card__ticket__details"
                             style="width: fit-content; max-width: 70%;
                             {{ $reply->user_id == auth()->user()->id ? 'background-color: #D0F0F7; margin-left: auto;' : 'background-color: #E9ECEF; margin-right: auto;' }}">
+                            @if ($reply->qoutedReply)
+                                <div class="text-muted qouted__reply position-relative"
+                                    style="font-size: 12px; background-color: #FFFFFF;">
+                                    {!! Str::limit($reply->qoutedReply?->description, 200, '...') !!}
+                                    <a href="#reply-{{ $reply->qoutedReply->id }}" class="position-absolute"
+                                        style="right: 4px; top: 4px;">
+                                        <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                            @endif
                             <div
                                 class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
                                 <div class="d-flex align-items-center w-100">
@@ -69,7 +80,7 @@
                                         {!! $reply->description !!}
                                     </div>
                                     @if ($reply->fileAttachments->count() > 0)
-                                        <div class="ticket__attachments d-inline-flex gap-1" data-bs-toggle="modal"
+                                        <div class="ticket__attachments d-inline-flex mt-3 gap-1" data-bs-toggle="modal"
                                             data-bs-target="#replyTicketFilesModalForm{{ $reply->id }}">
                                             <i class="fa-solid fa-file-image"></i>
                                             <small
@@ -83,10 +94,12 @@
                         </div>
                         @if ($reply->likes->isNotEmpty())
                             <div class="d-flex flex-column likes__container rounded-5 shadow-sm"
-                                style="{{ $reply->user_id == auth()->user()->id ? 'right: -10px; ' : 'left: 10px;' }}">
+                                style="{{ $reply->user_id == auth()->user()->id ? 'right: -10px; ' : 'left: 12px;' }}">
                                 <button
-                                    class="btn btn-sm d-flex align-items-center justify-content-center rounded-circle btn__reply__qoute__action btn__display__reply__likes">
+                                    class="btn btn-sm d-flex align-items-center gap-1 justify-content-center rounded-circle btn__reply__qoute__action btn__display__reply__likes"
+                                    style="{{ $reply->likes->count() > 1 ? 'width: auto !important;' : '' }}">
                                     <i class="fa-solid fa-thumbs-up"></i>
+                                    {{ $reply->likes->count() > 1 ? $reply->likes->count() : '' }}
                                 </button>
                             </div>
                         @endif
@@ -100,10 +113,7 @@
                             <div class="modal-content custom__modal__content">
                                 <div class="modal__header d-flex justify-content-between align-items-center">
                                     <h6 class="modal__title">
-                                        {{ $reply->fileAttachments->count() > 1
-                                            ? 'Reply file attachments'
-                                            : 'Reply file
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            attachment' }}
+                                        {{ $reply->fileAttachments->count() > 1 ? 'Reply file attachments' : 'Reply file attachment' }}
                                         ({{ $reply->fileAttachments->count() }})
                                     </h6>
                                 </div>
@@ -174,6 +184,71 @@
                         </div>
                     </div>
                 @endforeach
+                <div wire:ignore.self class="modal fade modal-xl ticket__actions__modal" id="qouteReplyModal"
+                    tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered custom__modal">
+                        <div class="modal-content d-flex flex-column custom__modal__content">
+                            <div class="modal__header d-flex justify-content-between align-items-center">
+                                <h6 class="modal__title">Write your reply</h6>
+                                <button
+                                    class="btn d-flex align-items-center justify-content-center modal__close__button"
+                                    data-bs-dismiss="modal" id="btnCloseModal">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                            <div class="my-4 d-flex flex-column reply__ticket__info">
+                                <div class="mb-0 ticket__description">{!! $qouteReplyMessage !!}</div>
+                            </div>
+                            <div class="modal__body">
+                                <form wire:submit.prevent="sendQouteReply">
+                                    <div class="my-2">
+                                        <div wire:ignore>
+                                            <textarea wire:model="qouteReplyDescription" id="qouteReplyDescription"></textarea>
+                                        </div>
+                                        @error('qouteReplyDescription')
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                    <div class="mt-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <label class="ticket__actions__label">Attach file</label>
+                                            <div wire:loading wire:target="qouteReplyFiles">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="spinner-border text-info"
+                                                        style="height: 15px; width: 15px;" role="status">
+                                                    </div>
+                                                    <small style="fot-size: 12px;">Uploading...</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input class="form-control ticket__file__input w-auto my-3" type="file"
+                                            wire:model="qouteReplyFiles" multiple id="upload-{{ $upload }}">
+                                        @error('qouteReplyFiles.*')
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                    <button type="submit"
+                                        class="btn mt-4 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
+                                        <span wire:loading wire:target="sendQouteReply"
+                                            class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true">
+                                        </span>
+                                        Send
+                                        <div wire:loading.remove wire:target="sendQouteReply">
+                                            <i class="bi bi-send-fill"></i>
+                                        </div>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @else
                 <div class="alert alert-warning py-3 px-3 rounded-3" style="margin: 20px 0px;">
                     <small style="font-size: 14px;">No replies.</small>
@@ -188,3 +263,33 @@
         </div>
     @endif
 </div>
+
+@push('qoutereply-textarea')
+    <script>
+        tinymce.init({
+            selector: '#qouteReplyDescription',
+            plugins: 'lists',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist',
+            height: 350,
+            forced_root_block: false,
+            setup: function(editor) {
+                editor.on('init change', function() {
+                    editor.save();
+                });
+                editor.on('change', function(e) {
+                    @this.set('qouteReplyDescription', editor.getContent());
+                });
+            }
+        });
+    </script>
+@endpush
+
+{{-- Modal Scripts --}}
+@push('livewire-modal')
+    <script>
+        window.addEventListener('close-modal', () => {
+            $('#qouteReplyModal').modal('hide');
+            tinymce.get("qouteReplyDescription").setContent("");
+        });
+    </script>
+@endpush

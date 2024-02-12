@@ -47,22 +47,29 @@ trait Tickets
 
     public function serviceDeptAdminGetApprovedTickets()
     {
-        return Ticket::where([
-            ['status_id', Status::APPROVED],
-            ['approval_status', ApprovalStatusEnum::APPROVED],
-        ])->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
-            ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-            ->withWhereHas('ticketApprovals', fn($ticketApproval) =>
-                $ticketApproval->whereNotNull('level_1_approver->approver_id')
-                    ->whereNotNull('level_2_approver->approver_id')
-                    ->whereNotNull('level_1_approver->approved_by')
-                    ->whereNotNull('level_2_approver->approved_by')
-                    ->where([
-                        ['level_1_approver->is_approved', true],
-                        ['level_2_approver->is_approved', true],
-                        ['is_all_approved', true],
-                    ]))
-            ->orderByDesc('created_at')->get();
+        return ($this->ticketHasSpecialProject())
+            ? Ticket::where([
+                ['status_id', Status::APPROVED],
+                ['approval_status', ApprovalStatusEnum::APPROVED],
+            ])->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+                ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                ->withWhereHas('ticketApprovals', fn($ticketApproval) =>
+                    $ticketApproval->whereNotNull('level_1_approver->approver_id')
+                        ->whereNotNull('level_2_approver->approver_id')
+                        ->whereNotNull('level_1_approver->approved_by')
+                        ->whereNotNull('level_2_approver->approved_by')
+                        ->where([
+                            ['level_1_approver->is_approved', true],
+                            ['level_2_approver->is_approved', true],
+                            ['is_all_approved', true],
+                        ]))
+                ->orderByDesc('created_at')->get()
+            : Ticket::where([
+                ['status_id', Status::APPROVED],
+                ['approval_status', ApprovalStatusEnum::APPROVED],
+            ])->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+                ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                ->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetDisapprovedTickets()

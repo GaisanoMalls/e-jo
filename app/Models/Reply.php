@@ -15,7 +15,7 @@ class Reply extends Model
 {
     use HasFactory, Utils;
 
-    protected $fillable = ['ticket_id', 'user_id', 'description'];
+    protected $fillable = ['ticket_id', 'user_id', 'qouted_reply_id', 'description'];
 
     public function fileAttachments(): HasMany
     {
@@ -35,6 +35,11 @@ class Reply extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function qoutedReply()
+    {
+        return $this->belongsTo(Reply::class);
     }
 
     public function dateCreated(): string

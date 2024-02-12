@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Reply;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -18,6 +19,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(User::class, 'user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
+            $table->foreignIdFor(Reply::class, 'qouted_reply_id')->nullable()->constrained('replies')->nullOnDelete();
             $table->longText('description');
             $table->timestamps();
         });

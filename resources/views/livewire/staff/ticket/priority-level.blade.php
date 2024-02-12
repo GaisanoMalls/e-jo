@@ -1,5 +1,5 @@
 <div>
-    <div class="d-flex align-items-center gap-3">
+    <div class="d-flex align-items-center gap-2">
         <div class="d-flex align-items-center gap-2" style="color: {{ $ticket->priorityLevel->color }};">
             <i class="bi bi-flag-fill"></i>
             <p class="mb-0 ticket__details__priority">{{ $ticket->priorityLevel->name }}</p>
@@ -7,9 +7,8 @@
         @if (
             $ticket->status_id != App\Models\Status::CLOSED &&
                 $ticket->approval_status != App\Enums\ApprovalStatusEnum::DISAPPROVED)
-            <button class="btn btn-sm p-0 btn__change__priority__level"
-                style="font-size: 12px; color: blue; text-decoration: underline !important;" data-bs-toggle="modal"
-                data-bs-target="#changePriorityLevelModal">Change</button>
+            <button class="btn btn-sm p-0 btn__change__priority__level" style="font-size: 0.7rem; color: #6c757d;"
+                data-bs-toggle="modal" data-bs-target="#changePriorityLevelModal"><i class="bi bi-pen"></i></button>
         @endif
     </div>
 </div>

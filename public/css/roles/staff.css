@@ -8321,6 +8321,12 @@ a:hover {
   background-color: #fff;
   padding: 15px;
 }
+.ticket__section .card__ticket__details .qouted__reply {
+  padding: 1rem;
+}
+.ticket__section .card__ticket__details .qouted__reply p {
+  margin: 0 !important;
+}
 .ticket__section .card__ticket__details .ticket__details__card__header {
   padding: 1.5rem;
 }
@@ -8397,7 +8403,7 @@ a:hover {
 .ticket__section .card__ticket__details .ticket__details__card__body .ticket__reply__content {
   border-left: 0.08rem solid #d8e0e2;
   padding-left: 1.3rem;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
   margin-left: 0.8rem;
   margin-top: 0.5rem;
   position: relative;
@@ -8564,10 +8570,6 @@ a:hover {
 .ticket__section .card__ticket__details .ticket__costing__container .file__attachment__actions__container .file__attachment__action__button {
   font-size: 0.938rem;
 }
-.ticket__section .container__ticket__details__right {
-  top: 235px;
-  position: sticky;
-}
 .ticket__section .ticket__details__top {
   padding: 1.5rem 1.5rem 1.5rem 2.3rem;
   top: 70px;
@@ -8621,7 +8623,7 @@ a:hover {
   height: 30px;
   width: 30px;
   font-size: 0.875rem;
-  color: #2b3135;
+  color: #3e4549;
   border: none;
 }
 .reply__container .qoute__reply__action__container .btn__reply__qoute__action:hover {
