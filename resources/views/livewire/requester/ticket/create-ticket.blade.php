@@ -79,9 +79,6 @@
                             <div class="mb-3">
                                 <label for="ticketSubject" class="form-label input__field__label">
                                     Subject
-                                    <span class="text-sm text-muted">
-                                        <small>(Issue Summary)</small>
-                                    </span>
                                 </label>
                                 <input type="text" wire:model="subject" class="form-control input__field"
                                     placeholder="Tell us about your concern">

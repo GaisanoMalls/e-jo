@@ -94,7 +94,7 @@
                         <span class="sidebar__btn__link__name ">On Process</span>
                     </div>
                     <span class="badge sidebar__btn__link__badge">
-                        {{ $onProcessTickets->count() }}
+                        {{ $onProcessTickets?->count() }}
                     </span>
                 </a>
             </li>

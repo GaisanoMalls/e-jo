@@ -1,7 +1,7 @@
 <div>
     <div class="tickets__table__card">
         <div class="table-responsive custom__table">
-            @if ($onProcessTickets->isNotEmpty())
+            @if ($onProcessTickets?->isNotEmpty())
                 <table class="table mb-0">
                     <thead>
                         <tr>

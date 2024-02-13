@@ -151,17 +151,33 @@ class CreateTicket extends Component
 
                         TicketApproval::create([
                             'ticket_id' => $ticket->id,
-                            'level_1_approver' => [
-                                'approver_id' => $level1ApproverIds, // array<int>
-                                'approved_by' => null,
-                                'is_approved' => false,
+                            'approval_1' => [
+                                'level_1_approver' => [
+                                    'approver_id' => $level1ApproverIds, // array<int>
+                                    'approved_by' => null,
+                                    'is_approved' => false,
+                                ],
+                                'level_2_approver' => [
+                                    'approver_id' => $level2ApproverIds, // array<int>
+                                    'approved_by' => null,
+                                    'is_approved' => false,
+                                ],
+                                'is_all_approved' => false,
                             ],
-                            'level_2_approver' => [
-                                'approver_id' => $level2ApproverIds, // array<int>
-                                'approved_by' => null,
-                                'is_approved' => false,
+                            'approval_2' => [
+                                'level_1_approver' => [
+                                    'approver_id' => $level1ApproverIds, // array<int>
+                                    'approved_by' => null,
+                                    'is_approved' => false,
+                                ],
+                                'level_2_approver' => [
+                                    'approver_id' => $level2ApproverIds, // array<int>
+                                    'approved_by' => null,
+                                    'is_approved' => false,
+                                ],
+                                'is_all_approved' => false,
                             ],
-                            'is_all_approved' => false,
+                            'is_all_approval_done' => false
                         ]);
                     }
 
@@ -210,7 +226,7 @@ class CreateTicket extends Component
     }
 
     public function render()
-    {   
+    {
         return view('livewire.requester.ticket.create-ticket', [
             'priorityLevels' => $this->queryPriorityLevels(),
             'serviceDepartments' => $this->queryServiceDepartments(),

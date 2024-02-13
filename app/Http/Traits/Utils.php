@@ -4,6 +4,7 @@ namespace App\Http\Traits;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Models\Role;
+use App\Models\SpecialProjectAmountApproval;
 use App\Models\Status;
 use App\Models\Ticket;
 use Carbon\Carbon;
@@ -106,12 +107,12 @@ trait Utils
     {
         //        $staffRolePath = '';
         return match (true) {
-            Auth::user()->hasRole(Role::SYSTEM_ADMIN)             => 'system_admin',
+            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => 'system_admin',
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => 'service_department_admin',
-            Auth::user()->hasRole(Role::APPROVER)                 => 'approver',
-            Auth::user()->hasRole(Role::AGENT)                    => 'agent',
-            Auth::user()->hasRole(Role::USER)                     => 'requester',
-            default                                               => 'guest',
+            Auth::user()->hasRole(Role::APPROVER) => 'approver',
+            Auth::user()->hasRole(Role::AGENT) => 'agent',
+            Auth::user()->hasRole(Role::USER) => 'requester',
+            default => 'guest',
         };
     }
 
@@ -168,21 +169,34 @@ trait Utils
     /**
      * @return bool
      */
-    public function ticketHasSpecialProject()
+    public function isApproved2LevelsOfApproverAndHasSpecialProject()
     {
         $ticketHasAllApproved = Ticket::has('helpTopic.specialProject')->withWhereHas('ticketApprovals', fn($ticketApproval) =>
-            $ticketApproval->whereNotNull('level_1_approver->approver_id')
-                ->whereNotNull('level_2_approver->approver_id')
-                ->whereNotNull('level_1_approver->approved_by')
-                ->whereNotNull('level_2_approver->approved_by')
+            $ticketApproval->whereNotNull('approval_1->level_1_approver->approver_id')
+                ->whereNotNull('approval_1->level_2_approver->approver_id')
+                ->whereNotNull('approval_1->level_1_approver->approved_by')
+                ->whereNotNull('approval_1->level_2_approver->approved_by')
                 ->where([
-                    ['level_1_approver->is_approved', true],
-                    ['level_2_approver->is_approved', true],
-                    ['is_all_approved', true],
+                    ['approval_1->level_1_approver->is_approved', true],
+                    ['approval_1->level_2_approver->is_approved', true],
+                    ['approval_1->is_all_approved', true],
                 ]))->get();
 
         return ($ticketHasAllApproved->isNotEmpty())
             ? true
             : false;
+    }
+
+    public function isOnlyAgent(int $agentId)
+    {
+        return auth()->user()->id === $agentId && auth()->user()->hasRole(Role::AGENT);
+    }
+
+    public function isSpecialProjectCostingApprover(int $approverId, Ticket $ticket)
+    {
+        return auth()->user()->id === $approverId
+            && auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)
+            && SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
+                ->whereJsonContains('service_department_admin_approver->approver_id', $approverId)->exists();
     }
 }

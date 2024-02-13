@@ -8531,7 +8531,7 @@ a:hover {
   font-size: 1.3rem !important;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .amount {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #212529;
 }
@@ -8550,6 +8550,37 @@ a:hover {
 }
 .ticket__section .card__ticket__details .ticket__costing__container .costing__header__label {
   font-size: 0.813rem;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .approved__costing__status {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #664d03;
+  padding: 2px 7px;
+  background-color: #F5F7F9;
+  border: 0.01rem solid #d1d3d3;
+  height: 24px;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .costing__approver__container {
+  padding-left: 5px;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .costing__approver__container:not(:first-child) .costing__approver__initial {
+  margin-left: -8px;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .costing__approver__container .costing__approver__initial {
+  font-weight: 500;
+  font-size: 9px;
+  height: 26px;
+  width: 26px;
+  color: white;
+  background-color: #3B4053;
+  border: 2px solid white;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .btn__approve__costing {
+  font-size: 0.813rem;
+  background-color: #D32839;
+  color: white;
+  outline: none;
+  font-weight: 500;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .costing__labels {
   font-size: 0.813rem;
@@ -8574,7 +8605,7 @@ a:hover {
   background-color: #E9ECEF;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .ticket__actual__cost {
-  font-size: 1.3rem !important;
+  font-size: 1.2rem !important;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .file__attachment__actions__container .file__attachment__action__button {
   font-size: 0.938rem;

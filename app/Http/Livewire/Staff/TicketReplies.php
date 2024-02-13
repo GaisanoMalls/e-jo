@@ -83,7 +83,7 @@ class TicketReplies extends Component
     {
         $this->quoteReplyFiles = [];
         $this->upload++;
-        $this->reset('qouteReplyDescription');
+        $this->reset('quoteReplyDescription');
         $this->dispatchBrowserEvent('close-modal');
     }
 

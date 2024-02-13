@@ -25,48 +25,48 @@ class TicketLevelApproval extends Component
     public function getLevel1Approvers()
     {
         $ticketApproval = TicketApproval::where('ticket_id', $this->ticket->id)->get();
-        return User::with('profile')->whereIn('id', $ticketApproval->pluck('level_1_approver.approver_id')->flatten()->toArray())->get();
+        return User::with('profile')->whereIn('id', $ticketApproval->pluck('approval_1.level_1_approver.approver_id')->flatten()->toArray())->get();
     }
 
     public function getLevel2Approvers()
     {
         $ticketApproval = TicketApproval::where('ticket_id', $this->ticket->id)->get();
-        return User::with('profile')->whereIn('id', $ticketApproval->pluck('level_2_approver.approver_id')->flatten()->toArray())->get();
+        return User::with('profile')->whereIn('id', $ticketApproval->pluck('approval_1.level_2_approver.approver_id')->flatten()->toArray())->get();
     }
 
     public function isTicketLevel1Approved()
     {
         return $this->ticket->ticketApprovals->filter(
-            fn($approval) => data_get($approval->level_1_approver, 'approver_id') != null
-            && data_get($approval->level_1_approver, 'is_approved') == true
+            fn($approval) => data_get($approval->approval_1['level_1_approver'], 'approver_id') != null
+            && data_get($approval->approval_1['level_1_approver'], 'is_approved') == true
         )->isNotEmpty();
     }
 
     public function isTicketLevel2Approved()
     {
         return $this->ticket->ticketApprovals->filter(
-            fn($approval) => data_get($approval->level_2_approver, 'approver_id') != null
-            && data_get($approval->level_2_approver, 'is_approved') == true
+            fn($approval) => data_get($approval->approval_1['level_2_approver'], 'approver_id') != null
+            && data_get($approval->approval_1['level_2_approver'], 'is_approved') == true
         )->isNotEmpty();
     }
 
     public function isApprovedByLevel2Approver()
     {
         return $this->ticket->ticketApprovals->filter(
-            fn($approval) => data_get($approval->level_2_approver, 'is_approved') == true
-            && data_get($approval->level_2_approver, 'is_approved') == false
-            && data_get($approval->level_2_approver, 'approved_by') != null
+            fn($approval) => data_get($approval->approval_1['level_2_approver'], 'is_approved') == true
+            && data_get($approval->approval_1['level_2_approver'], 'is_approved') == false
+            && data_get($approval->approval_1['level_2_approver'], 'approved_by') != null
         )->isNotEmpty();
     }
 
     public function ticketLevel1ApprovalApprovedBy()
     {
-        return TicketApproval::where('ticket_id', $this->ticket->id)->first()?->level_1_approver['approved_by'];
+        return TicketApproval::where('ticket_id', $this->ticket->id)->first()?->approval_1['level_1_approver']['approved_by'];
     }
 
     public function ticketLevel2ApprovalApprovedBy()
     {
-        return TicketApproval::where('ticket_id', $this->ticket->id)->first()?->level_2_approver['approved_by'];
+        return TicketApproval::where('ticket_id', $this->ticket->id)->first()?->approval_1['level_2_approver']['approved_by'];
     }
 
     public function render()

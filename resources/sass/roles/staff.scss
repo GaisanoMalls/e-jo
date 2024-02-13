@@ -1602,7 +1602,7 @@ a {
             }
 
             .amount {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
                 font-weight: $fw-600;
                 color: #212529;
             }
@@ -1623,6 +1623,42 @@ a {
 
             .costing__header__label {
                 font-size: $fs-13;
+            }
+
+            .approved__costing__status {
+                font-size: $fs-12;
+                font-weight: $fw-500;
+                color: #664d03;
+                padding: 2px 7px;
+                background-color: #F5F7F9;
+                border: 0.01rem solid #d1d3d3;
+                height: 24px;
+            }
+
+            .costing__approver__container {
+                padding-left: 5px;
+
+                &:not(:first-child) .costing__approver__initial {
+                    margin-left: -8px;
+                }
+
+                .costing__approver__initial {
+                    font-weight: $fw-500;
+                    font-size: 9px;
+                    height: 26px;
+                    width: 26px;
+                    color: white;
+                    background-color: #3B4053;
+                    border: 2px solid white;
+                }
+            }
+
+            .btn__approve__costing {
+                font-size: $fs-13;
+                background-color: #D32839;
+                color: white;
+                outline: none;
+                font-weight: $fw-500;
             }
 
             .costing__labels {
@@ -1655,7 +1691,7 @@ a {
             }
 
             .ticket__actual__cost {
-                font-size: 1.3rem !important;
+                font-size: 1.2rem !important;
             }
 
             .file__attachment__actions__container {

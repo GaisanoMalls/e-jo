@@ -4,9 +4,11 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Requests\Agent\StoreTicketCostingRequest;
 use App\Http\Traits\Utils;
+use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
 use App\Models\TicketCosting;
 use App\Models\TicketCostingFile;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Log;
@@ -45,36 +47,52 @@ class AddCosting extends Component
     public function saveCosting()
     {
         $this->validate();
-        
+
         try {
-            $existingTicketCosting = TicketCosting::where('ticket_id', $this->ticket->id)->first();
+            if ($this->isOnlyAgent($this->ticket->agent_id)) {
+                $existingTicketCosting = TicketCosting::where('ticket_id', $this->ticket->id)->first();
 
-            if ($existingTicketCosting) {
-                $existingTicketCosting->update(['amount' => $this->amount]);
-            } else {
-                $ticketCosting = TicketCosting::create([
-                    'ticket_id' => $this->ticket->id,
-                    'amount' => $this->amount,
-                ]);
+                if ($existingTicketCosting) {
+                    $existingTicketCosting->update(['amount' => $this->amount]);
+                } else {
+                    $ticketCosting = TicketCosting::create([
+                        'ticket_id' => $this->ticket->id,
+                        'attached_by_id' => auth()->user()->id,
+                        'amount' => $this->amount,
+                    ]);
 
-                if ($this->costingFiles) {
-                    foreach ($this->costingFiles as $uploadedCostingFile) {
-                        $fileName = $uploadedCostingFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs(
-                            "public/ticket/{$this->ticket->ticket_number}/costing_attachments/" . $this->fileDirByUserType(),
-                            $uploadedCostingFile,
-                            $fileName
-                        );
+                    DB::transaction(function () {
+                        $approverId = SpecialProjectAmountApproval::all()->pluck('service_department_admin_approver')
+                            ->map(function ($item, $key) {
+                                return $item['approver_id']; // Access the approver_id from each item
+                            })->first();
 
-                        $costingFile = new TicketCostingFile();
-                        $costingFile->file_attachment = $fileAttachment;
-                        $costingFile->ticket_costing_id = $ticketCosting->id;
+                        SpecialProjectAmountApproval::whereJsonContains('service_department_admin_approver->approver_id', $approverId)
+                            ->update(['ticket_id' => $this->ticket->id]);
+                    });
 
-                        $ticketCosting->fileAttachments()->save($costingFile);
+                    if ($this->costingFiles) {
+                        foreach ($this->costingFiles as $uploadedCostingFile) {
+                            $fileName = $uploadedCostingFile->getClientOriginalName();
+                            $fileAttachment = Storage::putFileAs(
+                                "public/ticket/{$this->ticket->ticket_number}/costing_attachments/" . $this->fileDirByUserType(),
+                                $uploadedCostingFile,
+                                $fileName
+                            );
+
+                            $costingFile = new TicketCostingFile();
+                            $costingFile->file_attachment = $fileAttachment;
+                            $costingFile->ticket_costing_id = $ticketCosting->id;
+
+                            $ticketCosting->fileAttachments()->save($costingFile);
+                        }
                     }
-                }
 
-                $this->actionOnSubmit();
+                    $this->actionOnSubmit();
+                }
+            } else {
+                $this->dispatchBrowserEvent('close-costing-modal');
+                noty()->addError('Oops, something went wrong.');
             }
 
         } catch (\Exception $e) {

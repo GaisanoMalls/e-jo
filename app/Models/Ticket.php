@@ -94,6 +94,11 @@ class Ticket extends Model
         return $this->hasOne(TicketCosting::class);
     }
 
+    public function specialProjectAmountApproval(): HasOne
+    {
+        return $this->hasOne(SpecialProjectAmountApproval::class);
+    }
+
     public function fileAttachments(): HasMany
     {
         return $this->hasMany(TicketFile::class);
@@ -122,6 +127,11 @@ class Ticket extends Model
     public function ticketApprovals(): HasMany
     {
         return $this->hasMany(TicketApproval::class);
+    }
+
+    public function SPAmountApprovals(): HasMany
+    {
+        return $this->hasMany(SpecialProjectAmountApproval::class, 'ticket_id');
     }
 
     public function tags(): BelongsToMany
@@ -158,5 +168,4 @@ class Ticket extends Model
     {
         return !is_null($this->helpTopic?->specialProject);
     }
-
 }
