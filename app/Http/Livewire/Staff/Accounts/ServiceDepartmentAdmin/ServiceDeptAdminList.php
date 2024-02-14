@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 
+use App\Http\Traits\Utils;
 use App\Models\Role;
+use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -11,6 +13,8 @@ use Livewire\Component;
 
 class ServiceDeptAdminList extends Component
 {
+    use Utils;
+
     public $serviceDepartmentAdmins;
     public $serviceDeptAdminDeleteId;
     public $serviceDeptAdminFullName;
@@ -27,7 +31,15 @@ class ServiceDeptAdminList extends Component
     public function delete()
     {
         try {
-            User::find($this->serviceDeptAdminDeleteId)->delete();
+            User::where('id', $this->serviceDeptAdminDeleteId)->delete();
+            if ($this->hasCostingApprover2()) {
+                SpecialProjectAmountApproval::whereNotNull('fpm_coo_approver')
+                    ->update(['service_department_admin_approver' => null]);
+            }
+            if ($this->hasCostingApprover1() && !$this->hasCostingApprover2()) {
+                SpecialProjectAmountApproval::whereJsonContains('service_department_admin_approver->approver_id', $this->serviceDeptAdminDeleteId)->delete();
+            }
+
             $this->serviceDeptAdminDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
             noty()->addSuccess('Service department admin account has been deleted');

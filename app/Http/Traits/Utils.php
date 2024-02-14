@@ -199,4 +199,14 @@ trait Utils
             && SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
                 ->whereJsonContains('service_department_admin_approver->approver_id', $approverId)->exists();
     }
+
+    public function hasCostingApprover1()
+    {
+        return SpecialProjectAmountApproval::whereNotNull('service_department_admin_approver->approver_id')->exists();
+    }
+
+    public function hasCostingApprover2()
+    {
+        return SpecialProjectAmountApproval::whereNotNull('fpm_coo_approver->approver_id')->exists();
+    }
 }

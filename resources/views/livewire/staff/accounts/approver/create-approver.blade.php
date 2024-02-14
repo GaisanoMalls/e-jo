@@ -142,6 +142,17 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        @if (!$hasCostingApprover2)
+                                            <div class="col-12 mb-3 d-flex">
+                                                <input wire:model="asCostingApprover2"
+                                                    class="form-check-input check__special__project" type="checkbox"
+                                                    role="switch" id="checkAsCostingApprover2"
+                                                    wire:loading.attr="disabled">
+                                                <label class="form-check-label" for="checkAsCostingApprover2">
+                                                    Add as FPM COO Approver
+                                                </label>
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="col-md-5 px-2 mt-3">
                                         <div

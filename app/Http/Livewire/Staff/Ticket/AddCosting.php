@@ -53,23 +53,29 @@ class AddCosting extends Component
                 $existingTicketCosting = TicketCosting::where('ticket_id', $this->ticket->id)->first();
 
                 if ($existingTicketCosting) {
+                    // Update the amount if costing exists.
                     $existingTicketCosting->update(['amount' => $this->amount]);
                 } else {
-                    $ticketCosting = TicketCosting::create([
-                        'ticket_id' => $this->ticket->id,
-                        'attached_by_id' => auth()->user()->id,
-                        'amount' => $this->amount,
-                    ]);
 
-                    DB::transaction(function () {
-                        $approverId = SpecialProjectAmountApproval::all()->pluck('service_department_admin_approver')
-                            ->map(function ($item, $key) {
-                                return $item['approver_id']; // Access the approver_id from each item
-                            })->first();
+                    // Get the costing approver id
+                    $approverId = SpecialProjectAmountApproval::all()->pluck('service_department_admin_approver')
+                        ->map(function ($item, $key) {
+                            return $item['approver_id']; // Access the approver_id from each item
+                        })->first();
+
+                    if ($approverId) {
+                        // Create a costing when approver is found
+                        $ticketCosting = TicketCosting::create([
+                            'ticket_id' => $this->ticket->id,
+                            'attached_by_id' => auth()->user()->id,
+                            'amount' => $this->amount,
+                        ]);
 
                         SpecialProjectAmountApproval::whereJsonContains('service_department_admin_approver->approver_id', $approverId)
                             ->update(['ticket_id' => $this->ticket->id]);
-                    });
+                    } else {
+                        noty()->addError('No costing approver is found. Please contact the administrator');
+                    }
 
                     if ($this->costingFiles) {
                         foreach ($this->costingFiles as $uploadedCostingFile) {

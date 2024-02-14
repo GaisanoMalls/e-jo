@@ -9,6 +9,7 @@ use App\Models\ApproverLevel;
 use App\Models\Level;
 use App\Models\Profile;
 use App\Models\Role;
+use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +28,7 @@ class CreateApprover extends Component
     public $last_name;
     public $email;
     public $suffix;
+    public $asCostingApprover2 = false;
 
     public function rules()
     {
@@ -75,6 +77,41 @@ class CreateApprover extends Component
                     'level_id' => Level::where('value', 2)->pluck('value')->first(),
                 ]);
 
+                if ($this->asCostingApprover2) {
+                    if (!$this->hasCostingApprover2()) {
+                        if (SpecialProjectAmountApproval::whereNull('fpm_coo_approver')->exists()) {
+                            SpecialProjectAmountApproval::whereNull('fpm_coo_approver')
+                                ->update([
+                                    'fpm_coo_approver' => [
+                                        'approver_id' => $approver->id,
+                                        'is_approved' => false,
+                                        'date_approved' => null
+                                    ]
+                                ]);
+                        } elseif (SpecialProjectAmountApproval::whereNull('service_department_admin_approver')->exists()) {
+                            SpecialProjectAmountApproval::whereNull('service_department_admin_approver')
+                                ->update([
+                                    'fpm_coo_approver' => [
+                                        'approver_id' => $approver->id,
+                                        'is_approved' => false,
+                                        'date_approved' => null
+                                    ]
+                                ]);
+                        } else {
+                            // If neither field is null, create a new record
+                            SpecialProjectAmountApproval::create([
+                                'fpm_coo_approver' => [
+                                    'approver_id' => $approver->id,
+                                    'is_approved' => false,
+                                    'date_approved' => null
+                                ]
+                            ]);
+                        }
+                    } else {
+                        noty()->warning('Costing approver 2 already assigned');
+                    }
+                }
+
                 $this->actionOnSubmit();
                 noty()->addSuccess('Account successfully created');
             });
@@ -90,6 +127,7 @@ class CreateApprover extends Component
             'approverSuffixes' => $this->querySuffixes(),
             'approverBranches' => $this->queryBranches(),
             'approverBUDepartments' => $this->queryBUDepartments(),
+            'hasCostingApprover2' => $this->hasCostingApprover2()
         ]);
     }
 }

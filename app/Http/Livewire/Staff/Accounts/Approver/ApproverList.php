@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire\Staff\Accounts\Approver;
 
+use App\Http\Traits\Utils;
 use App\Models\Role;
+use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +15,8 @@ use Spatie\Permission\Models\Permission;
 
 class ApproverList extends Component
 {
+    use Utils;
+
     public $allPermissions;
     public $approvers;
     public $approverDeleteId;
@@ -41,7 +45,15 @@ class ApproverList extends Component
     public function delete()
     {
         try {
-            User::find($this->approverDeleteId)->delete();
+            User::where('id', $this->approverDeleteId)->delete();
+            if ($this->hasCostingApprover1()) {
+                SpecialProjectAmountApproval::whereNotNull('service_department_admin_approver')
+                    ->update(['fpm_coo_approver' => null]);
+            }
+            if ($this->hasCostingApprover2() && !$this->hasCostingApprover1()) {
+                SpecialProjectAmountApproval::whereJsonContains('fpm_coo_approver->approver_id', $this->approverDeleteId)->delete();
+            }
+
             $this->approverDeleteId = null;
             $this->actionOnSubmit();
             noty()->addSuccess('Approver account has been deleted');

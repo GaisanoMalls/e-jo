@@ -6,7 +6,6 @@ use App\Http\Requests\SysAdmin\Manage\Account\StoreServiceDeptAdminRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\ApproverLevel;
-use App\Models\Department;
 use App\Models\Level;
 use App\Models\Profile;
 use App\Models\Role;
@@ -83,15 +82,36 @@ class CreateServiceDeptAdmin extends Component
 
                 if ($this->asCostingApprover1) {
                     if (!$this->hasCostingApprover1()) {
-                        SpecialProjectAmountApproval::create([
-                            'service_department_admin_approver' => [
-                                'approver_id' => $serviceDeptAdmin->id,
-                                'is_approved' => false,
-                                'date_approved' => null
-                            ]
-                        ]);
+                        if (SpecialProjectAmountApproval::whereNull('service_department_admin_approver')->exists()) {
+                            SpecialProjectAmountApproval::whereNull('service_department_admin_approver')
+                                ->update([
+                                    'service_department_admin_approver' => [
+                                        'approver_id' => $serviceDeptAdmin->id,
+                                        'is_approved' => false,
+                                        'date_approved' => null
+                                    ]
+                                ]);
+                        } elseif (SpecialProjectAmountApproval::whereNull('fpm_coo_approver')->exists()) {
+                            SpecialProjectAmountApproval::whereNull('fpm_coo_approver')
+                                ->update([
+                                    'service_department_admin_approver' => [
+                                        'approver_id' => $serviceDeptAdmin->id,
+                                        'is_approved' => false,
+                                        'date_approved' => null
+                                    ]
+                                ]);
+                        } else {
+                            // If neither field is null, create a new record
+                            SpecialProjectAmountApproval::create([
+                                'service_department_admin_approver' => [
+                                    'approver_id' => $serviceDeptAdmin->id,
+                                    'is_approved' => false,
+                                    'date_approved' => null
+                                ]
+                            ]);
+                        }
                     } else {
-                        noty()->warning('Unable to assign costing approver 1 since it has already been assigned');
+                        noty()->warning('Costing approver 1 already assigned');
                     }
                 }
 
@@ -109,11 +129,6 @@ class CreateServiceDeptAdmin extends Component
         $this->reset();
         $this->resetValidation();
         $this->dispatchBrowserEvent('close-modal');
-    }
-
-    public function hasCostingApprover1()
-    {
-        return SpecialProjectAmountApproval::count() !== 0;
     }
 
     public function render()

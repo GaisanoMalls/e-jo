@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Accounts\Approver;
 
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
+use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,7 @@ class UpdateApprover extends Component
     public $suffix;
     public $permissions = [];
     public $currentPermissions = [];
+    public $asCostingApprover2 = false;
 
     public function mount(User $approver)
     {
@@ -37,6 +39,12 @@ class UpdateApprover extends Component
         $this->branches = $approver->branches->pluck("id")->toArray();
         $this->bu_departments = $approver->buDepartments->pluck("id")->toArray();
         $this->currentPermissions = $approver->getAllPermissions()->pluck('name')->toArray();
+        $this->asCostingApprover2 = $this->isCostingApprover2();
+    }
+
+    private function isCostingApprover2()
+    {
+        return SpecialProjectAmountApproval::where('fpm_coo_approver->approver_id', $this->approver->id)->exists();
     }
 
     public function rules(): array
@@ -76,14 +84,65 @@ class UpdateApprover extends Component
                 $this->approver->branches()->sync($this->branches);
                 $this->approver->syncPermissions($this->permissions);
                 $this->approver->buDepartments()->sync($this->bu_departments);
+
+                if ($this->asCostingApprover2) {
+                    if (!$this->hasCostingApprover2()) {
+                        if (SpecialProjectAmountApproval::whereNull('fpm_coo_approver')->exists()) {
+                            SpecialProjectAmountApproval::whereNull('fpm_coo_approver')
+                                ->update([
+                                    'fpm_coo_approver' => [
+                                        'approver_id' => $this->approver->id,
+                                        'is_approved' => false,
+                                        'date_approved' => null
+                                    ]
+                                ]);
+                        } elseif (SpecialProjectAmountApproval::whereNull('service_department_admin_approver')->exists()) {
+                            SpecialProjectAmountApproval::whereNull('service_department_admin_approver')
+                                ->update([
+                                    'fpm_coo_approver' => [
+                                        'approver_id' => $this->approver->id,
+                                        'is_approved' => false,
+                                        'date_approved' => null
+                                    ]
+                                ]);
+                        } else {
+                            // If neither field is null, create a new record
+                            SpecialProjectAmountApproval::create([
+                                'fpm_coo_approver' => [
+                                    'approver_id' => $this->approver->id,
+                                    'is_approved' => false,
+                                    'date_approved' => null
+                                ]
+                            ]);
+                        }
+                    } else {
+                        noty()->warning('Costing approver 2 already assigned');
+                    }
+                }
+
+                if (!$this->asCostingApprover2) {
+                    if ($this->hasCostingApprover1()) {
+                        SpecialProjectAmountApproval::whereNotNull('service_department_admin_approver')
+                            ->update(['fpm_coo_approver' => null]);
+                    }
+                    if ($this->hasCostingApprover2() && !$this->hasCostingApprover1()) {
+                        SpecialProjectAmountApproval::query()->delete();
+                    }
+                }
+
+                noty()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName()}.");
             });
-
-            noty()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName()}.");
-
         } catch (Exception $e) {
             Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Failed to update the account');
         }
+    }
+
+    public function currentUserAsCostingApprover2()
+    {
+        return SpecialProjectAmountApproval::whereNotNull('fpm_coo_approver')
+            ->whereJsonContains('fpm_coo_approver->approver_id', $this->approver->id)
+            ->exists();
     }
 
     public function render()
@@ -93,6 +152,8 @@ class UpdateApprover extends Component
             'approverBranches' => $this->queryBranches(),
             'approverBUDepartments' => $this->queryBUDepartments(),
             'allPermissions' => Permission::all(),
+            'currentUserAsCostingApprover2' => $this->currentUserAsCostingApprover2(),
+            'hasCostingApprover2' => $this->hasCostingApprover2()
         ]);
     }
 }

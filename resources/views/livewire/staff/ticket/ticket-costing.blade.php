@@ -105,6 +105,21 @@
                                     </span>
                                 </small>
                             </div>
+                            <div class="d-flex flex-column justify-content-between gap-2">
+                                <small class="text-muted text-sm costing__header__label">
+                                    Approver
+                                </small>
+                                <div class="d-flex align-items-center costing__approver__container">
+                                    <small
+                                        class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial">
+                                        SS
+                                    </small>
+                                    <small
+                                        class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial">
+                                        OB
+                                    </small>
+                                </div>
+                            </div>
                             @if ($this->isSpecialProjectCostingApprover(auth()->user()->id, $ticket))
                                 <div class="d-flex flex-column justify-content-between gap-2">
                                     <small class="text-muted text-sm costing__header__label">
@@ -133,22 +148,6 @@
                                             Approve
                                         </button>
                                     @endif
-                                </div>
-
-                                <div class="d-flex flex-column justify-content-between gap-2">
-                                    <small class="text-muted text-sm costing__header__label">
-                                        Approver
-                                    </small>
-                                    <div class="d-flex align-items-center costing__approver__container">
-                                        <small
-                                            class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial">
-                                            SS
-                                        </small>
-                                        <small
-                                            class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial">
-                                            OB
-                                        </small>
-                                    </div>
                                 </div>
                             @endif
                         @endif
