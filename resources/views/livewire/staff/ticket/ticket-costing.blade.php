@@ -2,20 +2,19 @@
     @if (!is_null($ticket->ticketCosting))
         <div class="card border-0 p-0 card__ticket__details">
             <div class="row p- gap-2 justify-content-center ticket__costing__container">
-                <div class="col-md-8">
+                <div class="col-12">
                     <div class="d-flex gap-3 flex-wrap justify-content-between">
                         <div class="d-flex flex-column justify-content-between gap-2">
-                            <small class="text-muted text-sm costing__header__label" @style(['color: #d32839 !important;' => $isCostingGreaterOrEqual])>
+                            <small class="text-muted text-sm costing__header__label">
                                 Actual Cost
                             </small>
                             <div class="d-flex align-items-center gap-1">
-                                <span class="currency text-muted" @style(['color: #d32839 !important;' => $isCostingGreaterOrEqual])>₱</span>
+                                <span class="currency text-muted">₱</span>
                                 @if ($editingFieldId === $ticket->ticketCosting->id)
                                     <div class="d-flex flex-column gap-1">
                                         <input type="text" wire:model.defer="amount"
                                             class="form-control p-0 rounded-0 border-0 border-2 border-bottom fw-bold form__field ticket__actual__cost"
-                                            id="amount" placeholder="{{ $ticket->ticketCosting->amount }}"
-                                            @style(['color: #d32839;' => $isCostingGreaterOrEqual])>
+                                            id="amount" placeholder="{{ $ticket->ticketCosting->amount }}">
                                         @error('amount')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -24,7 +23,7 @@
                                         @enderror
                                     </div>
                                 @else
-                                    <span class="amount" @style(['color: #d32839;' => $isCostingGreaterOrEqual])>
+                                    <span class="amount">
                                         {{ $ticket->ticketCosting?->getAmount() }}
                                     </span>
                                 @endif
@@ -111,11 +110,13 @@
                                 </small>
                                 <div class="d-flex align-items-center costing__approver__container">
                                     <small
-                                        class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial">
+                                        class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial"
+                                        style="background-color: #9DA85C;">
                                         SS
                                     </small>
                                     <small
-                                        class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial">
+                                        class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial"
+                                        style="background-color: #3B4053;">
                                         OB
                                     </small>
                                 </div>
@@ -132,7 +133,7 @@
                                     @if ($this->isCostingApproved())
                                         <small
                                             class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
-                                            <i class="fa-solid fa-check"></i>
+                                            <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
                                             Approved
                                         </small>
                                     @else
@@ -149,22 +150,27 @@
                                         </button>
                                     @endif
                                 </div>
+                            @else
+                                <div class="d-flex flex-column justify-content-between gap-2">
+                                    <small class="text-muted text-sm costing__header__label">
+                                        Status
+                                    </small>
+                                    @if ($this->isCostingApproved())
+                                        <small
+                                            class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                            <i class="fa-solid fa-check"></i>
+                                            Approved
+                                        </small>
+                                    @else
+                                        <small
+                                            class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
+                                            <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
+                                            For approval
+                                        </small>
+                                    @endif
+                                </div>
                             @endif
                         @endif
-                    </div>
-                </div>
-                <div class="col-md-1 d-flex justify-content-center">
-                    <div class="separator"></div>
-                </div>
-                <div class="col-md-2">
-                    <div class="d-flex flex-column justify-content-between gap-2">
-                        <small class="text-muted text-sm costing__header__label">Special Project Cost</small>
-                        <div class="d-flex gap-1">
-                            <span class="currency" style="color: #d32839;">₱</span>
-                            <span class="amount" style="color: #d32839;">
-                                {{ $ticket->helpTopic->specialProject?->getAmount() }}
-                            </span>
-                        </div>
                     </div>
                 </div>
             </div>

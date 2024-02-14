@@ -37,7 +37,7 @@
                                 @else
                                     <div class="level__approval__approver__name__initial d-flex align-items-center p-2 me-2 justify-content-center
                                         text-white"
-                                        style="background-color: {{ $isTicketLevel1Approved ? '#3B4053' : '#757a8f' }};">
+                                        style="background-color: {{ !$isTicketLevel1Approved ? '#9DA85C' : '#757a8f' }};">
                                         {{ $level1Approver->profile->getNameInitial() }}
                                     </div>
                                 @endif

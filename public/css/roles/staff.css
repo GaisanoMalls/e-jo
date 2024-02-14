@@ -8554,7 +8554,7 @@ a:hover {
 .ticket__section .card__ticket__details .ticket__costing__container .approved__costing__status {
   font-size: 0.75rem;
   font-weight: 500;
-  color: #664d03;
+  color: green;
   padding: 2px 7px;
   background-color: #F5F7F9;
   border: 0.01rem solid #d1d3d3;
@@ -8572,7 +8572,6 @@ a:hover {
   height: 26px;
   width: 26px;
   color: white;
-  background-color: #3B4053;
   border: 2px solid white;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .btn__approve__costing {
