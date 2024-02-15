@@ -146,18 +146,16 @@
                             <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Assigned Permissions</h6>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label form__field__label">Permissions</label>
-                                        <div>
-                                            <div id="select-approver-permissions" wire:ignore></div>
-                                        </div>
-                                        @error('permissions')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
+                                    <label class="form-label form__field__label">Permissions</label>
+                                    <div>
+                                        <div id="select-approver-permissions" wire:ignore></div>
                                     </div>
+                                    @error('permissions')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
