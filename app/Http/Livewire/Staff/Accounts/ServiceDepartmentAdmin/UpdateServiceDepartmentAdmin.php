@@ -119,14 +119,13 @@ class UpdateServiceDepartmentAdmin extends Component
                     }
                 }
 
-                if (!$this->asCostingApprover1) {
-                    if ($this->hasCostingApprover2()) {
-                        SpecialProjectAmountApproval::whereNotNull('fpm_coo_approver')
-                            ->update(['service_department_admin_approver' => null]);
-                    }
-                    if ($this->hasCostingApprover1() && !$this->hasCostingApprover2()) {
-                        SpecialProjectAmountApproval::query()->delete();
-                    }
+                if (!$this->asCostingApprover1 && $this->hasCostingApprover2()) {
+                    SpecialProjectAmountApproval::whereNotNull('fpm_coo_approver')
+                        ->update(['service_department_admin_approver' => null]);
+                }
+
+                if (!$this->asCostingApprover1 && $this->hasCostingApprover1() && !$this->hasCostingApprover2()) {
+                    SpecialProjectAmountApproval::query()->delete();
                 }
 
                 noty()->addSuccess("You have successfully updated the account for {$this->serviceDeptAdmin->profile->getFullName()}.");

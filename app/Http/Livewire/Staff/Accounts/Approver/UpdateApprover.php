@@ -120,14 +120,13 @@ class UpdateApprover extends Component
                     }
                 }
 
-                if (!$this->asCostingApprover2) {
-                    if ($this->hasCostingApprover1()) {
-                        SpecialProjectAmountApproval::whereNotNull('service_department_admin_approver')
-                            ->update(['fpm_coo_approver' => null]);
-                    }
-                    if ($this->hasCostingApprover2() && !$this->hasCostingApprover1()) {
-                        SpecialProjectAmountApproval::query()->delete();
-                    }
+                if (!$this->asCostingApprover2 && $this->hasCostingApprover1()) {
+                    SpecialProjectAmountApproval::whereNotNull('service_department_admin_approver')
+                        ->update(['fpm_coo_approver' => null]);
+                }
+
+                if (!$this->asCostingApprover2 && $this->hasCostingApprover2() && !$this->hasCostingApprover1()) {
+                    SpecialProjectAmountApproval::query()->delete();
                 }
 
                 noty()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName()}.");
