@@ -179,6 +179,7 @@ class TicketCosting extends Component
     {
         return view('livewire.staff.ticket.ticket-costing', [
             'isCostingGreaterOrEqual' => $this->isCostingGreaterOrEqual(),
+            'costingApprovers' => $this->costingApprovers(),
         ]);
     }
 }

@@ -1636,10 +1636,13 @@ a {
             }
 
             .costing__approver__container {
-                padding-left: 5px;
-
-                &:not(:first-child) .costing__approver__initial {
-                    margin-left: -8px;
+                .costing__approver__picture {
+                    height: 26px;
+                    width: 26px;
+                    opacity: 2;
+                    -o-object-fit: cover;
+                    object-fit: cover;
+                    opacity: 0.5;
                 }
 
                 .costing__approver__initial {
@@ -1648,7 +1651,16 @@ a {
                     height: 26px;
                     width: 26px;
                     color: white;
+                }
+
+                .costing__approver__approved__badge {
+                    font-size: 11px;
+                    height: 10px;
+                    width: 10px;
+                    bottom: 0;
                     border: 2px solid white;
+                    background-color: green;
+                    right: -2px;
                 }
             }
 

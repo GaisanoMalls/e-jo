@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -208,5 +209,29 @@ trait Utils
     public function hasCostingApprover2()
     {
         return SpecialProjectAmountApproval::whereNotNull('fpm_coo_approver->approver_id')->exists();
+    }
+
+    public function costingApprovers()
+    {
+        $costingApprovers = SpecialProjectAmountApproval::all();
+        $approverIds = array_merge(
+            $costingApprovers->pluck('service_department_admin_approver.approver_id')->toArray(),
+            $costingApprovers->pluck('fpm_coo_approver.approver_id')->toArray()
+        );
+
+        return User::with('profile')->whereIn('id', $approverIds)->get();
+    }
+
+    public function approvedCostingBy(User $user)
+    {
+        return SpecialProjectAmountApproval::where(
+            fn($approver1) => $approver1->whereJsonContains('service_department_admin_approver->approver_id', $user->id)
+                ->where('service_department_admin_approver->is_approved', true)
+        )->orWhere(
+                fn($approver2) => $approver2->whereJsonContains('fpm_coo_approver->approver_id', $user->id)
+                    ->where('fpm_coo_approver->is_approved', true)
+            )->exists();
+
+
     }
 }

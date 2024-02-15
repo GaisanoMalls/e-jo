@@ -108,17 +108,52 @@
                                 <small class="text-muted text-sm costing__header__label">
                                     Approver
                                 </small>
-                                <div class="d-flex align-items-center costing__approver__container">
-                                    <small
-                                        class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial"
-                                        style="background-color: #9DA85C;">
-                                        SS
-                                    </small>
-                                    <small
+                                <div class="d-flex align-items-center gap-1 costing__approver__container ">
+                                    @if ($costingApprovers)
+                                        @foreach ($costingApprovers as $costingApprover)
+                                            @if ($costingApprover->profile->picture)
+                                                <div class="d-flex position-relative">
+                                                    <img class="costing__approver__picture rounded-circle"
+                                                        src="https://avatars.githubusercontent.com/u/63698615?s=400&u=49142410ee5c191a78412e36511c8b927fc6b1b1&v=4"
+                                                        data-tooltip="{{ $costingApprover->profile->getFullName() }}"
+                                                        data-tooltip-position="top" data-tooltip-font-size="11px">
+                                                    @if ($this->approvedCostingBy($costingApprover))
+                                                        <div class="position-absolute rounded-circle costing__approver__approved__badge"
+                                                            style="background-color: green">
+                                                        </div>
+                                                    @else
+                                                        <div class="position-absolute rounded-circle costing__approver__approved__badge bx-flashing"
+                                                            style="background-color: #FFA500">
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @else
+                                                <div class="d-flex position-relative">
+                                                    <small
+                                                        class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial"
+                                                        style="background-color: {{ $costingApprover->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN) ? '#9DA85C' : '#3B4053' }} "
+                                                        data-tooltip="{{ $costingApprover->profile->getFullName() }}"
+                                                        data-tooltip-position="top" data-tooltip-font-size="11px">
+                                                        {{ $costingApprover->profile->getNameInitial() }}
+                                                    </small>
+                                                    @if ($this->approvedCostingBy($costingApprover))
+                                                        <div class="position-absolute rounded-circle costing__approver__approved__badge"
+                                                            style="background-color: green">
+                                                        </div>
+                                                    @else
+                                                        <div class="position-absolute rounded-circle costing__approver__approved__badge bx-flashing"
+                                                            style="background-color: #FFA500">
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                    {{-- <small
                                         class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial"
                                         style="background-color: #3B4053;">
                                         OB
-                                    </small>
+                                    </small> --}}
                                 </div>
                             </div>
                             @if ($this->isSpecialProjectCostingApprover(auth()->user()->id, $ticket))
@@ -137,17 +172,40 @@
                                             Approved
                                         </small>
                                     @else
-                                        <button wire:click="approveCosting"
-                                            class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
-                                            <i class="bi bi-check2-circle" wire:loading.class="d-none"
-                                                wire:target="approveCosting"></i>
-                                            <div wire:loading wire:target="approveCosting"
-                                                class="spinner-border spinner-border-sm loading__spinner"
-                                                role="status">
-                                                <span class="sr-only">Loading...</span>
-                                            </div>
-                                            Approve
-                                        </button>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <button wire:click="approveCosting"
+                                                class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
+                                                <i class="bi bi-check2-circle" wire:loading.class="d-none"
+                                                    wire:target="approveCosting"></i>
+                                                <div wire:loading wire:target="approveCosting"
+                                                    class="spinner-border spinner-border-sm loading__spinner"
+                                                    role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                                Approve
+                                            </button>
+
+                                            @if ($this->isCostingApproved())
+                                                <button
+                                                    class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
+                                                    <i class="bi bi-reply" wire:loading.class="d-none"
+                                                        style="transform: scaleX(-1);"></i>
+                                                    <div wire:loading
+                                                        class="spinner-border spinner-border-sm loading__spinner"
+                                                        role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                    Forward
+                                                </button>
+                                            @else
+                                                <button
+                                                    class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing"
+                                                    disabled>
+                                                    <i class="bi bi-reply" style="transform: scaleX(-1);"></i>
+                                                    Forward
+                                                </button>
+                                            @endif
+                                        </div>
                                     @endif
                                 </div>
                             @else

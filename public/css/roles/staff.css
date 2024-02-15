@@ -8560,11 +8560,13 @@ a:hover {
   border: 0.01rem solid #d1d3d3;
   height: 24px;
 }
-.ticket__section .card__ticket__details .ticket__costing__container .costing__approver__container {
-  padding-left: 5px;
-}
-.ticket__section .card__ticket__details .ticket__costing__container .costing__approver__container:not(:first-child) .costing__approver__initial {
-  margin-left: -8px;
+.ticket__section .card__ticket__details .ticket__costing__container .costing__approver__container .costing__approver__picture {
+  height: 26px;
+  width: 26px;
+  opacity: 2;
+  -o-object-fit: cover;
+  object-fit: cover;
+  opacity: 0.5;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .costing__approver__container .costing__approver__initial {
   font-weight: 500;
@@ -8572,7 +8574,15 @@ a:hover {
   height: 26px;
   width: 26px;
   color: white;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .costing__approver__container .costing__approver__approved__badge {
+  font-size: 11px;
+  height: 10px;
+  width: 10px;
+  bottom: 0;
   border: 2px solid white;
+  background-color: green;
+  right: -2px;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .btn__approve__costing {
   font-size: 0.813rem;
