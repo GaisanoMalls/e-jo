@@ -77,11 +77,11 @@
                     <small class="ticket__details__info__label" style="font-weight: 500;">
                         SLA:</small>
                     <div class="d-flex align-items-center gap-2">
-                        @if ($isApprovedForSLA)
+                        @if ($isSlaApproved)
                             @livewire('sla-timer', ['ticket' => $ticket])
                         @endif
                         <small class="ticket__details__info">
-                            <i class="fa-solid fa-clock me-1 text-muted {{ $isApprovedForSLA ? 'bx-flashing' : '' }}"
+                            <i class="fa-solid fa-clock me-1 text-muted {{ $isSlaApproved ? 'bx-flashing' : '' }}"
                                 style="font-size: 11px;"></i>
                             {{ $ticket->sla->time_unit ?? '----' }}
                         </small>

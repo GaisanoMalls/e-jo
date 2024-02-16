@@ -139,38 +139,74 @@ trait Utils
         // Calculate the time remaining
         $timeRemaining = $targetDate - $currentDate;
 
-        // Calculate days, hours, and minutes
-        $days = floor($timeRemaining / (60 * 60 * 24));
-        $hours = floor(($timeRemaining % (60 * 60 * 24)) / (60 * 60));
-        $minutes = floor(($timeRemaining % (60 * 60)) / 60);
-        // dd($days);
+        // Calculate total SLA time
+        $totalSlaTime = $slaHours * 3600; // Convert hours to seconds
+
+        // Calculate time elapsed
+        $timeElapsed = $totalSlaTime - $timeRemaining;
+
+        // Calculate percentage of time elapsed
+        $percentageElapsed = ($timeElapsed / $totalSlaTime) * 100;
+
         // Check if the countdown has reached zero
         if ($timeRemaining <= 0) {
-            $timer = 'Ticket is overdue';
+            $percentageElapsed = 100; // Set to 100% if overdue
+            $timer = 'OVERDUE';
         } else {
+            $days = floor($timeRemaining / (60 * 60 * 24));
+            $hours = floor(($timeRemaining % (60 * 60 * 24)) / (60 * 60));
+            $minutes = floor(($timeRemaining % (60 * 60)) / 60);
+
             $timer = '';
 
             if ($days > 0) {
                 $timer .= "{$days} days, ";
             }
 
-            if ($hours > 0)
+            if ($hours > 0) {
                 $timer .= "{$hours} hours, ";
+            }
 
             $timer .= "{$minutes} minutes";
         }
 
-        return $timer;
+        return [
+            'timer' => $timer,
+            'percentageElapsed' => (int) $percentageElapsed
+        ];
     }
 
     /**
      * @return bool
      */
-    public function startSLA(Ticket $ticket)
+    public function isSlaApproved(Ticket $ticket)
     {
-        return ($this->ticket->status_id == Status::APPROVED || $this->ticket->approval_status == ApprovalStatusEnum::APPROVED)
+        return ($this->ticket->status_id == Status::APPROVED
+            || $this->ticket->approval_status == ApprovalStatusEnum::APPROVED
+            && !is_null($this->ticket->svcdept_date_approved))
             ? true
             : false;
+    }
+
+    /**
+     * Check wether sla is overdue
+     * @return bool
+     */
+    public function isSlaOverdue(Ticket $ticket)
+    {
+        return $this->ticketSLATimer($this->ticket)['timer'] === 'OVERDUE';
+    }
+
+    public function getSLADays(Ticket $ticket)
+    {
+        return (preg_match('/(\d+)/', $ticket->sla->time_unit, $matches))
+            ? $matches[0]
+            : 0;
+    }
+
+    public function getSLAUnit(Ticket $ticket)
+    {
+        return trim(str_replace($this->getSLADays($ticket), "", $ticket->sla->time_unit));
     }
 
     /**

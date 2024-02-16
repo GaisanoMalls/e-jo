@@ -34,7 +34,6 @@ class CreateTicketsTable extends Migration
             $table->string('ticket_number')->unique();
             $table->string('subject');
             $table->longText('description');
-            $table->longText('issue_summary')->nullable();
             $table->string('approval_status');
             $table->dateTime('svcdept_date_approved')->nullable();
             $table->timestamps();

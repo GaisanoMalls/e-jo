@@ -14,15 +14,10 @@ class TicketDetails extends Component
 
     protected $listeners = ['loadTicketDetails' => '$refresh'];
 
-    public function isApprovedForSLA()
-    {
-        return $this->startSLA($this->ticket);
-    }
-
     public function render()
     {
         return view('livewire.approver.ticket.ticket-details', [
-            'isApprovedForSLA' => $this->isApprovedForSLA(),
+            'isSlaApproved' => $this->isSlaApproved($this->ticket),
         ]);
     }
 }

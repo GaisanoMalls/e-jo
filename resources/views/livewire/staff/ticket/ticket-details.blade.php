@@ -80,18 +80,42 @@
                         @endif
                     </small>
                 </div>
+                <div class="my-2" style="border-top: 0.08rem solid #e6edef;"></div>
                 <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                     <small class="ticket__details__info__label">
-                        SLA:</small>
+                        Service Level Agreement:</small>
                     <div class="d-flex align-items-center gap-2">
-                        @if ($isApprovedForSLA)
+                        @if ($this->isSlaApproved($ticket))
                             @livewire('sla-timer', ['ticket' => $ticket])
                         @endif
-                        <small class="ticket__details__info" id="slaDays">
-                            <i class="fa-solid fa-clock me-1 text-muted {{ $isApprovedForSLA ? 'bx-flashing' : '' }}"
-                                style="font-size: 11px;"></i>
-                            {{ $ticket->sla->time_unit ?? '----' }}
-                        </small>
+                        <!-- Progress bar 4 -->
+                        <div class="progress mx-auto"
+                            data-value='{{ $this->ticketSLATimer($ticket)['percentageElapsed'] }}'>
+                            <span
+                                class="progress-left {{ $this->isSlaApproved($ticket) && !$this->isSlaOverdue($ticket) ? 'bx-flashing' : '' }}">
+                                <span class="progress-bar" @style([
+                                    'border-color: #8BE78B;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 0 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 49,
+                                    'border-color: #F79500;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 50 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 79,
+                                    'border-color: #940000;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 80 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 100,
+                                ])></span>
+                            </span>
+                            <span
+                                class="progress-right {{ $this->isSlaApproved($ticket) && !$this->isSlaOverdue($ticket) ? 'bx-flashing' : '' }}">
+                                <span class="progress-bar" @style([
+                                    'border-color: #8BE78B;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 0 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 49,
+                                    'border-color: #F79500;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 50 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 79,
+                                    'border-color: #940000;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 80 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 100,
+                                ])></span>
+                            </span>
+                            <div
+                                class="progress-value w-100 h-100 rounded-circle d-flex flex-column align-items-center justify-content-center">
+                                <div class="fw-bold progress__initial__value">
+                                    {{ $this->getSLADays($ticket) }}
+                                </div>
+                                <span class="unit">{{ $this->getSLAUnit($ticket) }}</sup>
+                            </div>
+                        </div>
+                        <!-- END -->
                     </div>
                 </div>
             </div>
@@ -104,6 +128,34 @@
     <script>
         window.addEventListener('close-modal', () => {
             $('#assignTicketModal').modal('hide');
+        });
+    </script>
+@endpush
+
+@push('extra')
+    <script>
+        $(function() {
+            $(".progress").each(function() {
+                var value = $(this).attr('data-value');
+                var left = $(this).find('.progress-left .progress-bar');
+                var right = $(this).find('.progress-right .progress-bar');
+
+                if (value > 0) {
+                    if (value <= 50) {
+                        right.css('transform', 'rotate(' + percentageToDegrees(value) + 'deg)')
+                    } else {
+                        right.css('transform', 'rotate(180deg)')
+                        left.css('transform', 'rotate(' + percentageToDegrees(value - 50) + 'deg)')
+                    }
+                }
+            })
+
+            function percentageToDegrees(percentage) {
+
+                return percentage / 100 * 360
+
+            }
+
         });
     </script>
 @endpush

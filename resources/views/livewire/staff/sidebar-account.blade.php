@@ -35,7 +35,7 @@
             </h6>
         </a>
         @if (!auth()->user()->hasRole(App\Models\Role::SYSTEM_ADMIN))
-            <p class=" sidebar__userdepartment">
+            <p class="sidebar__userdepartment">
                 {{ auth()->user()->getBuDepartments() . ' -' }}
                 {{ auth()->user()->getBranches() ?? '' }}
             </p>
