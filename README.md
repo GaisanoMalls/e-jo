@@ -8,4 +8,4 @@
 ^8.2
 
 ## Screenshot
-![ticketing-ejo](https://github.com/GaisanoMalls/e-jo/assets/63698615/8ccab8ef-d14e-446f-b74f-39f5fad173c7)
+![ejo](https://github.com/GaisanoMalls/e-jo/assets/63698615/98ef8c2e-2429-4d0c-b3a9-c0a4f3aaef26)
