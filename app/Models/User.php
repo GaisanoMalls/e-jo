@@ -112,68 +112,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Team::class, 'user_team')->withPivot(['user_id', 'team_id']);
     }
 
-    public function getServiceDepartments(): string
-    {
-        $serviceDepartmentNames = [];
-
-        foreach ($this->serviceDepartments as $serviceDepartment) {
-            $serviceDepartmentNames[] = $serviceDepartment->name;
-        }
-
-        if (!empty($serviceDepartmentNames)) {
-            return implode(', ', $serviceDepartmentNames);
-        }
-
-        return '----';
-    }
-
-    public function getTeams(): string
-    {
-        $teams = [];
-
-        foreach ($this->teams as $team) {
-            $teams[] = $team->name;
-        }
-
-        if (!empty($teams)) {
-            return implode(', ', $teams);
-        }
-
-        return '----';
-    }
-
-    // Get the branches assiged to approver.
-    public function getBranches(): string
-    {
-        $branchNames = [];
-
-        foreach ($this->branches as $branch) {
-            $branchNames[] = $branch->name;
-        }
-
-        if (!empty($branchNames)) {
-            return implode(', ', $branchNames);
-        }
-
-        return '----';
-    }
-
-    // Get the branches assiged to approver.
-    public function getBUDepartments(): string
-    {
-        $buDepartmentNames = [];
-
-        foreach ($this->buDepartments as $buDepartment) {
-            $buDepartmentNames[] = $buDepartment->name;
-        }
-
-        if (!empty($buDepartmentNames)) {
-            return implode(', ', $buDepartmentNames);
-        }
-
-        return '----';
-    }
-
     /**
      * Check if the user is Superuser.
      *
@@ -270,6 +208,68 @@ class User extends Authenticatable
         return $this->updatedAt($this->created_at, $this->updated_at);
     }
 
+    public function getServiceDepartments(): string
+    {
+        $serviceDepartmentNames = [];
+
+        foreach ($this->serviceDepartments as $serviceDepartment) {
+            $serviceDepartmentNames[] = $serviceDepartment->name;
+        }
+
+        if (!empty($serviceDepartmentNames)) {
+            return implode(', ', $serviceDepartmentNames);
+        }
+
+        return '----';
+    }
+
+    public function getTeams(): string
+    {
+        $teams = [];
+
+        foreach ($this->teams as $team) {
+            $teams[] = $team->name;
+        }
+
+        if (!empty($teams)) {
+            return implode(', ', $teams);
+        }
+
+        return '----';
+    }
+
+    // Get the branches assiged to approver.
+    public function getBranches(): string
+    {
+        $branchNames = [];
+
+        foreach ($this->branches as $branch) {
+            $branchNames[] = $branch->name;
+        }
+
+        if (!empty($branchNames)) {
+            return implode(', ', $branchNames);
+        }
+
+        return '----';
+    }
+
+    // Get the branches assiged to approver.
+    public function getBUDepartments(): string
+    {
+        $buDepartmentNames = [];
+
+        foreach ($this->buDepartments as $buDepartment) {
+            $buDepartmentNames[] = $buDepartment->name;
+        }
+
+        if (!empty($buDepartmentNames)) {
+            return implode(', ', $buDepartmentNames);
+        }
+
+        return '----';
+    }
+
     public function getUserRoles()
     {
         $userRoles = [];
@@ -298,5 +298,11 @@ class User extends Authenticatable
         }
 
         return '----';
+    }
+
+    // For agent use only
+    public function getClaimedTickets()
+    {
+        return Ticket::withWhereHas('agent', fn($agent) => $agent->where('agent_id', $this->id))->count();
     }
 }

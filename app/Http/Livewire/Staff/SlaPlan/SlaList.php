@@ -16,7 +16,7 @@ class SlaList extends Component
     public $serviceLevelAgreements = [];
     public $slaEditId;
     public $slaDeleteId;
-    public $countdown_approach;
+    public $hours;
     public $time_unit;
 
     protected $listeners = ['loadServiceLevelAgreements' => 'fetchServiceLevelAgreements'];
@@ -24,7 +24,7 @@ class SlaList extends Component
     protected function rules()
     {
         return [
-            'countdown_approach' => 'required|numeric',
+            'hours' => 'required|numeric',
             'time_unit' => "required|unique:service_level_agreements,time_unit,{$this->slaEditId}",
         ];
     }
@@ -51,7 +51,7 @@ class SlaList extends Component
     public function editSLA(ServiceLevelAgreement $serviceLevelAgreement)
     {
         $this->slaEditId = $serviceLevelAgreement->id;
-        $this->countdown_approach = $serviceLevelAgreement->countdown_approach;
+        $this->hours = $serviceLevelAgreement->hours;
         $this->time_unit = $serviceLevelAgreement->time_unit;
         $this->resetValidation();
         $this->dispatchBrowserEvent('show-edit-sla-modal');
@@ -74,7 +74,7 @@ class SlaList extends Component
     public function deleteSLA(ServiceLevelAgreement $serviceLevelAgreement)
     {
         $this->slaDeleteId = $serviceLevelAgreement->id;
-        $this->countdown_approach = $serviceLevelAgreement->countdown_approach;
+        $this->hours = $serviceLevelAgreement->hours;
         $this->time_unit = $serviceLevelAgreement->time_unit;
         $this->dispatchBrowserEvent('show-delete-sla-modal');
     }

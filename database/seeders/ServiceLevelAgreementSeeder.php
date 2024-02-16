@@ -17,26 +17,42 @@ class ServiceLevelAgreementSeeder extends Seeder
     {
         $serviceLevelAgreements = [
             [
-                'countdown_approach' => 24,
+                'hours' => 1,
+                'time_unit' => '1 Hour'
+            ],
+            [
+                'hours' => 3,
+                'time_unit' => '3 Hours'
+            ],
+            [
+                'hours' => 7,
+                'time_unit' => '7 Hours'
+            ],
+            [
+                'hours' => 5,
+                'time_unit' => '5 Hours'
+            ],
+            [
+                'hours' => 24,
                 'time_unit' => '1 Day'
             ],
             [
-                'countdown_approach' => 48,
+                'hours' => 48,
                 'time_unit' => '2 Days'
             ],
             [
-                'countdown_approach' => 72,
+                'hours' => 72,
                 'time_unit' => '3 Days'
             ],
             [
-                'countdown_approach' => 96,
+                'hours' => 96,
                 'time_unit' => '4 Days'
             ],
         ];
 
         foreach ($serviceLevelAgreements as $sla) {
             ServiceLevelAgreement::firstOrCreate([
-                'countdown_approach' => $sla['countdown_approach'],
+                'hours' => $sla['hours'],
                 'time_unit' => $sla['time_unit'],
             ]);
         }

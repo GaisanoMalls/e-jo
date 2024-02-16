@@ -75,12 +75,12 @@ class CreateServiceDeptAdmin extends Component
                     ])),
                 ]);
 
-                ApproverLevel::create([
-                    'user_id' => $serviceDeptAdmin->id,
-                    'level_id' => Level::where('value', 1)->pluck('value')->first(),
-                ]);
-
-                if ($this->asCostingApprover1) {
+                if (!$this->asCostingApprover1) {
+                    ApproverLevel::create([
+                        'user_id' => $serviceDeptAdmin->id,
+                        'level_id' => Level::where('value', 1)->pluck('value')->first(),
+                    ]);
+                } else {
                     if (!$this->hasCostingApprover1()) {
                         if (SpecialProjectAmountApproval::whereNull('service_department_admin_approver')->exists()) {
                             SpecialProjectAmountApproval::whereNull('service_department_admin_approver')

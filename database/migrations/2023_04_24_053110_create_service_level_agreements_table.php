@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::create('service_level_agreements', function (Blueprint $table) {
             $table->id();
-            $table->integer('countdown_approach');
+            $table->integer('hours');
             $table->string('time_unit');
             $table->timestamps();
         });

@@ -26,10 +26,10 @@ class StoreSLARequest extends FormRequest
     public function rules()
     {
         return [
-            'countdown_approach' => [
+            'hours' => [
                 'required',
                 'numeric',
-                Rule::unique('service_level_agreements', 'countdown_approach')
+                Rule::unique('service_level_agreements', 'hours')
             ],
             'time_unit' => [
                 'required',

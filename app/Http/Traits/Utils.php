@@ -126,18 +126,15 @@ trait Utils
         return time() . "_" . Str::slug(auth()->user()->profile->getFullName()) . "." . $picture->getClientOriginalExtension();
     }
 
-    /**
-     * @return string
-     */
     public function ticketSLATimer(Ticket $ticket)
     {
-        $slaDays = (int) $this->ticket->sla->time_unit[0];
+        $slaHours = (int) $this->ticket->sla->hours; // Assuming SLA is in hours
 
         // Get the current date and time
         $currentDate = now()->timestamp;
 
         // Get the target date from the server or any other data source
-        $targetDate = Carbon::parse($ticket->svcdept_date_approved)->addHours($slaDays * 24)->timestamp;
+        $targetDate = Carbon::parse($ticket->svcdept_date_approved)->addHours($slaHours)->timestamp;
 
         // Calculate the time remaining
         $timeRemaining = $targetDate - $currentDate;
@@ -146,12 +143,21 @@ trait Utils
         $days = floor($timeRemaining / (60 * 60 * 24));
         $hours = floor(($timeRemaining % (60 * 60 * 24)) / (60 * 60));
         $minutes = floor(($timeRemaining % (60 * 60)) / 60);
-
+        // dd($days);
         // Check if the countdown has reached zero
         if ($timeRemaining <= 0) {
             $timer = 'Ticket is overdue';
         } else {
-            $timer = "{$days} days, {$hours} hours, {$minutes} minutes";
+            $timer = '';
+
+            if ($days > 0) {
+                $timer .= "{$days} days, ";
+            }
+
+            if ($hours > 0)
+                $timer .= "{$hours} hours, ";
+
+            $timer .= "{$minutes} minutes";
         }
 
         return $timer;
@@ -222,7 +228,7 @@ trait Utils
         return User::with('profile')->whereIn('id', $approverIds)->get();
     }
 
-    public function approvedCostingBy(User $user)
+    public function costingApprovedBy(User $user)
     {
         return SpecialProjectAmountApproval::where(
             fn($approver1) => $approver1->whereJsonContains('service_department_admin_approver->approver_id', $user->id)
@@ -231,7 +237,5 @@ trait Utils
                 fn($approver2) => $approver2->whereJsonContains('fpm_coo_approver->approver_id', $user->id)
                     ->where('fpm_coo_approver->is_approved', true)
             )->exists();
-
-
     }
 }

@@ -72,12 +72,12 @@ class CreateApprover extends Component
                     ])),
                 ]);
 
-                ApproverLevel::create([
-                    'user_id' => $approver->id,
-                    'level_id' => Level::where('value', 2)->pluck('value')->first(),
-                ]);
-
-                if ($this->asCostingApprover2) {
+                if (!$this->asCostingApprover2) {
+                    ApproverLevel::create([
+                        'user_id' => $approver->id,
+                        'level_id' => Level::where('value', 2)->pluck('value')->first(),
+                    ]);
+                } else {
                     if (!$this->hasCostingApprover2()) {
                         if (SpecialProjectAmountApproval::whereNull('fpm_coo_approver')->exists()) {
                             SpecialProjectAmountApproval::whereNull('fpm_coo_approver')

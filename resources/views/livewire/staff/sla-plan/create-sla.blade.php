@@ -14,12 +14,12 @@
                         <div class="row mb-2">
                             <div class="col-md-12">
                                 <div class="mb-2">
-                                    <label for="countdown_approach" class="form-label form__field__label">Hours</label>
-                                    <input type="text" wire:model="countdown_approach"
+                                    <label for="hours" class="form-label form__field__label">Hours</label>
+                                    <input type="text" wire:model="hours"
                                         class="form-control form__field
-                                    @error('countdown_approach') is-invalid @enderror"
-                                        id="countdown_approach" placeholder="e.g. 24">
-                                    @error('countdown_approach')
+                                    @error('hours') is-invalid @enderror"
+                                        id="hours" placeholder="e.g. 24">
+                                    @error('hours')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}

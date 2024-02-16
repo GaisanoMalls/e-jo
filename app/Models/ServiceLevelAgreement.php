@@ -13,10 +13,10 @@ class ServiceLevelAgreement extends Model
     use HasFactory, Utils;
 
     /**
-     * countdown_approach: 72
+     * hours: 72
      * time_unit: 3 Days
      */
-    protected $fillable = ['countdown_approach', 'time_unit'];
+    protected $fillable = ['hours', 'time_unit'];
 
     public function tickets(): HasMany
     {

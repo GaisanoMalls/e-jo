@@ -29,71 +29,24 @@
                 </span>
             </div>
         </div>
-        <div class="my-3">
-            <a href="">
-                <h6 class="sidebar__userfullname">
-                    {{ auth()->user()->profile->getFullName() }}
-                </h6>
-            </a>
-            @if (auth()->user()->department)
-                @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
-                    <small class="fw-semibold px-3 py-2 rounded-5"
-                        style="font-size: 12px; background-color:
-                #9DA85C; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
-                0.25rem -0.0625rem rgba(20, 20, 20,
-                0.07);"
-                        title="{{ auth()->user()->getBUDepartments() }}">
-                        {{ Str::limit(auth()->user()->getBUDepartments(),'30') ?? '' }}
-                    </small>
-                @elseif(auth()->user()->hasRole(App\Models\Role::APPROVER))
-                    <small class=" fw-semibold px-3 py-2 rounded-5"
-                        style="font-size: 12px; background-color:
-                #3B4053; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
-                0.25rem -0.0625rem rgba(20, 20, 20,
-                0.07);"
-                        title="{{ auth()->user()->getBUDepartments() }}">
-                        {{ Str::limit(auth()->user()->getBUDepartments(),'30') ?? '' }}
-                    </small>
-                @elseif(auth()->user()->hasRole(App\Models\Role::AGENT))
-                    <small class=" fw-semibold px-3 py-2 rounded-5"
-                        style="font-size: 12px; background-color:
-                #196837; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
-                0.25rem -0.0625rem rgba(20, 20, 20,
-                0.07);"
-                        title="{{ auth()->user()->getBUDepartments() }}">
-                        {{ Str::limit(auth()->user()->getBUDepartments(),'30') ?? '' }}
-                    </small>
-                @elseif(auth()->user()->hasRole(App\Models\Role::USER))
-                    <small class="fw-semibold px-3 py-2 rounded-5"
-                        style="font-size: 12px; background-color:
-                #24695C; color: #FFFFFF; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
-                0.25rem -0.0625rem rgba(20, 20, 20,
-                0.07);"
-                        title="{{ auth()->user()->getBUDepartments() }}">
-                        {{ Str::limit(auth()->user()->getBUDepartments(),'30') ?? '' }}
-                    </small>
-                @else
-                    <small class=" fw-semibold px-3 py-2 rounded-5"
-                        style="font-size: 12px; background-color:
-                #F2F2F2; color: #5b5943; box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem
-                0.25rem -0.0625rem rgba(20, 20, 20,
-                0.07);">
-                        {{ Str::limit(auth()->user()->getBUDepartments(),'30') ?? '' }}
-                    </small>
-                @endif
-            @endif
-        </div>
+        <a href="">
+            <h6 class="my-3 sidebar__userfullname">
+                {{ auth()->user()->profile->getFullName() }}
+            </h6>
+        </a>
         @if (!auth()->user()->hasRole(App\Models\Role::SYSTEM_ADMIN))
             <p class=" sidebar__userdepartment">
-                {{ auth()->user()->getServiceDepartments() . ' -' }}
+                {{ auth()->user()->getBuDepartments() . ' -' }}
                 {{ auth()->user()->getBranches() ?? '' }}
             </p>
         @endif
         <div class="mt-3 d-flex staff__ticket__count justify-content-center">
-            <li>
-                <span class="counter">9</span>
-                <p class="counter__label">Claimed</p>
-            </li>
+            @if (auth()->user()->hasRole(App\Models\Role::AGENT))
+                <li>
+                    <span class="counter">{{ auth()->user()->getClaimedTickets() }}</span>
+                    <p class="counter__label">Claimed</p>
+                </li>
+            @endif
             <li>
                 <span class="counter">95</span>
                 <p class="counter__label">Answered </p>
