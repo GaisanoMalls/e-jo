@@ -23,8 +23,10 @@
     @include('layouts.staff.approver.includes.modal.confirm_logout')
     <div class="container mb-5 approver__section">
         @livewire('offline')
-        @if (Route::is('approver.tickets.*'))
-            @livewire('approver.ticket-tab')
+        @if (!App\Http\Traits\Utils::costingApprover2Only())
+            @if (Route::is('approver.tickets.*'))
+                @livewire('approver.ticket-tab')
+            @endif
         @endif
         @yield('main-content')
     </div>

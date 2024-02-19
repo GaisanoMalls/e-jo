@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Staff\Approver;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Approver\Tickets as ApproverTickets;
+use App\Http\Traits\Utils;
 
 class ApproverDashboardController extends Controller
 {
-    use ApproverTickets;
+    use ApproverTickets, Utils;
 
     public function index()
     {
@@ -17,15 +18,14 @@ class ApproverDashboardController extends Controller
         $disapprovedTickets = $this->getDisapprovedTickets();
         $onProcessTickets = $this->getOnProcessTickets();
 
-        return view(
-            'layouts.staff.approver.includes.dashboard',
-            compact([
+        return (!$this->costingApprover2Only())
+            ? view('layouts.staff.approver.includes.dashboard', compact([
                 'openTickets',
                 'viewedTickets',
                 'approvedTickets',
                 'disapprovedTickets',
                 'onProcessTickets'
-            ])
-        );
+            ]))
+            : abort(403, 'Unauthorized access');
     }
 }

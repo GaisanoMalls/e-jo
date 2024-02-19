@@ -8,6 +8,7 @@ use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
 use App\Models\TicketCosting as Costing;
 use App\Models\TicketCostingFile;
+use App\Models\User;
 use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Validation\Rules\File;
@@ -25,7 +26,7 @@ class TicketCosting extends Component
     public $newCostingFiles = [];
     public $additionalCostingFiles = [];
     public $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
-    protected $listeners = ['loadTicketCosting' => '$refresh'];
+    protected $listeners = ['loadServiceDeptAdminTicketCosting' => '$refresh'];
 
     public function updatedNewCostingFiles()
     {
@@ -90,7 +91,7 @@ class TicketCosting extends Component
             }
 
             $this->dispatchBrowserEvent('close-costing-file-preview-modal');
-            $this->emit('loadTicketCosting');
+            $this->emit('loadServiceDeptAdminTicketCosting');
         } else {
             $this->editingFieldId = null;
             noty()->addWarning('Sorry, only agents have the authority to delete the attachments.');
@@ -116,7 +117,7 @@ class TicketCosting extends Component
 
                 $this->uploadFileCostingCount++;
                 $this->additionalCostingFiles = [];
-                $this->emit('loadTicketCosting');
+                $this->emit('loadServiceDeptAdminTicketCosting');
             }
         } else {
             $this->editingFieldId = null;
@@ -143,7 +144,7 @@ class TicketCosting extends Component
 
                 $this->uploadFileCostingCount++;
                 $this->newCostingFiles = [];
-                $this->emit('loadTicketCosting');
+                $this->emit('loadServiceDeptAdminTicketCosting');
                 $this->dispatchBrowserEvent('close-new-ticket-costing-file-modal');
             }
         } else {
@@ -152,9 +153,18 @@ class TicketCosting extends Component
         }
     }
 
-    public function approveCosting()
+    public function isSpecialProjectCostingApprover1(int $approverId)
     {
-        if ($this->isSpecialProjectCostingApprover(auth()->user()->id, $this->ticket)) {
+        return auth()->user()->id === $approverId
+            && auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)
+            && SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)->whereJsonContains('service_department_admin_approver->approver_id', $approverId)->exists();
+    }
+
+    public function approveCostingApproval1()
+    {
+        $costingApprover1Id = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->where('id', auth()->user()->id)->value('id');
+
+        if ($this->isSpecialProjectCostingApprover1($costingApprover1Id)) {
             SpecialProjectAmountApproval::where([
                 ['ticket_id', $this->ticket->id],
                 ['service_department_admin_approver->is_approved', false]
@@ -162,14 +172,15 @@ class TicketCosting extends Component
                         'service_department_admin_approver->is_approved' => true,
                         'service_department_admin_approver->date_approved' => Carbon::now(),
                     ]);
-            $this->emit('loadTicketCosting');
+
+            $this->emit('loadServiceDeptAdminTicketCosting');
             noty()->addSuccess('Ticket costing is approved.');
         } else {
             noty()->addWarning("Sorry, You don't have permission to approve the costing");
         }
     }
 
-    public function isCostingApproved()
+    public function isCostingApproval1Approved()
     {
         return SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)
             ->whereJsonContains('service_department_admin_approver->is_approved', true)->exists();
@@ -177,9 +188,6 @@ class TicketCosting extends Component
 
     public function render()
     {
-        return view('livewire.staff.ticket.ticket-costing', [
-            'isCostingGreaterOrEqual' => $this->isCostingGreaterOrEqual(),
-            'costingApprovers' => $this->costingApprovers(),
-        ]);
+        return view('livewire.staff.ticket.ticket-costing');
     }
 }

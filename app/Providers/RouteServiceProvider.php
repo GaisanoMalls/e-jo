@@ -24,6 +24,7 @@ class RouteServiceProvider extends ServiceProvider
     const DEPARTMENT_ADMIN_REDIRECT_URL = '/staff/dashboard';
     const AGENT_REDIRECT_URL = '/staff/dashboard';
     const APPROVER_REDIRECT_URL = '/approver/dashboard';
+    const COSTING_APPROVER_REDIRECT_URL = '/approver/tickets/costing-approval';
     const USER_REDIRECT_URL = '/user/dashboard';
 
     /**
@@ -63,7 +64,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting()
     {
-        RateLimiter::for ('api', function (Request $request) {
+        RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
     }

@@ -109,8 +109,8 @@
                                     Approver
                                 </small>
                                 <div class="d-flex align-items-center gap-1 costing__approver__container ">
-                                    @if ($costingApprovers)
-                                        @foreach ($costingApprovers as $costingApprover)
+                                    @if ($this->costingApprovers())
+                                        @foreach ($this->costingApprovers() as $costingApprover)
                                             @if ($costingApprover->profile->picture)
                                                 <div class="d-flex position-relative">
                                                     <img class="costing__approver__picture rounded-circle"
@@ -118,8 +118,9 @@
                                                         data-tooltip="{{ $costingApprover->profile->getFullName() }}"
                                                         data-tooltip-position="top" data-tooltip-font-size="11px">
                                                     @if ($this->costingApprovedBy($costingApprover))
-                                                        <div class="position-absolute rounded-circle costing__approver__approved__badge"
+                                                        <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle costing__approver__approved__badge"
                                                             style="background-color: green">
+                                                            <i class="bi bi-check-lg"></i>
                                                         </div>
                                                     @else
                                                         <div class="position-absolute rounded-circle costing__approver__approved__badge bx-flashing"
@@ -137,8 +138,9 @@
                                                         {{ $costingApprover->profile->getNameInitial() }}
                                                     </small>
                                                     @if ($this->costingApprovedBy($costingApprover))
-                                                        <div class="position-absolute rounded-circle costing__approver__approved__badge"
+                                                        <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle costing__approver__approved__badge"
                                                             style="background-color: green">
+                                                            <i class="bi bi-check-lg"></i>
                                                         </div>
                                                     @else
                                                         <div class="position-absolute rounded-circle costing__approver__approved__badge bx-flashing"
@@ -149,23 +151,18 @@
                                             @endif
                                         @endforeach
                                     @endif
-                                    {{-- <small
-                                        class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial"
-                                        style="background-color: #3B4053;">
-                                        OB
-                                    </small> --}}
                                 </div>
                             </div>
-                            @if ($this->isSpecialProjectCostingApprover(auth()->user()->id, $ticket))
+                            @if ($this->isSpecialProjectCostingApprover1(auth()->user()->id))
                                 <div class="d-flex flex-column justify-content-between gap-2">
                                     <small class="text-muted text-sm costing__header__label">
-                                        @if ($this->isCostingApproved())
+                                        @if ($this->isCostingApproval1Approved())
                                             Status
                                         @else
                                             Action
                                         @endif
                                     </small>
-                                    @if ($this->isCostingApproved())
+                                    @if ($this->isCostingApproval1Approved())
                                         <small
                                             class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
                                             <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
@@ -173,11 +170,11 @@
                                         </small>
                                     @else
                                         <div class="d-flex align-items-center gap-2">
-                                            <button wire:click="approveCosting"
+                                            <button wire:click="approveCostingApproval1"
                                                 class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
                                                 <i class="bi bi-check2-circle" wire:loading.class="d-none"
-                                                    wire:target="approveCosting"></i>
-                                                <div wire:loading wire:target="approveCosting"
+                                                    wire:target="approveCostingApproval1"></i>
+                                                <div wire:loading wire:target="approveCostingApproval1"
                                                     class="spinner-border spinner-border-sm loading__spinner"
                                                     role="status">
                                                     <span class="sr-only">Loading...</span>
@@ -185,7 +182,7 @@
                                                 Approve
                                             </button>
 
-                                            @if ($this->isCostingApproved())
+                                            @if ($this->isCostingApproval1Approved())
                                                 <button
                                                     class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
                                                     <i class="bi bi-reply" wire:loading.class="d-none"
@@ -213,7 +210,7 @@
                                     <small class="text-muted text-sm costing__header__label">
                                         Status
                                     </small>
-                                    @if ($this->isCostingApproved())
+                                    @if ($this->isCostingApproval1Approved())
                                         <small
                                             class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
                                             <i class="fa-solid fa-check"></i>

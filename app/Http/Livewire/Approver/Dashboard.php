@@ -17,14 +17,12 @@ class Dashboard extends Component
         $disapprovedTickets = $this->getDisapprovedTickets();
         $onProcessTickets = $this->getOnProcessTickets();
 
-        return view('livewire.approver.dashboard',
-            compact([
-                'openTickets',
-                'viewedTickets',
-                'approvedTickets',
-                'disapprovedTickets',
-                'onProcessTickets',
-            ])
-        );
+        return view('livewire.approver.dashboard', compact([
+            'openTickets',
+            'viewedTickets',
+            'approvedTickets',
+            'disapprovedTickets',
+            'onProcessTickets',
+        ]));
     }
 }

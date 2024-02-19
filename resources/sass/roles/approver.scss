@@ -1,4 +1,4 @@
-@use "../generic"as generic;
+@use "../generic" as generic;
 @import "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap";
 @import "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap";
 @import "../bootstrap-icons.scss";
@@ -65,7 +65,7 @@ $active-button-background-color: #1a3c40;
 $button-background-2: #3b8890;
 $search-button-background: #1a3c40;
 $button-box-shadow: 0 0.25rem 0.375rem -0.0625rem rgb(20 20 20 / 12%),
-0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
+    0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
 $gradient-background: linear-gradient(310deg, #d28b27 0%, #f7be44 100%);
 $sidebar-gradient-background: linear-gradient(310deg, #2c287f 0%, #9079ce 100%);
 $box-shadow-global: 0 20px 27px 0 rgb(0 0 0 / 5%);
@@ -147,8 +147,8 @@ $color-1: #d32839;
     box-shadow: 0px 1px 4px 0px rgba(132, 132, 132, 0.25);
 }
 
-.tooltip{
-   font-size: $fs-11;
+.tooltip {
+    font-size: $fs-11;
 }
 
 .btn__see__reason {
@@ -469,6 +469,36 @@ nav {
     color: white;
 }
 
+.file__preview {
+    height: 35px;
+    width: 35px;
+    border-radius: $border-radius-8;
+    box-shadow: $button-box-shadow;
+    object-fit: cover;
+}
+
+.ticket__costing__modal {
+    .costing__file__attachment {
+        border: 0;
+        border-radius: 0;
+        font-size: $fs-13;
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
+    .ticket__costing__label {
+        font-size: $fs-14;
+        color: #212529;
+        font-weight: 500;
+    }
+
+    a {
+        color: #24695c;
+    }
+}
+
 .approver__section {
     margin-top: 30px;
     margin-bottom: 50px;
@@ -512,6 +542,10 @@ nav {
                 font-size: 1.5rem;
                 color: #1d5c63;
             }
+        }
+
+        a {
+            color: rgb(18, 56, 49);
         }
     }
 
@@ -918,6 +952,125 @@ nav {
                             color: $white;
                             border-radius: $border-radius-9;
                             background-color: $color-1;
+                        }
+                    }
+                }
+
+                .ticket__costing__container {
+                    padding: 1.5rem;
+
+                    .currency {
+                        font-size: 1.3rem !important;
+                    }
+
+                    .amount {
+                        font-size: 1.2rem;
+                        font-weight: $fw-600;
+                        color: #212529;
+                    }
+
+                    .btn__edit__costing,
+                    .btn__update__costing {
+                        height: 30px;
+                        width: 30px;
+                        border: 0 !important;
+                        font-size: $fs-13;
+                        color: #6C757D;
+
+                        &:hover {
+                            background-color: #F5F7F9;
+                            color: #212529;
+                        }
+                    }
+
+                    .costing__header__label {
+                        font-size: $fs-13;
+                    }
+
+                    .approved__costing__status {
+                        font-size: $fs-12;
+                        font-weight: $fw-500;
+                        color: green;
+                        padding: 2px 7px;
+                        background-color: #F5F7F9;
+                        border: 0.01rem solid #d1d3d3;
+                        height: 24px;
+                    }
+
+                    .costing__approver__container {
+                        .costing__approver__picture {
+                            height: 27px;
+                            width: 27px;
+                            opacity: 2;
+                            -o-object-fit: cover;
+                            object-fit: cover;
+                            opacity: 0.5;
+                        }
+
+                        .costing__approver__initial {
+                            font-weight: $fw-500;
+                            font-size: 11px;
+                            height: 27px;
+                            width: 27px;
+                            color: white;
+                        }
+
+                        .costing__approver__approved__badge {
+                            font-size: 11px;
+                            height: 15px;
+                            width: 15px;
+                            bottom: 0;
+                            border: 2px solid white;
+                            background-color: green;
+                            color: white;
+                            right: -2px;
+                        }
+                    }
+
+                    .btn__approve__costing {
+                        font-size: $fs-13;
+                        background-color: #D32839;
+                        color: white;
+                        outline: none;
+                        font-weight: $fw-500;
+                    }
+
+                    .costing__labels {
+                        font-size: $fs-13;
+                    }
+
+                    .separator {
+                        width: 1px;
+                        height: 100%;
+                        margin: 0 10px;
+                        background-color: #d1d3d3;
+                    }
+
+                    .show__costing__attachments,
+                    .btn__show__add__costing__file__modal {
+                        &:hover {
+                            cursor: pointer;
+                        }
+                    }
+
+                    .btn__show__add__costing__file__modal {
+                        border-radius: $border-radius-8;
+                        font-size: $fs-11;
+                        padding: 0.3rem 0.5rem;
+                        background-color: #F5F7F9;
+
+                        &:hover {
+                            background-color: #E9ECEF;
+                        }
+                    }
+
+                    .ticket__actual__cost {
+                        font-size: 1.2rem !important;
+                    }
+
+                    .file__attachment__actions__container {
+                        .file__attachment__action__button {
+                            font-size: $fs-15;
                         }
                     }
                 }

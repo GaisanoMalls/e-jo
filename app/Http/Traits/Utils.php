@@ -235,12 +235,11 @@ trait Utils
         return auth()->user()->id === $agentId && auth()->user()->hasRole(Role::AGENT);
     }
 
-    public function isSpecialProjectCostingApprover(int $approverId, Ticket $ticket)
+    public function isSpecialProjectCostingApprover2(int $approverId, Ticket $ticket)
     {
         return auth()->user()->id === $approverId
-            && auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)
-            && SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
-                ->whereJsonContains('service_department_admin_approver->approver_id', $approverId)->exists();
+            && auth()->user()->hasRole(Role::APPROVER)
+            && SpecialProjectAmountApproval::where('ticket_id', $ticket->id)->whereJsonContains('fpm_coo_approver->approver_id', $approverId)->exists();
     }
 
     public function hasCostingApprover1()
@@ -269,9 +268,13 @@ trait Utils
         return SpecialProjectAmountApproval::where(
             fn($approver1) => $approver1->whereJsonContains('service_department_admin_approver->approver_id', $user->id)
                 ->where('service_department_admin_approver->is_approved', true)
-        )->orWhere(
-                fn($approver2) => $approver2->whereJsonContains('fpm_coo_approver->approver_id', $user->id)
-                    ->where('fpm_coo_approver->is_approved', true)
-            )->exists();
+        )->orWhere(fn($approver2) => $approver2->whereJsonContains('fpm_coo_approver->approver_id', $user->id)->where('fpm_coo_approver->is_approved', true))
+            ->exists();
+    }
+
+    public static function costingApprover2Only()
+    {
+        $approverId = User::role(Role::APPROVER)->where('id', auth()->user()->id)->value('id');
+        return SpecialProjectAmountApproval::whereJsonContains('fpm_coo_approver->approver_id', $approverId)->exists();
     }
 }

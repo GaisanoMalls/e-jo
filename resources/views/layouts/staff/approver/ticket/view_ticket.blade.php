@@ -27,7 +27,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-7 position-relative mb-3">
+                    <div class="col-md-8 position-relative mb-3">
+                        @livewire('approver.ticket.ticket-costing', ['ticket' => $ticket])
                         <div class="card border-0 p-0 card__ticket__details">
                             <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                                 <div class="d-flex align-items-center user__account__media">
@@ -84,7 +85,7 @@
                         @endif
                         {{-- End Replies/Comments --}}
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="container__ticket__details__right">
                             @livewire('approver.ticket.ticket-details', ['ticket' => $ticket])
                             @livewire('approver.ticket.ticket-level-approval', ['ticket' => $ticket])
