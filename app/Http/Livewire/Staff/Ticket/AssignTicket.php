@@ -31,7 +31,7 @@ class AssignTicket extends Component
 
     public function mount()
     {
-        $this->isSpecialProject = !is_null($this->ticket->helpTopic->specialProject);
+        $this->isSpecialProject = !is_null($this->ticket->isSpecialProject());
     }
 
     private function actionOnSubmit()

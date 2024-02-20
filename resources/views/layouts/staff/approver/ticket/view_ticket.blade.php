@@ -28,7 +28,9 @@
                 </div>
                 <div class="row">
                     <div class="col-md-8 position-relative mb-3">
-                        @livewire('approver.ticket.ticket-costing', ['ticket' => $ticket])
+                        @if ($isAmountForCOOApproval)
+                            @livewire('approver.ticket.ticket-costing', ['ticket' => $ticket])
+                        @endif
                         <div class="card border-0 p-0 card__ticket__details">
                             <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                                 <div class="d-flex align-items-center user__account__media">

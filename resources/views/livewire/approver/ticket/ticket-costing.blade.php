@@ -47,8 +47,8 @@
                                 Approver
                             </small>
                             <div class="d-flex align-items-center gap-1 costing__approver__container ">
-                                @if ($this->costingApprovers())
-                                    @foreach ($this->costingApprovers() as $costingApprover)
+                                @if ($this->costingApprovers($ticket))
+                                    @foreach ($this->costingApprovers($ticket) as $costingApprover)
                                         @if ($costingApprover->profile->picture)
                                             <div class="d-flex position-relative">
                                                 <img class="costing__approver__picture rounded-circle"

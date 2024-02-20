@@ -129,11 +129,6 @@ class Ticket extends Model
         return $this->hasMany(TicketApproval::class);
     }
 
-    public function SPAmountApprovals(): HasMany
-    {
-        return $this->hasMany(SpecialProjectAmountApproval::class, 'ticket_id');
-    }
-
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'ticket_tag');
@@ -166,6 +161,6 @@ class Ticket extends Model
 
     public function isSpecialProject()
     {
-        return !is_null($this->helpTopic?->specialProject);
+        return !is_null($this->helpTopic?->has('specialProject'));
     }
 }

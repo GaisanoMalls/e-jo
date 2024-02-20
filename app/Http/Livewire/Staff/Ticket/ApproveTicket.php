@@ -65,7 +65,7 @@ class ApproveTicket extends Component
                             'svcdept_date_approved' => Carbon::now(),
                         ]);
                         // Do this process if ticket's help topic has special project.
-                        if ($this->ticket->helpTopic->specialProject) {
+                        if ($this->ticket->isSpecialProject()) {
                             // Update ticket approval based on current approver (Level 1 - Service Dept. Admin)
                             TicketApproval::where('ticket_id', $this->ticket->id)
                                 ->whereNotNull('approval_1->level_1_approver->approver_id')

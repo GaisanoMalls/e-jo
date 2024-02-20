@@ -28,47 +28,43 @@
                         </thead>
                         <tbody>
                             @foreach ($forApprovalTickets as $ticket)
-                                @if ($this->isTicketNeedLevelOfApproval($ticket))
-                                    <tr wire:key="ticket-{{ $ticket->id }}">
-                                        <td class="custom__table__data">
-                                            <div class="ticket__list__status__line"
-                                                style="background-color: {{ $ticket->priorityLevel->color ?? '' }};">
-                                            </div>
-                                            <p class="mb-0">
-                                                {{ $ticket->dateCreated() }} @
-                                                {{ $ticket->created_at->format('g:i A') }}
-                                            </p>
-                                        </td>
-                                        <td class="custom__table__data clickable_td">
-                                            <p class="mb-0">{{ $ticket->ticket_number }}</p>
-                                        </td>
-                                        <td class="custom__table__data">
-                                            <p class="mb-0">{{ $ticket->user->getBUDepartments() }}</p>
-                                        </td>
-                                        <td class="custom__table__data">
-                                            <p class="mb-0">{{ Str::limit($ticket->subject, 30) }}</p>
-                                        </td>
-                                        <td class="custom__table__data">
-                                            @if ($ticket->agent)
-                                                <p class="mb-0">{{ $ticket->agent->profile->getFullName() }}</p>
-                                            @else
-                                                <p class="mb-0">----</p>
-                                            @endif
-                                        </td>
-                                        <td class="custom__table__data">
-                                            <p class="mb-0" style="color: {{ $ticket->priorityLevel->color }};">
-                                                {{ $ticket->priorityLevel->name ?? '' }}</p>
-                                        </td>
-                                        <td class="custom__table__data">
-                                            @if ($this->isTicketNeedLevelOfApproval($ticket))
-                                                <small class="rounded-5"
-                                                    style="background-color: #9DA85C; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
-                                                    For Approval
-                                                </small>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endif
+                                <tr wire:key="ticket-{{ $ticket->id }}">
+                                    <td class="custom__table__data">
+                                        <div class="ticket__list__status__line"
+                                            style="background-color: {{ $ticket->priorityLevel->color ?? '' }};">
+                                        </div>
+                                        <p class="mb-0">
+                                            {{ $ticket->dateCreated() }} @
+                                            {{ $ticket->created_at->format('g:i A') }}
+                                        </p>
+                                    </td>
+                                    <td class="custom__table__data clickable_td">
+                                        <p class="mb-0">{{ $ticket->ticket_number }}</p>
+                                    </td>
+                                    <td class="custom__table__data">
+                                        <p class="mb-0">{{ $ticket->user->getBUDepartments() }}</p>
+                                    </td>
+                                    <td class="custom__table__data">
+                                        <p class="mb-0">{{ Str::limit($ticket->subject, 30) }}</p>
+                                    </td>
+                                    <td class="custom__table__data">
+                                        @if ($ticket->agent)
+                                            <p class="mb-0">{{ $ticket->agent->profile->getFullName() }}</p>
+                                        @else
+                                            <p class="mb-0">----</p>
+                                        @endif
+                                    </td>
+                                    <td class="custom__table__data">
+                                        <p class="mb-0" style="color: {{ $ticket->priorityLevel->color }};">
+                                            {{ $ticket->priorityLevel->name ?? '' }}</p>
+                                    </td>
+                                    <td class="custom__table__data">
+                                        <small class="rounded-5"
+                                            style="background-color: #9DA85C; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
+                                            For Approval
+                                        </small>
+                                    </td>
+                                </tr>
                             @endforeach
 
                             @foreach ($openTickets as $ticket)

@@ -252,15 +252,24 @@ trait Utils
         return SpecialProjectAmountApproval::whereNotNull('fpm_coo_approver->approver_id')->exists();
     }
 
-    public function costingApprovers()
+    public function costingApprovers(Ticket $ticket)
     {
         $costingApprovers = SpecialProjectAmountApproval::all();
         $approverIds = array_merge(
             $costingApprovers->pluck('service_department_admin_approver.approver_id')->toArray(),
-            $costingApprovers->pluck('fpm_coo_approver.approver_id')->toArray()
+            ($this->isAmountForCOOApproval($ticket))
+            ? $costingApprovers->pluck('fpm_coo_approver.approver_id')->toArray()
+            : []
         );
 
         return User::with('profile')->whereIn('id', $approverIds)->get();
+    }
+
+    public function isAmountForCOOApproval(Ticket $ticket)
+    {
+        return ($ticket->ticketCosting && $ticket->helpTopic && $ticket->isSpecialProject())
+            ? ($ticket->ticketCosting->amount >= $ticket->helpTopic->specialProject->amount) // true
+            : false;
     }
 
     public function costingApprovedBy(User $user)

@@ -6,7 +6,7 @@
         <div class="ticket__section" x-data="{ pinned: true }">
             <button :class="pinned ? 'd-none' : ''"
                 class="btn btn-sm p-0 bg-blue d-flex align-items-center rounded-circle text-white shadow justify-content-center position-fixed"
-                style="font-size: 1rem; height: 30px; width: 30px; top: 94px; right: 51px; z-index: 1; background-color: #D32839;"
+                style="font-size: 1rem; height: 30px; width: 30px; top: 94px; right: 51px; z-index: 2; background-color: #D32839;"
                 @click="pinned = true">
                 <i class="bi bi-pin-angle-fill"></i>
             </button>
@@ -134,7 +134,7 @@
                         <div class="col-md-4">
                             <div class="container__ticket__details__right">
                                 @livewire('staff.ticket.ticket-details', ['ticket' => $ticket])
-                                @if ($ticket->helpTopic->specialProject)
+                                @if ($ticket->isSpecialProject())
                                     @livewire('staff.ticket.ticket-level-approval', ['ticket' => $ticket])
                                 @endif
                                 @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::APPROVED)
@@ -148,7 +148,7 @@
                 </div>
             </div>
             @if (
-                $ticket->helpTopic->specialProject &&
+                $ticket->isSpecialProject() &&
                     auth()->user()->hasRole(App\Models\Role::AGENT))
                 @livewire('staff.ticket.add-costing', ['ticket' => $ticket])
             @endif

@@ -139,7 +139,7 @@ class CreateTicket extends Component
                 $filteredLevel2Approvers = $approverLevel->where('level_id', Level::where('value', 2)->pluck('value')->first());
 
                 if ($filteredLevel1Approvers->isNotEmpty()) {
-                    if ($ticket->helpTopic->specialProject) {
+                    if (!is_null($ticket->isSpecialProject())) {
                         // Filter approver ids by level
                         $level1ApproverIds = $filteredLevel1Approvers->isNotEmpty()
                             ? $filteredLevel1Approvers->pluck('user_id')->toArray()

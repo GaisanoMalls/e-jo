@@ -39,7 +39,7 @@ class AddCosting extends Component
     {
         $this->uploadCostingCount++;
         $this->reset('amount', 'costingFiles');
-        $this->emit('loadTicketCosting');
+        $this->emit('loadServiceDeptAdminTicketCosting');
         $this->emit('loadCostingButtonHeader');
         $this->dispatchBrowserEvent('close-costing-modal');
     }
@@ -58,12 +58,17 @@ class AddCosting extends Component
                 } else {
 
                     // Get the costing approver id
-                    $approverId = SpecialProjectAmountApproval::all()->pluck('service_department_admin_approver')
+                    $approver1Id = SpecialProjectAmountApproval::all()->pluck('service_department_admin_approver')
                         ->map(function ($item, $key) {
                             return $item['approver_id']; // Access the approver_id from each item
                         })->first();
 
-                    if ($approverId) {
+                    $approver2Id = SpecialProjectAmountApproval::all()->pluck('fpm_coo_approver')
+                        ->map(function ($item, $key) {
+                            return $item['approver_id']; // Access the approver_id from each item
+                        })->first();
+
+                    if ($approver1Id && $approver2Id) {
                         // Create a costing when approver is found
                         $ticketCosting = TicketCosting::create([
                             'ticket_id' => $this->ticket->id,
@@ -71,8 +76,21 @@ class AddCosting extends Component
                             'amount' => $this->amount,
                         ]);
 
-                        SpecialProjectAmountApproval::whereJsonContains('service_department_admin_approver->approver_id', $approverId)
-                            ->update(['ticket_id' => $this->ticket->id]);
+                        if (SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)->doesntExist()) {
+                            SpecialProjectAmountApproval::create([
+                                'ticket_id' => $this->ticket->id,
+                                'service_department_admin_approver' => [
+                                    'approver_id' => $approver1Id,
+                                    'is_approved' => false,
+                                    'date_approved' => null
+                                ],
+                                'fpm_coo_approver' => [
+                                    'approver_id' => $approver2Id,
+                                    'is_approved' => false,
+                                    'date_approved' => null
+                                ]
+                            ]);
+                        }
                     } else {
                         noty()->addError('No costing approver is found. Please contact the administrator');
                     }

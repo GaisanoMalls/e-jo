@@ -2,7 +2,7 @@
     <div class="card border-0 p-0 card__ticket__details">
         <div class="d-flex flex-column gap-3 ticket__details__card__body__right">
             <label class="ticket__actions__label">Level of Approval</label>
-            @if ($ticket->helpTopic->specialProject)
+            @if ($ticket->isSpecialProject())
                 <div class="d-flex gap-2 border-0 rounded-3"
                     style="color: #664d03; font-size: 13px; background-color: #FFF3CD; padding: 8px 9px; line-height: 18px;">
                     <i class="bi bi-info-circle-fill" style="color: #D32839;"></i>

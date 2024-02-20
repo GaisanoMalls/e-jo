@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="row mx-0">
-            @if ($ticketsWithCostings->isNotEmpty())
+            @if ($ticketsWithCosting)
                 <div class="card ticket__card" id="userTicketCard">
                     <div class="table-responsive">
                         <table class="table mb-0 custom__table">
@@ -29,7 +29,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($ticketsWithCostings as $ticket)
+                                @foreach ($ticketsWithCosting as $ticket)
                                     <tr
                                         onclick="window.location.href='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
                                         <td class="custom__table__data">

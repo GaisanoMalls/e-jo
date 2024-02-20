@@ -11,11 +11,6 @@ class Open extends Component
 {
     use Tickets;
 
-    public function isTicketNeedLevelOfApproval(Ticket $ticket)
-    {
-        return TicketApproval::where('ticket_id', $ticket->id)->where('is_need_level_of_approval', true)->exists();
-    }
-
     public function render()
     {
         $openTickets = $this->getOpenTickets();
