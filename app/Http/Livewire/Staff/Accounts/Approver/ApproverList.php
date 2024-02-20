@@ -7,7 +7,6 @@ use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;

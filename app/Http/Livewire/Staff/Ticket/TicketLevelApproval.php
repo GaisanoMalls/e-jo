@@ -2,12 +2,9 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
-use App\Models\ActivityLog;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\User;
-use App\Notifications\ServiceDepartmentAdmin\ApprovedLevel1ApproverNotification;
-use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
 class TicketLevelApproval extends Component

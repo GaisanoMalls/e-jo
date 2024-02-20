@@ -6,7 +6,6 @@ use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
 class ApprovedTicketForAgentNotification extends Notification

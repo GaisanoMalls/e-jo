@@ -6,12 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\Approver\Tickets as ApproverTickets;
 use App\Http\Traits\Utils;
 use App\Models\Clarification;
-use App\Models\Role;
-use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
-use App\Models\TicketCosting;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class ApproverTicketsController extends Controller
 {

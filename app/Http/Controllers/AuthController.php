@@ -6,7 +6,6 @@ use App\Http\Traits\AuthRedirect;
 use App\Http\Traits\Logout;
 use App\Http\Traits\Utils;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {

@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Requests\ServiceDeptAdmin\StoreClarificationRequest;
 use App\Http\Traits\Utils;
-use App\Mail\Staff\FromApproverClarificationMail;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
@@ -14,7 +13,6 @@ use App\Notifications\ServiceDepartmentAdmin\TicketClarificationFromServiceDeptA
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;

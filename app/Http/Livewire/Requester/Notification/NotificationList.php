@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Requester\Notification;
 
-use App\Models\ActivityLog;
 use App\Models\Ticket;
 use Livewire\Component;
 

@@ -3,17 +3,13 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
-use App\Mail\Requester\TicketCreatedMail;
 use App\Mail\Staff\ApprovedTicketMail;
 use App\Models\ActivityLog;
-use App\Models\ApproverLevel;
-use App\Models\Level;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\User;
-use App\Notifications\Requester\TicketCreatedNotification;
 use App\Notifications\ServiceDepartmentAdmin\ApprovedLevel1ApproverNotification;
 use App\Notifications\ServiceDepartmentAdmin\ApprovedTicketForAgentNotification;
 use App\Notifications\ServiceDepartmentAdmin\ApprovedTicketForRequesterNotification;

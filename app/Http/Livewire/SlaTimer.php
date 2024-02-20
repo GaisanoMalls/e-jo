@@ -3,11 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Http\Traits\Utils;
-use App\Models\ApprovalStatus;
-use App\Models\Status;
 use App\Models\Ticket;
 use Livewire\Component;
-use Carbon\Carbon;
 
 class SlaTimer extends Component
 {

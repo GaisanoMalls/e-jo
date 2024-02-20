@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Staff\HelpTopic;
 
-use App\Http\Requests\SysAdmin\Manage\HelpTopic\StoreHelpTopicRequest;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\HelpTopic;

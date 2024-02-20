@@ -5,7 +5,6 @@ namespace App\Notifications\Requester;
 use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class TicketClarificationFromRequesterNotification extends Notification implements ShouldQueue

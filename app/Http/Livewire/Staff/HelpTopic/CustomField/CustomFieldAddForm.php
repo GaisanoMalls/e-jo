@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Staff\HelpTopic\CustomField;
 use App\Enums\FieldRequiredOptionEnum;
 use App\Enums\FieldTypesEnum;
 use App\Http\Requests\SysAdmin\Manage\HelpTopic\CustomField\CustomFieldRequest;
-use App\Http\Traits\Utils;
 use App\Models\Field;
 use Exception;
 use Livewire\Component;
