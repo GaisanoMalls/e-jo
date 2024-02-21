@@ -38,6 +38,7 @@ class TicketCosting extends Component
                 ->update([
                     'fpm_coo_approver->is_approved' => true,
                     'fpm_coo_approver->date_approved' => Carbon::now(),
+                    'is_done' => true
                 ]);
 
             $this->emit('loadApproverTicketCosting');

@@ -165,11 +165,19 @@
                                     @endif
                                 </small>
                                 @if ($this->isDoneCostingApproval1($ticket))
-                                    <small
-                                        class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
-                                        <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
-                                        Approved
-                                    </small>
+                                    @if ($this->isCostingAmountNeedCOOApproval($ticket) && !$this->isDoneCostingApproval2($ticket))
+                                        <small
+                                            class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
+                                            <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
+                                            For approval
+                                        </small>
+                                    @else
+                                        <small
+                                            class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                            <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
+                                            Approved
+                                        </small>
+                                    @endif
                                 @else
                                     <div class="d-flex align-items-center gap-2">
                                         <button wire:click="approveCostingApproval1"
@@ -213,17 +221,19 @@
                                     Status
                                 </small>
                                 @if ($this->isDoneCostingApproval1($ticket))
-                                    <small
-                                        class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
-                                        <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
-                                        Approved
-                                    </small>
-                                @else
-                                    <small
-                                        class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
-                                        <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
-                                        For approval
-                                    </small>
+                                    @if ($this->isCostingAmountNeedCOOApproval($ticket) && !$this->isDoneCostingApproval2($ticket))
+                                        <small
+                                            class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
+                                            <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
+                                            For approval
+                                        </small>
+                                    @else
+                                        <small
+                                            class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                            <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
+                                            Approved
+                                        </small>
+                                    @endif
                                 @endif
                             </div>
                         @endif
