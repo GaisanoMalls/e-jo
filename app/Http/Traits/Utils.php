@@ -257,7 +257,7 @@ trait Utils
         $costingApprovers = SpecialProjectAmountApproval::all();
         $approverIds = array_merge(
             $costingApprovers->pluck('service_department_admin_approver.approver_id')->toArray(),
-            ($this->isAmountForCOOApproval($ticket))
+            ($this->isCostingAmountNeedCOOApproval($ticket))
             ? $costingApprovers->pluck('fpm_coo_approver.approver_id')->toArray()
             : []
         );
@@ -265,20 +265,43 @@ trait Utils
         return User::with('profile')->whereIn('id', $approverIds)->get();
     }
 
-    public function isAmountForCOOApproval(Ticket $ticket)
+    public function isCostingAmountNeedCOOApproval(Ticket $ticket)
     {
         return ($ticket->ticketCosting && $ticket->helpTopic && $ticket->isSpecialProject())
             ? ($ticket->ticketCosting->amount >= $ticket->helpTopic->specialProject->amount) // true
             : false;
     }
 
-    public function costingApprovedBy(User $user)
+    public function costingApprovedBy(User $user, Ticket $ticket)
     {
-        return SpecialProjectAmountApproval::where(
-            fn($approver1) => $approver1->whereJsonContains('service_department_admin_approver->approver_id', $user->id)
-                ->where('service_department_admin_approver->is_approved', true)
-        )->orWhere(fn($approver2) => $approver2->whereJsonContains('fpm_coo_approver->approver_id', $user->id)->where('fpm_coo_approver->is_approved', true))
+        return SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
+            ->where(fn($approver1) => $approver1->whereJsonContains('service_department_admin_approver->approver_id', $user->id)
+                ->whereJsonContains('service_department_admin_approver->is_approved', true))
+            ->orWhere(fn($approver2) => $approver2->whereJsonContains('fpm_coo_approver->approver_id', $user->id)->whereJsonContains('fpm_coo_approver->is_approved', true))
             ->exists();
+    }
+
+    public function isDoneCostingApprovals(Ticket $ticket)
+    {
+        return $this->isDoneCostingApproval1($ticket) || $this->isDoneCostingApproval2($ticket);
+    }
+
+    public function isDoneCostingApproval1(Ticket $ticket)
+    {
+        return SpecialProjectAmountApproval::where([
+            ['ticket_id', $ticket->id],
+            ['service_department_admin_approver->is_approved', true],
+            ['service_department_admin_approver->date_approved', '!=', null]
+        ])->orWhere('is_done', true)->exists();
+    }
+
+    public function isDoneCostingApproval2(Ticket $ticket)
+    {
+        return SpecialProjectAmountApproval::where([
+            ['ticket_id', $ticket->id],
+            ['fpm_coo_approver->is_approved', true],
+            ['fpm_coo_approver->date_approved', '!=', null]
+        ])->orWhere('is_done', true)->exists();
     }
 
     public static function costingApprover2Only()

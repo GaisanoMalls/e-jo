@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->foreignIdFor(Ticket::class, 'ticket_id')->nullable()->constrained('tickets')->cascadeOnDelete();
             $table->json('service_department_admin_approver')->nullable();
             $table->json('fpm_coo_approver')->nullable();
+            $table->boolean('is_done')->default(false);
             $table->timestamps();
         });
     }

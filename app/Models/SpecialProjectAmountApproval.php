@@ -14,6 +14,7 @@ class SpecialProjectAmountApproval extends Model
         'ticket_id',
         'service_department_admin_approver',
         'fpm_coo_approver',
+        'is_done'
     ];
 
     /**

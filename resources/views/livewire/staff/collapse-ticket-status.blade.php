@@ -1,12 +1,20 @@
 <div>
-    <button wire:ignore.self
-        class="btn btn-toggle d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons sidebar__btn__collapse {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'sidebar__btn__active active' : '' }}"
+    <button wire:ignore.self x-data="{ open: !{{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') }} }" @click="open = !open"
+        class="btn btn-toggle d-flex gap-3 justify-content-between btn-block align-items-center w-100 border-0 sidebar__buttons sidebar__btn__collapse {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'sidebar__btn__active active' : '' }}"
         data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="true"
         wire:click="$emit('loadSidebarCollapseTicketStatus')">
-        <div class="d-flex align-items-center justify-content-center sidebar__button__icon__container">
-            <i class="bi bi-ticket-perforated-fill"></i>
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center justify-content-center sidebar__button__icon__container">
+                <i class="bi bi-ticket-perforated-fill"></i>
+            </div>
+            Tickets
         </div>
-        Tickets
+        <div class="d-flex align-items-center position-relative">
+            <i class="bi bi-chevron-right position-absolute" :class="{ 'd-none': !open }" x-transition
+                style="right: 6px;"></i>
+            <i class="bi bi-chevron-down position-absolute" :class="{ 'd-none': open }" x-transition
+                style="right: 6px;"></i>
+        </div>
     </button>
     <div wire:ignore.self
         class="collapse {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'show' : '' }}"
@@ -21,9 +29,11 @@
                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                         <span class="sidebar__btn__link__name ">Open</span>
                     </div>
-                    <span class="badge sidebar__btn__link__badge">
-                        {{ $openTickets->count() }}
-                    </span>
+                    @if ($openTickets->count() >= 1)
+                        <span class="badge sidebar__btn__link__badge">
+                            {{ $openTickets->count() }}
+                        </span>
+                    @endif
                 </a>
             </li>
             @if (!auth()->user()->hasRole(App\Models\Role::AGENT))
@@ -36,9 +46,11 @@
                             <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                             <span class="sidebar__btn__link__name ">Viewed</span>
                         </div>
-                        <span class="badge sidebar__btn__link__badge">
-                            {{ $viewedTickets->count() }}
-                        </span>
+                        @if ($viewedTickets->count() >= 1)
+                            <span class="badge sidebar__btn__link__badge">
+                                {{ $viewedTickets->count() }}
+                            </span>
+                        @endif
                     </a>
                 </li>
                 <li>
@@ -50,9 +62,11 @@
                             <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                             <span class="sidebar__btn__link__name ">Approved</span>
                         </div>
-                        <span class="badge sidebar__btn__link__badge">
-                            {{ $approvedTickets->count() }}
-                        </span>
+                        @if ($approvedTickets->count() >= 1)
+                            <span class="badge sidebar__btn__link__badge">
+                                {{ $approvedTickets->count() }}
+                            </span>
+                        @endif
                     </a>
                 </li>
                 <li>
@@ -64,9 +78,11 @@
                             <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                             <span class="sidebar__btn__link__name ">Disapproved</span>
                         </div>
-                        <span class="badge sidebar__btn__link__badge">
-                            {{ $disapprovedTickets->count() }}
-                        </span>
+                        @if ($disapprovedTickets->count() >= 1)
+                            <span class="badge sidebar__btn__link__badge">
+                                {{ $disapprovedTickets->count() }}
+                            </span>
+                        @endif
                     </a>
                 </li>
             @endif
@@ -79,9 +95,11 @@
                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                         <span class="sidebar__btn__link__name ">Claimed</span>
                     </div>
-                    <span class="badge sidebar__btn__link__badge">
-                        {{ $claimedTickets->count() }}
-                    </span>
+                    @if ($claimedTickets->count() >= 1)
+                        <span class="badge sidebar__btn__link__badge">
+                            {{ $claimedTickets->count() }}
+                        </span>
+                    @endif
                 </a>
             </li>
             <li>
@@ -93,9 +111,11 @@
                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                         <span class="sidebar__btn__link__name ">On Process</span>
                     </div>
-                    <span class="badge sidebar__btn__link__badge">
-                        {{ $onProcessTickets?->count() }}
-                    </span>
+                    @if ($onProcessTickets->count() >= 1)
+                        <span class="badge sidebar__btn__link__badge">
+                            {{ $onProcessTickets?->count() }}
+                        </span>
+                    @endif
                 </a>
             </li>
             <li>
@@ -107,9 +127,11 @@
                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                         <span class="sidebar__btn__link__name ">Overdue</span>
                     </div>
-                    <span class="badge sidebar__btn__link__badge">
-                        {{ $overdueTickets->count() }}
-                    </span>
+                    @if ($overdueTickets->count() >= 1)
+                        <span class="badge sidebar__btn__link__badge">
+                            {{ $overdueTickets->count() }}
+                        </span>
+                    @endif
                 </a>
             </li>
             <li>
@@ -121,9 +143,11 @@
                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                         <span class="sidebar__btn__link__name ">Closed</span>
                     </div>
-                    <span class="badge sidebar__btn__link__badge">
-                        {{ $closedTickets->count() }}
-                    </span>
+                    @if ($closedTickets->count() >= 1)
+                        <span class="badge sidebar__btn__link__badge">
+                            {{ $closedTickets->count() }}
+                        </span>
+                    @endif
                 </a>
             </li>
             {{-- <li>

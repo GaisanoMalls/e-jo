@@ -49,28 +49,16 @@ class ApproverTicketsController extends Controller
 
     public function costingApprovals()
     {
-        $tickets = Ticket::has('helpTopic.specialProject')
-            ->has('ticketCosting')
-            ->has('specialProjectAmountApproval')
-            ->with('helpTopic.specialProject')->get();
-
-        $ticketsWithCosting = [];
-        foreach ($tickets as $ticket) {
-            $ticketsWithCosting = Ticket::withWhereHas('ticketCosting', function ($costing) use ($ticket) {
-                $costing->where('amount', '>=', (float) $ticket->helpTopic->specialProject->amount);
-            })->orderByDesc('created_at')->get();
-        }
-
         return ($this->costingApprover2Only())
-            ? view('layouts.staff.approver.ticket.consting_approval', compact([
-                'ticketsWithCosting'
-            ]))
+            ? view('layouts.staff.approver.ticket.consting_approval', [
+                'forApprovalCostings' => $this->getForApprovalCostings()
+            ])
             : abort(403, 'Unauthorized access');
     }
 
     public function viewTicketDetails(Ticket $ticket)
     {
-        $isAmountForCOOApproval = $this->isAmountForCOOApproval($ticket);
+        $isCostingAmountNeedCOOApproval = $this->isCostingAmountNeedCOOApproval($ticket);
         $latestClarification = Clarification::whereHas('ticket', fn($query) => $query->where('ticket_id', $ticket->id))
             ->whereHas('user', fn($user) => $user->where('user_id', '!=', auth()->user()->id))
             ->orderByDesc('created_at')
@@ -79,7 +67,7 @@ class ApproverTicketsController extends Controller
         return view('layouts.staff.approver.ticket.view_ticket', compact([
             'ticket',
             'latestClarification',
-            'isAmountForCOOApproval'
+            'isCostingAmountNeedCOOApproval'
         ]));
     }
 }

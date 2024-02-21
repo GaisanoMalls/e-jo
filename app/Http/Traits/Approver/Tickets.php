@@ -4,8 +4,10 @@ namespace App\Http\Traits\Approver;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\BasicModelQueries;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\User;
 
 trait Tickets
 {
@@ -67,5 +69,38 @@ trait Tickets
             ->withWhereHas('user.buDepartments', fn($department) => $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray()))
             ->withWhereHas('ticketApprovals', fn($approval) => $approval->whereJsonContains('approval_1->level_2_approver->approver_id', auth()->user()->id))
             ->orderByDesc('created_at')->get();
+    }
+
+    // ------------------------------------------------------------------------------------
+    // For COO Approver Only
+    public function getForApprovalCostings()
+    {
+        $tickets = Ticket::has('helpTopic.specialProject')
+            ->has('ticketCosting')
+            ->has('specialProjectAmountApproval')
+            ->with('helpTopic.specialProject')->get();
+
+        $costingsForApproval = [];
+        $cooApproverId = User::role(Role::APPROVER)->where('id', auth()->user()->id)->value('id');
+
+        foreach ($tickets as $ticket) {
+            $costingsForApproval = Ticket::withWhereHas(
+                'specialProjectAmountApproval',
+                fn($spAmountApproval) => $spAmountApproval->whereNotNull(['service_department_admin_approver->approver_id', 'service_department_admin_approver->date_approved'])
+                    ->whereJsonContains('service_department_admin_approver->is_approved', true)
+                    ->whereJsonContains('fpm_coo_approver->approver_id', $cooApproverId)
+            )->withWhereHas('ticketCosting', fn($costing) => $costing->where('amount', '>=', (float) $ticket->helpTopic->specialProject->amount))
+                ->orderByDesc('created_at')->get();
+        }
+
+        return $costingsForApproval;
+    }
+
+    public function getApprovedCostings()
+    {
+        $tickets = Ticket::has('helpTopic.specialProject')
+            ->has('ticketCosting')
+            ->has('specialProjectAmountApproval')
+            ->with('helpTopic.specialProject')->get();
     }
 }

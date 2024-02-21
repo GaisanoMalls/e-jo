@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.visible>
     @if (!is_null($ticket->ticketCosting))
         <div class="card border-0 p-0 card__ticket__details">
             <div class="row p- gap-2 justify-content-center ticket__costing__container">
@@ -10,7 +10,7 @@
                             </small>
                             <div class="d-flex align-items-center gap-1">
                                 <span class="currency text-muted">₱</span>
-                                @if ($editingFieldId === $ticket->ticketCosting->id)
+                                @if ($editingFieldId === $ticket->ticketCosting->id && !$this->isDoneCostingApprovals($ticket))
                                     <div class="d-flex flex-column gap-1">
                                         <input type="text" wire:model.defer="amount"
                                             class="form-control p-0 rounded-0 border-0 border-2 border-bottom fw-bold form__field ticket__actual__cost"
@@ -28,7 +28,7 @@
                                     </span>
                                 @endif
                                 <div class="d-flex align-items-center">
-                                    @if ($editingFieldId === $ticket->ticketCosting->id)
+                                    @if ($editingFieldId === $ticket->ticketCosting->id && !$this->isDoneCostingApprovals($ticket))
                                         <button wire:click="updateTicketCostingAmount"
                                             class="btn btn-sm d-flex ms-2 rounded-circle align-items-center justify-content-center btn__update__costing">
                                             <i class="bi bi-check-lg" wire:loading.class="d-none"
@@ -40,7 +40,7 @@
                                             </div>
                                         </button>
                                     @endif
-                                    @if ($this->isOnlyAgent($ticket->agent_id))
+                                    @if ($this->isOnlyAgent($ticket->agent_id) && !$this->isDoneCostingApprovals($ticket))
                                         <button wire:click="toggleEditCostingAmount({{ $ticket->ticketCosting->id }})"
                                             class="btn btn-sm d-flex ms-2 rounded-circle align-items-center justify-content-center btn__edit__costing">
                                             @if ($editingFieldId === $ticket->ticketCosting->id)
@@ -118,7 +118,7 @@
                                                     src="https://avatars.githubusercontent.com/u/63698615?s=400&u=49142410ee5c191a78412e36511c8b927fc6b1b1&v=4"
                                                     data-tooltip="{{ $costingApprover->profile->getFullName() }}"
                                                     data-tooltip-position="top" data-tooltip-font-size="11px">
-                                                @if ($this->costingApprovedBy($costingApprover1))
+                                                @if ($this->costingApprovedBy($costingApprover, $ticket))
                                                     <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle costing__approver__approved__badge"
                                                         style="background-color: green">
                                                         <i class="bi bi-check-lg"></i>
@@ -138,7 +138,7 @@
                                                     data-tooltip-position="top" data-tooltip-font-size="11px">
                                                     {{ $costingApprover->profile->getNameInitial() }}
                                                 </small>
-                                                @if ($this->costingApprovedBy($costingApprover))
+                                                @if ($this->costingApprovedBy($costingApprover, $ticket))
                                                     <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle costing__approver__approved__badge"
                                                         style="background-color: green">
                                                         <i class="bi bi-check-lg"></i>
@@ -155,15 +155,16 @@
                             </div>
                         </div>
                         @if ($this->isSpecialProjectCostingApprover1(auth()->user()->id))
+                            {{-- Show this block if the costing approver 1 is equal to the current authenticated approver. --}}
                             <div class="d-flex flex-column justify-content-between gap-2">
                                 <small class="text-muted text-sm costing__header__label">
-                                    @if ($this->isCostingApproval1Approved())
+                                    @if ($this->isDoneCostingApproval1($ticket))
                                         Status
                                     @else
                                         Action
                                     @endif
                                 </small>
-                                @if ($this->isCostingApproval1Approved())
+                                @if ($this->isDoneCostingApproval1($ticket))
                                     <small
                                         class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
                                         <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
@@ -182,8 +183,7 @@
                                             </div>
                                             Approve
                                         </button>
-
-                                        @if ($this->isCostingApproval1Approved() && $this->isAmountForCOOApproval($ticket))
+                                        @if ($this->isDoneCostingApproval1($ticket) && $this->isCostingAmountNeedCOOApproval($ticket))
                                             <button
                                                 class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
                                                 <i class="bi bi-reply" wire:loading.class="d-none"
@@ -207,14 +207,15 @@
                                 @endif
                             </div>
                         @else
+                            {{-- Otherwise, show this block instead --}}
                             <div class="d-flex flex-column justify-content-between gap-2">
                                 <small class="text-muted text-sm costing__header__label">
                                     Status
                                 </small>
-                                @if ($this->isCostingApproval1Approved())
+                                @if ($this->isDoneCostingApproval1($ticket))
                                     <small
                                         class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
-                                        <i class="fa-solid fa-check"></i>
+                                        <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
                                         Approved
                                     </small>
                                 @else

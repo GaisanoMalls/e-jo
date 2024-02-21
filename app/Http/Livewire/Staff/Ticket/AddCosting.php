@@ -75,7 +75,7 @@ class AddCosting extends Component
                             'amount' => $this->amount,
                         ]);
 
-                        if (SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)->doesntExist()) {
+                        if (SpecialProjectAmountApproval::whereNotNull('ticket_id')->exists()) {
                             SpecialProjectAmountApproval::create([
                                 'ticket_id' => $this->ticket->id,
                                 'service_department_admin_approver' => [
@@ -89,6 +89,11 @@ class AddCosting extends Component
                                     'date_approved' => null
                                 ]
                             ]);
+                        } else {
+                            SpecialProjectAmountApproval::whereNull('ticket_id')->whereNotNull([
+                                'service_department_admin_approver',
+                                'fpm_coo_approver'
+                            ])->update(['ticket_id' => $this->ticket->id]);
                         }
                     } else {
                         noty()->addError('No costing approver is found. Please contact the administrator');

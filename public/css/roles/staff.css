@@ -7968,7 +7968,7 @@ a:hover {
 .sidebar__collapse__ul {
   border-left: 0.08rem solid #d1d3d3;
   margin-left: 25px;
-  padding: 7px 15px;
+  padding: 7px 2px 7px 15px;
   align-items: center;
   justify-content: space-between;
 }

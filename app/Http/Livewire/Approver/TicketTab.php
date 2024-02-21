@@ -3,11 +3,12 @@
 namespace App\Http\Livewire\Approver;
 
 use App\Http\Traits\Approver\Tickets;
+use App\Http\Traits\Utils;
 use Livewire\Component;
 
 class TicketTab extends Component
 {
-    use Tickets;
+    use Tickets, Utils;
 
     public function render()
     {
@@ -18,18 +19,13 @@ class TicketTab extends Component
         $onProcessTickets = $this->getOnProcessTickets();
         $forApprovalTickets = $this->getForApprovalTickets();
 
-        return view(
-            'livewire.approver.ticket-tab',
-            compact(
-                [
-                    'openTickets',
-                    'viewedTickets',
-                    'approvedTickets',
-                    'disapprovedTickets',
-                    'onProcessTickets',
-                    'forApprovalTickets',
-                ]
-            )
-        );
+        return view('livewire.approver.ticket-tab', compact([
+            'openTickets',
+            'viewedTickets',
+            'approvedTickets',
+            'disapprovedTickets',
+            'onProcessTickets',
+            'forApprovalTickets',
+        ]));
     }
 }

@@ -69,14 +69,18 @@ class TicketCosting extends Component
 
     public function updateTicketCostingAmount()
     {
-        if ($this->isOnlyAgent($this->ticket->agent_id)) {
-            $this->validate(['amount' => ['required', 'numeric']]);
-            $this->ticket->ticketCosting->update(['amount' => $this->amount]);
-            $this->editingFieldId = null;
-            $this->amount = null;
+        if (!$this->isDoneCostingApprovals($this->ticket)) {
+            if ($this->isOnlyAgent($this->ticket->agent_id)) {
+                $this->validate(['amount' => ['required', 'numeric']]);
+                $this->ticket->ticketCosting->update(['amount' => $this->amount]);
+                $this->editingFieldId = null;
+                $this->amount = null;
+            } else {
+                $this->editingFieldId = null;
+                noty()->addWarning('Sorry, only agents have the authority to set the amount.');
+            }
         } else {
-            $this->editingFieldId = null;
-            noty()->addWarning('Sorry, only agents have the authority to set the amount.');
+            noty()->addWarning("Unable to update since ticket costing has already been approved.");
         }
     }
 
@@ -165,13 +169,12 @@ class TicketCosting extends Component
         $costingApprover1Id = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->where('id', auth()->user()->id)->value('id');
 
         if ($this->isSpecialProjectCostingApprover1($costingApprover1Id)) {
-            SpecialProjectAmountApproval::where([
-                ['ticket_id', $this->ticket->id],
-                ['service_department_admin_approver->is_approved', false]
-            ])->update([
-                        'service_department_admin_approver->is_approved' => true,
-                        'service_department_admin_approver->date_approved' => Carbon::now(),
-                    ]);
+            SpecialProjectAmountApproval::where([['ticket_id', $this->ticket->id], ['service_department_admin_approver->is_approved', false]])
+                ->update([
+                    'service_department_admin_approver->is_approved' => true,
+                    'service_department_admin_approver->date_approved' => Carbon::now(),
+                    'is_done' => !$this->isCostingAmountNeedCOOApproval($this->ticket) ? true : false
+                ]);
 
             $this->emit('loadServiceDeptAdminTicketCosting');
             noty()->addSuccess('Ticket costing is approved.');
