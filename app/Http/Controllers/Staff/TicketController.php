@@ -84,7 +84,6 @@ class TicketController extends Controller
         $departments = $this->queryBUDepartments();
         $priorityLevels = $this->queryPriorityLevels();
         $serviceDepartments = $this->queryServiceDepartments();
-        $ticketHasSpecialProject = !is_null($ticket->isSpecialProject());
 
         $approvers = User::whereHas('teams', fn($query) => $query->where('teams.id', $ticket->team_id))
             ->whereHas('branches', fn($query) => $query->where('branches.id', $ticket->branch_id))
@@ -102,7 +101,6 @@ class TicketController extends Controller
             'priorityLevels',
             'teams',
             'approvers',
-            'ticketHasSpecialProject',
         ]));
     }
 }

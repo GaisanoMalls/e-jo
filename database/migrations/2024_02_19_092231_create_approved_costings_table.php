@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\TicketCosting;
+use App\Models\SpecialProjectAmountApproval;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,12 +13,10 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('costing_disapprovals', function (Blueprint $table) {
+        Schema::create('approved_costings', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(TicketCosting::class, 'tick_costing_id')->constrained('ticket_costings')->cascadeOnDelete();
-            $table->text('reason');
-            $table->dateTime('date_approved');
-            $table->timestamp('created_at')->useCurrent();
+            $table->foreignIdFor(SpecialProjectAmountApproval::class, 'special_project_amount_approval_id')->constrained('special_project_amount_approvals')->cascadeOnDelete();
+            $table->dateTime('approved_date');
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('costing_disapprovals');
+        Schema::dropIfExists('approved_costings');
     }
 };

@@ -1,6 +1,6 @@
 <div wire:init="loadClarifications">
     @if (!is_null($clarifications))
-        <div>
+        <div wire:poll.visible.7s>
             @if ($ticket->clarifications->isNotEmpty())
                 @foreach ($ticket->clarifications as $clarification)
                     @include('layouts.user.ticket.includes.modal.preview_clarification_ticket_files_modal')

@@ -39,7 +39,7 @@
                         <button type="button"
                             class="btn d-flex align-items-center gap-2 w-100 dropdown__select__button button__approve"
                             data-bs-toggle="modal" data-bs-target="#confirmTicketApproveModal">
-                            <i class="bi bi-check-lg"></i>
+                            <i class="bi bi-check2-circle"></i>
                             Approve
                         </button>
                     </li>

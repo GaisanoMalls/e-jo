@@ -10,6 +10,8 @@ use App\Models\TicketCosting as Costing;
 use App\Models\TicketCostingFile;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Storage;
@@ -166,20 +168,25 @@ class TicketCosting extends Component
 
     public function approveCostingApproval1()
     {
-        $costingApprover1Id = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->where('id', auth()->user()->id)->value('id');
+        try {
+            $costingApprover1Id = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->where('id', auth()->user()->id)->value('id');
 
-        if ($this->isSpecialProjectCostingApprover1($costingApprover1Id)) {
-            SpecialProjectAmountApproval::where([['ticket_id', $this->ticket->id], ['service_department_admin_approver->is_approved', false]])
-                ->update([
-                    'service_department_admin_approver->is_approved' => true,
-                    'service_department_admin_approver->date_approved' => Carbon::now(),
-                    'is_done' => !$this->isCostingAmountNeedCOOApproval($this->ticket) ? true : false
-                ]);
+            if ($this->isSpecialProjectCostingApprover1($costingApprover1Id)) {
+                SpecialProjectAmountApproval::where([['ticket_id', $this->ticket->id], ['service_department_admin_approver->is_approved', false]])
+                    ->update([
+                        'service_department_admin_approver->is_approved' => true,
+                        'service_department_admin_approver->date_approved' => Carbon::now(),
+                        'is_done' => !$this->isCostingAmountNeedCOOApproval($this->ticket) ? true : false
+                    ]);
 
-            $this->emit('loadServiceDeptAdminTicketCosting');
-            noty()->addSuccess('Ticket costing is approved.');
-        } else {
-            noty()->addWarning("Sorry, You don't have permission to approve the costing");
+                $this->emit('loadServiceDeptAdminTicketCosting');
+                noty()->addSuccess('Ticket costing is approved.');
+            } else {
+                noty()->addWarning("Sorry, You have no permission to approve the costing");
+            }
+        } catch (Exception $e) {
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
+            noty()->addError('Oops, something went wrong.');
         }
     }
 

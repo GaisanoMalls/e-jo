@@ -127,7 +127,6 @@ class AddCosting extends Component
             Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
             noty()->addError('Oops, something went wrong.');
         }
-        $this->actionOnSubmit();
     }
 
     public function updatedCostingFiles()

@@ -161,6 +161,6 @@ class Ticket extends Model
 
     public function isSpecialProject()
     {
-        return !is_null($this->helpTopic?->has('specialProject'));
+        return !is_null($this->helpTopic->specialProject);
     }
 }

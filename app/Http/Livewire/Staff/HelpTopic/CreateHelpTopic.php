@@ -66,18 +66,6 @@ class CreateHelpTopic extends Component
                     SpecialProject::create([
                         'help_topic_id' => $helpTopic->id,
                         'amount' => $this->amount,
-                        'fmp_coo_approver' => [
-                            'approver_id' => null,
-                            'is_approved' => false,
-                        ],
-                        'service_department_approver' => [
-                            'approver_id' => null,
-                            'is_approved' => false,
-                        ],
-                        'bu_head_approver' => [
-                            'approver_id' => null,
-                            'is_approved' => false,
-                        ],
                     ]);
                 }
             });

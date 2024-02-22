@@ -38,7 +38,7 @@
                             </div>
                             <div class="d-flex flex-wrap justify-content-center gap-3 gap-lg-4 gap-xl-4">
                                 @if (
-                                    $ticketHasSpecialProject &&
+                                    $ticket->isSpecialProject() &&
                                         auth()->user()->hasRole(App\Models\Role::AGENT))
                                     @livewire('staff.ticket.load-costing-button-header', ['ticket' => $ticket])
                                 @endif

@@ -8061,6 +8061,13 @@ nav .nav__user__picture {
   outline: none;
   font-weight: 500;
 }
+.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__costing__container .btn__disapprove__costing {
+  font-size: 0.813rem;
+  background-color: #7BA504;
+  color: white;
+  outline: none;
+  font-weight: 500;
+}
 .approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__costing__container .costing__labels {
   font-size: 0.813rem;
 }

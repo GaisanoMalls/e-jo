@@ -14,15 +14,6 @@ class SpecialProject extends Model
     protected $fillable = [
         'help_topic_id',
         'amount',
-        'fmp_coo_approver',
-        'service_department_approver',
-        'bu_department_approver',
-    ];
-
-    protected $casts = [
-        'fmp_coo_approver' => AsArrayObject::class,
-        'service_department_approver' => AsArrayObject::class,
-        'bu_department_department_approver' => AsArrayObject::class,
     ];
 
     public function helpTopic(): BelongsTo

@@ -119,26 +119,16 @@
                                             </div>
                                             Approve
                                         </button>
+                                        <button wire:click="disapproveCostingApproval2"
+                                            class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__disapprove__costing">
+                                            <i class="bi bi-x-lg"></i>
+                                            <div wire:loading class="spinner-border spinner-border-sm loading__spinner"
+                                                role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                            Disapprove
+                                        </button>
                                     </div>
-                                @endif
-                            </div>
-                        @else
-                            <div class="d-flex flex-column justify-content-between gap-2">
-                                <small class="text-muted text-sm costing__header__label">
-                                    Status
-                                </small>
-                                @if ($this->isCostingApproval2Approved())
-                                    <small
-                                        class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
-                                        <i class="fa-solid fa-check"></i>
-                                        Approved
-                                    </small>
-                                @else
-                                    <small
-                                        class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
-                                        <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
-                                        For approval
-                                    </small>
                                 @endif
                             </div>
                         @endif

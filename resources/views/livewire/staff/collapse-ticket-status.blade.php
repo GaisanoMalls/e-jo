@@ -10,9 +10,9 @@
             Tickets
         </div>
         <div class="d-flex align-items-center position-relative">
-            <i class="bi bi-chevron-right position-absolute" :class="{ 'd-none': !open }" x-transition
+            <i class="fa-solid fa-chevron-right position-absolute" :class="{ 'd-none': !open }" x-transition
                 style="right: 6px;"></i>
-            <i class="bi bi-chevron-down position-absolute" :class="{ 'd-none': open }" x-transition
+            <i class="fa-solid fa-chevron-down position-absolute" :class="{ 'd-none': open }" x-transition
                 style="right: 6px;"></i>
         </div>
     </button>

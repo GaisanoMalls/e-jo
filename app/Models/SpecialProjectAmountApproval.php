@@ -29,4 +29,15 @@ class SpecialProjectAmountApproval extends Model
     {
         return $this->belongsTo(Ticket::class);
     }
+
+
+    public function approvedCostings()
+    {
+        return $this->hasMany(ApprovedCosting::class);
+    }
+
+    public function disapprovedCostings()
+    {
+        return $this->hasMany(DisapprovedCosting::class);
+    }
 }

@@ -292,7 +292,7 @@ trait Utils
             ['ticket_id', $ticket->id],
             ['service_department_admin_approver->is_approved', true],
             ['service_department_admin_approver->date_approved', '!=', null]
-        ])->orWhere('is_done', true)->exists();
+        ])->orWhereIn('is_done', [true, false])->exists();
     }
 
     public function isDoneCostingApproval2(Ticket $ticket)
@@ -300,8 +300,9 @@ trait Utils
         return SpecialProjectAmountApproval::where([
             ['ticket_id', $ticket->id],
             ['fpm_coo_approver->is_approved', true],
-            ['fpm_coo_approver->date_approved', '!=', null]
-        ])->orWhere('is_done', true)->exists();
+            ['fpm_coo_approver->date_approved', '!=', null],
+            ['is_done', true]
+        ])->exists();
     }
 
     public static function costingApprover2Only()

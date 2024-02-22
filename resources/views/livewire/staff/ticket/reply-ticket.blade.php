@@ -51,7 +51,7 @@
                                 role="status" aria-hidden="true">
                             </span>
                             Send
-                            <div wire:loading.remove>
+                            <div wire:loading.remove wire:target="replyTicket">
                                 <i class="bi bi-send-fill"></i>
                             </div>
                         </button>
