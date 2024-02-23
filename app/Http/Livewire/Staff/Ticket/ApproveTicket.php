@@ -102,17 +102,20 @@ class ApproveTicket extends Component
                             Notification::send($agent, new ApprovedTicketForAgentNotification($this->ticket));
                         }
 
+                        // Delete the ticket notification of the currently logged in service department admin.
+                        auth()->user()->notifications->each(
+                            fn($notification) => $notification->data['ticket']['id'] === $this->ticket->id ? $notification->delete() : null
+                        );
+
                         // Notify the ticket sender/requester.
                         Notification::send($this->ticket->user, new ApprovedTicketForRequesterNotification($this->ticket));
                         ActivityLog::make($this->ticket->id, 'approved the ticket');
 
                         $this->actionOnSubmit();
                         noty()->addSuccess('Ticket has been approved');
-
                     } else {
                         noty()->addInfo('Ticket has already been approved by other service dept. admin');
                     }
-
                     return redirect()->route('staff.tickets.open_tickets');
                 });
             } catch (Exception $e) {

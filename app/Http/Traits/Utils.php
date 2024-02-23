@@ -292,7 +292,7 @@ trait Utils
             ['ticket_id', $ticket->id],
             ['service_department_admin_approver->is_approved', true],
             ['service_department_admin_approver->date_approved', '!=', null]
-        ])->orWhereIn('is_done', [true, false])->exists();
+        ])->exists();
     }
 
     public function isDoneCostingApproval2(Ticket $ticket)

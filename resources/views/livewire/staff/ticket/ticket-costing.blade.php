@@ -203,13 +203,6 @@
                                                 </div>
                                                 Forward
                                             </button>
-                                        @else
-                                            <button
-                                                class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing"
-                                                disabled>
-                                                <i class="bi bi-reply" style="transform: scaleX(-1);"></i>
-                                                Forward
-                                            </button>
                                         @endif
                                     </div>
                                 @endif
@@ -234,6 +227,12 @@
                                             Approved
                                         </small>
                                     @endif
+                                @else
+                                    <small
+                                        class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
+                                        <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
+                                        For approval
+                                    </small>
                                 @endif
                             </div>
                         @endif
