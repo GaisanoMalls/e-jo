@@ -7279,6 +7279,41 @@ url(/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?4753c5ba57962b4d7bf8248a6
   font-size: 0.688rem;
 }
 
+.sort__button {
+  background-color: #E9ECEF;
+  font-size: 0.75rem;
+  color: #212529;
+  padding: 8px 12px;
+}
+.sort__button:hover {
+  cursor: pointer;
+}
+.sort__button i {
+  color: #212529;
+  font-size: 0.813rem;
+}
+
+.sort__button__dropdown {
+  border: 0;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+  margin-top: 13px !important;
+  border-radius: 0.563rem;
+  padding: 8px;
+}
+.sort__button__dropdown .dropdown-item {
+  color: #131313;
+  border: 0;
+  font-size: 0.813rem;
+  padding: 8px 13px;
+  border-radius: 0.563rem;
+}
+.sort__button__dropdown .dropdown-item i {
+  color: #777d87 !important;
+}
+.sort__button__dropdown .dropdown-item:focus {
+  background-color: #E9ECEF !important;
+}
+
 .btn__see__reason {
   color: black;
   text-decoration: underline !important;
@@ -7457,6 +7492,7 @@ body {
   border: 0 !important;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
   padding: 6px;
+  top: 30px;
 }
 .navbar .navbar-nav .dropdown-menu .dropdown-item {
   padding: 9px 14px;

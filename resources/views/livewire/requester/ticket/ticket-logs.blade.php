@@ -10,8 +10,7 @@
             <div class="d-flex flex-column">
                 @foreach ($ticket->activityLogs as $log)
                     <div
-                        class="d-flex justify-content-between py-3 log__list
-                                            {{ $ticket->activityLogs->count() > 1 ? 'border-bottom' : '' }}">
+                        class="d-flex justify-content-between py-3 log__list {{ $ticket->activityLogs->count() > 1 ? 'border-bottom' : '' }}">
                         <div class="d-flex gap-3">
                             <i class="bi bi-clock-history log__icon"></i>
                             <div class="d-flex align-items-start flex-column">

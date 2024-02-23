@@ -1,4 +1,4 @@
-@use "../generic"as generic;
+@use "../generic" as generic;
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap");
 @import "../bootstrap-icons.scss";
 @import '../boxicons.scss';
@@ -125,8 +125,48 @@ $color-1: #d32839;
     background: #D32839;
 }
 
-.tooltip{
-   font-size: $fs-11;
+.tooltip {
+    font-size: $fs-11;
+}
+
+.sort__button {
+    background-color: #E9ECEF;
+    font-size: $fs-12;
+    color: #212529;
+    padding: 8px 12px;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    i {
+        color: #212529;
+        font-size: $fs-13;
+    }
+}
+
+.sort__button__dropdown {
+    border: 0;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+    margin-top: 13px !important;
+    border-radius: 0.563rem;
+    padding: 8px;
+
+    .dropdown-item {
+        color: #131313;
+        border: 0;
+        font-size: $fs-13;
+        padding: 8px 13px;
+        border-radius: $border-radius-9;
+
+        i {
+            color: #777d87 !important;
+        }
+
+        &:focus {
+            background-color: #E9ECEF !important;
+        }
+    }
 }
 
 .btn__see__reason {
@@ -327,6 +367,7 @@ body {
             border: 0 !important;
             box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
             padding: 6px;
+            top: 30px;
 
             .dropdown-item {
                 padding: 9px 14px;

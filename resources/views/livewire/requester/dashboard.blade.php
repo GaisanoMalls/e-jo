@@ -1,5 +1,5 @@
-<div class="row">
-    <div class="col-xl-3 col-md-6">
+<div class="row justify-content-center">
+    <div class="col-xl-3 col-md-4">
         <div class="card custom__card dashboard__card"
             onclick="window.location.href='{{ route('user.tickets.open_tickets') }}'">
             <div class="d-flex align-items-center justify-content-start gap-4 card__content">
@@ -15,7 +15,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6" onclick="window.location.href='{{ route('user.tickets.viewed_tickets') }}'">
+    <div class="col-xl-3 col-md-4" onclick="window.location.href='{{ route('user.tickets.viewed_tickets') }}'">
         <div class="card custom__card dashboard__card">
             <div class="d-flex align-items-center justify-content-start gap-4 card__content">
                 <div class="d-flex align-items-center justify-content-center icon__container">
@@ -30,7 +30,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-3 col-md-4">
         <div class="card custom__card dashboard__card"
             onclick="window.location.href='{{ route('user.tickets.approved_tickets') }}'">
             <div class="d-flex align-items-center justify-content-start gap-4 card__content">
@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-3 col-md-4">
         <div class="card custom__card dashboard__card"
             onclick="window.location.href='{{ route('user.tickets.disapproved_tickets') }}'">
             <div class="d-flex align-items-center justify-content-start gap-4 card__content">
@@ -62,7 +62,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-3 col-md-4">
         <div class="card custom__card dashboard__card"
             onclick="window.location.href='{{ route('user.tickets.claimed_tickets') }}'">
             <div class="d-flex align-items-center justify-content-start gap-4 card__content">
@@ -78,7 +78,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-3 col-md-4">
         <div class="card custom__card dashboard__card"
             onclick="window.location.href='{{ route('user.tickets.on_process_tickets') }}'">
             <div class="d-flex align-items-center justify-content-start gap-4 card__content">
@@ -94,7 +94,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-3 col-md-4">
         <div class="card custom__card dashboard__card">
             <div class="d-flex align-items-center justify-content-start gap-4 card__content">
                 <div class="d-flex align-items-center justify-content-center icon__container">
@@ -109,7 +109,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6">
+    <div class="col-xl-3 col-md-4">
         <div class="card custom__card dashboard__card"
             onclick="window.location.href='{{ route('user.tickets.closed_tickets') }}'">
             <div class="d-flex align-items-center justify-content-start gap-4 card__content">
