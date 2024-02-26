@@ -22,77 +22,77 @@ trait TicketsByStaffWithSameTemplates
     public function getApprovedTickets()
     {
         return match (true) {
-            Auth::user()->hasRole(Role::SYSTEM_ADMIN)             => $this->sysAdminGetApprovedTickets(),
+            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetApprovedTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetApprovedTickets(),
-            default                                               => [],
+            default => [],
         };
     }
 
     public function getDisapprovedTickets()
     {
         return match (true) {
-            Auth::user()->hasRole(Role::SYSTEM_ADMIN)             => $this->sysAdminGetDisapprovedTickets(),
+            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetDisapprovedTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetDisapprovedTickets(),
-            default                                               => [],
+            default => [],
         };
     }
 
     public function getOpenTickets()
     {
         return match (true) {
-            Auth::user()->hasRole(Role::SYSTEM_ADMIN)             => $this->sysAdminGetOpenTickets(),
+            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetOpenTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetOpentTickets(),
-            Auth::user()->hasRole(Role::AGENT)                    => $this->agentGetOpenTickets(),
-            default                                               => [],
+            Auth::user()->hasRole(Role::AGENT) => $this->agentGetOpenTickets(),
+            default => [],
         };
     }
 
     public function getClaimedTickets()
     {
         return match (true) {
-            Auth::user()->hasRole(Role::SYSTEM_ADMIN)             => $this->sysAdminGetClaimedTickets(),
+            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetClaimedTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetClaimedTickets(),
-            Auth::user()->hasRole(Role::AGENT)                    => $this->agentGetClaimedTickets(),
-            default                                               => [],
+            Auth::user()->hasRole(Role::AGENT) => $this->agentGetClaimedTickets(),
+            default => [],
         };
     }
 
     public function getOnProcessTickets()
     {
         return match (true) {
-            Auth::user()->hasRole(Role::SYSTEM_ADMIN)             => $this->sysAdminGetOnProcessTickets(),
+            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetOnProcessTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetOnProcessTickets(),
-            Auth::user()->hasRole(Role::AGENT)                    => $this->agentGetOnProcessTickets(),
-            default                                               => [],
+            Auth::user()->hasRole(Role::AGENT) => $this->agentGetOnProcessTickets(),
+            default => [],
         };
     }
 
     public function getViewedTickets()
     {
         return match (true) {
-            Auth::user()->hasRole(Role::SYSTEM_ADMIN)             => $this->sysAdminGetViewedTickets(),
+            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetViewedTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetViewedTickets(),
-            default                                               => [],
+            default => [],
         };
     }
 
     public function getOverdueTickets()
     {
         return match (true) {
-            Auth::user()->hasRole(Role::SYSTEM_ADMIN)             => $this->sysAdminGetOverdueTickets(),
+            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetOverdueTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetOverdueTickets(),
-            Auth::user()->hasRole(Role::AGENT)                    => $this->agentGetOverdueTickets(),
-            default                                               => [],
+            Auth::user()->hasRole(Role::AGENT) => $this->agentGetOverdueTickets(),
+            default => [],
         };
     }
 
     public function getClosedTickets()
     {
         return match (true) {
-            Auth::user()->hasRole(Role::SYSTEM_ADMIN)             => $this->sysAdminGetClosedTickets(),
+            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetClosedTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetClosedTickets(),
-            Auth::user()->hasRole(Role::AGENT)                    => $this->agentGetClosedTickets(),
-            default                                               => [],
+            Auth::user()->hasRole(Role::AGENT) => $this->agentGetClosedTickets(),
+            default => [],
         };
     }
 }

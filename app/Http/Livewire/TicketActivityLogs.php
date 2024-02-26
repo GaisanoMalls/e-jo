@@ -9,8 +9,8 @@ use Livewire\Component;
 class TicketActivityLogs extends Component
 {
     public Ticket $ticket;
-    public $isAll = false;
-    public $isMyLogsOnly = false;
+    public bool $isAll = false;
+    public bool $isMyLogsOnly = false;
     public $ticketLogs = [];
 
     protected $listeners = ['loadTicketLogs' => 'loadLogs'];
@@ -43,7 +43,9 @@ class TicketActivityLogs extends Component
     {
         if ($this->isAll) {
             $this->ticketLogs = $this->ticket->activityLogs;
-        } elseif ($this->isMyLogsOnly) {
+        }
+
+        if ($this->isMyLogsOnly) {
             $this->ticketLogs = ActivityLog::where('ticket_id', $this->ticket->id)
                 ->where('user_id', auth()->user()->id)->orderByDesc('created_at')
                 ->get();

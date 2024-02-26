@@ -118,7 +118,9 @@
                                                     src="https://avatars.githubusercontent.com/u/63698615?s=400&u=49142410ee5c191a78412e36511c8b927fc6b1b1&v=4"
                                                     data-tooltip="{{ $costingApprover->profile->getFullName() }}  {{ $this->isDoneCostingApproval1($ticket) ? '(Approved)' : 'For approval' }}"
                                                     data-tooltip-position="top" data-tooltip-font-size="11px">
-                                                @if ($this->costingApprovedBy($costingApprover, $ticket))
+                                                @if (
+                                                    $this->approvedByCostingApprover1($costingApprover, $ticket) ||
+                                                        $this->approvedByCostingApprover2($costingApprover, $ticket))
                                                     <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle costing__approver__approved__badge"
                                                         style="background-color: green">
                                                         <i class="bi bi-check-lg"></i>
@@ -138,7 +140,9 @@
                                                     data-tooltip-position="top" data-tooltip-font-size="11px">
                                                     {{ $costingApprover->profile->getNameInitial() }}
                                                 </small>
-                                                @if ($this->costingApprovedBy($costingApprover, $ticket))
+                                                @if (
+                                                    $this->approvedByCostingApprover1($costingApprover, $ticket) ||
+                                                        $this->approvedByCostingApprover2($costingApprover, $ticket))
                                                     <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle costing__approver__approved__badge"
                                                         style="background-color: green">
                                                         <i class="bi bi-check-lg"></i>

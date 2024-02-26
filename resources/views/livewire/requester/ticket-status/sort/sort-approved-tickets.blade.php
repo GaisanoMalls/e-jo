@@ -11,13 +11,16 @@
            <ul class="dropdown-menu dropdown-menu-end slideIn animate sort__button__dropdown">
                <li>
                    <button class="dropdown-item d-flex align-item gap-2" type="button">
-                       <i class="bi bi-check2-all"></i>
+                       All
+                   </button>
+               </li>
+               <li>
+                   <button class="dropdown-item d-flex align-item gap-2" type="button">
                        With Costing
                    </button>
                </li>
                <li>
                    <button class="dropdown-item d-flex align-items-center gap-2" type="button">
-                       <i class="bi bi-person-fill-check"></i>
                        Without Costing
                    </button>
                </li>

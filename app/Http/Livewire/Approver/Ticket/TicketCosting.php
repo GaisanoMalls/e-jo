@@ -6,6 +6,7 @@ use App\Http\Traits\Utils;
 use App\Models\ApprovedCosting;
 use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
+use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
 use Carbon\Carbon;
@@ -39,6 +40,9 @@ class TicketCosting extends Component
         if ($this->isSpecialProjectCostingApprover2($costingApprover2Id)) {
             if ($this->isDoneCostingApproval1($this->ticket) && $this->isCostingAmountNeedCOOApproval($this->ticket)) {
                 DB::transaction(function () {
+                    // Change the ticket status to Approved
+                    $this->ticket->status_id = Status::APPROVED;
+
                     // Perform the update first
                     SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)
                         ->update([

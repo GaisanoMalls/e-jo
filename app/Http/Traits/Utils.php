@@ -4,6 +4,7 @@ namespace App\Http\Traits;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Models\Role;
+use App\Models\SpecialProject;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -272,12 +273,19 @@ trait Utils
             : false;
     }
 
-    public function costingApprovedBy(User $user, Ticket $ticket)
+    public function approvedByCostingApprover1(User $approver, Ticket $ticket)
     {
         return SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
-            ->where(fn($approver1) => $approver1->whereJsonContains('service_department_admin_approver->approver_id', $user->id)
+            ->where(fn($approver1) => $approver1->whereJsonContains('service_department_admin_approver->approver_id', $approver->id)
                 ->whereJsonContains('service_department_admin_approver->is_approved', true))
-            ->orWhere(fn($approver2) => $approver2->whereJsonContains('fpm_coo_approver->approver_id', $user->id)->whereJsonContains('fpm_coo_approver->is_approved', true))
+            ->exists();
+    }
+
+    public function approvedByCostingApprover2(User $approver, Ticket $ticket)
+    {
+        return SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
+            ->where(fn($approver2) => $approver2->whereJsonContains('fpm_coo_approver->approver_id', $approver->id)
+                ->whereJsonContains('fpm_coo_approver->is_approved', true))
             ->exists();
     }
 
