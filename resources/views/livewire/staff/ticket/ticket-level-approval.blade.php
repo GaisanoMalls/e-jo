@@ -9,7 +9,6 @@
                     This ticket is associated with a special project.
                 </div>
             @endif
-
             <div class="d-flex flex-column level__approval__container">
                 <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
                     <small class="level__number__label">

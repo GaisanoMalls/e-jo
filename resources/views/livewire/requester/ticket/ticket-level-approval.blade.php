@@ -67,6 +67,14 @@
                                 Approved
                             </div>
                         </div>
+                    @else
+                        <div class="d-flex align-items-center gap-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip" data-bs-title="To be approved by level 1 approver">
+                            <i class="bi bi-info-circle-fill ms-1" style="font-size: 11px; color: #D32839;"></i>
+                            <div class="border-0 text-muted" style="font-size: 0.75rem;">
+                                Pending
+                            </div>
+                        </div>
                     @endif
                 </div>
                 @foreach ($level2Approvers as $level2Approver)
@@ -87,26 +95,11 @@
                                 @endif
                                 <small class="approver__name {{ $isTicketLevel2Approved ? 'text-dark' : '' }}">
                                     {{ $level2Approver->profile->getFullName() }}
-                                    @if ($level2Approver->id == auth()->user()->id)
-                                        <span class="text-muted">(You)</span>
-                                    @endif
                                     @if ($ticketLevel2ApprovalApprovedBy == $level2Approver->id)
                                         <i class="bi bi-check-lg text-muted"></i>
                                     @endif
                                 </small>
                             </div>
-                            @if ($level2Approver->id == auth()->user()->id)
-                                @if (!$isTicketLevel2Approved && $isTicketLevel1Approved)
-                                    <button wire:click="level2Approve" wire:loading.class="disabled"
-                                        class="btn btn-sm d-flex align-items-center gap-2 btn__approve" type="button">
-                                        <div wire:loading wire:target="level2Approve"
-                                            class="spinner-border spinner-border-sm loading__spinner" role="status">
-                                            <span class="sr-only">Loading...</span>
-                                        </div>
-                                        Approve
-                                    </button>
-                                @endif
-                            @endif
                         </div>
                     </div>
                 @endforeach

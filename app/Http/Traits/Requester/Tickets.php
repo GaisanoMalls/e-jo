@@ -41,12 +41,12 @@ trait Tickets
 
     public function getApprovedTickets()
     {
-        return Ticket::with(['replies', 'priorityLevel'])->orHas('ticketCosting')
+        return Ticket::with(['replies', 'priorityLevel'])
             ->where(fn($statusQuery) => $statusQuery->where([
                 ['status_id', Status::APPROVED],
                 ['approval_status', ApprovalStatusEnum::APPROVED],
                 ['user_id', User::role(Role::USER)->where('id', auth()->user()->id)->value('id')]
-            ]))
+            ]))->orHas('ticketCosting')
             ->orderByDesc('created_at')->get();
     }
 

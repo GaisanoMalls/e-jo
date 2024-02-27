@@ -11,7 +11,7 @@ class DisapprovedCosting extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['special_project_amount_approval_id', 'reason', 'disapproved_date'];
+    protected $fillable = ['special_project_amount_approval_id', 'amount', 'reason', 'disapproved_date'];
 
     public function specialProjectAmountApproval()
     {

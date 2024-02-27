@@ -24,6 +24,9 @@
                 </div>
                 <div class="row">
                     <div class="col-md-8 position-relative">
+                        @if ($isCostingAmountNeedApproval)
+                            @livewire('requester.ticket.ticket-costing', ['ticket' => $ticket])
+                        @endif
                         <div class="card border-0 p-0 card__ticket__details">
                             <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                                 <div class="d-flex align-items-center user__account__media">
@@ -92,8 +95,8 @@
                 <div class="col-md-4">
                     <div class="container__ticket__details__right">
                         @livewire('requester.ticket.ticket-details', ['ticket' => $ticket])
+                        @livewire('requester.ticket.ticket-level-approval', ['ticket' => $ticket])
                         @livewire('requester.ticket.assigned-agent', ['ticket' => $ticket])
-                        {{-- PARTIALY DISABLED @livewire('requester.ticket.approvers', ['ticket' => $ticket]) --}}
                         @livewire('requester.ticket.ticket-logs', ['ticket' => $ticket])
                     </div>
                 </div>

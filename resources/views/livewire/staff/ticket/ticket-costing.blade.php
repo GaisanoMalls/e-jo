@@ -75,8 +75,8 @@
                                         data-bs-toggle="modal" data-bs-target="#costingPreviewFileAttachmentModal">
                                         <i class="fa-solid fa-file-zipper"></i>
                                         {{ $ticket->ticketCosting->fileAttachments->count() }}
-                                        {{ $ticket->ticketCosting->fileAttachments->count() > 1 ? 'files' : 'file' }}
                                         attached
+                                        {{ $ticket->ticketCosting->fileAttachments->count() > 1 ? 'files' : 'file' }}
                                     </small>
                                 @else
                                     @if (!$this->isOnlyAgent($ticket->agent_id))
@@ -270,7 +270,7 @@
                                                 type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
                                                 wire:model="additionalCostingFiles" multiple
                                                 id="upload-{{ $uploadFileCostingCount }}"
-                                                onchange="validateCotingFile()">
+                                                onchange="validateCostingFile()">
                                             <div x-transition.duration.500ms x-show="isUploading"
                                                 class="progress progress-sm mt-1" style="height: 10px;">
                                                 <div class="progress-bar progress-bar-striped progress-bar-animated"
@@ -437,7 +437,7 @@
                                             type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
                                             wire:model="newCostingFiles" multiple
                                             id="upload-{{ $uploadFileCostingCount }}"
-                                            onchange="validateCotingFile()">
+                                            onchange="validateCostingFile()">
                                         <div x-transition.duration.500ms x-show="isUploading"
                                             class="progress progress-sm mt-1" style="height: 10px;">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated"
@@ -493,7 +493,7 @@
         });
 
         // Validate file
-        function validateCotingFile() {
+        function validateCostingFile() {
             const excludeEXEfileMessage = document.querySelector('#excludeEXEfileMessage');
             const costingFileInput = document.querySelector(`#upload-{{ $uploadFileCostingCount }}`);
 

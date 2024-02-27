@@ -51,11 +51,13 @@ class TicketsController extends Controller
 
     public function viewTicket(Ticket $ticket)
     {
-        return view('layouts.user.ticket.view_ticket', compact('ticket'));
+        $isCostingAmountNeedApproval = $this->isCostingAmountNeedCOOApproval($ticket) || !$this->isCostingAmountNeedCOOApproval($ticket);
+        return view('layouts.user.ticket.view_ticket', compact('ticket', 'isCostingAmountNeedApproval'));
     }
 
     public function ticketClarifications(Ticket $ticket)
     {
-        return view('layouts.user.ticket.includes.ticket_clarifications', compact('ticket'));
+        $isCostingAmountNeedApproval = $this->isCostingAmountNeedCOOApproval($ticket) || !$this->isCostingAmountNeedCOOApproval($ticket);
+        return view('layouts.user.ticket.includes.ticket_clarifications', compact('ticket', 'isCostingAmountNeedApproval'));
     }
 }

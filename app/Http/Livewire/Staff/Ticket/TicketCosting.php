@@ -71,91 +71,111 @@ class TicketCosting extends Component
 
     public function updateTicketCostingAmount()
     {
-        if (!$this->isDoneCostingApprovals($this->ticket)) {
-            if ($this->isOnlyAgent($this->ticket->agent_id)) {
-                $this->validate(['amount' => ['required', 'numeric']]);
-                $this->ticket->ticketCosting->update(['amount' => $this->amount]);
-                $this->editingFieldId = null;
-                $this->amount = null;
+        try {
+            if (!$this->isDoneCostingApprovals($this->ticket)) {
+                if ($this->isOnlyAgent($this->ticket->agent_id)) {
+                    $this->validate(['amount' => ['required', 'numeric']]);
+                    $this->ticket->ticketCosting->update(['amount' => $this->amount]);
+                    $this->editingFieldId = null;
+                    $this->amount = null;
+                } else {
+                    $this->editingFieldId = null;
+                    noty()->addWarning('Sorry, only agents have the authority to set the amount.');
+                }
             } else {
-                $this->editingFieldId = null;
-                noty()->addWarning('Sorry, only agents have the authority to set the amount.');
+                noty()->addWarning("Unable to update since ticket costing has already been approved.");
             }
-        } else {
-            noty()->addWarning("Unable to update since ticket costing has already been approved.");
+        } catch (Exception $e) {
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
+            noty()->addError('Oops, something went wrong.');
         }
     }
 
     public function deleteCostingAttachent(TicketCostingFile $ticketCostingFile)
     {
-        if ($this->isOnlyAgent($this->ticket->agent_id)) {
-            if (Storage::exists($ticketCostingFile->file_attachment)) {
-                $ticketCostingFile->delete();
-                Storage::delete($ticketCostingFile->file_attachment);
-            } else {
-                noty()->addInfo('File not found.');
-            }
+        try {
+            if ($this->isOnlyAgent($this->ticket->agent_id)) {
+                if (Storage::exists($ticketCostingFile->file_attachment)) {
+                    $ticketCostingFile->delete();
+                    Storage::delete($ticketCostingFile->file_attachment);
+                } else {
+                    noty()->addInfo('File not found.');
+                }
 
-            $this->dispatchBrowserEvent('close-costing-file-preview-modal');
-            $this->emit('loadServiceDeptAdminTicketCosting');
-        } else {
-            $this->editingFieldId = null;
-            noty()->addWarning('Sorry, only agents have the authority to delete the attachments.');
+                $this->dispatchBrowserEvent('close-costing-file-preview-modal');
+                $this->emit('loadServiceDeptAdminTicketCosting');
+            } else {
+                $this->editingFieldId = null;
+                noty()->addWarning('Sorry, only agents have the authority to delete the attachments.');
+            }
+        } catch (Exception $e) {
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
+            noty()->addError('Oops, something went wrong.');
         }
     }
 
     public function saveAdditionalCostingFiles()
     {
-        if ($this->isOnlyAgent($this->ticket->agent_id)) {
-            if ($this->additionalCostingFiles) {
-                foreach ($this->additionalCostingFiles as $uploadedAdditionalCostingFile) {
-                    $fileName = $uploadedAdditionalCostingFile->getClientOriginalName();
-                    $fileAttachment = Storage::putFileAs(
-                        "public/ticket/{$this->ticket->ticket_number}/costing_attachments/" . $this->fileDirByUserType(),
-                        $uploadedAdditionalCostingFile,
-                        $fileName
-                    );
+        try {
+            if ($this->isOnlyAgent($this->ticket->agent_id)) {
+                if ($this->additionalCostingFiles) {
+                    foreach ($this->additionalCostingFiles as $uploadedAdditionalCostingFile) {
+                        $fileName = $uploadedAdditionalCostingFile->getClientOriginalName();
+                        $fileAttachment = Storage::putFileAs(
+                            "public/ticket/{$this->ticket->ticket_number}/costing_attachments/" . $this->fileDirByUserType(),
+                            $uploadedAdditionalCostingFile,
+                            $fileName
+                        );
 
-                    $this->ticket->ticketCosting->fileAttachments()->create([
-                        'file_attachment' => $fileAttachment,
-                    ]);
+                        $this->ticket->ticketCosting->fileAttachments()->create([
+                            'file_attachment' => $fileAttachment,
+                        ]);
+                    }
+
+                    $this->uploadFileCostingCount++;
+                    $this->additionalCostingFiles = [];
+                    $this->emit('loadServiceDeptAdminTicketCosting');
                 }
-
-                $this->uploadFileCostingCount++;
-                $this->additionalCostingFiles = [];
-                $this->emit('loadServiceDeptAdminTicketCosting');
+            } else {
+                $this->editingFieldId = null;
+                noty()->addWarning('Sorry, only agents have the authority to add attachments.');
             }
-        } else {
-            $this->editingFieldId = null;
-            noty()->addWarning('Sorry, only agents have the authority to add attachments.');
+        } catch (Exception $e) {
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
+            noty()->addError('Oops, something went wrong.');
         }
     }
 
     public function saveNewCostingFiles()
     {
-        if ($this->isOnlyAgent($this->ticket->agent_id)) {
-            if ($this->newCostingFiles) {
-                foreach ($this->newCostingFiles as $newCostingFile) {
-                    $fileName = $newCostingFile->getClientOriginalName();
-                    $fileAttachment = Storage::putFileAs(
-                        "public/ticket/{$this->ticket->ticket_number}/costing_attachments/" . $this->fileDirByUserType(),
-                        $newCostingFile,
-                        $fileName
-                    );
+        try {
+            if ($this->isOnlyAgent($this->ticket->agent_id)) {
+                if ($this->newCostingFiles) {
+                    foreach ($this->newCostingFiles as $newCostingFile) {
+                        $fileName = $newCostingFile->getClientOriginalName();
+                        $fileAttachment = Storage::putFileAs(
+                            "public/ticket/{$this->ticket->ticket_number}/costing_attachments/" . $this->fileDirByUserType(),
+                            $newCostingFile,
+                            $fileName
+                        );
 
-                    $this->ticket->ticketCosting->fileAttachments()->create([
-                        'file_attachment' => $fileAttachment,
-                    ]);
+                        $this->ticket->ticketCosting->fileAttachments()->create([
+                            'file_attachment' => $fileAttachment,
+                        ]);
+                    }
+
+                    $this->uploadFileCostingCount++;
+                    $this->newCostingFiles = [];
+                    $this->emit('loadServiceDeptAdminTicketCosting');
+                    $this->dispatchBrowserEvent('close-new-ticket-costing-file-modal');
                 }
-
-                $this->uploadFileCostingCount++;
-                $this->newCostingFiles = [];
-                $this->emit('loadServiceDeptAdminTicketCosting');
-                $this->dispatchBrowserEvent('close-new-ticket-costing-file-modal');
+            } else {
+                $this->editingFieldId = null;
+                noty()->addWarning('Sorry, only agents have the authority to add attachments.');
             }
-        } else {
-            $this->editingFieldId = null;
-            noty()->addWarning('Sorry, only agents have the authority to add attachments.');
+        } catch (Exception $e) {
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
+            noty()->addError('Oops, something went wrong.');
         }
     }
 
@@ -163,7 +183,9 @@ class TicketCosting extends Component
     {
         return auth()->user()->id === $approverId
             && auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)
-            && SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)->whereJsonContains('service_department_admin_approver->approver_id', $approverId)->exists();
+            && SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)
+                ->whereJsonContains('service_department_admin_approver->approver_id', $approverId)
+                ->exists();
     }
 
     public function approveCostingApproval1()

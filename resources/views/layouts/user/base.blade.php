@@ -47,6 +47,7 @@
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/alpine.js') }}"></script>
     @stack('livewire-textarea')
+    @stack('livewire-textarea-disapproval')
     @stack('livewire-modal')
     @stack('livewire-select')
 </body>

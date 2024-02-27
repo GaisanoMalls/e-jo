@@ -7,8 +7,7 @@
                         <img src="{{ Storage::url($latestReply->user->profile->picture) }}" class="me-2 sender__profile"
                             alt="">
                     @else
-                        <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center
-                                                                    text-white"
+                        <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
                             style="background-color: #24695C;">
                             {{ $latestReply->user->profile->getNameInitial() }}
                         </div>

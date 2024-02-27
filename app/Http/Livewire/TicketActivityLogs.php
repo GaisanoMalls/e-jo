@@ -33,7 +33,7 @@ class TicketActivityLogs extends Component
 
     public function hasMyLogs()
     {
-        // Check if there are logs for the current user
+        // Check if there are logs for the current staff
         return ActivityLog::where('ticket_id', $this->ticket->id)
             ->where('user_id', auth()->user()->id)
             ->exists();
