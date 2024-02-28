@@ -28,7 +28,8 @@
                         </thead>
                         <tbody>
                             @foreach ($forApprovalTickets as $ticket)
-                                <tr wire:key="ticket-{{ $ticket->id }}">
+                                <tr wire:key="ticket-{{ $ticket->id }}"
+                                    onclick="window.location.href='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
                                     <td class="custom__table__data">
                                         <div class="ticket__list__status__line"
                                             style="background-color: {{ $ticket->priorityLevel->color ?? '' }};">

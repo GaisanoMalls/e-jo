@@ -20,20 +20,22 @@ trait Tickets
     }
 
     /**
-     * Filter the newly created tickets send by the requester.
+     * Filter the newly created tickets sent by the requester.
      * Condition: Requester and Service Dept. Admin - Match the Branch and BU Department.
      * Tickets are exclusively visible within their respective Business Unit (BU).
+     * Special Project - Costing: Include filter for ticket that has amount for special project and is approved.
      */
     public function serviceDeptAdminGetOpentTickets()
     {
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL))
             ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
+            ->orWhere(fn($query) => $query->withWhereHas('specialProjectAmountApproval', fn($spAmountApproval) => $spAmountApproval->where('is_done', true)))
             ->orderByDesc('created_at')->get();
     }
 
     /**
-     * Filter the newly created tickets send by the requester.
+     * Filter the newly created tickets sent by the requester.
      * Condition: Requester and Service Dept. Admin - Match the Branch and BU Department.
      * Tickets are exclusively visible within their respective Business Unit (BU).
      */
@@ -42,7 +44,7 @@ trait Tickets
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::VIEWED)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
             ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
-            ->orderByDesc('created_at')->get();
+            ->whereDoesntHave('specialProjectAmountApproval')->orderByDesc('created_at')->get();
     }
 
     public function serviceDeptAdminGetApprovedTickets()

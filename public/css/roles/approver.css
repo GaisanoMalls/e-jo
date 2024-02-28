@@ -7466,7 +7466,17 @@ nav .nav__user__picture {
   border: none;
 }
 
-.loading__spinner {
+.btn__approve {
+  font-size: 0.75rem;
+  color: #ffffff;
+  border-radius: 0.563rem;
+  background-color: #d32839;
+}
+.btn__approve:hover {
+  color: #ffffff;
+  background-color: #d32839;
+}
+.btn__approve .loading__spinner {
   height: 12px;
   width: 12px;
 }
@@ -7986,12 +7996,6 @@ nav .nav__user__picture {
 }
 .approver__section .ticket__card .ticket__details__section .card__ticket__details .level__approval__container .level__approver__container .approver__name {
   font-size: 0.813rem;
-}
-.approver__section .ticket__card .ticket__details__section .card__ticket__details .level__approval__container .level__approver__container .btn__approve {
-  font-size: 0.75rem;
-  color: #ffffff;
-  border-radius: 0.563rem;
-  background-color: #d32839;
 }
 .approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__costing__container {
   padding: 1.5rem;

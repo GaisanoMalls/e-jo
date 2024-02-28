@@ -1,4 +1,43 @@
 <div>
+    <div class="tickets__card__header pb-0 pt-4 px-4">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex flex-column me-3">
+                <h6 class="card__title">Open Tickets</h6>
+                <p class="card__description">
+                    Respond the tickets sent by the requester
+                </p>
+            </div>
+            <div class="d-flex">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm d-flex align-items-center gap-2 rounded-2 sort__button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-filter"></i>
+                        All
+                        <small class="text-muted" style="font-size: 12px;">
+                            ({{ $openTickets->count() }})
+                        </small>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end slideIn animate sort__button__dropdown">
+                        <li>
+                            <button wire:click="" class="dropdown-item d-flex align-item gap-2" type="button">
+                                All
+                            </button>
+                        </li>
+                        <li>
+                            <button wire:click="" class="dropdown-item d-flex align-item gap-2" type="button">
+                                With PR
+                            </button>
+                        </li>
+                        <li>
+                            <button wire:click="" class="dropdown-item d-flex align-items-center gap-2" type="button">
+                                Without PR
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="tickets__table__card">
         <div class="table-responsive custom__table">
             @if ($openTickets->isNotEmpty())

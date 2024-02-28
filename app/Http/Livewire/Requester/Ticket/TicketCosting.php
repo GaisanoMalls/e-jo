@@ -114,15 +114,6 @@ class TicketCosting extends Component
         ]);
     }
 
-    public function isDoneSpecialProjectAmountApproval(Ticket $ticket)
-    {
-        return SpecialProjectAmountApproval::where([
-            ['ticket_id', $ticket->id],
-            ['is_done', true],
-        ])->exists();
-    }
-
-
     public function render()
     {
         return view('livewire.requester.ticket.ticket-costing');

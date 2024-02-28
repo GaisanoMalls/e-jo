@@ -349,9 +349,21 @@ nav {
     border: none;
 }
 
-.loading__spinner {
-    height: 12px;
-    width: 12px;
+.btn__approve {
+    font-size: $fs-12;
+    color: $white;
+    border-radius: $border-radius-9;
+    background-color: $color-1;
+
+    &:hover {
+        color: $white;
+        background-color: $color-1;
+    }
+
+    .loading__spinner {
+        height: 12px;
+        width: 12px;
+    }
 }
 
 .modal__confirm__approve__ticket {
@@ -945,13 +957,6 @@ nav {
 
                         .approver__name {
                             font-size: $fs-13;
-                        }
-
-                        .btn__approve {
-                            font-size: $fs-12;
-                            color: $white;
-                            border-radius: $border-radius-9;
-                            background-color: $color-1;
                         }
                     }
                 }

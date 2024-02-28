@@ -64,11 +64,6 @@ class TicketCosting extends Component
         $this->resetValidation();
     }
 
-    public function isCostingGreaterOrEqual()
-    {
-        return $this->ticket->ticketCosting?->amount >= $this->ticket->helpTopic->specialProject?->amount;
-    }
-
     public function updateTicketCostingAmount()
     {
         try {

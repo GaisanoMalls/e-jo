@@ -2,13 +2,19 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Http\Traits\Utils;
+use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\User;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class TicketLevelApproval extends Component
 {
+    use Utils;
+
     public Ticket $ticket;
 
     protected $listeners = ['loadLevelOfApproval' => 'render'];
@@ -31,28 +37,50 @@ class TicketLevelApproval extends Component
         return User::with('profile')->whereIn('id', $ticketApproval->pluck('approval_1.level_2_approver.approver_id')->flatten()->toArray())->get();
     }
 
-    public function isTicketLevel1Approved()
+    // Get the service dept admin who's allowed to approve the last approval
+    public function isOnlyServiceDeptAdminForLastApproval()
+    {
+        $ticketApproval = TicketApproval::where('ticket_id', $this->ticket->id)->get();
+        $approverIds = $ticketApproval->pluck('approval_2.level_1_approver.approver_id')->flatten()->toArray();
+
+        return in_array(auth()->user()->id, $approverIds)
+            && auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)
+            && $this->isDoneSpecialProjectAmountApproval($this->ticket);
+    }
+
+    public function isTicketApproval1Level1Approved()
     {
         return $this->ticket->ticketApprovals->filter(
             fn($approval) => data_get($approval->approval_1['level_1_approver'], 'approver_id') != null
+            && data_get($approval->approval_1['level_1_approver'], 'approved_by') != null
             && data_get($approval->approval_1['level_1_approver'], 'is_approved') == true
         )->isNotEmpty();
     }
 
-    public function isTicketLevel2Approved()
+    public function isTicketApproval1Level2Approved()
     {
         return $this->ticket->ticketApprovals->filter(
             fn($approval) => data_get($approval->approval_1['level_2_approver'], 'approver_id') != null
+            && data_get($approval->approval_1['level_2_approver'], 'approved_by') != null
             && data_get($approval->approval_1['level_2_approver'], 'is_approved') == true
         )->isNotEmpty();
     }
 
-    public function isApprovedByLevel2Approver()
+    public function isTicketApproval2Level1Approved()
     {
         return $this->ticket->ticketApprovals->filter(
-            fn($approval) => data_get($approval->approval_1['level_2_approver'], 'is_approved') == true
-            && data_get($approval->approval_1['level_2_approver'], 'is_approved') == false
-            && data_get($approval->approval_1['level_2_approver'], 'approved_by') != null
+            fn($approval) => data_get($approval->approval_2['level_1_approver'], 'approver_id') != null
+            && data_get($approval->approval_2['level_1_approver'], 'approved_by') != null
+            && data_get($approval->approval_2['level_1_approver'], 'is_approved') == true
+        )->isNotEmpty();
+    }
+
+    public function isTicketApproval2Level2Approved()
+    {
+        return $this->ticket->ticketApprovals->filter(
+            fn($approval) => data_get($approval->approval_2['level_2_approver'], 'approver_id') != null
+            && data_get($approval->approval_2['level_2_approver'], 'approved_by') != null
+            && data_get($approval->approval_2['level_2_approver'], 'is_approved') == true
         )->isNotEmpty();
     }
 
@@ -66,16 +94,34 @@ class TicketLevelApproval extends Component
         return TicketApproval::where('ticket_id', $this->ticket->id)->first()?->approval_1['level_2_approver']['approved_by'];
     }
 
+    // Final approval for Level 1 approver after the approval from costing
+    public function approveApproval2Level1Approver()
+    {
+        try {
+            if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+                if ($this->isDoneSpecialProjectAmountApproval($this->ticket)) {
+                    TicketApproval::where('ticket_id', $this->ticket->id)
+                        ->whereNotNull('approval_2->level_1_approver->approver_id')
+                        ->whereJsonContains('approval_2->level_1_approver->approver_id', auth()->user()->id)
+                        ->update([
+                            'approval_2->level_1_approver->approved_by' => auth()->user()->id,
+                            'approval_2->level_1_approver->is_approved' => true,
+                        ]);
+                    $this->actionOnSubmit();
+                } else {
+                    noty()->addWarning('Amount for special project has not yet approved.');
+                }
+            } else {
+                noty()->addError('You have no rights/permission to approve the ticket');
+            }
+        } catch (Exception $e) {
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
+            noty()->addError('Oops, something went wrong');
+        }
+    }
+
     public function render()
     {
-        return view('livewire.staff.ticket.ticket-level-approval', [
-            'level1Approvers' => $this->getLevel1Approvers(),
-            'level2Approvers' => $this->getLevel2Approvers(),
-            'isTicketLevel1Approved' => $this->isTicketLevel1Approved(),
-            'isTicketLevel2Approved' => $this->isTicketLevel2Approved(),
-            'isApprovedByLevel2Approver' => $this->isApprovedByLevel2Approver(),
-            'ticketLevel1ApprovalApprovedBy' => $this->ticketLevel1ApprovalApprovedBy(),
-            'ticketLevel2ApprovalApprovedBy' => $this->ticketLevel2ApprovalApprovedBy(),
-        ]);
+        return view('livewire.staff.ticket.ticket-level-approval');
     }
 }

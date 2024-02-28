@@ -69,7 +69,7 @@
                         </div>
                         @if ($editingFieldId !== $ticket->ticketCosting->id)
                             <div class="d-flex flex-column justify-content-between gap-2">
-                                <small class="text-muted text-sm costing__header__label">Attachment</small>
+                                <small class="text-muted text-sm costing__header__label">Costing Attachment</small>
                                 @if ($ticket->ticketCosting->fileAttachments->count() > 0)
                                     <small class="mb-1 mt-2 costing__labels show__costing__attachments"
                                         data-bs-toggle="modal" data-bs-target="#costingPreviewFileAttachmentModal">
@@ -93,6 +93,18 @@
                                         </small>
                                     @endif
                                 @endif
+                            </div>
+                        @endif
+                        @if ($this->isDoneSpecialProjectAmountApproval($ticket) && $ticket->ticketCosting->prFileAttachments->count() > 0)
+                            <div class="d-flex flex-column justify-content-between gap-2">
+                                <small class="text-muted text-sm costing__header__label">PR Attachment</small>
+                                <small class="mb-1 mt-2 costing__labels show__costing__attachments"
+                                    data-bs-toggle="modal" data-bs-target="#costingPreviewPRFileAttachmentModal">
+                                    <i class="fa-solid fa-file-zipper"></i>
+                                    {{ $ticket->ticketCosting->prFileAttachments->count() }}
+                                    attached
+                                    {{ $ticket->ticketCosting->prFileAttachments->count() > 1 ? 'files' : 'file' }}
+                                </small>
                             </div>
                         @endif
                         <div class="d-flex flex-column justify-content-between gap-2">
@@ -406,6 +418,93 @@
                 @endif
             </div>
         </div>
+
+        <!-- Preview Ticket Costing PR Files Modal -->
+        @if ($ticket->ticketCosting->prFileAttachments->count() > 0)
+            <div wire:ignore.self class="modal fade ticket__costing__modal" tabindex="-1"
+                id="costingPreviewPRFileAttachmentModal" aria-labelledby="modalFormLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered custom__modal">
+                    @if ($ticket->ticketCosting->prFileAttachments->count() !== 0)
+                        <div class="modal-content custom__modal__content">
+                            <div class="modal__header d-flex justify-content-between align-items-center">
+                                <h6 class="modal__title">
+                                    {{ $ticket->ticketCosting->prFileAttachments->count() > 1 ? 'PR file attachments' : 'PR file attachment' }}
+                                    ({{ $ticket->ticketCosting->prFileAttachments->count() }})
+                                </h6>
+                            </div>
+                            <div class="modal__body mt-3">
+                                <ul class="list-group list-group-flush">
+                                    @foreach ($ticket->ticketCosting->prFileAttachments->sortByDesc('created_at') as $file)
+                                        <li
+                                            class="list-group-item d-flex align-items-center px-0 py-3 justify-content-between">
+                                            <a href="{{ Storage::url($file->file_attachment) }}" target="_blank">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    @switch(pathinfo(basename($file->file_attachment),
+                                                        PATHINFO_EXTENSION))
+                                                        @case('jpeg')
+                                                            <img src="{{ Storage::url($file->file_attachment) }}"
+                                                                class="file__preview">
+                                                        @break
+
+                                                        @case('jpg')
+                                                            <img src="{{ Storage::url($file->file_attachment) }}"
+                                                                class="file__preview">
+                                                        @break
+
+                                                        @case('png')
+                                                            <img src="{{ Storage::url($file->file_attachment) }}"
+                                                                class="file__preview">
+                                                        @break
+
+                                                        @case('pdf')
+                                                            <i class="bi bi-filetype-pdf" style="font-size: 35px;"></i>
+                                                        @break
+
+                                                        @case('doc')
+                                                            <i class="bi bi-filetype-doc" style="font-size: 35px;"></i>
+                                                        @break
+
+                                                        @case('docx')
+                                                            <i class="bi bi-filetype-docx" style="font-size: 35px;"></i>
+                                                        @break
+
+                                                        @case('xlsx')
+                                                            <i class="bi bi-filetype-xlsx" style="font-size: 35px;"></i>
+                                                        @break
+
+                                                        @case('xls')
+                                                            <i class="bi bi-filetype-xls" style="font-size: 35px;"></i>
+                                                        @break
+
+                                                        @case('csv')
+                                                            <i class="bi bi-filetype-csv" style="font-size: 35px;"></i>
+                                                        @break
+
+                                                        @default
+                                                    @endswitch
+                                                    <p class="mb-0" style="font-size: 14px;">
+                                                        {{ basename($file->file_attachment) }}
+                                                    </p>
+                                                </div>
+                                            </a>
+                                            <div
+                                                class="d-flex align-items-center gap-4 file__attachment__actions__container">
+                                                <a type="button" class="file__attachment__action__button"
+                                                    href="{{ Storage::url($file->file_attachment) }}" download
+                                                    target="_blank">
+                                                    <i class="bi bi-cloud-arrow-down"
+                                                        style="font-size: 18px !important;"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        @endif
 
         {{-- Add costing file --}}
         <div wire:ignore.self class="modal fade ticket__costing__modal" id="addCostingFileModal" tabindex="-1"

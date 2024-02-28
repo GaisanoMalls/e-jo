@@ -50,8 +50,8 @@ class ApproveTicket extends Component
 
     public function approveTicket()
     {
-        if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
-            try {
+        try {
+            if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
                 DB::transaction(function () {
                     // Update the ticket status if approved.
                     if ($this->ticket->status_id != Status::APPROVED && $this->ticket->approval_status != ApprovalStatusEnum::APPROVED) {
@@ -118,12 +118,12 @@ class ApproveTicket extends Component
                     }
                     return redirect()->route('staff.tickets.open_tickets');
                 });
-            } catch (Exception $e) {
-                Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-                noty()->addError('Oops, something went wrong');
+            } else {
+                noty()->addError('You have no rights/permission to approve the ticket');
             }
-        } else {
-            noty()->addWarning('You have no rights/permissions to approve the ticket');
+        } catch (Exception $e) {
+            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
+            noty()->addError('Oops, something went wrong');
         }
     }
 

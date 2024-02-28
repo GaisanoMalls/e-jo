@@ -1672,6 +1672,18 @@ a {
                     font-size: $fs-13;
                 }
             }
+
+            .btn__approve {
+                font-size: $fs-12;
+                color: $white;
+                border-radius: $border-radius-9;
+                background-color: $color-1;
+
+                .loading__spinner {
+                    height: 12px;
+                    width: 12px;
+                }
+            }
         }
 
         .ticket__costing__container {
@@ -1832,6 +1844,47 @@ a {
         &:focus {
             box-shadow: none;
             border-color: $color-1;
+        }
+    }
+
+    .sort__button {
+        background-color: #E9ECEF;
+        font-size: $fs-12;
+        color: #212529;
+        padding: 8px 12px;
+        font-weight: $fw-500;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        i {
+            color: #212529;
+            font-size: $fs-13;
+        }
+    }
+
+    .sort__button__dropdown {
+        border: 0;
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+        margin-top: 13px !important;
+        border-radius: 0.563rem;
+        padding: 8px;
+
+        .dropdown-item {
+            color: #131313;
+            border: 0;
+            font-size: $fs-13;
+            padding: 8px 13px;
+            border-radius: $border-radius-9;
+
+            i {
+                color: #777d87 !important;
+            }
+
+            &:focus {
+                background-color: #E9ECEF !important;
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ class Open extends Component
     {
         $ticket = Ticket::findOrFail($id);
 
-        if ($ticket->status_id != Status::VIEWED) {
+        if ($ticket->status_id !== Status::VIEWED) {
             $ticket->update(['status_id' => Status::VIEWED]);
             ActivityLog::make($id, 'seen the ticket');
         }

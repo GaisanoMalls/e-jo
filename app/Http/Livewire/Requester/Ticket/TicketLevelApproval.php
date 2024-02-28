@@ -23,7 +23,7 @@ class TicketLevelApproval extends Component
         return User::with('profile')->whereIn('id', $ticketApproval->pluck('approval_1.level_2_approver.approver_id')->flatten()->toArray())->get();
     }
 
-    public function isTicketLevel1Approved()
+    public function isTicketApproval1Level1Approved()
     {
         return $this->ticket->ticketApprovals->filter(
             fn($approval) => data_get($approval->approval_1['level_1_approver'], 'approver_id') != null
@@ -32,7 +32,16 @@ class TicketLevelApproval extends Component
         )->isNotEmpty();
     }
 
-    public function isTicketLevel2Approved()
+    public function isTicketApproval2Level1Approved()
+    {
+        return $this->ticket->ticketApprovals->filter(
+            fn($approval) => data_get($approval->approval_2['level_1_approver'], 'approver_id') != null
+            && data_get($approval->approval_2['level_1_approver'], 'approved_by') != null
+            && data_get($approval->approval_2['level_1_approver'], 'is_approved') == true
+        )->isNotEmpty();
+    }
+
+    public function isTicketApproval1Level2Approved()
     {
         return $this->ticket->ticketApprovals->filter(
             fn($approval) => data_get($approval->approval_1['level_2_approver'], 'approver_id') != null
@@ -40,11 +49,11 @@ class TicketLevelApproval extends Component
         )->isNotEmpty();
     }
 
-    public function isApprovedByLevel2Approver()
+    public function isTicketApproval2Level2Approved()
     {
         return $this->ticket->ticketApprovals->filter(
-            fn($approval) => data_get($approval->approval_1['level_2_approver'], 'is_approved') == true
-            && data_get($approval->approval_1['level_2_approver'], 'is_approved') == true
+            fn($approval) => data_get($approval->approval_2['level_2_approver'], 'approver_id') != null
+            && data_get($approval->approval_2['level_2_approver'], 'is_approved') == true
         )->isNotEmpty();
     }
 
@@ -60,14 +69,6 @@ class TicketLevelApproval extends Component
 
     public function render()
     {
-        return view('livewire.requester.ticket.ticket-level-approval', [
-            'level1Approvers' => $this->getLevel1Approvers(),
-            'level2Approvers' => $this->getLevel2Approvers(),
-            'isTicketLevel1Approved' => $this->isTicketLevel1Approved(),
-            'isTicketLevel2Approved' => $this->isTicketLevel2Approved(),
-            'isApprovedByLevel2Approver' => $this->isApprovedByLevel2Approver(),
-            'ticketLevel1ApprovalApprovedBy' => $this->ticketLevel1ApprovalApprovedBy(),
-            'ticketLevel2ApprovalApprovedBy' => $this->ticketLevel2ApprovalApprovedBy(),
-        ]);
+        return view('livewire.requester.ticket.ticket-level-approval');
     }
 }

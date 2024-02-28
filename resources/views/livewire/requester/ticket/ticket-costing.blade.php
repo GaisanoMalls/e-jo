@@ -301,83 +301,88 @@
                             </button>
                         </form>
                     </div>
-                    <div class="modal__body mt-3">
-                        <ul class="list-group list-group-flush">
-                            @foreach ($ticket->ticketCosting->prFileAttachments->sortByDesc('created_at') as $file)
-                                <li
-                                    class="list-group-item d-flex align-items-center px-0 py-3 justify-content-between">
-                                    <a href="{{ Storage::url($file->file_attachment) }}" target="_blank">
-                                        <div class="d-flex align-items-center gap-2">
-                                            @switch(pathinfo(basename($file->file_attachment),
-                                                PATHINFO_EXTENSION))
-                                                @case('jpeg')
-                                                    <img src="{{ Storage::url($file->file_attachment) }}"
-                                                        class="file__preview">
-                                                @break
+                    @if ($ticket->ticketCosting)
+                        <div class="modal__body mt-3">
+                            <ul class="list-group list-group-flush">
+                                @foreach ($ticket->ticketCosting->prFileAttachments->sortByDesc('created_at') as $file)
+                                    <li
+                                        class="list-group-item d-flex align-items-center px-0 py-3 justify-content-between">
+                                        <a href="{{ Storage::url($file->file_attachment) }}" target="_blank">
+                                            <div class="d-flex align-items-center gap-2">
+                                                @switch(pathinfo(basename($file->file_attachment),
+                                                    PATHINFO_EXTENSION))
+                                                    @case('jpeg')
+                                                        <img src="{{ Storage::url($file->file_attachment) }}"
+                                                            class="file__preview">
+                                                    @break
 
-                                                @case('jpg')
-                                                    <img src="{{ Storage::url($file->file_attachment) }}"
-                                                        class="file__preview">
-                                                @break
+                                                    @case('jpg')
+                                                        <img src="{{ Storage::url($file->file_attachment) }}"
+                                                            class="file__preview">
+                                                    @break
 
-                                                @case('png')
-                                                    <img src="{{ Storage::url($file->file_attachment) }}"
-                                                        class="file__preview">
-                                                @break
+                                                    @case('png')
+                                                        <img src="{{ Storage::url($file->file_attachment) }}"
+                                                            class="file__preview">
+                                                    @break
 
-                                                @case('pdf')
-                                                    <i class="bi bi-filetype-pdf" style="font-size: 35px;"></i>
-                                                @break
+                                                    @case('pdf')
+                                                        <i class="bi bi-filetype-pdf" style="font-size: 35px;"></i>
+                                                    @break
 
-                                                @case('doc')
-                                                    <i class="bi bi-filetype-doc" style="font-size: 35px;"></i>
-                                                @break
+                                                    @case('doc')
+                                                        <i class="bi bi-filetype-doc" style="font-size: 35px;"></i>
+                                                    @break
 
-                                                @case('docx')
-                                                    <i class="bi bi-filetype-docx" style="font-size: 35px;"></i>
-                                                @break
+                                                    @case('docx')
+                                                        <i class="bi bi-filetype-docx" style="font-size: 35px;"></i>
+                                                    @break
 
-                                                @case('xlsx')
-                                                    <i class="bi bi-filetype-xlsx" style="font-size: 35px;"></i>
-                                                @break
+                                                    @case('xlsx')
+                                                        <i class="bi bi-filetype-xlsx" style="font-size: 35px;"></i>
+                                                    @break
 
-                                                @case('xls')
-                                                    <i class="bi bi-filetype-xls" style="font-size: 35px;"></i>
-                                                @break
+                                                    @case('xls')
+                                                        <i class="bi bi-filetype-xls" style="font-size: 35px;"></i>
+                                                    @break
 
-                                                @case('csv')
-                                                    <i class="bi bi-filetype-csv" style="font-size: 35px;"></i>
-                                                @break
+                                                    @case('csv')
+                                                        <i class="bi bi-filetype-csv" style="font-size: 35px;"></i>
+                                                    @break
 
-                                                @default
-                                            @endswitch
-                                            <p class="mb-0" style="font-size: 14px;">
-                                                {{ basename($file->file_attachment) }}
-                                            </p>
-                                        </div>
-                                    </a>
-                                    <div class="d-flex align-items-center gap-4 file__attachment__actions__container">
-                                        <a type="button" class="file__attachment__action__button"
-                                            wire:key="{{ $file->id }}"
-                                            wire:click="deleteCostingPRFile({{ $file->id }})">
-                                            <i class="bi bi-trash" wire:loading.class="d-none"
-                                                wire:target="deleteCostingPRFile({{ $file->id }})"></i>
-                                            <div wire:loading wire:target="deleteCostingPRFile({{ $file->id }})"
-                                                class="spinner-border spinner-border-sm loading__spinner"
-                                                role="status">
-                                                <span class="sr-only">Loading...</span>
+                                                    @default
+                                                @endswitch
+                                                <p class="mb-0" style="font-size: 14px;">
+                                                    {{ basename($file->file_attachment) }}
+                                                </p>
                                             </div>
                                         </a>
-                                        <a type="button" class="file__attachment__action__button"
-                                            href="{{ Storage::url($file->file_attachment) }}" download
-                                            target="_blank">
-                                            <i class="bi bi-cloud-arrow-down" style="font-size: 18px !important;"></i>
-                                        </a>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
+                                        <div
+                                            class="d-flex align-items-center gap-4 file__attachment__actions__container">
+                                            <a type="button" class="file__attachment__action__button"
+                                                wire:key="{{ $file->id }}"
+                                                wire:click="deleteCostingPRFile({{ $file->id }})">
+                                                <i class="bi bi-trash" wire:loading.class="d-none"
+                                                    wire:target="deleteCostingPRFile({{ $file->id }})"></i>
+                                                <div wire:loading
+                                                    wire:target="deleteCostingPRFile({{ $file->id }})"
+                                                    class="spinner-border spinner-border-sm loading__spinner"
+                                                    role="status">
+                                                    <span class="sr-only">Loading...</span>
+                                                </div>
+                                            </a>
+                                            <a type="button" class="file__attachment__action__button"
+                                                href="{{ Storage::url($file->file_attachment) }}" download
+                                                target="_blank">
+                                                <i class="bi bi-cloud-arrow-down"
+                                                    style="font-size: 18px !important;"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

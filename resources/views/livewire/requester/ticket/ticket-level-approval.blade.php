@@ -5,9 +5,10 @@
             <div class="d-flex flex-column level__approval__container">
                 <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
                     <small class="level__number__label">
-                        Level 1 {{ $level1Approvers->count() > 1 ? 'Approvers' : 'Approver' }}
+                        Level 1 {{ $this->getLevel1Approvers()->count() > 1 ? 'Approvers' : 'Approver' }}
+                        ({{ $this->isTicketApproval1Level1Approved() && !$this->isTicketApproval2Level1Approved() ? '1' : ($this->isTicketApproval2Level1Approved() ? '2' : '0') }}/2)
                     </small>
-                    @if ($isTicketLevel1Approved)
+                    @if ($this->isTicketApproval1Level1Approved())
                         <div class="d-flex align-items-center gap-1">
                             <i class="bi bi-check-circle-fill ms-1" style="font-size: 11px; color: #D32839;"></i>
                             <div class="border-0 text-muted" style="font-size: 0.75rem;">
@@ -24,12 +25,12 @@
                         </div>
                     @endif
                 </div>
-                @foreach ($level1Approvers as $level1Approver)
+                @foreach ($this->getLevel1Approvers() as $level1Approver)
                     <div class="d-flex flex-column">
                         <div
                             class="d-flex align-items-center justify-content-between ps-3 position-relative level__approver__container">
                             <div class="level__approval__approver__dot position-absolute rounded-circle"></div>
-                            <div class="d-flex align-items-center {{ !$isTicketLevel1Approved ? 'text-muted' : '' }}"
+                            <div class="d-flex align-items-center {{ !$this->isTicketApproval1Level1Approved() ? 'text-muted' : '' }}"
                                 style="padding: 4px 0 4px 0;">
                                 @if ($level1Approver->profile->picture)
                                     <img src="{{ Storage::url($level1Approver->profile->picture) }}" alt=""
@@ -46,7 +47,7 @@
                                     @if ($level1Approver->id == auth()->user()->id)
                                         <span class="text-muted">(You)</span>
                                     @endif
-                                    @if ($ticketLevel1ApprovalApprovedBy == $level1Approver->id)
+                                    @if ($this->ticketLevel1ApprovalApprovedBy() == $level1Approver->id)
                                         <i class="bi bi-check-lg text-muted"></i>
                                     @endif
                                 </small>
@@ -58,9 +59,10 @@
             <div class="d-flex flex-column level__approval__container text-muted">
                 <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
                     <small class="level__number__label">
-                        Level 2 {{ $level2Approvers->count() > 1 ? 'Approvers' : 'Approver' }}
+                        Level 2 {{ $this->getLevel2Approvers()->count() > 1 ? 'Approvers' : 'Approver' }}
+                        ({{ $this->isTicketApproval1Level2Approved() && !$this->isTicketApproval2Level2Approved() ? '1' : ($this->isTicketApproval2Level2Approved() ? '2' : '0') }}/2)
                     </small>
-                    @if ($isTicketLevel2Approved)
+                    @if ($this->isTicketApproval1Level2Approved())
                         <div class="d-flex align-items-center gap-1">
                             <i class="bi bi-check-circle-fill ms-1" style="font-size: 11px; color: #D32839;"></i>
                             <div class="border-0 text-muted" style="font-size: 0.75rem;">
@@ -77,7 +79,7 @@
                         </div>
                     @endif
                 </div>
-                @foreach ($level2Approvers as $level2Approver)
+                @foreach ($this->getLevel2Approvers() as $level2Approver)
                     <div class="d-flex flex-column">
                         <div
                             class="d-flex align-items-center justify-content-between ps-3 position-relative level__approver__container">
@@ -93,9 +95,10 @@
                                         {{ $level2Approver->profile->getNameInitial() }}
                                     </div>
                                 @endif
-                                <small class="approver__name {{ $isTicketLevel2Approved ? 'text-dark' : '' }}">
+                                <small
+                                    class="approver__name {{ $this->isTicketApproval1Level2Approved() ? 'text-dark' : '' }}">
                                     {{ $level2Approver->profile->getFullName() }}
-                                    @if ($ticketLevel2ApprovalApprovedBy == $level2Approver->id)
+                                    @if ($this->ticketLevel2ApprovalApprovedBy() == $level2Approver->id)
                                         <i class="bi bi-check-lg text-muted"></i>
                                     @endif
                                 </small>
