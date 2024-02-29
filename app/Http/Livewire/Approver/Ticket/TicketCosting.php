@@ -28,12 +28,12 @@ class TicketCosting extends Component
 
     public function rules()
     {
-        return (new ReasonOfDisapprovalRequest())->rules();
+        return(new ReasonOfDisapprovalRequest())->rules();
     }
 
     public function messages()
     {
-        return (new ReasonOfDisapprovalRequest())->messages();
+        return(new ReasonOfDisapprovalRequest())->messages();
     }
 
     private function actionOnSubmit()

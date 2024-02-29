@@ -21,7 +21,7 @@ class Approved extends Component
         $this->approvedTickets = $this->loadApprovedTickets();
     }
 
-    public function filterAll()
+    public function filterAllApprovedTickets()
     {
         $this->withCosting = false;
         $this->withOutCosting = false;
@@ -52,20 +52,25 @@ class Approved extends Component
         }
 
         if ($this->withCosting) {
-            $this->approvedTickets = Ticket::whereHas('ticketCosting')->with(['replies', 'priorityLevel'])
+            $this->approvedTickets = Ticket::whereHas('ticketCosting')
+                ->with(['replies', 'priorityLevel'])
                 ->where([
                     ['approval_status', ApprovalStatusEnum::APPROVED],
                     ['user_id', auth()->user()->id]
-                ])->orderByDesc('created_at')->get();
-
+                ])
+                ->orderByDesc('created_at')
+                ->get();
         }
 
         if ($this->withOutCosting) {
-            $this->approvedTickets = Ticket::whereDoesntHave('ticketCosting')->with(['replies', 'priorityLevel'])
+            $this->approvedTickets = Ticket::whereDoesntHave('ticketCosting')
+                ->with(['replies', 'priorityLevel'])
                 ->where([
                     ['approval_status', ApprovalStatusEnum::APPROVED],
                     ['user_id', auth()->user()->id]
-                ])->orderByDesc('created_at')->get();
+                ])
+                ->orderByDesc('created_at')
+                ->get();
         }
 
         return $this->approvedTickets;

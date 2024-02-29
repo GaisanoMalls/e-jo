@@ -8,7 +8,7 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-                @if ($ticketLogs->isNotEmpty() || ($isAll || $isMyLogsOnly))
+                @if ($ticketLogs->isNotEmpty())
                     <div class="btn-group">
                         <button type="button"
                             class="btn btn-sm d-flex align-items-center gap-2 px-2 py-1 rounded-2 dropdown-toggle my__logs"

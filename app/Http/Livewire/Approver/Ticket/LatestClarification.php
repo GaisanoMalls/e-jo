@@ -17,7 +17,8 @@ class LatestClarification extends Component
     {
         $this->latestClarification = Clarification::whereHas('ticket', fn($query) => $query->where('ticket_id', $this->ticket->id))
             ->whereHas('user', fn($user) => $user->where('user_id', '!=', auth()->user()->id))
-            ->orderByDesc('created_at')->first();
+            ->orderByDesc('created_at')
+            ->first();
 
         return view('livewire.approver.ticket.latest-clarification');
     }

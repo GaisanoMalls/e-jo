@@ -31,13 +31,17 @@ class TicketLevelApproval extends Component
     public function getLevel1Approvers()
     {
         $ticketApproval = TicketApproval::where('ticket_id', $this->ticket->id)->get();
-        return User::with('profile')->whereIn('id', $ticketApproval->pluck('approval_1.level_1_approver.approver_id')->flatten()->toArray())->get();
+        return User::with('profile')
+            ->whereIn('id', $ticketApproval->pluck('approval_1.level_1_approver.approver_id')->flatten()->toArray())
+            ->get();
     }
 
     public function getLevel2Approvers()
     {
         $ticketApproval = TicketApproval::where('ticket_id', $this->ticket->id)->get();
-        return User::with('profile')->whereIn('id', $ticketApproval->pluck('approval_1.level_2_approver.approver_id')->flatten()->toArray())->get();
+        return User::with('profile')
+            ->whereIn('id', $ticketApproval->pluck('approval_1.level_2_approver.approver_id')->flatten()->toArray())
+            ->get();
     }
 
     // Get the service dept admin who's allowed to approve the last approval
@@ -90,12 +94,14 @@ class TicketLevelApproval extends Component
 
     public function ticketLevel1ApprovalApprovedBy()
     {
-        return TicketApproval::where('ticket_id', $this->ticket->id)->first()?->approval_1['level_1_approver']['approved_by'];
+        return TicketApproval::where('ticket_id', $this->ticket->id)
+            ->first()?->approval_1['level_1_approver']['approved_by'];
     }
 
     public function ticketLevel2ApprovalApprovedBy()
     {
-        return TicketApproval::where('ticket_id', $this->ticket->id)->first()?->approval_1['level_2_approver']['approved_by'];
+        return TicketApproval::where('ticket_id', $this->ticket->id)
+            ->first()?->approval_1['level_2_approver']['approved_by'];
     }
 
     public function approveTicketApproval1level2Approver()

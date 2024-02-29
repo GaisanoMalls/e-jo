@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire\Staff\TicketStatus;
 
+use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\TicketsByStaffWithSameTemplates;
+use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -11,6 +13,69 @@ use Livewire\Component;
 class Open extends Component
 {
     use TicketsByStaffWithSameTemplates;
+
+    public bool $allOpenTickets = true;
+    public bool $withPr = false;
+    public bool $withoutPr = false;
+    public $openTickets = [];
+
+    public function mount()
+    {
+        $this->openTickets = $this->loadOpenTickets();
+    }
+
+    public function filterAllOpenTickets()
+    {
+        $this->withPr = false;
+        $this->withoutPr = false;
+        $this->allOpenTickets = true;
+        $this->loadOpenTickets();
+    }
+
+    public function filterOpenTicketsWithPr()
+    {
+        $this->allOpenTickets = false;
+        $this->withoutPr = false;
+        $this->withPr = true;
+        $this->loadOpenTickets();
+    }
+
+    public function filterOpenTicketsWithoutPr()
+    {
+        $this->allOpenTickets = false;
+        $this->withPr = false;
+        $this->withoutPr = true;
+        $this->loadOpenTickets();
+    }
+
+    public function loadOpenTickets()
+    {
+        if ($this->allOpenTickets) {
+            $this->openTickets = $this->getOpenTickets();
+        }
+
+        if ($this->withPr) {
+            $this->openTickets = Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL))
+                ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
+                    ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
+                ->orWhere(fn($query) => $query->withWhereHas('specialProjectAmountApproval', fn($spAmountApproval) => $spAmountApproval->where('is_done', true)))
+                ->whereHas('ticketCosting', fn($costing) => $costing->has('prFileAttachments'))
+                ->orderByDesc('created_at')
+                ->get();
+        }
+
+        if ($this->withoutPr) {
+            $this->openTickets = Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL))
+                ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
+                    ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
+                ->orWhere(fn($query) => $query->withWhereHas('specialProjectAmountApproval', fn($spAmountApproval) => $spAmountApproval->where('is_done', true)))
+                ->whereHas('ticketCosting', fn($costing) => $costing->whereDoesntHave('prFileAttachments'))
+                ->orderByDesc('created_at')
+                ->get();
+        }
+
+        return $this->openTickets;
+    }
 
     public function seenTicket($id)
     {
@@ -26,7 +91,6 @@ class Open extends Component
 
     public function render()
     {
-        $openTickets = $this->getOpenTickets();
-        return view('livewire.staff.ticket-status.open', compact('openTickets'));
+        return view('livewire.staff.ticket-status.open');
     }
 }

@@ -14,7 +14,7 @@ trait TicketsByStaffWithSameTemplates
 
     public function getTicketsToAssign()
     {
-        return (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+        return(Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
             ? $this->serviceDeptAdminGetTicketsToAssign()
             : [];
     }

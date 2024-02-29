@@ -12,24 +12,27 @@
                     <button type="button" class="btn btn-sm d-flex align-items-center gap-2 rounded-2 sort__button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-filter"></i>
-                        All
+                        {{ $allOpenTickets ? 'All' : ($withPr ? 'With PR' : ($withoutPr ? 'Without PR' : '')) }}
                         <small class="text-muted" style="font-size: 12px;">
                             ({{ $openTickets->count() }})
                         </small>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end slideIn animate sort__button__dropdown">
                         <li>
-                            <button wire:click="" class="dropdown-item d-flex align-item gap-2" type="button">
+                            <button wire:click="filterAllOpenTickets" class="dropdown-item d-flex align-item gap-2"
+                                type="button">
                                 All
                             </button>
                         </li>
                         <li>
-                            <button wire:click="" class="dropdown-item d-flex align-item gap-2" type="button">
+                            <button wire:click="filterOpenTicketsWithPr" class="dropdown-item d-flex align-item gap-2"
+                                type="button">
                                 With PR
                             </button>
                         </li>
                         <li>
-                            <button wire:click="" class="dropdown-item d-flex align-items-center gap-2" type="button">
+                            <button wire:click="filterOpenTicketsWithoutPr"
+                                class="dropdown-item d-flex align-items-center gap-2" type="button">
                                 Without PR
                             </button>
                         </li>

@@ -9,11 +9,16 @@ use Livewire\Component;
 class TicketActivityLogs extends Component
 {
     public Ticket $ticket;
-    public bool $isAll = false;
+    public bool $isAll = true;
     public bool $isMyLogsOnly = false;
     public $ticketLogs = [];
 
     protected $listeners = ['loadTicketLogs' => 'loadLogs'];
+
+    public function mount()
+    {
+        $this->ticketLogs = $this->loadLogs();
+    }
 
     public function filterAll()
     {
@@ -50,14 +55,12 @@ class TicketActivityLogs extends Component
                 ->where('user_id', auth()->user()->id)->orderByDesc('created_at')
                 ->get();
         }
+
+        return $this->ticketLogs;
     }
 
     public function render()
     {
-        if (!$this->isAll && !$this->isMyLogsOnly) {
-            $this->filterAll();
-        }
-
         return view('livewire.ticket-activity-logs');
     }
 }

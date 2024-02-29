@@ -10,7 +10,8 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-start slideIn animate sort__button__dropdown">
             <li>
-                <button wire:click="filterAll" class="dropdown-item d-flex align-item gap-2" type="button">
+                <button wire:click="filterAllApprovedTickets" class="dropdown-item d-flex align-item gap-2"
+                    type="button">
                     All
                 </button>
             </li>

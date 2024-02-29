@@ -13,7 +13,10 @@ class LoadReason extends Component
 
     public function render()
     {
-        $reason = $this->ticket->reasons()->where('ticket_id', $this->ticket->id)->first();
+        $reason = $this->ticket->reasons()
+            ->where('ticket_id', $this->ticket->id)
+            ->first();
+
         return view('livewire.approver.ticket.load-reason', [
             'reason' => $reason
         ]);
