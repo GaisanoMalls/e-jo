@@ -38,6 +38,16 @@ class TicketCosting extends Component
         return(new StoreCostingPRFileRequest())->messages();
     }
 
+    public function updatedCostingPRFiles()
+    {
+        $this->validate([
+            'costingPRFiles.*' => [
+                'nullable',
+                File::types($this->prFileAllowedExtension)->max(25600) //25600 (25 MB)
+            ],
+        ]);
+    }
+
     private function actionOnSubmit()
     {
         $this->uploadPRFileCostingCount++;
@@ -46,7 +56,6 @@ class TicketCosting extends Component
         $this->emit('loadRequesterTicketCosting');
         $this->emit('loadRequesterTicketCostingPRFile');
     }
-
 
     public function saveCostingPRFile()
     {
@@ -107,20 +116,10 @@ class TicketCosting extends Component
     public function isDonePRFileApproval(Ticket $ticket)
     {
         return TicketCostingPRFile::where([
-            ['ticket_costing_id', $ticket->ticketCosting->id],
+            ['ticket_costing_id', $ticket->ticketCosting?->id],
             ['is_approved_level_1_approver', true],
         ])->orWhere('is_approved_level_2_approver', true)
             ->exists();
-    }
-
-    public function updatedCostingPRFiles()
-    {
-        $this->validate([
-            'costingPRFiles.*' => [
-                'nullable',
-                File::types($this->prFileAllowedExtension)->max(25600) //25600 (25 MB)
-            ],
-        ]);
     }
 
     public function render()

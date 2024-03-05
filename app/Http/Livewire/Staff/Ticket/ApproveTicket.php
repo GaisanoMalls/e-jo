@@ -15,6 +15,7 @@ use App\Notifications\ServiceDepartmentAdmin\ApprovedTicketForAgentNotification;
 use App\Notifications\ServiceDepartmentAdmin\ApprovedTicketForRequesterNotification;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -91,16 +92,17 @@ class ApproveTicket extends Component
                             }
                         }
 
+                        //  TODO
                         // Get the agents with specific conditions.
-                        $agents = User::withWhereHas('teams', fn($query) => $query->where('teams.id', $this->ticket->team_id))
-                            ->whereHas('branches', fn($query) => $query->where('branches.id', $this->ticket->branch_id))
-                            ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->service_department_id))->get();
+                        // $agents = User::withWhereHas('teams', fn(Builder $query) => $query->where('teams.id', $this->ticket->team_id))
+                        //     ->whereHas('branches', fn(Builder $query) => $query->where('branches.id', $this->ticket->branch_id))
+                        //     ->whereHas('serviceDepartments', fn(Builder $query) => $query->where('service_departments.id', $this->ticket->service_department_id))->get();
 
-                        // Notify agents through email and app based notification.
-                        foreach ($agents as $agent) {
-                            Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
-                            Notification::send($agent, new ApprovedTicketForAgentNotification($this->ticket));
-                        }
+                        // // Notify agents through email and app based notification.
+                        // foreach ($agents as $agent) {
+                        //     Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
+                        //     Notification::send($agent, new ApprovedTicketForAgentNotification($this->ticket));
+                        // }
 
                         // Delete the ticket notification of the currently logged in service department admin.
                         auth()->user()->notifications->each(

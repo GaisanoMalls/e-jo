@@ -8,6 +8,7 @@ use App\Models\Department;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -41,8 +42,8 @@ class UpdateAgent extends Component
         $this->branch = $agent->branches->pluck('id');
         $this->bu_department = $agent->buDepartments->pluck('id')->first();
         $this->service_department = $agent->serviceDepartments->pluck('id');
-        $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
-        $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
+        $this->BUDepartments = Department::whereHas('branches', fn(Builder $query) => $query->where('branches.id', $this->branch))->get();
+        $this->teams = Team::whereHas('branches', fn(Builder $query) => $query->where('branches.id', $this->branch))->get();
         $this->currentTeams = $agent->teams->pluck('id')->toArray();
     }
 
@@ -70,8 +71,8 @@ class UpdateAgent extends Component
 
     public function updatedBranch()
     {
-        $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
-        $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
+        $this->BUDepartments = Department::whereHas('branches', fn(Builder $query) => $query->where('branches.id', $this->branch))->get();
+        $this->teams = Team::whereHas('branches', fn(Builder $query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments-and-teams', [
             'BUDepartments' => $this->BUDepartments,
             'teams' => $this->teams,

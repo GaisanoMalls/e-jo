@@ -13,6 +13,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\Requester\TicketClarificationFromRequesterNotification;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
@@ -31,12 +32,12 @@ class SendClarification extends Component
 
     public function rules()
     {
-        return (new StoreTicketClarificationRequest())->rules();
+        return(new StoreTicketClarificationRequest())->rules();
     }
 
     public function messages()
     {
-        return (new StoreTicketClarificationRequest())->messages();
+        return(new StoreTicketClarificationRequest())->messages();
     }
 
     private function actionOnSubmit()
@@ -86,7 +87,7 @@ class SendClarification extends Component
                 }
 
                 // Get the latest staff
-                $latestStaff = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
+                $latestStaff = $clarification->whereHas('user', fn(Builder $user) => $user->where('id', '!=', auth()->user()->id))
                     ->where('ticket_id', $this->ticket->id)
                     ->latest('created_at')->first();
 
@@ -98,8 +99,8 @@ class SendClarification extends Component
 
                 // Get the department admin (approver) when there is no latest staff in the clarifications
                 $initialServiceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->whereHas('branches', fn($branch) => $branch->where('branches.id', auth()->user()->branches->pluck('id')->first()))
-                    ->whereHas('buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))->get();
+                    ->whereHas('branches', fn(Builder $branch) => $branch->where('branches.id', auth()->user()->branches->pluck('id')->first()))
+                    ->whereHas('buDepartments', fn(Builder $query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))->get();
 
                 foreach ($initialServiceDepartmentAdmins as $initialServiceDepartmentAdmin) {
                     Notification::send($latestStaff->user ?? $initialServiceDepartmentAdmin, new TicketClarificationFromRequesterNotification($this->ticket));

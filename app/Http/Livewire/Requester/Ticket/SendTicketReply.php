@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -28,12 +29,12 @@ class SendTicketReply extends Component
 
     public function rules()
     {
-        return (new ReplyTicketRequest())->rules();
+        return(new ReplyTicketRequest())->rules();
     }
 
     public function messages()
     {
-        return (new ReplyTicketRequest())->messages();
+        return(new ReplyTicketRequest())->messages();
     }
 
     private function actionOnSubmit()
@@ -82,7 +83,7 @@ class SendTicketReply extends Component
                 }
 
                 $latestReply = Reply::where('ticket_id', $this->ticket->id)
-                    ->withWhereHas('user', fn($user) => $user->role(Role::USER))
+                    ->withWhereHas('user', fn(Builder $user) => $user->role(Role::USER))
                     ->latest('created_at')->first();
 
                 ActivityLog::make($this->ticket->id, 'replied to ' . $latestReply->user->profile->getFullName());

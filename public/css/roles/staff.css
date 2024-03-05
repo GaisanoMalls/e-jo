@@ -7821,72 +7821,6 @@ a:hover {
   padding: 3px 9px;
 }
 
-.progress {
-  width: 50px;
-  height: 50px;
-  background: none;
-  position: relative;
-}
-.progress::after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 4px solid #eee;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.progress > span {
-  width: 50%;
-  height: 100%;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  z-index: 1;
-}
-.progress .progress-left {
-  left: 0;
-}
-.progress .progress-bar {
-  width: 100%;
-  height: 100%;
-  background: none;
-  border-width: 4px;
-  border-style: solid;
-  position: absolute;
-  top: 0;
-}
-.progress .progress-left .progress-bar {
-  left: 100%;
-  border-top-right-radius: 80px;
-  border-bottom-right-radius: 80px;
-  border-left: 0;
-  transform-origin: center left;
-}
-.progress .progress-right {
-  right: 0;
-}
-.progress .progress-right .progress-bar {
-  left: -100%;
-  border-top-left-radius: 80px;
-  border-bottom-left-radius: 80px;
-  border-right: 0;
-  transform-origin: center right;
-}
-.progress .progress-value {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.progress .progress-value .progress__initial__value {
-  font-size: 0.875rem;
-}
-.progress .progress-value .unit {
-  font-size: 9px;
-  margin-top: -4px;
-}
-
 .page__main__header .company__logo {
   height: 35px;
 }
@@ -8535,6 +8469,71 @@ a:hover {
 .ticket__section .card__ticket__details .ticket__details__card__body__right .ticket__details__info.not__set {
   background-color: transparent;
 }
+.ticket__section .card__ticket__details .ticket__details__card__body__right .progress {
+  width: 50px;
+  height: 50px;
+  background: none;
+  position: relative;
+}
+.ticket__section .card__ticket__details .ticket__details__card__body__right .progress::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 4px solid #eee;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.ticket__section .card__ticket__details .ticket__details__card__body__right .progress > span {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+}
+.ticket__section .card__ticket__details .ticket__details__card__body__right .progress .progress-left {
+  left: 0;
+}
+.ticket__section .card__ticket__details .ticket__details__card__body__right .progress .progress-bar {
+  width: 100%;
+  height: 100%;
+  background: none;
+  border-width: 4px;
+  border-style: solid;
+  position: absolute;
+  top: 0;
+}
+.ticket__section .card__ticket__details .ticket__details__card__body__right .progress .progress-left .progress-bar {
+  left: 100%;
+  border-top-right-radius: 80px;
+  border-bottom-right-radius: 80px;
+  border-left: 0;
+  transform-origin: center left;
+}
+.ticket__section .card__ticket__details .ticket__details__card__body__right .progress .progress-right {
+  right: 0;
+}
+.ticket__section .card__ticket__details .ticket__details__card__body__right .progress .progress-right .progress-bar {
+  left: -100%;
+  border-top-left-radius: 80px;
+  border-bottom-left-radius: 80px;
+  border-right: 0;
+  transform-origin: center right;
+}
+.ticket__section .card__ticket__details .ticket__details__card__body__right .progress .progress-value {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.ticket__section .card__ticket__details .ticket__details__card__body__right .progress .progress-value .progress__initial__value {
+  font-size: 0.875rem;
+}
+.ticket__section .card__ticket__details .ticket__details__card__body__right .progress .progress-value .unit {
+  font-size: 9px;
+  margin-top: -4px;
+}
 .ticket__section .card__ticket__details .btn__ticket__set__action {
   background-color: #1f2937;
   font-weight: 500;
@@ -8703,6 +8702,7 @@ a:hover {
   z-index: 1;
   background-color: #ffffff;
   border-radius: 0.5rem;
+  box-shadow: rgba(33, 35, 38, 0.1) 0px 7px 7px -7px;
   z-index: 2;
 }
 .ticket__section .ticket__details__top .ticket__details__topbuttons__label {

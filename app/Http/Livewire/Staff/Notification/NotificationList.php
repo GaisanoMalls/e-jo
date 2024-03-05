@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -56,7 +57,7 @@ class NotificationList extends Component
     public function render()
     {
         $notifications = auth()->user()->notifications->filter(
-            fn($notification) => Ticket::where('id', data_get($notification->data, 'ticket.id'))->exists()
+            fn(Builder $notification) => Ticket::where('id', data_get($notification->data, 'ticket.id'))->exists()
         );
 
         return view('livewire.staff.notification.notification-list', [

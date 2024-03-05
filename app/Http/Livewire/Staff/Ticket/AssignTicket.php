@@ -11,6 +11,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\ServiceDepartmentAdmin\AssignedAgentNotification;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
@@ -71,9 +72,9 @@ class AssignTicket extends Component
     public function updatedTeam()
     {
         $this->agents = User::with('profile')->role(Role::AGENT)
-            ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->serviceDepartment->id))
-            ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
-            ->whereHas('teams', fn($team) => $team->where('teams.id', $this->team))->get();
+            ->whereHas('serviceDepartments', fn(Builder $query) => $query->where('service_departments.id', $this->ticket->serviceDepartment->id))
+            ->whereHas('branches', fn(Builder $branch) => $branch->where('branches.id', $this->ticket->branch->id))
+            ->whereHas('teams', fn(Builder $team) => $team->where('teams.id', $this->team))->get();
         $this->dispatchBrowserEvent('get-agents-from-team', ['agents' => $this->agents->toArray()]);
     }
 
@@ -82,7 +83,7 @@ class AssignTicket extends Component
         return view('livewire.staff.ticket.assign-ticket', [
             'agents' => $this->agents,
             'teams' => Team::where('service_department_id', $this->ticket->serviceDepartment->id)
-                ->withWhereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
+                ->withWhereHas('branches', fn(Builder $branch) => $branch->where('branches.id', $this->ticket->branch->id))
                 ->get(),
         ]);
     }

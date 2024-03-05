@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Models\Tag;
 use App\Models\Ticket;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class TicketTag extends Component
@@ -26,7 +27,7 @@ class TicketTag extends Component
 
     public function getTagIds()
     {
-        return Tag::whereHas('tickets', fn($ticket) => $ticket->where('tickets.id', $this->ticket->id))->pluck('id')->toArray();
+        return Tag::whereHas('tickets', fn(Builder $ticket) => $ticket->where('tickets.id', $this->ticket->id))->pluck('id')->toArray();
     }
 
     public function removeTag($tagId)

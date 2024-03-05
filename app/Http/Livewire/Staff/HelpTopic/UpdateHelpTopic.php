@@ -7,6 +7,7 @@ use App\Models\HelpTopic;
 use App\Models\SpecialProject;
 use App\Models\Team;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -32,7 +33,7 @@ class UpdateHelpTopic extends Component
         $this->service_department = $helpTopic->service_department_id;
         $this->team = $helpTopic->team_id;
         $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
-        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
+        $this->teams = Team::whereHas('serviceDepartment', fn(Builder $query) => $query->where('service_department_id', $helpTopic->service_department_id))->get();
         $this->isSpecialProject = $helpTopic->specialProject ? true : false;
     }
 
@@ -79,7 +80,7 @@ class UpdateHelpTopic extends Component
 
     public function updatedServiceDepartment()
     {
-        $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->service_department))->get();
+        $this->teams = Team::whereHas('serviceDepartment', fn(Builder $team) => $team->where('service_department_id', $this->service_department))->get();
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 

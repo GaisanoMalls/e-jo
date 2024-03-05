@@ -10,6 +10,7 @@ use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -30,12 +31,12 @@ class CreateRequester extends Component
 
     public function rules()
     {
-        return (new StoreUserRequest())->rules();
+        return(new StoreUserRequest())->rules();
     }
 
     public function updatedBranch()
     {
-        $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
+        $this->BUDepartments = Department::whereHas('branches', fn(Builder $query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
     }
 

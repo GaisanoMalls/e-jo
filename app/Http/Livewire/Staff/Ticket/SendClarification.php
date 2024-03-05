@@ -11,6 +11,7 @@ use App\Models\Status;
 use App\Models\Ticket;
 use App\Notifications\ServiceDepartmentAdmin\TicketClarificationFromServiceDeptAdminNotification;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
@@ -29,12 +30,12 @@ class SendClarification extends Component
 
     public function rules()
     {
-        return (new StoreClarificationRequest())->rules();
+        return(new StoreClarificationRequest())->rules();
     }
 
     public function messages()
     {
-        return (new StoreClarificationRequest())->messages();
+        return(new StoreClarificationRequest())->messages();
     }
 
     private function actionOnSubmit()
@@ -83,7 +84,7 @@ class SendClarification extends Component
                 }
 
                 // * GET THE REQUESTER
-                $requester = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
+                $requester = $clarification->whereHas('user', fn(Builder $user) => $user->where('id', '!=', auth()->user()->id))
                     ->where('ticket_id', $this->ticket->id)->latest('created_at')->first();
 
                 // * CONSTRUCT A LOG DESCRIPTION
