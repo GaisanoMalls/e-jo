@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\SpecialProjectStatusEnum;
 use App\Models\Ticket;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,10 +14,12 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('ticket_costings', function (Blueprint $table) {
+        Schema::create('ticket_special_project_status', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
-            $table->decimal('amount', 10, 2);
+            $table->enum('costing_and_planning_status', [SpecialProjectStatusEnum::DONE->value])->nullable();
+            $table->enum('purchasing_status', [SpecialProjectStatusEnum::ON_ORDERED->value, SpecialProjectStatusEnum::DELIVERED->value])->nullable();
+            $table->enum('resource_status', [SpecialProjectStatusEnum::PROCESSED->value])->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('ticket_costings');
+        Schema::dropIfExists('ticket_special_project_status');
     }
 };

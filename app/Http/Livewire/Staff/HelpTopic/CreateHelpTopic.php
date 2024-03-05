@@ -39,7 +39,7 @@ class CreateHelpTopic extends Component
         ];
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         $this->reset();
         $this->resetValidation();

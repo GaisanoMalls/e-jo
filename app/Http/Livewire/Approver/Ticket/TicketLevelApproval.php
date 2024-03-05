@@ -3,13 +3,17 @@
 namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
+use App\Enums\SpecialProjectStatusEnum;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
+use App\Models\TicketCostingPRFile;
+use App\Models\TicketSpecialProjectStatus;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -21,7 +25,7 @@ class TicketLevelApproval extends Component
 
     protected $listeners = ['loadLevelOfApproval' => '$refresh'];
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         $this->emit('loadLevelOfApproval');
         $this->emit('loadTicketLogs');
@@ -136,23 +140,36 @@ class TicketLevelApproval extends Component
     {
         try {
             if (auth()->user()->hasRole(Role::APPROVER)) {
-                if ($this->isDoneSpecialProjectAmountApproval($this->ticket)) {
-                    Ticket::where('id', $this->ticket->id)->update([
-                        'approval_status' => ApprovalStatusEnum::APPROVED
-                    ]);
-
-                    TicketApproval::where('ticket_id', $this->ticket->id)
-                        ->whereNotNull('approval_2->level_2_approver->approver_id')
-                        ->whereJsonContains('approval_2->level_2_approver->approver_id', auth()->user()->id)
-                        ->update([
-                            'approval_2->level_2_approver->approved_by' => auth()->user()->id,
-                            'approval_2->level_2_approver->is_approved' => true,
-                            'is_all_approval_done' => true
+                DB::transaction(function () {
+                    if ($this->isDoneSpecialProjectAmountApproval($this->ticket)) {
+                        Ticket::where('id', $this->ticket->id)->update([
+                            'approval_status' => ApprovalStatusEnum::APPROVED
                         ]);
-                    $this->actionOnSubmit();
-                } else {
-                    noty()->addWarning('Amount for special project has not yet approved.');
-                }
+
+                        TicketApproval::where('ticket_id', $this->ticket->id)
+                            ->whereNotNull('approval_2->level_2_approver->approver_id')
+                            ->whereJsonContains('approval_2->level_2_approver->approver_id', auth()->user()->id)
+                            ->update([
+                                'approval_2->level_2_approver->approved_by' => auth()->user()->id,
+                                'approval_2->level_2_approver->is_approved' => true,
+                                'is_all_approval_done' => true
+                            ]);
+
+                        TicketCostingPRFile::where([['ticket_costing_id', $this->ticket->ticketCosting->id]])
+                            ->update(['is_approved_level_2_approver' => true]);
+
+                        if (TicketApproval::where([['ticket_id', $this->ticket->id], ['is_all_approval_done', true]])->exists()) {
+                            TicketSpecialProjectStatus::create([
+                                'ticket_id' => $this->ticket->id,
+                                'costing_and_planning_status' => SpecialProjectStatusEnum::DONE
+                            ]);
+                        }
+
+                        $this->actionOnSubmit();
+                    } else {
+                        noty()->addWarning('Amount for special project has not yet approved.');
+                    }
+                });
             } else {
                 noty()->addError('You have no rights/permission to approve the ticket');
             }

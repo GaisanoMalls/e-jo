@@ -2,12 +2,14 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Enums\SpecialProjectStatusEnum;
 use App\Http\Traits\Utils;
 use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
 use App\Models\TicketCosting as Costing;
 use App\Models\TicketCostingFile;
+use App\Models\TicketSpecialProjectStatus;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -89,8 +91,8 @@ class TicketCosting extends Component
     public function deleteCostingAttachent(TicketCostingFile $ticketCostingFile)
     {
         try {
-            if ($this->isOnlyAgent($this->ticket->agent_id)) {
-                if (Storage::exists($ticketCostingFile->file_attachment)) {
+            if ($this->isOnlyAgent($this->ticket->agent_id) && !$this->isDoneSpecialProjectAmountApproval($this->ticket)) {
+                if (Storage::exists($ticketCostingFile->file_attachment) && $ticketCostingFile->ticket_costing_id === $this->ticket->ticketCosting->id) {
                     $ticketCostingFile->delete();
                     Storage::delete($ticketCostingFile->file_attachment);
                 } else {
@@ -101,7 +103,7 @@ class TicketCosting extends Component
                 $this->emit('loadServiceDeptAdminTicketCosting');
             } else {
                 $this->editingFieldId = null;
-                noty()->addWarning('Sorry, only agents have the authority to delete the attachments.');
+                noty()->addWarning('Deletion of attachment is restricted.');
             }
         } catch (Exception $e) {
             Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
@@ -174,26 +176,26 @@ class TicketCosting extends Component
         }
     }
 
-    public function isSpecialProjectCostingApprover1(int $approverId)
+    public function isSpecialProjectCostingApprover1(int $approverId, Ticket $ticket)
     {
         return auth()->user()->id === $approverId
             && auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)
-            && SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)
+            && SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
                 ->whereJsonContains('service_department_admin_approver->approver_id', $approverId)
                 ->exists();
     }
 
-    public function approveCostingApproval1()
+    public function approveCostingApproval1(Ticket $ticket)
     {
         try {
             $costingApprover1Id = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->where('id', auth()->user()->id)->value('id');
 
-            if ($this->isSpecialProjectCostingApprover1($costingApprover1Id)) {
-                SpecialProjectAmountApproval::where([['ticket_id', $this->ticket->id], ['service_department_admin_approver->is_approved', false]])
+            if ($this->isSpecialProjectCostingApprover1($costingApprover1Id, $ticket)) {
+                SpecialProjectAmountApproval::where([['ticket_id', $ticket->id], ['service_department_admin_approver->is_approved', false]])
                     ->update([
                         'service_department_admin_approver->is_approved' => true,
                         'service_department_admin_approver->date_approved' => Carbon::now(),
-                        'is_done' => !$this->isCostingAmountNeedCOOApproval($this->ticket) ? true : false
+                        'is_done' => !$this->isCostingAmountNeedCOOApproval($ticket) ? true : false
                     ]);
 
                 $this->emit('loadServiceDeptAdminTicketCosting');
@@ -207,10 +209,14 @@ class TicketCosting extends Component
         }
     }
 
-    public function isCostingApproval1Approved()
+    public function isDoneTicketCostingAndPlanning(Ticket $ticket)
     {
-        return SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)
-            ->whereJsonContains('service_department_admin_approver->is_approved', true)->exists();
+        return $this->isDoneSpecialProjectAmountApproval($ticket)
+            && TicketSpecialProjectStatus::whereNotNull('costing_and_planning_status')
+                ->where([
+                    ['ticket_id', $ticket->id],
+                    ['costing_and_planning_status', SpecialProjectStatusEnum::DONE]
+                ])->exists();
     }
 
     public function render()

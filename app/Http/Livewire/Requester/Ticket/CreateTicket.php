@@ -56,12 +56,12 @@ class CreateTicket extends Component
 
     public function rules()
     {
-        return (new StoreTicketRequest())->rules();
+        return(new StoreTicketRequest())->rules();
     }
 
     public function messages()
     {
-        return (new StoreTicketRequest())->messages();
+        return(new StoreTicketRequest())->messages();
     }
 
     public function updated($fields)

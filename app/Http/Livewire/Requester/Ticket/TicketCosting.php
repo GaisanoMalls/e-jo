@@ -30,15 +30,15 @@ class TicketCosting extends Component
 
     public function rules()
     {
-        return (new StoreCostingPRFileRequest())->rules();
+        return(new StoreCostingPRFileRequest())->rules();
     }
 
     public function messages()
     {
-        return (new StoreCostingPRFileRequest())->messages();
+        return(new StoreCostingPRFileRequest())->messages();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         $this->uploadPRFileCostingCount++;
         $this->costingPRFiles = [];
@@ -51,7 +51,7 @@ class TicketCosting extends Component
     public function saveCostingPRFile()
     {
         try {
-            if ($this->isCurrentRequesterIsOwnerOfCosting()) {
+            if ($this->isCurrentRequesterIsOwnerOfCosting() && !$this->isDonePRFileApproval($this->ticket)) {
                 if ($this->costingPRFiles) {
                     foreach ($this->costingPRFiles as $uploadedFile) {
                         $fileName = $uploadedFile->getClientOriginalName();
@@ -69,7 +69,7 @@ class TicketCosting extends Component
                     session()->flash('error', 'PR file is required');
                 }
             } else {
-                noty()->addError('Unverified user');
+                noty()->addError('Adding of attachments is restricted.');
             }
 
         } catch (Exception $e) {
@@ -78,11 +78,11 @@ class TicketCosting extends Component
         }
     }
 
-    public function deleteCostingPRFile(TicketCostingPRFile $prFile)
+    public function deleteCostingPRFile(TicketCostingPRFile $prFile, Ticket $ticket)
     {
         try {
-            if ($this->isCurrentRequesterIsOwnerOfCosting()) {
-                if (Storage::exists($prFile->file_attachment)) {
+            if ($this->isCurrentRequesterIsOwnerOfCosting() && !$this->isDonePRFileApproval($ticket)) {
+                if (Storage::exists($prFile->file_attachment) && $prFile->ticket_costing_id === $ticket->ticketCosting->id) {
                     $prFile->delete();
                     Storage::delete($prFile->file_attachment);
                     $this->emit('loadRequesterTicketCostingPRFile');
@@ -91,7 +91,7 @@ class TicketCosting extends Component
                     noty()->addInfo('File not found.');
                 }
             } else {
-                noty()->addError('Unverified user');
+                noty()->addError('Deletion of attachment is restricted');
             }
         } catch (Exception $e) {
             Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
@@ -102,6 +102,15 @@ class TicketCosting extends Component
     public function isCurrentRequesterIsOwnerOfCosting()
     {
         return auth()->user()->id === $this->ticket->user->id;
+    }
+
+    public function isDonePRFileApproval(Ticket $ticket)
+    {
+        return TicketCostingPRFile::where([
+            ['ticket_costing_id', $ticket->ticketCosting->id],
+            ['is_approved_level_1_approver', true],
+        ])->orWhere('is_approved_level_2_approver', true)
+            ->exists();
     }
 
     public function updatedCostingPRFiles()

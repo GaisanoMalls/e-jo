@@ -17,7 +17,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(TicketCosting::class, 'ticket_costing_id')->constrained('ticket_costings')->cascadeOnDelete();
             $table->string('file_attachment')->nullable(false);
-            $table->timestamps();
+            $table->boolean('is_approved_level_1_approver')->default(false);
+            $table->boolean('is_approved_level_2_approver')->default(false);
         });
     }
 

@@ -248,59 +248,62 @@
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
-                    <div class="modal__body mt-3">
-                        <form wire:submit.prevent="saveCostingPRFile">
-                            <div class="col-12 mt-auto">
-                                <div class="d-flex align-items-center gap-3">
-                                    <label for="ticketSubject" class="form-label ticket__costing__label">
-                                        Attachment
-                                    </label>
-                                </div>
-                                <div x-data="{ isUploading: false, progress: 1 }"
-                                    x-on:livewire-upload-start="isUploading = true; progress = 1"
-                                    x-on:livewire-upload-finish="isUploading = false"
-                                    x-on:livewire-upload-error="isUploading = false"
-                                    x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                    <input class="form-control form-control-sm border-0 costing__file__attachment"
-                                        type="file" accept=".pdf" wire:model="costingPRFiles" multiple
-                                        id="upload-{{ $uploadPRFileCostingCount }}"
-                                        onchange="validatePRCostingFile()">
-                                    <div x-transition.duration.500ms x-show="isUploading"
-                                        class="progress progress-sm mt-1" style="height: 10px;">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                            role="progressbar" aria-label="Animated striped example"
-                                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
-                                            x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
+                    @if (!$this->isDonePRFileApproval($ticket))
+                        <div class="modal__body mt-3">
+                            <form wire:submit.prevent="saveCostingPRFile">
+                                <div class="col-12 mt-auto">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <label for="ticketSubject" class="form-label ticket__costing__label">
+                                            Attachment
+                                        </label>
+                                    </div>
+                                    <div x-data="{ isUploading: false, progress: 1 }"
+                                        x-on:livewire-upload-start="isUploading = true; progress = 1"
+                                        x-on:livewire-upload-finish="isUploading = false"
+                                        x-on:livewire-upload-error="isUploading = false"
+                                        x-on:livewire-upload-progress="progress = $event.detail.progress">
+                                        <input class="form-control form-control-sm border-0 costing__file__attachment"
+                                            type="file" accept=".pdf" wire:model="costingPRFiles" multiple
+                                            id="upload-{{ $uploadPRFileCostingCount }}"
+                                            onchange="validatePRCostingFile()">
+                                        <div x-transition.duration.500ms x-show="isUploading"
+                                            class="progress progress-sm mt-1" style="height: 10px;">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                role="progressbar" aria-label="Animated striped example"
+                                                aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                                                x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between"
+                                            x-transition.duration.500ms>
+                                            <span x-show="isUploading" x-text="progress + '%'"
+                                                style="font-size: 12px;">
+                                            </span>
+                                            <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
+                                                <i x-show="isUploading" class='bx bx-loader-circle bx-spin'
+                                                    style="font-size: 14px;"></i>
+                                                <span x-show="isUploading">Uploading...</span>
+                                            </span>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between"
-                                        x-transition.duration.500ms>
-                                        <span x-show="isUploading" x-text="progress + '%'" style="font-size: 12px;">
+                                    <span class="error__message" id="excludeEXEfileMessageForPR"></span>
+                                    @if (session()->has('error'))
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ session('error') }}
                                         </span>
-                                        <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
-                                            <i x-show="isUploading" class='bx bx-loader-circle bx-spin'
-                                                style="font-size: 14px;"></i>
-                                            <span x-show="isUploading">Uploading...</span>
-                                        </span>
-                                    </div>
+                                    @endif
                                 </div>
-                                <span class="error__message" id="excludeEXEfileMessageForPR"></span>
-                                @if (session()->has('error'))
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ session('error') }}
+                                <button type="submit"
+                                    class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
+                                    <span wire:loading wire:target="saveCostingPRFile"
+                                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                                     </span>
-                                @endif
-                            </div>
-                            <button type="submit"
-                                class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
-                                <span wire:loading wire:target="saveCostingPRFile"
-                                    class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
-                                </span>
-                                Save
-                            </button>
-                        </form>
-                    </div>
+                                    Save
+                                </button>
+                            </form>
+                        </div>
+                    @endif
                     @if ($ticket->ticketCosting)
                         <div class="modal__body mt-3">
                             <ul class="list-group list-group-flush">
@@ -359,18 +362,20 @@
                                         </a>
                                         <div
                                             class="d-flex align-items-center gap-4 file__attachment__actions__container">
-                                            <a type="button" class="file__attachment__action__button"
-                                                wire:key="{{ $file->id }}"
-                                                wire:click="deleteCostingPRFile({{ $file->id }})">
-                                                <i class="bi bi-trash" wire:loading.class="d-none"
-                                                    wire:target="deleteCostingPRFile({{ $file->id }})"></i>
-                                                <div wire:loading
-                                                    wire:target="deleteCostingPRFile({{ $file->id }})"
-                                                    class="spinner-border spinner-border-sm loading__spinner"
-                                                    role="status">
-                                                    <span class="sr-only">Loading...</span>
-                                                </div>
-                                            </a>
+                                            @if (!$this->isDonePRFileApproval($ticket))
+                                                <a type="button" class="file__attachment__action__button"
+                                                    wire:key="{{ $file->id }}"
+                                                    wire:click="deleteCostingPRFile({{ $file->id }}, {{ $ticket }})">
+                                                    <i class="bi bi-trash" wire:loading.class="d-none"
+                                                        wire:target="deleteCostingPRFile({{ $file->id }}, {{ $ticket }})"></i>
+                                                    <div wire:loading
+                                                        wire:target="deleteCostingPRFile({{ $file->id }})"
+                                                        class="spinner-border spinner-border-sm loading__spinner"
+                                                        role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </a>
+                                            @endif
                                             <a type="button" class="file__attachment__action__button"
                                                 href="{{ Storage::url($file->file_attachment) }}" download
                                                 target="_blank">

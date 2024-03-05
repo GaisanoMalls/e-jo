@@ -34,7 +34,7 @@ class CreateAgent extends Component
 
     public function rules()
     {
-        return (new StoreAgenRequest())->rules();
+        return(new StoreAgenRequest())->rules();
     }
 
     public function updatedBranch()
@@ -47,7 +47,7 @@ class CreateAgent extends Component
         ]);
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         $this->reset();
         $this->resetValidation();

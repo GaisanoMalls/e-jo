@@ -9,8 +9,9 @@ class TicketCostingPRFile extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     protected $table = 'ticket_costing_pr_files';
-    protected $fillable = ['ticket_costing_id', 'file_attachment'];
+    protected $fillable = ['ticket_costing_id', 'file_attachment', 'is_approved_level_1_approver', 'is_approved_level_2_approver'];
 
     public function ticketCosting()
     {

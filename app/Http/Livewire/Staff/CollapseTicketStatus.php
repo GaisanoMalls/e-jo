@@ -13,24 +13,6 @@ class CollapseTicketStatus extends Component
 
     public function render()
     {
-        $openTickets = $this->getOpenTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
-        $claimedTickets = $this->getClaimedTickets();
-        $onProcessTickets = $this->getOnProcessTickets();
-        $overdueTickets = $this->getOverdueTickets();
-        $closedTickets = $this->getClosedTickets();
-
-        return view('livewire.staff.collapse-ticket-status', compact([
-            'openTickets',
-            'viewedTickets',
-            'approvedTickets',
-            'disapprovedTickets',
-            'claimedTickets',
-            'onProcessTickets',
-            'overdueTickets',
-            'closedTickets',
-        ]));
+        return view('livewire.staff.collapse-ticket-status');
     }
 }

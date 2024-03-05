@@ -26,12 +26,12 @@ class AddCosting extends Component
 
     public function rules()
     {
-        return (new StoreTicketCostingRequest())->rules();
+        return(new StoreTicketCostingRequest())->rules();
     }
 
     public function messages()
     {
-        return (new StoreTicketCostingRequest())->messages();
+        return(new StoreTicketCostingRequest())->messages();
     }
 
     private function actionOnSubmit()
@@ -71,7 +71,6 @@ class AddCosting extends Component
                         // Create a costing when approver is found
                         $ticketCosting = TicketCosting::create([
                             'ticket_id' => $this->ticket->id,
-                            'attached_by_id' => auth()->user()->id,
                             'amount' => $this->amount,
                         ]);
 

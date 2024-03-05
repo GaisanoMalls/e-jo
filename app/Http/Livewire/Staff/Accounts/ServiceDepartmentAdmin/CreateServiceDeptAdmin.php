@@ -34,10 +34,10 @@ class CreateServiceDeptAdmin extends Component
 
     public function rules()
     {
-        return (new StoreServiceDeptAdminRequest())->rules();
+        return(new StoreServiceDeptAdminRequest())->rules();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         $this->reset();
         $this->resetValidation();

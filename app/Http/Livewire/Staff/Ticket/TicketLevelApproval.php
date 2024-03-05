@@ -6,8 +6,10 @@ use App\Http\Traits\Utils;
 use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
+use App\Models\TicketCostingPRFile;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -19,7 +21,7 @@ class TicketLevelApproval extends Component
 
     protected $listeners = ['loadLevelOfApproval' => 'render'];
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         $this->emit('loadLevelOfApproval');
         $this->emit('loadTicketLogs');
@@ -84,6 +86,11 @@ class TicketLevelApproval extends Component
         )->isNotEmpty();
     }
 
+    public function isRequesterDonePR(Ticket $ticket)
+    {
+        return $ticket->ticketCosting->has('prFileAttachments')->exists();
+    }
+
     public function ticketLevel1ApprovalApprovedBy()
     {
         return TicketApproval::where('ticket_id', $this->ticket->id)->first()?->approval_1['level_1_approver']['approved_by'];
@@ -100,13 +107,18 @@ class TicketLevelApproval extends Component
         try {
             if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
                 if ($this->isDoneSpecialProjectAmountApproval($this->ticket)) {
-                    TicketApproval::where('ticket_id', $this->ticket->id)
-                        ->whereNotNull('approval_2->level_1_approver->approver_id')
-                        ->whereJsonContains('approval_2->level_1_approver->approver_id', auth()->user()->id)
-                        ->update([
-                            'approval_2->level_1_approver->approved_by' => auth()->user()->id,
-                            'approval_2->level_1_approver->is_approved' => true,
-                        ]);
+                    DB::transaction(function () {
+                        TicketApproval::where('ticket_id', $this->ticket->id)
+                            ->whereNotNull('approval_2->level_1_approver->approver_id')
+                            ->whereJsonContains('approval_2->level_1_approver->approver_id', auth()->user()->id)
+                            ->update([
+                                'approval_2->level_1_approver->approved_by' => auth()->user()->id,
+                                'approval_2->level_1_approver->is_approved' => true,
+                            ]);
+
+                        TicketCostingPRFile::where([['ticket_costing_id', $this->ticket->ticketCosting->id]])
+                            ->update(['is_approved_level_1_approver' => true]);
+                    });
                     $this->actionOnSubmit();
                 } else {
                     noty()->addWarning('Amount for special project has not yet approved.');

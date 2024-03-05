@@ -29,9 +29,9 @@
                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                         <span class="sidebar__btn__link__name ">Open</span>
                     </div>
-                    @if ($openTickets->count() >= 1)
+                    @if ($this->getOpenTickets()->count() >= 1)
                         <span class="badge sidebar__btn__link__badge">
-                            {{ $openTickets->count() }}
+                            {{ $this->getOpenTickets()->count() }}
                         </span>
                     @endif
                 </a>
@@ -46,9 +46,9 @@
                             <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                             <span class="sidebar__btn__link__name ">Viewed</span>
                         </div>
-                        @if ($viewedTickets->count() >= 1)
+                        @if ($this->getViewedTickets()->count() >= 1)
                             <span class="badge sidebar__btn__link__badge">
-                                {{ $viewedTickets->count() }}
+                                {{ $this->getViewedTickets()->count() }}
                             </span>
                         @endif
                     </a>
@@ -62,9 +62,9 @@
                             <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                             <span class="sidebar__btn__link__name ">Approved</span>
                         </div>
-                        @if ($approvedTickets->count() >= 1)
+                        @if ($this->getApprovedTickets()->count() >= 1)
                             <span class="badge sidebar__btn__link__badge">
-                                {{ $approvedTickets->count() }}
+                                {{ $this->getApprovedTickets()->count() }}
                             </span>
                         @endif
                     </a>
@@ -78,9 +78,9 @@
                             <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                             <span class="sidebar__btn__link__name ">Disapproved</span>
                         </div>
-                        @if ($disapprovedTickets->count() >= 1)
+                        @if ($this->getDisapprovedTickets()->count() >= 1)
                             <span class="badge sidebar__btn__link__badge">
-                                {{ $disapprovedTickets->count() }}
+                                {{ $this->getDisapprovedTickets()->count() }}
                             </span>
                         @endif
                     </a>
@@ -95,9 +95,9 @@
                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                         <span class="sidebar__btn__link__name ">Claimed</span>
                     </div>
-                    @if ($claimedTickets->count() >= 1)
+                    @if ($this->getClaimedTickets()->count() >= 1)
                         <span class="badge sidebar__btn__link__badge">
-                            {{ $claimedTickets->count() }}
+                            {{ $this->getClaimedTickets()->count() }}
                         </span>
                     @endif
                 </a>
@@ -111,9 +111,9 @@
                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                         <span class="sidebar__btn__link__name ">On Process</span>
                     </div>
-                    @if ($onProcessTickets->count() >= 1)
+                    @if ($this->getOnProcessTickets()->count() >= 1)
                         <span class="badge sidebar__btn__link__badge">
-                            {{ $onProcessTickets?->count() }}
+                            {{ $this->getOnProcessTickets()->count() }}
                         </span>
                     @endif
                 </a>
@@ -127,9 +127,9 @@
                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                         <span class="sidebar__btn__link__name ">Overdue</span>
                     </div>
-                    @if ($overdueTickets->count() >= 1)
+                    @if ($this->getOverdueTickets()->count() >= 1)
                         <span class="badge sidebar__btn__link__badge">
-                            {{ $overdueTickets->count() }}
+                            {{ $this->getOverdueTickets()->count() }}
                         </span>
                     @endif
                 </a>
@@ -143,9 +143,9 @@
                         <div class="sidebar__active__dot position-absolute rounded-circle"></div>
                         <span class="sidebar__btn__link__name ">Closed</span>
                     </div>
-                    @if ($closedTickets->count() >= 1)
+                    @if ($this->getClosedTickets()->count() >= 1)
                         <span class="badge sidebar__btn__link__badge">
-                            {{ $closedTickets->count() }}
+                            {{ $this->getClosedTickets()->count() }}
                         </span>
                     @endif
                 </a>

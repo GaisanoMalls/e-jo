@@ -40,7 +40,7 @@ class SlaList extends Component
         $this->resetValidation();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         $this->clearFormFields();
         $this->fetchServiceLevelAgreements();

@@ -20,14 +20,24 @@
                             $this->isTicketApproval1Level2Approved() &&
                             !$this->isTicketApproval2Level1Approved())
                         @if ($this->isOnlyServiceDeptAdminForLastApproval() && !$this->isTicketApproval2Level1Approved())
-                            <button wire:click="approveApproval2Level1Approver" wire:loading.class="disabled"
-                                class="btn btn-sm d-flex align-items-center gap-2 btn__approve" type="button">
-                                <div wire:loading wire:target="approveApproval2Level1Approver"
-                                    class="spinner-border spinner-border-sm loading__spinner" role="status">
-                                    <span class="sr-only">Loading...</span>
+                            @if ($this->isRequesterDonePR($ticket))
+                                <button wire:click="approveApproval2Level1Approver" wire:loading.class="disabled"
+                                    class="btn btn-sm d-flex align-items-center gap-2 btn__approve" type="button">
+                                    <div wire:loading wire:target="approveApproval2Level1Approver"
+                                        class="spinner-border spinner-border-sm loading__spinner" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Approve
+                                </button>
+                            @else
+                                <div class="d-flex align-items-center gap-1">
+                                    <i class="bi bi-check-circle-fill ms-1"
+                                        style="font-size: 11px; color: #D32839;"></i>
+                                    <div class="border-0 text-muted" style="font-size: 0.75rem;">
+                                        Approved
+                                    </div>
                                 </div>
-                                Approve
-                            </button>
+                            @endif
                         @else
                             @if ($this->isTicketApproval1Level1Approved() || $this->isTicketApproval2Level1Approved())
                                 <div class="d-flex align-items-center gap-1">

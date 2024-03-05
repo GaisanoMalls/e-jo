@@ -63,7 +63,7 @@
                         ({{ $this->isTicketApproval1Level2Approved() && !$this->isTicketApproval2Level2Approved() ? '1' : ($this->isTicketApproval2Level2Approved() ? '2' : '0') }}/2)
                     </small>
                     @if (
-                        $this->isTicketApproval1Level2Approved() &&
+                        $this->isTicketApproval1Level1Approved() &&
                             $this->isTicketApproval1Level2Approved() &&
                             !$this->isTicketApproval2Level2Approved())
                         @if ($this->isOnlyApproverForLastApproval())

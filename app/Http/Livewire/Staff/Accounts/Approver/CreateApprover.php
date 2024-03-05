@@ -32,10 +32,10 @@ class CreateApprover extends Component
 
     public function rules()
     {
-        return (new StoreApproverRequest())->rules();
+        return(new StoreApproverRequest())->rules();
     }
 
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         $this->reset();
         $this->resetValidation();

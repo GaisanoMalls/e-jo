@@ -10,16 +10,11 @@ class TicketCosting extends Model
 {
     use HasFactory, Utils;
 
-    protected $fillable = ['ticket_id', 'attached_by_id', 'amount'];
+    protected $fillable = ['ticket_id', 'amount'];
 
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
-    }
-
-    public function attachedByAgent()
-    {
-        return $this->belongsTo(User::class, 'attached_by_id');
     }
 
     public function fileAttachments()

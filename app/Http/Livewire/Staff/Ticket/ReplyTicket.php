@@ -27,12 +27,12 @@ class ReplyTicket extends Component
 
     public function rules()
     {
-        return (new StaffReplyTicketRequest())->rules();
+        return(new StaffReplyTicketRequest())->rules();
     }
 
     public function messages()
     {
-        return (new StaffReplyTicketRequest())->messages();
+        return(new StaffReplyTicketRequest())->messages();
     }
 
     private function actionOnSubmit()

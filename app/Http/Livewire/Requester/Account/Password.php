@@ -15,11 +15,11 @@ class Password extends Component
 
     public function rules()
     {
-        return (new UpdatePasswordRequest())->rules();
+        return(new UpdatePasswordRequest())->rules();
     }
 
     /** Perform livewire events upon form submission. */
-    public function actionOnSubmit()
+    private function actionOnSubmit()
     {
         $this->reset();
         $this->resetValidation();
