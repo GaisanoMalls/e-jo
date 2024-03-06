@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire\Staff\Accounts\Approver;
 
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
@@ -58,8 +58,7 @@ class ApproverList extends Component
             noty()->addSuccess('Approver account has been deleted');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addSuccess('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

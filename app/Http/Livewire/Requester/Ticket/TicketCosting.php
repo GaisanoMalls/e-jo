@@ -3,12 +3,12 @@
 namespace App\Http\Livewire\Requester\Ticket;
 
 use App\Http\Requests\Requester\StoreCostingPRFileRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
 use App\Models\TicketCostingPRFile;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\File;
 use Livewire\Component;
@@ -82,8 +82,7 @@ class TicketCosting extends Component
             }
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -103,8 +102,7 @@ class TicketCosting extends Component
                 noty()->addError('Deletion of attachment is restricted');
             }
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

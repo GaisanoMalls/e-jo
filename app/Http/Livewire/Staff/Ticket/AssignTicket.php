@@ -3,17 +3,16 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\User;
-use App\Notifications\ServiceDepartmentAdmin\AssignedAgentNotification;
+use App\Notifications\AppNotification;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
@@ -53,7 +52,17 @@ class AssignTicket extends Component
                         'approval_status' => ApprovalStatusEnum::APPROVED,
                     ]);
 
-                    Notification::send($this->ticket->agent, new AssignedAgentNotification($this->ticket));
+                    // Retrieve the service department administrator responsible for approving the ticket. For notification use only
+                    $serviceDepartmentAdmin = User::with('profile')->where('id', auth()->user()->id)->role(Role::SERVICE_DEPARTMENT_ADMIN)->first();
+
+                    Notification::send(
+                        $this->ticket->agent,
+                        new AppNotification(
+                            ticket: $this->ticket,
+                            title: "Assigned Ticket {$this->ticket->ticket_number}",
+                            message: "{$serviceDepartmentAdmin->profile->getFullName()} assign this ticket to you."
+                        )
+                    );
                     // Mail::to($this->ticket->agent)->send(new AssignedAgentMail($this->ticket, $this->ticket->agent));
                 }
 
@@ -64,17 +73,16 @@ class AssignTicket extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
     public function updatedTeam()
     {
         $this->agents = User::with('profile')->role(Role::AGENT)
-            ->whereHas('serviceDepartments', fn(Builder $query) => $query->where('service_departments.id', $this->ticket->serviceDepartment->id))
-            ->whereHas('branches', fn(Builder $branch) => $branch->where('branches.id', $this->ticket->branch->id))
-            ->whereHas('teams', fn(Builder $team) => $team->where('teams.id', $this->team))->get();
+            ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->serviceDepartment->id))
+            ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
+            ->whereHas('teams', fn($team) => $team->where('teams.id', $this->team))->get();
         $this->dispatchBrowserEvent('get-agents-from-team', ['agents' => $this->agents->toArray()]);
     }
 
@@ -83,7 +91,7 @@ class AssignTicket extends Component
         return view('livewire.staff.ticket.assign-ticket', [
             'agents' => $this->agents,
             'teams' => Team::where('service_department_id', $this->ticket->serviceDepartment->id)
-                ->withWhereHas('branches', fn(Builder $branch) => $branch->where('branches.id', $this->ticket->branch->id))
+                ->withWhereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
                 ->get(),
         ]);
     }

@@ -2,14 +2,13 @@
 
 namespace App\Http\Livewire\Staff\Notification;
 
+use App\Http\Traits\AppErrorLog;
 use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class NotificationList extends Component
@@ -42,8 +41,7 @@ class NotificationList extends Component
             });
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -57,7 +55,7 @@ class NotificationList extends Component
     public function render()
     {
         $notifications = auth()->user()->notifications->filter(
-            fn(Builder $notification) => Ticket::where('id', data_get($notification->data, 'ticket.id'))->exists()
+            fn($notification) => Ticket::where('id', data_get($notification->data, 'ticket.id'))->exists()
         );
 
         return view('livewire.staff.notification.notification-list', [

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Requester\Ticket;
 
 use App\Http\Requests\Requester\StoreTicketClarificationRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
@@ -11,11 +12,9 @@ use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
-use App\Notifications\Requester\TicketClarificationFromRequesterNotification;
+use App\Notifications\AppNotification;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -87,7 +86,7 @@ class SendClarification extends Component
                 }
 
                 // Get the latest staff
-                $latestStaff = $clarification->whereHas('user', fn(Builder $user) => $user->where('id', '!=', auth()->user()->id))
+                $latestStaff = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
                     ->where('ticket_id', $this->ticket->id)
                     ->latest('created_at')->first();
 
@@ -99,11 +98,19 @@ class SendClarification extends Component
 
                 // Get the department admin (approver) when there is no latest staff in the clarifications
                 $initialServiceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->whereHas('branches', fn(Builder $branch) => $branch->where('branches.id', auth()->user()->branches->pluck('id')->first()))
-                    ->whereHas('buDepartments', fn(Builder $query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))->get();
+                    ->whereHas('branches', fn($branch) => $branch->where('branches.id', auth()->user()->branches->pluck('id')->first()))
+                    ->whereHas('buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))->get();
 
                 foreach ($initialServiceDepartmentAdmins as $initialServiceDepartmentAdmin) {
-                    Notification::send($latestStaff->user ?? $initialServiceDepartmentAdmin, new TicketClarificationFromRequesterNotification($this->ticket));
+                    Notification::send(
+                        $latestStaff->user ?? $initialServiceDepartmentAdmin,
+                        new AppNotification(
+                            ticket: $this->ticket,
+                            title: "Clarification for ticket {$this->ticket->ticket_number}",
+                            message: "Ticket clarification sent by {$this->ticket->user->profile->getFullName()}",
+                            forClarification: true
+                        )
+                    );
                     // Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
                 }
 
@@ -111,8 +118,7 @@ class SendClarification extends Component
                 $this->actionOnSubmit();
             });
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Staff\Accounts\Agent;
 
+use App\Http\Traits\AppErrorLog;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
@@ -33,8 +33,7 @@ class AgentList extends Component
             noty()->addSuccess('Requester account has been deleted');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addSuccess('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

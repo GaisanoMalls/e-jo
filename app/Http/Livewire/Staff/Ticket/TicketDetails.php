@@ -55,9 +55,6 @@ class TicketDetails extends Component
 
     public function render()
     {
-        return view('livewire.staff.ticket.ticket-details', [
-            'isSlaApproved' => $this->isSlaApproved($this->ticket),
-            'isSlaOverdue' => $this->isSlaOverdue($this->ticket)
-        ]);
+        return view('livewire.staff.ticket.ticket-details');
     }
 }

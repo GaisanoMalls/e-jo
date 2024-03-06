@@ -7,7 +7,6 @@ use App\Http\Traits\Approver\Tickets as ApproverTickets;
 use App\Http\Traits\Utils;
 use App\Models\Clarification;
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Builder;
 
 class ApproverTicketsController extends Controller
 {
@@ -60,8 +59,8 @@ class ApproverTicketsController extends Controller
     public function viewTicketDetails(Ticket $ticket)
     {
         $isCostingAmountNeedCOOApproval = $this->isCostingAmountNeedCOOApproval($ticket);
-        $latestClarification = Clarification::whereHas('ticket', fn(Builder $query) => $query->where('ticket_id', $ticket->id))
-            ->whereHas('user', fn(Builder $user) => $user->where('user_id', '!=', auth()->user()->id))
+        $latestClarification = Clarification::whereHas('ticket', fn($query) => $query->where('ticket_id', $ticket->id))
+            ->whereHas('user', fn($user) => $user->where('user_id', '!=', auth()->user()->id))
             ->orderByDesc('created_at')
             ->first();
 

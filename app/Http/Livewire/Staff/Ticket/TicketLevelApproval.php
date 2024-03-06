@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\Role;
 use App\Models\Ticket;
@@ -10,7 +11,6 @@ use App\Models\TicketCostingPRFile;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class TicketLevelApproval extends Component
@@ -127,8 +127,7 @@ class TicketLevelApproval extends Component
                 noty()->addError('You have no rights/permission to approve the ticket');
             }
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

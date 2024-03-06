@@ -80,7 +80,7 @@
                             <div class="row align-items-center bg-light p-2 py-3 rounded-3 mx-1 mt-2 mb-4">
                                 <div class="col-md-12">
                                     <p class="mb-0" style="font-size: 13px; line-height: 19px;">
-                                        Discussion with agent has been disabled.
+                                        Discussion with agent is disabled.
                                     </p>
                                 </div>
                             </div>

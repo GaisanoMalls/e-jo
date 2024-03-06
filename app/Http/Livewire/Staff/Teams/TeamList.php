@@ -2,12 +2,11 @@
 
 namespace App\Http\Livewire\Staff\Teams;
 
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
-use App\Models\Branch;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -89,8 +88,7 @@ class TeamList extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -110,9 +108,7 @@ class TeamList extends Component
             noty()->addSuccess('Team successfully deleted');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            ;
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

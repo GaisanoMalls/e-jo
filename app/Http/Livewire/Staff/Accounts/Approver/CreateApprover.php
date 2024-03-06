@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Staff\Accounts\Approver;
 
 use App\Http\Requests\SysAdmin\Manage\Account\StoreApproverRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\ApproverLevel;
@@ -14,7 +15,6 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class CreateApprover extends Component
@@ -116,8 +116,7 @@ class CreateApprover extends Component
                 noty()->addSuccess('Account successfully created');
             });
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Failed to save a new approver');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

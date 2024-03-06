@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Staff\ServiceDeptAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ServiceDeptAdmin\StoreAnnouncementRequest;
 use App\Http\Requests\ServiceDeptAdmin\UpdateAnnouncementRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Models\Announcement;
 use App\Models\Department;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class AnnouncementController extends Controller
 {
@@ -68,7 +68,7 @@ class AnnouncementController extends Controller
             return back()->with('success', 'Announcement successfully deleted.');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
+            AppErrorLog::getError($e->getMessage(), false);
             return back()->with('success', 'Announcemant cannot be deleted.');
         }
     }

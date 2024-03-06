@@ -4,14 +4,16 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Requests\Approver\StoreDisapproveTicketRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Models\ActivityLog;
 use App\Models\Reason;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
-use App\Notifications\ServiceDepartmentAdmin\DisapprovedTicketNotification;
+use App\Models\User;
+use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
@@ -23,7 +25,7 @@ class DisapproveTicket extends Component
 
     public function rules()
     {
-        return (new StoreDisapproveTicketRequest())->rules();
+        return(new StoreDisapproveTicketRequest())->rules();
     }
 
     private function actionOnSubmit()
@@ -61,7 +63,18 @@ class DisapproveTicket extends Component
                     'approval_status' => ApprovalStatusEnum::DISAPPROVED,
                 ]);
 
-                Notification::send($this->ticket->user, new DisapprovedTicketNotification($this->ticket));
+                // Retrieve the service department administrator responsible for approving the ticket. For notification use only
+                $serviceDepartmentAdmin = User::with('profile')->where('id', auth()->user()->id)->role(Role::SERVICE_DEPARTMENT_ADMIN)->first();
+
+                Notification::send(
+                    $this->ticket->user,
+                    new AppNotification(
+                        ticket: $this->ticket,
+                        title: "Disapproved Ticket {$this->ticket->ticket_number}",
+                        message: "{$serviceDepartmentAdmin->profile->getFullName()} disapproved your ticket"
+                    )
+                );
+
                 ActivityLog::make($this->ticket->id, 'disapproved the ticket');
             });
 
@@ -69,8 +82,7 @@ class DisapproveTicket extends Component
             noty()->addSuccess('Ticket has been approved');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Ooos, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

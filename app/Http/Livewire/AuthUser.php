@@ -16,17 +16,18 @@ class AuthUser extends Component
 
     public function rules()
     {
-        return (new AuthRequest())->rules();
+        return(new AuthRequest())->rules();
     }
 
     public function messages()
     {
-        return (new AuthRequest())->messages();
+        return(new AuthRequest())->messages();
     }
 
     public function login()
     {
         $this->validate();
+        sleep(1);
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password, 'is_active' => true])) {
             session()->regenerate();
@@ -35,7 +36,6 @@ class AuthUser extends Component
 
         $this->reset('password');
         session()->flash('error', 'Invalid email or password. Please try again.');
-
     }
 
     public function render()

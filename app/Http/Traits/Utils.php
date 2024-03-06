@@ -4,14 +4,12 @@ namespace App\Http\Traits;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Models\Role;
-use App\Models\SpecialProject;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Str;
 
@@ -216,8 +214,8 @@ trait Utils
      */
     public function isApproved2LevelsOfApproverAndHasSpecialProject()
     {
-        $ticketHasAllApproved = Ticket::has('helpTopic.specialProject')->withWhereHas('ticketApprovals', fn(Builder $ticketApproval) =>
-            $ticketApproval->whereNotNull('approval_1->level_1_approver->approver_id')
+        $ticketHasAllApproved = Ticket::has('helpTopic.specialProject')
+            ->withWhereHas('ticketApprovals', fn($ticketApproval) => $ticketApproval->whereNotNull('approval_1->level_1_approver->approver_id')
                 ->whereNotNull('approval_1->level_2_approver->approver_id')
                 ->whereNotNull('approval_1->level_1_approver->approved_by')
                 ->whereNotNull('approval_1->level_2_approver->approved_by')
@@ -241,7 +239,9 @@ trait Utils
     {
         return auth()->user()->id === $approverId
             && auth()->user()->hasRole(Role::APPROVER)
-            && SpecialProjectAmountApproval::where('ticket_id', $ticket->id)->whereJsonContains('fpm_coo_approver->approver_id', $approverId)->exists();
+            && SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
+                ->whereJsonContains('fpm_coo_approver->approver_id', $approverId)
+                ->exists();
     }
 
     public function hasCostingApprover1()
@@ -277,7 +277,7 @@ trait Utils
     public function approvedByCostingApprover1(User $approver, Ticket $ticket)
     {
         return SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
-            ->where(fn(Builder $approver1) => $approver1->whereJsonContains('service_department_admin_approver->approver_id', $approver->id)
+            ->where(fn($approver1) => $approver1->whereJsonContains('service_department_admin_approver->approver_id', $approver->id)
                 ->whereJsonContains('service_department_admin_approver->is_approved', true))
             ->exists();
     }
@@ -285,7 +285,7 @@ trait Utils
     public function approvedByCostingApprover2(User $approver, Ticket $ticket)
     {
         return SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
-            ->where(fn(Builder $approver2) => $approver2->whereJsonContains('fpm_coo_approver->approver_id', $approver->id)
+            ->where(fn($approver2) => $approver2->whereJsonContains('fpm_coo_approver->approver_id', $approver->id)
                 ->whereJsonContains('fpm_coo_approver->is_approved', true))
             ->exists();
     }

@@ -212,7 +212,6 @@ input {
         font-size: $fs-15;
         border-radius: $border-radius-10;
         white-space: nowrap;
-        text-transform: capitalize;
         font-weight: $fw-500;
 
         &:active {
@@ -240,7 +239,6 @@ input {
         font-size: $fs-15;
         border-radius: $border-radius-10;
         white-space: nowrap;
-        text-transform: capitalize;
         font-weight: $fw-500;
         background-color: transparent;
         color: #4a5568;

@@ -3,11 +3,11 @@
 namespace App\Http\Livewire\Requester\Account;
 
 use App\Http\Requests\Requester\UpdateProfileRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -40,7 +40,7 @@ class Profile extends Component
 
     public function rules()
     {
-        return (new UpdateProfileRequest())->rules();
+        return(new UpdateProfileRequest())->rules();
     }
 
     /** Reset the file input field after form submission. */
@@ -103,8 +103,7 @@ class Profile extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Something went wrong while updating your profile.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

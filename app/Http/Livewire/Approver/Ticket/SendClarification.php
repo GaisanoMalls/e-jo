@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Http\Requests\ServiceDeptAdmin\StoreClarificationRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
@@ -10,9 +11,7 @@ use App\Models\ClarificationFile;
 use App\Models\Status;
 use App\Models\Ticket;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -87,7 +86,7 @@ class SendClarification extends Component
                 }
 
                 // Get the current requester (Sender of the ticket clarification).
-                $requester = $clarification->whereHas('user', fn(Builder $user) => $user->where('id', '!=', auth()->user()->id))
+                $requester = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
                     ->where('ticket_id', $this->ticket->id)
                     ->latest('created_at')->first();
 
@@ -103,8 +102,7 @@ class SendClarification extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Failed to send ticket clarification. Please try again.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

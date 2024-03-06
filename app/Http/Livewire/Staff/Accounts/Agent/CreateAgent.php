@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Staff\Accounts\Agent;
 
 use App\Http\Requests\SysAdmin\Manage\Account\StoreAgenRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\Department;
@@ -11,10 +12,8 @@ use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class CreateAgent extends Component
@@ -40,8 +39,8 @@ class CreateAgent extends Component
 
     public function updatedBranch()
     {
-        $this->BUDepartments = Department::whereHas('branches', fn(Builder $query) => $query->where('branches.id', $this->branch))->get();
-        $this->teams = Team::whereHas('branches', fn(Builder $query) => $query->where('branches.id', $this->branch))->get();
+        $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
+        $this->teams = Team::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments-and-teams', [
             'BUDepartments' => $this->BUDepartments,
             'teams' => $this->teams,
@@ -87,8 +86,7 @@ class CreateAgent extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

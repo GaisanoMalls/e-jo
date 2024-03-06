@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Http\Traits\AppErrorLog;
 use App\Models\ActivityLog;
 use App\Models\Status;
 use App\Models\Ticket;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class ClaimTicket extends Component
@@ -52,8 +52,7 @@ class ClaimTicket extends Component
             noty()->addSuccess("You have claimed the ticket - {$this->ticket->ticket_number}.");
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Failed to claim the ticket.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

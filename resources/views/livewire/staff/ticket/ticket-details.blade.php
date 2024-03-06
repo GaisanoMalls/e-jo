@@ -93,7 +93,7 @@
                             data-value='{{ $this->ticketSLATimer($ticket)['percentageElapsed'] }}'>
                             <span
                                 class="progress-left {{ $this->isSlaApproved($ticket) && !$this->isSlaOverdue($ticket) ? 'bx-flashing' : '' }}">
-                                <span class="progress-bar" @style([
+                                <span wire:ignore class="progress-bar" @style([
                                     'border-color: #8BE78B;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 0 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 49,
                                     'border-color: #F79500;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 50 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 79,
                                     'border-color: #940000;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 80 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 100,
@@ -101,7 +101,7 @@
                             </span>
                             <span
                                 class="progress-right {{ $this->isSlaApproved($ticket) && !$this->isSlaOverdue($ticket) ? 'bx-flashing' : '' }}">
-                                <span class="progress-bar" @style([
+                                <span wire:ignore class="progress-bar" @style([
                                     'border-color: #8BE78B;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 0 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 49,
                                     'border-color: #F79500;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 50 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 79,
                                     'border-color: #940000;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 80 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 100,

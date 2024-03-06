@@ -3,9 +3,9 @@
 namespace App\Http\Livewire\Staff\Accounts\Requester;
 
 use App\Http\Requests\SysAdmin\Manage\Account\UpdatePasswordRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class UpdateRequesterPassword extends Component
@@ -16,7 +16,7 @@ class UpdateRequesterPassword extends Component
 
     public function rules()
     {
-        return (new UpdatePasswordRequest())->rules();
+        return(new UpdatePasswordRequest())->rules();
     }
 
     public function clearFormFields()
@@ -41,8 +41,7 @@ class UpdateRequesterPassword extends Component
             noty()->addSuccess('Password has been updated.');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

@@ -2,14 +2,13 @@
 
 namespace App\Http\Livewire\Staff\Accounts\Requester;
 
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\Department;
 use App\Models\User;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class UpdateRequester extends Component
@@ -36,7 +35,7 @@ class UpdateRequester extends Component
         $this->email = $this->user->email;
         $this->branch = $this->user->branches->pluck('id')->first();
         $this->bu_department = $this->user->buDepartments->pluck('id')->first();
-        $this->BUDepartments = Department::whereHas('branches', fn(Builder $query) => $query->where('branches.id', $this->branch))->get();
+        $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
     }
 
     protected function rules()
@@ -54,7 +53,7 @@ class UpdateRequester extends Component
 
     public function updatedBranch()
     {
-        $this->BUDepartments = Department::whereHas('branches', fn(Builder $query) => $query->where('branches.id', $this->branch))->get();
+        $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments', ['BUDepartments' => $this->BUDepartments]);
     }
 
@@ -83,8 +82,7 @@ class UpdateRequester extends Component
                 noty()->addSuccess("You have successfully updated the account for {$this->user->profile->getFullName()}.");
             });
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Failed to update the account.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

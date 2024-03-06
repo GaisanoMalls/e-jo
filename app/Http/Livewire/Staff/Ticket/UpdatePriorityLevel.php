@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\ActivityLog;
 use App\Models\Ticket;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class UpdatePriorityLevel extends Component
@@ -41,8 +41,7 @@ class UpdatePriorityLevel extends Component
                 $this->actionOnSubmit();
             }
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

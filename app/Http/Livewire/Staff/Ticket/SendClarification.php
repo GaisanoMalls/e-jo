@@ -3,17 +3,18 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Requests\ServiceDeptAdmin\StoreClarificationRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
-use App\Notifications\ServiceDepartmentAdmin\TicketClarificationFromServiceDeptAdminNotification;
+use App\Models\User;
+use App\Notifications\AppNotification;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -84,7 +85,7 @@ class SendClarification extends Component
                 }
 
                 // * GET THE REQUESTER
-                $requester = $clarification->whereHas('user', fn(Builder $user) => $user->where('id', '!=', auth()->user()->id))
+                $requester = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
                     ->where('ticket_id', $this->ticket->id)->latest('created_at')->first();
 
                 // * CONSTRUCT A LOG DESCRIPTION
@@ -92,17 +93,27 @@ class SendClarification extends Component
                     ? 'sent a clarification'
                     : 'replied a clarification to ' . $requester->user->profile->getFullName();
 
-                ActivityLog::make($this->ticket->id, $logDescription);
-                Notification::send($this->ticket->user, new TicketClarificationFromServiceDeptAdminNotification($this->ticket));
+                // Retrieve the service department administrator responsible for approving the ticket. For notification use only
+                $serviceDepartmentAdmin = User::with('profile')->where('id', auth()->user()->id)->role(Role::SERVICE_DEPARTMENT_ADMIN)->first();
+
+                Notification::send(
+                    $this->ticket->user,
+                    new AppNotification(
+                        ticket: $this->ticket,
+                        title: "Clarification for ticket {$this->ticket->ticket_number}",
+                        message: "Ticket clarification sent by {$serviceDepartmentAdmin->profile->getFullName()} ",
+                        forClarification: true
+                    )
+                );
                 // Mail::to($this->ticket->user)->send(new FromApproverClarificationMail($this->ticket, $this->ticket->user, $this->description));
 
+                ActivityLog::make($this->ticket->id, $logDescription);
             });
 
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

@@ -19,7 +19,7 @@
                     View
                 </span>
             </div>
-            <div class="d-flex flex-column justify-content-between text-end">
+            <div class="d-flex flex-column justify-content-between text-end" style="width: 200px;">
                 <small class="notification__running__time">
                     {{ $notification->created_at->diffForHumans(null, true) }} ago
                 </small>

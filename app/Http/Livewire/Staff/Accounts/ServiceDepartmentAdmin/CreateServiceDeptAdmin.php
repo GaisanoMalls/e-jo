@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 
 use App\Http\Requests\SysAdmin\Manage\Account\StoreServiceDeptAdminRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\ApproverLevel;
@@ -14,7 +15,6 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class CreateServiceDeptAdmin extends Component
@@ -119,8 +119,7 @@ class CreateServiceDeptAdmin extends Component
                 noty()->addSuccess('Account successfully created');
             });
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addSuccess('Failed to save a new service department admin');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

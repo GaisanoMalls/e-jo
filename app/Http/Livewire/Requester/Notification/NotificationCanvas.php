@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Requester\Notification;
 
-use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class NotificationCanvas extends Component
@@ -19,7 +18,7 @@ class NotificationCanvas extends Component
 
     public function clearNotifications()
     {
-        auth()->user()->notifications->each(fn(Builder $notification) => $notification->delete());
+        auth()->user()->notifications->each(fn($notification) => $notification->delete());
         $this->emit('requesterLoadNotificationList');
         $this->emit('requesterLoadNotificationCanvas');
         $this->emit('requesterLoadNavlinkNotification');

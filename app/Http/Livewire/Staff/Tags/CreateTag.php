@@ -3,10 +3,10 @@
 namespace App\Http\Livewire\Staff\Tags;
 
 use App\Http\Requests\SysAdmin\Manage\Tag\StoreTagRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\Tag;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -18,7 +18,7 @@ class CreateTag extends Component
 
     public function rules()
     {
-        return (new StoreTagRequest())->rules();
+        return(new StoreTagRequest())->rules();
     }
 
     public function clearFormField()
@@ -47,8 +47,7 @@ class CreateTag extends Component
             noty()->addSuccess('Tag created');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

@@ -4,9 +4,9 @@ namespace App\Http\Livewire\Staff\HelpTopic\CustomField;
 
 use App\Enums\FieldRequiredOptionEnum;
 use App\Enums\FieldTypesEnum;
+use App\Http\Traits\AppErrorLog;
 use App\Models\Field;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
 
@@ -25,8 +25,7 @@ class CustomFieldList extends Component
         try {
             $field->delete();
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

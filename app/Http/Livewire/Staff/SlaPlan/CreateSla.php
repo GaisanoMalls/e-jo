@@ -3,9 +3,9 @@
 namespace App\Http\Livewire\Staff\SlaPlan;
 
 use App\Http\Requests\SysAdmin\Manage\SLA\StoreSLARequest;
+use App\Http\Traits\AppErrorLog;
 use App\Models\ServiceLevelAgreement;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class CreateSla extends Component
@@ -15,7 +15,7 @@ class CreateSla extends Component
 
     public function rules()
     {
-        return (new StoreSLARequest())->rules();
+        return(new StoreSLARequest())->rules();
     }
 
     public function clearFormFields()
@@ -40,8 +40,7 @@ class CreateSla extends Component
             noty()->addSuccess('A new SLA has been created.');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

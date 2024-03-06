@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Enums\SpecialProjectStatusEnum;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
@@ -13,7 +14,6 @@ use App\Models\TicketSpecialProjectStatus;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Storage;
@@ -83,8 +83,7 @@ class TicketCosting extends Component
                 noty()->addWarning("Unable to update since ticket costing has already been approved.");
             }
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -106,8 +105,7 @@ class TicketCosting extends Component
                 noty()->addWarning('Deletion of attachment is restricted.');
             }
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -138,8 +136,7 @@ class TicketCosting extends Component
                 noty()->addWarning('Sorry, only agents have the authority to add attachments.');
             }
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -171,8 +168,7 @@ class TicketCosting extends Component
                 noty()->addWarning('Sorry, only agents have the authority to add attachments.');
             }
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -204,8 +200,7 @@ class TicketCosting extends Component
                 noty()->addWarning("Sorry, You have no permission to approve the costing");
             }
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

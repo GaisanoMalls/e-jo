@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Http\Requests\Approver\Costing\ReasonOfDisapprovalRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\ApprovedCosting;
 use App\Models\DisapprovedCosting;
@@ -14,7 +15,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class TicketCosting extends Component
@@ -89,8 +89,7 @@ class TicketCosting extends Component
             }
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -132,8 +131,7 @@ class TicketCosting extends Component
             }
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

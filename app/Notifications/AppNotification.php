@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Notifications\ServiceDepartmentAdmin;
+namespace App\Notifications;
 
-use App\Models\Role;
 use App\Models\Ticket;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class ApprovedTicketForRequesterNotification extends Notification
+class AppNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-
-    public Ticket $ticket;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket)
-    {
-        $this->ticket = $ticket;
+    public function __construct(
+        protected readonly Ticket $ticket,
+        protected readonly string $title,
+        protected readonly string $message,
+        protected readonly bool $forClarification = false
+    ) {
     }
 
     /**
@@ -43,12 +43,11 @@ class ApprovedTicketForRequesterNotification extends Notification
      */
     public function toArray($notifiable)
     {
-        $serviceDepartmentAdmin = User::with('profile')->where('id', auth()->user()->id)->role(Role::SERVICE_DEPARTMENT_ADMIN)->first();
-
         return [
             'ticket' => $this->ticket,
-            'title' => "Approved Ticket {$this->ticket->ticket_number}",
-            'message' => "{$serviceDepartmentAdmin->profile->getFullName()} approved your ticket",
+            'title' => $this->title,
+            'message' => $this->message,
+            'for_clarification' => $this->forClarification
         ];
     }
 }

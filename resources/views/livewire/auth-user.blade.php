@@ -33,7 +33,8 @@
             <span wire:loading wire:target="login" class="spinner-border spinner-border-sm" role="status"
                 aria-hidden="true">
             </span>
-            Sign In
+            <span wire:loading.remove wire:target="login">Sign In</span>
+            <span wire:loading wire:target="login">Signing in...</span>
         </button>
         <a href="{{ route('forgot_password') }}" class="mt-4 link">Forgot password?</a>
     </form>

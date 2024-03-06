@@ -13,7 +13,6 @@ use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\Team;
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -304,6 +303,6 @@ class User extends Authenticatable
     // For agent use only
     public function getClaimedTickets()
     {
-        return Ticket::withWhereHas('agent', fn(Builder $agent) => $agent->where('agent_id', $this->id))->count();
+        return Ticket::withWhereHas('agent', fn($agent) => $agent->where('agent_id', $this->id))->count();
     }
 }

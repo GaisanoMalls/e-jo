@@ -5,10 +5,10 @@ namespace App\Http\Livewire\Staff\HelpTopic\CustomField;
 use App\Enums\FieldRequiredOptionEnum;
 use App\Enums\FieldTypesEnum;
 use App\Http\Requests\SysAdmin\Manage\HelpTopic\CustomField\CustomFieldRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Models\Field;
 use Exception;
 use Livewire\Component;
-use Illuminate\Support\Facades\Log;
 use Spatie\LaravelOptions\Options;
 
 class CustomFieldAddForm extends Component
@@ -64,8 +64,7 @@ class CustomFieldAddForm extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

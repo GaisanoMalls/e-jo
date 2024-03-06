@@ -4,17 +4,20 @@ namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Enums\SpecialProjectStatusEnum;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Role;
+use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\TicketCostingPRFile;
 use App\Models\TicketSpecialProjectStatus;
 use App\Models\User;
+use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
 class TicketLevelApproval extends Component
@@ -104,34 +107,74 @@ class TicketLevelApproval extends Component
 
     public function ticketLevel2ApprovalApprovedBy()
     {
-        return TicketApproval::where('ticket_id', $this->ticket->id)
-            ->first()?->approval_1['level_2_approver']['approved_by'];
+        return TicketApproval::where('ticket_id', $this->ticket->id)->first()?->approval_1['level_2_approver']['approved_by'];
     }
 
     public function approveTicketApproval1level2Approver()
     {
         try {
-            TicketApproval::where('ticket_id', $this->ticket->id)
-                ->where(function ($level1Approver) {
-                    $level1Approver->whereNotNull([
-                        'approval_1->level_1_approver->approver_id',
-                        'approval_1->level_1_approver->approved_by',
-                    ])->whereJsonContains('approval_1->level_1_approver->is_approved', true);
-                })->where(function ($level2Approver) {
-                    $level2Approver->whereNotNull('approval_1->level_2_approver->approver_id')
-                        ->whereJsonContains('approval_1->level_2_approver->is_approved', false)
-                        ->whereJsonContains('approval_1->level_2_approver->approver_id', auth()->user()->id);
-                })->update([
-                        'approval_1->level_2_approver->approved_by' => auth()->user()->id,
-                        'approval_1->level_2_approver->is_approved' => true,
-                        'approval_1->is_all_approved' => true,
-                    ]);
+            if (auth()->user()->hasRole(Role::APPROVER)) {
+                DB::transaction(function () {
+                    Ticket::where('id', $this->ticket->id)->update(['status_id' => Status::APPROVED]);
+                    TicketApproval::where('ticket_id', $this->ticket->id)
+                        ->where(function ($level1Approver) {
+                            $level1Approver->whereNotNull([
+                                'approval_1->level_1_approver->approver_id',
+                                'approval_1->level_1_approver->approved_by',
+                            ])->whereJsonContains('approval_1->level_1_approver->is_approved', true);
+                        })->where(function ($level2Approver) {
+                            $level2Approver->whereNotNull('approval_1->level_2_approver->approver_id')
+                                ->whereJsonContains('approval_1->level_2_approver->is_approved', false)
+                                ->whereJsonContains('approval_1->level_2_approver->approver_id', auth()->user()->id);
+                        })->update([
+                                'approval_1->level_2_approver->approved_by' => auth()->user()->id,
+                                'approval_1->level_2_approver->is_approved' => true,
+                                'approval_1->is_all_approved' => true,
+                            ]);
 
-            ActivityLog::make($this->ticket->id, 'approved the level 2 approval');
-            $this->actionOnSubmit();
+                    // Retrieve the approver responsible for approving the ticket. For notification use only
+                    $level2Approver = User::with('profile')
+                        ->role(Role::APPROVER)
+                        ->where('id', auth()->user()->id)
+                        ->first();
+
+                    // Notify the requester
+                    Notification::send(
+                        $this->ticket->user,
+                        new AppNotification(
+                            ticket: $this->ticket,
+                            title: "Level of approvals (Ticket #{$this->ticket->ticket_number})",
+                            message: "{$level2Approver->profile->getFullName()} approved the level 2 approval. Approvals for levels 1 and 2 have been completed."
+                        )
+                    );
+
+                    // Get the agents.
+                    $agents = User::role(Role::AGENT)
+                        ->withWhereHas('branches', fn($query) => $query->whereIn('branches.id', [$this->ticket->branch_id]))
+                        ->withWhereHas('serviceDepartments', fn($query) => $query->whereIn('service_departments.id', [$this->ticket->service_department_id]))
+                        ->get();
+
+                    // Notify agents through email and app based notification.
+                    foreach ($agents as $agent) {
+                        // Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
+                        Notification::send(
+                            $agent,
+                            new AppNotification(
+                                ticket: $this->ticket,
+                                title: "New Ticket {$this->ticket->ticket_number}",
+                                message: "You have a new ticket",
+                            )
+                        );
+                    }
+                });
+
+                ActivityLog::make($this->ticket->id, 'approved the level 2 approval');
+                $this->actionOnSubmit();
+            } else {
+                noty()->addError('You have no rights/permission to approve the ticket');
+            }
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -174,8 +217,7 @@ class TicketLevelApproval extends Component
                 noty()->addError('You have no rights/permission to approve the ticket');
             }
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

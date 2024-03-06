@@ -3,12 +3,12 @@
 namespace App\Http\Livewire\Staff\BUDepartments;
 
 use App\Http\Requests\SysAdmin\Manage\BUDepartment\StoreBUDepartmentRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Department;
 use App\Models\ServiceDepartment;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -22,12 +22,12 @@ class CreateBuDepartment extends Component
 
     public function rules()
     {
-        return (new StoreBUDepartmentRequest())->rules();
+        return(new StoreBUDepartmentRequest())->rules();
     }
 
     public function messages()
     {
-        return (new StoreBUDepartmentRequest())->messages();
+        return(new StoreBUDepartmentRequest())->messages();
     }
 
     private function actionOnSubmit()
@@ -64,8 +64,7 @@ class CreateBuDepartment extends Component
             noty()->addSuccess('New BU\Department has been created.');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

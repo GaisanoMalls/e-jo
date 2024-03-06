@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Requests\Agent\StoreTicketCostingRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
@@ -10,7 +11,6 @@ use App\Models\TicketCosting;
 use App\Models\TicketCostingFile;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\File;
 
@@ -123,8 +123,7 @@ class AddCosting extends Component
             }
 
         } catch (\Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

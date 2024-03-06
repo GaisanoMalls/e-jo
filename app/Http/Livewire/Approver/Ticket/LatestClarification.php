@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Models\Clarification;
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class LatestClarification extends Component
@@ -16,8 +15,8 @@ class LatestClarification extends Component
 
     public function render()
     {
-        $this->latestClarification = Clarification::whereHas('ticket', fn(Builder $query) => $query->where('ticket_id', $this->ticket->id))
-            ->whereHas('user', fn(Builder $user) => $user->where('user_id', '!=', auth()->user()->id))
+        $this->latestClarification = Clarification::whereHas('ticket', fn($query) => $query->where('ticket_id', $this->ticket->id))
+            ->whereHas('user', fn($user) => $user->where('user_id', '!=', auth()->user()->id))
             ->orderByDesc('created_at')
             ->first();
 

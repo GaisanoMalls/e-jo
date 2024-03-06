@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Requester\Ticket;
 
 use App\Http\Requests\Requester\ReplyTicketRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Reply;
@@ -11,9 +12,7 @@ use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -83,7 +82,7 @@ class SendTicketReply extends Component
                 }
 
                 $latestReply = Reply::where('ticket_id', $this->ticket->id)
-                    ->withWhereHas('user', fn(Builder $user) => $user->role(Role::USER))
+                    ->withWhereHas('user', fn($user) => $user->role(Role::USER))
                     ->latest('created_at')->first();
 
                 ActivityLog::make($this->ticket->id, 'replied to ' . $latestReply->user->profile->getFullName());
@@ -92,8 +91,7 @@ class SendTicketReply extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

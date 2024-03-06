@@ -9,7 +9,6 @@ use App\Http\Traits\Utils;
 use App\Models\Reply;
 use App\Models\Ticket;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 
 class TicketController extends Controller
 {
@@ -75,7 +74,7 @@ class TicketController extends Controller
 
     public function myBookmarkedTickets()
     {
-        $bookmarkedTickets = Ticket::whereHas('bookmark', fn(Builder $query) => $query->where('bookmarks.user_id', auth()->user()->id))->get();
+        $bookmarkedTickets = Ticket::whereHas('bookmark', fn($query) => $query->where('bookmarks.user_id', auth()->user()->id))->get();
         return view('layouts.staff.bookmark.my_bookmarks', compact('bookmarkedTickets'));
     }
 
@@ -86,9 +85,9 @@ class TicketController extends Controller
         $priorityLevels = $this->queryPriorityLevels();
         $serviceDepartments = $this->queryServiceDepartments();
 
-        $approvers = User::whereHas('teams', fn(Builder $query) => $query->where('teams.id', $ticket->team_id))
-            ->whereHas('branches', fn(Builder $query) => $query->where('branches.id', $ticket->branch_id))
-            ->whereHas('serviceDepartments', fn(Builder $query) => $query->where('service_departments.id', $ticket->service_department_id))
+        $approvers = User::whereHas('teams', fn($query) => $query->where('teams.id', $ticket->team_id))
+            ->whereHas('branches', fn($query) => $query->where('branches.id', $ticket->branch_id))
+            ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $ticket->service_department_id))
             ->where('id', '!=', $ticket->agent_id)
             ->get();
 

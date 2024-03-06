@@ -3,9 +3,9 @@
 namespace App\Http\Livewire\Staff;
 
 use App\Http\Requests\StaffQouteReplyRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
-use App\Models\QouteReply;
 use App\Models\Reply;
 use App\Models\ReplyFile;
 use App\Models\ReplyLike;
@@ -13,9 +13,7 @@ use App\Models\Status;
 use App\Models\Ticket;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rules\File;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -40,12 +38,12 @@ class TicketReplies extends Component
 
     public function rules()
     {
-        return (new StaffQouteReplyRequest())->rules();
+        return(new StaffQouteReplyRequest())->rules();
     }
 
     public function messages()
     {
-        return (new StaffQouteReplyRequest())->messages();
+        return(new StaffQouteReplyRequest())->messages();
     }
 
     public function likeReply(Reply $reply)
@@ -128,8 +126,7 @@ class TicketReplies extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Failed to send ticket clarification. Please try again.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

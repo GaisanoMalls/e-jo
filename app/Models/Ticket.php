@@ -89,7 +89,7 @@ class Ticket extends Model
         return $this->hasOne(Bookmark::class);
     }
 
-    public function ticketCosting()
+    public function ticketCosting(): HasOne
     {
         return $this->hasOne(TicketCosting::class);
     }

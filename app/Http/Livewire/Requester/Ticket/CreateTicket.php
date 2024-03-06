@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Requester\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Requests\Requester\StoreTicketRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
@@ -19,11 +20,9 @@ use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\TicketFile;
 use App\Models\TicketTeam;
-use App\Notifications\Requester\TicketCreatedNotification;
+use App\Notifications\AppNotification;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
@@ -129,8 +128,8 @@ class CreateTicket extends Component
                 }
 
                 $approverLevel = ApproverLevel::with('approver.profile')
-                    ->withWhereHas('approver.buDepartments', fn(Builder $query) => $query->whereIn('departments.id', auth()->user()->buDepartments()->pluck('departments.id')->toArray()))
-                    ->withWhereHas('approver.branches', fn(Builder $query) => $query->whereIn('branches.id', auth()->user()->branches()->pluck('branches.id')->toArray()))
+                    ->withWhereHas('approver.buDepartments', fn($query) => $query->whereIn('departments.id', auth()->user()->buDepartments()->pluck('departments.id')->toArray()))
+                    ->withWhereHas('approver.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches()->pluck('branches.id')->toArray()))
                     ->get();
 
                 $filteredLevel1Approvers = $approverLevel->where('level_id', Level::where('value', 1)->pluck('value')->first());
@@ -180,7 +179,14 @@ class CreateTicket extends Component
                     }
 
                     $filteredLevel1Approvers->each(function ($serviceDepartmentAdmin) use ($ticket) {
-                        Notification::send($serviceDepartmentAdmin->approver, new TicketCreatedNotification($ticket));
+                        Notification::send(
+                            $serviceDepartmentAdmin->approver,
+                            new AppNotification(
+                                ticket: $ticket,
+                                title: "New ticket created {$ticket->ticket_number}",
+                                message: "{$ticket->user->profile->getFullName()} created a ticket"
+                            )
+                        );
                         // Mail::to($serviceDepartmentAdmin->approver)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin->approver));
                     });
                 }
@@ -190,8 +196,7 @@ class CreateTicket extends Component
                 noty()->addSuccess('Ticket successfully created.');
             });
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -207,14 +212,14 @@ class CreateTicket extends Component
 
     public function updatedServiceDepartment()
     {
-        $this->helpTopics = HelpTopic::with(['team', 'sla'])->whereHas('serviceDepartment', fn(Builder $query) => $query->where('service_department_id', $this->serviceDepartment))->get();
+        $this->helpTopics = HelpTopic::with(['team', 'sla'])->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->serviceDepartment))->get();
         $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);
     }
 
     public function updatedHelpTopic()
     {
-        $this->team = Team::withWhereHas('helpTopics', fn(Builder $helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
-        $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn(Builder $helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
+        $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
+        $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
     }
 
     public function cancel()

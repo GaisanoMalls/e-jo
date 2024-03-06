@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Staff\Branches;
 
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Branch;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -62,8 +62,7 @@ class BranchList extends Component
             noty()->addSuccess('Branch successfully updated');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -83,8 +82,7 @@ class BranchList extends Component
             $this->dispatchBrowserEvent('close-modal');
             noty()->addSuccess('Branch successfully deleted');
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

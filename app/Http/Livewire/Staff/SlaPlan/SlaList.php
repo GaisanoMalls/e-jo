@@ -3,10 +3,10 @@
 namespace App\Http\Livewire\Staff\SlaPlan;
 
 use App\Http\Requests\SysAdmin\Manage\SLA\UpdateSLARequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\ServiceLevelAgreement;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class SlaList extends Component
@@ -66,8 +66,7 @@ class SlaList extends Component
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
@@ -89,8 +88,7 @@ class SlaList extends Component
             $this->dispatchBrowserEvent('close-modal');
             noty()->addSuccess('SLA successfully deleted');
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

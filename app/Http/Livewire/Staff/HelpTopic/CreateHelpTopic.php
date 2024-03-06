@@ -2,15 +2,14 @@
 
 namespace App\Http\Livewire\Staff\HelpTopic;
 
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
 use App\Models\SpecialProject;
 use App\Models\Team;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -75,14 +74,13 @@ class CreateHelpTopic extends Component
             noty()->addSuccess('A new help topic has been created.');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
     public function updatedServiceDepartment()
     {
-        $this->teams = Team::whereHas('serviceDepartment', fn(Builder $team) => $team->where('service_department_id', $this->service_department))->get();
+        $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->service_department))->get();
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 

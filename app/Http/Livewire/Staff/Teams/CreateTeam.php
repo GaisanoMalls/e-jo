@@ -3,11 +3,11 @@
 namespace App\Http\Livewire\Staff\Teams;
 
 use App\Http\Requests\SysAdmin\Manage\Team\StoreTeamRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -21,12 +21,12 @@ class CreateTeam extends Component
 
     public function rules()
     {
-        return (new StoreTeamRequest())->rules();
+        return(new StoreTeamRequest())->rules();
     }
 
     public function messages()
     {
-        return (new StoreTeamRequest())->messages();
+        return(new StoreTeamRequest())->messages();
     }
 
     private function actionOnSubmit()
@@ -56,8 +56,7 @@ class CreateTeam extends Component
             noty()->addSuccess('New team has been created.');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong.');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

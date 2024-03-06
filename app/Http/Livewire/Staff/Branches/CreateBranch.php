@@ -3,9 +3,9 @@
 namespace App\Http\Livewire\Staff\Branches;
 
 use App\Http\Requests\SysAdmin\Manage\Branch\StoreBranchRequest;
+use App\Http\Traits\AppErrorLog;
 use App\Models\Branch;
 use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -15,7 +15,7 @@ class CreateBranch extends Component
 
     public function rules()
     {
-        return (new StoreBranchRequest())->rules();
+        return(new StoreBranchRequest())->rules();
     }
 
     public function clearFormField()
@@ -44,8 +44,7 @@ class CreateBranch extends Component
             noty()->addSuccess('New branch has been created.');
 
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Oops, something went wrong');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 

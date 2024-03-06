@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Staff\Accounts\Approver;
 
+use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 
@@ -133,8 +133,7 @@ class UpdateApprover extends Component
                 noty()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName()}.");
             });
         } catch (Exception $e) {
-            Log::channel('appErrorLog')->error($e->getMessage(), [url()->full()]);
-            noty()->addError('Failed to update the account');
+            AppErrorLog::getError($e->getMessage());
         }
     }
 
