@@ -27,8 +27,8 @@ class StoreTicketCostingRequest extends FormRequest
         return [
             'amount' => ['required', 'numeric', 'min:500'],
             'costingFiles.*' => [
-                'nullable',
-                File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv'])->max(25 * 1024) //25600 (25 MB)
+                'required',
+                File::types(['pdf'])->max(25 * 1024) //25600 (25 MB)
             ],
         ];
     }

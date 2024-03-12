@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
-use App\Enums\SpecialProjectStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
@@ -12,7 +11,6 @@ use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\TicketCostingPRFile;
-use App\Models\TicketSpecialProjectStatus;
 use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
@@ -115,22 +113,20 @@ class TicketLevelApproval extends Component
         try {
             if (auth()->user()->hasRole(Role::APPROVER)) {
                 DB::transaction(function () {
-                    Ticket::where('id', $this->ticket->id)->update(['status_id' => Status::APPROVED]);
+                    $this->ticket->update(['status_id' => Status::APPROVED]);
                     TicketApproval::where('ticket_id', $this->ticket->id)
-                        ->where(function ($level1Approver) {
-                            $level1Approver->whereNotNull([
-                                'approval_1->level_1_approver->approver_id',
-                                'approval_1->level_1_approver->approved_by',
-                            ])->whereJsonContains('approval_1->level_1_approver->is_approved', true);
-                        })->where(function ($level2Approver) {
-                            $level2Approver->whereNotNull('approval_1->level_2_approver->approver_id')
-                                ->whereJsonContains('approval_1->level_2_approver->is_approved', false)
-                                ->whereJsonContains('approval_1->level_2_approver->approver_id', auth()->user()->id);
-                        })->update([
-                                'approval_1->level_2_approver->approved_by' => auth()->user()->id,
-                                'approval_1->level_2_approver->is_approved' => true,
-                                'approval_1->is_all_approved' => true,
-                            ]);
+                        ->where(fn($level1Approver) => $level1Approver->whereNotNull([
+                            'approval_1->level_1_approver->approver_id',
+                            'approval_1->level_1_approver->approved_by',
+                        ])->whereJsonContains('approval_1->level_1_approver->is_approved', true))
+                        ->where(fn($level2Approver) => $level2Approver->whereNotNull('approval_1->level_2_approver->approver_id')
+                            ->whereJsonContains('approval_1->level_2_approver->is_approved', false)
+                            ->whereJsonContains('approval_1->level_2_approver->approver_id', auth()->user()->id))
+                        ->update([
+                            'approval_1->level_2_approver->approved_by' => auth()->user()->id,
+                            'approval_1->level_2_approver->is_approved' => true,
+                            'approval_1->is_all_approved' => true,
+                        ]);
 
                     // Retrieve the approver responsible for approving the ticket. For notification use only
                     $level2Approver = User::with('profile')
@@ -155,7 +151,7 @@ class TicketLevelApproval extends Component
                         ->get();
 
                     // Notify agents through email and app based notification.
-                    foreach ($agents as $agent) {
+                    $agents->each(function ($agent) {
                         // Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
                         Notification::send(
                             $agent,
@@ -165,7 +161,7 @@ class TicketLevelApproval extends Component
                                 message: "You have a new ticket",
                             )
                         );
-                    }
+                    });
                 });
 
                 ActivityLog::make($this->ticket->id, 'approved the level 2 approval');
@@ -186,6 +182,7 @@ class TicketLevelApproval extends Component
                 DB::transaction(function () {
                     if ($this->isDoneSpecialProjectAmountApproval($this->ticket)) {
                         Ticket::where('id', $this->ticket->id)->update([
+                            'status_id' => Status::APPROVED,
                             'approval_status' => ApprovalStatusEnum::APPROVED
                         ]);
 
@@ -200,13 +197,6 @@ class TicketLevelApproval extends Component
 
                         TicketCostingPRFile::where([['ticket_costing_id', $this->ticket->ticketCosting->id]])
                             ->update(['is_approved_level_2_approver' => true]);
-
-                        if (TicketApproval::where([['ticket_id', $this->ticket->id], ['is_all_approval_done', true]])->exists()) {
-                            TicketSpecialProjectStatus::create([
-                                'ticket_id' => $this->ticket->id,
-                                'costing_and_planning_status' => SpecialProjectStatusEnum::DONE
-                            ]);
-                        }
 
                         $this->actionOnSubmit();
                     } else {

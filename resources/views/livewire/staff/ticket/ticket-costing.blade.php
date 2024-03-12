@@ -71,13 +71,22 @@
                             <div class="d-flex flex-column justify-content-between gap-2">
                                 <small class="text-muted text-sm costing__header__label">Costing Attachment</small>
                                 @if ($ticket->ticketCosting->fileAttachments->count() > 0)
-                                    <small class="mb-1 mt-2 costing__labels show__costing__attachments"
-                                        data-bs-toggle="modal" data-bs-target="#costingPreviewFileAttachmentModal">
-                                        <i class="fa-solid fa-file-zipper"></i>
-                                        {{ $ticket->ticketCosting->fileAttachments->count() }}
-                                        attached
-                                        {{ $ticket->ticketCosting->fileAttachments->count() > 1 ? 'files' : 'file' }}
-                                    </small>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <small class="mb-1 mt-2 costing__labels show__costing__attachments"
+                                            data-bs-toggle="modal" data-bs-target="#costingPreviewFileAttachmentModal">
+                                            <i class="fa-solid fa-file-zipper"></i>
+                                            {{ $ticket->ticketCosting->fileAttachments->count() }}
+                                            attached
+                                            {{ $ticket->ticketCosting->fileAttachments->count() > 1 ? 'files' : 'file' }}
+                                        </small>
+                                        @if ($this->isDoneTicketCostingAndPlanning($ticket))
+                                            <small
+                                                class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                                <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
+                                                {{ $ticket->specialProjectStatus->costing_and_planning_status }}
+                                            </small>
+                                        @endif
+                                    </div>
                                 @else
                                     @if (!$this->isOnlyAgent($ticket->agent_id))
                                         <small
@@ -180,99 +189,129 @@
                                         Action
                                     @endif
                                 </small>
-                                @if ($this->isDoneTicketCostingAndPlanning($ticket))
-                                    <small
-                                        class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
-                                        <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
-                                        @foreach ($ticket->specialProjectStatus as $specialProject)
-                                            {{ $specialProject->costing_and_planning_status }}
-                                        @endforeach
-                                    </small>
-                                @else
-                                    @if ($this->isDoneCostingApproval1($ticket))
-                                        @if ($this->isCostingAmountNeedCOOApproval($ticket) && !$this->isDoneCostingApproval2($ticket))
-                                            <small
-                                                class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
-                                                <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
-                                                For approval
-                                            </small>
-                                        @else
-                                            <small
-                                                class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
-                                                <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
-                                                Approved
-                                            </small>
-                                        @endif
+
+                                @if ($this->isDoneCostingApproval1($ticket))
+                                    @if ($this->isCostingAmountNeedCOOApproval($ticket) && !$this->isDoneCostingApproval2($ticket))
+                                        <small
+                                            class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
+                                            <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
+                                            For approval
+                                        </small>
                                     @else
-                                        <div class="d-flex align-items-center gap-2">
-                                            <button wire:click="approveCostingApproval1({{ $ticket }})"
+                                        <small
+                                            class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                            <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
+                                            Approved
+                                        </small>
+                                    @endif
+                                @else
+                                    <div class="d-flex align-items-center gap-2">
+                                        <button wire:click="approveCostingApproval1({{ $ticket }})"
+                                            class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
+                                            <i class="bi bi-check2-circle" wire:loading.class="d-none"
+                                                wire:target="approveCostingApproval1({{ $ticket }})"></i>
+                                            <div wire:loading
+                                                wire:target="approveCostingApproval1({{ $ticket }})"
+                                                class="spinner-border spinner-border-sm loading__spinner"
+                                                role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                            Approve
+                                        </button>
+                                        @if ($this->isDoneCostingApproval1($ticket) && $this->isCostingAmountNeedCOOApproval($ticket))
+                                            <button
                                                 class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
-                                                <i class="bi bi-check2-circle" wire:loading.class="d-none"
-                                                    wire:target="approveCostingApproval1({{ $ticket }})"></i>
+                                                <i class="bi bi-reply" wire:loading.class="d-none"
+                                                    style="transform: scaleX(-1);"></i>
                                                 <div wire:loading
-                                                    wire:target="approveCostingApproval1({{ $ticket }})"
                                                     class="spinner-border spinner-border-sm loading__spinner"
                                                     role="status">
                                                     <span class="sr-only">Loading...</span>
                                                 </div>
-                                                Approve
+                                                Forward
                                             </button>
-                                            @if ($this->isDoneCostingApproval1($ticket) && $this->isCostingAmountNeedCOOApproval($ticket))
-                                                <button
-                                                    class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
-                                                    <i class="bi bi-reply" wire:loading.class="d-none"
-                                                        style="transform: scaleX(-1);"></i>
-                                                    <div wire:loading
-                                                        class="spinner-border spinner-border-sm loading__spinner"
-                                                        role="status">
-                                                        <span class="sr-only">Loading...</span>
-                                                    </div>
-                                                    Forward
-                                                </button>
-                                            @endif
-                                        </div>
-                                    @endif
+                                        @endif
+                                    </div>
                                 @endif
                             </div>
                         @else
                             {{-- Otherwise, show this block instead --}}
                             <div class="d-flex flex-column justify-content-between gap-2">
                                 <small class="text-muted text-sm costing__header__label">
-                                    Status
+                                    Approval Status
                                 </small>
-                                @if ($this->isDoneTicketCostingAndPlanning($ticket))
-                                    <small
-                                        class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
-                                        <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
-                                        @foreach ($ticket->specialProjectStatus as $specialProject)
-                                            {{ $specialProject->costing_and_planning_status }}
-                                        @endforeach
-                                    </small>
-                                @else
-                                    @if ($this->isDoneCostingApproval1($ticket))
-                                        @if ($this->isCostingAmountNeedCOOApproval($ticket) && !$this->isDoneCostingApproval2($ticket))
-                                            <small
-                                                class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
-                                                <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
-                                                For approval
-                                            </small>
-                                        @else
-                                            <small
-                                                class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
-                                                <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
-                                                Approved
-                                            </small>
-                                        @endif
-                                    @else
+                                @if ($this->isDoneCostingApproval1($ticket))
+                                    @if ($this->isCostingAmountNeedCOOApproval($ticket) && !$this->isDoneCostingApproval2($ticket))
                                         <small
                                             class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
                                             <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
                                             For approval
                                         </small>
+                                    @else
+                                        <small
+                                            class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                            <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
+                                            Approved
+                                        </small>
                                     @endif
+                                @else
+                                    <small
+                                        class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
+                                        <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
+                                        For approval
+                                    </small>
                                 @endif
                             </div>
                         @endif
+                        <div class="d-flex flex-column justify-content-between gap-2 position-relative">
+                            <small class="text-muted text-sm costing__header__label">
+                                Purchasing
+                            </small>
+                            <div class="btn-group">
+                                <button type="button"
+                                    class="btn btn-sm d-flex align-items-center justify-content-center gap-2 px-2 py-1 rounded-2 dropdown-toggle btn__purchase"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div wire:loading wire:target="setOrder, setDeliver"
+                                        class="spinner-border spinner-border-sm loading__spinner" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    @if (auth()->user()->hasRole(App\Models\Role::AGENT))
+                                        {{ $this->getPurchasingStatus() ?: 'Action' }}
+                                    @else
+                                        In progress
+                                    @endif
+                                </button>
+                                @if ($this->isOnlyAgent(auth()->user()->id))
+                                    <ul wire:ignore.self
+                                        class="dropdown-menu dropdown-menu-end position-absolute purchase__dropdown">
+                                        @if ($this->isDoneCostingApprovals($ticket))
+                                            <li>
+                                                <button
+                                                    class="dropdown-item d-flex align-items-center gap-2 {{ $this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value ? 'fw-semibold' : '' }}"
+                                                    type="button" wire:click="setOrder">
+                                                    <i class="fa-solid fa-cart-arrow-down"></i>
+                                                    {{ $this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value ? \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value : 'Order' }}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button
+                                                    class="dropdown-item d-flex align-items-center gap-2 {{ $this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value ? 'fw-semibold' : '' }}"
+                                                    type="button" wire:click="setDeliver">
+                                                    <i class="fa-solid fa-truck"></i>
+                                                    {{ $this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value ? \App\Enums\SpecialProjectStatusEnum::DELIVERED->value : 'Delivered' }}
+                                                </button>
+                                            </li>
+                                        @else
+                                            <li>
+                                                <span style="font-size: 12px;">
+                                                    Waiting for costing to be approved
+                                                </span>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -300,9 +339,8 @@
                                             x-on:livewire-upload-progress="progress = $event.detail.progress">
                                             <input
                                                 class="form-control form-control-sm border-0 costing__file__attachment"
-                                                type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
-                                                wire:model="additionalCostingFiles" multiple
-                                                id="upload-{{ $uploadFileCostingCount }}"
+                                                type="file" accept=".pdf" wire:model="additionalCostingFiles"
+                                                multiple id="upload-{{ $uploadFileCostingCount }}"
                                                 onchange="validateCostingFile()">
                                             <div x-transition.duration.500ms x-show="isUploading"
                                                 class="progress progress-sm mt-1" style="height: 10px;">
@@ -326,12 +364,6 @@
                                             </div>
                                         </div>
                                         <span class="error__message" id="excludeEXEfileMessage"></span>
-                                        @error('additionalCostingFiles.*')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
                                     </div>
                                     <button type="submit"
                                         class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
@@ -554,8 +586,7 @@
                                         x-on:livewire-upload-error="isUploading = false"
                                         x-on:livewire-upload-progress="progress = $event.detail.progress">
                                         <input class="form-control form-control-sm border-0 costing__file__attachment"
-                                            type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
-                                            wire:model="newCostingFiles" multiple
+                                            type="file" accept=".pdf" wire:model="newCostingFiles" multiple
                                             id="upload-{{ $uploadFileCostingCount }}"
                                             onchange="validateCostingFile()">
                                         <div x-transition.duration.500ms x-show="isUploading"
@@ -579,12 +610,6 @@
                                         </div>
                                     </div>
                                     <span class="error__message" id="excludeEXEfileMessage"></span>
-                                    @error('newCostingFiles.*')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                    @enderror
                                 </div>
                                 <button type="submit"
                                     class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
@@ -608,8 +633,13 @@
         window.addEventListener('close-costing-file-preview-modal', () => {
             $('#costingPreviewFileAttachmentModal').modal('hide');
         });
+
         window.addEventListener('close-new-ticket-costing-file-modal', () => {
             $('#addCostingFileModal').modal('hide');
+        });
+
+        window.addEventListener('close-purchase-dropdown-menu', () => {
+            $(".dropdown-menu.show").removeClass("show");
         });
 
         // Validate file

@@ -143,18 +143,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <input type="hidden" value="{{ $agent->team_id }}" id="agentCurrentTeamId">
-                                        <label class="form-label form__field__label">
-                                            Team
-                                            @if ($teams)
-                                                <span class="fw-normal" style="font-size: 13px;">
-                                                    ({{ $teams->count() }})</span>
-                                            @endif
+                                        <label for="branch" class="form-label form__field__label">
+                                            Service Department
                                         </label>
                                         <div>
-                                            <div id="select-agent-team" wire:ignore></div>
+                                            <div id="select-agent-service-department" wire:ignore></div>
                                         </div>
-                                        @error('selectedTeams')
+                                        @error('service_department')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -164,13 +159,19 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="branch" class="form-label form__field__label">
-                                            Service Department
+                                        <input type="hidden" value="{{ $agent->team_id }}" id="agentCurrentTeamId">
+                                        <label class="form-label form__field__label">
+                                            Team
+                                            @if ($teams)
+                                                <span class="fw-normal" style="font-size: 13px;">
+                                                    ({{ $teams->count() }})
+                                                </span>
+                                            @endif
                                         </label>
                                         <div>
-                                            <div id="select-agent-service-department" wire:ignore></div>
+                                            <div id="select-agent-team" wire:ignore></div>
                                         </div>
-                                        @error('service_department')
+                                        @error('selectedTeams')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -244,10 +245,7 @@
             @this.set('bu_department', null);
             @this.set('selectedTeams', []);
             agentBUDepartmentSelect.reset();
-            agentTeamSelect.reset();
             agentBUDepartmentSelect.disable();
-            agentTeamSelect.disable();
-            agentTeamSelect.setOptions([]);
             agentBUDepartmentSelect.setOptions([]);
 
         });
@@ -257,13 +255,10 @@
             if (agentBranchId) {
                 @this.set('branch', parseInt(agentBranchId));
                 agentBUDepartmentSelect.enable();
-                agentTeamSelect.enable();
 
-                window.addEventListener('get-branch-bu-departments-and-teams', (event) => {
+                window.addEventListener('get-branch-bu-departments', (event) => {
                     const agentBUDepartments = event.detail.BUDepartments;
-                    const agentTeams = event.detail.teams;
                     const agentBUDepartmentOption = [];
-                    const agentTeamOption = [];
 
                     // BU/Department Select
                     if (agentBUDepartments.length > 0) {
@@ -279,22 +274,6 @@
                         });
                         agentBUDepartmentSelect.setOptions(agentBUDepartmentOption);
                         agentBUDepartmentSelect.setValue(@json($bu_department));
-                    }
-
-                    // Teams Select
-                    if (agentTeams.length > 0) {
-                        agentTeams.forEach(function(agentTeam) {
-                            VirtualSelect.init({
-                                ele: agentTeamSelect
-                            });
-
-                            agentTeamOption.push({
-                                label: agentTeam.name,
-                                value: agentTeam.id
-                            });
-                        });
-                        agentTeamSelect.setOptions(agentTeamOption);
-                        agentTeamSelect.setValue(@json($currentTeams));
                     }
                 })
             }
@@ -340,10 +319,6 @@
             markSearchResults: true,
         });
 
-        agentTeamSelect.addEventListener('change', () => {
-            @this.set('selectedTeams', agentTeamSelect.value);
-        });
-
         const agentServiceDepartmentOption = [
             @foreach ($agentServiceDepartments as $serviceDepartment)
                 {
@@ -363,8 +338,51 @@
         });
 
         agentServiceDepartmentSelect.addEventListener('change', () => {
-            @this.set('service_department', parseInt(agentServiceDepartmentSelect.value));
+            serviceDepartmentId = agentServiceDepartmentSelect.value;
+
+            if (serviceDepartmentId) {
+                @this.set('service_department', parseInt(serviceDepartmentId));
+                agentBUDepartmentSelect.enable();
+
+                window.addEventListener('get-teams-service-department', () => {
+                    const agentTeams = event.detail.teams;
+                    const agentTeamOption = [];
+
+                    // Teams Select
+                    if (agentTeams.length > 0) {
+                        agentTeamSelect.enable();
+
+                        agentTeams.forEach(function(agentTeam) {
+                            VirtualSelect.init({
+                                ele: agentTeamSelect
+                            });
+
+                            agentTeamOption.push({
+                                label: agentTeam.name,
+                                value: agentTeam.id
+                            });
+                        });
+                        agentTeamSelect.setOptions(agentTeamOption);
+                        agentTeamSelect.setValue(@json($currentTeams));
+                    } else {
+                        agentTeamSelect.reset();
+                        agentTeamSelect.disable();
+                        agentTeamSelect.setOptions([]);
+                    }
+                });
+            }
         });
+
+        agentTeamSelect.addEventListener('change', () => {
+            @this.set('selectedTeams', agentTeamSelect.value);
+        });
+
+        agentServiceDepartmentSelect.addEventListener('reset', () => {
+            agentTeamSelect.reset();
+            agentTeamSelect.disable();
+            agentTeamSelect.setOptions([]);
+            agentTeamSelect.setOptions([]);
+        })
     </script>
 @endpush
 

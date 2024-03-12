@@ -7863,6 +7863,12 @@ a:hover {
 .sidebar__buttons:hover {
   background-color: #f5f7f9;
 }
+.sidebar__buttons .transform__down {
+  transform: rotate(1.5708rad);
+}
+.sidebar__buttons .remain__right {
+  transform: rotate(0rad);
+}
 
 .sidebar__btn__active {
   background-color: #ffffff;
@@ -8102,13 +8108,14 @@ a:hover {
 }
 .custom__table tbody tr td span {
   font-size: 0.813rem;
-  color: #626060;
+  color: rgb(31, 41, 55);
   font-weight: 500;
 }
 .custom__table .table__head__label {
   letter-spacing: 0.01rem;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.875rem;
+  color: rgb(107, 114, 128);
   text-transform: capitalize;
 }
 .custom__table .media {
@@ -8695,15 +8702,44 @@ a:hover {
 .ticket__section .card__ticket__details .ticket__costing__container .file__attachment__actions__container .file__attachment__action__button {
   font-size: 0.938rem;
 }
+.ticket__section .card__ticket__details .ticket__costing__container .btn__purchase {
+  background-color: #E9ECEF;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #212529;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .btn__purchase:hover {
+  cursor: pointer;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .purchase__dropdown {
+  border: 0;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+  top: -52px !important;
+  right: 90px !important;
+  height: 87px;
+  padding: 8px;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .purchase__dropdown .dropdown-item {
+  color: #131313;
+  border: 0;
+  font-size: 0.813rem;
+  padding: 8px 13px;
+  border-radius: 0.563rem;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .purchase__dropdown .dropdown-item i {
+  color: #777d87 !important;
+}
+.ticket__section .card__ticket__details .ticket__costing__container .purchase__dropdown .dropdown-item:focus {
+  background-color: #E9ECEF !important;
+}
 .ticket__section .ticket__details__top {
   padding: 1.5rem 1.5rem 1.5rem 2.3rem;
   top: 70px;
   position: sticky;
-  z-index: 1;
   background-color: #ffffff;
   border-radius: 0.5rem;
   box-shadow: rgba(33, 35, 38, 0.1) 0px 7px 7px -7px;
-  z-index: 2;
+  z-index: 4;
 }
 .ticket__section .ticket__details__top .ticket__details__topbuttons__label {
   font-size: 0.75rem;
@@ -10639,6 +10675,14 @@ input[type=checkbox]:checked + .form-check-label {
 .help__topics__section .help__topic__modal .modal__content .form__field:focus {
   box-shadow: none;
   border-color: #d32839;
+}
+.help__topics__section .help__topic__modal .modal__content .amount__field__container .currency {
+  left: 17px;
+  top: 8px;
+  font-size: 20px;
+}
+.help__topics__section .help__topic__modal .modal__content .amount__field__container .amount__field {
+  padding-left: 40px !important;
 }
 .help__topics__section .help__topic__details__card {
   border: none;

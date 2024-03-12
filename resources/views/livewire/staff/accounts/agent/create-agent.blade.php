@@ -4,7 +4,7 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0">
-                    <h1 class="modal-title modal__title" id="addNewAgentModalLabel">Add new agent</h1>
+                    <h1 class="modal-title modal__title" id="addNewAgentModalLabel">Agent Account</h1>
                     <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
                         <i class="fa-sharp fa-solid fa-xmark"></i>
                     </button>
@@ -148,6 +148,22 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="mb-2">
+                                                <label for="department" class="form-label form__field__label">
+                                                    Service Department
+                                                </label>
+                                                <div>
+                                                    <div id="select-agent-service-department" wire:ignore></div>
+                                                </div>
+                                                @error('service_department')
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mb-2">
                                                 <label class="form-label form__field__label">
                                                     Team
                                                     @if ($teams)
@@ -159,22 +175,6 @@
                                                     <div id="select-agent-team" wire:ignore></div>
                                                 </div>
                                                 @error('teams')
-                                                    <span class="error__message">
-                                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                                        {{ $message }}
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-2">
-                                                <label for="department" class="form-label form__field__label">
-                                                    Service Department
-                                                </label>
-                                                <div>
-                                                    <div id="select-agent-service-department" wire:ignore></div>
-                                                </div>
-                                                @error('service_department')
                                                     <span class="error__message">
                                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                                         {{ $message }}
@@ -259,27 +259,14 @@
         });
         agentBUDepartmentSelect.disable();
 
-        const agentTeamSelect = document.querySelector('#select-agent-team')
-        VirtualSelect.init({
-            ele: agentTeamSelect,
-            multiple: true,
-            search: true,
-            showValueAsTags: true,
-            markSearchResults: true,
-        });
-        agentTeamSelect.disable();
-
         agentBranchSelect.addEventListener('change', () => {
             const agentBranchId = agentBranchSelect.value;
             if (agentBranchId) {
                 @this.set('branch', parseInt(agentBranchId));
                 agentBUDepartmentSelect.enable();
-                agentTeamSelect.enable();
-                window.addEventListener('get-branch-bu-departments-and-teams', (event) => {
+                window.addEventListener('get-branch-bu-departments', (event) => {
                     const agentBUDepartments = event.detail.BUDepartments;
-                    const agentTeams = event.detail.teams;
                     const agentBUDepartmentOption = [];
-                    const agentTeamOption = [];
 
                     //  BU/Department Select
                     if (agentBUDepartments.length > 0) {
@@ -298,25 +285,6 @@
                         agentBUDepartmentSelect.close();
                         agentBUDepartmentSelect.setOptions();
                         agentBUDepartmentSelect.disable();
-                    }
-
-                    // Team Select
-                    if (agentTeams.length > 0) {
-                        agentTeams.forEach(function(agentTeam) {
-                            VirtualSelect.init({
-                                ele: agentTeamSelect
-                            });
-
-                            agentTeamOption.push({
-                                label: agentTeam.name,
-                                value: agentTeam.id
-                            });
-                        });
-                        agentTeamSelect.setOptions(agentTeamOption);
-                    } else {
-                        agentTeamSelect.close();
-                        agentTeamSelect.setOptions();
-                        agentTeamSelect.disable();
                     }
                 });
             }
@@ -339,12 +307,54 @@
             markSearchResults: true,
         });
 
-        agentBranchSelect.addEventListener('reset', () => {
+        const agentTeamSelect = document.querySelector('#select-agent-team')
+        VirtualSelect.init({
+            ele: agentTeamSelect,
+            multiple: true,
+            search: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+        });
+        agentTeamSelect.disable();
+
+        agentServiceDepartmentSelect.addEventListener('change', () => {
+            @this.set('service_department', parseInt(agentServiceDepartmentSelect.value));
+            agentTeamSelect.enable();
+
+            window.addEventListener('get-teams-service-department', (event) => {
+                const agentTeams = event.detail.teams;
+                const agentTeamOption = [];
+
+                // Team Select
+                if (agentTeams.length > 0) {
+                    agentTeams.forEach(function(agentTeam) {
+                        VirtualSelect.init({
+                            ele: agentTeamSelect
+                        });
+
+                        agentTeamOption.push({
+                            label: agentTeam.name,
+                            value: agentTeam.id
+                        });
+                    });
+                    agentTeamSelect.setOptions(agentTeamOption);
+                } else {
+                    agentTeamSelect.close();
+                    agentTeamSelect.setOptions();
+                    agentTeamSelect.disable();
+                }
+            });
+        });
+
+        agentServiceDepartmentSelect.addEventListener('reset', () => {
             agentTeamSelect.reset();
-            agentBUDepartmentSelect.reset();
             agentTeamSelect.disable();
-            agentBUDepartmentSelect.disable();
             agentTeamSelect.setOptions([]);
+        });
+
+        agentBranchSelect.addEventListener('reset', () => {
+            agentBUDepartmentSelect.reset();
+            agentBUDepartmentSelect.disable();
             agentBUDepartmentSelect.setOptions([]);
         });
 
@@ -353,9 +363,6 @@
         });
         agentTeamSelect.addEventListener('change', () => {
             @this.set('selectedTeams', agentTeamSelect.value);
-        });
-        agentServiceDepartmentSelect.addEventListener('change', () => {
-            @this.set('service_department', parseInt(agentServiceDepartmentSelect.value));
         });
     </script>
 @endpush

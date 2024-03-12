@@ -99,6 +99,11 @@ class Ticket extends Model
         return $this->hasOne(SpecialProjectAmountApproval::class);
     }
 
+    public function specialProjectStatus(): HasOne
+    {
+        return $this->hasOne(TicketSpecialProjectStatus::class);
+    }
+
     public function fileAttachments(): HasMany
     {
         return $this->hasMany(TicketFile::class);
@@ -127,11 +132,6 @@ class Ticket extends Model
     public function ticketApprovals(): HasMany
     {
         return $this->hasMany(TicketApproval::class);
-    }
-
-    public function specialProjectStatus(): HasMany
-    {
-        return $this->hasMany(TicketSpecialProjectStatus::class);
     }
 
     public function tags(): BelongsToMany

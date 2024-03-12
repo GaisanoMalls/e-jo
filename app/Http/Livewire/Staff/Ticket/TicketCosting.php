@@ -8,6 +8,7 @@ use App\Http\Traits\Utils;
 use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
+use App\Models\TicketApproval;
 use App\Models\TicketCosting as Costing;
 use App\Models\TicketCostingFile;
 use App\Models\TicketSpecialProjectStatus;
@@ -29,14 +30,14 @@ class TicketCosting extends Component
     public $uploadFileCostingCount = 0;
     public $newCostingFiles = [];
     public $additionalCostingFiles = [];
-    public $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
+    public $allowedExtensions = ['pdf'];
     protected $listeners = ['loadServiceDeptAdminTicketCosting' => '$refresh'];
 
     public function updatedNewCostingFiles()
     {
         $this->validate([
             'newCostingFiles.*' => [
-                'nullable',
+                'required',
                 File::types($this->allowedExtensions)->max(25600) //25600 (25 MB)
             ],
         ]);
@@ -45,8 +46,8 @@ class TicketCosting extends Component
     public function updatedAdditionalCostingFiles()
     {
         $this->validate([
-            'newCostingFiles.*' => [
-                'nullable',
+            'additionalCostingFiles.*' => [
+                'required',
                 File::types($this->allowedExtensions)->max(25600) //25600 (25 MB)
             ],
         ]);
@@ -113,7 +114,7 @@ class TicketCosting extends Component
     {
         try {
             if ($this->isOnlyAgent($this->ticket->agent_id)) {
-                if ($this->additionalCostingFiles) {
+                if (!empty($this->additionalCostingFiles)) {
                     foreach ($this->additionalCostingFiles as $uploadedAdditionalCostingFile) {
                         $fileName = $uploadedAdditionalCostingFile->getClientOriginalName();
                         $fileAttachment = Storage::putFileAs(
@@ -130,6 +131,15 @@ class TicketCosting extends Component
                     $this->uploadFileCostingCount++;
                     $this->additionalCostingFiles = [];
                     $this->emit('loadServiceDeptAdminTicketCosting');
+
+                    if ($this->ticket->ticketCosting->fileAttachments()->count() === 0) {
+                        TicketSpecialProjectStatus::create([
+                            'ticket_id' => $this->ticket->id,
+                            'costing_and_planning_status' => SpecialProjectStatusEnum::DONE
+                        ]);
+                    }
+                } else {
+                    noty()->addError('File attachment for costing is required');
                 }
             } else {
                 $this->editingFieldId = null;
@@ -144,7 +154,7 @@ class TicketCosting extends Component
     {
         try {
             if ($this->isOnlyAgent($this->ticket->agent_id)) {
-                if ($this->newCostingFiles) {
+                if (!empty($this->newCostingFiles)) {
                     foreach ($this->newCostingFiles as $newCostingFile) {
                         $fileName = $newCostingFile->getClientOriginalName();
                         $fileAttachment = Storage::putFileAs(
@@ -162,6 +172,13 @@ class TicketCosting extends Component
                     $this->newCostingFiles = [];
                     $this->emit('loadServiceDeptAdminTicketCosting');
                     $this->dispatchBrowserEvent('close-new-ticket-costing-file-modal');
+
+                    TicketSpecialProjectStatus::create([
+                        'ticket_id' => $this->ticket->id,
+                        'costing_and_planning_status' => SpecialProjectStatusEnum::DONE
+                    ]);
+                } else {
+                    noty()->addError('File attachment for costing is required');
                 }
             } else {
                 $this->editingFieldId = null;
@@ -187,15 +204,19 @@ class TicketCosting extends Component
             $costingApprover1Id = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->where('id', auth()->user()->id)->value('id');
 
             if ($this->isSpecialProjectCostingApprover1($costingApprover1Id, $ticket)) {
-                SpecialProjectAmountApproval::where([['ticket_id', $ticket->id], ['service_department_admin_approver->is_approved', false]])
-                    ->update([
-                        'service_department_admin_approver->is_approved' => true,
-                        'service_department_admin_approver->date_approved' => Carbon::now(),
-                        'is_done' => !$this->isCostingAmountNeedCOOApproval($ticket) ? true : false
-                    ]);
+                if ($this->ticket->ticketCosting()->count() !== 0) {
+                    SpecialProjectAmountApproval::where([['ticket_id', $ticket->id], ['service_department_admin_approver->is_approved', false]])
+                        ->update([
+                            'service_department_admin_approver->is_approved' => true,
+                            'service_department_admin_approver->date_approved' => Carbon::now(),
+                            'is_done' => !$this->isCostingAmountNeedCOOApproval($ticket) ? true : false
+                        ]);
 
-                $this->emit('loadServiceDeptAdminTicketCosting');
-                noty()->addSuccess('Ticket costing is approved.');
+                    $this->emit('loadServiceDeptAdminTicketCosting');
+                    noty()->addSuccess('Ticket costing is approved.');
+                } else {
+                    noty()->addError('Approval failed. Costing attachment is required');
+                }
             } else {
                 noty()->addWarning("Sorry, You have no permission to approve the costing");
             }
@@ -206,12 +227,45 @@ class TicketCosting extends Component
 
     public function isDoneTicketCostingAndPlanning(Ticket $ticket)
     {
-        return $this->isDoneSpecialProjectAmountApproval($ticket)
-            && TicketSpecialProjectStatus::whereNotNull('costing_and_planning_status')
-                ->where([
-                    ['ticket_id', $ticket->id],
-                    ['costing_and_planning_status', SpecialProjectStatusEnum::DONE]
-                ])->exists();
+        return TicketSpecialProjectStatus::whereNotNull('costing_and_planning_status')
+            ->where([
+                ['ticket_id', $ticket->id],
+                ['costing_and_planning_status', SpecialProjectStatusEnum::DONE]
+            ])->exists();
+    }
+
+    public function getPurchasingStatus()
+    {
+        $purhaseStatus = TicketSpecialProjectStatus::where('ticket_id', $this->ticket->id)->first();
+
+        if ($purhaseStatus) {
+            if ($purhaseStatus->purchasing_status === SpecialProjectStatusEnum::ON_ORDERED->value) {
+                return SpecialProjectStatusEnum::ON_ORDERED->value;
+            }
+
+            if ($purhaseStatus->purchasing_status === SpecialProjectStatusEnum::DELIVERED->value) {
+                return SpecialProjectStatusEnum::DELIVERED->value;
+            }
+        }
+    }
+    public function setOrder()
+    {
+        TicketSpecialProjectStatus::where([
+            ['ticket_id', $this->ticket->id],
+        ])->update(['purchasing_status' => SpecialProjectStatusEnum::ON_ORDERED]);
+
+        $this->emit('loadServiceDeptAdminTicketCosting');
+        $this->dispatchBrowserEvent('close-purchase-dropdown-menu');
+    }
+
+    public function setDeliver()
+    {
+        TicketSpecialProjectStatus::where([
+            ['ticket_id', $this->ticket->id],
+        ])->update(['purchasing_status' => SpecialProjectStatusEnum::DELIVERED]);
+
+        $this->emit('loadServiceDeptAdminTicketCosting');
+        $this->dispatchBrowserEvent('close-purchase-dropdown-menu');
     }
 
     public function render()

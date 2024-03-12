@@ -88,7 +88,7 @@ class ApproveTicket extends Component
                                     ->get();
 
                                 if ($level2Approvers->isNotEmpty()) {
-                                    foreach ($level2Approvers as $level2Approver) {
+                                    $level2Approvers->each(function ($level2Approver) use ($serviceDepartmentAdmin) {
                                         Notification::send(
                                             $level2Approver,
                                             new AppNotification(
@@ -97,7 +97,7 @@ class ApproveTicket extends Component
                                                 message: "{$serviceDepartmentAdmin->profile->getFullName()} approved the level 1 approval. You can now approved the approval for level 2"
                                             )
                                         );
-                                    }
+                                    });
                                 } else {
                                     AppErrorLog::getError("No level 2 approvers have been found");
                                 }

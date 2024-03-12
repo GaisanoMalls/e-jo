@@ -763,6 +763,14 @@ a {
     &:hover {
         background-color: $body-color;
     }
+
+    .transform__down {
+        transform: rotate(1.5708rad);
+    }
+
+    .remain__right {
+        transform: rotate(0rad);
+    }
 }
 
 .sidebar__btn__active {
@@ -1053,7 +1061,7 @@ a {
             td {
                 span {
                     font-size: $fs-13;
-                    color: #626060;
+                    color: rgb(31, 41, 55);
                     font-weight: $fw-500;
                 }
             }
@@ -1062,8 +1070,9 @@ a {
 
     .table__head__label {
         letter-spacing: 0.01rem;
-        font-weight: $fw-600;
+        font-weight: $fw-500;
         font-size: $fs-14;
+        color: rgb(107, 114, 128);
         text-transform: capitalize;
     }
 
@@ -1803,6 +1812,42 @@ a {
                     font-size: $fs-15;
                 }
             }
+
+            .btn__purchase {
+                background-color: #E9ECEF;
+                font-size: $fs-12;
+                font-weight: $fw-500;
+                color: #212529;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .purchase__dropdown {
+                border: 0;
+                box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+                top: -52px !important;
+                right: 90px !important;
+                height: 87px;
+                padding: 8px;
+
+                .dropdown-item {
+                    color: #131313;
+                    border: 0;
+                    font-size: $fs-13;
+                    padding: 8px 13px;
+                    border-radius: $border-radius-9;
+
+                    i {
+                        color: #777d87 !important;
+                    }
+
+                    &:focus {
+                        background-color: #E9ECEF !important;
+                    }
+                }
+            }
         }
     }
 
@@ -1810,11 +1855,10 @@ a {
         padding: 1.5rem 1.5rem 1.5rem 2.3rem;
         top: 70px;
         position: sticky;
-        z-index: 1;
         background-color: $white;
         border-radius: $border-radius-8;
         box-shadow: rgba(33, 35, 38, 0.1) 0px 7px 7px -7px;
-        z-index: 2;
+        z-index: 4;
 
         .ticket__details__topbuttons__label {
             font-size: $fs-12;
@@ -3862,6 +3906,18 @@ input[type="checkbox"] {
                 &:focus {
                     box-shadow: none;
                     border-color: $color-1;
+                }
+            }
+
+            .amount__field__container {
+                .currency {
+                    left: 17px;
+                    top: 8px;
+                    font-size: 20px;
+                }
+
+                .amount__field {
+                    padding-left: 40px !important;
                 }
             }
         }

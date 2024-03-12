@@ -60,7 +60,7 @@
                                 </td>
                                 <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
-                                        <span>{{ $serviceDepartmentAdmin->getServiceDepartments() }}</span>
+                                        <span>{{ Str::limit($serviceDepartmentAdmin->getServiceDepartments(), 30) }}</span>
                                     </div>
                                 </td>
                                 <td style="padding: 17px 30px;">

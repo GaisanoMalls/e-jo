@@ -34,9 +34,8 @@
                                 x-on:livewire-upload-error="isUploading = false"
                                 x-on:livewire-upload-progress="progress = $event.detail.progress">
                                 <input class="form-control form-control-sm border-0 costing__file__attachment"
-                                    type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
-                                    wire:model="costingFiles" multiple id="upload-{{ $uploadCostingCount }}"
-                                    onchange="validateCotingFile()">
+                                    type="file" accept=".pdf" wire:model="costingFiles" multiple
+                                    id="upload-{{ $uploadCostingCount }}" onchange="validateCotingFile()">
                                 <div x-transition.duration.500ms x-show="isUploading" class="progress progress-sm mt-1"
                                     style="height: 10px;">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated"
@@ -57,12 +56,12 @@
                                 </div>
                             </div>
                             <span class="error__message" id="excludeEXEfileMessage"></span>
-                            @error('costingFiles.*')
+                            @if (session()->has('fileError'))
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
+                                    {{ session('fileError') }}
                                 </span>
-                            @enderror
+                            @endif
                         </div>
                         <button type="submit"
                             class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">

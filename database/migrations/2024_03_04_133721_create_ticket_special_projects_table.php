@@ -19,7 +19,6 @@ return new class extends Migration {
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
             $table->enum('costing_and_planning_status', [SpecialProjectStatusEnum::DONE->value])->nullable();
             $table->enum('purchasing_status', [SpecialProjectStatusEnum::ON_ORDERED->value, SpecialProjectStatusEnum::DELIVERED->value])->nullable();
-            $table->enum('resource_status', [SpecialProjectStatusEnum::PROCESSED->value])->nullable();
             $table->timestamps();
         });
     }

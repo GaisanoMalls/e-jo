@@ -65,11 +65,11 @@ class Open extends Component
         }
 
         if ($this->withoutPr) {
-            $this->openTickets = Ticket::whereDoesntHave('ticketCosting.prFileAttachments')
-                ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL))
+            $this->openTickets = Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL))
                 ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                     ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
                 ->orWhere(fn($query) => $query->withWhereHas('specialProjectAmountApproval', fn($spAmountApproval) => $spAmountApproval->where('is_done', true)))
+                ->withWhereHas('ticketCosting', fn($costing) => $costing->whereDoesntHave('prFileAttachments'))
                 ->orderByDesc('created_at')
                 ->get();
         }

@@ -98,9 +98,12 @@
                                                     <label for="amount" class="form-label form__field__label">
                                                         Amount
                                                     </label>
-                                                    <input type="text" wire:model="amount"
-                                                        class="form-control form__field amount__field" id="amount"
-                                                        placeholder="Enter amount">
+                                                    <div class="d-flex position-relative amount__field__container">
+                                                        <span class="currency text-muted position-absolute">₱</span>
+                                                        <input type="text" wire:model="amount"
+                                                            class="form-control form__field amount__field"
+                                                            id="amount" placeholder="Enter amount">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

@@ -20,8 +20,8 @@ class TicketApproval extends Model
 
     /**
      * Properties Approval 1 and 2: 
-     * level_1_approver approver_id, approved_by, and is_approved
-     * level_2_approver approver_id, approved_by, and is_approved
+     * level_1_approver - approver_id, approved_by, and is_approved
+     * level_2_approver - approver_id, approved_by, and is_approved
      * is_all_approved
      */
     protected $casts = [

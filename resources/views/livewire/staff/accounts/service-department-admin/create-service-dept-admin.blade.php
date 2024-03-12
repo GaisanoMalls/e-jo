@@ -4,7 +4,8 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0">
-                    <h1 class="modal-title modal__title" id="addNewDeptAdminModalLabel">Add new service department Admin
+                    <h1 class="modal-title modal__title" id="addNewDeptAdminModalLabel">
+                        Service Department Admin Account
                     </h1>
                     <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
                         <i class="fa-sharp fa-solid fa-xmark"></i>

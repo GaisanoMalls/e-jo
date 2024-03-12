@@ -13,10 +13,25 @@ trait Tickets
 
     public function serviceDeptAdminGetTicketsToAssign()
     {
-        return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::APPROVED)->where('status_id', '!=', Status::CLAIMED))
+        return Ticket::whereHas('teams')
+            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::APPROVED)->where('approval_status', ApprovalStatusEnum::APPROVED))
             ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
-            ->withWhereHas('teams', fn($team) => $team->whereNull('teams.id'))
+            ->withWhereHas('ticketCosting', fn($ticketCosting) => $ticketCosting->withWhereHas('prFileAttachments', fn($prFile) =>
+                $prFile->where([
+                    ['is_approved_level_1_approver', true],
+                    ['is_approved_level_2_approver', true],
+                ])))
+            ->withWhereHas('ticketApprovals', fn($ticketApproval) => $ticketApproval->where([
+                ['approval_1->level_1_approver->is_approved', true],
+                ['approval_1->level_2_approver->is_approved', true],
+                ['approval_1->is_all_approved', true],
+            ]))
+            ->withWhereHas('specialProjectAmountApproval', fn($spAmountApproval) => $spAmountApproval->where([
+                ['service_department_admin_approver->is_approved', true],
+                ['fpm_coo_approver->is_approved', true],
+                ['is_done', true]
+            ]))
             ->orderByDesc('created_at')
             ->get();
     }
@@ -33,6 +48,11 @@ trait Tickets
             ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
             ->orWhere(fn($query) => $query->withWhereHas('specialProjectAmountApproval', fn($spAmountApproval) => $spAmountApproval->where('is_done', true)))
+            ->withWhereHas('ticketApprovals', fn($ticketApproval) => $ticketApproval->where([
+                ['approval_1->level_1_approver->is_approved', false],
+                ['approval_1->level_2_approver->is_approved', false],
+                ['approval_1->is_all_approved', false],
+            ]))
             ->orderByDesc('created_at')
             ->get();
     }

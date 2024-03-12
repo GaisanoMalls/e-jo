@@ -76,7 +76,7 @@
                                 Approve
                             </button>
                         @else
-                            @if ($this->isTicketApproval2Level2Approved() || $this->isTicketApproval2Level1Approved())
+                            @if ($this->isTicketApproval1Level1Approved() || $this->isTicketApproval1Level2Approved())
                                 <div class="d-flex align-items-center gap-1">
                                     <i class="bi bi-check-circle-fill ms-1"
                                         style="font-size: 11px; color: #D32839;"></i>

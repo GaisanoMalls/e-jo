@@ -22,7 +22,7 @@ class AddCosting extends Component
     public $uploadCostingCount = 0;
     public $amount;
     public $costingFiles = [];
-    public $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
+    public $allowedExtensions = ['pdf'];
 
     public function rules()
     {
@@ -49,56 +49,55 @@ class AddCosting extends Component
 
         try {
             if ($this->isOnlyAgent($this->ticket->agent_id)) {
-                $existingTicketCosting = TicketCosting::where('ticket_id', $this->ticket->id)->first();
-
-                if ($existingTicketCosting) {
-                    // Update the amount if costing exists.
-                    $existingTicketCosting->update(['amount' => $this->amount]);
-                } else {
-
-                    // Get the costing approver id
-                    $approver1Id = SpecialProjectAmountApproval::all()->pluck('service_department_admin_approver')
-                        ->map(function ($item, $key) {
-                            return $item['approver_id']; // Access the approver_id from each item
-                        })->first();
-
-                    $approver2Id = SpecialProjectAmountApproval::all()->pluck('fpm_coo_approver')
-                        ->map(function ($item, $key) {
-                            return $item['approver_id']; // Access the approver_id from each item
-                        })->first();
-
-                    if ($approver1Id && $approver2Id) {
-                        // Create a costing when approver is found
-                        $ticketCosting = TicketCosting::create([
-                            'ticket_id' => $this->ticket->id,
-                            'amount' => $this->amount,
-                        ]);
-
-                        if (SpecialProjectAmountApproval::whereNotNull('ticket_id')->exists()) {
-                            SpecialProjectAmountApproval::create([
-                                'ticket_id' => $this->ticket->id,
-                                'service_department_admin_approver' => [
-                                    'approver_id' => $approver1Id,
-                                    'is_approved' => false,
-                                    'date_approved' => null
-                                ],
-                                'fpm_coo_approver' => [
-                                    'approver_id' => $approver2Id,
-                                    'is_approved' => false,
-                                    'date_approved' => null
-                                ]
-                            ]);
-                        } else {
-                            SpecialProjectAmountApproval::whereNull('ticket_id')->whereNotNull([
-                                'service_department_admin_approver',
-                                'fpm_coo_approver'
-                            ])->update(['ticket_id' => $this->ticket->id]);
-                        }
+                if (!empty($this->costingFiles)) {
+                    $existingTicketCosting = TicketCosting::where('ticket_id', $this->ticket->id)->first();
+                    if ($existingTicketCosting) {
+                        // Update the amount if costing exists.
+                        $existingTicketCosting->update(['amount' => $this->amount]);
                     } else {
-                        noty()->addError('No costing approver is found. Please contact the administrator');
-                    }
 
-                    if ($this->costingFiles) {
+                        // Get the costing approver id
+                        $approver1Id = SpecialProjectAmountApproval::all()->pluck('service_department_admin_approver')
+                            ->map(function ($item, $key) {
+                                return $item['approver_id']; // Access the approver_id from each item
+                            })->first();
+
+                        $approver2Id = SpecialProjectAmountApproval::all()->pluck('fpm_coo_approver')
+                            ->map(function ($item, $key) {
+                                return $item['approver_id']; // Access the approver_id from each item
+                            })->first();
+
+                        if ($approver1Id && $approver2Id) {
+                            // Create a costing when approver is found
+                            $ticketCosting = TicketCosting::create([
+                                'ticket_id' => $this->ticket->id,
+                                'amount' => $this->amount,
+                            ]);
+
+                            if (SpecialProjectAmountApproval::whereNotNull('ticket_id')->exists()) {
+                                SpecialProjectAmountApproval::create([
+                                    'ticket_id' => $this->ticket->id,
+                                    'service_department_admin_approver' => [
+                                        'approver_id' => $approver1Id,
+                                        'is_approved' => false,
+                                        'date_approved' => null
+                                    ],
+                                    'fpm_coo_approver' => [
+                                        'approver_id' => $approver2Id,
+                                        'is_approved' => false,
+                                        'date_approved' => null
+                                    ]
+                                ]);
+                            } else {
+                                SpecialProjectAmountApproval::whereNull('ticket_id')->whereNotNull([
+                                    'service_department_admin_approver',
+                                    'fpm_coo_approver'
+                                ])->update(['ticket_id' => $this->ticket->id]);
+                            }
+                        } else {
+                            noty()->addError('No costing approver is found. Please contact the administrator');
+                        }
+
                         foreach ($this->costingFiles as $uploadedCostingFile) {
                             $fileName = $uploadedCostingFile->getClientOriginalName();
                             $fileAttachment = Storage::putFileAs(
@@ -113,9 +112,11 @@ class AddCosting extends Component
 
                             $ticketCosting->fileAttachments()->save($costingFile);
                         }
-                    }
 
-                    $this->actionOnSubmit();
+                        $this->actionOnSubmit();
+                    }
+                } else {
+                    session()->flash('fileError', 'File attachment for costing is required');
                 }
             } else {
                 $this->dispatchBrowserEvent('close-costing-modal');

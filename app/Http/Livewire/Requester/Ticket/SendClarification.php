@@ -101,7 +101,7 @@ class SendClarification extends Component
                     ->whereHas('branches', fn($branch) => $branch->where('branches.id', auth()->user()->branches->pluck('id')->first()))
                     ->whereHas('buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))->get();
 
-                foreach ($initialServiceDepartmentAdmins as $initialServiceDepartmentAdmin) {
+                $initialServiceDepartmentAdmins->each(function ($initialServiceDepartmentAdmin) use ($latestStaff) {
                     Notification::send(
                         $latestStaff->user ?? $initialServiceDepartmentAdmin,
                         new AppNotification(
@@ -112,7 +112,7 @@ class SendClarification extends Component
                         )
                     );
                     // Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
-                }
+                });
 
                 ActivityLog::make($this->ticket->id, $logClarificationDescription);
                 $this->actionOnSubmit();
