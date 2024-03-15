@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Enums\SpecialProjectStatusEnum;
 use App\Http\Requests\Agent\StoreTicketCostingRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
@@ -9,6 +10,7 @@ use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
 use App\Models\TicketCosting;
 use App\Models\TicketCostingFile;
+use App\Models\TicketSpecialProjectStatus;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
@@ -50,12 +52,16 @@ class AddCosting extends Component
         try {
             if ($this->isOnlyAgent($this->ticket->agent_id)) {
                 if (!empty($this->costingFiles)) {
+                    TicketSpecialProjectStatus::create([
+                        'ticket_id' => $this->ticket->id,
+                        'costing_and_planning_status' => SpecialProjectStatusEnum::DONE
+                    ]);
+
                     $existingTicketCosting = TicketCosting::where('ticket_id', $this->ticket->id)->first();
                     if ($existingTicketCosting) {
                         // Update the amount if costing exists.
                         $existingTicketCosting->update(['amount' => $this->amount]);
                     } else {
-
                         // Get the costing approver id
                         $approver1Id = SpecialProjectAmountApproval::all()->pluck('service_department_admin_approver')
                             ->map(function ($item, $key) {

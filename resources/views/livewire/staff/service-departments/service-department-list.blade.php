@@ -5,6 +5,7 @@
                 <thead>
                     <tr>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department Child</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
                     </tr>
@@ -15,6 +16,20 @@
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
                                     <span>{{ $serviceDepartment->name }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    @if ($serviceDepartment->children->count() > 0)
+                                        @foreach ($serviceDepartment->children->take($childDisplayLimit) as $child)
+                                            <span>{{ $child->name }}</span>
+                                        @endforeach
+                                        <span class="ms-2 text-muted">
+                                            {{ $serviceDepartment->children->count() - $childDisplayLimit !== 0 ? '+' . $serviceDepartment->children->count() - $childDisplayLimit : '' }}
+                                        </span>
+                                    @else
+                                        ---
+                                    @endif
                                 </div>
                             </td>
                             <td>
@@ -79,6 +94,51 @@
                                     </span>
                                 @enderror
                             </div>
+                            @if ($isServiceDepartmentHasChildren)
+                                <div class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
+                                    style="height: 93px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 1;">
+                                    <div class="d-flex mt-2 align-items-center justify-content-between gap-2">
+                                        <label for="childInput" class="form-label mt-1 form__field__label">Add
+                                            child</label>
+                                        @if (session()->has('childError'))
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ session('childError') }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="position-relative">
+                                        <input type="text" wire:model=""
+                                            class="form-control position-relative pe-5 form__field {{ session()->has('childError') ? 'is-invalid' : '' }}"
+                                            placeholder="Enter child name" style="width: 100%;" id="childInput">
+                                        <button wire:click="" type="button"
+                                            class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary outline-none rounded-3 shadow-sm position-absolute"
+                                            style="right: 0.6rem; top: 0.5rem; height: 30px; width: 30px;">
+                                            <i class="fa-regular fa-floppy-disk"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Child list --}}
+                            @if ($serviceDepartmentChildren?->isNotEmpty())
+                                @foreach ($serviceDepartmentChildren as $children)
+                                    <div class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
+                                        style="height: 60px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 0;">
+                                        <div class="position-relative">
+                                            <input wire:key="{{ $children->id }}" type="text" disabled readonly
+                                                value="{{ $children->name }}"
+                                                class="form-control position-relative pe-5 form__field"
+                                                style="width: 100%; margin-top: 11px">
+                                            <button wire:click="" type="button"
+                                                class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle text-white position-absolute"
+                                                style="right: -0.5rem; top: -0.5rem; height: 18px; width: 18px; font-size: 0.65rem; background-color: #9DA85C; border: 0.19rem solid white;">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                     <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
@@ -120,8 +180,8 @@
                     <button type="submit"
                         class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
                         wire:click="delete">
-                        <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm" role="status"
-                            aria-hidden="true">
+                        <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm"
+                            role="status" aria-hidden="true">
                         </span>
                         Yes, delete
                     </button>

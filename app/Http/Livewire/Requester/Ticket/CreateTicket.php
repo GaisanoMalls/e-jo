@@ -115,16 +115,11 @@ class CreateTicket extends Component
                 TicketTeam::create(['ticket_id' => $ticket->id, 'team_id' => $this->team != 'undefined' ? $this->team : null]);
 
                 if ($this->fileAttachments) {
-                    foreach ($this->fileAttachments as $uploadedFile) {
+                    collect($this->fileAttachments)->each(function ($uploadedFile) use ($ticket) {
                         $fileName = $uploadedFile->getClientOriginalName();
                         $fileAttachment = Storage::putFileAs("public/ticket/$ticket->ticket_number/creation_attachments", $uploadedFile, $fileName);
-
-                        $ticketFile = new TicketFile();
-                        $ticketFile->file_attachment = $fileAttachment;
-                        $ticketFile->ticket_id = $ticket->id;
-
-                        $ticket->fileAttachments()->save($ticketFile);
-                    }
+                        $ticket->fileAttachments()->create(['file_attachment' => $fileAttachment]);
+                    });
                 }
 
                 $approverLevel = ApproverLevel::with('approver.profile')

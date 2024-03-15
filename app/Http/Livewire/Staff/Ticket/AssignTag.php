@@ -14,8 +14,14 @@ class AssignTag extends Component
 
     public Ticket $ticket;
     public $selectedTags = [];
+    public $tags = [];
 
     protected $listeners = ['loadAssignTicketForm' => '$refresh'];
+
+    public function mount()
+    {
+        $this->tags = $this->queryTags();
+    }
 
     /**
      * Assign ticket tags
@@ -34,8 +40,6 @@ class AssignTag extends Component
 
     public function render()
     {
-        return view('livewire.staff.ticket.assign-tag', [
-            'tags' => $this->queryTags(),
-        ]);
+        return view('livewire.staff.ticket.assign-tag');
     }
 }

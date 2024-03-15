@@ -24,27 +24,25 @@
                                 </span>
                             @enderror
                         </div>
-                        @if (!$isSpecialProject)
-                            <div class="my-2">
-                                <label class="ticket__actions__label mb-2">
-                                    Assign to agent <span class="text-muted">(Optional)</span>
-                                    @if ($agents)
-                                        <span class="fw-normal" style="font-size: 13px;">
-                                            ({{ $agents->count() }})
-                                        </span>
-                                    @endif
-                                </label>
-                                <div>
-                                    <div id="select-agent" placeholder="Select (optional)" wire:ignore></div>
-                                </div>
-                                @error('agent')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
+                        <div class="my-2">
+                            <label class="ticket__actions__label mb-2">
+                                Assign to agent <span class="text-muted">(Optional)</span>
+                                @if ($agents)
+                                    <span class="fw-normal" style="font-size: 13px;">
+                                        ({{ $agents->count() }})
                                     </span>
-                                @enderror
+                                @endif
+                            </label>
+                            <div>
+                                <div id="select-agent" placeholder="Select" wire:ignore></div>
                             </div>
-                        @endif
+                            @error('agent')
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
                         <button type="submit"
                             class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
                             <span wire:loading wire:target="saveAssignTicket" class="spinner-border spinner-border-sm"
@@ -89,11 +87,13 @@
                 hasOptionDescription: true,
             });
         }
+        teamSelect.setValue(@json($currentlyAssignedTeams))
 
         const agentSelect = document.querySelector('#select-agent');
         // Initialize the agent select dropdown
         VirtualSelect.init({
             ele: agentSelect,
+            options: @json($agents),
             search: true,
             markSearchResults: true,
             hasOptionDescription: true
@@ -104,9 +104,13 @@
             teamSelect.setValue(event.detail.ticket.team_id);
         });
 
+        agentSelect.addEventListener('change', () => {
+            @this.set('agent', agentSelect.value);
+        });
+
         teamSelect.addEventListener('change', () => {
             const teamId = teamSelect.value;
-            @this.set('team', teamId);
+            @this.set('selectedTeams', teamId);
 
             if (teamId) {
                 agentSelect.enable();
@@ -120,7 +124,7 @@
                                 ele: agentSelect,
                                 search: true,
                                 markSearchResults: true,
-                                hasOptionDescription: true
+                                hasOptionDescription: true,
                             });
 
                             const middleName = `${agent.profile.middle_name ?? ''}`;
@@ -129,9 +133,11 @@
                             agentOption.push({
                                 label: `${agent.profile.first_name} ${firstLetter} ${agent.profile.last_name}`,
                                 value: agent.id
-                            })
+                            });
                         });
                         agentSelect.setOptions(agentOption);
+                        agentSelect.setValue(@json($currentlyAssignedAgent));
+
                     } else {
                         agentSelect.reset();
                         agentSelect.disable()
@@ -143,10 +149,6 @@
         teamSelect.addEventListener('reset', () => {
             agentSelect.setOptions([]);
             agentSelect.close();
-        });
-
-        agentSelect.addEventListener('change', () => {
-            @this.set('agent', agentSelect.value);
         });
 
         window.addEventListener('select-multiple-team', () => {

@@ -95,8 +95,6 @@
                                 @endif
                             </div>
                         </div>
-
-                        {{-- Otherwise, show this block instead --}}
                         <div class="d-flex flex-column justify-content-between gap-2">
                             <small class="text-muted text-sm costing__header__label">
                                 Status
@@ -120,6 +118,35 @@
                                     class="d-flex align-items-center justify-content-center gap-1 rounded-4 text-dark approved__costing__status">
                                     <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
                                     For approval
+                                </small>
+                            @endif
+                        </div>
+                        <div class="d-flex flex-column justify-content-between gap-2 position-relative">
+                            <small class="text-muted text-sm costing__header__label">
+                                Purchasing
+                            </small>
+                            @if (auth()->user()->hasRole(App\Models\Role::USER))
+                                <small
+                                    class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                    @if ($ticket->specialProjectStatus->purchasing_status)
+                                        <i class="fa-solid fa-cart-arrow-down" style="color: green;"></i>
+                                        {{ $ticket->specialProjectStatus->purchasing_status }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </small>
+                            @else
+                                <small
+                                    class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                    @if ($this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value)
+                                        <i class="fa-solid fa-cart-arrow-down" style="color: green;"></i>
+                                        {{ \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value }}
+                                    @elseif ($this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value)
+                                        <i class="fa-solid fa-truck" style="color: green;"></i>
+                                        {{ \App\Enums\SpecialProjectStatusEnum::DELIVERED->value }}
+                                    @else
+                                        N/A
+                                    @endif
                                 </small>
                             @endif
                         </div>

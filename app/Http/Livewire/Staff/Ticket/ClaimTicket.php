@@ -6,6 +6,7 @@ use App\Http\Traits\AppErrorLog;
 use App\Models\ActivityLog;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\TicketApproval;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -54,6 +55,15 @@ class ClaimTicket extends Component
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
+    }
+
+    public function isDoneFirstLevelApproval()
+    {
+        return TicketApproval::where([
+            ['ticket_id', $this->ticket->id],
+            ['approval_1->level_1_approver->is_approved', true],
+            ['approval_1->level_2_approver->is_approved', true],
+        ])->exists();
     }
 
     public function render()

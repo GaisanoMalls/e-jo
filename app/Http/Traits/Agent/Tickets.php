@@ -14,6 +14,10 @@ trait Tickets
             ->where('approval_status', ApprovalStatusEnum::APPROVED))
             ->where(fn($byUserQuery) => $byUserQuery->where('branch_id', auth()->user()->branches->pluck('id')->first())
                 ->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first()))
+            ->withWhereHas('ticketApprovals', fn($approval) => $approval->where([
+                ['approval_1->level_1_approver->is_approved', true],
+                ['approval_1->level_2_approver->is_approved', true],
+            ]))
             ->orderByDesc('created_at')
             ->get();
     }
@@ -26,6 +30,10 @@ trait Tickets
                 ->where('agent_id', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branches->pluck('id')->first())
                 ->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first()))
+            ->withWhereHas('ticketApprovals', fn($approval) => $approval->where([
+                ['approval_1->level_1_approver->is_approved', true],
+                ['approval_1->level_2_approver->is_approved', true],
+            ]))
             ->orderByDesc('created_at')
             ->get();
     }
@@ -37,6 +45,10 @@ trait Tickets
             ->where(fn($byUserQuery) => $byUserQuery->where('agent_id', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branches->pluck('id')->first())
                 ->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first()))
+            ->withWhereHas('ticketApprovals', fn($approval) => $approval->where([
+                ['approval_1->level_1_approver->is_approved', true],
+                ['approval_1->level_2_approver->is_approved', true],
+            ]))
             ->orderByDesc('created_at')
             ->get();
     }

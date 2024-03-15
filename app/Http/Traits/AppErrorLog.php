@@ -12,6 +12,7 @@ trait AppErrorLog
         Log::channel('appErrorLog')->error($e, [url()->full()]);
 
         if ($notify) {
+            // Show pop-up toastr/notification
             noty()->addError('Oops, something went wrong');
         }
     }

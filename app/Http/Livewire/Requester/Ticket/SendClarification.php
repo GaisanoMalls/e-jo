@@ -69,20 +69,15 @@ class SendClarification extends Component
                 ]);
 
                 if ($this->clarificationFiles) {
-                    foreach ($this->clarificationFiles as $uploadedClarificationFile) {
+                    collect($this->clarificationFiles)->each(function ($uploadedClarificationFile) use ($clarification) {
                         $fileName = $uploadedClarificationFile->getClientOriginalName();
                         $fileAttachment = Storage::putFileAs(
                             "public/ticket/{$this->ticket->ticket_number}/clarification_attachments/" . $this->fileDirByUserType(),
                             $uploadedClarificationFile,
                             $fileName
                         );
-
-                        $clarificationFile = new ClarificationFile();
-                        $clarificationFile->file_attachment = $fileAttachment;
-                        $clarificationFile->clarification_id = $clarification->id;
-
-                        $clarification->fileAttachments()->save($clarificationFile);
-                    }
+                        $clarification->fileAttachments()->create(['file_attachment' => $fileAttachment]);
+                    });
                 }
 
                 // Get the latest staff

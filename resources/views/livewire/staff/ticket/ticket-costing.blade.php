@@ -81,7 +81,8 @@
                                         </small>
                                         @if ($this->isDoneTicketCostingAndPlanning($ticket))
                                             <small
-                                                class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                                class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status"
+                                                style="margin-top: 4px;">
                                                 <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
                                                 {{ $ticket->specialProjectStatus->costing_and_planning_status }}
                                             </small>
@@ -184,7 +185,7 @@
                             <div class="d-flex flex-column justify-content-between gap-2">
                                 <small class="text-muted text-sm costing__header__label">
                                     @if ($this->isDoneCostingApproval1($ticket))
-                                        Status
+                                        Appoval Status
                                     @else
                                         Action
                                     @endif
@@ -267,50 +268,67 @@
                             <small class="text-muted text-sm costing__header__label">
                                 Purchasing
                             </small>
-                            <div class="btn-group">
-                                <button type="button"
-                                    class="btn btn-sm d-flex align-items-center justify-content-center gap-2 px-2 py-1 rounded-2 dropdown-toggle btn__purchase"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div wire:loading wire:target="setOrder, setDeliver"
-                                        class="spinner-border spinner-border-sm loading__spinner" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
-                                    @if (auth()->user()->hasRole(App\Models\Role::AGENT))
-                                        {{ $this->getPurchasingStatus() ?: 'Action' }}
-                                    @else
-                                        In progress
-                                    @endif
-                                </button>
-                                @if ($this->isOnlyAgent(auth()->user()->id))
-                                    <ul wire:ignore.self
-                                        class="dropdown-menu dropdown-menu-end position-absolute purchase__dropdown">
-                                        @if ($this->isDoneCostingApprovals($ticket))
-                                            <li>
-                                                <button
-                                                    class="dropdown-item d-flex align-items-center gap-2 {{ $this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value ? 'fw-semibold' : '' }}"
-                                                    type="button" wire:click="setOrder">
-                                                    <i class="fa-solid fa-cart-arrow-down"></i>
-                                                    {{ $this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value ? \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value : 'Order' }}
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <button
-                                                    class="dropdown-item d-flex align-items-center gap-2 {{ $this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value ? 'fw-semibold' : '' }}"
-                                                    type="button" wire:click="setDeliver">
-                                                    <i class="fa-solid fa-truck"></i>
-                                                    {{ $this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value ? \App\Enums\SpecialProjectStatusEnum::DELIVERED->value : 'Delivered' }}
-                                                </button>
-                                            </li>
+                            @if (auth()->user()->hasRole(App\Models\Role::AGENT))
+                                <div class="btn-group">
+                                    <button type="button"
+                                        class="btn btn-sm d-flex align-items-center justify-content-center gap-2 px-2 py-1 rounded-2 dropdown-toggle btn__purchase"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div wire:loading wire:target="setOrder, setDeliver"
+                                            class="spinner-border spinner-border-sm loading__spinner" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                        @if (auth()->user()->hasRole(App\Models\Role::AGENT))
+                                            {{ $ticket->specialProjectStatus->purchasing_status ?: 'Action' }}
                                         @else
-                                            <li>
-                                                <span style="font-size: 12px;">
-                                                    Waiting for costing to be approved
-                                                </span>
-                                            </li>
+                                            In progress
                                         @endif
-                                    </ul>
-                                @endif
-                            </div>
+                                    </button>
+                                    @if ($this->isOnlyAgent(auth()->user()->id))
+                                        <ul wire:ignore.self
+                                            class="dropdown-menu dropdown-menu-end position-absolute purchase__dropdown">
+                                            @if ($this->isPRApproved($ticket))
+                                                <li>
+                                                    <button
+                                                        class="dropdown-item d-flex align-items-center gap-2 {{ $ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value ? 'fw-semibold' : '' }}"
+                                                        type="button" wire:click="setOrder">
+                                                        <i class="fa-solid fa-cart-arrow-down"></i>
+                                                        {{ $ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value ? \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value : 'Order' }}
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button
+                                                        class="dropdown-item d-flex align-items-center gap-2 {{ $ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value ? 'fw-semibold' : '' }}"
+                                                        type="button" wire:click="setDeliver">
+                                                        <i class="fa-solid fa-truck"></i>
+                                                        {{ $ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value ? \App\Enums\SpecialProjectStatusEnum::DELIVERED->value : 'Delivered' }}
+                                                    </button>
+                                                </li>
+                                            @else
+                                                <li>
+                                                    <span style="font-size: 12px;">
+                                                        Available only when PR is approved
+                                                    </span>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    @endif
+                                </div>
+                            @else
+                                <small
+                                    class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                    @if ($ticket->specialProjectStatus->purchasing_status)
+                                        @if ($ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value)
+                                            <i class="fa-solid fa-cart-arrow-down" style="color: green;"></i>
+                                        @endif
+                                        @if ($ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value)
+                                            <i class="fa-solid fa-cart-arrow-down" style="color: green;"></i>
+                                        @endif
+                                        {{ $ticket->specialProjectStatus->purchasing_status }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </small>
+                            @endif
                         </div>
                     </div>
                 </div>

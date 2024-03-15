@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\ServiceDepartments;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\ServiceDepartment;
+use App\Models\ServiceDepartmentChild;
 use Exception;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -13,10 +14,13 @@ class ServiceDepartmentList extends Component
 {
     use BasicModelQueries;
 
+    public $isServiceDepartmentHasChildren;
+    public $serviceDepartmentChildren;
     public $serviceDepartments = [];
     public $serviceDepartmentEditId;
     public $serviceDepartmentDeleteId;
     public $name;
+    public $childDisplayLimit = 1;
 
     protected $listeners = ['loadServiceDepartments' => 'fetchServiceDepartments'];
 
@@ -42,6 +46,8 @@ class ServiceDepartmentList extends Component
     {
         $this->serviceDepartmentEditId = $serviceDepartment->id;
         $this->name = $serviceDepartment->name;
+        $this->isServiceDepartmentHasChildren = ServiceDepartmentChild::where('service_department_id', $serviceDepartment->id)->exists();
+        $this->serviceDepartmentChildren = ServiceDepartmentChild::where('service_department_id', $serviceDepartment->id)->get();
         $this->dispatchBrowserEvent('show-edit-service-department-modal');
         $this->resetValidation();
     }

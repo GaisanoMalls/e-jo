@@ -8,9 +8,9 @@ use App\Http\Traits\Utils;
 use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
-use App\Models\TicketApproval;
 use App\Models\TicketCosting as Costing;
 use App\Models\TicketCostingFile;
+use App\Models\TicketCostingPRFile;
 use App\Models\TicketSpecialProjectStatus;
 use App\Models\User;
 use Carbon\Carbon;
@@ -234,25 +234,19 @@ class TicketCosting extends Component
             ])->exists();
     }
 
-    public function getPurchasingStatus()
+    public function isPRApproved(Ticket $ticket)
     {
-        $purhaseStatus = TicketSpecialProjectStatus::where('ticket_id', $this->ticket->id)->first();
-
-        if ($purhaseStatus) {
-            if ($purhaseStatus->purchasing_status === SpecialProjectStatusEnum::ON_ORDERED->value) {
-                return SpecialProjectStatusEnum::ON_ORDERED->value;
-            }
-
-            if ($purhaseStatus->purchasing_status === SpecialProjectStatusEnum::DELIVERED->value) {
-                return SpecialProjectStatusEnum::DELIVERED->value;
-            }
-        }
+        return TicketCostingPRFile::where([
+            ['ticket_costing_id', $ticket->ticketCosting->id],
+            ['is_approved_level_1_approver', true],
+            ['is_approved_level_2_approver', true],
+        ])->exists();
     }
+
     public function setOrder()
     {
-        TicketSpecialProjectStatus::where([
-            ['ticket_id', $this->ticket->id],
-        ])->update(['purchasing_status' => SpecialProjectStatusEnum::ON_ORDERED]);
+        TicketSpecialProjectStatus::where('ticket_id', $this->ticket->id)
+            ->update(['purchasing_status' => SpecialProjectStatusEnum::ON_ORDERED]);
 
         $this->emit('loadServiceDeptAdminTicketCosting');
         $this->dispatchBrowserEvent('close-purchase-dropdown-menu');
@@ -260,9 +254,8 @@ class TicketCosting extends Component
 
     public function setDeliver()
     {
-        TicketSpecialProjectStatus::where([
-            ['ticket_id', $this->ticket->id],
-        ])->update(['purchasing_status' => SpecialProjectStatusEnum::DELIVERED]);
+        TicketSpecialProjectStatus::where('ticket_id', $this->ticket->id)
+            ->update(['purchasing_status' => SpecialProjectStatusEnum::DELIVERED]);
 
         $this->emit('loadServiceDeptAdminTicketCosting');
         $this->dispatchBrowserEvent('close-purchase-dropdown-menu');

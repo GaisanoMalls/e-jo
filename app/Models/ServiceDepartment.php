@@ -44,6 +44,11 @@ class ServiceDepartment extends Model
         return $this->hasMany(HelpTopic::class);
     }
 
+    public function children()
+    {
+        return $this->hasMany(ServiceDepartmentChild::class);
+    }
+
     public function serviceDepartmentAdmins(): Builder|BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_service_department')->role(Role::APPROVER);

@@ -61,7 +61,6 @@
         });
 
         const tagSelect = document.querySelector('#select-tag')
-        tagSelect.setValue({{ $ticket->tags->pluck('id') }});
 
         tagSelect.addEventListener('change', () => {
             @this.set('selectedTags', tagSelect.value);

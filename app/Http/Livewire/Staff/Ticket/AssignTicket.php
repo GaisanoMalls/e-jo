@@ -22,28 +22,55 @@ class AssignTicket extends Component
 
     public Ticket $ticket;
     public $agents = [];
-    public $team;
+    public $teams = [];
+    public $selectedTeams = [];
+    public $currentlyAssignedTeams = [];
+    public $currentlyAssignedAgent;
     public $agent;
     public $isSpecialProject;
     public $isMultipleTeams = false;
 
+    protected $rules = [
+        'agents' => '',
+    ];
+
     public function mount()
     {
+        $this->currentlyAssignedAgent = $this->ticket->agent_id;
+        $this->currentlyAssignedTeams = $this->ticket->teams->pluck('id')->toArray();
         $this->isSpecialProject = !is_null($this->ticket->isSpecialProject());
+        $this->teams = Team::where('service_department_id', $this->ticket->serviceDepartment->id)
+            ->withWhereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
+            ->get();
     }
 
     private function actionOnSubmit()
     {
         $this->emit('loadTicketDetails');
+        $this->emit('loadBackButtonHeader');
+        $this->emit('loadTicketStatusTextHeader');
         $this->dispatchBrowserEvent('close-modal');
+    }
+
+    public function updatedSelectedTeams()
+    {
+        $this->agents = User::with('profile')->role(Role::AGENT)
+            ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->serviceDepartment->id))
+            ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
+            ->whereHas('teams', fn($team) => $team->whereIn('teams.id', $this->selectedTeams))
+            ->get();
+        $this->dispatchBrowserEvent('get-agents-from-team', ['agents' => $this->agents]);
     }
 
     public function saveAssignTicket()
     {
         try {
             DB::transaction(function () {
-                $this->ticket->update(['agent_id' => $this->agent ?: null]);
-                $this->ticket->teams()->sync($this->team ?: null);
+                $this->ticket->update([
+                    'agent_id' => $this->agent ?: null,
+                    'status_id' => Status::APPROVED
+                ]);
+                $this->ticket->teams()->sync($this->selectedTeams ?: null);
 
                 $this->ticket->refresh();
                 if (!is_null($this->ticket->agent_id)) {
@@ -65,9 +92,6 @@ class AssignTicket extends Component
                     );
                     // Mail::to($this->ticket->agent)->send(new AssignedAgentMail($this->ticket, $this->ticket->agent));
                 }
-
-                $this->emit('loadBackButtonHeader');
-                $this->emit('loadTicketStatusTextHeader');
             });
 
             $this->actionOnSubmit();
@@ -77,22 +101,8 @@ class AssignTicket extends Component
         }
     }
 
-    public function updatedTeam()
-    {
-        $this->agents = User::with('profile')->role(Role::AGENT)
-            ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->serviceDepartment->id))
-            ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
-            ->whereHas('teams', fn($team) => $team->where('teams.id', $this->team))->get();
-        $this->dispatchBrowserEvent('get-agents-from-team', ['agents' => $this->agents->toArray()]);
-    }
-
     public function render()
     {
-        return view('livewire.staff.ticket.assign-ticket', [
-            'agents' => $this->agents,
-            'teams' => Team::where('service_department_id', $this->ticket->serviceDepartment->id)
-                ->withWhereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
-                ->get(),
-        ]);
+        return view('livewire.staff.ticket.assign-ticket');
     }
 }

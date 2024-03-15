@@ -37,7 +37,7 @@ trait Tickets
     }
 
     /**
-     * Filter the newly created tickets sent by the requester.
+     * Filter the newly created tickets.
      * Condition: Requester and Service Dept. Admin - Match the Branch and BU Department.
      * Tickets are exclusively visible within their respective Business Unit (BU).
      * Special Project - Costing: Include filter for ticket that has amount for special project and is approved.
@@ -45,7 +45,7 @@ trait Tickets
     public function serviceDeptAdminGetOpentTickets()
     {
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
+            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
             ->orWhere(fn($query) => $query->withWhereHas('specialProjectAmountApproval', fn($spAmountApproval) => $spAmountApproval->where('is_done', true)))
             ->withWhereHas('ticketApprovals', fn($ticketApproval) => $ticketApproval->where([
@@ -58,14 +58,14 @@ trait Tickets
     }
 
     /**
-     * Filter the newly created tickets sent by the requester.
+     * Filter the newly created tickets.
      * Condition: Requester and Service Dept. Admin - Match the Branch and BU Department.
      * Tickets are exclusively visible within their respective Business Unit (BU).
      */
     public function serviceDeptAdminGetViewedTickets()
     {
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::VIEWED)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
+            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
             ->whereDoesntHave('specialProjectAmountApproval')
             ->orderByDesc('created_at')
@@ -105,7 +105,7 @@ trait Tickets
     public function serviceDeptAdminGetDisapprovedTickets()
     {
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::DISAPPROVED)->where('approval_status', ApprovalStatusEnum::DISAPPROVED))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
+            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
             ->orderByDesc('created_at')
             ->get();
@@ -171,7 +171,7 @@ trait Tickets
     public function serviceDeptAdminGetOverdueTickets()
     {
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OVERDUE)->where('approval_status', ApprovalStatusEnum::APPROVED))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
+            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
             ->orderByDesc('created_at')
             ->get();
@@ -180,7 +180,7 @@ trait Tickets
     public function serviceDeptAdminGetClosedTickets()
     {
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->where('approval_status', ApprovalStatusEnum::APPROVED))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('branch', fn($query) => $query->orWhereIn('branch_id', auth()->user()->branches->pluck('id')->toArray()))
+            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('branch', fn($query) => $query->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('serviceDepartment', fn($query) => $query->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first())))
             ->orderByDesc('created_at')
             ->get();

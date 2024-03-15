@@ -65,20 +65,15 @@ class SendTicketReply extends Component
                 ]);
 
                 if ($this->replyFiles) {
-                    foreach ($this->replyFiles as $uploadedReplyFile) {
+                    collect($this->replyFiles)->each(function ($uploadedReplyFile) use ($reply) {
                         $fileName = $uploadedReplyFile->getClientOriginalName();
                         $fileAttachment = Storage::putFileAs(
                             "public/ticket/{$this->ticket->ticket_number}/reply_attachments/" . $this->fileDirByUserType(),
                             $uploadedReplyFile,
                             $fileName
                         );
-
-                        $replyFile = new ReplyFile();
-                        $replyFile->file_attachment = $fileAttachment;
-                        $replyFile->reply_id = $reply->id;
-
-                        $reply->fileAttachments()->save($replyFile);
-                    }
+                        $reply->fileAttachments()->create(['file_attachment' => $fileAttachment]);
+                    });
                 }
 
                 $latestReply = Reply::where('ticket_id', $this->ticket->id)

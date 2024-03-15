@@ -230,7 +230,7 @@ trait Utils
             : false;
     }
 
-    public function isOnlyAgent(int $agentId)
+    public function isOnlyAgent(?int $agentId)
     {
         return auth()->user()->id === $agentId && auth()->user()->hasRole(Role::AGENT);
     }
