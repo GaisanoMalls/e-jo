@@ -46,7 +46,7 @@ class ServiceDepartment extends Model
 
     public function children()
     {
-        return $this->hasMany(ServiceDepartmentChild::class);
+        return $this->hasMany(ServiceDepartmentChildren::class);
     }
 
     public function serviceDepartmentAdmins(): Builder|BelongsToMany
@@ -62,5 +62,20 @@ class ServiceDepartment extends Model
     public function dateUpdated(): string
     {
         return $this->updatedAt($this->created_at, $this->updated_at);
+    }
+
+    public function getChildren()
+    {
+        $childrenNames = [];
+
+        foreach ($this->children as $child) {
+            $childrenNames[] = $child->name;
+        }
+
+        if (!empty ($childrenNames)) {
+            return implode(', ', $childrenNames);
+        }
+
+        return '';
     }
 }

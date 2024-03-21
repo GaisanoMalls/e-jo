@@ -1,5 +1,5 @@
 <div>
-    <button wire:ignore.self x-data="{ open: !{{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') }} }" @click="open = !open"
+    <button wire:ignore.self
         class="btn btn-toggle d-flex gap-3 justify-content-between btn-block align-items-center w-100 border-0 sidebar__buttons sidebar__btn__collapse {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'sidebar__btn__active active' : '' }}"
         data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="true"
         wire:click="$emit('loadSidebarCollapseTicketStatus')">
@@ -8,12 +8,6 @@
                 <i class="bi bi-ticket-perforated-fill"></i>
             </div>
             Tickets
-        </div>
-        <div class="d-flex align-items-center position-relative">
-            <i class="fa-solid fa-chevron-right position-absolute" :class="{ 'd-none': !open }" x-transition
-                style="right: 6px;"></i>
-            <i class="fa-solid fa-chevron-down position-absolute" :class="{ 'd-none': open }" x-transition
-                style="right: 6px;"></i>
         </div>
     </button>
     <div wire:ignore.self

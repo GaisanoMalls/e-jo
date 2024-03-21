@@ -5,7 +5,7 @@
                 <thead>
                     <tr>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department Child</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Dept. Children</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
                     </tr>
@@ -20,16 +20,14 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
-                                    @if ($serviceDepartment->children->count() > 0)
-                                        @foreach ($serviceDepartment->children->take($childDisplayLimit) as $child)
-                                            <span>{{ $child->name }}</span>
-                                        @endforeach
-                                        <span class="ms-2 text-muted">
-                                            {{ $serviceDepartment->children->count() - $childDisplayLimit !== 0 ? '+' . $serviceDepartment->children->count() - $childDisplayLimit : '' }}
+                                    @if ($serviceDepartment->children->count() !== 0)
+                                        <span
+                                            class="d-flex align-items-center justify-content-center rounded-circle text-muted me-2"
+                                            style="height: 20px; width: 20px; font-size: 11px; padding: 0.6rem; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                            {{ $serviceDepartment->children->count() }}
                                         </span>
-                                    @else
-                                        ---
                                     @endif
+                                    <span>{{ $serviceDepartment->getChildren() }}</span>
                                 </div>
                             </td>
                             <td>
@@ -82,11 +80,22 @@
                 <form wire:submit.prevent="updateServiceDepartment">
                     <div class="modal-body modal__body">
                         <div class="row mb-2">
+                            @if (!$this->isCurrentServiceDepartmentHasChildren())
+                                <div class="col-12 mb-3 d-flex">
+                                    <input wire:model="serviceDeptHasChildren"
+                                        class="form-check-input check__special__project" type="checkbox" role="switch"
+                                        id="checkServiceDeptHasChildren" wire:loading.attr="disabled">
+                                    <label class="form-check-label" for="checkServiceDeptHasChildren"
+                                        style="margin-top: 0.2rem !important;">
+                                        Service department has child
+                                    </label>
+                                </div>
+                            @endif
                             <div class="mb-2">
                                 <label for="name" class="form-label form__field__label">Name</label>
                                 <input type="text" wire:model="name"
-                                    class="form-control form__field @error('name') is-invalid @enderror" id="name"
-                                    placeholder="Enter service department name">
+                                    class="form-control position-relative form__field @error('name') is-invalid @enderror"
+                                    id="name" placeholder="Enter service department name" style="z-index: 2;">
                                 @error('name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -94,12 +103,14 @@
                                     </span>
                                 @enderror
                             </div>
-                            @if ($isServiceDepartmentHasChildren)
+
+                            @if ($serviceDeptHasChildren || $this->isCurrentServiceDepartmentHasChildren())
                                 <div class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
                                     style="height: 93px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 1;">
                                     <div class="d-flex mt-2 align-items-center justify-content-between gap-2">
-                                        <label for="childInput" class="form-label mt-1 form__field__label">Add
-                                            child</label>
+                                        <label for="childInput" class="form-label mt-1 form__field__label">
+                                            Add child
+                                        </label>
                                         @if (session()->has('childError'))
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -108,34 +119,99 @@
                                         @endif
                                     </div>
                                     <div class="position-relative">
-                                        <input type="text" wire:model=""
+                                        <input type="text" wire:model="childName"
                                             class="form-control position-relative pe-5 form__field {{ session()->has('childError') ? 'is-invalid' : '' }}"
                                             placeholder="Enter child name" style="width: 100%;" id="childInput">
-                                        <button wire:click="" type="button"
-                                            class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary outline-none rounded-3 shadow-sm position-absolute"
-                                            style="right: 0.6rem; top: 0.5rem; height: 30px; width: 30px;">
-                                            <i class="fa-regular fa-floppy-disk"></i>
+                                        <button wire:click="addChildren" type="button"
+                                            class="btn btn-sm d-flex align-items-center justify-content-center outline-none rounded-3 position-absolute"
+                                            style="right: 0.6rem; top: 0.5rem; height: 30px; width: 30px; background-color: #edeef0; border: 1px solid #e7e9eb;">
+                                            <span wire:loading.remove wire:target="addChildren">
+                                                <i class="bi bi-save"></i>
+                                            </span>
+                                            <div wire:loading wire:target="addChildren"
+                                                class="spinner-border spinner-border-sm loading__spinner"
+                                                role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
                                         </button>
                                     </div>
                                 </div>
                             @endif
 
-                            {{-- Child list --}}
-                            @if ($serviceDepartmentChildren?->isNotEmpty())
-                                @foreach ($serviceDepartmentChildren as $children)
+                            {{-- Newly added children --}}
+                            @if (!empty($newlyAddedChildren))
+                                @foreach (collect($this->newlyAddedChildren) as $key => $newChild)
                                     <div class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
                                         style="height: 60px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 0;">
-                                        <div class="position-relative">
-                                            <input wire:key="{{ $children->id }}" type="text" disabled readonly
-                                                value="{{ $children->name }}"
+                                        <div wire:key="{{ $key }}" class="position-relative">
+                                            <input type="text" readonly value="{{ $newChild }}"
                                                 class="form-control position-relative pe-5 form__field"
-                                                style="width: 100%; margin-top: 11px">
-                                            <button wire:click="" type="button"
-                                                class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle text-white position-absolute"
-                                                style="right: -0.5rem; top: -0.5rem; height: 18px; width: 18px; font-size: 0.65rem; background-color: #9DA85C; border: 0.19rem solid white;">
-                                                <i class="fa-solid fa-xmark"></i>
-                                            </button>
+                                                style="width: 100%; margin-top: 11px; background-color: #f9fbfc;">
+                                            <div class="d-flex align-items-center justify-content-center bg-white p-3 rounded-circle position-absolute"
+                                                style="right: -0.5rem; top: -0.5rem; height: 30px; width: 30px;">
+                                                <button wire:click="removeChild({{ $key }})" type="button"
+                                                    class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
+                                                    style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                                    <i class="fa-solid fa-xmark"></i>
+                                                </button>
+                                            </div>
                                         </div>
+                                    </div>
+                                @endforeach
+                            @endif
+
+                            {{-- Current Children --}}
+                            @if ($this->serviceDepartmentChildren()?->isNotEmpty())
+                                @foreach ($this->serviceDepartmentChildren() as $child)
+                                    <div class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
+                                        style="height: 60px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 0;">
+                                        @if ($childEditId === $child->id)
+                                            <div class="position-relative">
+                                                <input wire:model="childEditName" type="text"
+                                                    class="form-control position-relative pe-5 form__field"
+                                                    style="width: 100%; margin-top: 11px; {{ $childEditId === $child->id ? 'border: 1px solid #D32839;' : '' }}">
+                                                <div class="d-flex align-items-center gap-1 bg-white rounded-4 p-1 position-absolute"
+                                                    style="right: -0.5rem; top: -0.5rem;">
+                                                    <button wire:click="updateChild({{ $child }})"
+                                                        type="button"
+                                                        class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
+                                                        style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                                        <i wire:loading.remove
+                                                            wire:target="updateChild({{ $child }})"
+                                                            class="bi bi-check-lg"></i>
+                                                        <i wire:loading wire:target="updateChild({{ $child }})"
+                                                            class='bx bx-loader-alt bx-spin'></i>
+                                                    </button>
+                                                    <button wire:click="cancelEditChild({{ $child }})"
+                                                        type="button"
+                                                        class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
+                                                        style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                                        <i class="bi bi-x-lg"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div wire:key="{{ $child->id }}" class="position-relative">
+                                                <input type="text" readonly value="{{ $child->name }}"
+                                                    class="form-control position-relative pe-5 form__field"
+                                                    style="width: 100%; margin-top: 11px;">
+                                                <div class="d-flex align-items-center gap-1 bg-white rounded-4 p-1 position-absolute"
+                                                    style="right: -0.5rem; top: -0.5rem;">
+                                                    <button wire:click="editChild({{ $child }})"
+                                                        type="button"
+                                                        class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
+                                                        style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button wire:click="deleteChild({{ $child }})"
+                                                        type="button"
+                                                        class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
+                                                        style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
                                 @endforeach
                             @endif

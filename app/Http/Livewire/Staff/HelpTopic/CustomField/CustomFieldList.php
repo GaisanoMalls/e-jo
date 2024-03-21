@@ -52,15 +52,19 @@ class CustomFieldList extends Component
 
     public function updateCustomeField()
     {
-        Field::where('id', $this->editingFieldId)->update([
-            'name' => $this->name,
-            'label' => $this->name,
-            'type' => $this->type,
-            'variable_name' => $this->variable_name,
-            'is_required' => $this->is_required,
-        ]);
+        if (empty ($this->name)) {
+            session()->flash('customFieldNameError', 'The name field is required');
+        } else {
+            Field::where('id', $this->editingFieldId)->update([
+                'name' => $this->name,
+                'label' => $this->name,
+                'type' => $this->type,
+                'variable_name' => $this->variable_name,
+                'is_required' => $this->is_required,
+            ]);
+            $this->editingFieldId = null;
+        }
 
-        $this->editingFieldId = null;
     }
 
     public function render()

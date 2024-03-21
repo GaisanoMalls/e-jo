@@ -15,6 +15,19 @@ tinymce.init({
 
 /***/ }),
 
+/***/ "./resources/sass/roles/user.scss":
+/*!****************************************!*\
+  !*** ./resources/sass/roles/user.scss ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./resources/sass/roles/staff.scss":
 /*!*****************************************!*\
   !*** ./resources/sass/roles/staff.scss ***!
@@ -106,10 +119,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/sass/roles/user.scss":
-/*!****************************************!*\
-  !*** ./resources/sass/roles/user.scss ***!
-  \****************************************/
+/***/ "./resources/sass/navigate-indicator.scss":
+/*!************************************************!*\
+  !*** ./resources/sass/navigate-indicator.scss ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -212,6 +225,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			"css/feedback": 0,
 /******/ 			"css/auth": 0,
 /******/ 			"css/icons/bootstrap-icons": 0,
+/******/ 			"css/navigate-indicator": 0,
 /******/ 			"css/icons/fontawesome": 0,
 /******/ 			"css/select/custom-virtual-select": 0
 /******/ 		};
@@ -263,15 +277,16 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/js/init/tinymce-init.js")))
-/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/fontawesome.scss")))
-/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/bootstrap-icons.scss")))
-/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/auth.scss")))
-/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/feedback.scss")))
-/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/roles/user.scss")))
-/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/roles/staff.scss")))
-/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/roles/approver.scss")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/select/custom-virtual-select.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/navigate-indicator","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/js/init/tinymce-init.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/navigate-indicator","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/fontawesome.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/navigate-indicator","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/bootstrap-icons.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/navigate-indicator","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/auth.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/navigate-indicator","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/feedback.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/navigate-indicator","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/navigate-indicator.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/navigate-indicator","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/roles/user.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/navigate-indicator","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/roles/staff.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/navigate-indicator","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/roles/approver.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/roles/approver","css/roles/staff","css/roles/user","css/feedback","css/auth","css/icons/bootstrap-icons","css/navigate-indicator","css/icons/fontawesome","css/select/custom-virtual-select"], () => (__webpack_require__("./resources/sass/select/custom-virtual-select.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

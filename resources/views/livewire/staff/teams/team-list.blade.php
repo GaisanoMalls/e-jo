@@ -6,6 +6,7 @@
                     <tr>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Team</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Dept. Children</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Branches</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
@@ -21,11 +22,30 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
-                                    <span>{{ $team->serviceDepartment->name ?? '----' }}</span>
+                                    <span>{{ $team->serviceDepartment->name ?? '' }}</span>
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
+                                    @if ($team->serviceDepartmentChildren->count() !== 0)
+                                        <span
+                                            class="d-flex align-items-center justify-content-center rounded-circle text-muted me-2"
+                                            style="height: 20px; width: 20px; font-size: 11px; padding: 0.6rem; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                            {{ $team->serviceDepartmentChildren->count() }}
+                                        </span>
+                                    @endif
+                                    <span>{{ $team->getTeamServiceDeptChildren() }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    @if ($team->branches->count() !== 0)
+                                        <span
+                                            class="d-flex align-items-center justify-content-center rounded-circle text-muted me-2"
+                                            style="height: 20px; width: 20px; font-size: 11px; padding: 0.6rem; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                            {{ $team->branches->count() }}
+                                        </span>
+                                    @endif
                                     <span>{{ $team->getBranches() }}</span>
                                 </div>
                             </td>
@@ -90,7 +110,7 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-2" style="z-index: 2;">
                                 <label class="form-label form__field__label">Service Department</label>
                                 <div>
                                     <div id="edit-select-service-department" wire:ignore></div>
@@ -101,6 +121,21 @@
                                         {{ $message }}
                                     </span>
                                 @enderror
+                            </div>
+                            <div wire:ignore
+                                class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
+                                style="height: 93px; width: 88%; margin-left: 40px; margin-top: -35px; z-index: 1;"
+                                id="editSelectServiceDeptChildrenContainer">
+                                <div class="d-flex mt-2 align-items-center justify-content-between gap-2">
+                                    <label for="childInput" class="form-label mt-1 form__field__label">
+                                        Select a child
+                                    </label>
+                                </div>
+                                <div class="position-relative">
+                                    <div>
+                                        <div id="edit-select-service-department-children"></div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label form__field__label">Assign to branch</label>
@@ -168,6 +203,13 @@
 
 @push('livewire-select')
     <script>
+        const editServiceDepartmentSelect = document.querySelector('#edit-select-service-department');
+        const editBranchSelect = document.querySelector('#edit-select-branch');
+        const editServiceDepartmentChildrenSelect = document.querySelector('#edit-select-service-department-children');
+        const editSelectServiceDeptChildrenContainer = document.querySelector('#editSelectServiceDeptChildrenContainer');
+
+        editSelectServiceDeptChildrenContainer.style.display = 'none';
+
         const editServiceDepartmentOption = [
             @foreach ($serviceDepartments as $serviceDepartment)
                 {
@@ -178,7 +220,7 @@
         ];
 
         VirtualSelect.init({
-            ele: '#edit-select-service-department',
+            ele: editServiceDepartmentSelect,
             options: editServiceDepartmentOption,
             search: true,
             markSearchResults: true,
@@ -194,20 +236,20 @@
         ];
 
         VirtualSelect.init({
-            ele: '#edit-select-branch',
+            ele: editBranchSelect,
             options: editBranchOption,
             search: true,
             multiple: true,
             showValueAsTags: true,
             markSearchResults: true,
-            popupDropboxBreakpoint: '3000px',
         });
 
-        const editServiceDepartmentSelect = document.querySelector('#edit-select-service-department');
-        const editBranchSelect = document.querySelector('#edit-select-branch');
-
-        editServiceDepartmentSelect.addEventListener('change', () => {
-            @this.set('editSelectedServiceDepartment', editServiceDepartmentSelect.value);
+        VirtualSelect.init({
+            ele: editServiceDepartmentChildrenSelect,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
         });
 
         editBranchSelect.addEventListener('change', () => {
@@ -220,11 +262,123 @@
             editServiceDepartmentSelect.reset();
         });
 
-        window.addEventListener('edit-current-service-department-id', (event) => {
+        window.addEventListener('edit-current-service-department', (event) => {
             editServiceDepartmentSelect.setValue(event.detail.serviceDepartmentId);
         });
 
-        window.addEventListener('edit-current-branch-ids', (event) => {
+        editServiceDepartmentSelect.addEventListener('reset', () => {
+            editServiceDepartmentChildrenSelect.setOptions([])
+            editSelectServiceDeptChildrenContainer.style.display = 'none';
+        });
+
+        // editServiceDepartmentSelect.addEventListener('change', () => {
+        //     const serviceDeptId = parseInt(editServiceDepartmentSelect.value);
+
+        //     if (serviceDeptId) {
+        //         @this.set('editSelectedServiceDepartment', serviceDeptId);
+
+        //         window.addEventListener('edit-current-service-department-children', (event) => {
+        //             const serviceDepartmentChildren = event.detail
+        //                 .serviceDepartmentChildren;
+        //             const editServiceDeptChildrenOption = [];
+        //             const currentTeamServiceDeptChildren = event.detail.currentTeamServiceDeptChildren
+
+        //             if (serviceDepartmentChildren.length > 0) {
+        //                 editSelectServiceDeptChildrenContainer.style.display = 'block';
+
+        //                 serviceDepartmentChildren.forEach(function(child) {
+        //                     editServiceDeptChildrenOption.push({
+        //                         label: child.name,
+        //                         value: child.id
+        //                     });
+        //                 });
+
+        //                 editServiceDepartmentChildrenSelect.setOptions(editServiceDeptChildrenOption);
+        //                 editServiceDepartmentChildrenSelect.setValue(currentTeamServiceDeptChildren)
+
+        //                 @this.set('selectedServiceDeptChildren', currentTeamServiceDeptChildren);
+
+        //                 window.addEventListener('load-service-dept-children', (event) => {
+        //                     const serviceDepartmentChildren = event.detail
+        //                         .serviceDepartmentChildren;
+        //                     const serviceDepartmentChildrenOption = [];
+
+        //                     if (serviceDepartmentChildren.length > 0) {
+        //                         editSelectServiceDeptChildrenContainer.style.display = 'block';
+
+        //                         serviceDepartmentChildren.forEach(function(child) {
+        //                             serviceDepartmentChildrenOption.push({
+        //                                 label: child.name,
+        //                                 value: child.id
+        //                             });
+        //                         });
+
+        //                         if (currentTeamServiceDeptChildren.length === 0) {
+        //                             editServiceDepartmentChildrenSelect.setOptions(
+        //                                 serviceDepartmentChildrenOption)
+        //                         }
+
+        //                         editServiceDepartmentChildrenSelect.addEventListener('change',
+        //                             () => {
+        //                                 @this.set('selectedServiceDeptChildren',
+        //                                     editServiceDepartmentChildrenSelect.value);
+        //                             });
+        //                     } else {
+        //                         editSelectServiceDeptChildrenContainer.style.display = 'none';
+        //                     }
+        //                 });
+        //             } else {
+        //                 editSelectServiceDeptChildrenContainer.style.display = 'none';
+        //             }
+        //         });
+        //     }
+        // });
+
+        editServiceDepartmentSelect.addEventListener('change', () => {
+            const serviceDeptId = parseInt(editServiceDepartmentSelect.value);
+
+            if (serviceDeptId) {
+                @this.set('editSelectedServiceDepartment', serviceDeptId);
+            }
+        });
+
+        function updateServiceDeptChildren(serviceDepartmentChildren, currentTeamServiceDeptChildren) {
+            const editServiceDeptChildrenOption = [];
+
+            if (serviceDepartmentChildren.length > 0) {
+                editSelectServiceDeptChildrenContainer.style.display = 'block';
+
+                serviceDepartmentChildren.forEach(function(child) {
+                    editServiceDeptChildrenOption.push({
+                        label: child.name,
+                        value: child.id
+                    });
+                });
+
+                editServiceDepartmentChildrenSelect.setOptions(editServiceDeptChildrenOption);
+                editServiceDepartmentChildrenSelect.setValue(currentTeamServiceDeptChildren);
+
+                @this.set('selectedServiceDeptChildren', currentTeamServiceDeptChildren);
+
+                editServiceDepartmentChildrenSelect.addEventListener('change', () => {
+                    @this.set('selectedServiceDeptChildren', editServiceDepartmentChildrenSelect.value);
+                });
+            } else {
+                // If no children, hide the child select
+                editSelectServiceDeptChildrenContainer.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('edit-current-service-department-children', (event) => {
+            const serviceDepartmentChildren = event.detail.serviceDepartmentChildren;
+            const currentTeamServiceDeptChildren = event.detail.currentTeamServiceDeptChildren;
+
+            // Update child options and selection
+            updateServiceDeptChildren(serviceDepartmentChildren, currentTeamServiceDeptChildren);
+        });
+
+
+        window.addEventListener('edit-current-branches', (event) => {
             editBranchSelect.setValue(event.detail.branchIds);
         });
 

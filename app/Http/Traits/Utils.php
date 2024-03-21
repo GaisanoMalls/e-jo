@@ -37,7 +37,7 @@ trait Utils
         $updated_at = Carbon::parse($updated_field)->isoFormat('MMM DD, YYYY HH:mm:ss');
 
         return $updated_at === $created_at
-            ? "----"
+            ? ""
             : Carbon::parse($updated_field)->format('M d, Y | h:i A');
     }
 
@@ -181,7 +181,7 @@ trait Utils
      */
     public function isSlaApproved(Ticket $ticket)
     {
-        return($this->ticket->status_id == Status::APPROVED
+        return ($this->ticket->status_id == Status::APPROVED
             || $this->ticket->approval_status == ApprovalStatusEnum::APPROVED
             && !is_null($this->ticket->svcdept_date_approved))
             ? true
@@ -199,7 +199,7 @@ trait Utils
 
     public function getSLADays(Ticket $ticket)
     {
-        return(preg_match('/(\d+)/', $ticket->sla->time_unit, $matches))
+        return (preg_match('/(\d+)/', $ticket->sla->time_unit, $matches))
             ? $matches[0]
             : 0;
     }
@@ -225,7 +225,7 @@ trait Utils
                     ['approval_1->is_all_approved', true],
                 ]))->get();
 
-        return($ticketHasAllApproved->isNotEmpty())
+        return ($ticketHasAllApproved->isNotEmpty())
             ? true
             : false;
     }
@@ -269,7 +269,7 @@ trait Utils
 
     public function isCostingAmountNeedCOOApproval(Ticket $ticket)
     {
-        return($ticket->ticketCosting && $ticket->helpTopic && $ticket->isSpecialProject())
+        return ($ticket->ticketCosting && $ticket->helpTopic && $ticket->isSpecialProject())
             ? ($ticket->ticketCosting->amount >= $ticket->helpTopic->specialProject->amount) // true
             : false;
     }

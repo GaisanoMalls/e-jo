@@ -28,8 +28,9 @@
                                         <div class="mb-2">
                                             <label for="helpTopicName"
                                                 class="form-label form__field__label">Name</label>
-                                            <input type="text" wire:model="name" class="form-control form__field"
-                                                id="helpTopicName" placeholder="Enter help topic name">
+                                            <input type="text" wire:model.defer="name"
+                                                class="form-control form__field" id="helpTopicName"
+                                                placeholder="Enter help topic name">
                                             @error('name')
                                                 <span class="error__message">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -54,13 +55,30 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="mb-2">
                                             <label for="department" class="form-label form__field__label">
                                                 Service Department
                                             </label>
                                             <div>
                                                 <div id="select-help-topic-service-department" wire:ignore></div>
+                                            </div>
+                                            @error('service_department')
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div wire:ignore class="col-md-4" id="serviceDeptChildContainer">
+                                        <div class="mb-2">
+                                            <label for="department" class="form-label form__field__label">
+                                                Service Dept. Children
+                                            </label>
+                                            <div>
+                                                <div id="select-help-topic-service-department-children">
+                                                </div>
                                             </div>
                                             @error('service_department')
                                                 <span class="error__message">
@@ -78,7 +96,8 @@
                                             </label>
                                             <div>
                                                 <div id="select-help-topic-team" placeholder="Select (optional)"
-                                                    wire:ignore></div>
+                                                    wire:ignore>
+                                                </div>
                                             </div>
                                             @error('team')
                                                 <span class="error__message">
@@ -88,10 +107,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div wire:ignore class="mt-2" id="specialProjectContainer">
-                                        <div class="py-2">
-                                            <hr>
-                                        </div>
+                                    <div wire:ignore class="mt-2" id="specialProjectAmountContainer">
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="mb-3">
@@ -100,7 +116,7 @@
                                                     </label>
                                                     <div class="d-flex position-relative amount__field__container">
                                                         <span class="currency text-muted position-absolute">₱</span>
-                                                        <input type="text" wire:model="amount"
+                                                        <input type="text" wire:model.defer="amount"
                                                             class="form-control form__field amount__field"
                                                             id="amount" placeholder="Enter amount">
                                                     </div>
@@ -120,8 +136,8 @@
                                     </span>
                                     Add New
                                 </button>
-                                <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
-                                    data-bs-dismiss="modal" wire:click="cancel">
+                                <button type="button" class="btn m-0 btn__modal__footer btn__cancel"
+                                    id="btnCloseModal" data-bs-dismiss="modal" wire:click="cancel">
                                     Cancel
                                 </button>
                             </div>
@@ -138,9 +154,11 @@
         const amountField = document.querySelector('#amount');
         const teamSelectContainer = document.querySelector('#teamSelectContainer');
         const specialProjectCheck = document.querySelector('#specialProjectCheck');
-        const specialProjectContainer = document.querySelector('#specialProjectContainer');
+        const specialProjectAmountContainer = document.querySelector('#specialProjectAmountContainer');
+        const serviceDeptChildContainer = document.querySelector('#serviceDeptChildContainer');
         const slaSelect = document.querySelector('#select-help-topic-sla');
         const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
+        const serviceDepartmentChildrenSelect = document.querySelector('#select-help-topic-service-department-children');
 
         const serviceLevelAgreementOption = [
             @foreach ($serviceLevelAgreements as $sla)
@@ -179,12 +197,20 @@
             markSearchResults: true,
         });
 
+        VirtualSelect.init({
+            ele: serviceDepartmentChildrenSelect,
+            search: true,
+            markSearchResults: true,
+        });
+
         const teamSelect = document.querySelector('#select-help-topic-team');
         VirtualSelect.init({
             ele: teamSelect,
             search: true,
             markSearchResults: true,
         });
+
+        serviceDepartmentChildrenSelect.disable();
         teamSelect.disable();
 
         serviceDepartmentSelect.addEventListener('change', () => {
@@ -212,6 +238,7 @@
                                 value: team.id
                             });
                         });
+
                         teamSelect.setOptions(teamOption);
 
                         const countTeams = document.querySelector('#countTeams');
@@ -220,6 +247,27 @@
                     } else {
                         teamSelect.disable();
                         teamSelect.setOptions([]);
+                    }
+                });
+
+                window.addEventListener('get-service-department-children', (event) => {
+                    const serviceDepartmentChildren = event.detail.serviceDepartmentChildren;
+                    const serviceDepartmentChildrenOption = [];
+
+                    if (serviceDepartmentChildren.length > 0) {
+                        serviceDepartmentChildrenSelect.enable();
+
+                        serviceDepartmentChildren.forEach((child) => {
+                            serviceDepartmentChildrenOption.push({
+                                label: child.name,
+                                value: child.id
+                            });
+                        });
+
+                        serviceDepartmentChildrenSelect.setOptions(serviceDepartmentChildrenOption);
+                    } else {
+                        serviceDepartmentChildrenSelect.disable();
+                        serviceDepartmentChildrenSelect.setOptions();
                     }
                 });
 
@@ -236,14 +284,21 @@
         });
 
         serviceDepartmentSelect.addEventListener('reset', () => {
+            const countTeams = document.querySelector('#countTeams');
+
             @this.set('teams', []); // Clear teams count when service department is resetted.
             @this.set('name', null);
-            const countTeams = document.querySelector('#countTeams');
+
             countTeams.textContent = '';
+            serviceDepartmentChildrenSelect.disable()
+            serviceDepartmentChildrenSelect.reset();
+            serviceDepartmentChildrenSelect.setOptions([]);
         });
 
-        if (specialProjectCheck && specialProjectContainer) {
-            specialProjectContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
+        if (specialProjectCheck && specialProjectAmountContainer || serviceDeptChildContainer) {
+            specialProjectAmountContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
+            serviceDeptChildContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
+
             specialProjectCheck.addEventListener('change', () => {
                 helpTopicNameContainer = document.querySelector('#helpTopicNameContainer');
                 if (specialProjectCheck.checked) {
@@ -251,33 +306,70 @@
                 }
 
                 window.addEventListener('show-special-project-container', (event) => {
-                    helpTopicNameContainer.style.display = 'none';
-                    amountField.required = true;
                     @this.set('team', null);
+                    amountField.required = true;
                     teamSelect.disable();
                     teamSelectContainer.style.display = 'none';
-                    specialProjectContainer.style.display = 'block';
+                    helpTopicNameContainer.style.display = 'none';
+                    specialProjectAmountContainer.style.display = 'block';
+                    serviceDeptChildContainer.style.display = 'block'
 
                     serviceDepartmentSelect.addEventListener('change', () => {
+                        const serviceDepartmentId = serviceDepartmentSelect.value;
                         const serviceDepartments = @json($serviceDepartments);
 
+                        window.addEventListener('get-service-department-children', (event) => {
+                            const serviceDepartmentChildren = event.detail
+                                .serviceDepartmentChildren;
+                            const serviceDepartmentChildrenOption = [];
+
+                            serviceDepartmentChildren.forEach((child) => {
+                                serviceDepartmentChildrenOption.push({
+                                    label: child.name,
+                                    value: child.id
+                                });
+                            });
+
+                            serviceDepartmentChildrenSelect.setOptions(
+                                serviceDepartmentChildrenOption);
+
+                            serviceDepartmentChildrenSelect.addEventListener('change',
+                                () => {
+                                    serviceDepartmentChildrenId = parseInt(
+                                        serviceDepartmentChildrenSelect.value);
+                                    serviceDepartmentChildName =
+                                        serviceDepartmentChildrenSelect
+                                        .getDisplayValue();
+
+                                    if (serviceDepartmentChildrenId) {
+                                        @this.set('selectedServiceDepartmentChildrenId',
+                                            serviceDepartmentChildrenId);
+                                        @this.set(
+                                            'selectedServiceDepartmentChildrenName',
+                                            serviceDepartmentChildName
+                                        )
+                                    }
+                                });
+                        });
+
                         serviceDepartments.forEach((department) => {
-                            if (serviceDepartmentSelect.value == department.id) {
+                            if (serviceDepartmentId == department.id) {
                                 if (specialProjectCheck.checked) {
-                                    @this.set('name',
-                                        `Special Project (${department.name})`);
+                                    @this.set('name', `(SP) ${department.name}`);
                                 }
                             }
                         });
+
                     });
                 });
 
                 window.addEventListener('hide-special-project-container', () => {
-                    helpTopicNameContainer.style.display = 'block';
-                    amountField.required = false;
                     teamSelect.enable();
+                    amountField.required = false;
                     teamSelectContainer.style.display = 'block';
-                    specialProjectContainer.style.display = 'none';
+                    helpTopicNameContainer.style.display = 'block';
+                    specialProjectAmountContainer.style.display = 'none';
+                    serviceDeptChildContainer.style.display = 'none';
                     serviceDepartmentSelect.reset();
                 });
             });
@@ -288,14 +380,20 @@
 @push('livewire-modal')
     <script>
         window.addEventListener('close-modal', () => {
-            serviceDepartmentSelect.reset();
+            @this.set('name', null);
+
             slaSelect.reset();
+            serviceDepartmentSelect.reset();
+            serviceDepartmentChildrenSelect.reset();
+            serviceDepartmentChildrenSelect.setOptions([]);
+            serviceDepartmentChildrenSelect.disable();
+
             teamSelect.reset();
             teamSelect.disable();
             teamSelect.setOptions([]);
 
-            @this.set('name', null);
-            specialProjectContainer.style.display = 'none';
+            specialProjectAmountContainer.style.display = 'none';
+            serviceDeptChildContainer.style.display = 'none';
         });
     </script>
 @endpush

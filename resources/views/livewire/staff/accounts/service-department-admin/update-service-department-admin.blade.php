@@ -25,8 +25,9 @@
                                         <label for="first_name" class="form-label form__field__label">
                                             First name
                                         </label>
-                                        <input type="text" wire:model="first_name" class="form-control form__field"
-                                            id="first_name" placeholder="Enter first name (required)">
+                                        <input type="text" wire:model.defer="first_name"
+                                            class="form-control form__field" id="first_name"
+                                            placeholder="Enter first name (required)">
                                         @error('first_name')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -40,8 +41,9 @@
                                         <label for="middle_name" class="form-label form__field__label">
                                             Middle name
                                         </label>
-                                        <input type="text" wire:model="middle_name" class="form-control form__field"
-                                            id="middle_name" placeholder="Enter middle name (optional)">
+                                        <input type="text" wire:model.defer="middle_name"
+                                            class="form-control form__field" id="middle_name"
+                                            placeholder="Enter middle name (optional)">
                                         @error('middle_name')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -53,8 +55,9 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="last_name" class="form-label form__field__label">Last name</label>
-                                        <input type="text" wire:model="last_name" class="form-control form__field"
-                                            id="last_name" placeholder="Enter last name (required)">
+                                        <input type="text" wire:model.defer="last_name"
+                                            class="form-control form__field" id="last_name"
+                                            placeholder="Enter last name (required)">
                                         @error('last_name')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -85,7 +88,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="email" class="form-label form__field__label">Email</label>
-                                        <input type="email" wire:model="email" class="form-control form__field"
+                                        <input type="email" wire:model.defer="email" class="form-control form__field"
                                             id="email" placeholder="Enter email (required)">
                                         @error('email')
                                             <span class="error__message">
@@ -267,6 +270,7 @@
             if (serviceDeptAdminBranchIds) {
                 @this.set('branches', serviceDeptAdminBranchIds);
                 serviceDeptAdminBUDepartmentSelect.enable();
+
                 window.addEventListener('get-branch-bu-departments', (event) => {
                     const serviceDeptAdminBUDepartments = event.detail.BUDepartments;
                     const serviceDeptAdminBUDepartmentOption = [];

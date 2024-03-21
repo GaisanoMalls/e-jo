@@ -22,11 +22,6 @@ class ServiceDepartmentSeeder extends Seeder
             'SPE',
             'SPM',
             'DPS',
-            'FPM_BLDG. MAINTENANCE',
-            'FPM_ELEVATORS & ESCALATORS',
-            'FPM_RAC',
-            'FPM_PLUMBING',
-            'FPM_ELECTRICAL'
         ];
 
         foreach ($serviceDepartments as $serviceDepartment) {

@@ -22,8 +22,6 @@
                         @elseif ($ticket->approval_status == App\Enums\ApprovalStatusEnum::DISAPPROVED)
                             <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
                             Disapproved
-                        @else
-                            ----
                         @endif
                     </small>
                 </div>
@@ -61,7 +59,7 @@
                     </small>
                     <small class="ticket__details__info">
                         <i class="bi bi-question-circle-fill me-1 text-muted" style="font-size: 11px;"></i>
-                        {{ $ticket->helpTopic->name ?? '----' }}
+                        {{ $ticket->helpTopic->name ?? '' }}
                     </small>
                 </div>
                 <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
@@ -71,7 +69,7 @@
                     <small
                         class="position-relative ticket__details__info {{ $ticket->agent_id != null ? '' : 'not__set' }}">
                         <i class="fa-solid fa-user-check me-1 text-muted" style="font-size: 11px;"></i>
-                        {{ $ticket->agent_id != null ? $ticket->agent->profile->getFullName() : '----' }}
+                        {{ $ticket->agent_id != null ? $ticket->agent->profile->getFullName() : '' }}
                         @if (
                             $ticket->agent_id &&
                                 auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))

@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Staff\ServiceDepartments;
 use App\Http\Requests\SysAdmin\Manage\ServiceDepartment\StoreServiceDepartmentRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Models\ServiceDepartment;
-use App\Models\ServiceDepartmentChild;
+use App\Models\ServiceDepartmentChildren;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -20,7 +20,7 @@ class CreateServiceDepartment extends Component
 
     public function rules()
     {
-        return(new StoreServiceDepartmentRequest())->rules();
+        return (new StoreServiceDepartmentRequest())->rules();
     }
 
     public function clearFormField()
@@ -39,7 +39,7 @@ class CreateServiceDepartment extends Component
     {
         if ($this->hasChildren) {
             if (!is_null($this->children)) {
-                $isExistsInDB = ServiceDepartmentChild::where('name', $this->children)->exists();
+                $isExistsInDB = ServiceDepartmentChildren::where('name', $this->children)->exists();
                 $childNameLowerCase = strtolower($this->children);
                 $addedChildrenLowerCase = array_map('strtolower', $this->addedChildren);
 
@@ -71,7 +71,7 @@ class CreateServiceDepartment extends Component
     public function updatedHasChildren()
     {
         // Clear the added children inside the array when unchecked.
-        if (!empty($this->addedChildren)) {
+        if (!empty ($this->addedChildren)) {
             $this->addedChildren = [];
         }
     }
@@ -85,8 +85,8 @@ class CreateServiceDepartment extends Component
                     if (is_null($this->children) && empty ($this->addedChildren)) {
                         session()->flash('childError', 'Child field is required');
 
-                    } elseif (empty ($this->addedChildren)) {
-                        session()->flash('childError', 'Please add the child first');
+                    } elseif (empty ($this->addedChildren) || !empty ($this->name) && !empty ($this->children)) {
+                        session()->flash('childError', 'Please add the child');
 
                     } else {
                         $service_department = ServiceDepartment::create([

@@ -23,7 +23,6 @@
                             <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
                             Disapproved
                         @else
-                            ----
                         @endif
                     </small>
                 </div>
@@ -46,7 +45,7 @@
                     <small class="ticket__details__info__label" style="font-weight: 500;">Team:</small>
                     <small class="ticket__details__info">
                         <i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>
-                        {{ $ticket->team->name ?? '----' }}
+                        {{ $ticket->team->name ?? '' }}
                     </small>
                 </div>
                 <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
@@ -55,7 +54,7 @@
                     </small>
                     <small class="ticket__details__info">
                         <i class="bi bi-question-circle-fill me-1 text-muted" style="font-size: 11px;"></i>
-                        {{ $ticket->helpTopic->name ?? '----' }}
+                        {{ $ticket->helpTopic->name ?? '' }}
                     </small>
                 </div>
                 <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
@@ -67,7 +66,7 @@
                         @if ($ticket->agent)
                             {{ $ticket->agent->profile->getFullName() }}
                         @else
-                            ----
+                            No agent
                         @endif
                     </small>
                 </div>
@@ -82,7 +81,7 @@
                         <small class="ticket__details__info">
                             <i class="fa-solid fa-clock me-1 text-muted {{ $isSlaApproved ? 'bx-flashing' : '' }}"
                                 style="font-size: 11px;"></i>
-                            {{ $ticket->sla->time_unit ?? '----' }}
+                            {{ $ticket->sla->time_unit ?? '' }}
                         </small>
                     </div>
                 </div>

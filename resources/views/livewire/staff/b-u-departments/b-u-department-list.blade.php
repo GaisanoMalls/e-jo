@@ -19,6 +19,13 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
+                                    @if ($department->branches->count() !== 0)
+                                        <span
+                                            class="d-flex align-items-center justify-content-center rounded-circle text-muted me-2"
+                                            style="height: 20px; width: 20px; font-size: 11px; padding: 0.6rem; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                            {{ $department->branches->count() }}
+                                        </span>
+                                    @endif
                                     <span>{{ $department->getBranches() }}</span>
                                 </div>
                             </td>

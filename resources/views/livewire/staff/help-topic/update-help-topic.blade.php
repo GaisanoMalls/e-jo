@@ -17,7 +17,7 @@
                                 <div class="col-md-8">
                                     <div class="mb-3">
                                         <label for="name" class="form-label form__field__label">Name</label>
-                                        <input type="text" wire:model="name" class="form-control form__field"
+                                        <input type="text" wire:model.defer="name" class="form-control form__field"
                                             id="name" placeholder="Enter name (required)">
                                         @error('name')
                                             <span class="error__message">
@@ -86,7 +86,7 @@
                                             <div class="mb-3">
                                                 <label for="amount"
                                                     class="form-label form__field__label">Amount</label>
-                                                <input type="text" wire:model="amount"
+                                                <input type="text" wire:model.defer="amount"
                                                     class="form-control form__field amount__field" id="amount"
                                                     placeholder="Enter amount">
                                                 @error('amount')

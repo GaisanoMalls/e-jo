@@ -157,11 +157,11 @@ class Ticket extends Model
             $teamNames[] = $team->name;
         }
 
-        if (!empty($teamNames)) {
+        if (!empty ($teamNames)) {
             return implode(', ', $teamNames);
         }
 
-        return '----';
+        return '';
     }
 
     public function isSpecialProject()

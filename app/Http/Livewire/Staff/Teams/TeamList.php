@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Teams;
 
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
+use App\Models\ServiceDepartmentChildren;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,9 @@ class TeamList extends Component
 
     public $teams = [];
     public $editSelectedBranches = [];
+    public $currentTeamServiceDeptChildren = [];
+    public $serviceDepartmentChildren = [];
+    public $selectedServiceDeptChildren = [];
     public $teamEditId;
     public $teamDeleteId;
     public $editSelectedServiceDepartment;
@@ -53,17 +57,63 @@ class TeamList extends Component
         $this->dispatchBrowserEvent('reset-select-options');
     }
 
+    // public function editTeam(Team $team)
+    // {
+    //     $this->teamEditId = $team->id;
+    //     $this->name = $team->name;
+    //     $this->editSelectedServiceDepartment = $team->service_department_id;
+    //     $this->editSelectedBranches = $team->branches->pluck('id')->toArray();
+    //     $this->currentTeamServiceDeptChildren = $team->serviceDepartmentChildren->pluck('id')->toArray();
+    //     $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->editSelectedServiceDepartment)->get(['id', 'name'])->toArray();
+
+    //     $this->resetValidation();
+    //     $this->dispatchBrowserEvent('show-edit-team-modal');
+    //     $this->dispatchBrowserEvent('edit-current-service-department', ['serviceDepartmentId' => $this->editSelectedServiceDepartment]);
+    //     $this->dispatchBrowserEvent('edit-current-branches', ['branchIds' => $this->editSelectedBranches]);
+    //     $this->dispatchBrowserEvent('edit-current-service-department-children', [
+    //         'currentTeamServiceDeptChildren' => $this->currentTeamServiceDeptChildren,
+    //         'serviceDepartmentChildren' => $this->serviceDepartmentChildren,
+    //     ]);
+    // }
+
+    // public function updatedEditSelectedServiceDepartment()
+    // {
+    //     $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->editSelectedServiceDepartment)->get(['id', 'name'])->toArray();
+    //     $this->dispatchBrowserEvent('load-service-dept-children', ['serviceDepartmentChildren' => $this->serviceDepartmentChildren]);
+    // }
+
     public function editTeam(Team $team)
     {
         $this->teamEditId = $team->id;
         $this->name = $team->name;
         $this->editSelectedServiceDepartment = $team->service_department_id;
         $this->editSelectedBranches = $team->branches->pluck('id')->toArray();
+        $this->currentTeamServiceDeptChildren = $team->serviceDepartmentChildren->pluck('id')->toArray();
+        $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->editSelectedServiceDepartment)->get(['id', 'name'])->toArray();
 
         $this->resetValidation();
         $this->dispatchBrowserEvent('show-edit-team-modal');
-        $this->dispatchBrowserEvent('edit-current-service-department-id', ['serviceDepartmentId' => $this->editSelectedServiceDepartment]);
-        $this->dispatchBrowserEvent('edit-current-branch-ids', ['branchIds' => $this->editSelectedBranches]);
+        $this->dispatchBrowserEvent('edit-current-service-department', ['serviceDepartmentId' => $this->editSelectedServiceDepartment]);
+        $this->dispatchBrowserEvent('edit-current-branches', ['branchIds' => $this->editSelectedBranches]);
+
+        // Call the function to update child options and selection
+        $this->updateServiceDeptChildren($this->serviceDepartmentChildren, $this->currentTeamServiceDeptChildren);
+    }
+
+    public function updatedEditSelectedServiceDepartment()
+    {
+        $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->editSelectedServiceDepartment)->get(['id', 'name'])->toArray();
+
+        // Call the function to update child options and selection
+        $this->updateServiceDeptChildren($this->serviceDepartmentChildren, []);
+    }
+
+    public function updateServiceDeptChildren($serviceDepartmentChildren, $currentTeamServiceDeptChildren)
+    {
+        $this->dispatchBrowserEvent('edit-current-service-department-children', [
+            'currentTeamServiceDeptChildren' => $currentTeamServiceDeptChildren,
+            'serviceDepartmentChildren' => $serviceDepartmentChildren,
+        ]);
     }
 
     public function update()
@@ -81,7 +131,8 @@ class TeamList extends Component
                         'slug' => Str::slug($this->name),
                     ]);
 
-                    $team->branches()->sync($this->editSelectedBranches);
+                    $team->branches()->sync(array_map('intval', $this->editSelectedBranches));
+                    $team->serviceDepartmentChildren()->sync(array_map('intval', $this->selectedServiceDeptChildren));
                 });
             }
 

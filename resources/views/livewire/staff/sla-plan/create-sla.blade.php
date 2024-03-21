@@ -15,7 +15,7 @@
                             <div class="col-md-12">
                                 <div class="mb-2">
                                     <label for="hours" class="form-label form__field__label">Hours</label>
-                                    <input type="text" wire:model="hours"
+                                    <input type="text" wire:model.defer="hours"
                                         class="form-control form__field
                                     @error('hours') is-invalid @enderror"
                                         id="hours" placeholder="e.g. 24">
@@ -32,7 +32,7 @@
                                     <label for="time_unit" class="form-label form__field__label">
                                         Time unit
                                     </label>
-                                    <input type="text" wire:model="time_unit"
+                                    <input type="text" wire:model.defer="time_unit"
                                         class="form-control form__field
                                     @error('time_unit') is-invalid @enderror"
                                         id=" time_unit" placeholder="e.g. 1 Day">

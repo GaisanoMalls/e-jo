@@ -41,6 +41,11 @@ class Team extends Model
         return $this->hasMany(HelpTopic::class);
     }
 
+    public function serviceDepartmentChildren(): BelongsToMany
+    {
+        return $this->belongsToMany(ServiceDepartmentChildren::class, 'team_service_department_children', 'team_id', 'service_dept_child_id');
+    }
+
     public function branches(): BelongsToMany
     {
         return $this->belongsToMany(Branch::class, 'team_branch');
@@ -59,11 +64,26 @@ class Team extends Model
             $branchNames[] = $branch->name;
         }
 
-        if (!empty($branchNames)) {
+        if (!empty ($branchNames)) {
             return implode(', ', $branchNames);
         }
 
-        return '----';
+        return '';
+    }
+
+    public function getTeamServiceDeptChildren()
+    {
+        $childrenNames = [];
+
+        foreach ($this->serviceDepartmentChildren as $child) {
+            $childrenNames[] = $child->name;
+        }
+
+        if (!empty ($childrenNames)) {
+            return implode(', ', $childrenNames);
+        }
+
+        return '';
     }
 
     public function dateCreated(): string

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Teams;
 use App\Http\Requests\SysAdmin\Manage\Team\StoreTeamRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
+use App\Models\ServiceDepartmentChildren;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -16,17 +17,19 @@ class CreateTeam extends Component
     use BasicModelQueries;
 
     public $selectedBranches = [];
+    public $serviceDeptChildren = [];
+    public $selectedChildren = [];
     public $name;
     public $selectedServiceDepartment;
 
     public function rules()
     {
-        return(new StoreTeamRequest())->rules();
+        return (new StoreTeamRequest())->rules();
     }
 
     public function messages()
     {
-        return(new StoreTeamRequest())->messages();
+        return (new StoreTeamRequest())->messages();
     }
 
     private function actionOnSubmit()
@@ -35,6 +38,12 @@ class CreateTeam extends Component
         $this->resetValidation();
         $this->emit('loadTeams');
         $this->dispatchBrowserEvent('clear-select-options');
+    }
+
+    public function updatedSelectedServiceDepartment()
+    {
+        $this->serviceDeptChildren = ServiceDepartmentChildren::where('service_department_id', $this->selectedServiceDepartment)->get();
+        $this->dispatchBrowserEvent('load-service-department-children', ['serviceDeptChildren' => $this->serviceDeptChildren]);
     }
 
     public function saveTeam()
@@ -49,7 +58,11 @@ class CreateTeam extends Component
                     'slug' => Str::slug($this->name),
                 ]);
 
-                $team->branches()->attach($this->selectedBranches);
+                $team->branches()->attach(array_map('intval', $this->selectedBranches));
+
+                if (!empty ($this->selectedChildren)) {
+                    $team->serviceDepartmentChildren()->attach(array_map('intval', $this->selectedChildren));
+                }
             });
 
             $this->actionOnSubmit();

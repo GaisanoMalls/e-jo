@@ -30,8 +30,9 @@
                                         <div class="d-flex align-items-center text-start px-0 td__content"
                                             style="height: 0;">
                                             @if ($editingFieldId === $field->id)
-                                                <input wire:model="name" class="form-control form__field" type="text"
-                                                    id="fieldName">
+                                                <input wire:model="name"
+                                                    class="form-control form__field {{ $editingFieldId === $field->id && session()->has('customFieldNameError') ? 'is-invalid' : '' }}"
+                                                    type="text" id="fieldName">
                                             @else
                                                 <span>{{ $field->name }}</span>
                                             @endif

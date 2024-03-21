@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(ServiceDepartment::class, 'service_department_id')->constrained('service_departments')->cascadeOnDelete();
             $table->string('name');
+            $table->timestamps();
         });
     }
 

@@ -216,11 +216,11 @@ class User extends Authenticatable
             $serviceDepartmentNames[] = $serviceDepartment->name;
         }
 
-        if (!empty($serviceDepartmentNames)) {
+        if (!empty ($serviceDepartmentNames)) {
             return implode(', ', $serviceDepartmentNames);
         }
 
-        return '----';
+        return '';
     }
 
     public function getTeams(): string
@@ -231,11 +231,11 @@ class User extends Authenticatable
             $teams[] = $team->name;
         }
 
-        if (!empty($teams)) {
+        if (!empty ($teams)) {
             return implode(', ', $teams);
         }
 
-        return '----';
+        return '';
     }
 
     // Get the branches assiged to approver.
@@ -247,11 +247,11 @@ class User extends Authenticatable
             $branchNames[] = $branch->name;
         }
 
-        if (!empty($branchNames)) {
+        if (!empty ($branchNames)) {
             return implode(', ', $branchNames);
         }
 
-        return '----';
+        return '';
     }
 
     // Get the branches assiged to approver.
@@ -263,11 +263,11 @@ class User extends Authenticatable
             $buDepartmentNames[] = $buDepartment->name;
         }
 
-        if (!empty($buDepartmentNames)) {
+        if (!empty ($buDepartmentNames)) {
             return implode(', ', $buDepartmentNames);
         }
 
-        return '----';
+        return '';
     }
 
     public function getUserRoles()
@@ -278,11 +278,11 @@ class User extends Authenticatable
             $userRoles[] = $role;
         }
 
-        if (!empty($userRoles)) {
+        if (!empty ($userRoles)) {
             return implode(', ', $userRoles);
         }
 
-        return '----';
+        return '';
     }
 
     public function getUserPermissions()
@@ -293,11 +293,11 @@ class User extends Authenticatable
             $userPermissions[] = $permission;
         }
 
-        if (!empty($userPermissions)) {
+        if (!empty ($userPermissions)) {
             return implode(', ', $userPermissions);
         }
 
-        return '----';
+        return '';
     }
 
     // For agent use only

@@ -14,7 +14,7 @@
                         <div class="row mb-2">
                             <div class="mb-2">
                                 <label for="name" class="form-label form__field__label">Name</label>
-                                <input type="text" wire:model="name"
+                                <input type="text" wire:model.defer="name"
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
                                     placeholder="Enter team name">
                                 @error('name')
@@ -24,7 +24,7 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-2" style="z-index: 2;">
                                 <label for="department" class="form-label form__field__label">Service Department</label>
                                 <div>
                                     <div id="select-service-department" wire:ignore></div>
@@ -35,6 +35,27 @@
                                         {{ $message }}
                                     </span>
                                 @enderror
+                            </div>
+                            <div wire:ignore
+                                class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
+                                style="height: 93px; width: 88%; margin-left: 40px; margin-top: -35px; z-index: 1;"
+                                id="selectServiceDeptChildrenContainer">
+                                <div class="d-flex mt-2 align-items-center justify-content-between gap-2">
+                                    <label for="childInput" class="form-label mt-1 form__field__label">
+                                        Select a child
+                                    </label>
+                                    @if (session()->has('childError'))
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ session('childError') }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="position-relative">
+                                    <div>
+                                        <div id="select-service-department-children"></div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label form__field__label">Assign to branch</label>
@@ -71,53 +92,103 @@
 
 @push('livewire-select')
     <script>
-        const serviceDepartmentOption = [
-            @foreach ($serviceDepartments as $serviceDepartment)
-                {
-                    label: "{{ $serviceDepartment->name }}",
-                    value: "{{ $serviceDepartment->id }}"
-                },
-            @endforeach
-        ];
-
-        VirtualSelect.init({
-            ele: '#select-service-department',
-            options: serviceDepartmentOption,
-            search: true,
-            required: true,
-            markSearchResults: true,
-        });
-
-        const branchOption = [
-            @foreach ($branches as $branch)
-                {
-                    label: "{{ $branch->name }}",
-                    value: "{{ $branch->id }}"
-                },
-            @endforeach
-        ];
-
-        VirtualSelect.init({
-            ele: '#select-branch',
-            options: branchOption,
-            search: true,
-            required: true,
-            multiple: true,
-            showValueAsTags: true,
-            markSearchResults: true,
-            popupDropboxBreakpoint: '3000px',
-        });
-
         const serviceDepartmentSelect = document.querySelector('#select-service-department');
         const branchSelect = document.querySelector('#select-branch');
+        const serviceDepartmentChildren = document.querySelector('#select-service-department-children');
+        const selectServiceDeptChildrenContainer = document.querySelector('#selectServiceDeptChildrenContainer');
 
-        serviceDepartmentSelect.addEventListener('change', () => {
-            @this.set('selectedServiceDepartment', serviceDepartmentSelect.value);
-        });
+        selectServiceDeptChildrenContainer.style.display = 'none';
 
-        branchSelect.addEventListener('change', () => {
-            @this.set('selectedBranches', branchSelect.value);
-        });
+        if (serviceDepartmentSelect) {
+            const serviceDepartmentOption = [
+                @foreach ($serviceDepartments as $serviceDepartment)
+                    {
+                        label: "{{ $serviceDepartment->name }}",
+                        value: "{{ $serviceDepartment->id }}"
+                    },
+                @endforeach
+            ];
+
+            VirtualSelect.init({
+                ele: serviceDepartmentSelect,
+                options: serviceDepartmentOption,
+                search: true,
+                required: true,
+                markSearchResults: true,
+            });
+
+            VirtualSelect.init({
+                ele: serviceDepartmentChildren,
+                search: true,
+                required: true,
+                multiple: true,
+                showValueAsTags: true,
+                markSearchResults: true,
+            });
+
+            serviceDepartmentSelect.addEventListener('reset', () => {
+                serviceDepartmentChildren.setOptions([]);
+                selectServiceDeptChildrenContainer.style.display = 'none';
+            });
+
+            serviceDepartmentSelect.addEventListener('change', () => {
+                const serviceDeptId = parseInt(serviceDepartmentSelect.value);
+
+                if (serviceDeptId) {
+                    @this.set('selectedServiceDepartment', serviceDeptId);
+
+                    window.addEventListener('load-service-department-children', (event) => {
+                        const children = event.detail.serviceDeptChildren
+                        const childrenOption = [];
+
+                        if (children.length > 0) {
+                            selectServiceDeptChildrenContainer.style.display = 'block';
+
+                            children.forEach(function(child) {
+                                childrenOption.push({
+                                    label: child.name,
+                                    value: child.id
+                                });
+                            });
+
+                            serviceDepartmentChildren.setOptions(childrenOption)
+                            serviceDepartmentChildren.addEventListener('change', () => {
+                                @this.set('selectedChildren', serviceDepartmentChildren.value)
+                            });
+
+                        } else {
+                            selectServiceDeptChildrenContainer.style.display = 'none';
+                            serviceDepartmentChildren.setOptions([]);
+                        }
+                    });
+                }
+            });
+        }
+
+        if (branchSelect) {
+            const branchOption = [
+                @foreach ($branches as $branch)
+                    {
+                        label: "{{ $branch->name }}",
+                        value: "{{ $branch->id }}"
+                    },
+                @endforeach
+            ];
+
+            VirtualSelect.init({
+                ele: branchSelect,
+                options: branchOption,
+                search: true,
+                required: true,
+                multiple: true,
+                showValueAsTags: true,
+                markSearchResults: true,
+            });
+
+            branchSelect.addEventListener('change', () => {
+                @this.set('selectedBranches', branchSelect.value);
+            });
+        }
 
         // Clear all selected branches in the select option.
         window.addEventListener('clear-select-options', () => {

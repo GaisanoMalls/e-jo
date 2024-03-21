@@ -6,6 +6,7 @@ use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
+use App\Models\ServiceDepartmentChildren;
 use App\Models\SpecialProject;
 use App\Models\Team;
 use Exception;
@@ -19,6 +20,9 @@ class CreateHelpTopic extends Component
     public $isSpecialProject = false;
     public $COOApprovers = [];
     public $teams = [];
+    public $serviceDepartmentChildren = [];
+    public $selectedServiceDepartmentChildrenId;
+    public $selectedServiceDepartmentChildrenName;
     public $name;
     public $sla;
     public $service_department;
@@ -58,7 +62,7 @@ class CreateHelpTopic extends Component
                     'service_department_id' => $this->service_department,
                     'team_id' => $this->team,
                     'service_level_agreement_id' => $this->sla,
-                    'name' => $this->name,
+                    'name' => $this->name . ($this->selectedServiceDepartmentChildrenName ? " - {$this->selectedServiceDepartmentChildrenName}" : ''),
                     'slug' => Str::slug($this->name),
                 ]);
 
@@ -80,8 +84,13 @@ class CreateHelpTopic extends Component
 
     public function updatedServiceDepartment()
     {
-        $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->service_department))->get();
-        $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
+        if ($this->isSpecialProject) {
+            $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->service_department)->get(['id', 'name'])->toArray();
+            $this->dispatchBrowserEvent('get-service-department-children', ['serviceDepartmentChildren' => $this->serviceDepartmentChildren]);
+        } else {
+            $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->service_department))->get();
+            $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
+        }
     }
 
     public function showSpecialProjectContainer()

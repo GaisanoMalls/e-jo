@@ -20,12 +20,12 @@ class CustomFieldAddForm extends Component
 
     public function rules()
     {
-        return(new CustomFieldRequest())->rules();
+        return (new CustomFieldRequest())->rules();
     }
 
     public function messages()
     {
-        return(new CustomFieldRequest())->messages();
+        return (new CustomFieldRequest())->messages();
     }
 
     public function cancel()
