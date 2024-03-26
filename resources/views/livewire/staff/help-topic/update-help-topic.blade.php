@@ -57,6 +57,20 @@
                                         @enderror
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label form__field__label">Service Dept. Children</label>
+                                        <div>
+                                            <div id="select-help-topic-service-department-children" wire:ignore></div>
+                                        </div>
+                                        {{-- @error('service_department')
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror --}}
+                                    </div>
+                                </div>
                                 @if (!$helpTopic->specialProject)
                                     <div class="col-md-6">
                                         <div class="mb-3">
@@ -160,14 +174,33 @@
             selectedValue: @json($service_department)
         });
 
-        const teamOption = [
-            @foreach ($teams as $tm)
+        console.log(@json($service_department_child));
+        const serviceDeptChildrenOption = [
+            @foreach ($service_department_children as $child)
                 {
-                    label: "{{ $tm->name }}",
-                    value: "{{ $tm->id }}"
+                    label: "{{ $child->name }}",
+                    value: "{{ $child->id }}"
+                },
+            @endforeach
+        ]
+        const serviceDepartmentChildrenSelect = document.querySelector('#select-help-topic-service-department-children');
+        VirtualSelect.init({
+            ele: serviceDepartmentChildrenSelect,
+            options: serviceDeptChildrenOption,
+            search: true,
+            markSearchResults: true,
+            selectedValue: @json($service_department_child->id)
+        });
+
+        const teamOption = [
+            @foreach ($teams as $t)
+                {
+                    label: "{{ $t->name }}",
+                    value: "{{ $t->id }}"
                 },
             @endforeach
         ];
+
 
         const teamSelect = document.querySelector('#select-help-topic-team');
         VirtualSelect.init({
@@ -214,6 +247,11 @@
             }
         });
 
+        serviceDepartmentChildrenSelect.addEventListener('change', () => {
+            @this.set('selected_child', serviceDepartmentChildrenSelect.value);
+            @this.set('selectedServiceDepartmentChildrenName', serviceDepartmentChildrenSelect.getDisplayValue());
+        });
+
         const isSpecialProject = @json($isSpecialProject);
         if (isSpecialProject) {
             serviceDepartmentSelect.addEventListener('change', () => {
@@ -221,7 +259,7 @@
 
                 serviceDepartments.forEach((department) => {
                     if (serviceDepartmentSelect.value == department.id) {
-                        @this.set('name', `Special Project (${department.name})`);
+                        @this.set('name', `(SP) ${department.name}`);
                     }
                 });
             });

@@ -27,14 +27,7 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
-                                    @if ($team->serviceDepartmentChildren->count() !== 0)
-                                        <span
-                                            class="d-flex align-items-center justify-content-center rounded-circle text-muted me-2"
-                                            style="height: 20px; width: 20px; font-size: 11px; padding: 0.6rem; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
-                                            {{ $team->serviceDepartmentChildren->count() }}
-                                        </span>
-                                    @endif
-                                    <span>{{ $team->getTeamServiceDeptChildren() }}</span>
+                                    <span>{{ $team->serviceDepartmentChild?->name }}</span>
                                 </div>
                             </td>
                             <td>
@@ -205,7 +198,7 @@
     <script>
         const editServiceDepartmentSelect = document.querySelector('#edit-select-service-department');
         const editBranchSelect = document.querySelector('#edit-select-branch');
-        const editServiceDepartmentChildrenSelect = document.querySelector('#edit-select-service-department-children');
+        const editServiceDepartmentChildSelect = document.querySelector('#edit-select-service-department-children');
         const editSelectServiceDeptChildrenContainer = document.querySelector('#editSelectServiceDeptChildrenContainer');
 
         editSelectServiceDeptChildrenContainer.style.display = 'none';
@@ -245,9 +238,8 @@
         });
 
         VirtualSelect.init({
-            ele: editServiceDepartmentChildrenSelect,
+            ele: editServiceDepartmentChildSelect,
             search: true,
-            multiple: true,
             showValueAsTags: true,
             markSearchResults: true,
         });
@@ -267,72 +259,9 @@
         });
 
         editServiceDepartmentSelect.addEventListener('reset', () => {
-            editServiceDepartmentChildrenSelect.setOptions([])
+            editServiceDepartmentChildSelect.setOptions([])
             editSelectServiceDeptChildrenContainer.style.display = 'none';
         });
-
-        // editServiceDepartmentSelect.addEventListener('change', () => {
-        //     const serviceDeptId = parseInt(editServiceDepartmentSelect.value);
-
-        //     if (serviceDeptId) {
-        //         @this.set('editSelectedServiceDepartment', serviceDeptId);
-
-        //         window.addEventListener('edit-current-service-department-children', (event) => {
-        //             const serviceDepartmentChildren = event.detail
-        //                 .serviceDepartmentChildren;
-        //             const editServiceDeptChildrenOption = [];
-        //             const currentTeamServiceDeptChildren = event.detail.currentTeamServiceDeptChildren
-
-        //             if (serviceDepartmentChildren.length > 0) {
-        //                 editSelectServiceDeptChildrenContainer.style.display = 'block';
-
-        //                 serviceDepartmentChildren.forEach(function(child) {
-        //                     editServiceDeptChildrenOption.push({
-        //                         label: child.name,
-        //                         value: child.id
-        //                     });
-        //                 });
-
-        //                 editServiceDepartmentChildrenSelect.setOptions(editServiceDeptChildrenOption);
-        //                 editServiceDepartmentChildrenSelect.setValue(currentTeamServiceDeptChildren)
-
-        //                 @this.set('selectedServiceDeptChildren', currentTeamServiceDeptChildren);
-
-        //                 window.addEventListener('load-service-dept-children', (event) => {
-        //                     const serviceDepartmentChildren = event.detail
-        //                         .serviceDepartmentChildren;
-        //                     const serviceDepartmentChildrenOption = [];
-
-        //                     if (serviceDepartmentChildren.length > 0) {
-        //                         editSelectServiceDeptChildrenContainer.style.display = 'block';
-
-        //                         serviceDepartmentChildren.forEach(function(child) {
-        //                             serviceDepartmentChildrenOption.push({
-        //                                 label: child.name,
-        //                                 value: child.id
-        //                             });
-        //                         });
-
-        //                         if (currentTeamServiceDeptChildren.length === 0) {
-        //                             editServiceDepartmentChildrenSelect.setOptions(
-        //                                 serviceDepartmentChildrenOption)
-        //                         }
-
-        //                         editServiceDepartmentChildrenSelect.addEventListener('change',
-        //                             () => {
-        //                                 @this.set('selectedServiceDeptChildren',
-        //                                     editServiceDepartmentChildrenSelect.value);
-        //                             });
-        //                     } else {
-        //                         editSelectServiceDeptChildrenContainer.style.display = 'none';
-        //                     }
-        //                 });
-        //             } else {
-        //                 editSelectServiceDeptChildrenContainer.style.display = 'none';
-        //             }
-        //         });
-        //     }
-        // });
 
         editServiceDepartmentSelect.addEventListener('change', () => {
             const serviceDeptId = parseInt(editServiceDepartmentSelect.value);
@@ -355,13 +284,11 @@
                     });
                 });
 
-                editServiceDepartmentChildrenSelect.setOptions(editServiceDeptChildrenOption);
-                editServiceDepartmentChildrenSelect.setValue(currentTeamServiceDeptChildren);
+                editServiceDepartmentChildSelect.setOptions(editServiceDeptChildrenOption);
+                editServiceDepartmentChildSelect.setValue(currentTeamServiceDeptChildren);
 
-                @this.set('selectedServiceDeptChildren', currentTeamServiceDeptChildren);
-
-                editServiceDepartmentChildrenSelect.addEventListener('change', () => {
-                    @this.set('selectedServiceDeptChildren', editServiceDepartmentChildrenSelect.value);
+                editServiceDepartmentChildSelect.addEventListener('change', () => {
+                    @this.set('selectedServiceDeptChild', editServiceDepartmentChildSelect.value);
                 });
             } else {
                 // If no children, hide the child select

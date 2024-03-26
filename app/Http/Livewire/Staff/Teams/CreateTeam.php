@@ -18,9 +18,9 @@ class CreateTeam extends Component
 
     public $selectedBranches = [];
     public $serviceDeptChildren = [];
-    public $selectedChildren = [];
     public $name;
     public $selectedServiceDepartment;
+    public $selectedChild;
 
     public function rules()
     {
@@ -54,15 +54,12 @@ class CreateTeam extends Component
             DB::transaction(function () {
                 $team = Team::create([
                     'service_department_id' => $this->selectedServiceDepartment,
+                    'service_dept_child_id' => $this->selectedChild,
                     'name' => $this->name,
                     'slug' => Str::slug($this->name),
                 ]);
 
                 $team->branches()->attach(array_map('intval', $this->selectedBranches));
-
-                if (!empty ($this->selectedChildren)) {
-                    $team->serviceDepartmentChildren()->attach(array_map('intval', $this->selectedChildren));
-                }
             });
 
             $this->actionOnSubmit();

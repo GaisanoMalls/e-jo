@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="position-relative">
                                     <div>
-                                        <div id="select-service-department-children"></div>
+                                        <div id="select-service-department-child-select"></div>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
     <script>
         const serviceDepartmentSelect = document.querySelector('#select-service-department');
         const branchSelect = document.querySelector('#select-branch');
-        const serviceDepartmentChildren = document.querySelector('#select-service-department-children');
+        const serviceDepartmentChildSelect = document.querySelector('#select-service-department-child-select');
         const selectServiceDeptChildrenContainer = document.querySelector('#selectServiceDeptChildrenContainer');
 
         selectServiceDeptChildrenContainer.style.display = 'none';
@@ -118,16 +118,15 @@
             });
 
             VirtualSelect.init({
-                ele: serviceDepartmentChildren,
+                ele: serviceDepartmentChildSelect,
                 search: true,
                 required: true,
-                multiple: true,
                 showValueAsTags: true,
                 markSearchResults: true,
             });
 
             serviceDepartmentSelect.addEventListener('reset', () => {
-                serviceDepartmentChildren.setOptions([]);
+                serviceDepartmentChildSelect.setOptions([]);
                 selectServiceDeptChildrenContainer.style.display = 'none';
             });
 
@@ -151,14 +150,14 @@
                                 });
                             });
 
-                            serviceDepartmentChildren.setOptions(childrenOption)
-                            serviceDepartmentChildren.addEventListener('change', () => {
-                                @this.set('selectedChildren', serviceDepartmentChildren.value)
+                            serviceDepartmentChildSelect.setOptions(childrenOption)
+                            serviceDepartmentChildSelect.addEventListener('change', () => {
+                                @this.set('selectedChild', serviceDepartmentChildSelect.value)
                             });
 
                         } else {
                             selectServiceDeptChildrenContainer.style.display = 'none';
-                            serviceDepartmentChildren.setOptions([]);
+                            serviceDepartmentChildSelect.setOptions([]);
                         }
                     });
                 }

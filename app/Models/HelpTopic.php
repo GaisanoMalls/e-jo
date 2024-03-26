@@ -15,6 +15,7 @@ class HelpTopic extends Model
 
     protected $fillable = [
         'service_department_id',
+        'service_dept_child_id',
         'team_id',
         'service_level_agreement_id',
         'name',
@@ -29,6 +30,11 @@ class HelpTopic extends Model
     public function serviceDepartment(): BelongsTo
     {
         return $this->belongsTo(ServiceDepartment::class);
+    }
+
+    public function serviceDepartmentChild(): BelongsTo
+    {
+        return $this->belongsTo(ServiceDepartmentChildren::class, 'service_dept_child_id');
     }
 
     public function team(): BelongsTo

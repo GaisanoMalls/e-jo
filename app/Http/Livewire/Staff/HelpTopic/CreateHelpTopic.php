@@ -60,6 +60,7 @@ class CreateHelpTopic extends Component
             DB::transaction(function () {
                 $helpTopic = HelpTopic::create([
                     'service_department_id' => $this->service_department,
+                    'service_dept_child_id' => $this->selectedServiceDepartmentChildrenId,
                     'team_id' => $this->team,
                     'service_level_agreement_id' => $this->sla,
                     'name' => $this->name . ($this->selectedServiceDepartmentChildrenName ? " - {$this->selectedServiceDepartmentChildrenName}" : ''),
@@ -95,7 +96,6 @@ class CreateHelpTopic extends Component
 
     public function showSpecialProjectContainer()
     {
-        $this->name = 'Special Project';
         $this->dispatchBrowserEvent('show-special-project-container');
     }
 

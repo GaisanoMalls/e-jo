@@ -117,6 +117,12 @@ trait Tickets
             ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLAIMED)->where('approval_status', ApprovalStatusEnum::APPROVED))
             ->where(fn($byUserQuery) => $byUserQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                 ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray()))
+            // ->orWhereHas('ticketApprovals', fn($ticketApproval) =>
+            //     $ticketApproval->where([
+            //         ['approval_2->level_1_approver->approver_id', auth()->user()->id],
+            //         ['approval_2->level_1_approver->approved_by', null],
+            //         ['approval_2->level_1_approver->is_approved', false],
+            //     ]))
             ->orderByDesc('created_at')
             ->get();
     }
@@ -124,7 +130,9 @@ trait Tickets
     public function serviceDeptAdminGetOnProcessTickets()
     {
         $ticketIsNotYetApproved = Ticket::with(['clarifications', 'helpTopic.specialProject'])
-            ->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL)->where('status_id', Status::ON_PROCESS)->exists();
+            ->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL)
+            ->where('status_id', Status::ON_PROCESS)
+            ->exists();
 
         if ($ticketIsNotYetApproved) {
             return Ticket::with(['clarifications', 'helpTopic.specialProject'])

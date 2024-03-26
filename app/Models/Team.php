@@ -22,6 +22,7 @@ class Team extends Model
 
     protected $fillable = [
         'service_department_id',
+        'service_dept_child_id',
         'name',
         'slug',
     ];
@@ -29,6 +30,11 @@ class Team extends Model
     public function serviceDepartment(): BelongsTo
     {
         return $this->belongsTo(ServiceDepartment::class);
+    }
+
+    public function serviceDepartmentChild(): BelongsTo
+    {
+        return $this->belongsTo(ServiceDepartmentChildren::class, 'service_dept_child_id');
     }
 
     public function tickets(): HasMany
@@ -39,11 +45,6 @@ class Team extends Model
     public function helpTopics(): HasMany
     {
         return $this->hasMany(HelpTopic::class);
-    }
-
-    public function serviceDepartmentChildren(): BelongsToMany
-    {
-        return $this->belongsToMany(ServiceDepartmentChildren::class, 'team_service_department_children', 'team_id', 'service_dept_child_id');
     }
 
     public function branches(): BelongsToMany

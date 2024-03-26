@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Department;
 use App\Models\ServiceDepartment;
 use App\Models\ServiceDepartmentChildren;
 use Illuminate\Database\Migrations\Migration;

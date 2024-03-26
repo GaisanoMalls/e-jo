@@ -8,7 +8,6 @@
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Team</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">SLA</th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Approvals</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
                     </tr>
@@ -17,28 +16,32 @@
                     @foreach ($helpTopics as $helpTopic)
                         <tr>
                             <td>
-                                <div class="d-flex align-items-center text-start td__content">
+                                <div
+                                    class="d-flex gap-4 justify-content-between align-items-center text-start td__content">
                                     <span>{{ $helpTopic->name }}</span>
+                                    @if ($helpTopic->specialProject?->amount)
+                                        <div class="d-flex align-items-center rounded-4"
+                                            style="background-color: #f1f3ef; padding: 0.1rem 0.4rem;">
+                                            <span style="font-size: 11px; color: #D32839;">₱</span>
+                                            <span
+                                                style="font-size: 11px; color: #D32839;">{{ number_format($helpTopic->specialProject?->amount, 2) }}</span>
+                                        </div>
+                                    @endif
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
-                                    <span>{{ $helpTopic->serviceDepartment->name }}</span>
+                                    <span>{{ $helpTopic->serviceDepartment?->name }}</span>
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
-                                    <span>{{ $helpTopic->team->name ?? '' }}</span>
+                                    <span>{{ $helpTopic->team?->name }}</span>
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
-                                    <span>{{ $helpTopic->sla->time_unit ?? '' }}</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center text-start td__content">
-                                    <span>{{ $helpTopic->levels?->count() }}</span>
+                                    <span>{{ $helpTopic->sla?->time_unit }}</span>
                                 </div>
                             </td>
                             <td>
