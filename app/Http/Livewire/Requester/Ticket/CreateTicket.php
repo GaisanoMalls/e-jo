@@ -18,7 +18,6 @@ use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
-use App\Models\TicketFile;
 use App\Models\TicketTeam;
 use App\Notifications\AppNotification;
 use Exception;

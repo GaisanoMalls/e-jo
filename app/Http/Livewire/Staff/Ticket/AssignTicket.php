@@ -55,12 +55,17 @@ class AssignTicket extends Component
     public function updatedSelectedTeams()
     {
         $this->agents = User::with('profile')->role(Role::AGENT)
-            ->whereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->serviceDepartment->id))
-            ->whereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
-            ->whereHas('teams', fn($team) => $team->whereIn('teams.id', $this->selectedTeams))
+            ->withWhereHas('serviceDepartments', fn($query) => $query->where('service_departments.id', $this->ticket->serviceDepartment->id))
+            ->withWhereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
+            ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', $this->selectedTeams))
             ->get();
         $this->dispatchBrowserEvent('get-agents-from-team', ['agents' => $this->agents]);
     }
+
+    // public function updatedIsMultipleTeams()
+    // {
+
+    // }
 
     public function saveAssignTicket()
     {

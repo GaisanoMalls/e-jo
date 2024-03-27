@@ -34,7 +34,7 @@ class CreateServiceDeptAdmin extends Component
 
     public function rules()
     {
-        return(new StoreServiceDeptAdminRequest())->rules();
+        return (new StoreServiceDeptAdminRequest())->rules();
     }
 
     private function actionOnSubmit()

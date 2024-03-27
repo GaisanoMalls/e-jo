@@ -32,7 +32,7 @@ class CreateApprover extends Component
 
     public function rules()
     {
-        return(new StoreApproverRequest())->rules();
+        return (new StoreApproverRequest())->rules();
     }
 
     private function actionOnSubmit()

@@ -27,7 +27,7 @@
                         <div class="my-2">
                             <label class="ticket__actions__label mb-2">
                                 Assign to agent <span class="text-muted">(Optional)</span>
-                                @if ($agents)
+                                @if (count($agents) > 0)
                                     <span class="fw-normal" style="font-size: 13px;">
                                         ({{ $agents->count() }})
                                     </span>
@@ -69,6 +69,8 @@
         ];
 
         const teamSelect = document.querySelector('#select-team');
+        const checkMultipleTeams = document.querySelector('#checkMultipleTeams');
+
         if (@json($isSpecialProject)) {
             VirtualSelect.init({
                 ele: '#select-team',

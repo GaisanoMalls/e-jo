@@ -14,8 +14,6 @@
     <link rel="stylesheet" href="{{ asset('css/select/custom-virtual-select.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roles/user.css') }}">
     <link rel="stylesheet" href="{{ asset('css/navigate-indicator.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@latest/pace-theme-default.min.css">
     <title>{{ $title ?? 'Dashboard' }}</title>
     @livewireStyles
 </head>
