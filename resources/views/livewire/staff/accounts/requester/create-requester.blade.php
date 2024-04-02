@@ -103,15 +103,6 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="mb-2">
-                                                <label for="role" class="form-label form__field__label">User
-                                                    role</label>
-                                                <input type="text" value="User / Requester"
-                                                    class="form-control form__field" disabled readonly
-                                                    style="padding: 0.75rem 1rem; font-size: 0.875rem; border-radius: 0.563rem; border: 1px solid #e7e9eb;">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-2">
                                                 <label for="branch" class="form-label form__field__label">
                                                     Branch
                                                 </label>

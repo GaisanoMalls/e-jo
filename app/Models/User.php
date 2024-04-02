@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
+    public function purchasingTeam()
+    {
+        return $this->hasOne(PurchasingTeam::class, 'agent_id', 'id');
+    }
+
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
@@ -216,7 +221,7 @@ class User extends Authenticatable
             $serviceDepartmentNames[] = $serviceDepartment->name;
         }
 
-        if (!empty ($serviceDepartmentNames)) {
+        if (!empty($serviceDepartmentNames)) {
             return implode(', ', $serviceDepartmentNames);
         }
 
@@ -231,7 +236,7 @@ class User extends Authenticatable
             $teams[] = $team->name;
         }
 
-        if (!empty ($teams)) {
+        if (!empty($teams)) {
             return implode(', ', $teams);
         }
 
@@ -247,7 +252,7 @@ class User extends Authenticatable
             $branchNames[] = $branch->name;
         }
 
-        if (!empty ($branchNames)) {
+        if (!empty($branchNames)) {
             return implode(', ', $branchNames);
         }
 
@@ -263,7 +268,7 @@ class User extends Authenticatable
             $buDepartmentNames[] = $buDepartment->name;
         }
 
-        if (!empty ($buDepartmentNames)) {
+        if (!empty($buDepartmentNames)) {
             return implode(', ', $buDepartmentNames);
         }
 
@@ -278,7 +283,7 @@ class User extends Authenticatable
             $userRoles[] = $role;
         }
 
-        if (!empty ($userRoles)) {
+        if (!empty($userRoles)) {
             return implode(', ', $userRoles);
         }
 
@@ -293,7 +298,7 @@ class User extends Authenticatable
             $userPermissions[] = $permission;
         }
 
-        if (!empty ($userPermissions)) {
+        if (!empty($userPermissions)) {
             return implode(', ', $userPermissions);
         }
 

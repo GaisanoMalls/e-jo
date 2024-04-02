@@ -46,6 +46,13 @@ class UpdateServiceDepartmentAdmin extends Component
         return SpecialProjectAmountApproval::where('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->exists();
     }
 
+    public function currentUserAsCostingApprover1()
+    {
+        return SpecialProjectAmountApproval::whereNotNull('service_department_admin_approver')
+            ->whereJsonContains('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)
+            ->exists();
+    }
+
     public function rules()
     {
         return [
@@ -134,13 +141,6 @@ class UpdateServiceDepartmentAdmin extends Component
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
-    }
-
-    public function currentUserAsCostingApprover1()
-    {
-        return SpecialProjectAmountApproval::whereNotNull('service_department_admin_approver')
-            ->whereJsonContains('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)
-            ->exists();
     }
 
     public function render()

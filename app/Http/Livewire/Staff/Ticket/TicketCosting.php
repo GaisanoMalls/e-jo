@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Enums\SpecialProjectStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
+use App\Models\PurchasingTeam;
 use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
@@ -259,6 +260,11 @@ class TicketCosting extends Component
 
         $this->emit('loadServiceDeptAdminTicketCosting');
         $this->dispatchBrowserEvent('close-purchase-dropdown-menu');
+    }
+
+    public function currentAgentInPurchasingTeam()
+    {
+        return PurchasingTeam::where('agent_id', auth()->user()->id)->exists();
     }
 
     public function render()

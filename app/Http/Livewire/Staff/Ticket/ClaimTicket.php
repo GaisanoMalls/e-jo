@@ -47,7 +47,7 @@ class ClaimTicket extends Component
 
                     if (is_null($agent)) {
                         if ($this->ticket->teams()->count() === 0) {
-                            noty()->addWarning("Unable to claim this ticket. Please wait for the service dept admin to assign this ticket to you.");
+                            noty()->addWarning("Unable to claim this ticket. Please wait for the service dept admin to assign this ticket directly to you or to your team.");
                         } else {
                             noty()->addWarning("Unable to claim this ticket since you're not part of these teams: {$this->ticket->getTeams()}");
                         }

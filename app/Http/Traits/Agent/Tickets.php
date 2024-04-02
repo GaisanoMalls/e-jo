@@ -18,6 +18,7 @@ trait Tickets
                 ['approval_1->level_1_approver->is_approved', true],
                 ['approval_1->level_2_approver->is_approved', true],
             ]))
+            ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray()))
             ->orderByDesc('created_at')
             ->get();
     }
@@ -34,6 +35,7 @@ trait Tickets
                 ['approval_1->level_1_approver->is_approved', true],
                 ['approval_1->level_2_approver->is_approved', true],
             ]))
+            ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray()))
             ->orderByDesc('created_at')
             ->get();
     }
@@ -49,6 +51,7 @@ trait Tickets
                 ['approval_1->level_1_approver->is_approved', true],
                 ['approval_1->level_2_approver->is_approved', true],
             ]))
+            ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray()))
             ->orderByDesc('created_at')
             ->get();
     }
@@ -60,6 +63,7 @@ trait Tickets
             ->where(fn($byUserQuery) => $byUserQuery->where('agent_id', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branches->pluck('id')->first())
                 ->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first()))
+            ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray()))
             ->orderByDesc('created_at')
             ->get();
     }
@@ -71,6 +75,7 @@ trait Tickets
             ->where(fn($byUserQuery) => $byUserQuery->where('agent_id', auth()->user()->id)
                 ->where('branch_id', auth()->user()->branches->pluck('id')->first())
                 ->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first()))
+            ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray()))
             ->orderByDesc('created_at')
             ->get();
     }

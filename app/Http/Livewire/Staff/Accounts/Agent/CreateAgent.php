@@ -8,6 +8,7 @@ use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\Department;
 use App\Models\Profile;
+use App\Models\PurchasingTeam;
 use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
@@ -23,6 +24,7 @@ class CreateAgent extends Component
     public $BUDepartments = [];
     public $teams = [];
     public $selectedTeams = [];
+    public $assignToPurchasingTeam = false;
     public $first_name;
     public $middle_name;
     public $last_name;
@@ -34,7 +36,7 @@ class CreateAgent extends Component
 
     public function rules()
     {
-        return(new StoreAgenRequest())->rules();
+        return (new StoreAgenRequest())->rules();
     }
 
     public function updatedBranch()
@@ -86,6 +88,14 @@ class CreateAgent extends Component
                     'slug' => $this->slugify($fullname),
                 ]);
 
+                if ($this->assignToPurchasingTeam) {
+                    if (PurchasingTeam::count() > 0) {
+                        noty()->addError('An agent is already assigned to the purchasing team.');
+                    } else {
+                        $agent->purchasingTeam()->create();
+                    }
+                }
+
                 $agent->teams()->attach($this->selectedTeams);
             });
 
@@ -94,6 +104,12 @@ class CreateAgent extends Component
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
+    }
+
+    public function hasAgentAssignedInPurchasingTeam()
+    {
+        return (PurchasingTeam::count() > 0)
+            && (PurchasingTeam::whereNotNull('agent_id')->exists());
     }
 
     public function cancel()

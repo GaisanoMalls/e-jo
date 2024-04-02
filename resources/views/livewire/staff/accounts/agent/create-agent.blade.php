@@ -103,15 +103,6 @@
                                     <div class="col-md-6">
                                         <div class="col-md-12">
                                             <div class="mb-2">
-                                                <label for="role" class="form-label form__field__label">User
-                                                    role</label>
-                                                <input type="text" value="Agent" class="form-control form__field"
-                                                    disabled readonly
-                                                    style="padding: 0.75rem 1rem; font-size: 0.875rem; border-radius: 0.563rem; border: 1px solid #e7e9eb;">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-2">
                                                 <label for="branch" class="form-label form__field__label">
                                                     Branch
                                                 </label>
@@ -182,6 +173,17 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        @if (!$this->hasAgentAssignedInPurchasingTeam())
+                                            <div class="col-12 mb-3 d-flex">
+                                                <input wire:model="assignToPurchasingTeam"
+                                                    class="form-check-input check__special__project" type="checkbox"
+                                                    role="switch" id="checkAsPurchasingTeam"
+                                                    wire:loading.attr="disabled">
+                                                <label class="form-check-label" for="checkAsPurchasingTeam">
+                                                    Assign to purchasing team
+                                                </label>
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="col-md-5 px-2 mt-3">
                                         <div
