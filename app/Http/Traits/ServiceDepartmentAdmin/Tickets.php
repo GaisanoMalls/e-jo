@@ -78,7 +78,8 @@ trait Tickets
             return Ticket::where([
                 ['status_id', Status::APPROVED],
                 ['approval_status', ApprovalStatusEnum::APPROVED],
-            ])->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+            ])
+                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
                 ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                 ->withWhereHas('ticketApprovals', fn($ticketApproval) =>
                     $ticketApproval->whereNotNull('approval_1->level_1_approver->approver_id')
@@ -113,16 +114,22 @@ trait Tickets
 
     public function serviceDeptAdminGetClaimedTickets()
     {
-        return Ticket::whereHas('agent')
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLAIMED)->where('approval_status', ApprovalStatusEnum::APPROVED))
+        $claimedTicketsQuery = Ticket::whereHas('agent')
+            ->whereNotNull('agent_id')
             ->where(fn($byUserQuery) => $byUserQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray()))
-            ->orWhereHas('ticketApprovals', fn($ticketApproval) =>
+                ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLAIMED)->where('approval_status', ApprovalStatusEnum::APPROVED))
+                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray()));
+
+        $claimedTicketsQuery->when($claimedTicketsQuery->has('ticketApprovals'), function ($query) {
+            $query->withWhereHas('ticketApprovals', fn($ticketApproval) =>
                 $ticketApproval->orWhere([
                     ['approval_2->level_1_approver->approver_id', auth()->user()->id],
                     ['approval_2->level_1_approver->approved_by', null],
                     ['approval_2->level_1_approver->is_approved', false],
-                ]))
+                ]));
+        });
+
+        return $claimedTicketsQuery
             ->orderByDesc('created_at')
             ->get();
     }

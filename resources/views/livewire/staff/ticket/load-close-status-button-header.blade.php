@@ -1,4 +1,7 @@
-@if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN) && $ticket->status_id !== App\Models\Status::DISAPPROVED)
+@if (
+    (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN) ||
+        auth()->user()->hasRole(App\Models\Role::AGENT)) &&
+        $ticket->status_id !== App\Models\Status::DISAPPROVED)
     <div>
         @if ($ticket->status_id == App\Models\Status::CLOSED)
             <div class="d-flex flex-column">

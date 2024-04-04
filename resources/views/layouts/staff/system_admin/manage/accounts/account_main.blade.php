@@ -13,8 +13,8 @@
 
 @section('manage-content')
     <div class="row gap-4">
-        @include('layouts.staff.system_admin.manage.accounts.includes.approver')
         @include('layouts.staff.system_admin.manage.accounts.includes.service_department_admin')
+        @include('layouts.staff.system_admin.manage.accounts.includes.approver')
         @include('layouts.staff.system_admin.manage.accounts.includes.agent')
         @include('layouts.staff.system_admin.manage.accounts.includes.user')
     </div>
