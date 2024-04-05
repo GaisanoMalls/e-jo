@@ -47,11 +47,6 @@ class HelpTopic extends Model
         return $this->belongsTo(ServiceLevelAgreement::class, 'service_level_agreement_id');
     }
 
-    public function fields()
-    {
-        return $this->belongsToMany(Field::class, 'help_topic_field');
-    }
-
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
@@ -60,6 +55,11 @@ class HelpTopic extends Model
     public function specialProject(): HasOne
     {
         return $this->hasOne(SpecialProject::class);
+    }
+
+    public function form()
+    {
+        return $this->hasOne(Form::class);
     }
 
     public function dateCreated(): string

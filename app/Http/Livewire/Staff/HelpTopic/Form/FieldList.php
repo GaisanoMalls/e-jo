@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Staff\HelpTopic\CustomField;
+namespace App\Http\Livewire\Staff\HelpTopic\Form;
 
 use App\Enums\FieldRequiredOptionEnum;
 use App\Enums\FieldTypesEnum;
@@ -10,7 +10,7 @@ use Exception;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
 
-class CustomFieldList extends Component
+class FieldList extends Component
 {
     public $name;
     public $type;
@@ -36,7 +36,7 @@ class CustomFieldList extends Component
         $this->editingFieldId = $field->id == $this->editingFieldId ? null : $field->id;
         $this->dispatchBrowserEvent('show-dropdown-fields', [
             'currentFieldType' => $field->type,
-            'currentRequiredField' => $field->is_required,
+            'currentRequiredField' => $field->is_required ? 'Yes' : 'No',
         ]);
     }
 
@@ -52,7 +52,7 @@ class CustomFieldList extends Component
 
     public function updateCustomeField()
     {
-        if (empty ($this->name)) {
+        if (empty($this->name)) {
             session()->flash('customFieldNameError', 'The name field is required');
         } else {
             Field::where('id', $this->editingFieldId)->update([
@@ -60,7 +60,7 @@ class CustomFieldList extends Component
                 'label' => $this->name,
                 'type' => $this->type,
                 'variable_name' => $this->variable_name,
-                'is_required' => $this->is_required,
+                'is_required' => $this->is_required == FieldRequiredOptionEnum::YES->value ? true : false,
             ]);
             $this->editingFieldId = null;
         }
@@ -69,7 +69,7 @@ class CustomFieldList extends Component
 
     public function render()
     {
-        return view('livewire.staff.help-topic.custom-field.custom-field-list', [
+        return view('livewire.staff.help-topic.form.field-list', [
             'fields' => Field::orderByDesc('created_at')->get(),
             'editFieldTypes' => Options::forEnum(FieldTypesEnum::class)->toArray(),
             'editFieldRequiredOption' => Options::forEnum(FieldRequiredOptionEnum::class)->toArray(),

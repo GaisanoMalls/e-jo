@@ -5,24 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class HelpTopicField extends Model
+class Form extends Model
 {
     use HasFactory;
 
-
-    protected $table = 'help_topic_field';
-    protected $fillable = [
-        'help_topic_id',
-        'field_id',
-    ];
+    protected $fillable = ['help_topic_id', 'name'];
 
     public function helpTopic()
     {
         return $this->belongsTo(HelpTopic::class);
     }
 
-    public function field()
+    public function fields()
     {
-        return $this->belongsTo(Field::class);
+        return $this->hasMany(Field::class);
     }
 }

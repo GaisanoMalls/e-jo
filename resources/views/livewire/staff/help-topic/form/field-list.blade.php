@@ -58,7 +58,7 @@
                                                     <div id="select-edit-required-field" wire:ignore></div>
                                                 </div>
                                             @else
-                                                <span>{{ $field->is_required }}</span>
+                                                <span>{{ $field->is_required ? 'Yes' : 'No' }}</span>
                                             @endif
                                         </div>
                                     </td>
@@ -74,7 +74,8 @@
                                         </div>
                                     </td>
                                     <td class="px-0">
-                                        <div class="d-flex align-items-center justify-content-end px-2">
+                                        <div class="d-flex align-items-center justify-content-end px-2"
+                                            wire:key="button-actions-{{ $index + 1 }}">
                                             @if ($editingFieldId === $field->id)
                                                 <button type="submit" class="btn action__button">
                                                     <i class="bi bi-check-lg" style="font-size: 18px;"></i>
@@ -155,6 +156,13 @@
             selectEditRequiredField.addEventListener('change', () => {
                 @this.set('is_required', selectEditRequiredField.value);
             });
+
+            window.addEventListener('get-added-fields', function(event) {
+                // Handle the event data
+                console.log(event);
+
+                // You can perform any actions here based on the event data
+            })
         });
     </script>
 @endpush

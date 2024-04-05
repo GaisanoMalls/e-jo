@@ -15,7 +15,7 @@
     <div class="row gap-4">
         <div class="help__topics__section">
             @livewire('staff.help-topic.create-help-topic')
-            @livewire('staff.help-topic.custom-field.custom-field-modal')
+            @livewire('staff.help-topic.form.field-modal')
             <div class="col-12 content__container">
                 <div class="card card__rounded__and__no__border">
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-1 table__header">
@@ -31,7 +31,7 @@
                                 class="btn d-flex align-items-center justify-content-center gap-2 button__header"
                                 data-bs-toggle="modal" data-bs-target="#customFieldModal">
                                 <i class="fa-solid fa-file-circle-plus"></i>
-                                <span class="button__name">Custom Field</span>
+                                <span class="button__name">Add Form</span>
                             </button>
                         </div>
                     </div>

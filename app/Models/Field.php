@@ -11,6 +11,7 @@ class Field extends Model
     use HasFactory;
 
     protected $fillable = [
+        'form_id',
         'name',
         'label',
         'type',
@@ -19,7 +20,15 @@ class Field extends Model
         'is_enabled',
     ];
 
-    protected $casts = ['is_required' => FieldRequiredOptionEnum::class];
+    protected $casts = [
+        'is_required' => 'bool',
+        'is_enabled' => 'bool'
+    ];
+
+    public function form()
+    {
+        return $this->belongsTo(Form::class);
+    }
 
     public function helpTopics()
     {

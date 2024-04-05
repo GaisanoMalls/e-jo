@@ -24,17 +24,8 @@ class CustomFieldRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:fields,name'],
-            'type' => ['required'],
-            'is_required' => ['required'],
-            'variable_name' => ['required'],
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'is_required.required' => 'This field is required.',
+            'form_name' => ['required', 'unique:forms,name'],
+            'help_topic' => ['required', 'numeric'],
         ];
     }
 }
