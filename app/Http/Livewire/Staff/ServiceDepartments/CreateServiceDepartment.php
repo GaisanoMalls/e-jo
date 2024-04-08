@@ -39,15 +39,13 @@ class CreateServiceDepartment extends Component
     {
         if ($this->hasChildren) {
             if (!is_null($this->children)) {
-                $isExistsInDB = ServiceDepartmentChildren::where('name', $this->children)->exists();
-                $childNameLowerCase = strtolower($this->children);
-                $addedChildrenLowerCase = array_map('strtolower', $this->addedChildren);
+                $isServiceDeptChildExists = ServiceDepartmentChildren::where('name', $this->children)->exists();
 
-                if ($isExistsInDB) {
-                    session()->flash('childError', 'Child name is already exists');
+                if ($isServiceDeptChildExists) {
+                    session()->flash('childError', 'Subdepartment is already exists');
 
-                } elseif (in_array($childNameLowerCase, $addedChildrenLowerCase)) {
-                    session()->flash('childError', 'Subdepartment name is already added');
+                } elseif (in_array(strtolower($this->children), array_map('strtolower', $this->addedChildren))) {
+                    session()->flash('childError', 'Subdepartment is already added');
 
                 } else {
                     array_push($this->addedChildren, $this->children);
@@ -94,14 +92,13 @@ class CreateServiceDepartment extends Component
                             'slug' => Str::slug($this->name),
                         ]);
 
-                        collect($this->addedChildren)->each(function ($child) use ($service_department) {
+                        foreach ($this->addedChildren as $child) {
                             $service_department->children()->create(['name' => $child]);
-                        });
+                        }
 
                         $this->actionOnSubmit();
                         noty()->addSuccess('A new service department has been created.');
                     }
-
                 } else {
                     $service_department = ServiceDepartment::create([
                         'name' => $this->name,

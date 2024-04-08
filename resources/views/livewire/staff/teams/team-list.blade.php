@@ -6,7 +6,7 @@
                     <tr>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Team</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Dept. Children</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Subdepartment</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Branches</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
@@ -121,7 +121,7 @@
                                 id="editSelectServiceDeptChildrenContainer">
                                 <div class="d-flex mt-2 align-items-center justify-content-between gap-2">
                                     <label for="childInput" class="form-label mt-1 form__field__label">
-                                        Select a child
+                                        Select subdepartment
                                     </label>
                                 </div>
                                 <div class="position-relative">
@@ -240,7 +240,6 @@
         VirtualSelect.init({
             ele: editServiceDepartmentChildSelect,
             search: true,
-            showValueAsTags: true,
             markSearchResults: true,
         });
 

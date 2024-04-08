@@ -6,6 +6,7 @@ use App\Http\Requests\SysAdmin\Manage\Team\StoreTeamRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\ServiceDepartmentChildren;
+use App\Models\Subteam;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -18,9 +19,12 @@ class CreateTeam extends Component
 
     public $selectedBranches = [];
     public $serviceDeptChildren = [];
+    public $addedSubteam = [];
     public $name;
     public $selectedServiceDepartment;
     public $selectedChild;
+    public $subteam;
+    public $hasSubteam = false;
 
     public function rules()
     {
@@ -46,24 +50,88 @@ class CreateTeam extends Component
         $this->dispatchBrowserEvent('load-service-department-children', ['serviceDeptChildren' => $this->serviceDeptChildren]);
     }
 
+    public function addSubteam()
+    {
+        if ($this->hasSubteam) {
+            if (!is_null($this->subteam)) {
+                $isSubteamExists = Subteam::where('name', $this->subteam)->exists();
+
+                if ($isSubteamExists) {
+                    session()->flash('subteamError', 'Subteam is already exists');
+                } elseif (in_array(strtolower($this->subteam), array_map('strtolower', $this->addedSubteam))) {
+                    session()->flash('subteamError', 'Subteam is already added');
+                } else {
+                    array_push($this->addedSubteam, $this->subteam);
+                    $this->reset('subteam');
+                }
+            } else {
+                session()->flash('subteamError', 'The subteam field is required');
+            }
+        }
+    }
+
+    public function removeSubteam(int $subteam_key)
+    {
+        foreach (array_keys($this->addedSubteam) as $key) {
+            if ($subteam_key === $key) {
+                unset($this->addedSubteam[$key]);
+            }
+        }
+    }
+
+
+    public function updatedHasSubteam()
+    {
+        // Clear the added subteam inside the array when unchecked.
+        if (!empty($this->addedSubteam)) {
+            $this->addedSubteam = [];
+        }
+    }
+
     public function saveTeam()
     {
         $this->validate();
 
         try {
             DB::transaction(function () {
-                $team = Team::create([
-                    'service_department_id' => $this->selectedServiceDepartment,
-                    'service_dept_child_id' => $this->selectedChild,
-                    'name' => $this->name,
-                    'slug' => Str::slug($this->name),
-                ]);
+                if ($this->hasSubteam) {
+                    if (is_null($this->subteam) && empty ($this->addedSubteam)) {
+                        session()->flash('subteamError', 'Subteam field is required');
 
-                $team->branches()->attach(array_map('intval', $this->selectedBranches));
+                    } elseif (empty ($this->addedSubteam) || empty ($this->name) && !empty ($this->subteam)) {
+                        session()->flash('subteamError', 'Please add a subteam');
+
+                    } else {
+                        $team = Team::create([
+                            'service_department_id' => $this->selectedServiceDepartment,
+                            'service_dept_child_id' => $this->selectedChild ?: null,
+                            'name' => $this->name,
+                            'slug' => Str::slug($this->name),
+                        ]);
+
+                        $team->branches()->attach(array_map('intval', $this->selectedBranches));
+
+                        foreach ($this->addedSubteam as $subteam) {
+                            $team->subteams()->create(['name' => $subteam]);
+                        }
+
+                        $this->actionOnSubmit();
+                        noty()->addSuccess('New team has been created.');
+                    }
+                } else {
+                    $team = Team::create([
+                        'service_department_id' => $this->selectedServiceDepartment,
+                        'service_dept_child_id' => $this->selectedChild ?: null,
+                        'name' => $this->name,
+                        'slug' => Str::slug($this->name),
+                    ]);
+
+                    $team->branches()->attach(array_map('intval', $this->selectedBranches));
+
+                    $this->actionOnSubmit();
+                    noty()->addSuccess('New team has been created.');
+                }
             });
-
-            $this->actionOnSubmit();
-            noty()->addSuccess('New team has been created.');
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

@@ -67,9 +67,9 @@
                                 </div>
                             @endif
 
-                            {{-- Child list --}}
+                            {{-- subdepartment list --}}
                             @if (!empty($addedChildren))
-                                @foreach (collect($this->addedChildren) as $key => $child)
+                                @foreach ($this->addedChildren as $key => $child)
                                     <div class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
                                         style="height: 60px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 0;">
                                         <div wire:key="{{ $key }}" class="position-relative">

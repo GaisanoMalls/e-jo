@@ -47,6 +47,11 @@ class Team extends Model
         return $this->hasMany(HelpTopic::class);
     }
 
+    public function subteams()
+    {
+        return $this->hasMany(Subteam::class);
+    }
+
     public function branches(): BelongsToMany
     {
         return $this->belongsToMany(Branch::class, 'team_branch');
@@ -65,7 +70,7 @@ class Team extends Model
             $branchNames[] = $branch->name;
         }
 
-        if (!empty ($branchNames)) {
+        if (!empty($branchNames)) {
             return implode(', ', $branchNames);
         }
 
@@ -80,7 +85,7 @@ class Team extends Model
             $childrenNames[] = $child->name;
         }
 
-        if (!empty ($childrenNames)) {
+        if (!empty($childrenNames)) {
             return implode(', ', $childrenNames);
         }
 

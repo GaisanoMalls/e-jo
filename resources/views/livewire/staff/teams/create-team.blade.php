@@ -12,7 +12,15 @@
                 <form wire:submit.prevent="saveTeam">
                     <div class="modal-body modal__body">
                         <div class="row mb-2">
-                            <div class="mb-2">
+                            <div class="col-12 mb-3 d-flex">
+                                <input wire:model="hasSubteam" class="form-check-input check__special__project"
+                                    type="checkbox" role="switch" id="checkHasChildren" wire:loading.attr="disabled">
+                                <label class="form-check-label" for="checkHasChildren"
+                                    style="margin-top: 0.2rem !important;">
+                                    Has subteam
+                                </label>
+                            </div>
+                            <div class="mb-2" style="z-index: 2;">
                                 <label for="name" class="form-label form__field__label">Name</label>
                                 <input type="text" wire:model.defer="name"
                                     class="form-control form__field @error('name') is-invalid @enderror" id="name"
@@ -24,6 +32,64 @@
                                     </span>
                                 @enderror
                             </div>
+
+                            @if ($hasSubteam)
+                                <div class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
+                                    style="height: 93px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 1;">
+                                    <div class="d-flex mt-2 align-items-center justify-content-between gap-2">
+                                        <label for="childInput" class="form-label mt-1 form__field__label">
+                                            Add subteam
+                                        </label>
+                                        @if (session()->has('subteamError'))
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ session('subteamError') }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="position-relative">
+                                        <input type="text" wire:model.defer="subteam"
+                                            class="form-control position-relative pe-5 form__field {{ session()->has('childError') ? 'is-invalid' : '' }}"
+                                            placeholder="Enter child name" style="width: 100%;" id="childInput">
+                                        <button wire:click="addSubteam" type="button"
+                                            class="btn btn-sm d-flex align-items-center justify-content-center outline-none rounded-3 position-absolute"
+                                            style="right: 0.6rem; top: 0.5rem; height: 30px; width: 30px; background-color: #edeef0; border: 1px solid #e7e9eb;">
+                                            <span wire:loading.remove wire:target="addSubteam">
+                                                <i class="bi bi-save"></i>
+                                            </span>
+                                            <div wire:loading wire:target="addSubteam"
+                                                class="spinner-border spinner-border-sm loading__spinner"
+                                                role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {{-- subteam list --}}
+                                @if (!empty($addedSubteam))
+                                    @foreach ($this->addedSubteam as $key => $subteam)
+                                        <div class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
+                                            style="height: 60px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 0;">
+                                            <div wire:key="{{ $key }}" class="position-relative">
+                                                <input type="text" readonly value="{{ $subteam }}"
+                                                    class="form-control position-relative pe-5 form__field"
+                                                    style="width: 100%; margin-top: 11px; background-color: #f9fbfc;">
+                                                <div class="d-flex align-items-center justify-content-center bg-white p-3 rounded-circle position-absolute"
+                                                    style="right: -0.5rem; top: -0.5rem; height: 30px; width: 30px;">
+                                                    <button wire:click="removeSubteam({{ $key }})"
+                                                        type="button"
+                                                        class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
+                                                        style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                                        <i class="fa-solid fa-xmark"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            @endif
+
                             <div class="mb-2" style="z-index: 2;">
                                 <label for="department" class="form-label form__field__label">Service Department</label>
                                 <div>
@@ -42,7 +108,7 @@
                                 id="selectServiceDeptChildrenContainer">
                                 <div class="d-flex mt-2 align-items-center justify-content-between gap-2">
                                     <label for="childInput" class="form-label mt-1 form__field__label">
-                                        Select a child
+                                        Select subdepartment (optional)
                                     </label>
                                     @if (session()->has('childError'))
                                         <span class="error__message">
@@ -121,7 +187,6 @@
                 ele: serviceDepartmentChildSelect,
                 search: true,
                 required: true,
-                showValueAsTags: true,
                 markSearchResults: true,
             });
 
