@@ -92,6 +92,21 @@ class Team extends Model
         return '';
     }
 
+    public function getSubteams(): string
+    {
+        $subteams = [];
+
+        foreach ($this->subteams as $subteam) {
+            $subteams[] = $subteam->name;
+        }
+
+        if (!empty($subteams)) {
+            return implode(', ', $subteams);
+        }
+
+        return '';
+    }
+
     public function dateCreated(): string
     {
         return $this->createdAt($this->created_at);

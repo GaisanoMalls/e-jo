@@ -5,6 +5,7 @@
                 <thead>
                     <tr>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Team</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Subteams</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Subdepartment</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Branches</th>
@@ -18,6 +19,11 @@
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
                                     <span>{{ $team->name }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center text-start td__content">
+                                    <span>{{ $team->getSubteams() }}</span>
                                 </div>
                             </td>
                             <td>

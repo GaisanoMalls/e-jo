@@ -24,6 +24,7 @@ class TeamList extends Component
     public $teamDeleteId;
     public $editSelectedServiceDepartment;
     public $name;
+    public $hasSubteam = false;
 
     protected $listeners = ['loadTeams' => 'fetchTeams'];
 
