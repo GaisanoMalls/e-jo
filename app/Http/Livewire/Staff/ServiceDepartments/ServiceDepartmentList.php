@@ -70,8 +70,8 @@ class ServiceDepartmentList extends Component
         $this->validate();
 
         try {
-            if (!empty ($this->name) && !empty ($this->childName)) {
-                session()->flash('childError', 'Please add the child');
+            if (!empty($this->name) && !empty($this->childName)) {
+                session()->flash('childError', 'Please add the subdepartment');
 
             } else {
                 $serviceDepartment = ServiceDepartment::findOrFail($this->serviceDepartmentEditId);
@@ -85,7 +85,7 @@ class ServiceDepartmentList extends Component
                 });
 
                 if ($childrenUpdated) {
-                    noty()->addSuccess('A new child have been added');
+                    noty()->addSuccess('A new subdepartment have been added');
                     $this->newlyAddedChildren = [];
                 }
 
@@ -107,7 +107,7 @@ class ServiceDepartmentList extends Component
 
     public function updatedserviceDeptHasChildren()
     {
-        if (!empty ($this->newlyAddedChildren)) {
+        if (!empty($this->newlyAddedChildren)) {
             // Clear the added children inside the array when unchecked.
             $this->newlyAddedChildren = [];
         }
@@ -143,17 +143,17 @@ class ServiceDepartmentList extends Component
                 $newlyAddedChildrenrenLowerCase = array_map('strtolower', $this->newlyAddedChildren);
 
                 if ($isExistsInDB) {
-                    session()->flash('childError', 'Child name is already exists');
+                    session()->flash('childError', 'Subdepartment name is already exists');
 
                 } elseif (in_array($childNameLowerCase, $newlyAddedChildrenrenLowerCase)) {
-                    session()->flash('childError', 'Child name is already added');
+                    session()->flash('childError', 'Subdepartment name is already added');
 
                 } else {
                     array_push($this->newlyAddedChildren, $this->childName);
                     $this->reset('childName');
                 }
             } else {
-                session()->flash('childError', 'The child field is required');
+                session()->flash('childError', 'The subdepartment field is required');
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

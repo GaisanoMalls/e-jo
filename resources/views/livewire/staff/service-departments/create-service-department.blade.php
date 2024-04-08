@@ -17,7 +17,7 @@
                                     type="checkbox" role="switch" id="checkHasChildren" wire:loading.attr="disabled">
                                 <label class="form-check-label" for="checkHasChildren"
                                     style="margin-top: 0.2rem !important;">
-                                    Service department has child
+                                    Has subdepartments
                                 </label>
                             </div>
                             <div class="mb-0" style="z-index: 2;">
@@ -38,7 +38,7 @@
                                     style="height: 93px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 1;">
                                     <div class="d-flex mt-2 align-items-center justify-content-between gap-2">
                                         <label for="childInput" class="form-label mt-1 form__field__label">
-                                            Add child
+                                            Add subdepartment
                                         </label>
                                         @if (session()->has('childError'))
                                             <span class="error__message">

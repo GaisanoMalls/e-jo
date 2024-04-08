@@ -47,14 +47,14 @@ class CreateServiceDepartment extends Component
                     session()->flash('childError', 'Child name is already exists');
 
                 } elseif (in_array($childNameLowerCase, $addedChildrenLowerCase)) {
-                    session()->flash('childError', 'Child name is already added');
+                    session()->flash('childError', 'Subdepartment name is already added');
 
                 } else {
                     array_push($this->addedChildren, $this->children);
                     $this->reset('children');
                 }
             } else {
-                session()->flash('childError', 'The child field is required');
+                session()->flash('childError', 'The subdepartment field is required');
             }
         }
     }
@@ -71,7 +71,7 @@ class CreateServiceDepartment extends Component
     public function updatedHasChildren()
     {
         // Clear the added children inside the array when unchecked.
-        if (!empty ($this->addedChildren)) {
+        if (!empty($this->addedChildren)) {
             $this->addedChildren = [];
         }
     }
@@ -83,10 +83,10 @@ class CreateServiceDepartment extends Component
             DB::transaction(function () {
                 if ($this->hasChildren) {
                     if (is_null($this->children) && empty ($this->addedChildren)) {
-                        session()->flash('childError', 'Child field is required');
+                        session()->flash('childError', 'Subdepartment field is required');
 
                     } elseif (empty ($this->addedChildren) || !empty ($this->name) && !empty ($this->children)) {
-                        session()->flash('childError', 'Please add the child');
+                        session()->flash('childError', 'Please add the subdepartment');
 
                     } else {
                         $service_department = ServiceDepartment::create([
