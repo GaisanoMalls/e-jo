@@ -13,15 +13,20 @@ class Feedback extends Model
 
     protected $fillable = [
         'user_id',
+        'ticket_id',
         'rating',
         'had_issues_encountered',
         'description',
         'suggestion',
-        'accepted_privacy_policy'
     ];
 
     public function sender(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class);
     }
 }

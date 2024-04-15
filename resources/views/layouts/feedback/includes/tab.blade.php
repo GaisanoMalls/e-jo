@@ -6,7 +6,7 @@
                     {{ Route::is('feedback.to_rate') ? 'active' : '' }}"
                     href="{{ route('feedback.to_rate') }}">
                     <i class="fa-solid fa-medal"></i>
-                    To Rate
+                    For feedback
                 </a>
             </li>
             <li class="nav-item">
@@ -14,7 +14,7 @@
                     {{ Route::is('feedback.reviews') ? 'active' : '' }}"
                     href="{{ route('feedback.reviews') }}">
                     <i class="fa-solid fa-comment-dots"></i>
-                    My Reviews
+                    My Feedbacks
                 </a>
             </li>
         </ul>

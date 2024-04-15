@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('css/select/custom-virtual-select.css') }}">
     <link rel="stylesheet" href="{{ asset('css/feedback.css') }}">
     <title>E-JO - {{ $title ?? 'Feedback' }}</title>
+    @livewireStyles
 </head>
 
 <body class="{{ Route::is('feedback.index') ? 'bg-white' : '' }}">
@@ -20,25 +21,20 @@
     @include('layouts.feedback.includes.tab')
     <div class="container feedback__container">
         @section('feedback-content')
-        @include('layouts.feedback.includes.welcome_message')
+            @include('layouts.feedback.includes.welcome_message')
         @show
     </div>
-    {{-- @include('layouts.feedback.includes.button_create_feedback') --}}
+
     @include('layouts.staff.includes.toaster-message')
+
+    @livewireScripts
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/select/virtual-select.min.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
 
     @stack('toastr-message-js')
-    @if ($errors->storeFeedback->any())
-    <script>
-        $(function () {
-            $('#modalFeedback').modal('show');
-        });
-
-    </script>
-    @endif
+    @stack('custom-js')
 </body>
 
 </html>

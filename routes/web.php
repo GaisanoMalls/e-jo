@@ -245,7 +245,6 @@ Route::middleware(['auth', Role::requestersOnly()])->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/to-rate', 'ticketsToRate')->name('to_rate');
             Route::get('/my-reviews', 'reviews')->name('reviews');
-            Route::post('/rate/store', 'store')->name('store');
         });
     });
 });

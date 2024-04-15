@@ -23,7 +23,7 @@
                 <small class="pe-2 fw-semibold">{{ auth()->user()->profile->first_name }}</small>
             </a>
             <ul class="dropdown-menu dropdown-menu-end border-0 feedback__user__dropdown__menu">
-                <li><a class="dropdown-item dropdown__item" href="{{ route('staff.dashboard') }}">Dashboard</a></li>
+                <li><a class="dropdown-item dropdown__item" href="{{ route('user.dashboard') }}">Dashboard</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>

@@ -104,6 +104,11 @@ class Ticket extends Model
         return $this->hasOne(TicketSpecialProjectStatus::class);
     }
 
+    public function feedback(): HasOne
+    {
+        return $this->hasOne(Feedback::class);
+    }
+
     public function fileAttachments(): HasMany
     {
         return $this->hasMany(TicketFile::class);

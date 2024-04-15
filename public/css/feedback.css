@@ -33,25 +33,6 @@ body {
   background-color: #f5f7f9;
 }
 
-.btn__create__feedback {
-  position: fixed !important;
-  bottom: 30px;
-  right: 30px;
-  z-index: 1;
-  border-radius: 3.125rem !important;
-  height: 2.8rem;
-  width: 2.8rem;
-  background-color: #d32839;
-  color: white;
-}
-.btn__create__feedback:hover {
-  background-color: #d32839;
-  color: white;
-}
-.btn__create__feedback:focus {
-  background-color: #d32839;
-}
-
 .banner {
   opacity: 2;
   height: 350px;
@@ -250,6 +231,14 @@ nav .feedback__user__dropdown__menu .dropdown__item:focus {
   color: #808080;
 }
 
+.stars__container i {
+  font-size: 0.875rem;
+  color: #e1e1e1;
+}
+.stars__container i.filled {
+  color: #ff725c;
+}
+
 .feedback__modal .feedback__content {
   border: none;
   border-radius: 0.625rem;
@@ -280,18 +269,12 @@ nav .feedback__user__dropdown__menu .dropdown__item:focus {
   border: 1px solid #e7e9eb;
   font-size: 0.875rem;
   border-radius: 0.563rem;
+  padding: 0.6rem 1rem !important;
   border: 0.1rem solid #d5dde5;
 }
 .feedback__modal .form__inputs .form__field:focus {
   box-shadow: none;
   border-color: #d32839;
-}
-.feedback__modal .form__inputs .stars__container i {
-  font-size: 0.875rem;
-  color: #e1e1e1;
-}
-.feedback__modal .form__inputs .stars__container i.filled {
-  color: #ff725c;
 }
 .feedback__modal .form__inputs .radio__button {
   width: 15px;
@@ -306,20 +289,6 @@ nav .feedback__user__dropdown__menu .dropdown__item:focus {
 }
 .feedback__modal .form__inputs .radio__button:checked + .check__label {
   color: #ff725c;
-}
-.feedback__modal .form__inputs .check__privacy__policy {
-  width: 15px;
-  height: 15px;
-  border: 1px solid #d99595;
-  margin-top: 6px;
-  box-shadow: none !important;
-}
-.feedback__modal .form__inputs .check__privacy__policy:checked {
-  background-color: #ff725c;
-  border: 1px solid #ff725c;
-}
-.feedback__modal .form__inputs .check__label {
-  font-size: 0.875rem;
 }
 .feedback__modal .form__inputs .custom__textarea {
   height: 100px;

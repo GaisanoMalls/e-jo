@@ -1,4 +1,4 @@
-@use "./_generic"as generic;
+@use "./_generic" as generic;
 @import "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap";
 
 $fw-500: 500;
@@ -47,27 +47,6 @@ $body-color: #f5f7f9;
 
 body {
     background-color: $body-color;
-}
-
-.btn__create__feedback {
-    position: fixed !important;
-    bottom: 30px;
-    right: 30px;
-    z-index: 1;
-    border-radius: 3.125rem !important;
-    height: 2.8rem;
-    width: 2.8rem;
-    background-color: #d32839;
-    color: white;
-
-    &:hover {
-        background-color: #d32839;
-        color: white;
-    }
-
-    &:focus {
-        background-color: #d32839;
-    }
 }
 
 .banner {
@@ -310,6 +289,17 @@ nav {
     }
 }
 
+.stars__container {
+    i {
+        font-size: 0.875rem;
+        color: #e1e1e1;
+
+        &.filled {
+            color: #ff725c;
+        }
+    }
+}
+
 .feedback__modal {
     .feedback__content {
         border: none;
@@ -344,22 +334,12 @@ nav {
 
         .form__field {
             @include generic.input-field-config;
+            padding: 0.6rem 1rem !important;
             border: 0.1rem solid #d5dde5;
 
             &:focus {
                 box-shadow: none;
                 border-color: #d32839;
-            }
-        }
-
-        .stars__container {
-            i {
-                font-size: 0.875rem;
-                color: #e1e1e1;
-
-                &.filled {
-                    color: #ff725c;
-                }
             }
         }
 
@@ -380,22 +360,22 @@ nav {
             }
         }
 
-        .check__privacy__policy {
-            width: 15px;
-            height: 15px;
-            border: 1px solid #d99595;
-            margin-top: 6px;
-            box-shadow: none !important;
+        // .check__privacy__policy {
+        //     width: 15px;
+        //     height: 15px;
+        //     border: 1px solid #d99595;
+        //     margin-top: 6px;
+        //     box-shadow: none !important;
 
-            &:checked {
-                background-color: #ff725c;
-                border: 1px solid #ff725c;
-            }
-        }
+        //     &:checked {
+        //         background-color: #ff725c;
+        //         border: 1px solid #ff725c;
+        //     }
+        // }
 
-        .check__label {
-            font-size: $fs-14;
-        }
+        // .check__label {
+        //     font-size: $fs-14;
+        // }
 
         .custom__textarea {
             height: 100px;
