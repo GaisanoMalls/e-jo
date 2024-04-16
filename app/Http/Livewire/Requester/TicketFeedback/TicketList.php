@@ -21,7 +21,7 @@ class TicketList extends Component
     public $rating;
     public $feedback;
     public $suggestion;
-    public $had_issues_encountered = false;
+    public $had_issues_encountered;
 
     public function mount()
     {

@@ -2,7 +2,8 @@
     <div class="row my-5 gap-4">
         @if ($toRateTickets->isNotEmpty())
             @foreach ($toRateTickets as $ticket)
-                <div class="card border-0 feedback__card" wire:key="ticket-feedback-{{ $ticket->id }}">
+                <div wire:key="ticket-{{ $ticket->id }}" class="card border-0 feedback__card"
+                    wire:key="ticket-feedback-{{ $ticket->id }}">
                     <div class="d-flex flex-wrap align-items-center justify-content-between card__header">
                         <p class="mb-1 ticket__container">
                             <span class="lbl__ticket__num">Ticket #</span>
@@ -299,7 +300,15 @@
                                     </div>
                                 </div> --}}
                                 <div class="col-12 d-flex align-items-center justify-content-between">
-                                    <button type="submit" class="btn btn__submit">Submit Feedback</button>
+                                    <button type="submit"
+                                        class="btn d-flex align-items-center justify-content-center gap-2 btn__submit">
+                                        <span wire:loading wire:target="submitFeedback"
+                                            class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true">
+                                        </span>
+                                        <span wire:loading wire:target="submitFeedback">Submitting...</span>
+                                        <span wire:loading.remove wire:target="submitFeedback">Submit Feedback</span>
+                                    </button>
                                     <button wire:click="cancel" type="button" class="btn btn-sm p-1"
                                         data-bs-dismiss="modal">Cancel</button>
                                 </div>

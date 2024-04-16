@@ -291,7 +291,7 @@ nav .feedback__user__dropdown__menu .dropdown__item:focus {
   color: #ff725c;
 }
 .feedback__modal .form__inputs .custom__textarea {
-  height: 100px;
+  min-height: 100px;
 }
 .feedback__modal .form__inputs .btn__submit {
   padding: 0.6rem 1rem;
