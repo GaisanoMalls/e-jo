@@ -52,12 +52,12 @@ class AddFormField extends Component
     public function addField()
     {
         if (is_null($this->name)) {
-            session()->flash('field_name_error', 'Field name is required');
+            $this->addError('name', 'Field name is required');
             return;
         }
 
         if (is_null($this->type)) {
-            session()->flash('field_type_error', 'Field type is required');
+            $this->addError('type', 'Field type is required');
             return;
         }
 

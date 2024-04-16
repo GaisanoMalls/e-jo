@@ -30,12 +30,12 @@ class TicketCosting extends Component
 
     public function rules()
     {
-        return(new StoreCostingPRFileRequest())->rules();
+        return (new StoreCostingPRFileRequest())->rules();
     }
 
     public function messages()
     {
-        return(new StoreCostingPRFileRequest())->messages();
+        return (new StoreCostingPRFileRequest())->messages();
     }
 
     public function updatedCostingPRFiles()
@@ -75,7 +75,7 @@ class TicketCosting extends Component
                         $this->actionOnSubmit();
                     }
                 } else {
-                    session()->flash('error', 'PR file is required');
+                    $this->addError('costingPRFiles', 'PR file is required');
                 }
             } else {
                 noty()->addError('Adding of attachments is restricted.');

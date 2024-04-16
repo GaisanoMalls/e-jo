@@ -57,15 +57,15 @@ class CreateTeam extends Component
                 $isSubteamExists = Subteam::where('name', $this->subteam)->exists();
 
                 if ($isSubteamExists) {
-                    session()->flash('subteamError', 'Subteam is already exists');
+                    $this->addError('subteam', 'Subteam is already exists');
                 } elseif (in_array(strtolower($this->subteam), array_map('strtolower', $this->addedSubteam))) {
-                    session()->flash('subteamError', 'Subteam is already added');
+                    $this->addError('subteam', 'Subteam is already added');
                 } else {
                     array_push($this->addedSubteam, $this->subteam);
                     $this->reset('subteam');
                 }
             } else {
-                session()->flash('subteamError', 'The subteam field is required');
+                $this->addError('subteam', 'The subteam field is required');
             }
         }
     }
@@ -96,10 +96,10 @@ class CreateTeam extends Component
             DB::transaction(function () {
                 if ($this->hasSubteam) {
                     if (is_null($this->subteam) && empty ($this->addedSubteam)) {
-                        session()->flash('subteamError', 'Subteam field is required');
+                        $this->addError('subteamError', 'Subteam field is required');
 
                     } elseif (empty ($this->addedSubteam) || empty ($this->name) && !empty ($this->subteam)) {
-                        session()->flash('subteamError', 'Please add a subteam');
+                        $this->addError('subteamError', 'Please add a subteam');
 
                     } else {
                         $team = Team::create([

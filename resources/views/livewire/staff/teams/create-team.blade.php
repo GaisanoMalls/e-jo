@@ -40,12 +40,12 @@
                                         <label for="childInput" class="form-label mt-1 form__field__label">
                                             Add subteam
                                         </label>
-                                        @if (session()->has('subteamError'))
+                                        @error('subteam')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ session('subteamError') }}
+                                                {{ $message }}
                                             </span>
-                                        @endif
+                                        @enderror
                                     </div>
                                     <div class="position-relative">
                                         <input type="text" wire:model.defer="subteam"

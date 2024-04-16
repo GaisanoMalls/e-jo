@@ -28,12 +28,12 @@ class AddCosting extends Component
 
     public function rules()
     {
-        return(new StoreTicketCostingRequest())->rules();
+        return (new StoreTicketCostingRequest())->rules();
     }
 
     public function messages()
     {
-        return(new StoreTicketCostingRequest())->messages();
+        return (new StoreTicketCostingRequest())->messages();
     }
 
     private function actionOnSubmit()
@@ -122,7 +122,7 @@ class AddCosting extends Component
                         $this->actionOnSubmit();
                     }
                 } else {
-                    session()->flash('fileError', 'File attachment for costing is required');
+                    $this->addError('costingFiles', 'File attachment for costing is required');
                 }
             } else {
                 $this->dispatchBrowserEvent('close-costing-modal');

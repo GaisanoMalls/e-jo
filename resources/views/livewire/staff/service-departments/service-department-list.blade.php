@@ -111,16 +111,16 @@
                                         <label for="childInput" class="form-label mt-1 form__field__label">
                                             Add subdepartment
                                         </label>
-                                        @if (session()->has('childError'))
+                                        @error('childName')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ session('childError') }}
+                                                {{ $message }}
                                             </span>
-                                        @endif
+                                        @enderror
                                     </div>
                                     <div class="position-relative">
                                         <input type="text" wire:model="childName"
-                                            class="form-control position-relative pe-5 form__field {{ session()->has('childError') ? 'is-invalid' : '' }}"
+                                            class="form-control position-relative pe-5 form__field @error('childName') 'is-invalid' @enderror"
                                             placeholder="Enter child name" style="width: 100%;" id="childInput">
                                         <button wire:click="addChildren" type="button"
                                             class="btn btn-sm d-flex align-items-center justify-content-center outline-none rounded-3 position-absolute"

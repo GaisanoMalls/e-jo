@@ -58,12 +58,12 @@
                                     <input wire:model="name" class="form-control form__field" type="text"
                                         id="fieldName" placeholder="Enter field name">
                                 </div>
-                                @if (session()->has('field_name_error'))
+                                @error('name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ session('field_name_error') }}
+                                        {{ $message }}
                                     </span>
-                                @endif
+                                @enderror
                             </td>
                             <td class="px-0">
                                 <div class="d-flex align-items-center text-start px-1 td__content">
@@ -71,6 +71,12 @@
                                         <div id="select-field-type" wire:ignore></div>
                                     </div>
                                 </div>
+                                @error('type')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
                                 @if (session()->has('field_type_error'))
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>

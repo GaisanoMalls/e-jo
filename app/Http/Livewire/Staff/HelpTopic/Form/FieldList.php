@@ -53,7 +53,7 @@ class FieldList extends Component
     public function updateCustomeField()
     {
         if (empty($this->name)) {
-            session()->flash('customFieldNameError', 'The name field is required');
+            session()->addError('customFieldNameError', 'The name field is required');
         } else {
             Field::where('id', $this->editingFieldId)->update([
                 'name' => $this->name,

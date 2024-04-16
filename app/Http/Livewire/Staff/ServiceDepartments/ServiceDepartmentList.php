@@ -71,7 +71,7 @@ class ServiceDepartmentList extends Component
 
         try {
             if (!empty($this->name) && !empty($this->childName)) {
-                session()->flash('childError', 'Please add the subdepartment');
+                $this->addError('childName', 'Please add the subdepartment');
 
             } else {
                 $serviceDepartment = ServiceDepartment::findOrFail($this->serviceDepartmentEditId);
@@ -143,17 +143,17 @@ class ServiceDepartmentList extends Component
                 $newlyAddedChildrenrenLowerCase = array_map('strtolower', $this->newlyAddedChildren);
 
                 if ($isExistsInDB) {
-                    session()->flash('childError', 'Subdepartment name is already exists');
+                    $this->addError('childName', 'Subdepartment name is already exists');
 
                 } elseif (in_array($childNameLowerCase, $newlyAddedChildrenrenLowerCase)) {
-                    session()->flash('childError', 'Subdepartment name is already added');
+                    $this->addError('childName', 'Subdepartment name is already added');
 
                 } else {
                     array_push($this->newlyAddedChildren, $this->childName);
                     $this->reset('childName');
                 }
             } else {
-                session()->flash('childError', 'The subdepartment field is required');
+                $this->addError('childName', 'The subdepartment field is required');
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

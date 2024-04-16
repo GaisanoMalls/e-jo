@@ -314,12 +314,12 @@
                                         </div>
                                     </div>
                                     <span class="error__message" id="excludeEXEfileMessageForPR"></span>
-                                    @if (session()->has('error'))
+                                    @error('costingPRFiles')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ session('error') }}
+                                            {{ $message }}
                                         </span>
-                                    @endif
+                                    @enderror
                                 </div>
                                 <button type="submit"
                                     class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
