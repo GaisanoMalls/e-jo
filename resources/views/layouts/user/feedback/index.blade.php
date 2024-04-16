@@ -17,15 +17,13 @@
 </head>
 
 <body class="{{ Route::is('feedback.index') ? 'bg-white' : '' }}">
-    @include('layouts.feedback.includes.nav__and__banner')
-    @include('layouts.feedback.includes.tab')
+    @include('layouts.user.feedback.includes.nav__and__banner')
+    @include('layouts.user.feedback.includes.tab')
     <div class="container feedback__container">
         @section('feedback-content')
-            @include('layouts.feedback.includes.welcome_message')
+            @include('layouts.user.feedback.includes.welcome_message')
         @show
     </div>
-
-    @include('layouts.staff.includes.toaster-message')
 
     @livewireScripts
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

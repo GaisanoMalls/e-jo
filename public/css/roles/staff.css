@@ -8144,6 +8144,14 @@ a:hover {
   color: #ffffff;
 }
 
+.stars__container i {
+  font-size: 0.782rem;
+  color: #e1e1e1;
+}
+.stars__container i.filled {
+  color: #ff725c;
+}
+
 .team__row {
   padding: 20px 0 !important;
   border-top: 1px solid #eaeaea;
@@ -8171,6 +8179,29 @@ a:hover {
   color: black;
 }
 
+.feedback .ticket__details__user__picture {
+  height: 34px !important;
+  width: 34px !important;
+  border-radius: 3.125rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  margin-right: 0.7rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.feedback .user__name__initial {
+  height: 28px !important;
+  width: 28px !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  background-color: #24695c;
+  margin-right: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #d9ddd9;
+  font-size: 0.75rem;
+}
+
 .ticket__section .tickets__card {
   border: none;
   border-radius: 0.625rem;
@@ -8186,8 +8217,8 @@ a:hover {
   font-weight: 500;
 }
 .ticket__section .tickets__card .tickets__table__card .custom__table .td__content {
-  padding: 9px 20px;
-  height: 50px;
+  padding: 9px 22px;
+  min-height: 50px;
 }
 .ticket__section .tickets__card .tickets__table__card .custom__table .ticket__list__status__line {
   position: absolute;
@@ -9465,7 +9496,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .accounts__section .users__account__card .table-striped > tbody > tr .td__content {
   padding: 9px 21px;
-  height: 50px;
+  min-height: 50px;
 }
 .accounts__section .users__account__card .user__details__container .card__title {
   font-weight: 600;
@@ -9937,7 +9968,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .departments__section .td__content {
   padding: 9px 20px;
-  height: 50px;
+  min-height: 50px;
 }
 .departments__section .custom__table .department__admin__picture {
   height: 35px;
@@ -10115,7 +10146,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .branch__section .td__content {
   padding: 9px 20px;
-  height: 50px;
+  min-height: 50px;
 }
 .branch__section .custom__table .department__admin__picture {
   height: 35px;
@@ -10288,7 +10319,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .team__section .td__content {
   padding: 9px 20px;
-  height: 50px;
+  min-height: 50px;
 }
 .team__section .team__modal .modal__content {
   padding: 2rem 2.3rem;
@@ -10424,7 +10455,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .roles__permissions__section .roles__permissions__card .roles__permissions__type__card .custom__table .td__content {
   padding: 9px 20px;
-  height: 50px;
+  min-height: 50px;
 }
 .roles__permissions__section .roles__permissions__card .roles__permissions__type__card .role__permission {
   background-color: #3B4053;
@@ -10601,7 +10632,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .help__topics__section .td__content {
   padding: 9px 20px;
-  height: 50px;
+  min-height: 50px;
 }
 .help__topics__section .custom__table .department__admin__picture {
   height: 35px;
@@ -10776,7 +10807,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .sla__section .td__content {
   padding: 9px 20px;
-  height: 50px;
+  min-height: 50px;
 }
 .sla__section .sla__modal .modal__content {
   padding: 2rem 2.3rem;
@@ -10889,7 +10920,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .tags__section .td__content {
   padding: 9px 20px;
-  height: 50px;
+  min-height: 50px;
 }
 .tags__section .tag__modal .modal__content {
   padding: 2rem 2.3rem;
@@ -11002,7 +11033,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .ticket__statuses__section .td__content {
   padding: 9px 20px;
-  height: 50px;
+  min-height: 50px;
 }
 .ticket__statuses__section .status__modal .modal__content {
   padding: 2rem 2.3rem;
@@ -11148,7 +11179,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .directory__content .directory__card .directory__type__card .custom__table .td__content {
   padding: 9px 20px;
-  height: 50px;
+  min-height: 50px;
 }
 
 @media (max-width: 400px) {

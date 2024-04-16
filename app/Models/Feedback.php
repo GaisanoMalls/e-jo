@@ -25,7 +25,7 @@ class Feedback extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function ticket()
+    public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);
     }

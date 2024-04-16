@@ -33,6 +33,17 @@
                 </li>
                 @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
                     <li class="mb-1">
+                        <a href="{{ route('staff.feedbacks') }}"
+                            class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
+                            {{ Route::is('staff.feedbacks') ? 'sidebar__btn__active active' : '' }}">
+                            <div
+                                class="d-flex align-items-center justify-content-center sidebar__button__icon__container">
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            Feedbacks
+                        </a>
+                    </li>
+                    <li class="mb-1">
                         <a href="{{ route('staff.announcement.home') }}"
                             class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
                             {{ Route::is('staff.announcement.*') ? 'sidebar__btn__active active' : '' }}">

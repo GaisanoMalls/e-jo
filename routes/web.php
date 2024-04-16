@@ -7,6 +7,7 @@ use App\Http\Controllers\Staff\Approver\ApproverTicketsController;
 use App\Http\Controllers\Staff\Approver\NotificationController as ApproverNotificationController;
 use App\Http\Controllers\Staff\DashboardController;
 use App\Http\Controllers\Staff\DirectoryController;
+use App\Http\Controllers\Staff\FeedbackController as StaffFeedbackContoller;
 use App\Http\Controllers\Staff\ServiceDeptAdmin\AnnouncementController;
 use App\Http\Controllers\Staff\ServiceDeptAdmin\TicketClarificationController;
 use App\Http\Controllers\Staff\SysAdmin\AccountAgentController;
@@ -26,7 +27,7 @@ use App\Http\Controllers\Staff\SysAdmin\TicketStatusController;
 use App\Http\Controllers\Staff\TicketController as StaffTicketController;
 use App\Http\Controllers\User\AccountController as UserAccountSettingsController;
 use App\Http\Controllers\User\Dashboard as UserDashboardController;
-use App\Http\Controllers\User\FeedbackController;
+use App\Http\Controllers\User\FeedbackController as UserFeedbackController;
 use App\Http\Controllers\User\TicketsController as UserTicketsController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
@@ -67,6 +68,7 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
                 Route::get('/closed', 'closedTickets')->name('closed_tickets');
             });
         });
+        Route::get('/feedbacks', StaffFeedbackContoller::class)->name('feedbacks');
         Route::prefix('ticket')->name('ticket.')->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
                 Route::get('/{ticket}/view', 'viewTicket')->name('view_ticket');
@@ -241,7 +243,7 @@ Route::middleware(['auth', Role::requestersOnly()])->group(function () {
 // * Feedback Routes
 Route::middleware(['auth', Role::requestersOnly()])->group(function () {
     Route::prefix('feedback')->name('feedback.')->group(function () {
-        Route::controller(FeedbackController::class)->group(function () {
+        Route::controller(UserFeedbackController::class)->group(function () {
             Route::get('/', 'index')->name('index');
             Route::get('/to-rate', 'ticketsToRate')->name('to_rate');
             Route::get('/my-reviews', 'reviews')->name('reviews');

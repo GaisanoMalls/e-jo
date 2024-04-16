@@ -91,13 +91,15 @@
                                 </div>
                                 <img class="feedback__form__pic" src="{{ asset('images/feedback_form.jpg') }}"
                                     alt="">
-                                <div class="d-flex flex-column gap-1">
-                                    <a href="{{ route('user.ticket.view_ticket', $ticket) }}"
-                                        class="ticket__number text-center">{{ $ticketNumber }}</a>
-                                    <small class="text-uppercase text-center text-muted" style="font-size: 0.7rem;">
-                                        Ticket Number
-                                    </small>
-                                </div>
+                                @if ($ticket)
+                                    <div class="d-flex flex-column gap-1">
+                                        <a href="{{ route('user.ticket.view_ticket', $ticket) }}"
+                                            class="ticket__number text-center">{{ $ticketNumber }}</a>
+                                        <small class="text-uppercase text-center text-muted" style="font-size: 0.7rem;">
+                                            Ticket Number
+                                        </small>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-7">
