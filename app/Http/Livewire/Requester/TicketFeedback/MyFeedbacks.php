@@ -60,13 +60,12 @@ class MyFeedbacks extends Component
                 ['id', $this->feedbackId],
                 ['ticket_id', $this->ticket],
                 ['user_id', auth()->user()->id],
-            ])
-                ->update([
-                    'rating' => $this->rating,
-                    'had_issues_encountered' => $this->had_issues_encountered,
-                    'description' => $this->feedback,
-                    'suggestion' => $this->suggestion,
-                ]);
+            ])->update([
+                        'rating' => $this->rating,
+                        'had_issues_encountered' => $this->had_issues_encountered,
+                        'description' => $this->feedback,
+                        'suggestion' => $this->suggestion,
+                    ]);
 
             $this->resetExcept('userId');
             $this->dispatchBrowserEvent('close-edit-feedback-modal');

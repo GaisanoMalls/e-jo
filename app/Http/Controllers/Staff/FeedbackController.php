@@ -17,8 +17,7 @@ class FeedbackController extends Controller
                         $userQuery->withWhereHas('buDepartments', fn($department) => $department->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))
                             ->withWhereHas('branches', fn($branch) => $branch->where('branches.id', auth()->user()->branches->pluck('id')->toArray()));
                     });
-            })
-                ->get()
+            })->get()
         ]);
     }
 }

@@ -48,9 +48,6 @@
                                             <th class="border-0 table__head__label" style="padding: 17px 30px">
                                                 Date Created
                                             </th>
-                                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                                                Priority
-                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -144,7 +141,7 @@
                                                                         alt="">
                                                                 @else
                                                                     <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
-                                                                        style="background-color: #24695C;">
+                                                                        style="background-color: #196837;">
                                                                         {{ $feedback->ticket->agent->profile->getNameInitial() }}
                                                                     </div>
                                                                 @endif
@@ -170,14 +167,6 @@
                                                     <div class="d-flex text-start td__content">
                                                         <span>
                                                             {{ \Carbon\Carbon::parse($feedback->created_at)->format('M d, Y | g:i A') }}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td style="vertical-align: top;">
-                                                    <div class="d-flex text-start td__content">
-                                                        <span
-                                                            style="color: {{ $feedback->ticket->priorityLevel->color }};">
-                                                            {{ $feedback->ticket->priorityLevel->name }}
                                                         </span>
                                                     </div>
                                                 </td>
