@@ -21,7 +21,6 @@ class UpdateAgent extends Component
     public $teams = [];
     public $currentTeams = [];
     public $selectedTeams = [];
-    public $assignToPurchasingTeam = false;
     public $first_name;
     public $middle_name;
     public $last_name;
@@ -45,7 +44,6 @@ class UpdateAgent extends Component
         $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->teams = Team::withWhereHas('serviceDepartment', fn($query) => $query->where('service_departments.id', $this->service_department))->get();
         $this->currentTeams = $agent->teams->pluck('id')->toArray();
-        $this->assignToPurchasingTeam = $this->isAgentAssignedToPurchasingTeam();
     }
 
     public function rules()
@@ -110,12 +108,6 @@ class UpdateAgent extends Component
                         $this->suffix,
                     ])),
                 ]);
-
-                if ($this->assignToPurchasingTeam) {
-                    $this->agent->purchasingTeam()->create();
-                } else {
-                    $this->agent->purchasingTeam()->delete();
-                }
 
                 noty()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName()}.");
             });

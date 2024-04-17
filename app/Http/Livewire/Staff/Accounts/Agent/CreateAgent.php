@@ -9,6 +9,7 @@ use App\Http\Traits\Utils;
 use App\Models\Department;
 use App\Models\Profile;
 use App\Models\Role;
+use App\Models\Subteam;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
@@ -23,6 +24,7 @@ class CreateAgent extends Component
     public $BUDepartments = [];
     public $teams = [];
     public $selectedTeams = [];
+    public $subteams = [];
     public $first_name;
     public $middle_name;
     public $last_name;
@@ -31,6 +33,7 @@ class CreateAgent extends Component
     public $branch;
     public $bu_department;
     public $service_department;
+    public $hasSubteams = false;
 
     public function rules()
     {
@@ -50,6 +53,14 @@ class CreateAgent extends Component
         $this->teams = Team::withWhereHas('serviceDepartment', fn($query) => $query->where('service_departments.id', $this->service_department))->get();
         $this->dispatchBrowserEvent('get-teams-service-department', [
             'teams' => $this->teams,
+        ]);
+    }
+
+    public function updatedSelectedTeams()
+    {
+        $this->subteams = Subteam::withWhereHas('team', fn($team) => $team->whereIn('teams.id', array_map('intval', $this->selectedTeams)))->get();
+        $this->dispatchBrowserEvent('get-subteams', [
+            'subteams' => $this->subteams
         ]);
     }
 

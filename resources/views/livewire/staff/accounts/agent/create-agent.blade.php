@@ -173,6 +173,22 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div wire:ignore class="col-md-12" id="createAgentSubteamContainer">
+                                            <div class="mb-2">
+                                                <label class="form-label form__field__label">
+                                                    Sub-teams
+                                                </label>
+                                                <div>
+                                                    <div id="select-agent-subteam"></div>
+                                                </div>
+                                                @error('teams')
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-5 px-2 mt-3">
                                         <div
@@ -335,6 +351,44 @@
                     agentTeamSelect.disable();
                 }
             });
+        });
+
+        const agentSubteamSelect = document.querySelector('#select-agent-subteam')
+        const createAgentSubteamContainer = document.querySelector('#createAgentSubteamContainer');
+
+        createAgentSubteamContainer.style.display = 'none';
+
+        VirtualSelect.init({
+            ele: agentSubteamSelect,
+            multiple: true,
+            search: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            hasOptionDescription: true
+        });
+
+        window.addEventListener('get-subteams', (event) => {
+            const subteams = event.detail.subteams;
+            const subteamOption = [];
+
+            if (subteams.length > 0) {
+                createAgentSubteamContainer.style.display = 'block';
+
+                subteams.forEach(function(subteam) {
+                    subteamOption.push({
+                        label: subteam.name,
+                        value: subteamOption.id,
+                        description: subteam.team.name
+                    });
+                });
+
+                agentSubteamSelect.setOptions(subteamOption);
+
+            } else {
+                createAgentSubteamContainer.style.display = 'none';
+                agentSubteamSelect.reset();
+                agentSubteamSelect.setOptions([]);
+            }
         });
 
         agentServiceDepartmentSelect.addEventListener('reset', () => {

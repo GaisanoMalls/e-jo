@@ -106,6 +106,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Level::class, 'approver_level')->withPivot(['user_id', 'level_id']);
     }
 
+    public function subteams()
+    {
+        return $this->belongsToMany(Subteam::class, 'user_subteams', 'user_id', 'subteam_id');
+    }
+
     // For Agents Only
     public function teams(): BelongsToMany
     {

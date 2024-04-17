@@ -15,4 +15,11 @@ class Subteam extends Model
     {
         return $this->belongsTo(Team::class);
     }
+
+    public function agents()
+    {
+        return $this->belongsToMany(User::class, 'user_subteams', 'subteam_id', 'user_id')
+            ->role(Role::AGENT)
+            ->withTimestamps();
+    }
 }
