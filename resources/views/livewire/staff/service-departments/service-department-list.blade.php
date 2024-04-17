@@ -5,7 +5,7 @@
                 <thead>
                     <tr>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Dept. Children</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Sub-Service Dept.</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
                     </tr>
@@ -141,9 +141,10 @@
                             {{-- Newly added children --}}
                             @if (!empty($newlyAddedChildren))
                                 @foreach (collect($this->newlyAddedChildren) as $key => $newChild)
-                                    <div class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
+                                    <div wire:key="child-{{ $key }}"
+                                        class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
                                         style="height: 60px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 0;">
-                                        <div wire:key="{{ $key }}" class="position-relative">
+                                        <div class="position-relative">
                                             <input type="text" readonly value="{{ $newChild }}"
                                                 class="form-control position-relative pe-5 form__field"
                                                 style="width: 100%; margin-top: 11px; background-color: #f9fbfc;">
@@ -163,10 +164,11 @@
                             {{-- Current Children --}}
                             @if ($this->serviceDepartmentChildren()?->isNotEmpty())
                                 @foreach ($this->serviceDepartmentChildren() as $child)
-                                    <div class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
+                                    <div wire:key="child-{{ $child->id }}"
+                                        class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
                                         style="height: 60px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 0;">
                                         @if ($childEditId === $child->id)
-                                            <div class="position-relative">
+                                            <div wire:key="update-{{ $child->id }}" class="position-relative">
                                                 <input wire:model="childEditName" type="text"
                                                     class="form-control position-relative pe-5 form__field"
                                                     style="width: 100%; margin-top: 11px; {{ $childEditId === $child->id ? 'border: 1px solid #D32839;' : '' }}">
@@ -191,7 +193,7 @@
                                                 </div>
                                             </div>
                                         @else
-                                            <div wire:key="{{ $child->id }}" class="position-relative">
+                                            <div wire:key="edit-{{ $child->id }}" class="position-relative">
                                                 <input type="text" readonly value="{{ $child->name }}"
                                                     class="form-control position-relative pe-5 form__field"
                                                     style="width: 100%; margin-top: 11px;">

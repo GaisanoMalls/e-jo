@@ -11,7 +11,7 @@
                 </thead>
                 <tbody>
                     @foreach ($branches as $branch)
-                        <tr>
+                        <tr wire:key="branch-{{ $branch->id }}">
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
                                     <span>{{ $branch->name }}</span>

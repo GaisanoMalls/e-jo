@@ -5,9 +5,9 @@
                 <thead>
                     <tr>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Team</th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Subteams</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Sub-teams</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Subdepartment</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Sub-Service Dept.</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Branches</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
@@ -15,7 +15,7 @@
                 </thead>
                 <tbody>
                     @foreach ($teams as $team)
-                        <tr>
+                        <tr wire:key="team-{{ $team->id }}">
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
                                     <span>{{ $team->name }}</span>

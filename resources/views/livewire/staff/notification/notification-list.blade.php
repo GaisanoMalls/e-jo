@@ -1,6 +1,6 @@
 <div>
     @foreach ($userNotifications->sortByDesc('created_at') as $notification)
-        <div
+        <div wire:key="notification-{{ $notification->id }}"
             class="d-flex justify-content-between px-4 py-3 border-top notification__card {{ $notification->read() ? 'text-muted' : 'unread__border' }}">
             <div class="d-flex flex-column gap-1">
                 <h6 class="mb-0 notification__message {{ $notification->read() ? 'fw-normal' : '' }}">

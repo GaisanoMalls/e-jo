@@ -37,7 +37,7 @@
                     </thead>
                     <tbody>
                         @foreach ($agents as $agent)
-                            <tr>
+                            <tr wire:key="agent-{{ $agent->id }}">
                                 <td>
                                     <a href="{{ route('staff.manage.user_account.agent.view_details', $agent->id) }}">
                                         <div class="media d-flex align-items-center user__account__media">

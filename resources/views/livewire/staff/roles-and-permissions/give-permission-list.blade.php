@@ -15,7 +15,7 @@
                     </thead>
                     <tbody>
                         @foreach ($roles as $role)
-                            <tr>
+                            <tr wire:key="role-{{ $role->id }}">
                                 <td>
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ $role->name }}</span>

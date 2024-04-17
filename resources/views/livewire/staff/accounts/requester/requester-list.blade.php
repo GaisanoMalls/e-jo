@@ -31,7 +31,7 @@
                     </thead>
                     <tbody>
                         @foreach ($users as $user)
-                            <tr>
+                            <tr wire:key="user-{{ $user->id }}">
                                 <td>
                                     <a href="{{ route('staff.manage.user_account.user.view_details', $user->id) }}">
                                         <div class="media d-flex align-items-center user__account__media">

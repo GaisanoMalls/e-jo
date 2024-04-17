@@ -70,7 +70,7 @@
                                 @if (!empty($addedSubteam))
                                     @foreach ($this->addedSubteam as $key => $subteam)
                                         <div class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
-                                            style="height: 60px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 0;">
+                                            style="height: 60px; width: 88%; margin-left: 40px; margin-top: -25px;">
                                             <div wire:key="{{ $key }}" class="position-relative">
                                                 <input type="text" readonly value="{{ $subteam }}"
                                                     class="form-control position-relative pe-5 form__field"
@@ -90,7 +90,7 @@
                                 @endif
                             @endif
 
-                            <div class="mb-2" style="z-index: 2;">
+                            <div class="mb-2">
                                 <label for="department" class="form-label form__field__label">Service Department</label>
                                 <div>
                                     <div id="select-service-department" wire:ignore></div>
@@ -102,12 +102,11 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div wire:ignore
-                                class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
-                                style="height: 93px; width: 88%; margin-left: 40px; margin-top: -35px; z-index: 1;"
+                            <div wire:ignore class="ps-4 pe-0 pt-4 border-start border-bottom position-relative"
+                                style="height: 76px; width: 88%; margin-bottom: 1.7rem; margin-left: 40px; margin-top: -8px; border-bottom-left-radius: 10px;"
                                 id="selectServiceDeptChildrenContainer">
-                                <div class="d-flex mt-2 align-items-center justify-content-between gap-2">
-                                    <label for="childInput" class="form-label mt-1 form__field__label">
+                                <div class="d-flex align-items-center justify-content-between gap-2">
+                                    <label for="childInput" class="form-label form__field__label">
                                         Select subdepartment (optional)
                                     </label>
                                     @if (session()->has('childError'))

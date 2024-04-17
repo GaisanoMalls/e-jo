@@ -12,7 +12,7 @@
                 </thead>
                 <tbody>
                     @foreach ($tags as $tag)
-                        <tr wire:key="{{ $tag->id }}">
+                        <tr wire:key="tag-{{ $tag->id }}">
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
                                     <span>{{ $tag->name }}</span>

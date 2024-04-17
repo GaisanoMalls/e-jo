@@ -12,7 +12,7 @@
                 </thead>
                 <tbody>
                     @foreach ($serviceLevelAgreements as $sla)
-                        <tr>
+                        <tr wire:key="sla-{{ $sla->id }}">
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
                                     <span>{{ $sla->hours }}</span>

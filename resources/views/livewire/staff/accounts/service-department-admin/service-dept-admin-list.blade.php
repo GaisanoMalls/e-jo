@@ -35,7 +35,7 @@
                     </thead>
                     <tbody>
                         @foreach ($serviceDepartmentAdmins as $serviceDepartmentAdmin)
-                            <tr>
+                            <tr wire:key="dept-admin-{{ $serviceDepartmentAdmin->id }}">
                                 <td>
                                     <a
                                         href="{{ route('staff.manage.user_account.service_department_admin.view_details', $serviceDepartmentAdmin->id) }}">

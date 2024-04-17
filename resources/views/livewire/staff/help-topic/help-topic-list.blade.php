@@ -14,7 +14,7 @@
                 </thead>
                 <tbody>
                     @foreach ($helpTopics as $helpTopic)
-                        <tr>
+                        <tr wire:key="help-topic-{{ $helpTopic->id }}">
                             <td>
                                 <div
                                     class="d-flex gap-4 justify-content-between align-items-center text-start td__content">

@@ -11,7 +11,7 @@
                 </thead>
                 <tbody>
                     @foreach ($buDepartments as $department)
-                        <tr>
+                        <tr wire:key="department-{{ $department->id }}">
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
                                     <span>{{ $department->name }}</span>

@@ -29,7 +29,7 @@
                     </thead>
                     <tbody>
                         @foreach ($approvers as $approver)
-                            <tr>
+                            <tr wire:key="approver-{{ $approver->id }}">
                                 <td>
                                     <a
                                         href="{{ route('staff.manage.user_account.approver.view_details', $approver->id) }}">

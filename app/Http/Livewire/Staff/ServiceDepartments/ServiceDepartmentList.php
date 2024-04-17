@@ -162,9 +162,9 @@ class ServiceDepartmentList extends Component
 
     public function removeChild(int $child_key)
     {
-        foreach (array_keys($this->newlyAddedChildrenren) as $key) {
+        foreach (array_keys($this->newlyAddedChildren) as $key) {
             if ($child_key === $key) {
-                unset($this->newlyAddedChildrenren[$key]);
+                unset($this->newlyAddedChildren[$key]);
             }
         }
     }
