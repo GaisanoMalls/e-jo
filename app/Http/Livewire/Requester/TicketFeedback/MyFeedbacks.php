@@ -33,7 +33,6 @@ class MyFeedbacks extends Component
             'rating' => 'required|in:1,2,3,4,5',
             'had_issues_encountered' => 'required',
             'feedback' => 'required',
-            'suggestion' => 'required',
         ];
     }
 

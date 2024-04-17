@@ -5,11 +5,6 @@
     </div>
 
     <form wire:submit.prevent="login" novalidate>
-        @if (session()->has('error'))
-            <ul class='form__errors mb-2 text-center'>
-                <li>{{ session('error') }}</li>
-            </ul>
-        @endif
         <div class="my-2">
             <label class="form-label input__login__label" for="email">Email address</label>
             <input type="email" id="email"

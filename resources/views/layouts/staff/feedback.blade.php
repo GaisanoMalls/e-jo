@@ -119,6 +119,17 @@
                                                             <small class="text-wrap" style="font-size: 0.84rem;">
                                                                 {{ $feedback->description }}
                                                             </small>
+
+                                                            @if ($feedback->suggestion)
+                                                                <div class="d-flex flex-column mt-2 gap-1">
+                                                                    <span class="fw-normal"
+                                                                        style="font-size: 0.8rem; color: #8a92a1;">Suggestion</span>
+                                                                    <small class="text-wrap" style="font-size: 0.84rem;">
+                                                                        {{ $feedback->suggestion }}
+                                                                    </small>
+                                                                </div>
+                                                            @endif
+
                                                             @if ($feedback->had_issues_encountered == 'Yes')
                                                                 <div class="d-flex align-items-center rounded-2 justify-content-center gap-2"
                                                                     style="background-color: #e2e2e1; width: 11.3rem; padding: 2px 8px;">

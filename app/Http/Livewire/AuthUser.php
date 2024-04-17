@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Http\Requests\AuthRequest;
 use App\Http\Traits\AuthRedirect;
+use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,12 +17,22 @@ class AuthUser extends Component
 
     public function rules()
     {
-        return(new AuthRequest())->rules();
+        return (new AuthRequest())->rules();
     }
 
     public function messages()
     {
-        return(new AuthRequest())->messages();
+        return (new AuthRequest())->messages();
+    }
+
+    public function updatedEmail()
+    {
+        if (User::where('email', $this->email)->doesntExist()) {
+            $this->addError('email', 'Email not found.');
+            return;
+        }
+
+        $this->clearValidation('email');
     }
 
     public function login()
@@ -35,7 +46,7 @@ class AuthUser extends Component
         }
 
         $this->reset('password');
-        session()->flash('error', 'Invalid email or password. Please try again.');
+        $this->addError('password', 'Incorrect password for this email.');
     }
 
     public function render()
