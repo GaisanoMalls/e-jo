@@ -8,7 +8,6 @@ use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\Department;
 use App\Models\Profile;
-use App\Models\PurchasingTeam;
 use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
@@ -24,7 +23,6 @@ class CreateAgent extends Component
     public $BUDepartments = [];
     public $teams = [];
     public $selectedTeams = [];
-    public $assignToPurchasingTeam = false;
     public $first_name;
     public $middle_name;
     public $last_name;
@@ -73,12 +71,15 @@ class CreateAgent extends Component
                     'email' => $this->email,
                     'password' => Hash::make('agent'),
                 ]);
+
                 $agent->assignRole(Role::AGENT);
                 $agent->branches()->attach($this->branch);
+                $agent->teams()->attach($this->selectedTeams);
                 $agent->buDepartments()->attach($this->bu_department);
                 $agent->serviceDepartments()->attach($this->service_department);
 
                 $fullname = $this->first_name . $this->middle_name ?? "" . $this->last_name;
+
                 Profile::create([
                     'user_id' => $agent->id,
                     'first_name' => $this->first_name,
@@ -87,16 +88,6 @@ class CreateAgent extends Component
                     'suffix' => $this->suffix,
                     'slug' => $this->slugify($fullname),
                 ]);
-
-                if ($this->assignToPurchasingTeam) {
-                    if (PurchasingTeam::count() > 0) {
-                        noty()->addError('An agent is already assigned to the purchasing team.');
-                    } else {
-                        $agent->purchasingTeam()->create();
-                    }
-                }
-
-                $agent->teams()->attach($this->selectedTeams);
             });
 
             $this->actionOnSubmit();
@@ -104,12 +95,6 @@ class CreateAgent extends Component
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
-    }
-
-    public function hasAgentAssignedInPurchasingTeam()
-    {
-        return (PurchasingTeam::count() > 0)
-            && (PurchasingTeam::whereNotNull('agent_id')->exists());
     }
 
     public function cancel()

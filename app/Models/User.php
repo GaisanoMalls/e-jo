@@ -59,11 +59,6 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class);
     }
 
-    public function purchasingTeam()
-    {
-        return $this->hasOne(PurchasingTeam::class, 'agent_id', 'id');
-    }
-
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);

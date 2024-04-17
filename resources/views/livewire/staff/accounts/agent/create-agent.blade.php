@@ -173,17 +173,6 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        @if (!$this->hasAgentAssignedInPurchasingTeam())
-                                            <div class="col-12 mb-3 d-flex">
-                                                <input wire:model="assignToPurchasingTeam"
-                                                    class="form-check-input check__special__project" type="checkbox"
-                                                    role="switch" id="checkAsPurchasingTeam"
-                                                    wire:loading.attr="disabled">
-                                                <label class="form-check-label" for="checkAsPurchasingTeam">
-                                                    Assign to purchasing team
-                                                </label>
-                                            </div>
-                                        @endif
                                     </div>
                                     <div class="col-md-5 px-2 mt-3">
                                         <div

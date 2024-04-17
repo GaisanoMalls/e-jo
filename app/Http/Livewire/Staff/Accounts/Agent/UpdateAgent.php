@@ -6,7 +6,6 @@ use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\Department;
-use App\Models\PurchasingTeam;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
@@ -47,19 +46,6 @@ class UpdateAgent extends Component
         $this->teams = Team::withWhereHas('serviceDepartment', fn($query) => $query->where('service_departments.id', $this->service_department))->get();
         $this->currentTeams = $agent->teams->pluck('id')->toArray();
         $this->assignToPurchasingTeam = $this->isAgentAssignedToPurchasingTeam();
-    }
-
-    public function isAgentAssignedToPurchasingTeam()
-    {
-        return PurchasingTeam::whereNotNull('agent_id')
-            ->where('agent_id', $this->agent->id)
-            ->exists();
-    }
-
-    public function hasAgentAssignedInPurchasingTeam()
-    {
-        return (PurchasingTeam::count() > 0)
-            && (PurchasingTeam::whereNotNull('agent_id')->exists());
     }
 
     public function rules()

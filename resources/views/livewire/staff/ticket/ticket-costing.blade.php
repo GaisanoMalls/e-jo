@@ -268,7 +268,7 @@
                             <small class="text-muted text-sm costing__header__label">
                                 Purchasing
                             </small>
-                            @if (auth()->user()->hasRole(App\Models\Role::AGENT) && $this->currentAgentInPurchasingTeam())
+                            @if (auth()->user()->hasRole(App\Models\Role::AGENT) && $this->currentAgentAssignedInPurchasingTeam())
                                 <div class="btn-group">
                                     <button type="button"
                                         class="btn btn-sm d-flex align-items-center justify-content-center gap-2 px-2 py-1 rounded-2 dropdown-toggle btn__purchase"

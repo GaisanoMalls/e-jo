@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Enums\SpecialProjectStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
-use App\Models\PurchasingTeam;
 use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
@@ -262,9 +261,12 @@ class TicketCosting extends Component
         $this->dispatchBrowserEvent('close-purchase-dropdown-menu');
     }
 
-    public function currentAgentInPurchasingTeam()
+    public function currentAgentAssignedInPurchasingTeam()
     {
-        return PurchasingTeam::where('agent_id', auth()->user()->id)->exists();
+        return User::where('id', auth()->user()->id)
+            ->withWhereHas('roles', fn($role) => $role->where('roles.name', Role::AGENT))
+            ->withWhereHas('teams', fn($team) => $team->where('teams.name', 'Purchasing'))
+            ->exists();
     }
 
     public function render()

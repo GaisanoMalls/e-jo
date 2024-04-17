@@ -182,31 +182,6 @@
                                         @enderror
                                     </div>
                                 </div>
-                                @if ($this->isAgentAssignedToPurchasingTeam())
-                                    <div class="col-12 mb-3 d-flex">
-                                        <input wire:model="assignToPurchasingTeam"
-                                            class="form-check-input check__special__project" type="checkbox"
-                                            role="switch" id="checkAsPurchasingTeam" wire:loading.attr="disabled">
-                                        <label class="form-check-label" for="checkAsPurchasingTeam">
-                                            @if ($assignToPurchasingTeam)
-                                                Purchasing team
-                                            @else
-                                                Assign to purchasing team
-                                            @endif
-                                        </label>
-                                    </div>
-                                @endif
-
-                                @if (!$this->hasAgentAssignedInPurchasingTeam())
-                                    <div class="col-12 mb-3 d-flex">
-                                        <input wire:model="assignToPurchasingTeam"
-                                            class="form-check-input check__special__project" type="checkbox"
-                                            role="switch" id="checkAsPurchasingTeam" wire:loading.attr="disabled">
-                                        <label class="form-check-label" for="checkAsPurchasingTeam">
-                                            Assign to purchasing team
-                                        </label>
-                                    </div>
-                                @endif
                             </div>
                         </div>
                         <div class="col-12">

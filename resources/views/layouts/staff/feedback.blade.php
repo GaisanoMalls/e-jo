@@ -176,7 +176,7 @@
                                 </table>
                             @else
                                 <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                                    <small style="font-size: 14px;">No records for on bookmarked tickets.</small>
+                                    <small style="font-size: 14px;">Empty feedbacks</small>
                                 </div>
                             @endif
                         </div>
