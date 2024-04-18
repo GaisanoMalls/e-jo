@@ -9,7 +9,7 @@
             <label class="form-label input__login__label" for="email">Email address</label>
             <input type="email" id="email"
                 class="form-control login__input__field @error('email') is-invalid @enderror"
-                placeholder="Enter your email" wire:model="email">
+                placeholder="Enter your email" wire:model.debounce.600ms="email">
             @error('email')
                 <span class="text-danger custom__field__message">{{ $message }}</span>
             @enderror

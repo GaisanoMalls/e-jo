@@ -162,7 +162,6 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <input type="hidden" value="{{ $agent->team_id }}" id="agentCurrentTeamId">
                                         <label class="form-label form__field__label">
                                             Team
                                             @if ($teams)
@@ -175,6 +174,22 @@
                                             <div id="select-agent-team" wire:ignore></div>
                                         </div>
                                         @error('selectedTeams')
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label form__field__label">
+                                            Subteams
+                                        </label>
+                                        <div>
+                                            <div id="select-agent-subteam" wire:ignore></div>
+                                        </div>
+                                        @error('selectedSubteams')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -322,6 +337,27 @@
             markSearchResults: true,
         });
 
+        const agentSubteamOption = [
+            @foreach ($agentSubteams as $subteam)
+                {
+                    label: "{{ $subteam->name }}",
+                    value: "{{ $subteam->id }}",
+                    description: "{{ $subteam->team->name }}"
+                },
+            @endforeach
+        ];
+
+        const agentSubteamSelect = document.querySelector('#select-agent-subteam');
+        VirtualSelect.init({
+            ele: agentSubteamSelect,
+            options: agentSubteamOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            hasOptionDescription: true,
+        });
+
         const agentServiceDepartmentOption = [
             @foreach ($agentServiceDepartments as $serviceDepartment)
                 {
@@ -378,6 +414,36 @@
 
         agentTeamSelect.addEventListener('change', () => {
             @this.set('selectedTeams', agentTeamSelect.value);
+
+            window.addEventListener('get-subteams', (event) => {
+                const subteams = event.detail.subteams;
+                const subteamsOption = [];
+
+                if (subteams.length > 0) {
+                    subteams.forEach(function(subteam) {
+                        subteamsOption.push({
+                            label: subteam.name,
+                            value: subteam.id,
+                            description: subteam.team.name
+                        });
+                    });
+
+                    agentSubteamSelect.setOptions(subteamsOption);
+                    agentSubteamSelect.setValue(@json($currentSubteams));
+
+                } else {
+                    agentSubteamSelect.reset()
+                    agentSubteamSelect.setOptions()
+                }
+            });
+        });
+
+        agentSubteamSelect.addEventListener('change', () => {
+            @this.set('selectedSubteams', agentSubteamSelect.value);
+        });
+
+        agentTeamSelect.addEventListener('reset', () => {
+            agentSubteamSelect.reset();
         });
 
         agentServiceDepartmentSelect.addEventListener('reset', () => {

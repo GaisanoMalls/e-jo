@@ -189,7 +189,7 @@
             options: serviceDeptChildrenOption,
             search: true,
             markSearchResults: true,
-            selectedValue: @json($service_department_child->id)
+            selectedValue: @json($service_department_child?->id)
         });
 
         const teamOption = [

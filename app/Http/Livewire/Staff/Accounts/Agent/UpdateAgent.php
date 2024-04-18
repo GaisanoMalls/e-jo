@@ -6,6 +6,7 @@ use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\Department;
+use App\Models\Subteam;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
@@ -20,7 +21,10 @@ class UpdateAgent extends Component
     public $BUDepartments = [];
     public $teams = [];
     public $currentTeams = [];
+    public $currentSubteams = [];
     public $selectedTeams = [];
+    public $selectedSubteams = [];
+    public $subteams = [];
     public $first_name;
     public $middle_name;
     public $last_name;
@@ -43,7 +47,9 @@ class UpdateAgent extends Component
         $this->service_department = $agent->serviceDepartments->pluck('id');
         $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->teams = Team::withWhereHas('serviceDepartment', fn($query) => $query->where('service_departments.id', $this->service_department))->get();
+        $this->subteams = Subteam::withWhereHas('team', fn($query) => $query->whereIn('teams.id', $this->teams->pluck('id')->toArray()))->get();
         $this->currentTeams = $agent->teams->pluck('id')->toArray();
+        $this->currentSubteams = $agent->subteams->pluck('id')->toArray();
     }
 
     public function rules()
@@ -84,6 +90,14 @@ class UpdateAgent extends Component
         ]);
     }
 
+    public function updatedSelectedTeams()
+    {
+        $this->subteams = Subteam::withWhereHas('team', fn($query) => $query->whereIn('teams.id', $this->selectedTeams))->get();
+        $this->dispatchBrowserEvent('get-subteams', [
+            'subteams' => $this->subteams
+        ]);
+    }
+
     public function updateAgentAccount()
     {
         $this->validate();
@@ -95,6 +109,7 @@ class UpdateAgent extends Component
                 $this->agent->teams()->sync($this->selectedTeams);
                 $this->agent->buDepartments()->sync($this->bu_department);
                 $this->agent->serviceDepartments()->sync($this->service_department);
+                $this->agent->subteams()->sync(array_map('intval', $this->selectedSubteams));
 
                 $this->agent->profile()->update([
                     'first_name' => $this->first_name,
@@ -125,6 +140,7 @@ class UpdateAgent extends Component
             'agentServiceDepartments' => $this->queryServiceDepartments(),
             'agentBUDepartments' => $this->BUDepartments,
             'agentTeams' => $this->teams,
+            'agentSubteams' => $this->subteams
         ]);
     }
 }

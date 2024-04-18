@@ -372,17 +372,21 @@
             const subteamOption = [];
 
             if (subteams.length > 0) {
-                createAgentSubteamContainer.style.display = 'block';
 
                 subteams.forEach(function(subteam) {
                     subteamOption.push({
                         label: subteam.name,
-                        value: subteamOption.id,
+                        value: subteam.id,
                         description: subteam.team.name
                     });
                 });
 
+                createAgentSubteamContainer.style.display = 'block';
                 agentSubteamSelect.setOptions(subteamOption);
+
+                agentSubteamSelect.addEventListener('change', () => {
+                    @this.set('selectedSubteams', agentSubteamSelect.value);
+                });
 
             } else {
                 createAgentSubteamContainer.style.display = 'none';

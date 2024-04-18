@@ -19,7 +19,10 @@
                                 BU/Department
                             </th>
                             <th class="border-0 table__head__label" style="padding: 17px 30px;">
-                                Team
+                                Teams
+                            </th>
+                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                                Sub-teams
                             </th>
                             <th class="border-0 table__head__label" style="padding: 17px 30px;">
                                 Status
@@ -76,6 +79,11 @@
                                 <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>{{ Str::limit($agent->getTeams(), 30) }}</span>
+                                    </div>
+                                </td>
+                                <td style="padding: 17px 30px;">
+                                    <div class="d-flex align-items-center text-start td__content">
+                                        <span>{{ Str::limit($agent->getSubteams(), 30) }}</span>
                                     </div>
                                 </td>
                                 <td style="padding: 17px 30px;">

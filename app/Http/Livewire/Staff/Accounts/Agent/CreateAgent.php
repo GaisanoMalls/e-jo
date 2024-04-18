@@ -25,6 +25,7 @@ class CreateAgent extends Component
     public $teams = [];
     public $selectedTeams = [];
     public $subteams = [];
+    public $selectedSubteams = [];
     public $first_name;
     public $middle_name;
     public $last_name;
@@ -88,6 +89,7 @@ class CreateAgent extends Component
                 $agent->teams()->attach($this->selectedTeams);
                 $agent->buDepartments()->attach($this->bu_department);
                 $agent->serviceDepartments()->attach($this->service_department);
+                $agent->subteams()->attach(array_map('intval', $this->selectedSubteams));
 
                 $fullname = $this->first_name . $this->middle_name ?? "" . $this->last_name;
 

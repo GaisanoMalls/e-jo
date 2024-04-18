@@ -243,6 +243,21 @@ class User extends Authenticatable
         return '';
     }
 
+    public function getSubteams(): string
+    {
+        $subteams = [];
+
+        foreach ($this->subteams as $subteam) {
+            $subteams[] = $subteam->name;
+        }
+
+        if (!empty($subteams)) {
+            return implode(', ', $subteams);
+        }
+
+        return '';
+    }
+
     // Get the branches assiged to approver.
     public function getBranches(): string
     {

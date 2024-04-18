@@ -9254,22 +9254,22 @@ input[type=checkbox]:checked + .form-check-label {
   border: 0 !important;
 }
 .settings__content .settings__tab__container .ul__tab {
-  gap: 2rem;
+  gap: 2.4rem;
 }
 .settings__content .settings__tab__container .ul__tab::-webkit-scrollbar {
   display: none;
 }
 .settings__content .card__settings {
   padding: 0.7rem 0;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .settings__content .card__settings .settings__tab__button {
   margin-top: 15px;
   padding: 0.5rem 0 1.2rem 0;
-  font-size: 0.813rem;
+  font-size: 0.875rem;
   border-radius: 0 !important;
   white-space: nowrap;
-  color: #1f2937 !important;
+  color: #6b7280 !important;
   font-weight: 500;
 }
 .settings__content .card__settings .settings__tab__button i {

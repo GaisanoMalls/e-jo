@@ -69,7 +69,6 @@ class TicketCosting extends Component
                         $costingPRFile = new TicketCostingPRFile();
                         $costingPRFile->file_attachment = $fileAttachment;
                         $costingPRFile->ticket_costing_id = $this->ticket->ticketCosting->id;
-
                         $this->ticket->ticketCosting->prFileAttachments()->save($costingPRFile);
 
                         $this->actionOnSubmit();
@@ -77,10 +76,10 @@ class TicketCosting extends Component
                 } else {
                     $this->addError('costingPRFiles', 'PR file is required');
                 }
+
             } else {
                 noty()->addError('Adding of attachments is restricted.');
             }
-
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }

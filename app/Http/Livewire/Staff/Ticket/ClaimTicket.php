@@ -45,14 +45,15 @@ class ClaimTicket extends Component
                         ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', $this->ticket->teams->pluck('id')->toArray()))
                         ->first();
 
-                    if (is_null($agent)) {
-                        if ($this->ticket->teams()->count() === 0) {
-                            noty()->addWarning("Unable to claim this ticket. Please wait for the service dept admin to assign this ticket directly to you or to your team.");
-                        } else {
-                            noty()->addWarning("Unable to claim this ticket since you're not part of these teams: {$this->ticket->getTeams()}");
-                        }
-                        return;
-                    }
+                    // Pratially disabled
+                    // if (is_null($agent)) {
+                    //     if ($this->ticket->teams()->count() === 0) {
+                    //         noty()->addWarning("Unable to claim this ticket. Please wait for the service dept admin to assign this ticket directly to you or to your team.");
+                    //     } else {
+                    //         noty()->addWarning("Unable to claim this ticket since you're not part of these teams: {$this->ticket->getTeams()}");
+                    //     }
+                    //     return;
+                    // }
                 }
 
                 $this->ticket->update([
