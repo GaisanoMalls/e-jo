@@ -690,8 +690,6 @@ a {
         -ms-flex-align: center;
         align-items: center;
         background-color: #fff;
-        -webkit-box-shadow: 0 0 20px rgb(25 124 207 / 8%);
-        box-shadow: 0 0 20px rgb(25 124 207 / 8%);
         border-bottom: 1px solid #e6edef;
         padding: 0.8rem 0 0.8rem 0;
     }
@@ -1894,7 +1892,7 @@ a {
         position: sticky;
         background-color: $white;
         border-radius: $border-radius-8;
-        box-shadow: rgba(33, 35, 38, 0.1) 0px 7px 7px -7px;
+        // box-shadow: rgba(33, 35, 38, 0.1) 0px 7px 7px -7px;
         z-index: 4;
 
         .ticket__details__topbuttons__label {
@@ -2443,7 +2441,7 @@ input[type="checkbox"] {
         border: 0 !important;
 
         .ul__tab {
-            gap: 2.4rem;
+            gap: 1rem;
 
             &::-webkit-scrollbar {
                 display: none;
@@ -2457,7 +2455,7 @@ input[type="checkbox"] {
 
         .settings__tab__button {
             margin-top: 15px;
-            padding: 0.5rem 0 1.2rem 0;
+            padding: 0.5rem 0 0.5rem 0;
             font-size: $fs-14;
             border-radius: 0 !important;
             white-space: nowrap;
@@ -2478,10 +2476,6 @@ input[type="checkbox"] {
 
             &:hover {
                 color: $white;
-            }
-
-            .settings__icon__active__tab {
-                color: #5b5943;
             }
         }
 

@@ -7807,7 +7807,6 @@ a:hover {
   display: flex;
   align-items: center;
   background-color: #fff;
-  box-shadow: 0 0 20px rgba(25, 124, 207, 0.08);
   border-bottom: 1px solid #e6edef;
   padding: 0.8rem 0 0.8rem 0;
 }
@@ -8769,7 +8768,6 @@ a:hover {
   position: sticky;
   background-color: #ffffff;
   border-radius: 0.5rem;
-  box-shadow: rgba(33, 35, 38, 0.1) 0px 7px 7px -7px;
   z-index: 4;
 }
 .ticket__section .ticket__details__top .ticket__details__topbuttons__label {
@@ -9254,7 +9252,7 @@ input[type=checkbox]:checked + .form-check-label {
   border: 0 !important;
 }
 .settings__content .settings__tab__container .ul__tab {
-  gap: 2.4rem;
+  gap: 1rem;
 }
 .settings__content .settings__tab__container .ul__tab::-webkit-scrollbar {
   display: none;
@@ -9265,7 +9263,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .settings__content .card__settings .settings__tab__button {
   margin-top: 15px;
-  padding: 0.5rem 0 1.2rem 0;
+  padding: 0.5rem 0 0.5rem 0;
   font-size: 0.875rem;
   border-radius: 0 !important;
   white-space: nowrap;
@@ -9284,9 +9282,6 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .settings__content .card__settings .settings__active__tab:hover {
   color: #ffffff;
-}
-.settings__content .card__settings .settings__active__tab .settings__icon__active__tab {
-  color: #5b5943;
 }
 .settings__content .card__settings .settings__menu__button__group {
   position: absolute;

@@ -205,7 +205,7 @@
                                                         style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
                                                         <i class="bi bi-pencil"></i>
                                                     </button>
-                                                    <button wire:click="deleteChild({{ $child }})"
+                                                    <button wire:click="deleteChild({{ $child->id }})"
                                                         type="button"
                                                         class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
                                                         style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">

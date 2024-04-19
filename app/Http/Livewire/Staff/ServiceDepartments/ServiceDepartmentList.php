@@ -7,6 +7,7 @@ use App\Http\Traits\BasicModelQueries;
 use App\Models\ServiceDepartment;
 use App\Models\ServiceDepartmentChildren;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
 

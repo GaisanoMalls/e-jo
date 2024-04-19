@@ -266,7 +266,7 @@
                         @endif
                         <div class="d-flex flex-column justify-content-between gap-2 position-relative">
                             <small class="text-muted text-sm costing__header__label">
-                                Item Availability Status"
+                                Item Availability Status
                             </small>
                             @if (auth()->user()->hasRole(App\Models\Role::AGENT) && $this->currentAgentAssignedInPurchasingTeam())
                                 <div class="btn-group">
