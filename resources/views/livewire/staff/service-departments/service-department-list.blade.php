@@ -174,14 +174,14 @@
                                                     style="width: 100%; margin-top: 11px; {{ $childEditId === $child->id ? 'border: 1px solid #D32839;' : '' }}">
                                                 <div class="d-flex align-items-center gap-1 bg-white rounded-4 p-1 position-absolute"
                                                     style="right: -0.5rem; top: -0.5rem;">
-                                                    <button wire:click="updateChild({{ $child }})"
+                                                    <button wire:click="updateChild({{ $child->id }})"
                                                         type="button"
                                                         class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
                                                         style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
                                                         <i wire:loading.remove
                                                             wire:target="updateChild({{ $child }})"
                                                             class="bi bi-check-lg"></i>
-                                                        <i wire:loading wire:target="updateChild({{ $child }})"
+                                                        <i wire:loading wire:target="updateChild({{ $child->id }})"
                                                             class='bx bx-loader-alt bx-spin'></i>
                                                     </button>
                                                     <button wire:click="cancelEditChild({{ $child }})"
@@ -199,7 +199,7 @@
                                                     style="width: 100%; margin-top: 11px;">
                                                 <div class="d-flex align-items-center gap-1 bg-white rounded-4 p-1 position-absolute"
                                                     style="right: -0.5rem; top: -0.5rem;">
-                                                    <button wire:click="editChild({{ $child }})"
+                                                    <button wire:click="editChild({{ $child->id }})"
                                                         type="button"
                                                         class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
                                                         style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">

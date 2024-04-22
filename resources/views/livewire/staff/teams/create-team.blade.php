@@ -102,23 +102,23 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div wire:ignore class="ps-4 pe-0 pt-4 border-start border-bottom position-relative"
+                            <div class="ps-4 pe-0 pt-4 border-start border-bottom position-relative"
                                 style="height: 76px; width: 88%; margin-bottom: 1.7rem; margin-left: 40px; margin-top: -8px; border-bottom-left-radius: 10px;"
                                 id="selectServiceDeptChildrenContainer">
                                 <div class="d-flex align-items-center justify-content-between gap-2">
                                     <label for="childInput" class="form-label form__field__label">
-                                        Select subdepartment (optional)
+                                        Select Sub-Service Department
                                     </label>
-                                    @if (session()->has('childError'))
+                                    @error('selectedChild')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ session('childError') }}
+                                            {{ $message }}
                                         </span>
-                                    @endif
+                                    @enderror
                                 </div>
                                 <div class="position-relative">
                                     <div>
-                                        <div id="select-service-department-child-select"></div>
+                                        <div id="select-service-department-child-select" wire:ignore></div>
                                     </div>
                                 </div>
                             </div>
@@ -203,6 +203,7 @@
                     window.addEventListener('load-service-department-children', (event) => {
                         const children = event.detail.serviceDeptChildren
                         const childrenOption = [];
+                        console.log(children);
 
                         if (children.length > 0) {
                             selectServiceDeptChildrenContainer.style.display = 'block';

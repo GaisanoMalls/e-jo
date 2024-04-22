@@ -28,6 +28,8 @@ class TeamList extends Component
     public $editSelectedServiceDepartment;
     public $name;
     public $subteam;
+    public $subteamEditId;
+    public $subteamEditName;
     public $hasSubteam = false;
 
     protected $listeners = ['loadTeams' => 'fetchTeams'];
@@ -79,7 +81,7 @@ class TeamList extends Component
         $this->dispatchBrowserEvent('edit-current-branches', ['branchIds' => $this->editSelectedBranches]);
 
         // Call the function to update child options and selection
-        $this->updateServiceDeptChild($this->serviceDepartmentChildren, $this->currentTeamServiceDeptChild);
+        // $this->updateServiceDeptChild($this->serviceDepartmentChildren, $this->currentTeamServiceDeptChild);
     }
 
     public function isCurrentTeamHasSubteams()
@@ -94,10 +96,10 @@ class TeamList extends Component
 
     public function updatedEditSelectedServiceDepartment()
     {
-        $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->editSelectedServiceDepartment)->get(['id', 'name'])->toArray();
-
-        // Call the function to update child options and selection
-        $this->updateServiceDeptChild($this->serviceDepartmentChildren, []);
+        $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->editSelectedServiceDepartment)->get()->toArray();
+        $this->dispatchBrowserEvent('edit-current-service-department-children', [
+            'serviceDepartmentChildren' => $this->serviceDepartmentChildren,
+        ]);
     }
 
     public function updateServiceDeptChild($serviceDepartmentChildren, $currentTeamServiceDeptChild)
@@ -211,6 +213,36 @@ class TeamList extends Component
             $this->dispatchBrowserEvent('close-modal');
             noty()->addSuccess('Team successfully deleted');
 
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+        }
+    }
+
+
+    public function editSubteam(Subteam $subteam)
+    {
+        try {
+            $this->subteamEditId = $subteam->id;
+            $this->subteamEditName = $subteam->name;
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+        }
+    }
+
+    public function cancelEditSubteam(Subteam $subteam)
+    {
+        if ($this->subteamEditId === $subteam->id) {
+            $this->subteamEditId = null;
+            $this->subteamEditName = '';
+        }
+    }
+
+    public function updateSubteam(Subteam $subteam)
+    {
+        try {
+            $subteam->update(['name' => $this->subteamEditName]);
+            $this->subteamEditId = null;
+            $this->subteamEditName = '';
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }

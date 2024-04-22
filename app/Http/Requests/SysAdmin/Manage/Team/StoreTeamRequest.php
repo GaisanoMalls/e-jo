@@ -38,6 +38,7 @@ class StoreTeamRequest extends FormRequest
             ],
             'selectedServiceDepartment' => ['required'],
             'selectedBranches' => ['required'],
+            'selectedChild' => ['required'],
         ];
     }
 
@@ -45,7 +46,8 @@ class StoreTeamRequest extends FormRequest
     {
         return [
             'selectedServiceDepartment.required' => 'The service department field is required.',
-            'selectedBranches.required' => 'The branch field is required.'
+            'selectedBranches.required' => 'The branch field is required.',
+            'selectedChild.required' => 'The sub-service department field is required.'
         ];
     }
 }

@@ -184,24 +184,24 @@
                                     <div wire:key="subteam-{{ $subteam->id }}"
                                         class="ps-4 pe-0 pt-4 mb-4 border-start border-bottom rounded-3 position-relative"
                                         style="height: 60px; width: 88%; margin-left: 40px; margin-top: -25px; z-index: 0;">
-                                        {{-- @if ($subteamEditId === $subteam->id)
+                                        @if ($subteamEditId === $subteam->id)
                                             <div wire:key="update-{{ $subteam->id }}" class="position-relative">
-                                                <input wire:model="childEditName" type="text"
+                                                <input wire:model="subteamEditName" type="text"
                                                     class="form-control position-relative pe-5 form__field"
                                                     style="width: 100%; margin-top: 11px; {{ $subteamEditId === $subteam->id ? 'border: 1px solid #D32839;' : '' }}">
                                                 <div class="d-flex align-items-center gap-1 bg-white rounded-4 p-1 position-absolute"
                                                     style="right: -0.5rem; top: -0.5rem;">
-                                                    <button wire:click="updateChild({{ $subteam }})"
+                                                    <button wire:click="updateSubteam({{ $subteam->id }})"
                                                         type="button"
                                                         class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
                                                         style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
                                                         <i wire:loading.remove
-                                                            wire:target="updateChild({{ $subteam }})"
+                                                            wire:target="updateSubteam({{ $subteam->id }})"
                                                             class="bi bi-check-lg"></i>
-                                                        <i wire:loading wire:target="updateChild({{ $subteam }})"
+                                                        <i wire:loading wire:target="updateChild({{ $subteam->id }})"
                                                             class='bx bx-loader-alt bx-spin'></i>
                                                     </button>
-                                                    <button wire:click="cancelEditChild({{ $subteam }})"
+                                                    <button wire:click="cancelEditSubteam({{ $subteam->id }})"
                                                         type="button"
                                                         class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
                                                         style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
@@ -209,27 +209,28 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                        @else --}}
-                                        <div wire:key="edit-{{ $subteam->id }}" class="position-relative">
-                                            <input type="text" readonly value="{{ $subteam->name }}"
-                                                class="form-control position-relative pe-5 form__field"
-                                                style="width: 100%; margin-top: 11px;">
-                                            <div class="d-flex align-items-center gap-1 bg-white rounded-4 p-1 position-absolute"
-                                                style="right: -0.5rem; top: -0.5rem;">
-                                                <button wire:click="editChild({{ $subteam }})" type="button"
-                                                    class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
-                                                    style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
-                                                    <i class="bi bi-pencil"></i>
-                                                </button>
-                                                <button wire:click="deleteSubteam({{ $subteam->id }})"
-                                                    type="button"
-                                                    class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
-                                                    style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
+                                        @else
+                                            <div wire:key="edit-{{ $subteam->id }}" class="position-relative">
+                                                <input type="text" readonly value="{{ $subteam->name }}"
+                                                    class="form-control position-relative pe-5 form__field"
+                                                    style="width: 100%; margin-top: 11px;">
+                                                <div class="d-flex align-items-center gap-1 bg-white rounded-4 p-1 position-absolute"
+                                                    style="right: -0.5rem; top: -0.5rem;">
+                                                    <button wire:click="editSubteam({{ $subteam->id }})"
+                                                        type="button"
+                                                        class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
+                                                        style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button wire:click="deleteSubteam({{ $subteam->id }})"
+                                                        type="button"
+                                                        class="btn btn-sm d-flex align-items-center p-2 justify-content-center outline-none rounded-circle"
+                                                        style="height: 27px; width: 27px; font-size: 0.75rem; color: #d32839; background-color: #F5F7F9; border: 1px solid #e7e9eb;">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                        {{-- @endif --}}
+                                        @endif
                                     </div>
                                 @endforeach
                             @endif
@@ -251,7 +252,7 @@
                                 id="editSelectServiceDeptChildrenContainer">
                                 <div class="d-flex align-items-center justify-content-between gap-2">
                                     <label for="childInput" class="form-label form__field__label">
-                                        Select subdepartment (optional)
+                                        Select Sub-Service Department
                                     </label>
                                     @if (session()->has('childError'))
                                         <span class="error__message">
@@ -407,7 +408,9 @@
             }
         });
 
-        function updateServiceDeptChildren(serviceDepartmentChildren, currentTeamServiceDeptChildren) {
+        window.addEventListener('edit-current-service-department-children', (event) => {
+            const serviceDepartmentChildren = event.detail.serviceDepartmentChildren;
+            const currentTeamServiceDeptChildren = event.detail.currentTeamServiceDeptChildren;
             const editServiceDeptChildrenOption = [];
 
             if (serviceDepartmentChildren.length > 0) {
@@ -426,18 +429,11 @@
                 editServiceDepartmentChildSelect.addEventListener('change', () => {
                     @this.set('selectedServiceDeptChild', editServiceDepartmentChildSelect.value);
                 });
+
             } else {
                 // If no children, hide the child select
                 editSelectServiceDeptChildrenContainer.style.display = 'none';
             }
-        }
-
-        window.addEventListener('edit-current-service-department-children', (event) => {
-            const serviceDepartmentChildren = event.detail.serviceDepartmentChildren;
-            const currentTeamServiceDeptChildren = event.detail.currentTeamServiceDeptChildren;
-
-            // Update child options and selection
-            updateServiceDeptChildren(serviceDepartmentChildren, currentTeamServiceDeptChildren);
         });
 
 
