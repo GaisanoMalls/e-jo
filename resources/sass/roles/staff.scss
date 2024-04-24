@@ -56,7 +56,7 @@ $border-radius-8: 0.5rem;
 $border-radius-50: 3.125rem;
 $border-radius-50-percent: 3.125rem;
 $black-color: black;
-$body-color: #f5f7f9;
+$body-color: #f3f4f6;
 $white: #ffffff;
 $link-font-color: #24695c;
 $link-font-hover-color: #123831;
@@ -3685,9 +3685,9 @@ input[type="checkbox"] {
             }
 
             .role__permission {
-                background-color: #3B4053;
-                color: $white;
-                font-size: $fs-11;
+                background-color: #f5f0f0;
+                color: #5b5943;
+                font-size: 0.75rem;
 
                 .remove__permission__icon {
                     &:hover {

@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             ServiceLevelAgreementSeeder::class,
             PermissionModuleSeeder::class,
             PermissionActionSeeder::class,
+            PermissionSeeder::class,
         ]);
     }
 }

@@ -67,7 +67,7 @@ input:not(:focus)::placeholder {
 }
 
 .login__card {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,7 +100,7 @@ input:not(:focus)::placeholder {
 .login__form__container {
   padding: 40px;
   width: 470px;
-  background-color: #fff;
+  background-color: #ffffff;
   justify-content: center;
   margin-left: auto;
   margin-right: auto;

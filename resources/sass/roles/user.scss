@@ -27,7 +27,7 @@ $box-shadow-global: 0 20px 27px 0 rgb(0 0 0 / 5%);
 $button-box-shadow: 0 0.25rem 0.375rem -0.0625rem rgb(20 20 20 / 12%),
     0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
 $shadows-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-$body-color: #f5f7f9;
+$body-color: #f3f4f6;
 $white: #ffffff;
 $color-1: #d32839;
 
@@ -1555,11 +1555,11 @@ body {
 }
 
 .btn__cancel__logout {
-    background-color: #f5f7f9;
+    background-color: #f3f4f6;
     color: black;
 
     &:hover {
-        background-color: #f5f7f9;
+        background-color: #f3f4f6;
     }
 }
 
@@ -1631,7 +1631,7 @@ body {
             @include button;
 
             &.btn__close__ticket__modal {
-                background-color: #f5f7f9 !important;
+                background-color: #f3f4f6 !important;
                 color: black;
             }
         }

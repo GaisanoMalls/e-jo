@@ -20,8 +20,8 @@ class TeamList extends Component
     public $currentSubteams = [];
     public $addedSubteams = [];
     public $editSelectedBranches = [];
-    public $currentTeamServiceDeptChild;
     public $serviceDepartmentChildren = [];
+    public $currentServiceDeptChild;
     public $selectedServiceDeptChild;
     public $teamEditId;
     public $teamDeleteId;
@@ -69,7 +69,7 @@ class TeamList extends Component
         $this->teamEditId = $team->id;
         $this->name = $team->name;
         $this->editSelectedServiceDepartment = $team->service_department_id;
-        $this->currentTeamServiceDeptChild = $team->service_dept_child_id;
+        $this->currentServiceDeptChild = $team->service_dept_child_id;
         $this->editSelectedBranches = $team->branches->pluck('id')->toArray();
         $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->editSelectedServiceDepartment)->get(['id', 'name'])->toArray();
         $this->isCurrentTeamHasSubteams();
@@ -79,9 +79,6 @@ class TeamList extends Component
         $this->dispatchBrowserEvent('show-edit-team-modal');
         $this->dispatchBrowserEvent('edit-current-service-department', ['serviceDepartmentId' => $this->editSelectedServiceDepartment]);
         $this->dispatchBrowserEvent('edit-current-branches', ['branchIds' => $this->editSelectedBranches]);
-
-        // Call the function to update child options and selection
-        // $this->updateServiceDeptChild($this->serviceDepartmentChildren, $this->currentTeamServiceDeptChild);
     }
 
     public function isCurrentTeamHasSubteams()
@@ -99,14 +96,7 @@ class TeamList extends Component
         $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->editSelectedServiceDepartment)->get()->toArray();
         $this->dispatchBrowserEvent('edit-current-service-department-children', [
             'serviceDepartmentChildren' => $this->serviceDepartmentChildren,
-        ]);
-    }
-
-    public function updateServiceDeptChild($serviceDepartmentChildren, $currentTeamServiceDeptChild)
-    {
-        $this->dispatchBrowserEvent('edit-current-service-department-children', [
-            'currentTeamServiceDeptChild' => $currentTeamServiceDeptChild,
-            'serviceDepartmentChildren' => $serviceDepartmentChildren,
+            'currentServiceDeptChild' => $this->currentServiceDeptChild
         ]);
     }
 
@@ -159,39 +149,45 @@ class TeamList extends Component
         $this->validate();
 
         try {
+            if (!empty($this->serviceDepartmentChildren) && empty($this->selectedServiceDeptChild)) {
+                $this->addError('selectedServiceDeptChild', 'The sub-service department field is required.');
+                return;
+            }
+
             if (!empty($this->name) && !empty($this->subteam)) {
                 $this->addError('subteam', 'Please add the subteam');
-            } else {
-                $team = Team::findOrFail($this->teamEditId);
-                $subteamUpdated = false; // Flag to track if subteam have been updated
-
-                collect($this->addedSubteams)->each(function ($subteam) use ($team, &$subteamUpdated) {
-                    if ($team->subteams()->where('name', $subteam)->doesntExist()) {
-                        $team->subteams()->create(['name' => $subteam]);
-                        $subteamUpdated = true; // Set flag to true since a subteam has been added
-                    }
-                });
-
-                if ($subteamUpdated) {
-                    noty()->addSuccess('A new subteam have been added');
-                    $this->addedSubteams = [];
-                }
-
-                if ($team) {
-                    DB::transaction(function () use ($team) {
-                        $team->update([
-                            'name' => $this->name,
-                            'service_department_id' => $this->editSelectedServiceDepartment,
-                            'service_dept_child_id' => $this->selectedServiceDeptChild ?: null,
-                            'slug' => Str::slug($this->name),
-                        ]);
-
-                        $team->branches()->sync(array_map('intval', $this->editSelectedBranches));
-                    });
-                }
-
-                $this->actionOnSubmit();
+                return;
             }
+
+            $team = Team::findOrFail($this->teamEditId);
+            $subteamUpdated = false; // Flag to track if subteam have been updated
+
+            collect($this->addedSubteams)->each(function ($subteam) use ($team, &$subteamUpdated) {
+                if ($team->subteams()->where('name', $subteam)->doesntExist()) {
+                    $team->subteams()->create(['name' => $subteam]);
+                    $subteamUpdated = true; // Set flag to true since a subteam has been added
+                }
+            });
+
+            if ($subteamUpdated) {
+                noty()->addSuccess('A new subteam have been added');
+                $this->addedSubteams = [];
+            }
+
+            if ($team) {
+                DB::transaction(function () use ($team) {
+                    $team->update([
+                        'name' => $this->name,
+                        'service_department_id' => $this->editSelectedServiceDepartment,
+                        'service_dept_child_id' => $this->selectedServiceDeptChild ?: null,
+                        'slug' => Str::slug($this->name),
+                    ]);
+
+                    $team->branches()->sync(array_map('intval', $this->editSelectedBranches));
+                });
+            }
+
+            $this->actionOnSubmit();
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

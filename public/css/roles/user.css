@@ -7469,7 +7469,7 @@ input:not(:focus)::placeholder {
 }
 
 body {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
 }
 
 .navbar .company__logo {
@@ -7743,7 +7743,7 @@ body {
   font-weight: 500 !important;
 }
 .modal__footer__button:focus {
-  border-color: #f5f7f9 !important;
+  border-color: #f3f4f6 !important;
 }
 
 .ticket__card {
@@ -7848,7 +7848,7 @@ body {
   left: -19px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
   height: 2.3rem;
   width: 2.3rem;
   border: none !important;
@@ -8454,11 +8454,11 @@ body {
 }
 
 .btn__cancel__logout {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
   color: black;
 }
 .btn__cancel__logout:hover {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
 }
 
 .btn__confirm__logout:hover {
@@ -8525,7 +8525,7 @@ body {
   border-radius: 0.5rem;
 }
 .create__ticket__modal .modal__content .ticket__modal__button.btn__close__ticket__modal {
-  background-color: #f5f7f9 !important;
+  background-color: #f3f4f6 !important;
   color: black;
 }
 .create__ticket__modal .modal__content input[type=radio] {

@@ -127,7 +127,6 @@
             multiple: true,
             showValueAsTags: true,
             markSearchResults: true,
-            popupDropboxBreakpoint: '3000px',
         });
 
         window.addEventListener('refresh-permission-select', (event) => {

@@ -11,10 +11,10 @@ class GivePermissionList extends Component
 {
     public $allPermissions;
     public $currentPermissions;
-    public ?array $permissions = [];
-    public ?string $roleName = null;
-    public ?int $assignPermissionRoleId = null;
-    public ?int $editPermissionRoleId = null;
+    public $permissions = [];
+    public $roleName;
+    public $assignPermissionRoleId;
+    public $editPermissionRoleId;
 
     protected $listeners = ['loadAssignPermissionList' => '$refresh'];
 

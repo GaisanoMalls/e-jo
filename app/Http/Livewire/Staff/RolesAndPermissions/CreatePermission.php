@@ -10,8 +10,8 @@ use Spatie\Permission\Models\Permission;
 
 class CreatePermission extends Component
 {
-    public ?string $permissionAction = null;
-    public ?array $permissionModules = [];
+    public $permissionAction;
+    public $permissionModules = [];
 
     public function rules()
     {
@@ -33,6 +33,7 @@ class CreatePermission extends Component
         if (!is_null($this->permissionAction) && !empty($this->permissionModules)) {
             foreach ($this->permissionModules as $module) {
                 $permissionName = "$this->permissionAction $module";
+
                 if (!Permission::where('name', $permissionName)->exists()) {
                     Permission::create(['name' => $permissionName]);
                 } else {

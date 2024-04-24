@@ -31,10 +31,13 @@
                     </tbody>
                 </table>
             @else
-                <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
-                    <small style="font-size: 14px;">Empty permissions</small>
+                <div class="py-2 px-3 rounded-3" style="margin: 20px 29px; background-color: #f3f4f6;">
+                    <small style="font-size: 0.8rem;">Empty ticket permissions</small>
                 </div>
             @endif
         </div>
+    </div>
+    <div class="mt-3 mx-4 d-flex align-items-center justify-content-end">
+        {{ $permissions->links() }}
     </div>
 </div>

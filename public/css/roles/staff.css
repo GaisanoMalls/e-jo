@@ -7293,7 +7293,7 @@ url(/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?4753c5ba57962b4d7bf8248a6
 }
 
 body {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
 }
 
 .error__message {
@@ -7471,7 +7471,7 @@ input[type=radio]:checked {
 .btn__submit:focus {
   background-color: #1f2937 !important;
   color: #ffffff !important;
-  border-color: #f5f7f9 !important;
+  border-color: #f3f4f6 !important;
 }
 .btn__submit:hover {
   background-color: #1f2937;
@@ -7519,7 +7519,7 @@ input[type=radio]:checked {
   border-color: transparent;
 }
 .btn__cancel:focus {
-  border-color: #f5f7f9 !important;
+  border-color: #f3f4f6 !important;
 }
 
 .btn__x {
@@ -7542,11 +7542,11 @@ input[type=radio]:checked {
   font-weight: 500 !important;
 }
 .modal__footer__button:focus {
-  border-color: #f5f7f9 !important;
+  border-color: #f3f4f6 !important;
 }
 
 .page__header__back__button:focus {
-  border-color: #f5f7f9 !important;
+  border-color: #f3f4f6 !important;
 }
 
 .form__errors {
@@ -7780,7 +7780,7 @@ a:hover {
   position: relative;
 }
 .page__wrapper .page__body__wrapper {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
 }
 .page__wrapper .page__body__wrapper .page__body {
   min-height: calc(100vh - 76px);
@@ -7860,7 +7860,7 @@ a:hover {
   font-weight: 500;
 }
 .sidebar__buttons:hover {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
 }
 .sidebar__buttons .transform__down {
   transform: rotate(1.5708rad);
@@ -7890,7 +7890,7 @@ a:hover {
 }
 
 .sidebar__btn__active.active {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
   color: #31316a;
   font-weight: 600;
 }
@@ -7917,7 +7917,7 @@ a:hover {
   border-radius: 0.563rem;
 }
 .sidebar__collapse__btnlink:hover {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
 }
 .sidebar__collapse__btnlink .sidebar__btn__link__name {
   font-size: 0.813rem;
@@ -8027,7 +8027,7 @@ a:hover {
 .sidebar .sidebar__userinitial {
   height: 90px;
   width: 90px;
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
   color: #d32839;
   border: 3px solid #d32839;
   font-size: 1.25rem;
@@ -8778,7 +8778,7 @@ a:hover {
   left: -19px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
   height: 2.3rem;
   width: 2.3rem;
   border: none !important;
@@ -9804,10 +9804,10 @@ input[type=checkbox]:checked + .form-check-label {
   font-size: 1.125rem;
   color: rgb(104, 102, 102);
   border-radius: 3.125rem;
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
 }
 .announcement__section .announcement__card .announcement__card__list .announcement__content .btn__menu:hover {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
 }
 .announcement__section .announcement__card .announcement__card__list .announcement__content .custom__dropdown__menu {
   padding: 5px;
@@ -10453,9 +10453,9 @@ input[type=checkbox]:checked + .form-check-label {
   min-height: 50px;
 }
 .roles__permissions__section .roles__permissions__card .roles__permissions__type__card .role__permission {
-  background-color: #3B4053;
-  color: #ffffff;
-  font-size: 0.688rem;
+  background-color: #f5f0f0;
+  color: #5b5943;
+  font-size: 0.75rem;
 }
 .roles__permissions__section .roles__permissions__card .roles__permissions__type__card .role__permission .remove__permission__icon:hover {
   cursor: pointer;

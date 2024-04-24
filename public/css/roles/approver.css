@@ -7583,11 +7583,11 @@ nav .nav__user__picture {
 }
 
 .btn__cancel__logout {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
   color: black;
 }
 .btn__cancel__logout:hover {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
 }
 
 .btn__confirm__logout:hover {
@@ -7832,7 +7832,7 @@ nav .nav__user__picture {
   left: -19px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
   height: 2.3rem;
   width: 2.3rem;
   border: none !important;

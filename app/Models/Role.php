@@ -11,9 +11,6 @@ class Role extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
-    public $timestamps = false;
-
     // TODO Create a controller to run RolesSeeder programmatically. To be managed by System Admin.
     // * "The values (integers) of these constant variables are equal to the primary key of the 'roles' table. Therefore, the mentioned requirement is necessary."
     const SYSTEM_ADMIN = 'System Admin';

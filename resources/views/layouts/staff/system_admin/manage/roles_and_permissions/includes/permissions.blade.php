@@ -4,7 +4,7 @@
             <div class="d-flex flex-column me-3">
                 <h6 class="card__title">Permissions</h6>
                 <p class="card__description">
-                    Find all the users with their associated roles.
+                    Permissions have to be assigned to the staff.
                 </p>
             </div>
         </div>

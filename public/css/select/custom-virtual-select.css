@@ -24,7 +24,7 @@
 }
 
 .vscomp-option.focused {
-  background-color: #f5f7f9;
+  background-color: #f3f4f6;
 }
 
 .vscomp-option.selected::after {
