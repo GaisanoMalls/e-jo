@@ -28,8 +28,6 @@ class DatabaseSeeder extends Seeder
             SuffixesSeeder::class,
             LevelSeeder::class,
             ServiceLevelAgreementSeeder::class,
-            PermissionModuleSeeder::class,
-            PermissionActionSeeder::class,
             PermissionSeeder::class,
         ]);
     }

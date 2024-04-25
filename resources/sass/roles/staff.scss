@@ -3746,53 +3746,75 @@ input[type="checkbox"] {
                 }
             }
         }
-    }
 
-    .assign__permission__to__role__modal {
-        .modal__content {
-            padding: 2rem 2.3rem;
-            border: 0;
+        .search__field {
+            padding: 0.75rem 3rem 0.75rem 1rem;
             border-radius: $border-radius-9;
+            box-shadow: none !important;
+            font-size: 0.938rem;
 
-            .modal__header {
-                .modal__title {
-                    font-size: $fs-18;
-                    font-weight: $fw-600;
+            &:focus+.search__icon {
+                color: #e35558 !important;
+            }
+        }
+
+        .search__icon {
+            position: absolute;
+            right: 20px;
+            color: #a1a5b7;
+        }
+
+        &:focus {
+            box-shadow: none;
+            border-color: $color-1;
+        }
+    }
+}
+
+.assign__permission__to__role__modal {
+    .modal__content {
+        padding: 2rem 2.3rem;
+        border: 0;
+        border-radius: $border-radius-9;
+
+        .modal__header {
+            .modal__title {
+                font-size: $fs-18;
+                font-weight: $fw-600;
+            }
+        }
+
+        .modal__body {
+            padding: 1.3rem 0 0.5rem 0;
+        }
+
+        .modal__footer {
+            .btn__modal__footer {
+                @include generic.button-config;
+
+                &.btn__cancel {
+                    @include generic.form-button-cancel;
+                }
+
+                &.btn__send {
+                    @include generic.form-button-submit;
                 }
             }
+        }
 
-            .modal__body {
-                padding: 1.3rem 0 0.5rem 0;
-            }
+        .form__field__label {
+            font-size: $fs-14;
+        }
 
-            .modal__footer {
-                .btn__modal__footer {
-                    @include generic.button-config;
+        .form__field {
+            padding: 0.75rem 1rem;
+            font-size: $fs-14;
+            border-radius: $border-radius-9;
+            border: 1px solid #e7e9eb;
 
-                    &.btn__cancel {
-                        @include generic.form-button-cancel;
-                    }
-
-                    &.btn__send {
-                        @include generic.form-button-submit;
-                    }
-                }
-            }
-
-            .form__field__label {
-                font-size: $fs-14;
-            }
-
-            .form__field {
-                padding: 0.75rem 1rem;
-                font-size: $fs-14;
-                border-radius: $border-radius-9;
-                border: 1px solid #e7e9eb;
-
-                &:focus {
-                    box-shadow: none;
-                    border-color: $color-1;
-                }
+            &:focus {
+                box-shadow: none;
+                border-color: $color-1;
             }
         }
     }
@@ -4437,6 +4459,55 @@ input[type="checkbox"] {
         }
     }
 
+}
+
+.pagination {
+    display: flex;
+    gap: 5px;
+
+    .page-link {
+        border: none !important;
+    }
+
+    .page-item {
+
+        &.active>.page-link,
+        .page-link.active {
+            background-color: #eaedf1 !important;
+            color: #3e3d3d;
+            border: 0.08rem solid rgb(221, 233, 236) !important;
+        }
+
+        &.disabled>.page-link,
+        .page-link.disabled {
+            color: #9ca2ad;
+        }
+
+        &:first-child .page-link {
+            font-size: $fs-20;
+        }
+
+        &:last-child .page-link {
+            font-size: $fs-20;
+        }
+    }
+
+    .page-item,
+    .page-link {
+        height: 30px;
+        width: 30px;
+        color: #3e3d3d;
+        display: flex;
+        box-shadow: none;
+        font-size: $fs-13;
+        align-items: center;
+        justify-content: center;
+        border-radius: $border-radius-8 !important;
+
+        &:hover {
+            background-color: #f3f4f6;
+        }
+    }
 }
 
 // End Directory Section

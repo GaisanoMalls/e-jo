@@ -2,15 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\ApprovalStatus;
-use App\Models\Branch;
-use App\Models\Department;
 use App\Models\Role;
-use App\Models\ServiceDepartment;
-use App\Models\Status;
-use App\Models\Suffix;
-use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 

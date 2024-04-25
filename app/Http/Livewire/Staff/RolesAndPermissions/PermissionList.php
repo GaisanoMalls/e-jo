@@ -9,6 +9,11 @@ use Spatie\Permission\Models\Permission;
 class PermissionList extends Component
 {
     use WithPagination;
+
+    public $search = '';
+    public $numberList = [5, 10, 20];
+    public $paginatePageNumber = 5;
+
     protected $paginationTheme = 'bootstrap';
 
     protected $listeners = ['loadPermissionList' => '$refresh'];
@@ -23,11 +28,16 @@ class PermissionList extends Component
         }
     }
 
+    public function updatingSearch()
+    {
+        $this->resetPage(pageName: 'p');
+    }
+
     public function render()
     {
-        $permissions = Permission::orderBy('created_at', 'desc')->paginate(5);
+        $permissions = Permission::where('name', 'like', '%' . $this->search . '%')->paginate(perPage: $this->paginatePageNumber, pageName: 'p');
         return view('livewire.staff.roles-and-permissions.permission-list', [
-            'permissions' => $permissions
+            'permissions' => $permissions,
         ]);
     }
 }

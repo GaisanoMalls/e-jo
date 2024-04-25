@@ -1,4 +1,24 @@
 <div>
+    <div class="d-flex flex-wrap-reverse align-items-center justify-content-between">
+        <div class="d-flex flex-column flex-wrap mx-4 pt-3 gap-1">
+            <div class="w-100 d-flex align-items-center position-relative">
+                <input wire:model.debounce.400ms="search" type="text" class="form-control search__field"
+                    placeholder="Search permission">
+                <i wire:loading.remove wire:target="search" class="fa-solid fa-magnifying-glass search__icon"></i>
+                <span wire:loading wire:target="search" class="spinner-border spinner-border-sm search__icon"
+                    role="status" aria-hidden="true">
+                </span>
+            </div>
+            <small class="text-muted mb-1" style="font-size: 0.82rem;">
+                @if (!empty($search))
+                    {{ $permissions->count() }} {{ $permissions->count() > 1 ? 'results' : 'result' }} found
+                @endif
+            </small>
+        </div>
+        <div class="mx-4 mt-2">
+            <div id="permission-number-select-list" placeholder="Show" wire:ignore></div>
+        </div>
+    </div>
     <div class="roles__permissions__type__card">
         <div class="table-responsive custom__table">
             @if ($permissions->isNotEmpty())
@@ -37,7 +57,39 @@
             @endif
         </div>
     </div>
-    <div class="mt-3 mx-4 d-flex align-items-center justify-content-end">
+    <div class="mt-3 mx-4 d-flex flex-wrap align-items-center justify-content-between">
+        <small class="text-muted" style="margin-bottom: 20px; font-size: 0.82rem;">
+            Showing {{ $permissions->firstItem() }}
+            to {{ $permissions->lastItem() }}
+            of {{ $permissions->total() }} results
+        </small>
         {{ $permissions->links() }}
     </div>
 </div>
+
+@push('livewire-select')
+    <script>
+        const permissionNumberSelectList = document.querySelector('#permission-number-select-list');
+
+        const numberListOptions = [
+            @foreach ($numberList as $number)
+                {
+                    label: "{{ $number }} items",
+                    value: "{{ $number }}"
+                },
+            @endforeach
+        ];
+        VirtualSelect.init({
+            ele: permissionNumberSelectList,
+            options: numberListOptions
+        });
+
+        permissionNumberSelectList.addEventListener('change', () => {
+            @this.set('paginatePageNumber', permissionNumberSelectList.value);
+        });
+
+        permissionNumberSelectList.addEventListener('reset', () => {
+            @this.set('paginatePageNumber', 5)
+        });
+    </script>
+@endpush
