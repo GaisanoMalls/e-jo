@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             LevelSeeder::class,
             ServiceLevelAgreementSeeder::class,
             PermissionSeeder::class,
+            PermissionViaRolesSeeder::class,
         ]);
     }
 }

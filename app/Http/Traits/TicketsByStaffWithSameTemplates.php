@@ -14,9 +14,19 @@ trait TicketsByStaffWithSameTemplates
 
     public function getTicketsToAssign()
     {
-        return(Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+        return (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
             ? $this->serviceDeptAdminGetTicketsToAssign()
             : [];
+    }
+
+    public function getOpenTickets()
+    {
+        return match (true) {
+            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetOpenTickets(),
+            Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetOpentTickets(),
+            Auth::user()->hasRole(Role::AGENT) => $this->agentGetOpenTickets(),
+            default => [],
+        };
     }
 
     public function getApprovedTickets()
@@ -33,16 +43,6 @@ trait TicketsByStaffWithSameTemplates
         return match (true) {
             Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetDisapprovedTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetDisapprovedTickets(),
-            default => [],
-        };
-    }
-
-    public function getOpenTickets()
-    {
-        return match (true) {
-            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetOpenTickets(),
-            Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetOpentTickets(),
-            Auth::user()->hasRole(Role::AGENT) => $this->agentGetOpenTickets(),
             default => [],
         };
     }

@@ -1,6 +1,38 @@
 <div>
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-1 table__header">
+        <h6 class="mb-0 table__name shadow">List of teams</h6>
+        <div class="d-flex align-items-center justify-content-center ">
+            <div class="d-flex flex-column flex-wrap mx-4 gap-1 position-relative">
+                <div class="w-100 d-flex align-items-center position-relative">
+                    <input wire:model.debounce.400ms="searchTeam" type="text" class="form-control table__search__field"
+                        placeholder="Search permission">
+                    <i wire:loading.remove wire:target="searchTeam"
+                        class="fa-solid fa-magnifying-glass table__search__icon"></i>
+                    <span wire:loading wire:target="searchTeam"
+                        class="spinner-border spinner-border-sm table__search__icon" role="status" aria-hidden="true">
+                    </span>
+                </div>
+                @if (!empty($searchTeam))
+                    <div class="w-100 d-flex align-items-center justify-content-between mb-1 position-absolute"
+                        style="font-size: 0.9rem; bottom: -25px;">
+                        <small class="text-muted ">
+                            {{ $teams->count() }} {{ $teams->count() > 1 ? 'results' : 'result' }} found
+                        </small>
+                        <small wire:click="clearSearch" class="fw-regular clear__search">Clear</small>
+                    </div>
+                @endif
+            </div>
+            <div class="d-flex flex-wrap gap-3">
+                <button type="button" class="btn d-flex align-items-center justify-content-center gap-2 button__header"
+                    data-bs-toggle="modal" data-bs-target="#addNewTeamModal">
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="button__name">Add New</span>
+                </button>
+            </div>
+        </div>
+    </div>
     <div class="table-responsive custom__table">
-        @if ($teams->isNotEmpty())
+        @if ($teams)
             <table class="table mb-0">
                 <thead>
                     <tr>
@@ -81,7 +113,16 @@
                 <small style="font-size: 14px;">No records for teams.</small>
             </div>
         @endif
+        <div class="mt-3 mx-4 d-flex flex-wrap align-items-center justify-content-between">
+            <small class="text-muted" style="margin-bottom: 20px; font-size: 0.82rem;">
+                Showing {{ $teams->firstItem() }}
+                to {{ $teams->lastItem() }}
+                of {{ $teams->total() }} results
+            </small>
+            {{ $teams->links() }}
+        </div>
     </div>
+
 
     {{-- Edit Team Modal --}}
     <div wire:ignore.self class="modal fade team__modal" id="editTeamModal" tabindex="-1"
@@ -111,8 +152,8 @@
                             <div class="mb-2" style="z-index: 2">
                                 <label for="name" class="form-label form__field__label">Name</label>
                                 <input type="text" wire:model="name"
-                                    class="form-control form__field @error('name') is-invalid @enderror" id="name"
-                                    placeholder="Enter team name">
+                                    class="form-control form__field @error('name') is-invalid @enderror"
+                                    id="name" placeholder="Enter team name">
                                 @error('name')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>

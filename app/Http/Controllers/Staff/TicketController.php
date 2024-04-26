@@ -33,8 +33,7 @@ class TicketController extends Controller
 
     public function openTickets()
     {
-        $openTickets = $this->getOpenTickets();
-        return view('layouts.staff.ticket.statuses.open_tickets', compact('openTickets'));
+        return view('layouts.staff.ticket.statuses.open_tickets');
     }
 
     public function onProcessTickets()

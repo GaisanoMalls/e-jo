@@ -7,6 +7,7 @@
     "/js/roles/staff/dependent-dropdown.js": "/js/roles/staff/dependent-dropdown.js",
     "/js/roles/staff/approver.js": "/js/roles/staff/approver.js",
     "/css/roles/approver.css": "/css/roles/approver.css",
+    "/css/roles/staff.css": "/css/roles/staff.css",
     "/css/roles/user.css": "/css/roles/user.css",
     "/css/feedback.css": "/css/feedback.css",
     "/css/auth.css": "/css/auth.css",
@@ -216,6 +217,5 @@
     "/js/tinymce/themes/silver/theme.min.js": "/js/tinymce/themes/silver/theme.min.js",
     "/js/tinymce/tinymce.d.ts": "/js/tinymce/tinymce.d.ts",
     "/js/tinymce/tinymce.js": "/js/tinymce/tinymce.js",
-    "/js/tinymce/tinymce.min.js": "/js/tinymce/tinymce.min.js",
-    "/css/roles/staff.css": "/css/roles/staff.css"
+    "/js/tinymce/tinymce.min.js": "/js/tinymce/tinymce.min.js"
 }

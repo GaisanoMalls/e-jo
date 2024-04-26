@@ -11,7 +11,11 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm d-flex align-items-center gap-2 rounded-2 sort__button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-filter"></i>
+                        <div wire:loading wire:target="allOpenTickets, withPr, withoutPr"
+                            class="spinner-border spinner-border-sm loading__spinner" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <i wire:loading.remove wire:target="allOpenTickets, withPr, withoutPr" class="bi bi-filter"></i>
                         {{ $allOpenTickets ? 'All' : ($withPr ? 'With PR' : ($withoutPr ? 'Without PR' : '')) }}
                         <small class="text-muted" style="font-size: 12px;">
                             ({{ $openTickets->count() }})

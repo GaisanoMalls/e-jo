@@ -3505,7 +3505,7 @@ input[type="checkbox"] {
     padding: 0.4rem 0.9rem;
     background-color: $color-1;
     color: $white;
-    height: 37px;
+    height: 40px;
     font-weight: $fw-500;
 
     &:hover {
@@ -3747,27 +3747,40 @@ input[type="checkbox"] {
             }
         }
 
-        .search__field {
-            padding: 0.75rem 3rem 0.75rem 1rem;
-            border-radius: $border-radius-9;
-            box-shadow: none !important;
-            font-size: 0.938rem;
 
-            &:focus+.search__icon {
-                color: #e35558 !important;
-            }
-        }
+    }
+}
 
-        .search__icon {
-            position: absolute;
-            right: 20px;
-            color: #a1a5b7;
-        }
+.table__search__field {
+    padding: 0.53rem 3rem 0.53rem 1rem;
+    border-radius: $border-radius-9;
+    box-shadow: none !important;
+    font-size: 0.938rem;
 
-        &:focus {
-            box-shadow: none;
-            border-color: $color-1;
+    &:focus+.search__icon {
+        color: #e35558 !important;
+    }
+
+    &:focus {
+        box-shadow: none;
+        border-color: $color-1;
+
+        &+.table__search__icon {
+            color: $color-1;
         }
+    }
+}
+
+.table__search__icon {
+    position: absolute;
+    right: 20px;
+    color: #a1a5b7;
+}
+
+.clear__search {
+    &:hover {
+        cursor: pointer;
+        color: #d32839;
     }
 }
 

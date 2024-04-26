@@ -149,7 +149,7 @@
                             <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Assigned Permissions</h6>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label class="form-label form__field__label">Permissions</label>
+                                    <label class="form-label form__field__label">Via roles</label>
                                     <div>
                                         <div id="select-approver-permissions" wire:ignore></div>
                                     </div>

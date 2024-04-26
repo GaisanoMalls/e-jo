@@ -10,7 +10,7 @@ class PermissionList extends Component
 {
     use WithPagination;
 
-    public $search = '';
+    public $searchPermission = '';
     public $numberList = [5, 10, 20];
     public $paginatePageNumber = 5;
 
@@ -28,14 +28,19 @@ class PermissionList extends Component
         }
     }
 
-    public function updatingSearch()
+    public function updatingSearchPermission()
     {
-        $this->resetPage(pageName: 'p');
+        $this->resetPage();
+    }
+
+    public function clearSearchPermission()
+    {
+        $this->searchPermission = '';
     }
 
     public function render()
     {
-        $permissions = Permission::where('name', 'like', '%' . $this->search . '%')->paginate(perPage: $this->paginatePageNumber, pageName: 'p');
+        $permissions = Permission::where('name', 'like', '%' . $this->searchPermission . '%')->paginate(perPage: $this->paginatePageNumber);
         return view('livewire.staff.roles-and-permissions.permission-list', [
             'permissions' => $permissions,
         ]);

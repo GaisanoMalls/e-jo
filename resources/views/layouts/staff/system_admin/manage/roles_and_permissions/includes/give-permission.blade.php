@@ -7,6 +7,7 @@
                     Account roles with their associated permissions.
                 </p>
             </div>
+            @livewire('staff.roles-and-permissions.generate-default-role-permissions')
         </div>
     </div>
     @livewire('staff.roles-and-permissions.give-permission-list')

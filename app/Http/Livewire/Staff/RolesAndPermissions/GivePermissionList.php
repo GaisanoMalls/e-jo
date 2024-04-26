@@ -6,6 +6,7 @@ use App\Http\Requests\SysAdmin\Manage\Permission\GivePermissionRequest;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Models\Role as UserRole;
 
 class GivePermissionList extends Component
 {
@@ -79,7 +80,7 @@ class GivePermissionList extends Component
 
     public function render()
     {
-        $roles = Role::all();
+        $roles = Role::whereNot('name', UserRole::SYSTEM_ADMIN)->get();
         return view('livewire.staff.roles-and-permissions.give-permission-list', [
             'roles' => $roles,
             'allPermissions' => $this->getAllPermissions(),

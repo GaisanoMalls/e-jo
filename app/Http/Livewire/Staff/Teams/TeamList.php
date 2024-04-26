@@ -11,12 +11,12 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class TeamList extends Component
 {
-    use BasicModelQueries;
+    use BasicModelQueries, WithPagination;
 
-    public $teams = [];
     public $currentSubteams = [];
     public $addedSubteams = [];
     public $editSelectedBranches = [];
@@ -31,8 +31,10 @@ class TeamList extends Component
     public $subteamEditId;
     public $subteamEditName;
     public $hasSubteam = false;
+    public $searchTeam = '';
 
-    protected $listeners = ['loadTeams' => 'fetchTeams'];
+    protected $paginationTheme = 'bootstrap';
+    protected $listeners = ['loadTeams' => '$refresh'];
 
     protected function rules()
     {
@@ -49,11 +51,6 @@ class TeamList extends Component
             'editSelectedServiceDepartment.required' => 'The service department field is required.',
             'editSelectedBranches.required' => 'The branch field is requied.',
         ];
-    }
-
-    public function fetchTeams()
-    {
-        $this->teams = $this->queryTeams();
     }
 
     private function actionOnSubmit()
@@ -251,10 +248,26 @@ class TeamList extends Component
         $this->dispatchBrowserEvent('clear-select-options');
     }
 
+    public function updatingSearchTeam()
+    {
+        $this->resetPage();
+    }
+
+    public function clearSearch()
+    {
+        $this->searchTeam = '';
+    }
+
     public function render()
     {
         return view('livewire.staff.teams.team-list', [
-            'teams' => $this->fetchTeams(),
+            'teams' => Team::where('name', 'like', '%' . $this->searchTeam . '%')
+                ->orWhereHas('subteams', fn($subteam) => $subteam->where('name', 'like', '%' . $this->searchTeam . '%'))
+                ->orWhereHas('serviceDepartment', fn($serviceDepartment) => $serviceDepartment->where('name', 'like', '%' . $this->searchTeam . '%'))
+                ->orWhereHas('serviceDepartmentChild', fn($subServiceDepartment) => $subServiceDepartment->where('name', 'like', '%' . $this->searchTeam . '%'))
+                ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', '%' . $this->searchTeam . '%'))
+                ->orderByDesc('created_at')
+                ->paginate(15),
             'serviceDepartments' => $this->queryServiceDepartments(),
             'branches' => $this->queryBranches(),
         ]);

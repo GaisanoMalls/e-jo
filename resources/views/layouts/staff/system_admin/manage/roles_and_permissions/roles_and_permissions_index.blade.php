@@ -18,7 +18,7 @@
                 @include('layouts.staff.system_admin.manage.roles_and_permissions.includes.role_type_card')
             </div>
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-5 mb-4">
                     @include('layouts.staff.system_admin.manage.roles_and_permissions.includes.permissions')
                 </div>
                 <div class="col-md-7">
