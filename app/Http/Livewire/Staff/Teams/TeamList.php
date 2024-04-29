@@ -17,8 +17,8 @@ class TeamList extends Component
 {
     use BasicModelQueries, WithPagination;
 
-    public $currentSubteams = [];
     public $addedSubteams = [];
+    public $currentSubteams = [];
     public $editSelectedBranches = [];
     public $serviceDepartmentChildren = [];
     public $currentServiceDeptChild;

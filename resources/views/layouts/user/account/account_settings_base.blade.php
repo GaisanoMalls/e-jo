@@ -1,8 +1,5 @@
 @extends('layouts.user.base', [
-    'title' =>
-        $title ??
-        'User Profile - ' .
-            auth()->user()->profile->getFullName(),
+    'title' => $title ?? 'User Profile - ' . auth()->user()->profile->getFullName(),
 ])
 
 @section('main-content')

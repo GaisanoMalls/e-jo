@@ -31,12 +31,12 @@ class SendClarification extends Component
 
     public function rules()
     {
-        return(new StoreClarificationRequest())->rules();
+        return (new StoreClarificationRequest())->rules();
     }
 
     public function messages()
     {
-        return(new StoreClarificationRequest())->messages();
+        return (new StoreClarificationRequest())->messages();
     }
 
     private function actionOnSubmit()

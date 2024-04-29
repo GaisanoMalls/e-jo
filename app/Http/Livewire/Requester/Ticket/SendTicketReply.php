@@ -28,12 +28,12 @@ class SendTicketReply extends Component
 
     public function rules()
     {
-        return(new ReplyTicketRequest())->rules();
+        return (new ReplyTicketRequest())->rules();
     }
 
     public function messages()
     {
-        return(new ReplyTicketRequest())->messages();
+        return (new ReplyTicketRequest())->messages();
     }
 
     private function actionOnSubmit()

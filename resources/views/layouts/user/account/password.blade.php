@@ -1,7 +1,5 @@
 @extends('layouts.user.account.account_settings_base', [
-    'title' =>
-        'Update Password - ' .
-        auth()->user()->profile->getFullName(),
+    'title' => 'Update Password - ' . auth()->user()->profile->getFullName(),
 ])
 
 @section('account-content-header-title')

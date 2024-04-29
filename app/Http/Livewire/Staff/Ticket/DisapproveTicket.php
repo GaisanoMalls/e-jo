@@ -25,7 +25,7 @@ class DisapproveTicket extends Component
 
     public function rules()
     {
-        return(new StoreDisapproveTicketRequest())->rules();
+        return (new StoreDisapproveTicketRequest())->rules();
     }
 
     private function actionOnSubmit()

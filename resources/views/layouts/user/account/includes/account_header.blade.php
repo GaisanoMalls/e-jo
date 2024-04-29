@@ -5,7 +5,7 @@
             <div class="d-flex flex-column gap-1">
                 <h6 class="mb-0 user__full__name">
                     {{ auth()->user()->profile->getFullName() }}
-                    <span class="user__status">{{ auth()->user()->isActive()? 'Active': 'Inactive' }}</span>
+                    <span class="user__status">{{ auth()->user()->isActive() ? 'Active' : 'Inactive' }}</span>
                 </h6>
                 <p class="mb-0 user__department d-flex gap-2">
                     <i class="bi bi-buildings-fill"></i>

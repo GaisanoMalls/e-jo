@@ -10,21 +10,23 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ServiceDeptAdminList extends Component
 {
-    use Utils;
+    use Utils, WithPagination;
 
-    public $serviceDepartmentAdmins;
     public $serviceDeptAdminDeleteId;
     public $serviceDeptAdminFullName;
+    public $searchServiceDeptAdmin = '';
 
+    protected $paginationTheme = 'bootstrap';
     protected $listeners = ['loadServiceDeptAdminList' => '$refresh'];
 
     public function deleteServiceDepartmentAdmin(User $serviceDepartmentAdmin)
     {
         $this->serviceDeptAdminDeleteId = $serviceDepartmentAdmin->id;
-        $this->serviceDeptAdminFullName = $serviceDepartmentAdmin->profile->getFullName();
+        $this->serviceDeptAdminFullName = $serviceDepartmentAdmin->profile->getFullName;
         $this->dispatchBrowserEvent('show-delete-service-dept-admin-modal');
     }
 
@@ -36,6 +38,7 @@ class ServiceDeptAdminList extends Component
                 SpecialProjectAmountApproval::whereNotNull('fpm_coo_approver')
                     ->update(['service_department_admin_approver' => null]);
             }
+
             if ($this->hasCostingApprover1() && !$this->hasCostingApprover2()) {
                 SpecialProjectAmountApproval::whereJsonContains('service_department_admin_approver->approver_id', $this->serviceDeptAdminDeleteId)->delete();
             }
@@ -51,23 +54,54 @@ class ServiceDeptAdminList extends Component
 
     private function getInitialQuery()
     {
-        return User::role(Role::SERVICE_DEPARTMENT_ADMIN)->orderByDesc('created_at')->get();
+        return User::whereHas('profile', function ($profile) {
+            $profile->where('first_name', 'like', '%' . $this->searchServiceDeptAdmin . '%')
+                ->orWhere('middle_name', 'like', '%' . $this->searchServiceDeptAdmin . '%')
+                ->orWhere('last_name', 'like', '%' . $this->searchServiceDeptAdmin . '%');
+        })
+            ->orWhereHas('serviceDepartments', fn($serviceDept) => $serviceDept->where('name', 'like', '%' . $this->searchServiceDeptAdmin . '%'))
+            ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', '%' . $this->searchServiceDeptAdmin . '%'))
+            ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', '%' . $this->searchServiceDeptAdmin . '%'))
+            ->role(Role::SERVICE_DEPARTMENT_ADMIN)
+            ->orderByDesc('created_at')
+            ->paginate(15);
+    }
+
+    public function updatingSearchServiceDeptAdmin()
+    {
+        $this->resetPage();
+    }
+
+    public function clearSearch()
+    {
+        $this->searchServiceDeptAdmin = '';
     }
 
     public function render()
     {
-        $this->serviceDepartmentAdmins = (Route::is('staff.manage.user_account.index'))
-            ? User::with(['profile'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
-                ->take(5)->orderByDesc('created_at')->get()
-            : (
-                (Route::is('staff.manage.user_account.service_department_admins'))
-                ? User::with(['profile'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->orderByDesc('created_at')->get()
-                : $this->getInitialQuery()
-            );
+        $serviceDepartments = $this->getInitialQuery();
 
+        if (Route::is('staff.manage.user_account.index')) {
+            $serviceDepartments = User::with(['profile'])->role(Role::SERVICE_DEPARTMENT_ADMIN)
+                ->orderByDesc('created_at')
+                ->paginate(5);
+        }
+
+        if (Route::is('staff.manage.user_account.service_department_admins')) {
+            $serviceDepartments = User::whereHas('profile', function ($profile) {
+                $profile->where('first_name', 'like', '%' . $this->searchServiceDeptAdmin . '%')
+                    ->orWhere('middle_name', 'like', '%' . $this->searchServiceDeptAdmin . '%')
+                    ->orWhere('last_name', 'like', '%' . $this->searchServiceDeptAdmin . '%');
+            })
+                ->orWhereHas('serviceDepartments', fn($serviceDept) => $serviceDept->where('name', 'like', '%' . $this->searchServiceDeptAdmin . '%'))
+                ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', '%' . $this->searchServiceDeptAdmin . '%'))
+                ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', '%' . $this->searchServiceDeptAdmin . '%'))
+                ->role(Role::SERVICE_DEPARTMENT_ADMIN)
+                ->orderByDesc('created_at')
+                ->paginate(15);
+        }
         return view('livewire.staff.accounts.service-department-admin.service-dept-admin-list', [
-            'serviceDepartmentAdmins' => $this->serviceDepartmentAdmins,
+            'serviceDepartmentAdmins' => $serviceDepartments
         ]);
     }
 }

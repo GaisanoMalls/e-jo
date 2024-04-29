@@ -38,12 +38,12 @@ class TicketReplies extends Component
 
     public function rules()
     {
-        return(new StaffQouteReplyRequest())->rules();
+        return (new StaffQouteReplyRequest())->rules();
     }
 
     public function messages()
     {
-        return(new StaffQouteReplyRequest())->messages();
+        return (new StaffQouteReplyRequest())->messages();
     }
 
     public function likeReply(Reply $reply)
