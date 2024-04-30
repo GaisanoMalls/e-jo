@@ -73,6 +73,7 @@ class AddFormField extends Component
         );
 
         $this->reset('name', 'type', 'variable_name', 'is_required');
+        $this->resetValidation();
         $this->dispatchBrowserEvent('clear-form-fields');
     }
 

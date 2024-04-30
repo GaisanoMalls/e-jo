@@ -3926,6 +3926,17 @@ input[type="checkbox"] {
             margin-left: -13px;
             border-radius: $border-radius-50-percent;
         }
+
+        .td__content {
+            .btn__view__form {
+                text-decoration: underline !important;
+                color: $color-1 !important;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
     }
 
     .help__topic__modal {

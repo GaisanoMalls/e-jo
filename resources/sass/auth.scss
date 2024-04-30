@@ -21,9 +21,6 @@ $border-radius-10: 0.625rem;
 $white: #ffffff;
 
 input[type="password"] {
-    letter-spacing: 4px;
-    font-weight: $fw-600;
-
     &::placeholder {
         letter-spacing: normal;
         font-weight: normal;

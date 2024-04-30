@@ -10,18 +10,24 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Spatie\Permission\Models\Permission;
 
 class ApproverList extends Component
 {
-    use Utils;
+    use Utils, WithPagination;
 
     public $allPermissions;
-    public $approvers;
     public $approverDeleteId;
     public $approverAssignPermissionId;
     public $approverFullName;
     public $approverPermissions = [];
+    public $searchApprover = '';
+
+    public function mount()
+    {
+        $this->allPermissions = $this->getAllPermissions();
+    }
 
     protected $listeners = ['loadApproverList' => '$refresh'];
 
@@ -64,22 +70,45 @@ class ApproverList extends Component
 
     private function getInitialQuery()
     {
-        return $this->approvers = User::role(Role::APPROVER)->orderByDesc('created_at')->get();
+        return User::whereHas('profile', function ($profile) {
+            $profile->where('first_name', 'like', '%' . $this->searchApprover . '%')
+                ->orWhere('middle_name', 'like', '%' . $this->searchApprover . '%')
+                ->orWhere('last_name', 'like', '%' . $this->searchApprover . '%');
+        })
+            ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', '%' . $this->searchApprover . '%'))
+            ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', '%' . $this->searchApprover . '%'))
+            ->role(Role::APPROVER)
+            ->orderByDesc('created_at')
+            ->paginate(25);
+    }
+
+    public function updatingSearchApprover()
+    {
+        $this->resetPage();
+    }
+
+    public function clearApproverSearch()
+    {
+        $this->searchApprover = '';
     }
 
     public function render()
     {
-        $this->approvers = (Route::is('staff.manage.user_account.index'))
-            ? User::with(['profile'])->role(Role::APPROVER)->take(5)->orderByDesc('created_at')->get()
-            : (
-                (Route::is('staff.manage.user_account.approvers'))
-                ? User::with(['profile'])->role(Role::APPROVER)->orderByDesc('created_at')->get()
-                : $this->getInitialQuery()
-            );
+        $approvers = $this->getInitialQuery();
+
+        if (Route::is('staff.manage.user_account.index')) {
+            $approvers = User::with('profile')
+                ->role(Role::APPROVER)
+                ->orderByDesc('created_at')
+                ->paginate(15);
+        }
+
+        if (Route::is('staff.manage.user_account.approvers')) {
+            $approvers = $this->getInitialQuery();
+        }
 
         return view('livewire.staff.accounts.approver.approver-list', [
-            'approvers' => $this->approvers,
-            'allPermissions' => $this->getAllPermissions(),
+            'approvers' => $approvers
         ]);
     }
 }

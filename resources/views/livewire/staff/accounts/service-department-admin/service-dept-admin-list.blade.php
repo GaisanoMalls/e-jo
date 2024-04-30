@@ -1,33 +1,31 @@
 <div>
-    @if (!Route::is('staff.manage.user_account.index'))
-        <div class="row mb-3 mt-2">
-            <div class="col-lg-6 col-md-12">
-                <div class="d-flex flex-column flex-wrap mx-4 gap-1 position-relative">
-                    <div class="w-100 d-flex align-items-center position-relative">
-                        <input wire:model.debounce.400ms="searchServiceDeptAdmin" type="text"
-                            class="form-control table__search__field"
-                            placeholder="Search name, service department, branch, BU">
-                        <i wire:loading.remove wire:target="searchServiceDeptAdmin"
-                            class="fa-solid fa-magnifying-glass table__search__icon"></i>
-                        <span wire:loading wire:target="searchServiceDeptAdmin"
-                            class="spinner-border spinner-border-sm table__search__icon" role="status"
-                            aria-hidden="true">
-                        </span>
-                    </div>
-                    @if (!empty($searchServiceDeptAdmin))
-                        <div class="w-100 d-flex align-items-center justify-content-between mb-1 position-absolute"
-                            style="font-size: 0.9rem; bottom: -25px;">
-                            <small class="text-muted">
-                                {{ $serviceDepartmentAdmins->count() }}
-                                {{ $serviceDepartmentAdmins->count() > 1 ? 'results' : 'result' }} found
-                            </small>
-                            <small wire:click="clearSearch" class="fw-regular clear__search">Clear</small>
-                        </div>
-                    @endif
+    <div class="row mb-3 mt-2">
+        <div class="col-lg-6 col-md-12">
+            <div class="d-flex flex-column flex-wrap mx-4 gap-1 position-relative">
+                <div class="w-100 d-flex align-items-center position-relative">
+                    <input wire:model.debounce.400ms="searchServiceDeptAdmin" type="text"
+                        class="form-control table__search__field"
+                        placeholder="Search name, service department, branch, business unit (BU)">
+                    <i wire:loading.remove wire:target="searchServiceDeptAdmin"
+                        class="fa-solid fa-magnifying-glass table__search__icon"></i>
+                    <span wire:loading wire:target="searchServiceDeptAdmin"
+                        class="spinner-border spinner-border-sm table__search__icon" role="status" aria-hidden="true">
+                    </span>
                 </div>
+                @if (!empty($searchServiceDeptAdmin))
+                    <div class="w-100 d-flex align-items-center gap-2 mb-1 position-absolute"
+                        style="font-size: 0.9rem; bottom: -25px;">
+                        <small class="text-muted">
+                            {{ $serviceDepartmentAdmins->count() }}
+                            {{ $serviceDepartmentAdmins->count() > 1 ? 'results' : 'result' }} found
+                        </small>
+                        <small wire:click="clearServiceDeptAdminSearch"
+                            class="fw-regular text-danger clear__search">Clear</small>
+                    </div>
+                @endif
             </div>
         </div>
-    @endif
+    </div>
     @if ($serviceDepartmentAdmins->isNotEmpty())
         <div
             class="card account__type__card {{ Route::is('staff.manage.user_account.service_department_admins') ? 'card__rounded__and__no__border' : '' }}">
@@ -152,23 +150,20 @@
             </div>
         </div>
     @else
-        <div class="alert text-center d-flex align-items-center justify-content-center gap-2" role="alert"
+        <div class="alert text-center d-flex align-items-center justify-content-center gap-2 mt-5" role="alert"
             style="background-color: #F5F7F9; font-size: 14px;">
             <i class="fa-solid fa-circle-info"></i>
             Empty records for service department administrators.
         </div>
     @endif
-    @if (Route::is('staff.manage.user_account.service_department_admins') ||
-            (!empty($searchServiceDeptAdmin) || empty($searchServiceDeptAdmin)))
-        <div class="mt-3 mx-4 d-flex flex-wrap align-items-center justify-content-between">
-            <small class="text-muted" style="margin-bottom: 20px; font-size: 0.82rem;">
-                Showing {{ $serviceDepartmentAdmins->firstItem() }}
-                to {{ $serviceDepartmentAdmins->lastItem() }}
-                of {{ $serviceDepartmentAdmins->total() }} results
-            </small>
-            {{ $serviceDepartmentAdmins->links() }}
-        </div>
-    @endif
+    <div class="mt-3 mx-4 d-flex flex-wrap align-items-center justify-content-between">
+        <small class="text-muted" style="margin-bottom: 20px; font-size: 0.82rem;">
+            Showing {{ $serviceDepartmentAdmins->firstItem() }}
+            to {{ $serviceDepartmentAdmins->lastItem() }}
+            of {{ $serviceDepartmentAdmins->total() }} results
+        </small>
+        {{ $serviceDepartmentAdmins->links() }}
+    </div>
 
     {{-- Delete Service Department Admin Modal --}}
     <div wire:ignore.self class="modal fade modal__confirm__delete__user__account"

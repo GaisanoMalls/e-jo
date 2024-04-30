@@ -36,87 +36,78 @@
             @if (session()->has('required_form_fields_error'))
                 <small class="fw-semibold mb-1 text-danger ms-1">{{ session('required_form_fields_error') }}</small>
             @endif
-            <div class="custom__table">
-                <table class="table mb-0">
-                    <thead>
-                        <tr>
-                            <th class="border-0 table__head__label px-1">Name</th>
-                            <th class="border-0 table__head__label px-1">Type</th>
-                            <th class="border-0 table__head__label px-1">Required</th>
-                            <th class="border-0 table__head__label px-1">
-                                Variable Name
-                            </th>
-                            <th class="border-0 table__head__label px-1">
-                                Save
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="px-0">
-                                <div class="d-flex align-items-center text-start px-1 td__content">
-                                    <input wire:model="name" class="form-control form__field" type="text"
-                                        id="fieldName" placeholder="Enter field name">
-                                </div>
-                                @error('name')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                @enderror
-                            </td>
-                            <td class="px-0">
-                                <div class="d-flex align-items-center text-start px-1 td__content">
-                                    <div class="w-100">
-                                        <div id="select-field-type" wire:ignore></div>
-                                    </div>
-                                </div>
-                                @error('type')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                @enderror
-                                @if (session()->has('field_type_error'))
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ session('field_type_error') }}
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="px-0">
-                                <div class="d-flex align-items-center text-start px-1 td__content">
-                                    <div class="w-100">
-                                        <div id="select-required-field" wire:ignore></div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-0">
-                                <div class="d-flex align-items-center text-start px-1 td__content">
-                                    <input wire:model="variable_name" class="form-control form__field" type="text"
-                                        placeholder="Variable name here" disabled>
-                                </div>
-                            </td>
-                            <td class="px-0">
-                                <button wire:click="addField" type="button"
-                                    class="btn btn-sm d-flex align-items-center justify-content-center outline-none rounded-3"
-                                    style="height: 45px; width: 45px; background-color: #edeef0; border: 1px solid #e7e9eb;">
-                                    <span wire:loading.remove wire:target="addField">
-                                        <i class="bi bi-save"></i>
-                                    </span>
-                                    <div wire:loading wire:target="addField"
-                                        class="spinner-border spinner-border-sm loading__spinner" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+
+            <div class="row mb-3">
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
+                    <div class="mb-2">
+                        <label for="fieldName" class="form-label text-muted form__field__label"
+                            style="font-weight: 500;">Field
+                            name</label>
+                        <div class="d-flex align-items-center text-start px-1 td__content">
+                            <input wire:model="name" class="form-control form__field" type="text" id="fieldName"
+                                placeholder="Enter field name">
+                        </div>
+                        @error('name')
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ $message }}
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
+                    <div class="mb-2">
+                        <label class="form-label text-muted form__field__label" style="font-weight: 500;">Type</label>
+                        <div class="d-flex align-items-center text-start px-1 td__content">
+                            <div class="w-100">
+                                <div id="select-field-type" wire:ignore></div>
+                            </div>
+                        </div>
+                        @error('type')
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ $message }}
+                            </span>
+                        @enderror
+                        @if (session()->has('field_type_error'))
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ session('field_type_error') }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
+                    <div class="mb-2">
+                        <label class="form-label text-muted form__field__label"
+                            style="font-weight: 500;">Required</label>
+                        <div class="d-flex align-items-center text-start px-1 td__content">
+                            <div class="w-100">
+                                <div id="select-required-field" wire:ignore></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
+                    <div class="mb-2">
+                        <button wire:click="addField" type="button"
+                            class="btn btn-sm d-flex gap-2 ms-1 align-items-center justify-content-center outline-none px-3 rounded-3"
+                            style="height: 45px; background-color: #edeef0; border: 1px solid #e7e9eb; margin-bottom: 10px;">
+                            <span wire:loading.remove wire:target="addField">
+                                <i class="bi bi-save"></i>
+                            </span>
+                            <div wire:loading wire:target="addField"
+                                class="spinner-border spinner-border-sm loading__spinner" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Add
+                        </button>
+                    </div>
+                </div>
             </div>
             @if (!empty($addedFields))
                 <div class="row my-4 px-3">
-                    <div class="custom__table">
+                    <div class="table-responsive custom__table">
                         <table class="table mb-0">
                             <thead>
                                 <tr>

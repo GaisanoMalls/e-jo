@@ -13,12 +13,12 @@
                     </span>
                 </div>
                 @if (!empty($searchTeam))
-                    <div class="w-100 d-flex align-items-center justify-content-between mb-1 position-absolute"
+                    <div class="w-100 d-flex align-items-center gap-2 mb-1 position-absolute"
                         style="font-size: 0.9rem; bottom: -25px;">
                         <small class="text-muted">
                             {{ $teams->count() }} {{ $teams->count() > 1 ? 'results' : 'result' }} found
                         </small>
-                        <small wire:click="clearSearch" class="fw-regular clear__search">Clear</small>
+                        <small wire:click="clearSearch" class="fw-regular text-danger clear__search">Clear</small>
                     </div>
                 @endif
             </div>

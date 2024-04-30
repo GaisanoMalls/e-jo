@@ -10681,6 +10681,13 @@ input[type=checkbox]:checked + .form-check-label {
   margin-left: -13px;
   border-radius: 3.125rem;
 }
+.help__topics__section .custom__table .td__content .btn__view__form {
+  text-decoration: underline !important;
+  color: #d32839 !important;
+}
+.help__topics__section .custom__table .td__content .btn__view__form:hover {
+  cursor: pointer;
+}
 .help__topics__section .help__topic__modal .modal__content {
   padding: 2rem 2.3rem;
   border: 0;

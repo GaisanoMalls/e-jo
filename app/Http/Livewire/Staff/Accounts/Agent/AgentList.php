@@ -8,12 +8,15 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class AgentList extends Component
 {
-    public $agents;
+    use WithPagination;
+
     public $agentDeleteId;
     public $agentFullName;
+    public $searchAgent = '';
 
     protected $listeners = ['loadAgentList' => '$refresh'];
 
@@ -39,21 +42,48 @@ class AgentList extends Component
 
     private function getInitialQuery()
     {
-        return User::role(Role::AGENT)->take(5)->orderByDesc('created_at')->get();
+        return User::whereHas('profile', function ($profile) {
+            $profile->where('first_name', 'like', '%' . $this->searchAgent . '%')
+                ->orWhere('middle_name', 'like', '%' . $this->searchAgent . '%')
+                ->orWhere('last_name', 'like', '%' . $this->searchAgent . '%');
+        })
+            ->orWhereHas('serviceDepartments', fn($serviceDept) => $serviceDept->where('name', 'like', '%' . $this->searchAgent . '%'))
+            ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', '%' . $this->searchAgent . '%'))
+            ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', '%' . $this->searchAgent . '%'))
+            ->orWhereHas('teams', fn($team) => $team->where('name', 'like', '%' . $this->searchAgent . '%'))
+            ->orWhereHas('subteams', fn($subteam) => $subteam->where('name', 'like', '%' . $this->searchAgent . '%'))
+            ->role(Role::AGENT)
+            ->orderByDesc('created_at')
+            ->paginate(25);
+    }
+
+    public function updatingSearchAgent()
+    {
+        $this->resetPage();
+    }
+
+    public function clearAgentSearch()
+    {
+        $this->searchAgent = '';
     }
 
     public function render()
     {
-        $this->agents = (Route::is('staff.manage.user_account.index'))
-            ? User::with(['profile'])->role(Role::AGENT)->take(5)->orderByDesc('created_at')->get()
-            : (
-                (Route::is('staff.manage.user_account.agents'))
-                ? User::with(['profile'])->role(Role::AGENT)->orderByDesc('created_at')->get()
-                : $this->getInitialQuery()
-            );
+        $agents = $this->getInitialQuery();
+
+        if (Route::is('staff.manage.user_account.index')) {
+            $agents = User::with('profile')
+                ->role(Role::AGENT)
+                ->orderByDesc('created_at')
+                ->paginate(15);
+        }
+
+        if (Route::is('staff.manage.user_account.agents')) {
+            $agents = $this->getInitialQuery();
+        }
 
         return view('livewire.staff.accounts.agent.agent-list', [
-            'agents' => $this->agents,
+            'agents' => $agents,
         ]);
     }
 }

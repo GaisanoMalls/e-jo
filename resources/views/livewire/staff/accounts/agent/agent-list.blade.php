@@ -1,4 +1,29 @@
 <div>
+    <div class="row mb-3 mt-2">
+        <div class="col-lg-6 col-md-12">
+            <div class="d-flex flex-column flex-wrap mx-4 gap-1 position-relative">
+                <div class="w-100 d-flex align-items-center position-relative">
+                    <input wire:model.debounce.400ms="searchAgent" type="text" class="form-control table__search__field"
+                        placeholder="Search name, service department, branch, business unit (BU), teams, sub-teams">
+                    <i wire:loading.remove wire:target="searchAgent"
+                        class="fa-solid fa-magnifying-glass table__search__icon"></i>
+                    <span wire:loading wire:target="searchAgent"
+                        class="spinner-border spinner-border-sm table__search__icon" role="status" aria-hidden="true">
+                    </span>
+                </div>
+                @if (!empty($searchAgent))
+                    <div class="w-100 d-flex align-items-center gap-2 mb-1 position-absolute"
+                        style="font-size: 0.9rem; bottom: -25px;">
+                        <small class="text-muted">
+                            {{ $agents->count() }}
+                            {{ $agents->count() > 1 ? 'results' : 'result' }} found
+                        </small>
+                        <small wire:click="clearAgentSearch" class="fw-regular text-danger clear__search">Clear</small>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
     @if ($agents->isNotEmpty())
         <div
             class="card account__type__card {{ Route::is('staff.manage.user_account.agents') ? 'card__rounded__and__no__border' : '' }}">
@@ -136,12 +161,20 @@
             </div>
         </div>
     @else
-        <div class="alert text-center d-flex align-items-center justify-content-center gap-2" role="alert"
+        <div class="alert text-center d-flex align-items-center justify-content-center gap-2 mt-5" role="alert"
             style="background-color: #F5F7F9; font-size: 14px;">
             <i class="fa-solid fa-circle-info"></i>
             Empty records for agents.
         </div>
     @endif
+    <div class="mt-3 mx-4 d-flex flex-wrap align-items-center justify-content-between">
+        <small class="text-muted" style="margin-bottom: 20px; font-size: 0.82rem;">
+            Showing {{ $agents->firstItem() }}
+            to {{ $agents->lastItem() }}
+            of {{ $agents->total() }} results
+        </small>
+        {{ $agents->links() }}
+    </div>
 
     {{-- Delete Agent Modal --}}
     <div wire:ignore.self class="modal fade modal__confirm__delete__user__account" id="confirmDeleteAgentModal"

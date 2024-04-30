@@ -57,9 +57,9 @@ class HelpTopic extends Model
         return $this->hasOne(SpecialProject::class);
     }
 
-    public function form()
+    public function forms(): HasMany
     {
-        return $this->hasOne(Form::class);
+        return $this->hasMany(Form::class);
     }
 
     public function dateCreated(): string

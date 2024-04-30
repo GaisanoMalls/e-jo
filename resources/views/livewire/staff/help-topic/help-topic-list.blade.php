@@ -8,6 +8,7 @@
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Team</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">SLA</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Forms</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
                     </tr>
@@ -42,6 +43,13 @@
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
                                     <span>{{ $helpTopic->sla?->time_unit }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-1 text-start td__content">
+                                    <span class="rounded-circle"
+                                        style="background-color: #edeef0; padding: 2px 7px;">{{ $helpTopic->forms?->count() }}</span>
+                                    <span wire:click="asx" class="btn__view__form">View</span>
                                 </div>
                             </td>
                             <td>
