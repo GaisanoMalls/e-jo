@@ -40,24 +40,6 @@ $body-color: #f3f4f6;
     background-color: $body-color;
 }
 
-.vscomp-option.selected {
-    &::after {
-        content: "✔";
-        position: absolute;
-        right: 15px;
-    }
-}
-
-.vscomp-option:hover {
-    color: #d32839;
-
-    &::after {
-        content: "✔";
-        position: absolute;
-        right: 15px;
-    }
-}
-
 .vscomp-dropbox-container {
     z-index: 3 !important;
 }
@@ -91,13 +73,30 @@ $body-color: #f3f4f6;
     top: 9px;
 }
 
+.vscomp-wrapper.show-value-as-tags .vscomp-value-tag-content {
+    font-size: 12px;
+}
+
 .vscomp-wrapper.show-value-as-tags .vscomp-value-tag {
-    background-color: #3B4053;
-    color: white;
-    font-size: 11px;
-    padding: 2px 5px 2px 10px;
-    box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12),
-        0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+    background-color: #FFFFFF;
+    padding: 3px 3px 3px 10px;
+    color: #212529;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.vscomp-wrapper.show-value-as-tags .vscomp-value-tag-clear-button {
+    margin-left: 4px;
+    background-color: #f9f9fc;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    display: flex;
+    border-width: 1px;
+}
+
+.vscomp-wrapper.show-value-as-tags .vscomp-value-tag-clear-button .vscomp-clear-icon {
+    color: #040608;
 }
 
 .vscomp-wrapper.show-as-popup .vscomp-dropbox {

@@ -290,6 +290,7 @@
                                 value: agentBUDepartment.id
                             });
                         });
+
                         agentBUDepartmentSelect.setOptions(agentBUDepartmentOption);
                         agentBUDepartmentSelect.setValue(@json($bu_department));
                     }

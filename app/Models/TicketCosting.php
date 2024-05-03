@@ -22,11 +22,6 @@ class TicketCosting extends Model
         return $this->hasMany(TicketCostingFile::class);
     }
 
-    public function prFileAttachments()
-    {
-        return $this->hasMany(TicketCostingPRFile::class);
-    }
-
     public function getAmount()
     {
         return number_format($this->amount, 2, '.', ',');

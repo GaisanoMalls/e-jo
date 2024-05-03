@@ -10453,8 +10453,9 @@ input[type=checkbox]:checked + .form-check-label {
   min-height: 50px;
 }
 .roles__permissions__section .roles__permissions__card .roles__permissions__type__card .role__permission {
-  background-color: #f5f0f0;
-  color: #5b5943;
+  background-color: #FFFFFF;
+  border: 1px solid #ddd;
+  color: #212529;
   font-size: 0.75rem;
 }
 .roles__permissions__section .roles__permissions__card .roles__permissions__type__card .role__permission .remove__permission__icon:hover {

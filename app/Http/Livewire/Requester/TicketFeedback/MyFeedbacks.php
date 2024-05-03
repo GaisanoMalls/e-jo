@@ -83,6 +83,11 @@ class MyFeedbacks extends Component
         }
     }
 
+    public function cancel()
+    {
+        $this->resetExcept('userId');
+    }
+
     public function render()
     {
         $feedbacks = Feedback::where('user_id', auth()->user()->id)

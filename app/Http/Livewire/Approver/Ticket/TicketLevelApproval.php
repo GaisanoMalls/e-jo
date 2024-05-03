@@ -10,7 +10,6 @@ use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
-use App\Models\TicketCostingPRFile;
 use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
@@ -194,9 +193,6 @@ class TicketLevelApproval extends Component
                                 'approval_2->level_2_approver->is_approved' => true,
                                 'is_all_approval_done' => true
                             ]);
-
-                        TicketCostingPRFile::where([['ticket_costing_id', $this->ticket->ticketCosting->id]])
-                            ->update(['is_approved_level_2_approver' => true]);
 
                         $this->actionOnSubmit();
                     } else {
