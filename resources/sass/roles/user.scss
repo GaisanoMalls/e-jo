@@ -342,6 +342,20 @@ body {
     background-color: $body-color;
 }
 
+.mobile__responsive__nav {
+    border: 0 !important;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+    padding: 6px;
+    top: 20px !important;
+    @include rounded-8;
+
+    .dropdown-item {
+        padding: 9px 14px;
+        font-size: $fs-14;
+        @include rounded-8;
+    }
+}
+
 .navbar {
     .company__logo {
         height: 35px;

@@ -26,7 +26,7 @@
                 aria-label="Toggle navigation">
                 <i class="fa-solid fa-bars mx-auto"></i>
             </button>
-            <li class="nav-item my-auto list-unstyled dropdown d-block d-lg-none">
+            <li class="nav-item my-auto dropdown list-unstyled d-block d-lg-none">
                 <a class="nav-link mx-1" href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     @if (auth()->user()->profile->picture)
                         <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="nav__user__picture"
@@ -37,7 +37,8 @@
                             {{ auth()->user()->profile->getNameInitial() }}</div>
                     @endif
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end slideIn animate custom__dropdown__menu">
+                <ul
+                    class="dropdown-menu dropdown-menu-end slideIn animate custom__dropdown__menu mobile__responsive__nav">
                     <li>
                         <a class="btn dropdown-item d-flex align-items-center gap-3 dropdown__menu__items"
                             href="{{ route('user.account_settings.profile') }}">
@@ -72,8 +73,12 @@
                         <i class="bi bi-arrow-right-short d-lg-none d-sm-block"></i>
                     </a>
                 </li>
+                <li class="nav-item custom__nav__item text-lg-center text-sm-start d-lg-none d-block">
+                    <button type="button" class="btn w-100 btn__nav__create__ticket" data-bs-toggle="modal"
+                        data-bs-target="#createTicketModal" wire:click="clearModalErrorMessages">Create Ticket</button>
+                </li>
             </ul>
-            <ul class="navbar-nav d-inline-flex align-items-center ms-auto mb-2 mb-lg-0 gap-4">
+            <ul class="navbar-nav d-inline-flex align-items-center ms-auto mb-2 mb-lg-0 gap-4 d-none d-lg-flex">
                 @livewire('requester.ticket.create-ticket-button')
                 @livewire('requester.notification.navlink-notification')
                 @livewire('requester.navbar-profile-picture')

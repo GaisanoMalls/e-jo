@@ -7350,6 +7350,19 @@ input:not(:focus)::placeholder {
   transition: all 0.4s;
 }
 
+.mobile__responsive__nav {
+  border: 0 !important;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+  padding: 6px;
+  top: 20px !important;
+  border-radius: 0.5rem;
+}
+.mobile__responsive__nav .dropdown-item {
+  padding: 9px 14px;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+}
+
 nav {
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.13);
 }
@@ -7388,6 +7401,7 @@ nav .navbar-nav .dropdown-menu {
   border: 0 !important;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
   padding: 6px;
+  top: 20px !important;
 }
 nav .navbar-nav .dropdown-menu .dropdown-item {
   padding: 9px 14px;

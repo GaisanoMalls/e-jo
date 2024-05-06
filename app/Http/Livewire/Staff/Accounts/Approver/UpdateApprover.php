@@ -42,8 +42,8 @@ class UpdateApprover extends Component
         $this->branches = $approver->branches->pluck("id")->toArray();
         $this->bu_departments = $approver->buDepartments->pluck("id")->toArray();
         $this->currentPermissions = $approver->getAllPermissions()->pluck('name')->toArray();
-        $this->useDirectPermission = $this->approver->getDirectPermissions()->isNotEmpty();
         $this->asCostingApprover2 = $this->isCostingApprover2();
+        $this->useDirectPermission = $this->approverHasDirectPermissions();
     }
 
     public function rules(): array
@@ -60,18 +60,10 @@ class UpdateApprover extends Component
         ];
     }
 
-    public function permissionsViaRoles()
-    {
-        return $this->approver->getPermissionsViaRoles()->isNotEmpty()
-            ? $this->approver->getPermissionsViaRoles()
-            : collect([]);
-    }
-
-    public function directPermissions()
+    public function approverHasDirectPermissions()
     {
         return $this->approver->getDirectPermissions()->isNotEmpty()
-            ? $this->approver->getDirectPermissions()
-            : collect([]);
+            && $this->approver->getPermissionsViaRoles()->isEmpty();
     }
 
     private function isCostingApprover2()
@@ -192,9 +184,9 @@ class UpdateApprover extends Component
             'approverSuffixes' => $this->querySuffixes(),
             'approverBranches' => $this->queryBranches(),
             'approverBUDepartments' => $this->queryBUDepartments(),
-            'allPermissions' => Permission::all(),
             'currentUserAsCostingApprover2' => $this->currentUserAsCostingApprover2(),
-            'hasCostingApprover2' => $this->hasCostingApprover2()
+            'hasCostingApprover2' => $this->hasCostingApprover2(),
+            'allPermissions' => Permission::all(),
         ]);
     }
 }

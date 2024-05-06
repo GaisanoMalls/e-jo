@@ -111,7 +111,7 @@
                         <div class="col-12">
                             <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Work Details</h6>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="mb-3">
                                         <label class="form-label form__field__label">Branch</label>
                                         <div>
@@ -125,7 +125,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="mb-3">
                                         <input type="hidden" value="{{ $serviceDeptAdmin->department_id }}"
                                             id="serviceDeptAdminCurrentBUDepartmentId">
@@ -147,7 +147,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="mb-3">
                                         <label for="branch" class="form-label form__field__label">
                                             Service Department
@@ -162,6 +162,43 @@
                                                 {{ $message }}
                                             </span>
                                         @enderror
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Assigned Permissions
+                                    </h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <label class="form-label form__field__label">
+                                                    {{ $useDirectPermission ? 'Direct permissions' : 'Via roles' }}
+                                                </label>
+                                                <div class="d-flex">
+                                                    <input wire:model="useDirectPermission" class="form-check-input"
+                                                        type="checkbox" role="switch" id="checkDirectPermissions"
+                                                        wire:loading.attr="disabled" wire:loading.remove
+                                                        wire:target="useDirectPermission"
+                                                        style="margin-top: 2px !important; margin-right: 9px; width: 0.95rem; height: 0.95rem;">
+                                                    <div wire:loading wire:target="useDirectPermission"
+                                                        class="spinner-border spinner-border-sm me-2" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                    <label class="form-label form__field__label"
+                                                        for="checkDirectPermissions">
+                                                        Use direct permissions
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div id="select-service-dept-admin-permissions" wire:ignore></div>
+                                            </div>
+                                            @error('permissions')
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
                                 @if ($currentUserAsCostingApprover1)
@@ -337,6 +374,34 @@
 
         serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', () => {
             @this.set('service_departments', serviceDeptAdminSeviceDepartmentSelect.value);
+        });
+
+        const serviceDeptAdminPermissionOption = [
+            @foreach ($allPermissions as $permission)
+                {
+                    label: "{{ $permission->name }}",
+                    value: "{{ $permission->name }}"
+                },
+            @endforeach
+        ];
+
+        const selectServiceDeptAdminPermission = document.querySelector('#select-service-dept-admin-permissions');
+        VirtualSelect.init({
+            ele: selectServiceDeptAdminPermission,
+            options: serviceDeptAdminPermissionOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            selectedValue: @json($currentPermissions)
+        });
+
+        selectServiceDeptAdminPermission.addEventListener('change', () => {
+            @this.set('permissions', selectServiceDeptAdminPermission.value);
+        });
+
+        selectServiceDeptAdminPermission.addEventListener('reset', () => {
+            @this.set('permissions', [])
         });
     </script>
 @endpush

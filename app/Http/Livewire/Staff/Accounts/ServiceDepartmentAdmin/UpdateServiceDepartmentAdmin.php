@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 
 class UpdateServiceDepartmentAdmin extends Component
 {
@@ -25,7 +26,10 @@ class UpdateServiceDepartmentAdmin extends Component
     public $email;
     public $suffix;
     public $bu_department;
+    public $permissions = [];
+    public $currentPermissions = [];
     public $asCostingApprover1 = false;
+    public $useDirectPermission = false;
 
     public function mount(User $serviceDeptAdmin)
     {
@@ -39,11 +43,20 @@ class UpdateServiceDepartmentAdmin extends Component
         $this->suffix = $serviceDeptAdmin->profile->suffix;
         $this->email = $serviceDeptAdmin->email;
         $this->asCostingApprover1 = $this->isCostingApprover1();
+        $this->currentPermissions = $serviceDeptAdmin->getAllPermissions()->pluck('name')->toArray();
+        $this->useDirectPermission = $this->serviceDeptAdminHasDirectPermissions();
     }
 
     private function isCostingApprover1()
     {
         return SpecialProjectAmountApproval::where('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->exists();
+    }
+
+
+    public function serviceDeptAdminHasDirectPermissions()
+    {
+        return $this->serviceDeptAdmin->getDirectPermissions()->isNotEmpty()
+            && $this->serviceDeptAdmin->getPermissionsViaRoles()->isEmpty();
     }
 
     public function currentUserAsCostingApprover1()
@@ -151,7 +164,8 @@ class UpdateServiceDepartmentAdmin extends Component
             'serviceDeptAdminBUDepartments' => $this->queryBUDepartments(),
             'serviceDeptAdminServiceDepartments' => $this->queryServiceDepartments(),
             'currentUserAsCostingApprover1' => $this->currentUserAsCostingApprover1(),
-            'hasCostingApprover1' => $this->hasCostingApprover1()
+            'hasCostingApprover1' => $this->hasCostingApprover1(),
+            'allPermissions' => Permission::all(),
         ]);
     }
 }
