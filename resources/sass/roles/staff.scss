@@ -3683,19 +3683,6 @@ input[type="checkbox"] {
                     min-height: 50px;
                 }
             }
-
-            .role__permission {
-                background-color: #FFFFFF;
-                border: 1px solid #ddd;
-                color: #212529;
-                font-size: 0.75rem;
-
-                .remove__permission__icon {
-                    &:hover {
-                        cursor: pointer;
-                    }
-                }
-            }
         }
 
         .filter__user__with__roles__modal {

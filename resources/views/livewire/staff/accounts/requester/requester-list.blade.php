@@ -96,7 +96,7 @@
                                 <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center text-start gap-1 td__content">
                                         <span><i class="bi bi-person-lock text-muted"></i></span>
-                                        <span>{{ $user->getAllPermissions()->count() }}</span>
+                                        <span>{{ $user->getDirectPermissions()->count() }}</span>
                                     </div>
                                 </td>
                                 <td style="padding: 17px 30px;">

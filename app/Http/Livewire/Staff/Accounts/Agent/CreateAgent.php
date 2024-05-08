@@ -16,6 +16,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 
 class CreateAgent extends Component
 {
@@ -90,6 +91,9 @@ class CreateAgent extends Component
                 $agent->buDepartments()->attach($this->bu_department);
                 $agent->serviceDepartments()->attach($this->service_department);
                 $agent->subteams()->attach(array_map('intval', $this->selectedSubteams));
+                $agent->givePermissionTo(
+                    Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::AGENT))->pluck('name')->toArray()
+                );
 
                 $fullname = $this->first_name . $this->middle_name ?? "" . $this->last_name;
 

@@ -17,7 +17,7 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $otherPermissions = ['manage app', 'approve special project', 'approve special project costing'];
+        $otherPermissions = ['manage app', 'approve special project', 'approve special project costing', 'disapprove special project costing'];
         foreach ($otherPermissions as $otherPermission) {
             Permission::firstOrCreate([
                 'name' => $otherPermission,
@@ -50,7 +50,7 @@ class PermissionSeeder extends Seeder
         }
 
         // Permission for ticket feedback
-        $feedbackPermissions = ['create', 'view', 'delete', 'update'];
+        $feedbackPermissions = ['create', 'edit', 'view', 'delete', 'update'];
         foreach ($feedbackPermissions as $feedbackPermission) {
             Permission::firstOrCreate([
                 'name' => "{$feedbackPermission} feedback"

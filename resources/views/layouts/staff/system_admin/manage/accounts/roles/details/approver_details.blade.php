@@ -101,13 +101,15 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label form__field__label">Permissions</label>
-                                    <div class="rounded-3 d-flex align-items-center gap-2"
+                                    <div class="rounded-3 d-flex flex-wrap align-items-center gap-2"
                                         style="border: 1px solid #e7e9eb; border-radius: 0.563rem; padding: 0.75rem 1rem;">
-                                        @if ($approver->getPermissionsViaRoles()->isNotEmpty())
-                                            <span class="rounded-4 d-flex align-items-center gap-1 text-white"
-                                                style="font-size: 0.74rem; background-color: #3B4053; padding: 0.1rem 0.6rem;">
-                                                {{ $approver->getUserPermissions() }}
-                                            </span>
+                                        @if ($approver->getDirectPermissions()->isNotEmpty())
+                                            @foreach ($approver->getDirectPermissions() as $permission)
+                                                <span class="rounded-4 d-flex align-items-center gap-1"
+                                                    style="font-size: 0.74rem; background-color: #FFFFFF; padding: 0.1rem 0.6rem; border: 1px solid #dddddd; color: #212529; white-space: nowrap;">
+                                                    {{ $permission->name }}
+                                                </span>
+                                            @endforeach
                                         @else
                                             N/A
                                         @endif

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
+use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
@@ -29,7 +30,6 @@ class UpdateServiceDepartmentAdmin extends Component
     public $permissions = [];
     public $currentPermissions = [];
     public $asCostingApprover1 = false;
-    public $useDirectPermission = false;
 
     public function mount(User $serviceDeptAdmin)
     {
@@ -43,20 +43,12 @@ class UpdateServiceDepartmentAdmin extends Component
         $this->suffix = $serviceDeptAdmin->profile->suffix;
         $this->email = $serviceDeptAdmin->email;
         $this->asCostingApprover1 = $this->isCostingApprover1();
-        $this->currentPermissions = $serviceDeptAdmin->getAllPermissions()->pluck('name')->toArray();
-        $this->useDirectPermission = $this->serviceDeptAdminHasDirectPermissions();
+        $this->currentPermissions = $serviceDeptAdmin->getDirectPermissions()->pluck('name')->toArray();
     }
 
     private function isCostingApprover1()
     {
         return SpecialProjectAmountApproval::where('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->exists();
-    }
-
-
-    public function serviceDeptAdminHasDirectPermissions()
-    {
-        return $this->serviceDeptAdmin->getDirectPermissions()->isNotEmpty()
-            && $this->serviceDeptAdmin->getPermissionsViaRoles()->isEmpty();
     }
 
     public function currentUserAsCostingApprover1()
@@ -90,6 +82,7 @@ class UpdateServiceDepartmentAdmin extends Component
                 $this->serviceDeptAdmin->branches()->sync($this->branches);
                 $this->serviceDeptAdmin->buDepartments()->sync($this->bu_department);
                 $this->serviceDeptAdmin->serviceDepartments()->sync($this->service_departments);
+                $this->serviceDeptAdmin->syncPermissions($this->permissions);
 
                 $this->serviceDeptAdmin->profile()->update([
                     'first_name' => $this->first_name,
@@ -165,7 +158,7 @@ class UpdateServiceDepartmentAdmin extends Component
             'serviceDeptAdminServiceDepartments' => $this->queryServiceDepartments(),
             'currentUserAsCostingApprover1' => $this->currentUserAsCostingApprover1(),
             'hasCostingApprover1' => $this->hasCostingApprover1(),
-            'allPermissions' => Permission::all(),
+            'allPermissions' => Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::SERVICE_DEPARTMENT_ADMIN))->get()
         ]);
     }
 }

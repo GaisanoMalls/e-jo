@@ -23,27 +23,34 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center text-start gap-1 td__content">
-                                        @if ($role->permissions()->count() !== 0)
-                                            @foreach ($role->permissions->map->only('id', 'name') as $permission)
-                                                <span
-                                                    class="rounded-4 ps-2 pe-1 d-flex align-items-center gap-1 role__permission">
-                                                    {{ $permission['name'] }}
-                                                    <i class="bi bi-x remove__permission__icon"
-                                                        wire:click="removePermission({{ $role->id }}, {{ $permission['id'] }})"></i>
-                                                </span>
-                                            @endforeach
-                                        @else
-                                            <span>----</span>
-                                        @endif
+                                        {{ $role->permissions()->count() }}
                                     </div>
                                 </td>
                                 <td>
+                                    <button wire:click="resetPermissionsByRole('{{ $role->name }}')"
+                                        wire:loading.attr="disabled" type="button"
+                                        class="btn d-flex align-items-center justify-content-center gap-2"
+                                        style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; border: 1px solid rgb(223, 228, 233); color: #3e3d3d; font-weight: 500;">
+                                        <span wire:loading wire:target="resetPermissionsByRole('{{ $role->name }}')"
+                                            class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                        </span>
+                                        <span wire:loading.remove
+                                            wire:target="resetPermissionsByRole('{{ $role->name }}')"
+                                            class="button__name" style="white-space: nowrap;">
+                                            Reset permissions
+                                        </span>
+                                        <span wire:loading wire:target="resetPermissionsByRole('{{ $role->name }}')"
+                                            class="button__name" style="white-space: nowrap;">
+                                            Resetting...
+                                        </span>
+                                    </button>
+                                </td>
+                                <td>
                                     <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                                        <button data-tooltip="Assign Permission" data-tooltip-position="top"
-                                            data-tooltip-font-size="11px" type="button" class="btn action__button"
-                                            data-bs-toggle="modal" data-bs-target="#assignPermissionToRoleModal"
+                                        <button type="button" class="btn action__button" data-bs-toggle="modal"
+                                            data-bs-target="#assignPermissionToRoleModal"
                                             wire:click="assignPermissionToRole({{ $role->id }})">
-                                            <i class="bi bi-person-lock"></i>
+                                            <i class="bi bi-pencil"></i>
                                         </button>
                                     </div>
                                 </td>
@@ -95,7 +102,7 @@
                                 <span wire:loading wire:target="givePermission" class="spinner-border spinner-border-sm"
                                     role="status" aria-hidden="true">
                                 </span>
-                                Assign
+                                Save
                             </button>
                             <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
                                 data-bs-dismiss="modal" wire:click="cancel">Cancel</button>
@@ -122,11 +129,9 @@
         VirtualSelect.init({
             ele: selectPermission,
             options: permissionOption,
-            search: true,
-            required: true,
             multiple: true,
             showValueAsTags: true,
-            markSearchResults: true,
+            hideClearButton: true
         });
 
         window.addEventListener('refresh-permission-select', (event) => {

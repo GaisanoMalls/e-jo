@@ -58,24 +58,61 @@ class GivePermissionList extends Component
         $this->assignPermissionRoleId = $role->id;
         $this->roleName = $role->name;
         $this->dispatchBrowserEvent('refresh-permission-select', [
-            'allPermissions' => $this->getAllPermissions(),
+            'allPermissions' => Permission::withWhereHas('roles', fn($query) => $query->where('roles.name', $role->name))->get(['name'])->toArray(),
             'currentPermissions' => $role->permissions->pluck('name')->toArray(),
         ]);
     }
 
-    public function removePermission(Role $role, Permission $permission)
+    public function resetPermissionsByRole(string $roleName)
     {
-        try {
-            $permission = Permission::find($permission->id);
-            if ($permission) {
-                $role->revokePermissionTo($permission);
-                noty()->addInfo('Permission revoked.');
-            } else {
-                noty()->addError('Permission not found');
-            }
-        } catch (\Exception $e) {
-            noty()->addError('Oops, something went wrong');
+        switch ($roleName) {
+            case UserRole::SERVICE_DEPARTMENT_ADMIN:
+                $serviceDepartmentAdminRole = Role::where('name', UserRole::SERVICE_DEPARTMENT_ADMIN)->first();
+                $serviceDepartmentAdminRole->syncPermissions([
+                    'forward ticket',
+                    'assign ticket',
+                    'approve ticket',
+                    'approve special project costing'
+                ]);
+                break;
+
+            case UserRole::APPROVER:
+                $approverRole = Role::where('name', UserRole::APPROVER)->first();
+                $approverRole->syncPermissions([
+                    'view ticket',
+                    'approve special project',
+                    'approve special project costing',
+                    'disapprove special project costing'
+                ]);
+                break;
+
+            case UserRole::AGENT:
+                $agentRole = Role::where('name', UserRole::AGENT)->first();
+                $agentRole->syncPermissions([
+                    'view ticket',
+                    'claim ticket',
+                    'close ticket',
+                    'set costing',
+                    'edit costing'
+                ]);
+                break;
+
+            case UserRole::USER:
+                $requesterRole = Role::where('name', UserRole::USER)->first();
+                $requesterRole->syncPermissions([
+                    'create ticket',
+                    'create feedback',
+                    'view feedback',
+                    'edit feedback',
+                    'delete feedback'
+                ]);
+                break;
+
+            default:
+                noty()->addError('Undefined role name');
         }
+
+        $this->emit('loadAssignPermissionList');
     }
 
     public function render()

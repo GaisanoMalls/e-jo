@@ -6,12 +6,14 @@ use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\Department;
+use App\Models\Role;
 use App\Models\Subteam;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 
 class UpdateAgent extends Component
 {
@@ -24,6 +26,8 @@ class UpdateAgent extends Component
     public $currentSubteams = [];
     public $selectedTeams = [];
     public $selectedSubteams = [];
+    public $currentPermissions = [];
+    public $permissions = [];
     public $subteams = [];
     public $first_name;
     public $middle_name;
@@ -50,6 +54,7 @@ class UpdateAgent extends Component
         $this->subteams = Subteam::withWhereHas('team', fn($query) => $query->whereIn('teams.id', $this->teams->pluck('id')->toArray()))->get();
         $this->currentTeams = $agent->teams->pluck('id')->toArray();
         $this->currentSubteams = $agent->subteams->pluck('id')->toArray();
+        $this->currentPermissions = $this->agent->getDirectPermissions()->pluck('name')->toArray();
     }
 
     public function rules()
@@ -110,6 +115,7 @@ class UpdateAgent extends Component
                 $this->agent->buDepartments()->sync($this->bu_department);
                 $this->agent->serviceDepartments()->sync($this->service_department);
                 $this->agent->subteams()->sync(array_map('intval', $this->selectedSubteams));
+                $this->agent->syncPermissions($this->permissions);
 
                 $this->agent->profile()->update([
                     'first_name' => $this->first_name,
@@ -140,7 +146,8 @@ class UpdateAgent extends Component
             'agentServiceDepartments' => $this->queryServiceDepartments(),
             'agentBUDepartments' => $this->BUDepartments,
             'agentTeams' => $this->teams,
-            'agentSubteams' => $this->subteams
+            'agentSubteams' => $this->subteams,
+            'allPermissions' => Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::AGENT))->get()
         ]);
     }
 }

@@ -309,7 +309,7 @@ class User extends Authenticatable
     {
         $userPermissions = [];
 
-        foreach ($this->getPermissionsViaRoles()->pluck('name') as $permission) {
+        foreach ($this->getDirectPermissions()->pluck('name') as $permission) {
             $userPermissions[] = $permission;
         }
 

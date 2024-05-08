@@ -49,7 +49,7 @@
                                 <div class="d-flex align-items-center gap-1 text-start td__content">
                                     <span class="rounded-circle"
                                         style="background-color: #edeef0; padding: 2px 7px;">{{ $helpTopic->forms?->count() }}</span>
-                                    <span wire:click="asx" class="btn__view__form">View</span>
+                                    <span wire:click="" class="btn__view__form">View</span>
                                 </div>
                             </td>
                             <td>

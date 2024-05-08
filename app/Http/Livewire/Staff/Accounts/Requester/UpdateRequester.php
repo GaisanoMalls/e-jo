@@ -6,10 +6,12 @@ use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\Department;
+use App\Models\Role;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 
 class UpdateRequester extends Component
 {
@@ -17,6 +19,8 @@ class UpdateRequester extends Component
 
     public User $user;
     public $BUDepartments = [];
+    public $currentPermissions = [];
+    public $permissions = [];
     public $first_name;
     public $middle_name;
     public $last_name;
@@ -25,17 +29,18 @@ class UpdateRequester extends Component
     public $branch;
     public $bu_department;
 
-    public function mount()
+    public function mount(User $user)
     {
-        // $this->user = $user;
-        $this->first_name = $this->user->profile->first_name;
-        $this->middle_name = $this->user->profile->middle_name;
-        $this->last_name = $this->user->profile->last_name;
-        $this->suffix = $this->user->profile->suffix;
-        $this->email = $this->user->email;
-        $this->branch = $this->user->branches->pluck('id')->first();
-        $this->bu_department = $this->user->buDepartments->pluck('id')->first();
+        $this->user = $user;
+        $this->first_name = $user->profile->first_name;
+        $this->middle_name = $user->profile->middle_name;
+        $this->last_name = $user->profile->last_name;
+        $this->suffix = $user->profile->suffix;
+        $this->email = $user->email;
+        $this->branch = $user->branches->pluck('id')->first();
+        $this->bu_department = $user->buDepartments->pluck('id')->first();
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
+        $this->currentPermissions = $user->getDirectPermissions()->pluck('name')->toArray();
     }
 
     protected function rules()
@@ -66,6 +71,7 @@ class UpdateRequester extends Component
                 $this->user->update(['email' => $this->email]);
                 $this->user->branches()->sync($this->branch);
                 $this->user->buDepartments()->sync($this->bu_department);
+                $this->user->syncPermissions($this->permissions);
 
                 $this->user->profile()->update([
                     'first_name' => $this->first_name,
@@ -92,6 +98,7 @@ class UpdateRequester extends Component
             'requesterSuffixes' => $this->querySuffixes(),
             'requesterBranches' => $this->queryBranches(),
             'requesterBUDepartments' => $this->BUDepartments,
+            'allPermissions' => Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::USER))->get()
         ]);
     }
 }

@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 
 class CreateRequester extends Component
 {
@@ -30,7 +31,7 @@ class CreateRequester extends Component
 
     public function rules()
     {
-        return(new StoreUserRequest())->rules();
+        return (new StoreUserRequest())->rules();
     }
 
     public function updatedBranch()
@@ -61,6 +62,9 @@ class CreateRequester extends Component
                 $user->assignRole(Role::USER);
                 $user->branches()->attach($this->branch);
                 $user->buDepartments()->attach($this->department);
+                $user->givePermissionTo(
+                    Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::USER))->pluck('name')->toArray()
+                );
 
                 Profile::create([
                     'user_id' => $user->id,

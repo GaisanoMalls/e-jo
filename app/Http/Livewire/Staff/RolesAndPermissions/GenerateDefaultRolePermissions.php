@@ -2,18 +2,18 @@
 
 namespace App\Http\Livewire\Staff\RolesAndPermissions;
 
-use Database\Seeders\PermissionViaRolesSeeder;
+use Database\Seeders\DirectPermissionSeeder;
 use Livewire\Component;
 
 class GenerateDefaultRolePermissions extends Component
 {
-    public function generateDefaultRolePermissions()
+    public function generateDirectPermissions()
     {
         sleep(2);
-        $permissionRoles = new PermissionViaRolesSeeder;
-        $permissionRoles->run();
+        $directPermissions = new DirectPermissionSeeder;
+        $directPermissions->run();
         $this->emit('loadAssignPermissionList');
-        noty()->addSuccess('Default role permissions have been successfully generated');
+        noty()->addSuccess('Default permissions have been successfully assigned to all users');
     }
 
     public function render()

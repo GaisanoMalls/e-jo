@@ -5,14 +5,13 @@ namespace App\Http\Livewire\Staff\Accounts\Approver;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
+use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
-use App\Models\Role as UserRole;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class UpdateApprover extends Component
 {
@@ -29,7 +28,6 @@ class UpdateApprover extends Component
     public $permissions = [];
     public $currentPermissions = [];
     public $asCostingApprover2 = false;
-    public $useDirectPermission = false;
 
     public function mount(User $approver)
     {
@@ -41,9 +39,8 @@ class UpdateApprover extends Component
         $this->suffix = $approver->profile->suffix;
         $this->branches = $approver->branches->pluck("id")->toArray();
         $this->bu_departments = $approver->buDepartments->pluck("id")->toArray();
-        $this->currentPermissions = $approver->getAllPermissions()->pluck('name')->toArray();
+        $this->currentPermissions = $approver->getDirectPermissions()->pluck('name')->toArray();
         $this->asCostingApprover2 = $this->isCostingApprover2();
-        $this->useDirectPermission = $this->approverHasDirectPermissions();
     }
 
     public function rules(): array
@@ -58,12 +55,6 @@ class UpdateApprover extends Component
             'permissions' => 'nullable',
             'email' => "required|max:80|unique:users,email,{$this->approver->id}"
         ];
-    }
-
-    public function approverHasDirectPermissions()
-    {
-        return $this->approver->getDirectPermissions()->isNotEmpty()
-            && $this->approver->getPermissionsViaRoles()->isEmpty();
     }
 
     private function isCostingApprover2()
@@ -99,24 +90,7 @@ class UpdateApprover extends Component
                 $this->approver->branches()->sync($this->branches);
                 $this->approver->syncPermissions($this->permissions);
                 $this->approver->buDepartments()->sync($this->bu_departments);
-
-                if ($this->useDirectPermission) {
-                    $approverRole = Role::where('name', UserRole::APPROVER)->withWhereHas('users', function ($user) {
-                        $user->where('users.id', $this->approver->id);
-                    })->first();
-
-                    $approverRole->revokePermissionTo($this->approver->getPermissionsViaRoles()->pluck('name')->toArray());
-                    $this->approver->givePermissionTo($this->permissions);
-                }
-
-                if (!$this->useDirectPermission) {
-                    $approverRole = Role::where('name', UserRole::APPROVER)->withWhereHas('users', function ($user) {
-                        $user->where('users.id', $this->approver->id);
-                    })->first();
-
-                    $approverRole->revokePermissionTo($this->approver->getDirectPermissions()->pluck('name')->toArray());
-                    $approverRole->givePermissionTo($this->permissions);
-                }
+                $this->approver->syncPermissions($this->permissions);
 
                 if ($this->asCostingApprover2) {
                     if (!$this->hasCostingApprover2()) {
@@ -186,7 +160,7 @@ class UpdateApprover extends Component
             'approverBUDepartments' => $this->queryBUDepartments(),
             'currentUserAsCostingApprover2' => $this->currentUserAsCostingApprover2(),
             'hasCostingApprover2' => $this->hasCostingApprover2(),
-            'allPermissions' => Permission::all(),
+            'allPermissions' => Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::APPROVER))->get(),
         ]);
     }
 }

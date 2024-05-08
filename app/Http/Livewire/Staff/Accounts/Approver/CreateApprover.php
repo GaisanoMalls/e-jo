@@ -16,6 +16,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 
 class CreateApprover extends Component
 {
@@ -57,6 +58,9 @@ class CreateApprover extends Component
                 $approver->assignRole(Role::APPROVER);
                 $approver->buDepartments()->attach(array_map('intval', $this->bu_departments));
                 $approver->branches()->attach(array_map('intval', $this->branches));
+                $approver->givePermissionTo(
+                    Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::APPROVER))->pluck('name')->toArray()
+                );
 
                 Profile::create([
                     'user_id' => $approver->id,

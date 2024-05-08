@@ -16,6 +16,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 
 class CreateServiceDeptAdmin extends Component
 {
@@ -60,6 +61,9 @@ class CreateServiceDeptAdmin extends Component
                 $serviceDeptAdmin->buDepartments()->attach($this->bu_department);
                 $serviceDeptAdmin->branches()->attach(array_map('intval', $this->branches));
                 $serviceDeptAdmin->serviceDepartments()->attach($this->service_departments);
+                $serviceDeptAdmin->givePermissionTo(
+                    Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::SERVICE_DEPARTMENT_ADMIN))->pluck('name')->toArray()
+                );
 
                 Profile::create([
                     'user_id' => $serviceDeptAdmin->id,
