@@ -8,7 +8,7 @@
             </span>
             <span wire:loading.remove wire:target="generateDirectPermissions" class="button__name"
                 style="white-space: nowrap;">
-                Set all permissions
+                Set user permissions
             </span>
             <span wire:loading wire:target="generateDirectPermissions" class="button__name"
                 style="white-space: nowrap;">Setting permissions...</span>

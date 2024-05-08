@@ -23,6 +23,10 @@ class AddFormField extends Component
     public $variable_name;
     public $is_required;
     public $addedFields = [];
+    public $editingFieldId;
+    public $editingFieldName;
+    public $editingType;
+    public $editingIsRequired;
 
     public function rules()
     {
@@ -46,7 +50,7 @@ class AddFormField extends Component
 
     public function updatedName($value)
     {
-        $this->variable_name = preg_replace('/\s+/', '_', strtolower(trim($value)));
+        $this->variable_name = preg_replace('/[^a-zA-Z0-9.]+/', '_', strtolower(trim($value)));
     }
 
     public function addField()
@@ -77,10 +81,26 @@ class AddFormField extends Component
         $this->dispatchBrowserEvent('clear-form-fields');
     }
 
-    public function removeField(int $field_key)
+    public function toggleEditAddedField(int $fieldKey)
+    {
+        try {
+            $this->editingFieldId = $fieldKey;
+
+            foreach ($this->addedFields as $key => $field) {
+                if ($this->editingFieldId === $key) {
+                    $this->editingFieldName = $field['name'];
+                }
+            }
+
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+        }
+    }
+
+    public function removeField(int $fieldKey)
     {
         foreach (array_keys($this->addedFields) as $key) {
-            if ($field_key === $key) {
+            if ($fieldKey === $key) {
                 unset($this->addedFields[$key]);
             }
         }

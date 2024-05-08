@@ -133,7 +133,16 @@
                                         <td>
                                             <div class="d-flex align-items-center text-start px-0 td__content"
                                                 style="height: 0;">
-                                                <span>{{ $field['name'] }}</span>
+                                                @if ($editingFieldId === $key)
+                                                    <div wire:ignore.self
+                                                        class="d-flex align-items-center text-start px-1 td__content">
+                                                        <input wire:model="editingFieldName"
+                                                            class="form-control form__field" type="text"
+                                                            id="fieldName" placeholder="Enter field name">
+                                                    </div>
+                                                @else
+                                                    <span>{{ $field['name'] }}</span>
+                                                @endif
                                             </div>
                                         </td>
                                         <td>
@@ -155,7 +164,12 @@
                                             </div>
                                         </td>
                                         <td class="px-0">
-                                            <div class="d-flex align-items-center justify-content-end px-2">
+                                            <div class="d-flex align-items-center gap-2 justify-content-end px-2">
+                                                <button
+                                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                    wire:click="toggleEditAddedField({{ $key }})">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
                                                 <button
                                                     class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
                                                     wire:click="removeField({{ $key }})">

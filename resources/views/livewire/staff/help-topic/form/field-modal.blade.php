@@ -10,7 +10,6 @@
                     </button>
                 </div>
                 @livewire('staff.help-topic.form.add-form-field')
-                {{-- @livewire('staff.help-topic.form.field-list') --}}
             </div>
         </div>
     </div>
