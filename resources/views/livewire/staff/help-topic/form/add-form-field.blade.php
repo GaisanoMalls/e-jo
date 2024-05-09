@@ -31,182 +31,189 @@
                 </div>
             </div>
         </div>
-        <h6 class="px-1">Add field</h6>
-        @if (session()->has('required_form_fields_error'))
-            <small class="fw-semibold mb-1 text-danger ms-1">{{ session('required_form_fields_error') }}</small>
-        @endif
-
-        <div class="row mb-3">
-            <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
-                <div class="mb-2">
-                    <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
-                        Field name
-                    </label>
-                    <div class="d-flex align-items-center text-start px-1 td__content">
-                        <input wire:model="name" class="form-control form__field" type="text" id="fieldName"
-                            placeholder="Enter field name">
-                    </div>
-                    @error('name')
-                        <span class="error__message">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                            {{ $message }}
-                        </span>
-                    @enderror
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
-                <div class="mb-2">
-                    <label class="form-label text-muted form__field__label" style="font-weight: 500;">Type</label>
-                    <div class="d-flex align-items-center text-start px-1 td__content">
-                        <div class="w-100">
-                            <div id="select-field-type" wire:ignore></div>
+        <div class="mx-1">
+            <h6>Add field</h6>
+            @if (session()->has('required_form_fields_error'))
+                <small class="fw-semibold mb-1 text-danger ms-1">{{ session('required_form_fields_error') }}</small>
+            @endif
+            <div class="row mb-3">
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                    <div class="mb-2">
+                        <label for="fieldName" class="form-label text-muted form__field__label"
+                            style="font-weight: 500;">
+                            Field name
+                        </label>
+                        <div class="d-flex align-items-center text-start px-0 td__content">
+                            <input wire:model="name" class="form-control form__field" type="text" id="fieldName"
+                                placeholder="Enter field name">
                         </div>
-                    </div>
-                    @error('type')
-                        <span class="error__message">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                            {{ $message }}
-                        </span>
-                    @enderror
-                    @if (session()->has('field_type_error'))
-                        <span class="error__message">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                            {{ session('field_type_error') }}
-                        </span>
-                    @endif
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
-                <div class="mb-2">
-                    <label class="form-label text-muted form__field__label" style="font-weight: 500;">Required</label>
-                    <div class="d-flex align-items-center text-start px-1 td__content">
-                        <div class="w-100">
-                            <div id="select-required-field" wire:ignore></div>
-                        </div>
+                        @error('name')
+                            <span class="error__message position-absolute bottom-0" style="bottom: -5px !important;">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ $message }}
+                            </span>
+                        @enderror
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
-                <div class="mb-2">
-                    <button wire:click="addField" type="button"
-                        class="btn btn-sm d-flex gap-2 ms-1 align-items-center justify-content-center outline-none px-3 rounded-3"
-                        style="height: 45px; background-color: #edeef0; border: 1px solid #e7e9eb; margin-bottom: 10px;">
-                        <span wire:loading.remove wire:target="addField">
-                            <i class="bi bi-save"></i>
-                        </span>
-                        <div wire:loading wire:target="addField"
-                            class="spinner-border spinner-border-sm loading__spinner" role="status">
-                            <span class="sr-only">Loading...</span>
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
+                    <div class="mb-2">
+                        <label class="form-label text-muted form__field__label" style="font-weight: 500;">Type</label>
+                        <div class="d-flex align-items-center text-start px-0 td__content">
+                            <div class="w-100">
+                                <div id="select-field-type" wire:ignore></div>
+                            </div>
                         </div>
-                        Add
-                    </button>
+                        @error('type')
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ $message }}
+                            </span>
+                        @enderror
+                        @if (session()->has('field_type_error'))
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ session('field_type_error') }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
+                    <div class="mb-2">
+                        <label class="form-label text-muted form__field__label"
+                            style="font-weight: 500;">Required</label>
+                        <div class="d-flex align-items-center text-start px-0 td__content">
+                            <div class="w-100">
+                                <div id="select-required-field" wire:ignore></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
+                    <div class="mb-2">
+                        <button wire:click="addField" type="button"
+                            class="btn btn-sm d-flex gap-2 ms-1 align-items-center justify-content-center outline-none px-3 rounded-3"
+                            style="height: 45px; background-color: #edeef0; border: 1px solid #e7e9eb; margin-bottom: 10px;">
+                            <span wire:loading.remove wire:target="addField">
+                                <i class="bi bi-save"></i>
+                            </span>
+                            <div wire:loading wire:target="addField"
+                                class="spinner-border spinner-border-sm loading__spinner" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Add
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        @if (!empty($addedFields))
-            <div class="row my-4 px-3">
-                <div class="table-responsive custom__table">
-                    <table class="table mb-0">
-                        <thead>
-                            <tr>
-                                <th class="border-0 table__head__label px-2">Enable</th>
-                                <th class="border-0 table__head__label px-2">Name</th>
-                                <th class="border-0 table__head__label px-2">Type</th>
-                                <th class="border-0 table__head__label px-2">Required</th>
-                                <th class="border-0 table__head__label px-2">
-                                    Variable Name
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($addedFields as $key => $field)
-                                <tr wire:key="field-{{ $key }}">
-                                    <td>
-                                        <div class="form-check">
-                                            <input value="{{ $key }}" class="form-check-input" type="checkbox"
-                                                role="switch" wire:loading.attr="disabled") style="margin-top: 3px;">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0;">
-                                            @if ($editingFieldId === $key)
-                                                <input wire:model="editingFieldName" class="form-control form__field"
-                                                    type="text" placeholder="Enter field name">
-                                            @else
-                                                <span>{{ $field['name'] }}</span>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0;">
-                                            @if ($editingFieldId === $key)
-                                                <div class="w-100">
-                                                    <div id="editing-select-field-type" wire:ignore></div>
-                                                </div>
-                                            @else
-                                                <span>{{ $field['type'] }}</span>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0;">
-                                            @if ($editingFieldId === $key)
-                                                <div class="w-100">
-                                                    <div id="editing-select-field-is-required" wire:ignore></div>
-                                                </div>
-                                            @else
-                                                <span>{{ $field['is_required'] }}</span>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0;">
-                                            @if ($editingFieldId === $key)
-                                                <input wire:model="editingFieldVariableName"
-                                                    class="form-control form__field" type="text" readonly disabled>
-                                            @else
-                                                <span>{{ $field['variable_name'] }}</span>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td class="px-0">
-                                        <div class="d-flex align-items-center gap-2 justify-content-end px-2">
-                                            @if ($editingFieldId === $key)
-                                                <button
-                                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                    wire:click="updateAddedField({{ $key }})">
-                                                    <i class="bi bi-check-lg" style="font-size: 18px;"></i>
-                                                </button>
-                                                <button
-                                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                    wire:click="cancelEditAddedField({{ $key }})">
-                                                    <i class="bi bi-x-lg"></i>
-                                                </button>
-                                            @else
-                                                <button
-                                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                    wire:click="toggleEditAddedField({{ $key }})">
-                                                    <i class="bi bi-pencil"></i>
-                                                </button>
-                                                <button
-                                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                    wire:click="removeField({{ $key }})">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            @endif
-                                        </div>
-                                    </td>
+            @if (!empty($addedFields))
+                <div class="row my-4 px-3">
+                    <div class="table-responsive custom__table">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="border-0 table__head__label px-2">Enable</th>
+                                    <th class="border-0 table__head__label px-2">Name</th>
+                                    <th class="border-0 table__head__label px-2">Type</th>
+                                    <th class="border-0 table__head__label px-2">Required</th>
+                                    <th class="border-0 table__head__label px-2">
+                                        Variable Name
+                                    </th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($addedFields as $key => $field)
+                                    <tr wire:key="field-{{ $key }}">
+                                        <td>
+                                            <div class="form-check">
+                                                <input value="{{ $key }}" class="form-check-input"
+                                                    type="checkbox" role="switch" wire:loading.attr="disabled")
+                                                    style="margin-top: 3px;">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center text-start px-0 td__content"
+                                                style="height: 0; min-width: 200px;">
+                                                @if ($editingFieldId === $key)
+                                                    <input wire:model="editingFieldName"
+                                                        class="form-control form__field" type="text"
+                                                        placeholder="Enter field name">
+                                                @else
+                                                    <span>{{ $field['name'] }}</span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center text-start px-0 td__content"
+                                                style="height: 0;">
+                                                @if ($editingFieldId === $key)
+                                                    <div class="w-100">
+                                                        <div id="editing-select-field-type" wire:ignore></div>
+                                                    </div>
+                                                @else
+                                                    <span>{{ $field['type'] }}</span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center text-start px-0 td__content"
+                                                style="height: 0;">
+                                                @if ($editingFieldId === $key)
+                                                    <div class="w-100">
+                                                        <div id="editing-select-field-is-required" wire:ignore></div>
+                                                    </div>
+                                                @else
+                                                    <span>{{ $field['is_required'] }}</span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center text-start px-0 td__content"
+                                                style="height: 0;">
+                                                @if ($editingFieldId === $key)
+                                                    <input wire:model="editingFieldVariableName"
+                                                        class="form-control form__field" type="text" readonly
+                                                        disabled>
+                                                @else
+                                                    <span>{{ $field['variable_name'] }}</span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td class="px-0">
+                                            <div class="d-flex align-items-center gap-2 justify-content-end px-2">
+                                                @if ($editingFieldId === $key)
+                                                    <button
+                                                        class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                        wire:click="updateAddedField({{ $key }})">
+                                                        <i class="bi bi-check-lg" style="font-size: 18px;"></i>
+                                                    </button>
+                                                    <button
+                                                        class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                        wire:click="cancelEditAddedField({{ $key }})">
+                                                        <i class="bi bi-x-lg"></i>
+                                                    </button>
+                                                @else
+                                                    <button
+                                                        class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                        wire:click="toggleEditAddedField({{ $key }})">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button
+                                                        class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                        wire:click="removeField({{ $key }})">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-        @endif
+            @endif
+
+        </div>
         <div class="modal-footer modal__footer p-0 mt-3 justify-content-between border-0 gap-2">
             <div class="d-flex align-items-center gap-2">
                 <button wire:click="saveForm" type="button"
