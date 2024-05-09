@@ -16,17 +16,18 @@ use Spatie\LaravelOptions\Options;
 
 class AddFormField extends Component
 {
-    public $help_topic;
-    public $form_name;
+    public $helpTopic;
+    public $formName;
     public $name;
     public $type;
-    public $variable_name;
+    public $variableName;
     public $is_required;
     public $addedFields = [];
     public $editingFieldId;
     public $editingFieldName;
-    public $editingType;
-    public $editingIsRequired;
+    public $editingFieldType;
+    public $editingFieldIsRequired;
+    public $editingFieldVariableName;
 
     public function rules()
     {
@@ -48,9 +49,19 @@ class AddFormField extends Component
         $this->dispatchBrowserEvent('clear-form');
     }
 
+    public function convertToVariable($value)
+    {
+        return preg_replace('/[^a-zA-Z0-9.]+/', '_', strtolower(trim($value)));
+    }
+
     public function updatedName($value)
     {
-        $this->variable_name = preg_replace('/[^a-zA-Z0-9.]+/', '_', strtolower(trim($value)));
+        $this->variableName = $this->convertToVariable($value);
+    }
+
+    public function updatedEditingFieldName($value)
+    {
+        $this->editingFieldVariableName = $this->convertToVariable($value);
     }
 
     public function addField()
@@ -71,12 +82,12 @@ class AddFormField extends Component
                 'name' => $this->name,
                 'label' => $this->name,
                 'type' => $this->type,
-                'variable_name' => $this->variable_name,
+                'variable_name' => $this->variableName,
                 'is_required' => $this->is_required,
             )
         );
 
-        $this->reset('name', 'type', 'variable_name', 'is_required');
+        $this->reset('name', 'type', 'variableName', 'is_required');
         $this->resetValidation();
         $this->dispatchBrowserEvent('clear-form-fields');
     }
@@ -89,12 +100,57 @@ class AddFormField extends Component
             foreach ($this->addedFields as $key => $field) {
                 if ($this->editingFieldId === $key) {
                     $this->editingFieldName = $field['name'];
+                    $this->editingFieldType = $field['type'];
+                    $this->editingFieldIsRequired = $field['is_required'];
+                    $this->editingFieldVariableName = $field['variable_name'];
+
+                    $this->dispatchBrowserEvent('edit-added-field-show-select-field', [
+                        'isEditing' => true,
+                        'currentFieldType' => $this->editingFieldType,
+                        'currentFieldIsRequired' => $this->editingFieldIsRequired
+                    ]);
                 }
             }
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
+    }
+
+    public function updateAddedField(int $fieldKey)
+    {
+        try {
+            foreach ($this->addedFields as $key => &$field) {
+                if ($this->editingFieldId === $fieldKey && $key === $fieldKey) {
+                    $field['name'] = $this->editingFieldName;
+                    $field['type'] = $this->editingFieldType;
+                    $field['is_required'] = $this->editingFieldIsRequired;
+                    $field['variable_name'] = $this->editingFieldVariableName;
+                }
+            }
+
+            $this->editFieldAction();
+
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+        }
+    }
+
+    public function cancelEditAddedField(int $fieldKey)
+    {
+        if ($this->editingFieldId === $fieldKey) {
+            $this->editFieldAction();
+        }
+    }
+
+
+    public function editFieldAction()
+    {
+        $this->editingFieldId = null;
+        $this->editingFieldName = '';
+        $this->editingFieldType = '';
+        $this->editingFieldIsRequired = '';
+        $this->editingFieldVariableName = '';
     }
 
     public function removeField(int $fieldKey)
@@ -114,10 +170,9 @@ class AddFormField extends Component
             if (empty($this->addedFields)) {
                 session()->flash('required_form_fields_error', 'Form fields are required');
             } else {
-
                 $form = Form::create([
-                    'help_topic_id' => $this->help_topic,
-                    'name' => $this->form_name
+                    'help_topic_id' => $this->helpTopic,
+                    'name' => $this->formName
                 ]);
 
                 foreach ($this->addedFields as $field) {
