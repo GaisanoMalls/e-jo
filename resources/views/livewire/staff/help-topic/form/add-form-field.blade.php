@@ -1,7 +1,7 @@
 <div>
     <div class="row mb-4">
         <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="mb-2">
                     <label for="formName" class="form-label form__field__label">Form name</label>
                     <input type="text" wire:model="formName" class="form-control form__field" id="formName"
@@ -14,7 +14,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="mb-3">
                     <label for="sla" class="form-label form__field__label">
                         Help topic
@@ -30,11 +30,27 @@
                     @enderror
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label for="sla" class="form-label form__field__label">
+                        Visible to
+                    </label>
+                    <div>
+                        <div id="select-form-visibility" wire:ignore></div>
+                    </div>
+                    @error('visibleTo')
+                        <span class="error__message">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+            </div>
         </div>
         <div class="mx-1">
             <h6>Add field</h6>
             @if (session()->has('required_form_fields_error'))
-                <small class="fw-semibold mb-1 text-danger ms-1">{{ session('required_form_fields_error') }}</small>
+                <small class="fw-semibold text-danger mb-1 ms-1">{{ session('required_form_fields_error') }}</small>
             @endif
             <div class="row mb-3">
                 <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
@@ -48,14 +64,14 @@
                                 placeholder="Enter field name">
                         </div>
                         @error('name')
-                            <span class="error__message position-absolute bottom-0" style="bottom: -5px !important;">
+                            <span class="error__message position-absolute" style="bottom: -5px !important;">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 {{ $message }}
                             </span>
                         @enderror
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                     <div class="mb-2">
                         <label class="form-label text-muted form__field__label" style="font-weight: 500;">Type</label>
                         <div class="d-flex align-items-center text-start px-0 td__content">
@@ -64,20 +80,14 @@
                             </div>
                         </div>
                         @error('type')
-                            <span class="error__message">
+                            <span class="error__message position-absolute" style="bottom: -5px !important;">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 {{ $message }}
                             </span>
                         @enderror
-                        @if (session()->has('field_type_error'))
-                            <span class="error__message">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ session('field_type_error') }}
-                            </span>
-                        @endif
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                     <div class="mb-2">
                         <label class="form-label text-muted form__field__label"
                             style="font-weight: 500;">Required</label>
@@ -87,6 +97,12 @@
                             </div>
                         </div>
                     </div>
+                    @error('is_required')
+                        <span class="error__message position-absolute" style="bottom: -24px !important;">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
                 <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
                     <div class="mb-2">
@@ -212,9 +228,8 @@
                     </div>
                 </div>
             @endif
-
         </div>
-        <div class="modal-footer modal__footer p-0 mt-3 justify-content-between border-0 gap-2">
+        <div class="modal-footer modal__footer p-0 mt-3 mx-2 justify-content-between border-0 gap-2">
             <div class="d-flex align-items-center gap-2">
                 <button wire:click="saveForm" type="button"
                     class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send">
@@ -236,6 +251,7 @@
         const selectFieldType = document.querySelector('#select-field-type');
         const selectRequired = document.querySelector('#select-required-field');
         const selectHelpTopic = document.querySelector('#select-help-topic');
+        const selectFormVisibility = document.querySelector('#select-form-visibility');
 
         const fieldTypeOption = [
             @foreach ($fieldTypes as $fieldType)
@@ -293,10 +309,36 @@
             @this.set('helpTopic', parseInt(selectHelpTopic.value));
         });
 
+        selectHelpTopic.addEventListener('reset', () => {
+            @this.set('helpTopic', null);
+        });
+
+        const selectFormVisibilityOption = [
+            @foreach ($userRoles as $role)
+                {
+                    label: "{{ $role['label'] }}",
+                    value: "{{ $role['label'] }}"
+                },
+            @endforeach
+        ];
+
+        VirtualSelect.init({
+            ele: selectFormVisibility,
+            options: selectFormVisibilityOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+        });
+
+        selectFormVisibility.addEventListener('change', () => {
+            @this.set('visibleTo', selectFormVisibility.value)
+        });
+
         window.addEventListener('clear-form', () => {
             selectFieldType.reset();
             selectRequired.reset();
             selectHelpTopic.reset();
+            selectFormVisibility.reset();
         });
 
         window.addEventListener('clear-form-fields', () => {

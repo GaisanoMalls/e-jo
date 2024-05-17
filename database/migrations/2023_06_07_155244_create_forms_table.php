@@ -16,6 +16,7 @@ return new class extends Migration {
         Schema::create('forms', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained('help_topics')->cascadeOnDelete();
+            $table->json('visible_to');
             $table->string('name');
             $table->timestamps();
         });

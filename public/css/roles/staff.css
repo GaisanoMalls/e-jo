@@ -9252,7 +9252,7 @@ input[type=checkbox]:checked + .form-check-label {
   border: 0 !important;
 }
 .settings__content .settings__tab__container .ul__tab {
-  gap: 1rem;
+  gap: 2.3rem;
 }
 .settings__content .settings__tab__container .ul__tab::-webkit-scrollbar {
   display: none;

@@ -9,15 +9,16 @@ use App\Http\Traits\AppErrorLog;
 use App\Models\Field;
 use App\Models\Form;
 use App\Models\HelpTopic;
+use App\Models\Role;
 use Exception;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
 
 class AddFormField extends Component
 {
-    public $helpTopic;
     public $formName;
+    public $helpTopic;
+    public $visibleTo = [];
     public $name;
     public $type;
     public $variableName;
@@ -45,13 +46,22 @@ class AddFormField extends Component
     {
         $this->reset();
         $this->resetValidation();
-        $this->emit('loadCustomFieldList');
+        $this->emit('loadHelpTopics');
         $this->dispatchBrowserEvent('clear-form');
     }
 
     public function convertToVariable($value)
     {
         return preg_replace('/[^a-zA-Z0-9.]+/', '_', strtolower(trim($value)));
+    }
+
+    public function updatedHelpTopic()
+    {
+        $helpTopicHasExistingForm = Form::where('help_topic_id', $this->helpTopic)->exists();
+
+        if ($helpTopicHasExistingForm) {
+            $this->addError('helpTopic', 'Help topic has existing form');
+        }
     }
 
     public function updatedName($value)
@@ -66,13 +76,18 @@ class AddFormField extends Component
 
     public function addField()
     {
-        if (is_null($this->name)) {
+        if (!$this->name) {
             $this->addError('name', 'Field name is required');
             return;
         }
 
-        if (is_null($this->type)) {
+        if (!$this->type) {
             $this->addError('type', 'Field type is required');
+            return;
+        }
+
+        if (!$this->is_required) {
+            $this->addError('is_required', 'Please choose if this field is required or not');
             return;
         }
 
@@ -143,7 +158,6 @@ class AddFormField extends Component
         }
     }
 
-
     public function editFieldAction()
     {
         $this->editingFieldId = null;
@@ -169,9 +183,12 @@ class AddFormField extends Component
         try {
             if (empty($this->addedFields)) {
                 session()->flash('required_form_fields_error', 'Form fields are required');
+            } elseif (Form::where('help_topic_id', $this->helpTopic)->exists()) {
+                $this->addError('helpTopic', 'Help topic has existing form');
             } else {
                 $form = Form::create([
                     'help_topic_id' => $this->helpTopic,
+                    'visible_to' => json_encode($this->visibleTo),
                     'name' => $this->formName
                 ]);
 
@@ -207,6 +224,7 @@ class AddFormField extends Component
         return view('livewire.staff.help-topic.form.add-form-field', [
             'fieldRequiredOption' => Options::forEnum(FieldRequiredOptionEnum::class)->toArray(),
             'fieldTypes' => Options::forEnum(FieldTypesEnum::class)->toArray(),
+            'userRoles' => Options::forModels(Role::class)->toArray(),
             'helpTopics' => HelpTopic::all(['id', 'name'])
         ]);
     }

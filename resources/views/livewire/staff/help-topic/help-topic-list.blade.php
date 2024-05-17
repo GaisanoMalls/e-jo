@@ -8,7 +8,7 @@
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Team</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">SLA</th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Forms</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Form</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
                     </tr>
@@ -24,8 +24,9 @@
                                         <div class="d-flex align-items-center rounded-4"
                                             style="background-color: #f1f3ef; padding: 0.1rem 0.4rem;">
                                             <span style="font-size: 11px; color: #D32839;">₱</span>
-                                            <span
-                                                style="font-size: 11px; color: #D32839;">{{ number_format($helpTopic->specialProject?->amount, 2) }}</span>
+                                            <span style="font-size: 11px; color: #D32839;">
+                                                {{ number_format($helpTopic->specialProject?->amount, 2) }}
+                                            </span>
                                         </div>
                                     @endif
                                 </div>
@@ -47,9 +48,13 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center gap-1 text-start td__content">
-                                    <span class="rounded-circle"
-                                        style="background-color: #edeef0; padding: 2px 7px;">{{ $helpTopic->forms?->count() }}</span>
-                                    <span wire:click="" class="btn__view__form">View</span>
+                                    @if ($helpTopic->form)
+                                        <span wire:click="viewHelpTopicForm({{ $helpTopic->form->id }})"
+                                            data-bs-toggle="modal" data-bs-target="#viewFormModal"
+                                            class="btn__view__form">View</span>
+                                    @else
+                                        N/A
+                                    @endif
                                 </div>
                             </td>
                             <td>
@@ -118,6 +123,42 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- View help topic form --}}
+    <div wire:ignore.self class="modal fade help__topic__modal" id="viewFormModal" tabindex="-1"
+        aria-labelledby="viewFormModalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal__content">
+                <div class="modal-header modal__header p-0 border-0 mb-3">
+                    <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">
+                        {{ $formName }}
+                    </h1>
+                    <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
+                        <i class="fa-sharp fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                @if ($formFields->isNotEmpty())
+                    @foreach ($formFields as $field)
+                        @if ($field->type === \App\Enums\FieldTypesEnum::STRING->value)
+                            <div class="mb-2">
+                                <label for="{{ $field->variable_name }}" class="form-label form__field__label">
+                                    {{ $field->name }}</label>
+                                <input type="text" wire:model="{{ $field->variable_name }}"
+                                    class="form-control form__field" id="{{ $field->variable_name }}"
+                                    placeholder="Enter help topic name">
+                                @error('{{ $field->variable_name }}')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>

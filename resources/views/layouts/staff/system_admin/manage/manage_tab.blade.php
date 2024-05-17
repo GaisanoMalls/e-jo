@@ -6,10 +6,7 @@
                 <a href="{{ route('staff.manage.roles_and_permissions.index') }}"
                     class="btn d-flex align-items-center border-0 position-relative settings__tab__button
                     {{ Route::is('staff.manage.roles_and_permissions.*') ? 'settings__active__tab' : '' }}">
-                    <span class="rounded-2" @style([
-                        'background-color: #f5f0f0' => Route::is('staff.manage.roles_and_permissions.*'),
-                        'padding: 0.4rem 0.7rem',
-                    ])>
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
                         Roles & Permissions
                     </span>
                 </a>
@@ -18,10 +15,7 @@
                 <a href="{{ route('staff.manage.user_account.index') }}"
                     class="btn d-flex align-items-center border-0 settings__tab__button
                     {{ Route::is('staff.manage.user_account.*') ? 'settings__active__tab' : '' }}">
-                    <span class="rounded-2" @style([
-                        'background-color: #f5f0f0' => Route::is('staff.manage.user_account.*'),
-                        'padding: 0.4rem 0.7rem',
-                    ])>
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
                         Accounts
                     </span>
                 </a>
@@ -30,10 +24,7 @@
                 <a href="{{ route('staff.manage.service_level_agreements.index') }}"
                     class="btn d-flex align-items-center border-0 settings__tab__button
                     {{ Route::is('staff.manage.service_level_agreements.index') ? 'settings__active__tab' : '' }}">
-                    <span class="rounded-2" @style([
-                        'background-color: #f5f0f0' => Route::is('staff.manage.service_level_agreements.index'),
-                        'padding: 0.4rem 0.7rem',
-                    ])>
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
                         SLA Plans
                     </span>
                 </a>
@@ -42,10 +33,7 @@
                 <a href="{{ route('staff.manage.branch.index') }}"
                     class="btn d-flex align-items-center border-0 settings__tab__button
                     {{ Route::is('staff.manage.branch.*') ? 'settings__active__tab' : '' }}">
-                    <span class="rounded-2" @style([
-                        'background-color: #f5f0f0' => Route::is('staff.manage.branch.*'),
-                        'padding: 0.4rem 0.7rem',
-                    ])>
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
                         Branches
                     </span>
                 </a>
@@ -54,10 +42,7 @@
                 <a href="{{ route('staff.manage.bu_department.index') }}"
                     class="btn d-flex align-items-center border-0 settings__tab__button
                     {{ Route::is('staff.manage.bu_department.*') ? 'settings__active__tab' : '' }}">
-                    <span class="rounded-2" @style([
-                        'background-color: #f5f0f0' => Route::is('staff.manage.bu_department.*'),
-                        'padding: 0.4rem 0.7rem',
-                    ])>
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
                         BU/Departments
                     </span>
                 </a>
@@ -66,10 +51,7 @@
                 <a href="{{ route('staff.manage.service_department.index') }}"
                     class="btn d-flex align-items-center border-0 settings__tab__button
                     {{ Route::is('staff.manage.service_department.*') ? 'settings__active__tab' : '' }}">
-                    <span class="rounded-2" @style([
-                        'background-color: #f5f0f0' => Route::is('staff.manage.service_department.*'),
-                        'padding: 0.4rem 0.7rem',
-                    ])>
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
                         Service Departments
                     </span>
                 </a>
@@ -78,10 +60,7 @@
                 <a href="{{ route('staff.manage.team.index') }}"
                     class="btn d-flex align-items-center border-0 settings__tab__button
                     {{ Route::is('staff.manage.team.*') ? 'settings__active__tab' : '' }}">
-                    <span class="rounded-2" @style([
-                        'background-color: #f5f0f0' => Route::is('staff.manage.team.*'),
-                        'padding: 0.4rem 0.7rem',
-                    ])>
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
                         Teams
                     </span>
                 </a>
@@ -90,10 +69,7 @@
                 <a href="{{ route('staff.manage.help_topic.index') }}"
                     class="btn d-flex align-items-center border-0 settings__tab__button
                     {{ Route::is('staff.manage.help_topic.*') ? 'settings__active__tab' : '' }}">
-                    <span class="rounded-2" @style([
-                        'background-color: #f5f0f0' => Route::is('staff.manage.help_topic.*'),
-                        'padding: 0.4rem 0.7rem',
-                    ])>
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
                         Help Topics
                     </span>
                 </a>
@@ -102,10 +78,7 @@
                 <a href="{{ route('staff.manage.tag.index') }}"
                     class="btn d-flex align-items-center border-0 settings__tab__button
                     {{ Route::is('staff.manage.tag.*') ? 'settings__active__tab' : '' }}">
-                    <span class="rounded-2" @style([
-                        'background-color: #f5f0f0' => Route::is('staff.manage.tag.*'),
-                        'padding: 0.4rem 0.7rem',
-                    ])>
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
                         Tags
                     </span>
                 </a>
@@ -114,10 +87,7 @@
                 <a href="{{ route('staff.manage.ticket_statuses.index') }}"
                     class="btn d-flex align-items-center border-0 settings__tab__button
                     {{ Route::is('staff.manage.ticket_statuses.*') ? 'settings__active__tab' : '' }}">
-                    <span class="rounded-2" @style([
-                        'background-color: #f5f0f0' => Route::is('staff.manage.ticket_statuses.*'),
-                        'padding: 0.4rem 0.7rem',
-                    ])>
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
                         Ticket Status
                     </span>
                 </a>

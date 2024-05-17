@@ -4,8 +4,10 @@ namespace App\Http\Livewire\Staff\HelpTopic;
 
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
+use App\Models\Form;
 use App\Models\HelpTopic;
 use Exception;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class HelpTopicList extends Component
@@ -14,6 +16,15 @@ class HelpTopicList extends Component
 
     public $helpTopicDeleteId;
     public $helpTopicName;
+    public $formName;
+    public $formFieldName;
+    public Collection $formFields;
+    public $fieldVarNames;
+
+    public function mount()
+    {
+        $this->formFields = collect([]);
+    }
 
     protected $listeners = ['loadHelpTopics' => '$refresh'];
 
@@ -37,6 +48,12 @@ class HelpTopicList extends Component
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
+    }
+
+    public function viewHelpTopicForm(Form $form)
+    {
+        $this->formName = $form->name;
+        $this->formFields = $form->fields()->get();
     }
 
     public function render()
