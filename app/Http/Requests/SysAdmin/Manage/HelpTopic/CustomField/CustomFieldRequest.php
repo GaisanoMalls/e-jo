@@ -25,7 +25,7 @@ class CustomFieldRequest extends FormRequest
     {
         return [
             'formName' => ['required', 'unique:forms,name'],
-            'helpTopic' => ['required', 'numeric'],
+            'helpTopic' => ['required', 'numeric']
         ];
     }
 }

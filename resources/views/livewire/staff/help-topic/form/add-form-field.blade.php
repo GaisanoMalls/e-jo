@@ -58,6 +58,7 @@
                         <label for="fieldName" class="form-label text-muted form__field__label"
                             style="font-weight: 500;">
                             Field name
+                            <em style="font-size: 0.75rem;">(No special characters)</em>
                         </label>
                         <div class="d-flex align-items-center text-start px-0 td__content">
                             <input wire:model="name" class="form-control form__field" type="text" id="fieldName"

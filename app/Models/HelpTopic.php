@@ -52,9 +52,9 @@ class HelpTopic extends Model
         return $this->hasOne(SpecialProject::class);
     }
 
-    public function form(): HasOne
+    public function forms(): HasMany
     {
-        return $this->hasOne(Form::class);
+        return $this->hasMany(Form::class);
     }
 
     public function tickets(): HasMany

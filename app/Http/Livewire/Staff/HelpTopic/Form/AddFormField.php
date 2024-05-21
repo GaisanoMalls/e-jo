@@ -52,16 +52,7 @@ class AddFormField extends Component
 
     public function convertToVariable($value)
     {
-        return preg_replace('/[^a-zA-Z0-9.]+/', '_', strtolower(trim($value)));
-    }
-
-    public function updatedHelpTopic()
-    {
-        $helpTopicHasExistingForm = Form::where('help_topic_id', $this->helpTopic)->exists();
-
-        if ($helpTopicHasExistingForm) {
-            $this->addError('helpTopic', 'Help topic has existing form');
-        }
+        return preg_replace('/[^a-zA-Z0-9_.]+/', '_', strtolower(trim($value)));
     }
 
     public function updatedName($value)

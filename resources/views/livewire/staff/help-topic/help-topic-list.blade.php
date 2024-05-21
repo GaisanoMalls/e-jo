@@ -48,8 +48,8 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center gap-1 text-start td__content">
-                                    @if ($helpTopic->form)
-                                        <span wire:click="viewHelpTopicForm({{ $helpTopic->form->id }})"
+                                    @if ($helpTopic->forms->isNotEmpty())
+                                        <span wire:click="viewHelpTopicForm({{ $helpTopic->id }})"
                                             data-bs-toggle="modal" data-bs-target="#viewFormModal"
                                             class="btn__view__form">View</span>
                                     @else
@@ -128,24 +128,40 @@
     </div>
 
     {{-- View help topic form --}}
-    <div wire:ignore.self class="modal fade help__topic__modal" id="viewFormModal" tabindex="-1"
+    <div wire:ignore class="modal fade help__topic__modal" id="viewFormModal" tabindex="-1"
         aria-labelledby="viewFormModalModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0 mb-3">
                     <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">
-                        {{ $formName }}
+                        List of forms
                     </h1>
                     <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
                         <i class="fa-sharp fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                @if ($formFields->isNotEmpty())
+                @if ($helpTopicForms)
+                    @foreach ($helpTopicForms as $form)
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-2" style="font-size: 0.95rem;">
+                                <i class="bi bi-journal-text"></i>
+                                {{ $form->name }}
+                            </div>
+                            <button
+                                class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                wire:click="deleteHelpTopicForm({{ $form->id }})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    @endforeach
+                @endif
+                {{-- @if ($formFields->isNotEmpty())
                     @foreach ($formFields as $field)
                         @if ($field->type === \App\Enums\FieldTypesEnum::STRING->value)
                             <div class="mb-2">
                                 <label for="{{ $field->variable_name }}" class="form-label form__field__label">
-                                    {{ $field->name }}</label>
+                                    {{ $field->name }}
+                                </label>
                                 <input type="text" wire:model="{{ $field->variable_name }}"
                                     class="form-control form__field" id="{{ $field->variable_name }}"
                                     placeholder="Enter help topic name">
@@ -158,7 +174,7 @@
                             </div>
                         @endif
                     @endforeach
-                @endif
+                @endif --}}
             </div>
         </div>
     </div>

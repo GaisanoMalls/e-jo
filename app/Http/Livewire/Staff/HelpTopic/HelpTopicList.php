@@ -14,11 +14,12 @@ class HelpTopicList extends Component
 {
     use BasicModelQueries;
 
-    public $helpTopicDeleteId;
+    public Collection $formFields;
+    public Collection $helpTopicForms;
+    public $helpTopicId;
     public $helpTopicName;
     public $formName;
     public $formFieldName;
-    public Collection $formFields;
     public $fieldVarNames;
 
     public function mount()
@@ -30,7 +31,7 @@ class HelpTopicList extends Component
 
     public function deleteHelpTopic(HelpTopic $helpTopic)
     {
-        $this->helpTopicDeleteId = $helpTopic->id;
+        $this->helpTopicId = $helpTopic->id;
         $this->helpTopicName = $helpTopic->name;
         $this->dispatchBrowserEvent('show-delete-help-topic-modal');
     }
@@ -38,10 +39,10 @@ class HelpTopicList extends Component
     public function delete()
     {
         try {
-            $helpTopic = HelpTopic::find($this->helpTopicDeleteId);
+            $helpTopic = HelpTopic::find($this->helpTopicId);
             if ($helpTopic) {
                 $helpTopic->delete();
-                $this->helpTopicDeleteId = null;
+                $this->helpTopicId = null;
                 $this->dispatchBrowserEvent('close-modal');
                 noty()->addSuccess('Help topic successfully deleted');
             }
@@ -50,10 +51,18 @@ class HelpTopicList extends Component
         }
     }
 
-    public function viewHelpTopicForm(Form $form)
+    public function viewHelpTopicForm(HelpTopic $helpTopic)
     {
-        $this->formName = $form->name;
-        $this->formFields = $form->fields()->get();
+        $this->helpTopicForms = Form::where('help_topic_id', $helpTopic->id)->get();
+    }
+
+    public function deleteHelpTopicForm(Form $form)
+    {
+        try {
+            $form->delete();
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+        }
     }
 
     public function render()
