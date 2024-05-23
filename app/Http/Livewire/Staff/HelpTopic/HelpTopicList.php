@@ -2,13 +2,17 @@
 
 namespace App\Http\Livewire\Staff\HelpTopic;
 
+use App\Enums\FieldTypesEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
+use App\Models\Field;
 use App\Models\Form;
 use App\Models\HelpTopic;
+use App\Models\Role;
 use Exception;
 use Illuminate\Support\Collection;
 use Livewire\Component;
+use Spatie\LaravelOptions\Options;
 
 class HelpTopicList extends Component
 {
@@ -21,6 +25,7 @@ class HelpTopicList extends Component
     public $formName;
     public $formFieldName;
     public $fieldVarNames;
+    public $formId;
 
     public function mount()
     {
@@ -53,22 +58,40 @@ class HelpTopicList extends Component
 
     public function viewHelpTopicForm(HelpTopic $helpTopic)
     {
-        $this->helpTopicForms = Form::where('help_topic_id', $helpTopic->id)->get();
+        $this->helpTopicForms = $helpTopic->forms()->get(['id', 'name', 'visible_to']);
     }
 
     public function deleteHelpTopicForm(Form $form)
     {
         try {
             $form->delete();
+            $this->emitSelf('loadHelpTopics');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
+    }
+
+    public function deleteFormField(Field $field)
+    {
+        try {
+            $field->delete();
+            $this->emitSelf('loadHelpTopics');
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+        }
+    }
+
+    public function addFieldOfSelectedForm(Form $form)
+    {
+        $this->formName = $form->name;
     }
 
     public function render()
     {
         return view('livewire.staff.help-topic.help-topic-list', [
             'helpTopics' => $this->queryHelpTopics(),
+            'addFormFieldFieldTypes' => Options::forEnum(FieldTypesEnum::class)->toArray(),
+            'addFormFieldUserRoles' => Options::forModels(Role::class)->toArray(),
         ]);
     }
 }

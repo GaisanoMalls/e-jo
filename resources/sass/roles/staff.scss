@@ -4065,6 +4065,14 @@ input[type="checkbox"] {
         color: #777d87;
         font-size: $fs-13;
     }
+
+    .helptopic__form__list {
+        border-bottom: 1px solid #ddd;
+
+        &:last-child {
+            border-bottom: 0 !important;
+        }
+    }
 }
 
 .sla__section {

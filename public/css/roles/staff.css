@@ -10815,6 +10815,12 @@ input[type=checkbox]:checked + .form-check-label {
   color: #777d87;
   font-size: 0.813rem;
 }
+.help__topics__section .helptopic__form__list {
+  border-bottom: 1px solid #ddd;
+}
+.help__topics__section .helptopic__form__list:last-child {
+  border-bottom: 0 !important;
+}
 
 .sla__section .table__header {
   padding: 20px 30px !important;

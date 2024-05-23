@@ -14,7 +14,7 @@ class Form extends Model
     protected $fillable = ['help_topic_id', 'visible_to', 'name'];
 
     protected $casts = [
-        'visible_to' => 'json'
+        'visible_to' => 'array'
     ];
 
     public function helpTopic(): BelongsTo

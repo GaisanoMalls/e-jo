@@ -174,12 +174,10 @@ class AddFormField extends Component
         try {
             if (empty($this->addedFields)) {
                 session()->flash('required_form_fields_error', 'Form fields are required');
-            } elseif (Form::where('help_topic_id', $this->helpTopic)->exists()) {
-                $this->addError('helpTopic', 'Help topic has existing form');
             } else {
                 $form = Form::create([
                     'help_topic_id' => $this->helpTopic,
-                    'visible_to' => json_encode($this->visibleTo),
+                    'visible_to' => $this->visibleTo,
                     'name' => $this->formName
                 ]);
 

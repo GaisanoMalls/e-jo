@@ -247,7 +247,7 @@
         </div>
     </div>
 </div>
-@push('livewire-select')
+@push('livewire-modal')
     <script>
         const selectFieldType = document.querySelector('#select-field-type');
         const selectRequired = document.querySelector('#select-required-field');
