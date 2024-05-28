@@ -142,13 +142,14 @@
                 </div>
                 @if ($helpTopicForms)
                     @foreach ($helpTopicForms as $form)
-                        <div class="d-flex flex-column gap-2 py-3 helptopic__form__list">
+                        <div wire:key="form-{{ $form->id }}"
+                            class="d-flex flex-column gap-2 py-3 helptopic__form__list">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center gap-2" style="font-size: 0.95rem; color: black;">
                                     <i class="bi bi-journal-text"></i>
                                     {{ $form->name }}
                                 </div>
-                                <div wire:click="addFieldOfSelectedForm({{ $form->id }})"
+                                <div wire:click="addFieldToSelectedForm({{ $form->id }})"
                                     class="d-flex align-items-center gap-1">
                                     <button data-bs-target="#addFieldForSelectedForm" data-bs-toggle="modal"
                                         class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0">
@@ -163,7 +164,8 @@
                             @if ($form->fields->isNotEmpty())
                                 <div class="d-flex flex-wrap align-items-center gap-1">
                                     @foreach ($form->fields as $field)
-                                        <span class="d-flex align-items-center gap-1"
+                                        <span wire:key="field-{{ $field->id }}"
+                                            class="d-flex align-items-center gap-1"
                                             style="font-size: 0.65rem; border: 1px solid #ddd; border-radius: 20px; padding: 3px 7px 3px 8px;">
                                             {{ $field->name }}
                                             <button wire:click="deleteFormField({{ $field->id }})" type="button"
@@ -186,18 +188,23 @@
         </div>
     </div>
 
-    {{-- Add field of the selected form --}}
+    {{-- Add field to the selected form --}}
     <div wire:ignore.self class="modal fade help__topic__modal" id="addFieldForSelectedForm" tabindex="-1"
         aria-labelledby="addFieldForSelectedFormModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0 mb-3">
                     <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">
-                        Add fields for {{ $formName }}
+                        Add fields for {{ $selectedFormName }}
                     </h1>
                 </div>
                 <div class="mx-1">
                     <h6>Add field</h6>
+                    @if (session()->has('selected_form_required_form_fields_error'))
+                        <small class="fw-semibold text-danger mb-1">
+                            {{ session('selected_form_required_form_fields_error') }}
+                        </small>
+                    @endif
                     <div class="row mb-3">
                         <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                             <div class="mb-2">
@@ -207,10 +214,10 @@
                                     <em style="font-size: 0.75rem;">(No special characters)</em>
                                 </label>
                                 <div class="d-flex align-items-center text-start px-0 td__content">
-                                    <input wire:model="asx" class="form-control form__field" type="text"
-                                        id="fieldName" placeholder="Enter field name">
+                                    <input wire:model="selectedFormFieldName" class="form-control form__field"
+                                        type="text" id="fieldName" placeholder="Enter field name">
                                 </div>
-                                @error('name')
+                                @error('selectedFormFieldName')
                                     <span class="error__message position-absolute" style="bottom: -5px !important;">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -227,7 +234,7 @@
                                         <div id="add-selected-form-field-select-field-type" wire:ignore></div>
                                     </div>
                                 </div>
-                                @error('type')
+                                @error('selectedFormFieldType')
                                     <span class="error__message position-absolute" style="bottom: -5px !important;">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -245,7 +252,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @error('is_required')
+                            @error('selectedFormFieldIsRequired')
                                 <span class="error__message position-absolute" style="bottom: -24px !important;">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}
@@ -254,13 +261,13 @@
                         </div>
                         <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
                             <div class="mb-2">
-                                <button wire:click="" type="button"
+                                <button wire:click="saveAddedFields" type="button"
                                     class="btn btn-sm d-flex gap-2 ms-1 align-items-center justify-content-center outline-none px-3 rounded-3"
                                     style="height: 45px; background-color: #edeef0; border: 1px solid #e7e9eb; margin-bottom: 10px;">
-                                    <span wire:loading.remove wire:target="">
+                                    <span wire:loading.remove wire:target="saveAddedFields">
                                         <i class="bi bi-save"></i>
                                     </span>
-                                    <div wire:loading wire:target=""
+                                    <div wire:loading wire:target="saveAddedFields"
                                         class="spinner-border spinner-border-sm loading__spinner" role="status">
                                         <span class="sr-only">Loading...</span>
                                     </div>
@@ -269,7 +276,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- @if (!empty($addedFields))
+                    @if (!empty($selectedFormAddedFields))
                         <div class="row my-4 px-3">
                             <div class="table-responsive custom__table">
                                 <table class="table mb-0">
@@ -285,7 +292,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($addedFields as $key => $field)
+                                        @foreach ($selectedFormAddedFields as $key => $field)
                                             <tr wire:key="field-{{ $key }}">
                                                 <td>
                                                     <div class="form-check">
@@ -297,79 +304,35 @@
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
                                                         style="height: 0; min-width: 200px;">
-                                                        @if ($editingFieldId === $key)
-                                                            <input wire:model="editingFieldName"
-                                                                class="form-control form__field" type="text"
-                                                                placeholder="Enter field name">
-                                                        @else
-                                                            <span>{{ $field['name'] }}</span>
-                                                        @endif
+                                                        <span>{{ $field['name'] }}</span>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
                                                         style="height: 0;">
-                                                        @if ($editingFieldId === $key)
-                                                            <div class="w-100">
-                                                                <div id="editing-select-field-type" wire:ignore></div>
-                                                            </div>
-                                                        @else
-                                                            <span>{{ $field['type'] }}</span>
-                                                        @endif
+                                                        {{ $field['type'] }}</span>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
                                                         style="height: 0;">
-                                                        @if ($editingFieldId === $key)
-                                                            <div class="w-100">
-                                                                <div id="editing-select-field-is-required" wire:ignore>
-                                                                </div>
-                                                            </div>
-                                                        @else
-                                                            <span>{{ $field['is_required'] }}</span>
-                                                        @endif
+                                                        <span>{{ $field['is_required'] }}</span>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
                                                         style="height: 0;">
-                                                        @if ($editingFieldId === $key)
-                                                            <input wire:model="editingFieldVariableName"
-                                                                class="form-control form__field" type="text"
-                                                                readonly disabled>
-                                                        @else
-                                                            <span>{{ $field['variable_name'] }}</span>
-                                                        @endif
+                                                        <span>{{ $field['variable_name'] }}</span>
                                                     </div>
                                                 </td>
                                                 <td class="px-0">
                                                     <div
                                                         class="d-flex align-items-center gap-2 justify-content-end px-2">
-                                                        @if ($editingFieldId === $key)
-                                                            <button
-                                                                class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                                wire:click="updateAddedField({{ $key }})">
-                                                                <i class="bi bi-check-lg"
-                                                                    style="font-size: 18px;"></i>
-                                                            </button>
-                                                            <button
-                                                                class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                                wire:click="cancelEditAddedField({{ $key }})">
-                                                                <i class="bi bi-x-lg"></i>
-                                                            </button>
-                                                        @else
-                                                            <button
-                                                                class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                                wire:click="toggleEditAddedField({{ $key }})">
-                                                                <i class="bi bi-pencil"></i>
-                                                            </button>
-                                                            <button
-                                                                class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                                wire:click="removeField({{ $key }})">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        @endif
+                                                        <button
+                                                            class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                            wire:click="selectedFormRemoveField({{ $key }})">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -378,14 +341,14 @@
                                 </table>
                             </div>
                         </div>
-                    @endif --}}
+                    @endif
                 </div>
-                <div class="modal-footer modal__footer p-0 mt-3 mx-2 justify-content-between border-0 gap-2">
+                <div class="modal-footer modal__footer p-0 mt-3 justify-content-between border-0 gap-2">
                     <div class="d-flex align-items-center gap-2">
-                        <button wire:click="" type="button"
+                        <button wire:click="selectedFormSaveField" type="button"
                             class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send">
-                            <span wire:loading wire:target="" class="spinner-border spinner-border-sm" role="status"
-                                aria-hidden="true">
+                            <span wire:loading wire:target="selectedFormSaveField"
+                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                             </span>
                             Save field
                         </button>
@@ -424,10 +387,10 @@
         ];
 
         const addFormFieldSelectRequiredOption = [
-            @foreach ($addFormFieldUserRoles as $addFormFieldRequiredOption)
+            @foreach ($addFormFieldRequiredOption as $addFormFieldRequired)
                 {
-                    label: "{{ $addFormFieldRequiredOption['label'] }}",
-                    value: "{{ $addFormFieldRequiredOption['value'] }}"
+                    label: "{{ $addFormFieldRequired['label'] }}",
+                    value: "{{ $addFormFieldRequired['value'] }}"
                 },
             @endforeach
         ];
@@ -440,6 +403,19 @@
         VirtualSelect.init({
             ele: addSelectedFormFieldSelectRequired,
             options: addFormFieldSelectRequiredOption
+        });
+
+        addSelectedFormFieldSelectFieldType.addEventListener('change', () => {
+            @this.set('selectedFormFieldType', addSelectedFormFieldSelectFieldType.value)
+        });
+
+        addSelectedFormFieldSelectRequired.addEventListener('change', () => {
+            @this.set('selectedFormFieldIsRequired', addSelectedFormFieldSelectRequired.value)
+        });
+
+        window.addEventListener('selected-form-clear-form-fields', () => {
+            addSelectedFormFieldSelectFieldType.reset();
+            addSelectedFormFieldSelectRequired.reset();
         });
     </script>
 @endpush

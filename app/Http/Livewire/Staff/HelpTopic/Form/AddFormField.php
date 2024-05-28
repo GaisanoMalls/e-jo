@@ -6,7 +6,6 @@ use App\Enums\FieldRequiredOptionEnum;
 use App\Enums\FieldTypesEnum;
 use App\Http\Requests\SysAdmin\Manage\HelpTopic\CustomField\CustomFieldRequest;
 use App\Http\Traits\AppErrorLog;
-use App\Models\Field;
 use App\Models\Form;
 use App\Models\HelpTopic;
 use App\Models\Role;
@@ -23,6 +22,7 @@ class AddFormField extends Component
     public $type;
     public $variableName;
     public $is_required;
+    public $isFieldEnabled = false;
     public $addedFields = [];
     public $editingFieldId;
     public $editingFieldName;
@@ -84,13 +84,13 @@ class AddFormField extends Component
 
         array_push(
             $this->addedFields,
-            array(
+            [
                 'name' => $this->name,
                 'label' => $this->name,
                 'type' => $this->type,
                 'variable_name' => $this->variableName,
                 'is_required' => $this->is_required,
-            )
+            ]
         );
 
         $this->reset('name', 'type', 'variableName', 'is_required');
@@ -174,34 +174,25 @@ class AddFormField extends Component
         try {
             if (empty($this->addedFields)) {
                 session()->flash('required_form_fields_error', 'Form fields are required');
-            } else {
-                $form = Form::create([
-                    'help_topic_id' => $this->helpTopic,
-                    'visible_to' => $this->visibleTo,
-                    'name' => $this->formName
-                ]);
-
-                foreach ($this->addedFields as $field) {
-                    $form->fields()->create([
-                        'name' => $field['name'],
-                        'label' => $field['name'],
-                        'type' => $field['type'],
-                        'variable_name' => $field['variable_name'],
-                        'is_required' => $field['is_required'] == FieldRequiredOptionEnum::YES ? true : false
-                    ]);
-                }
-                $this->actionOnSubmit();
+                return;
             }
 
-            // Field::create([
-            //     'form_id' => $form->id,
-            //     'name' => $this->name,
-            //     'label' => $this->name,
-            //     'type' => $this->type,
-            //     'variable_name' => $this->variable_name,
-            //     'is_required' => $this->is_required == FieldRequiredOptionEnum::YES ? true : false,
-            // ]);
+            $form = Form::create([
+                'help_topic_id' => $this->helpTopic,
+                'visible_to' => $this->visibleTo,
+                'name' => $this->formName
+            ]);
 
+            foreach ($this->addedFields as $field) {
+                $form->fields()->create([
+                    'name' => $field['name'],
+                    'label' => $field['name'],
+                    'type' => $field['type'],
+                    'variable_name' => $field['variable_name'],
+                    'is_required' => $field['is_required'] == FieldRequiredOptionEnum::YES ? true : false
+                ]);
+            }
+            $this->actionOnSubmit();
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

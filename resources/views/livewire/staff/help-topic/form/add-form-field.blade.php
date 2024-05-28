@@ -50,7 +50,7 @@
         <div class="mx-1">
             <h6>Add field</h6>
             @if (session()->has('required_form_fields_error'))
-                <small class="fw-semibold text-danger mb-1 ms-1">{{ session('required_form_fields_error') }}</small>
+                <small class="fw-semibold text-danger mb-1">{{ session('required_form_fields_error') }}</small>
             @endif
             <div class="row mb-3">
                 <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
@@ -142,9 +142,9 @@
                                     <tr wire:key="field-{{ $key }}">
                                         <td>
                                             <div class="form-check">
-                                                <input value="{{ $key }}" class="form-check-input"
-                                                    type="checkbox" role="switch" wire:loading.attr="disabled")
-                                                    style="margin-top: 3px;">
+                                                <input value="{{ $key }}" wire:model="isFieldEnabled"
+                                                    class="form-check-input" type="checkbox" role="switch"
+                                                    wire:loading.attr="disabled") style="margin-top: 3px;">
                                             </div>
                                         </td>
                                         <td>

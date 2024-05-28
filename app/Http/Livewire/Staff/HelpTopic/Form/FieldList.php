@@ -54,17 +54,17 @@ class FieldList extends Component
     {
         if (empty($this->name)) {
             session()->addError('customFieldNameError', 'The name field is required');
-        } else {
-            Field::where('id', $this->editingFieldId)->update([
-                'name' => $this->name,
-                'label' => $this->name,
-                'type' => $this->type,
-                'variable_name' => $this->variable_name,
-                'is_required' => $this->is_required == FieldRequiredOptionEnum::YES->value ? true : false,
-            ]);
-            $this->editingFieldId = null;
+            return;
         }
 
+        Field::where('id', $this->editingFieldId)->update([
+            'name' => $this->name,
+            'label' => $this->name,
+            'type' => $this->type,
+            'variable_name' => $this->variable_name,
+            'is_required' => $this->is_required == FieldRequiredOptionEnum::YES->value ? true : false,
+        ]);
+        $this->editingFieldId = null;
     }
 
     public function render()
