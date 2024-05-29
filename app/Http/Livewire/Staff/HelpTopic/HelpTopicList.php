@@ -29,6 +29,13 @@ class HelpTopicList extends Component
     public $selectedFormFieldType;
     public $selectedFormFieldIsRequired;
     public $selectedFormAddedFields = [];
+    public $editSelectedFieldFormId;
+    public $editSelectedFieldId;
+    public $editSelectedFieldName;
+    public $editSelectedFieldType;
+    public $editSelectedFieldIsRequired;
+    public $editSelectedFieldIsCurrentlyEditing = false;
+
 
     protected $listeners = ['loadHelpTopics' => '$refresh'];
 
@@ -56,6 +63,7 @@ class HelpTopicList extends Component
 
     public function viewHelpTopicForm(HelpTopic $helpTopic)
     {
+        $this->editSelectedFieldIsCurrentlyEditing = false;
         $this->helpTopicForms = $helpTopic->forms()->get(['id', 'name', 'visible_to']);
     }
 
@@ -67,6 +75,16 @@ class HelpTopicList extends Component
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
+    }
+
+    public function editSelectedField(Field $field, Form $form)
+    {
+        $this->editSelectedFieldIsCurrentlyEditing = true;
+        $this->editSelectedFieldFormId = $form->id;
+        $this->editSelectedFieldId = $field->id;
+        $this->editSelectedFieldName = $field->name;
+        $this->editSelectedFieldType = $field->type;
+        $this->editSelectedFieldIsRequired = $field->is_required;
     }
 
     public function deleteFormField(Field $field)

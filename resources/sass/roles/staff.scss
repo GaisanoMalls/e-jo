@@ -4073,6 +4073,15 @@ input[type="checkbox"] {
             border-bottom: 0 !important;
         }
     }
+
+    .form__fields__container:hover {
+        border-color: #d32839 !important;
+        transition: all .6s;
+
+        .field__container {
+            display: flex !important;
+        }
+    }
 }
 
 .sla__section {

@@ -165,17 +165,94 @@
                                 <div class="d-flex flex-wrap align-items-center gap-1">
                                     @foreach ($form->fields as $field)
                                         <span wire:key="field-{{ $field->id }}"
-                                            class="d-flex align-items-center gap-1"
-                                            style="font-size: 0.65rem; border: 1px solid #ddd; border-radius: 20px; padding: 3px 7px 3px 8px;">
+                                            class="d-flex align-items-center gap-2 form__fields__container"
+                                            style="font-size: 0.65rem; border: 1px solid #dddddd; border-radius: 20px; padding: 3px 7px 3px 8px; {{ $field->is_enabled ? 'color: black;' : 'color: #6b7280;' }} {{ $editSelectedFieldIsCurrentlyEditing && $editSelectedFieldId === $field->id ? 'border-color: #d32839 !important;' : '' }}">
                                             {{ $field->name }}
-                                            <button wire:click="deleteFormField({{ $field->id }})" type="button"
-                                                class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
-                                                style="height: 4px; width: 4px;">
-                                                <i class="bi bi-x"></i>
-                                            </button>
+                                            @if (!$editSelectedFieldIsCurrentlyEditing || $editSelectedFieldId !== $field->id)
+                                                <div class="d-flex align-items-center gap-1 d-none field__container">
+                                                    <button
+                                                        wire:click="editSelectedField({{ $field->id }}, {{ $form->id }})"
+                                                        type="button"
+                                                        class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
+                                                        style="height: 4px; width: 4px;">
+                                                        <i wire:loading.remove
+                                                            wire:target="editSelectedField({{ $field->id }}, {{ $form->id }})"
+                                                            class="bi bi-pencil" style="font-size: 9px;"></i>
+                                                        <i wire:loading
+                                                            wire:target="editSelectedField({{ $field->id }}, {{ $form->id }})"
+                                                            class='bx bx-loader bx-spin'></i>
+                                                    </button>
+                                                    <button wire:click="deleteFormField({{ $field->id }})"
+                                                        type="button"
+                                                        class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
+                                                        style="height: 4px; width: 4px;">
+                                                        <i class="bi bi-x"></i>
+                                                    </button>
+                                                </div>
+                                            @endif
                                         </span>
                                     @endforeach
                                 </div>
+                                @if ($editSelectedFieldIsCurrentlyEditing && $editSelectedFieldFormId === $form->id)
+                                    <div class="row mt-1">
+                                        <div
+                                            class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            <div class="mb-2">
+                                                <label for="fieldName"
+                                                    class="form-label text-muted form__field__label"
+                                                    style="font-weight: 500;">
+                                                    Field name
+                                                </label>
+                                                <input wire:model="editSelectedFieldName"
+                                                    class="form-control form__field" type="text" id="fieldName"
+                                                    placeholder="Enter field name">
+                                                @error('editSelectedFieldName')
+                                                    <span class="error__message position-absolute"
+                                                        style="bottom: -5px !important;">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            <div class="mb-2">
+                                                <label class="form-label text-muted form__field__label"
+                                                    style="font-weight: 500;">Type</label>
+                                                <div class="w-100">
+                                                    <div id="edit-selected-field-type" wire:ignore>
+                                                    </div>
+                                                </div>
+                                                @error('editSelectedFieldType')
+                                                    <span class="error__message position-absolute"
+                                                        style="bottom: -5px !important;">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            <div class="mb-2">
+                                                <label class="form-label text-muted form__field__label"
+                                                    style="font-weight: 500;">Required</label>
+                                                <div class="w-100">
+                                                    <div id="edit-selected-field-is-required" wire:ignore>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @error('editSelectedFieldIsRequired')
+                                                <span class="error__message position-absolute"
+                                                    style="bottom: -24px !important;">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                @endif
                             @else
                                 <em style="font-size: 0.75rem; color: #848d96;">
                                     Empty fields
@@ -416,6 +493,13 @@
         window.addEventListener('selected-form-clear-form-fields', () => {
             addSelectedFormFieldSelectFieldType.reset();
             addSelectedFormFieldSelectRequired.reset();
+        });
+
+        // Edit seleted field
+        const editSelectedFieldType = document.querySelector('#edit-selected-field-type')
+        VirtualSelect.init({
+            ele: editSelectedFieldType,
+            // options: addFormFieldFieldTypeOption
         });
     </script>
 @endpush
