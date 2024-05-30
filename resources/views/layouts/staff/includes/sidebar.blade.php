@@ -1,3 +1,7 @@
+@php
+    use App\Models\Role;
+@endphp
+
 <div class="sidebar" id="sidebar__toggle" x-data="{ scrollPosition: localStorage.getItem('sidebarScrollPosition') || 0 }" x-init="() => { $el.scrollTop = scrollPosition }"
     @scroll="scrollPosition = $el.scrollTop; localStorage.setItem('sidebarScrollPosition', scrollPosition)">
     @livewire('staff.sidebar-account')
@@ -15,7 +19,7 @@
                         Dashboard
                     </a>
                 </li>
-                @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+                @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                     <li class="mb-1">
                         <a href="{{ route('staff.manual_ticket_assign.to_assign') }}"
                             class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons -bottom-3
@@ -31,7 +35,7 @@
                 <li class="mb-1">
                     @livewire('staff.collapse-ticket-status')
                 </li>
-                @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+                @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                     <li class="mb-1">
                         <a href="{{ route('staff.feedbacks') }}"
                             class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons
@@ -66,7 +70,7 @@
                     </a>
                 </li>
                 <hr>
-                @if (auth()->user()->hasRole(App\Models\Role::SYSTEM_ADMIN))
+                @if (auth()->user()->hasRole(Role::SYSTEM_ADMIN))
                     <li class="mb-1">
                         <a href="{{ route('staff.manage.roles_and_permissions.index') }}"
                             class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons

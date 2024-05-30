@@ -1,3 +1,8 @@
+@php
+    use App\Models\Role;
+    use App\Enums\SpecialProjectStatusEnum;
+@endphp
+
 <div wire:poll.visible>
     @if (!is_null($ticket->ticketCosting))
         <div class="card border-0 p-0 card__ticket__details">
@@ -157,7 +162,7 @@
                                             <div class="d-flex position-relative">
                                                 <small
                                                     class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial"
-                                                    style="background-color: {{ $costingApprover->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN) ? '#9DA85C' : '#3B4053' }}"
+                                                    style="background-color: {{ $costingApprover->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) ? '#9DA85C' : '#3B4053' }}"
                                                     data-tooltip="{{ $costingApprover->profile->getFullName() }}  {{ $this->isDoneCostingApproval1($ticket) ? '(Approved)' : '(For approval)' }}"
                                                     data-tooltip-position="top" data-tooltip-font-size="11px">
                                                     {{ $costingApprover->profile->getNameInitial() }}
@@ -268,7 +273,7 @@
                             <small class="text-muted text-sm costing__header__label">
                                 Item Availability Status
                             </small>
-                            @if (auth()->user()->hasRole(App\Models\Role::AGENT) && $this->currentAgentAssignedInPurchasingTeam())
+                            @if (auth()->user()->hasRole(Role::AGENT) && $this->currentAgentAssignedInPurchasingTeam())
                                 <div class="btn-group">
                                     <button type="button"
                                         class="btn btn-sm d-flex align-items-center justify-content-center gap-2 px-2 py-1 rounded-2 dropdown-toggle btn__purchase"
@@ -277,7 +282,7 @@
                                             class="spinner-border spinner-border-sm loading__spinner" role="status">
                                             <span class="sr-only">Loading...</span>
                                         </div>
-                                        @if (auth()->user()->hasRole(App\Models\Role::AGENT))
+                                        @if (auth()->user()->hasRole(Role::AGENT))
                                             {{ $ticket->specialProjectStatus->purchasing_status ?: 'Action' }}
                                         @else
                                             In progress
@@ -289,18 +294,18 @@
                                             @if ($this->isPRApproved($ticket))
                                                 <li>
                                                     <button
-                                                        class="dropdown-item d-flex align-items-center gap-2 {{ $ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value ? 'fw-semibold' : '' }}"
+                                                        class="dropdown-item d-flex align-items-center gap-2 {{ $ticket->specialProjectStatus->purchasing_status === SpecialProjectStatusEnum::ON_ORDERED->value ? 'fw-semibold' : '' }}"
                                                         type="button" wire:click="setOrder">
                                                         <i class="fa-solid fa-cart-arrow-down"></i>
-                                                        {{ $ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value ? \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value : 'Order' }}
+                                                        {{ $ticket->specialProjectStatus->purchasing_status === SpecialProjectStatusEnum::ON_ORDERED->value ? SpecialProjectStatusEnum::ON_ORDERED->value : 'Order' }}
                                                     </button>
                                                 </li>
                                                 <li>
                                                     <button
-                                                        class="dropdown-item d-flex align-items-center gap-2 {{ $ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value ? 'fw-semibold' : '' }}"
+                                                        class="dropdown-item d-flex align-items-center gap-2 {{ $ticket->specialProjectStatus->purchasing_status === SpecialProjectStatusEnum::DELIVERED->value ? 'fw-semibold' : '' }}"
                                                         type="button" wire:click="setDeliver">
                                                         <i class="fa-solid fa-truck"></i>
-                                                        {{ $ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value ? \App\Enums\SpecialProjectStatusEnum::DELIVERED->value : 'Delivered' }}
+                                                        {{ $ticket->specialProjectStatus->purchasing_status === SpecialProjectStatusEnum::DELIVERED->value ? SpecialProjectStatusEnum::DELIVERED->value : 'Delivered' }}
                                                     </button>
                                                 </li>
                                             @else
@@ -317,10 +322,10 @@
                                 <small
                                     class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
                                     @if ($ticket->specialProjectStatus->purchasing_status)
-                                        @if ($ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value)
+                                        @if ($ticket->specialProjectStatus->purchasing_status === SpecialProjectStatusEnum::ON_ORDERED->value)
                                             <i class="fa-solid fa-cart-arrow-down" style="color: green;"></i>
                                         @endif
-                                        @if ($ticket->specialProjectStatus->purchasing_status === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value)
+                                        @if ($ticket->specialProjectStatus->purchasing_status === SpecialProjectStatusEnum::DELIVERED->value)
                                             <i class="fa-solid fa-cart-arrow-down" style="color: green;"></i>
                                         @endif
                                         {{ $ticket->specialProjectStatus->purchasing_status }}

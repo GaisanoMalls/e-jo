@@ -1,3 +1,7 @@
+@php
+    use App\Enums\ApprovalStatusEnum;
+@endphp
+
 <div>
     <div class="row">
         <div class="mb-4 d-flex flex-wrap justify-content-between">
@@ -58,13 +62,13 @@
                                             {{ $ticket->priorityLevel->name ?? '' }}</p>
                                     </td>
                                     <td class="custom__table__data">
-                                        @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::FOR_APPROVAL)
+                                        @if ($ticket->approval_status === ApprovalStatusEnum::FOR_APPROVAL)
                                             <small class="rounded-5"
                                                 style="background-color: #9DA85C; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
                                                 For Approval
                                             </small>
                                         @endif
-                                        @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::APPROVED)
+                                        @if ($ticket->approval_status === ApprovalStatusEnum::APPROVED)
                                             <small class="rounded-5"
                                                 style="background-color: #243C44; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
                                                 <i class="fa-solid fa-check me-1"></i>

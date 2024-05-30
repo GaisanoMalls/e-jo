@@ -1,3 +1,7 @@
+@php
+    use App\Models\Role;
+@endphp
+
 <div>
     <div class="row mb-4">
         <div class="row mb-3">
@@ -105,7 +109,23 @@
                         </span>
                     @enderror
                 </div>
-                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end">
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                    <div class="mb-2">
+                        <label class="form-label text-muted form__field__label" style="font-weight: 500;">Enable</label>
+                        <div class="d-flex align-items-center text-start px-0 td__content">
+                            <div class="w-100">
+                                <div id="select-enable-field" wire:ignore></div>
+                            </div>
+                        </div>
+                    </div>
+                    @error('is_enabled')
+                        <span class="error__message position-absolute" style="bottom: -24px !important;">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+                <div class="col-12 mt-3 col-md-6 d-flex flex-column justify-content-end">
                     <div class="mb-2">
                         <button wire:click="addField" type="button"
                             class="btn btn-sm d-flex gap-2 ms-1 align-items-center justify-content-center outline-none px-3 rounded-3"
@@ -117,7 +137,7 @@
                                 class="spinner-border spinner-border-sm loading__spinner" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>
-                            Add
+                            Add field
                         </button>
                     </div>
                 </div>
@@ -179,7 +199,7 @@
                                                         <div id="editing-select-field-is-required" wire:ignore></div>
                                                     </div>
                                                 @else
-                                                    <span>{{ $field['is_required'] }}</span>
+                                                    <span>{{ $field['is_required'] === true ? 'Yes' : 'No' }}</span>
                                                 @endif
                                             </div>
                                         </td>
@@ -249,10 +269,11 @@
 </div>
 @push('livewire-modal')
     <script>
-        const selectFieldType = document.querySelector('#select-field-type');
-        const selectRequired = document.querySelector('#select-required-field');
         const selectHelpTopic = document.querySelector('#select-help-topic');
         const selectFormVisibility = document.querySelector('#select-form-visibility');
+        const selectFieldType = document.querySelector('#select-field-type');
+        const selectRequired = document.querySelector('#select-required-field');
+        const selectEnable = document.querySelector('#select-enable-field');
 
         const fieldTypeOption = [
             @foreach ($fieldTypes as $fieldType)
@@ -289,6 +310,23 @@
 
         selectRequired.addEventListener('change', () => {
             @this.set('is_required', selectRequired.value);
+        });
+
+        const selectEnableOption = [
+            @foreach ($fieldEnableOption as $fieldEnable)
+                {
+                    label: "{{ $fieldEnable['label'] }}",
+                    value: "{{ $fieldEnable['value'] }}"
+                },
+            @endforeach
+        ];
+        VirtualSelect.init({
+            ele: selectEnable,
+            options: selectEnableOption,
+        });
+
+        selectEnable.addEventListener('change', () => {
+            @this.set('is_enabled', selectEnable.value);
         });
 
         const selectHelpTopicOption = [
@@ -338,6 +376,7 @@
         window.addEventListener('clear-form', () => {
             selectFieldType.reset();
             selectRequired.reset();
+            selectEnable.reset();
             selectHelpTopic.reset();
             selectFormVisibility.reset();
         });
@@ -350,7 +389,7 @@
         window.addEventListener('edit-added-field-show-select-field', (event) => {
             const isEditing = event.detail.isEditing
             const currentFieldType = event.detail.currentFieldType
-            const currentFieldIsRequired = event.detail.currentFieldIsRequired;
+            const currentFieldRequired = event.detail.currentFieldRequired;
 
             if (isEditing) {
                 const editingSelectFieldType = document.querySelector('#editing-select-field-type');
@@ -375,14 +414,15 @@
                 editingSelectFieldIsRequired.reset();
 
                 editingSelectFieldType.setValue(currentFieldType);
-                editingSelectFieldIsRequired.setValue(currentFieldIsRequired);
+                console.log(currentFieldRequired);
+                editingSelectFieldIsRequired.setValue(currentFieldRequired === true ? 'Yes' : 'No');
 
                 editingSelectFieldType.addEventListener('change', () => {
                     @this.set('editingFieldType', editingSelectFieldType.value);
                 })
 
                 editingSelectFieldIsRequired.addEventListener('change', () => {
-                    @this.set('editingFieldIsRequired', editingSelectFieldIsRequired.value);
+                    @this.set('editingFieldRequired', editingSelectFieldIsRequired.value);
                 })
             }
         });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Staff\HelpTopic\Form;
 
+use App\Enums\FieldEnableOptionEnum;
 use App\Enums\FieldRequiredOptionEnum;
 use App\Enums\FieldTypesEnum;
 use App\Http\Requests\SysAdmin\Manage\HelpTopic\CustomField\CustomFieldRequest;
@@ -21,13 +22,14 @@ class AddFormField extends Component
     public $name;
     public $type;
     public $variableName;
-    public $is_required;
-    public $isFieldEnabled = false;
     public $addedFields = [];
+    public $is_required = false;
+    public $is_enabled = false;
     public $editingFieldId;
     public $editingFieldName;
     public $editingFieldType;
-    public $editingFieldIsRequired;
+    public $editingFieldRequired;
+    public $editingFieldEnable;
     public $editingFieldVariableName;
 
     public function rules()
@@ -89,7 +91,8 @@ class AddFormField extends Component
                 'label' => $this->name,
                 'type' => $this->type,
                 'variable_name' => $this->variableName,
-                'is_required' => $this->is_required,
+                'is_required' => $this->is_required == FieldRequiredOptionEnum::YES->value ? true : false,
+                'is_enabled' => $this->is_enabled == FieldEnableOptionEnum::YES->value ? true : false
             ]
         );
 
@@ -107,13 +110,15 @@ class AddFormField extends Component
                 if ($this->editingFieldId === $key) {
                     $this->editingFieldName = $field['name'];
                     $this->editingFieldType = $field['type'];
-                    $this->editingFieldIsRequired = $field['is_required'];
+                    $this->editingFieldRequired = $field['is_required'];
+                    $this->editingFieldEnable = $field['is_enabled'];
                     $this->editingFieldVariableName = $field['variable_name'];
 
                     $this->dispatchBrowserEvent('edit-added-field-show-select-field', [
                         'isEditing' => true,
                         'currentFieldType' => $this->editingFieldType,
-                        'currentFieldIsRequired' => $this->editingFieldIsRequired
+                        'currentFieldRequired' => $this->editingFieldRequired,
+                        'currentFieldEnable' => $this->editingFieldEnable
                     ]);
                 }
             }
@@ -130,8 +135,9 @@ class AddFormField extends Component
                 if ($this->editingFieldId === $fieldKey && $key === $fieldKey) {
                     $field['name'] = $this->editingFieldName;
                     $field['type'] = $this->editingFieldType;
-                    $field['is_required'] = $this->editingFieldIsRequired;
                     $field['variable_name'] = $this->editingFieldVariableName;
+                    $field['is_required'] = $this->editingFieldRequired;
+                    $field['is_enabled'] = $this->editingFieldEnable;
                 }
             }
 
@@ -152,10 +158,11 @@ class AddFormField extends Component
     public function editFieldAction()
     {
         $this->editingFieldId = null;
-        $this->editingFieldName = '';
-        $this->editingFieldType = '';
-        $this->editingFieldIsRequired = '';
-        $this->editingFieldVariableName = '';
+        $this->editingFieldName = null;
+        $this->editingFieldType = null;
+        $this->editingFieldRequired = null;
+        $this->editingFieldVariableName = null;
+
     }
 
     public function removeField(int $fieldKey)
@@ -189,7 +196,8 @@ class AddFormField extends Component
                     'label' => $field['name'],
                     'type' => $field['type'],
                     'variable_name' => $field['variable_name'],
-                    'is_required' => $field['is_required'] == FieldRequiredOptionEnum::YES ? true : false
+                    'is_required' => $field['is_required'],
+                    'is_enabled' => $field['is_enabled'],
                 ]);
             }
             $this->actionOnSubmit();
@@ -203,6 +211,7 @@ class AddFormField extends Component
     {
         return view('livewire.staff.help-topic.form.add-form-field', [
             'fieldRequiredOption' => Options::forEnum(FieldRequiredOptionEnum::class)->toArray(),
+            'fieldEnableOption' => Options::forEnum(FieldEnableOptionEnum::class)->toArray(),
             'fieldTypes' => Options::forEnum(FieldTypesEnum::class)->toArray(),
             'userRoles' => Options::forModels(Role::class)->toArray(),
             'helpTopics' => HelpTopic::all(['id', 'name'])

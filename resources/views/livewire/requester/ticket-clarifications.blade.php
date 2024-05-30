@@ -1,3 +1,8 @@
+@php
+    use App\Models\Role;
+    use App\Models\Status;
+@endphp
+
 <div wire:init="loadClarifications">
     @if (!is_null($clarifications))
         <div wire:poll.visible.7s>
@@ -10,7 +15,7 @@
                         <div
                             class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
                             <div class="d-flex align-items-center w-100">
-                                @if (!$clarification->user->hasRole(App\Models\Role::USER))
+                                @if (!$clarification->user->hasRole(Role::USER))
                                     @if ($clarification->user->profile->picture)
                                         <img src="{{ Storage::url($clarification->user->profile->picture) }}"
                                             alt=""
@@ -24,7 +29,7 @@
                                     @endif
                                 @endif
                                 <div class="d-flex flex-wrap justify-content-between w-100">
-                                    @if (!$clarification->user->hasRole(App\Models\Role::USER))
+                                    @if (!$clarification->user->hasRole(Role::USER))
                                         <small
                                             class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                                             {{ $clarification->user->profile->getFullName() }}
@@ -60,20 +65,12 @@
                         </div>
                     </div>
                 @endforeach
-                {{-- @if ($ticket->clarifications->count() !== 0 && $ticket->status_id !== App\Models\Status::CLOSED)
-        <button type="button" class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
-            justify-content-center gap-2 float-end" data-bs-toggle="modal" data-bs-target="#ticketClarificationModal"
-            wire:click="getLatestClarification">
-            <i class="fa-solid fa-pen"></i>
-            <span class="lbl__reply">Reply</span>
-        </button>
-        @endif --}}
             @else
                 <div class="alert alert-warning py-3 px-3 rounded-3" style="margin: 20px 0px;">
                     <small style="font-size: 14px;">No ticket clarifications</small>
                 </div>
             @endif
-            @if ($ticket->status_id !== App\Models\Status::DISAPPROVED)
+            @if ($ticket->status_id !== Status::DISAPPROVED)
                 <button type="button"
                     class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
                     justify-content-center gap-2 float-end"

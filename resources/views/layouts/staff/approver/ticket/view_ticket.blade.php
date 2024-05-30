@@ -1,5 +1,9 @@
-@extends('layouts.staff.approver.base', ['title' => $ticket->subject])
+@php
+    use App\Models\Status;
+    use App\Enums\ApprovalStatusEnum;
+@endphp
 
+@extends('layouts.staff.approver.base', ['title' => $ticket->subject])
 @section('main-content')
     @livewire('approver.ticket.load-reason', ['ticket' => $ticket])
     <div class="row mx-0">
@@ -71,9 +75,8 @@
                             </div>
                         </div>
                         @if (
-                            $ticket->status_id !== App\Models\Status::CLOSED ||
-                                ($ticket->approval_status !== App\Enums\ApprovalStatusEnum::DISAPPROVED &&
-                                    $ticket->clarifications->count() !== 0))
+                            $ticket->status_id !== Status::CLOSED ||
+                                ($ticket->approval_status !== ApprovalStatusEnum::DISAPPROVED && $ticket->clarifications->count() !== 0))
                             {{-- Replies/Comments --}}
                             @livewire('approver.ticket-clarifications', ['ticket' => $ticket])
                         @else

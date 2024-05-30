@@ -1,5 +1,9 @@
+@php
+    use App\Enums\ApprovalStatusEnum;
+@endphp
+
 <div>
-    @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::DISAPPROVED)
+    @if ($ticket->approval_status === ApprovalStatusEnum::DISAPPROVED)
         <div class="alert alert-warning p-3 rounded-3 border-0 mt-4 mb-3" role="alert" style="font-size: 13px;">
             <div class="mb-2">We regret to inform you that the approver has disapproved your ticket. After careful
                 consideration, the

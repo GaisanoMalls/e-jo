@@ -1,3 +1,8 @@
+@php
+    use App\Models\Role;
+    use App\Enums\SpecialProjectStatusEnum;
+@endphp
+
 <div wire:poll.visible.10s>
     @if (!is_null($ticket->ticketCosting))
         <div class="card border-0 p-0 card__ticket__details">
@@ -72,7 +77,7 @@
                                             <div class="d-flex position-relative">
                                                 <small
                                                     class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial"
-                                                    style="background-color: {{ $costingApprover->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN) ? '#9DA85C' : '#3B4053' }}"
+                                                    style="background-color: {{ $costingApprover->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) ? '#9DA85C' : '#3B4053' }}"
                                                     data-tooltip="{{ $costingApprover->profile->getFullName() }}  {{ $this->isDoneCostingApproval1($ticket) ? '(Approved)' : '(For approval)' }}"
                                                     data-tooltip-position="top" data-tooltip-font-size="11px">
                                                     {{ $costingApprover->profile->getNameInitial() }}
@@ -125,7 +130,7 @@
                             <small class="text-muted text-sm costing__header__label">
                                 Purchasing
                             </small>
-                            @if (auth()->user()->hasRole(App\Models\Role::USER))
+                            @if (auth()->user()->hasRole(Role::USER))
                                 <small
                                     class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
                                     @if ($ticket->specialProjectStatus->purchasing_status)
@@ -138,12 +143,12 @@
                             @else
                                 <small
                                     class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
-                                    @if ($this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value)
+                                    @if ($this->getPurchasingStatus() === SpecialProjectStatusEnum::ON_ORDERED->value)
                                         <i class="fa-solid fa-cart-arrow-down" style="color: green;"></i>
-                                        {{ \App\Enums\SpecialProjectStatusEnum::ON_ORDERED->value }}
-                                    @elseif ($this->getPurchasingStatus() === \App\Enums\SpecialProjectStatusEnum::DELIVERED->value)
+                                        {{ SpecialProjectStatusEnum::ON_ORDERED->value }}
+                                    @elseif ($this->getPurchasingStatus() === SpecialProjectStatusEnum::DELIVERED->value)
                                         <i class="fa-solid fa-truck" style="color: green;"></i>
-                                        {{ \App\Enums\SpecialProjectStatusEnum::DELIVERED->value }}
+                                        {{ SpecialProjectStatusEnum::DELIVERED->value }}
                                     @else
                                         N/A
                                     @endif

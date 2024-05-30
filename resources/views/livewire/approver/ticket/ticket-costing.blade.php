@@ -1,3 +1,7 @@
+@php
+    use App\Models\Role;
+@endphp
+
 <div>
     @if (!is_null($ticket->ticketCosting))
         <div class="card border-0 p-0 card__ticket__details">
@@ -72,7 +76,7 @@
                                             <div class="d-flex position-relative">
                                                 <small
                                                     class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial"
-                                                    style="background-color: {{ $costingApprover->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN) ? '#9DA85C' : '#3B4053' }}"
+                                                    style="background-color: {{ $costingApprover->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) ? '#9DA85C' : '#3B4053' }}"
                                                     data-tooltip="{{ $costingApprover->profile->getFullName() }}  {{ $this->isDoneCostingApproval1($ticket) ? '(Approved)' : '(For approval)' }}"
                                                     data-tooltip-position="top" data-tooltip-font-size="11px">
                                                     {{ $costingApprover->profile->getNameInitial() }}

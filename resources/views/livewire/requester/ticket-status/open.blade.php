@@ -1,3 +1,7 @@
+@php
+    use App\Enums\ApprovalStatusEnum;
+@endphp
+
 <div class="row mx-0">
     @if ($openTickets->isNotEmpty())
         <div class="card ticket__card" id="userTicketCard">
@@ -48,9 +52,9 @@
                                         {{ $ticket->priorityLevel->name ?? '' }}</p>
                                 </td>
                                 <td class="custom__table__data">
-                                    @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::FOR_APPROVAL)
+                                    @if ($ticket->approval_status === ApprovalStatusEnum::FOR_APPROVAL)
                                         <p class="mb-0">For approval</p>
-                                    @elseif ($ticket->approval_status === App\Enums\ApprovalStatusEnum::APPROVED)
+                                    @elseif ($ticket->approval_status === ApprovalStatusEnum::APPROVED)
                                         <p class="mb-0">Approved</p>
                                     @endif
                                 </td>

@@ -1,9 +1,13 @@
+@php
+    use App\Models\Status;
+    use App\Enums\ApprovalStatusEnum;
+@endphp
+
 @if (
-    ($ticket->status_id != App\Models\Status::CLOSED &&
-        $ticket->approval_status == App\Enums\ApprovalStatusEnum::APPROVED) ||
+    ($ticket->status_id != Status::CLOSED && $ticket->approval_status == ApprovalStatusEnum::APPROVED) ||
         $this->isDoneFirstLevelApproval())
     <div class="d-flex flex-column">
-        @if ($ticket->status_id == App\Models\Status::CLAIMED)
+        @if ($ticket->status_id == Status::CLAIMED)
             <button style="background-color: {{ $ticket->status->color }} !important;"
                 class="btn btn-sm border-0 m-auto text-white ticket__detatails__btn__claim claimed d-flex  align-items-center justify-content-center">
                 <i class="fa-regular fa-flag"></i>
@@ -32,7 +36,7 @@
             @endif
         @endif
     </div>
-@elseif ($ticket->status_id == App\Models\Status::CLAIMED)
+@elseif ($ticket->status_id == Status::CLAIMED)
     <div class="d-flex flex-column">
         <button style="background-color: {{ $ticket->status->color }} !important;"
             class="btn btn-sm border-0 m-auto text-white ticket__detatails__btn__claim claimed d-flex align-items-center justify-content-center">

@@ -1,3 +1,7 @@
+@php
+    use App\Models\Role;
+@endphp
+
 <div>
     <div class="sidebar__user text-center">
         <div class="position-relative d-flex justify-content-center">
@@ -11,19 +15,19 @@
             @endif
             <div class="sidebar__badge__bottom">
                 <span class="badge user__role__badge">
-                    @if (auth()->user()->hasRole(App\Models\Role::SYSTEM_ADMIN))
+                    @if (auth()->user()->hasRole(Role::SYSTEM_ADMIN))
                         System Admin
                     @endif
-                    @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+                    @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                         Service Department Admin
                     @endif
-                    @if (auth()->user()->hasRole(App\Models\Role::APPROVER))
+                    @if (auth()->user()->hasRole(Role::APPROVER))
                         Approver
                     @endif
-                    @if (auth()->user()->hasRole(App\Models\Role::AGENT))
+                    @if (auth()->user()->hasRole(Role::AGENT))
                         Agent
                     @endif
-                    @if (auth()->user()->hasRole(App\Models\Role::USER))
+                    @if (auth()->user()->hasRole(Role::USER))
                         User
                     @endif
                 </span>
@@ -34,14 +38,14 @@
                 {{ auth()->user()->profile->getFullName() }}
             </h6>
         </a>
-        @if (!auth()->user()->hasRole(App\Models\Role::SYSTEM_ADMIN))
+        @if (!auth()->user()->hasRole(Role::SYSTEM_ADMIN))
             <p class="sidebar__userdepartment">
                 {{ auth()->user()->getBuDepartments() . ' -' }}
                 {{ auth()->user()->getBranches() ?? '' }}
             </p>
         @endif
         <div class="mt-3 d-flex staff__ticket__count justify-content-center">
-            @if (auth()->user()->hasRole(App\Models\Role::AGENT))
+            @if (auth()->user()->hasRole(Role::AGENT))
                 <li>
                     <span class="counter">{{ auth()->user()->getClaimedTickets() }}</span>
                     <p class="counter__label">Claimed</p>

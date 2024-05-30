@@ -1,3 +1,7 @@
+@php
+    use App\Enums\ApprovalStatusEnum;
+@endphp
+
 <div>
     <div class="row">
         <div class="mb-4 d-flex flex-wrap justify-content-between">
@@ -70,8 +74,8 @@
 
                             @foreach ($openTickets as $ticket)
                                 @if (
-                                    $ticket->approval_status === App\Enums\ApprovalStatusEnum::APPROVED ||
-                                        $ticket->approval_status === App\Enums\ApprovalStatusEnum::DISAPPROVED)
+                                    $ticket->approval_status === ApprovalStatusEnum::APPROVED ||
+                                        $ticket->approval_status === ApprovalStatusEnum::DISAPPROVED)
                                     <tr class="clickable_tr" data-ticket-id="{{ $ticket->id }}"
                                         onclick="window.location='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
                                         <td class="custom__table__data">
@@ -105,7 +109,7 @@
                                                 {{ $ticket->priorityLevel->name ?? '' }}</p>
                                         </td>
                                         <td class="custom__table__data py-0">
-                                            @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::APPROVED)
+                                            @if ($ticket->approval_status === ApprovalStatusEnum::APPROVED)
                                                 <small class="rounded-5"
                                                     style="background-color: #243C44; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
                                                     <i class="fa-solid fa-check me-1"></i>
@@ -113,7 +117,7 @@
                                                 </small>
                                             @endif
 
-                                            @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::DISAPPROVED)
+                                            @if ($ticket->approval_status === ApprovalStatusEnum::DISAPPROVED)
                                                 <small class="rounded-5"
                                                     style="background-color: red; color: #FFFFFF; font-size: 11px; padding: 7px 12px;">
                                                     <i class="fa-solid fa-xmark me-1"></i>

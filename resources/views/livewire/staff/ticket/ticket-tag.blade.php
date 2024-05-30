@@ -1,3 +1,7 @@
+@php
+    use App\Models\Status;
+@endphp
+
 <div>
     <div class="card border-0 p-0 card__ticket__details card__ticket__details__right">
         <div class="ticket__details__card__body__right">
@@ -9,7 +13,7 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-3 ticket__tag__buttons__container">
-                    @if ($ticket->status_id != \App\Models\Status::CLOSED)
+                    @if ($ticket->status_id != Status::CLOSED)
                         @if ($ticket->tags->isNotEmpty())
                             <button type="button" class="btn__clear__tags" wire:click="clearTags">
                                 <i class="bi bi-trash"></i>
@@ -33,10 +37,10 @@
                     @foreach ($ticket->tags as $tag)
                         <div class="d-flex align-items-center shadow-sm gap-2 ticket__tag">
                             <a href=""
-                                class="tag__link {{ $ticket->status_id == \App\Models\Status::CLOSED ? 'me-2' : '' }}">
+                                class="tag__link {{ $ticket->status_id == Status::CLOSED ? 'me-2' : '' }}">
                                 {{ $tag->name }}
                             </a>
-                            @if ($ticket->status_id != \App\Models\Status::CLOSED)
+                            @if ($ticket->status_id != Status::CLOSED)
                                 <div wire:key="ticket-tag-{{ $tag->id }}"
                                     wire:click="removeTag({{ $tag->id }})"
                                     class="d-flex align-items-center justify-content-center remove__tag">

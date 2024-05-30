@@ -1,3 +1,7 @@
+@php
+    use App\Models\Role;
+@endphp
+
 <div wire:init="loadReplies">
     @if (!is_null($replies))
         <div wire:poll.visible>
@@ -73,7 +77,7 @@
                                             <small
                                                 class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                                                 {{ $reply->user->profile->getFullName() }}
-                                                @if ($reply->user->hasRole(App\Models\Role::SYSTEM_ADMIN))
+                                                @if ($reply->user->hasRole(Role::SYSTEM_ADMIN))
                                                     <i class="bi bi-person-fill-gear text-muted ms-1"
                                                         title="System Admin"></i>
                                                 @endif

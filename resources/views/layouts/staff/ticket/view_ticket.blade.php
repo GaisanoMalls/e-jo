@@ -1,5 +1,9 @@
-@extends('layouts.staff.base', ['title' => $ticket->subject])
+@php
+    use App\Models\Role;
+    use App\Enums\ApprovalStatusEnum;
+@endphp
 
+@extends('layouts.staff.base', ['title' => $ticket->subject])
 @section('main-content')
     @livewire('staff.ticket.load-disapproval-reason', ['ticket' => $ticket])
     @if ($ticket)
@@ -39,21 +43,21 @@
                             <div class="d-flex flex-wrap justify-content-center gap-3 gap-lg-4 gap-xl-4">
                                 @if (
                                     $ticket->isSpecialProject() &&
-                                        auth()->user()->hasRole(App\Models\Role::AGENT))
+                                        auth()->user()->hasRole(Role::AGENT))
                                     @livewire('staff.ticket.load-costing-button-header', ['ticket' => $ticket])
                                 @endif
                                 @if (Route::is('staff.ticket.view_ticket'))
                                     @livewire('staff.ticket.load-reply-button-header', ['ticket' => $ticket])
                                 @endif
                                 @if (Route::is('staff.ticket.ticket_clarifications') &&
-                                        auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+                                        auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                                     @livewire('staff.ticket.load-clarify-ticket-button-header', ['ticket' => $ticket])
                                 @endif
-                                @if (auth()->user()->hasRole(App\Models\Role::AGENT))
+                                @if (auth()->user()->hasRole(Role::AGENT))
                                     @livewire('staff.ticket.claim-ticket', ['ticket' => $ticket])
                                 @endif
                                 @livewire('staff.ticket.load-close-status-button-header', ['ticket' => $ticket])
-                                @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+                                @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                                     @livewire('staff.ticket.dropdown-approval-button', ['ticket' => $ticket])
                                 @endif
                                 @livewire('staff.ticket.bookmark-ticket', ['ticket' => $ticket])
@@ -111,7 +115,7 @@
                                     @show
                                 </small>
                                 <div class="d-flex align-items-center gap-3 threads__clarifications__tab__container">
-                                    @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+                                    @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                                         <a onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'"
                                             class="btn btn-sm px-0 rounded-0 {{ Route::is('staff.ticket.view_ticket') ? 'active' : '' }}"
                                             type="button">
@@ -137,7 +141,7 @@
                                 @if ($ticket->isSpecialProject())
                                     @livewire('staff.ticket.ticket-level-approval', ['ticket' => $ticket])
                                 @endif
-                                @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::APPROVED)
+                                @if ($ticket->approval_status === ApprovalStatusEnum::APPROVED)
                                     @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
                                 @endif
                                 @livewire('staff.ticket.ticket-tag', ['ticket' => $ticket])
@@ -149,10 +153,10 @@
             </div>
             @if (
                 $ticket->isSpecialProject() &&
-                    auth()->user()->hasRole(App\Models\Role::AGENT))
+                    auth()->user()->hasRole(Role::AGENT))
                 @livewire('staff.ticket.add-costing', ['ticket' => $ticket])
             @endif
-            @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+            @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                 @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
             @endif
             @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])
@@ -160,7 +164,7 @@
         @if (Route::is('staff.ticket.view_ticket'))
             @livewire('staff.ticket.reply-ticket', ['ticket' => $ticket])
         @endif
-        @if (auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+        @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
             @if (Route::is('staff.ticket.ticket_clarifications'))
                 @livewire('staff.ticket.send-clarification', ['ticket' => $ticket])
             @endif

@@ -1,6 +1,10 @@
+@php
+    use App\Http\Traits\Utils;
+@endphp
+
 <nav class="navbar navbar-expand-lg bg-white py-3 sticky-top">
     <div class="container gap-3">
-        <a href="{{ App\Http\Traits\Utils::costingApprover2Only() ? route('approver.tickets.costing_approval') : route('approver.dashboard') }}"
+        <a href="{{ Utils::costingApprover2Only() ? route('approver.tickets.costing_approval') : route('approver.dashboard') }}"
             class="navbar-brand d-flex gap-2 align-items-center justify-content-center">
             <img src="{{ asset('images/gmall.png') }}" class="company__logo" alt="GMall Ticketing System">
             <h5 class="mb-0 company__app__name position-relative">
@@ -59,9 +63,9 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-2">
                 <li class="nav-item custom__nav__item text-center">
                     <a class="nav-link custom__nav__link {{ Route::is('approver.dashboard') ? 'active' : '' }}"
-                        href="{{ App\Http\Traits\Utils::costingApprover2Only() ? route('approver.tickets.costing_approval') : route('approver.dashboard') }}">Dashboard</a>
+                        href="{{ Utils::costingApprover2Only() ? route('approver.tickets.costing_approval') : route('approver.dashboard') }}">Dashboard</a>
                 </li>
-                @if (!App\Http\Traits\Utils::costingApprover2Only())
+                @if (!Utils::costingApprover2Only())
                     <li class="nav-item custom__nav__item text-center">
                         <a href="{{ route('approver.tickets.open') }}"
                             class="nav-link custom__nav__link {{ Route::is('approver.tickets.*') ? 'active' : '' }}"

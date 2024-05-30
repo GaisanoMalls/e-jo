@@ -1,3 +1,8 @@
+@php
+    use App\Enums\ApprovalStatusEnum;
+    use App\Models\Role;
+@endphp
+
 <div>
     <div class="card border-0 p-0 card__ticket__details">
         <div class="ticket__details__card__body__right">
@@ -13,13 +18,13 @@
                         Approval status:
                     </small>
                     <small class="ticket__details__info">
-                        @if ($ticket->approval_status == App\Enums\ApprovalStatusEnum::APPROVED)
+                        @if ($ticket->approval_status == ApprovalStatusEnum::APPROVED)
                             <i class="fa-solid fa-circle-check me-1" style="color: green; font-size: 11px;"></i>
                             Approved
-                        @elseif ($ticket->approval_status == App\Enums\ApprovalStatusEnum::FOR_APPROVAL)
+                        @elseif ($ticket->approval_status == ApprovalStatusEnum::FOR_APPROVAL)
                             <i class="fa-solid fa-paper-plane me-1" style="color: orange; font-size: 11px;"></i>
                             For Approval
-                        @elseif ($ticket->approval_status == App\Enums\ApprovalStatusEnum::DISAPPROVED)
+                        @elseif ($ticket->approval_status == ApprovalStatusEnum::DISAPPROVED)
                             <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
                             Disapproved
                         @endif
@@ -50,7 +55,7 @@
                         {{ $ticket->getTeams() }}
                         @if (
                             $ticket->team_id &&
-                                auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+                                auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                             <i wire:click="removeAssignedTeam" class="bi bi-x ms-2 text-danger position-absolute"
                                 style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
                         @endif
@@ -75,7 +80,7 @@
                         {{ $ticket->agent_id != null ? $ticket->agent->profile->getFullName() : '' }}
                         @if (
                             $ticket->agent_id &&
-                                auth()->user()->hasRole(App\Models\Role::SERVICE_DEPARTMENT_ADMIN))
+                                auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                             <i wire:click="removeAssignedAgent" class="bi bi-x ms-2 text-danger position-absolute"
                                 style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
                         @endif

@@ -1,3 +1,7 @@
+@php
+    use App\Enums\ApprovalStatusEnum;
+@endphp
+
 <div>
     <div class="card border-0 p-0 card__ticket__details">
         <div class="ticket__details__card__body__right">
@@ -14,13 +18,13 @@
                     </small>
                     <small class="ticket__details__info">
                         <small class="ticket__details__info">
-                            @if ($ticket->approval_status === App\Enums\ApprovalStatusEnum::APPROVED)
+                            @if ($ticket->approval_status === ApprovalStatusEnum::APPROVED)
                                 <i class="fa-solid fa-circle-check me-1" style="color: green; font-size: 11px;"></i>
                                 Approved
-                            @elseif ($ticket->approval_status === App\Enums\ApprovalStatusEnum::FOR_APPROVAL)
+                            @elseif ($ticket->approval_status === ApprovalStatusEnum::FOR_APPROVAL)
                                 <i class="fa-solid fa-paper-plane me-1" style="color: orange; font-size: 11px;"></i>
                                 For Approval
-                            @elseif ($ticket->approval_status === App\Enums\ApprovalStatusEnum::DISAPPROVED)
+                            @elseif ($ticket->approval_status === ApprovalStatusEnum::DISAPPROVED)
                                 <i class="fa-solid fa-xmark me-1" style="color: red; font-size: 11px;"></i>
                                 Disapproved
                             @endif
@@ -76,7 +80,8 @@
                 </div>
                 <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                     <small class="ticket__details__info__label" style="font-weight: 500;">
-                        SLA:</small>
+                        SLA:
+                    </small>
                     <div class="d-flex align-items-center gap-2">
                         @if ($isSlaApproved)
                             @livewire('sla-timer', ['ticket' => $ticket])

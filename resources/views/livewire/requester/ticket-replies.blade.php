@@ -1,3 +1,8 @@
+@php
+    use App\Models\Role;
+    use App\Models\Status;
+@endphp
+
 <div wire:init="loadReplies">
     @if (!is_null($replies))
         <div wire:poll.visible.7s>
@@ -9,7 +14,7 @@
                         <div
                             class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
                             <div class="d-flex align-items-center w-100">
-                                @if (!$reply->user->hasRole(App\Models\Role::USER))
+                                @if (!$reply->user->hasRole(Role::USER))
                                     @if ($reply->user->profile->picture)
                                         <img src="{{ Storage::url($reply->user->profile->picture) }}" alt=""
                                             class="image-fluid ticket__details__user__picture reply__ticket__details__user__picture">
@@ -21,11 +26,11 @@
                                     @endif
                                 @endif
                                 <div class="d-flex flex-wrap justify-content-between w-100">
-                                    @if (!$reply->user->hasRole(App\Models\Role::USER))
+                                    @if (!$reply->user->hasRole(Role::USER))
                                         <small
                                             class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                                             {{ $reply->user->profile->getFullName() }}
-                                            @if ($reply->user->hasRole(App\Models\Role::SYSTEM_ADMIN))
+                                            @if ($reply->user->hasRole(Role::SYSTEM_ADMIN))
                                                 <i class="bi bi-person-fill-gear text-muted ms-1"
                                                     title="System Admin"></i>
                                             @endif
@@ -140,7 +145,7 @@
                     </div>
                     {{-- End Modal Preview --}}
                 @endforeach
-                @if ($ticket->status_id !== App\Models\Status::CLOSED)
+                @if ($ticket->status_id !== Status::CLOSED)
                     <button type="button"
                         class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2 float-end"
                         data-bs-toggle="modal" data-bs-target="#ticketReplyModal" wire:click="getLatestReply">
