@@ -82,7 +82,7 @@ class SlaList extends Component
     {
         try {
             $sla = ServiceLevelAgreement::with(['helpTopics', 'tickets'])->find($this->slaDeleteId);
-            dd($sla->getRelations());
+            $sla->delete();
             $this->slaDeleteId = null;
             $this->fetchServiceLevelAgreements();
             $this->dispatchBrowserEvent('close-modal');

@@ -148,25 +148,15 @@
                         <table class="table mb-0">
                             <thead>
                                 <tr>
-                                    <th class="border-0 table__head__label px-2">Enable</th>
                                     <th class="border-0 table__head__label px-2">Name</th>
                                     <th class="border-0 table__head__label px-2">Type</th>
                                     <th class="border-0 table__head__label px-2">Required</th>
-                                    <th class="border-0 table__head__label px-2">
-                                        Variable Name
-                                    </th>
+                                    <th class="border-0 table__head__label px-2">Enable</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($addedFields as $key => $field)
                                     <tr wire:key="field-{{ $key }}">
-                                        <td>
-                                            <div class="form-check">
-                                                <input value="{{ $key }}" wire:model="isFieldEnabled"
-                                                    class="form-check-input" type="checkbox" role="switch"
-                                                    wire:loading.attr="disabled") style="margin-top: 3px;">
-                                            </div>
-                                        </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start px-0 td__content"
                                                 style="height: 0; min-width: 200px;">
@@ -199,19 +189,19 @@
                                                         <div id="editing-select-field-is-required" wire:ignore></div>
                                                     </div>
                                                 @else
-                                                    <span>{{ $field['is_required'] === true ? 'Yes' : 'No' }}</span>
+                                                    <span>{{ $field['is_required'] ? 'Yes' : 'No' }}</span>
                                                 @endif
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start px-0 td__content"
-                                                style="height: 0;">
+                                                style="height: 0; min-width: 200px;">
                                                 @if ($editingFieldId === $key)
-                                                    <input wire:model="editingFieldVariableName"
-                                                        class="form-control form__field" type="text" readonly
-                                                        disabled>
+                                                    <div class="w-100">
+                                                        <div id="editing-select-field-enable" wire:ignore></div>
+                                                    </div>
                                                 @else
-                                                    <span>{{ $field['variable_name'] }}</span>
+                                                    <span>{{ $field['is_enabled'] ? 'Yes' : 'No' }}</span>
                                                 @endif
                                             </div>
                                         </td>
@@ -384,16 +374,19 @@
         window.addEventListener('clear-form-fields', () => {
             selectFieldType.reset();
             selectRequired.reset();
+            selectEnable.reset();
         });
 
         window.addEventListener('edit-added-field-show-select-field', (event) => {
             const isEditing = event.detail.isEditing
             const currentFieldType = event.detail.currentFieldType
             const currentFieldRequired = event.detail.currentFieldRequired;
+            const currentFieldEnable = event.detail.currentFieldEnable;
 
             if (isEditing) {
                 const editingSelectFieldType = document.querySelector('#editing-select-field-type');
                 const editingSelectFieldIsRequired = document.querySelector('#editing-select-field-is-required');
+                const editingSelectFieldEnable = document.querySelector('#editing-select-field-enable');
 
                 VirtualSelect.init({
                     ele: editingSelectFieldType,
@@ -405,25 +398,35 @@
                 VirtualSelect.init({
                     ele: editingSelectFieldIsRequired,
                     options: selectRequiredOption,
-                    search: true,
+                    popupDropboxBreakpoint: '3000px'
+                });
+
+                VirtualSelect.init({
+                    ele: editingSelectFieldEnable,
+                    options: selectEnableOption,
                     popupDropboxBreakpoint: '3000px'
                 });
 
                 // Reset the select field first before assigning a new value.
                 editingSelectFieldType.reset();
                 editingSelectFieldIsRequired.reset();
+                editingSelectFieldEnable.reset();
 
                 editingSelectFieldType.setValue(currentFieldType);
-                console.log(currentFieldRequired);
-                editingSelectFieldIsRequired.setValue(currentFieldRequired === true ? 'Yes' : 'No');
+                editingSelectFieldIsRequired.setValue(currentFieldRequired ? 'Yes' : 'No');
+                editingSelectFieldEnable.setValue(currentFieldEnable ? 'Yes' : 'No');
 
                 editingSelectFieldType.addEventListener('change', () => {
                     @this.set('editingFieldType', editingSelectFieldType.value);
-                })
+                });
 
                 editingSelectFieldIsRequired.addEventListener('change', () => {
                     @this.set('editingFieldRequired', editingSelectFieldIsRequired.value);
-                })
+                });
+
+                editingSelectFieldEnable.addEventListener('change', () => {
+                    @this.set('editingFieldEnable', editingSelectFieldEnable.value);
+                });
             }
         });
     </script>

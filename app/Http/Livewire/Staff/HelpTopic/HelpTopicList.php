@@ -14,14 +14,15 @@ use Exception;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
+use stdClass;
 
 class HelpTopicList extends Component
 {
     use BasicModelQueries;
 
-    public ?Collection $helpTopicForms = null;
-    public $helpTopicId;
-    public $helpTopicName;
+    public ?Collection $helpTopicForms;
+    public $deleteHelpTopicId;
+    public $selectedHelpTopicName;
     public $selectedFormId;
     public $selectedFormName;
     public $selectedFormFieldName;
@@ -35,24 +36,30 @@ class HelpTopicList extends Component
     public $editSelectedFieldType;
     public $editSelectedFieldIsRequired;
     public $editSelectedFieldIsCurrentlyEditing = false;
-
+    public $deleteHelpTopicFormId;
+    public $deleteHelpTopicFormName;
 
     protected $listeners = ['loadHelpTopics' => '$refresh'];
 
+    public function mount()
+    {
+        $this->helpTopicForms = collect([]);
+    }
+
     public function deleteHelpTopic(HelpTopic $helpTopic)
     {
-        $this->helpTopicId = $helpTopic->id;
-        $this->helpTopicName = $helpTopic->name;
+        $this->deleteHelpTopicId = $helpTopic->id;
+        $this->selectedHelpTopicName = $helpTopic->name;
         $this->dispatchBrowserEvent('show-delete-help-topic-modal');
     }
 
     public function delete()
     {
         try {
-            $helpTopic = HelpTopic::find($this->helpTopicId);
+            $helpTopic = HelpTopic::find($this->deleteHelpTopicId);
             if ($helpTopic) {
                 $helpTopic->delete();
-                $this->helpTopicId = null;
+                $this->deleteHelpTopicId = null;
                 $this->dispatchBrowserEvent('close-modal');
                 noty()->addSuccess('Help topic successfully deleted');
             }
@@ -67,11 +74,29 @@ class HelpTopicList extends Component
         $this->helpTopicForms = $helpTopic->forms()->get(['id', 'name', 'visible_to']);
     }
 
-    public function deleteHelpTopicForm(Form $form)
+    public function deleteHelpTopicFormConfirm(Form $form)
+    {
+        $this->deleteHelpTopicFormId = $form->id;
+        $this->deleteHelpTopicFormName = $form->name;
+    }
+
+    public function cancelDeleteForHelpTopicForm()
+    {
+        $this->reset(['deleteHelpTopicFormId', 'deleteHelpTopicFormName']);
+        $this->dispatchBrowserEvent('close-delete-confirmation-of-helptopic-form');
+    }
+
+    public function deleteHelpTopicForm()
     {
         try {
-            $form->delete();
-            $this->emit('loadHelpTopics');
+            $helpTopicForm = Form::find($this->deleteHelpTopicFormId);
+            if ($helpTopicForm) {
+                $helpTopicForm->delete();
+                $this->deleteHelpTopicFormId = null;
+                $this->reset(['deleteHelpTopicFormId', 'deleteHelpTopicFormName']);
+                $this->dispatchBrowserEvent('close-delete-confirmation-of-helptopic-form');
+                $this->helpTopicForms = Form::with('fields')->where('id', $this->selectedFormId)->get(['id', 'name', 'visible_to']);
+            }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
@@ -91,7 +116,6 @@ class HelpTopicList extends Component
     {
         try {
             $field->delete();
-            $this->emit('loadHelpTopics');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
@@ -101,6 +125,12 @@ class HelpTopicList extends Component
     {
         $this->selectedFormId = $form->id;
         $this->selectedFormName = $form->name;
+    }
+
+    public function cancelAddFieldToSelectedForm()
+    {
+        $this->editSelectedFieldIsCurrentlyEditing = false;
+        $this->helpTopicForms = Form::with('fields')->where('id', $this->selectedFormId)->get(['id', 'name', 'visible_to']);
     }
 
     public function convertToVariable($value)

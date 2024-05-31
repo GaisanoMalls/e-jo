@@ -49,9 +49,18 @@
                             <td>
                                 <div class="d-flex align-items-center gap-1 text-start td__content">
                                     @if ($helpTopic->forms->isNotEmpty())
-                                        <span wire:click="viewHelpTopicForm({{ $helpTopic->id }})"
-                                            data-bs-toggle="modal" data-bs-target="#viewFormModal"
-                                            class="btn__view__form">View</span>
+                                        <div class="d-flex align-item-center gap-2">
+                                            <span
+                                                class="d-flex align-items-center justify-content-center rounded-circle"
+                                                style="height: 25px; width: 25px; background-color: #f3f4f6;">
+                                                {{ $helpTopic->forms->count() }}
+                                            </span>
+                                            <span wire:click="viewHelpTopicForm({{ $helpTopic->id }})"
+                                                data-bs-toggle="modal" data-bs-target="#viewFormModal"
+                                                class="btn__view__form">
+                                                View
+                                            </span>
+                                        </div>
                                     @else
                                         N/A
                                     @endif
@@ -107,7 +116,7 @@
                         <p class="mb-1" style="font-weight: 500; font-size: 15px;">
                             Are you sure you want to delete this help topic?
                         </p>
-                        <strong>{{ $helpTopicName }}</strong>
+                        <strong>{{ $selectedHelpTopicName }}</strong>
                     </div>
                     <hr>
                     <div class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
@@ -118,6 +127,41 @@
                             wire:click="delete">
                             <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm"
                                 role="status" aria-hidden="true">
+                            </span>
+                            Yes, delete
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Delete help topic form --}}
+    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="deleteHelpTopicFormModal"
+        tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal__content">
+                <form wire:submit.prevent="delete">
+                    <div class="modal-body border-0 text-center pt-4 pb-1">
+                        <h6 class="fw-bold mb-4"
+                            style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                            Confirm Delete
+                        </h6>
+                        <p class="mb-1" style="font-weight: 500; font-size: 15px;">
+                            Delete help topic form?
+                        </p>
+                        <strong>{{ $deleteHelpTopicFormName }}</strong>
+                    </div>
+                    <hr>
+                    <div wire:click="cancelDeleteForHelpTopicForm"
+                        class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
+                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
+                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="button"
+                            class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
+                            wire:click="deleteHelpTopicForm">
+                            <span wire:loading wire:target="deleteHelpTopicForm"
+                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                             </span>
                             Yes, delete
                         </button>
@@ -140,12 +184,13 @@
                         <i class="fa-sharp fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                @if ($helpTopicForms)
+                @if ($helpTopicForms->isNotEmpty())
                     @foreach ($helpTopicForms as $form)
                         <div wire:key="form-{{ $form->id }}"
                             class="d-flex flex-column gap-2 py-3 helptopic__form__list">
                             <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2" style="font-size: 0.95rem; color: black;">
+                                <div class="d-flex align-items-center gap-2"
+                                    style="font-size: 0.95rem; color: black;">
                                     <i class="bi bi-journal-text"></i>
                                     {{ $form->name }}
                                 </div>
@@ -155,8 +200,9 @@
                                         class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0">
                                         <i class="bi bi-plus-lg"></i>
                                     </button>
-                                    <button wire:click="deleteHelpTopicForm({{ $form->id }})"
-                                        class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0">
+                                    <button wire:click="deleteHelpTopicFormConfirm({{ $form }})"
+                                        class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                        data-bs-toggle="modal" data-bs-target="#deleteHelpTopicFormModal">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
@@ -429,7 +475,8 @@
                             </span>
                             Save field
                         </button>
-                        <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
+                        <button wire:click="cancelAddFieldToSelectedForm" type="button"
+                            class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
                             data-bs-target="#viewFormModal" data-bs-toggle="modal">
                             Back
                         </button>
@@ -500,6 +547,11 @@
         VirtualSelect.init({
             ele: editSelectedFieldType,
             // options: addFormFieldFieldTypeOption
+        });
+
+        window.addEventListener('close-delete-confirmation-of-helptopic-form', () => {
+            $('#viewFormModal').modal('show');
+            $('#deleteHelpTopicFormModal').modal('hide');
         });
     </script>
 @endpush
