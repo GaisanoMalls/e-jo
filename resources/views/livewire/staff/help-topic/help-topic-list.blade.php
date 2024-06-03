@@ -174,7 +174,7 @@
     {{-- View help topic form --}}
     <div wire:ignore.self class="modal fade help__topic__modal" id="viewFormModal" tabindex="-1"
         aria-labelledby="viewFormModalModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0 mb-3">
                     <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">
@@ -184,7 +184,7 @@
                         <i class="fa-sharp fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                @if ($helpTopicForms->isNotEmpty())
+                @if ($helpTopicForms)
                     @foreach ($helpTopicForms as $form)
                         <div wire:key="form-{{ $form->id }}"
                             class="d-flex flex-column gap-2 py-3 helptopic__form__list">
@@ -207,7 +207,7 @@
                                     </button>
                                 </div>
                             </div>
-                            @if ($form->fields->isNotEmpty())
+                            @if ($form->fields)
                                 <div class="d-flex flex-wrap align-items-center gap-1">
                                     @foreach ($form->fields as $field)
                                         <span wire:key="field-{{ $field->id }}"
@@ -232,7 +232,12 @@
                                                         type="button"
                                                         class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
                                                         style="height: 4px; width: 4px;">
-                                                        <i class="bi bi-x"></i>
+                                                        <i wire:loading.remove
+                                                            wire:target="deleteFormField({{ $field->id }})"
+                                                            class="bi bi-x"></i>
+                                                        <i wire:loading="deleteFormField({{ $field->id }})"
+                                                            wire:target="deleteFormField({{ $field->id }})"
+                                                            class="bx bx-loader bx-spin"></i>
                                                     </button>
                                                 </div>
                                             @endif
@@ -240,9 +245,10 @@
                                     @endforeach
                                 </div>
                                 @if ($editSelectedFieldIsCurrentlyEditing && $editSelectedFieldFormId === $form->id)
-                                    <div class="row mt-1">
+                                    <div class="row mt-1 px-3 py-4 rounded-3"
+                                        style="background-color: #f3f4f6; margin-left: 2px; margin-right: 2px; border: 0.08rem solid #dddddd;">
                                         <div
-                                            class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                                             <div class="mb-2">
                                                 <label for="fieldName"
                                                     class="form-label text-muted form__field__label"
@@ -262,7 +268,7 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                                             <div class="mb-2">
                                                 <label class="form-label text-muted form__field__label"
                                                     style="font-weight: 500;">Type</label>
@@ -280,22 +286,68 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                                             <div class="mb-2">
                                                 <label class="form-label text-muted form__field__label"
                                                     style="font-weight: 500;">Required</label>
                                                 <div class="w-100">
-                                                    <div id="edit-selected-field-is-required" wire:ignore>
+                                                    <div id="edit-selected-field-required" wire:ignore>
                                                     </div>
                                                 </div>
                                             </div>
-                                            @error('editSelectedFieldIsRequired')
+                                            @error('editSelectedFieldRequired')
                                                 <span class="error__message position-absolute"
                                                     style="bottom: -24px !important;">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                                     {{ $message }}
                                                 </span>
                                             @enderror
+                                        </div>
+                                        <div
+                                            class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            <div class="mb-2">
+                                                <label class="form-label text-muted form__field__label"
+                                                    style="font-weight: 500;">Enabled</label>
+                                                <div class="w-100">
+                                                    <div id="edit-selected-field-enabled" wire:ignore>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @error('editCurrentSelectedFieldEnabled')
+                                                <span class="error__message position-absolute"
+                                                    style="bottom: -24px !important;">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="mt-2 d-flex align-items-center gap-2">
+                                            <button wire:click="updateSelectedFormField" type="button"
+                                                class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
+                                                style="padding: 0.6rem 1rem;
+                                                border-radius: 0.563rem;
+                                                font-size: 0.875rem;
+                                                background-color: #d32839;
+                                                color: white;
+                                                font-weight: 500;
+                                                box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
+                                                <span wire:loading wire:target=""
+                                                    class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true">
+                                                </span>
+                                                Update
+                                            </button>
+                                            <button wire:click="cancelEditSelectedFormField" type="button"
+                                                class="btn m-0 btn__modal__footer btn__cancel"
+                                                style="adding: 0.6rem 1rem;
+                                                    border-radius: 0.563rem;
+                                                    font-size: 0.875rem;
+                                                    border: 1px solid #e7e9eb;
+                                                    background-color: transparent;
+                                                    color: #d32839;
+                                                    font-weight: 500;">
+                                                Cancel
+                                            </button>
                                         </div>
                                     </div>
                                 @endif
@@ -395,6 +447,22 @@
                                         <span class="sr-only">Loading...</span>
                                     </div>
                                     Add
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3 col-md-6 d-flex flex-column justify-content-end">
+                            <div class="mb-2">
+                                <button wire:click="addField" type="button"
+                                    class="btn btn-sm d-flex gap-2 ms-1 align-items-center justify-content-center outline-none px-3 rounded-3"
+                                    style="height: 45px; background-color: #edeef0; border: 1px solid #e7e9eb; margin-bottom: 10px;">
+                                    <span wire:loading.remove wire:target="addField">
+                                        <i class="bi bi-save"></i>
+                                    </span>
+                                    <div wire:loading wire:target="addField"
+                                        class="spinner-border spinner-border-sm loading__spinner" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Add field
                                 </button>
                             </div>
                         </div>
@@ -519,6 +587,15 @@
             @endforeach
         ];
 
+        const addFormFieldSelectEnableOption = [
+            @foreach ($addFormFieldEnableOption as $addFormFieldEnable)
+                {
+                    label: "{{ $addFormFieldEnable['label'] }}",
+                    value: "{{ $addFormFieldEnable['value'] }}"
+                },
+            @endforeach
+        ];
+
         VirtualSelect.init({
             ele: addSelectedFormFieldSelectFieldType,
             options: addFormFieldFieldTypeOption
@@ -543,10 +620,38 @@
         });
 
         // Edit seleted field
-        const editSelectedFieldType = document.querySelector('#edit-selected-field-type')
-        VirtualSelect.init({
-            ele: editSelectedFieldType,
-            // options: addFormFieldFieldTypeOption
+        window.addEventListener('event-edit-selected-field-type', (event) => {
+            const editSelectedFieldType = document.querySelector('#edit-selected-field-type');
+            const editSelectedFieldRequired = document.querySelector('#edit-selected-field-required');
+            const editSelectedFieldEnabled = document.querySelector('#edit-selected-field-enabled');
+
+            const editCurrentSelectedFieldType = event.detail.editCurrentSelectedFieldType;
+            const editCurrentSelectedFieldRequired = event.detail.editCurrentSelectedFieldRequired;
+            const editCurrentSelectedFieldEnabled = event.detail.editCurrentSelectedFieldEnabled;
+
+            VirtualSelect.init({
+                ele: editSelectedFieldType,
+                options: addFormFieldFieldTypeOption,
+            });
+
+            VirtualSelect.init({
+                ele: editSelectedFieldRequired,
+                options: addFormFieldSelectRequiredOption,
+            });
+
+            VirtualSelect.init({
+                ele: editSelectedFieldEnabled,
+                options: addFormFieldSelectEnableOption,
+            });
+
+            editSelectedFieldType.reset();
+            editSelectedFieldRequired.reset();
+            editSelectedFieldEnabled.reset();
+
+            editSelectedFieldType.setValue(editCurrentSelectedFieldType);
+            editSelectedFieldRequired.setValue(editCurrentSelectedFieldRequired);
+            editSelectedFieldEnabled.setValue(editCurrentSelectedFieldEnabled);
+
         });
 
         window.addEventListener('close-delete-confirmation-of-helptopic-form', () => {

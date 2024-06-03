@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Staff\HelpTopic;
 
+use App\Enums\FieldEnableOptionEnum;
 use App\Enums\FieldRequiredOptionEnum;
 use App\Enums\FieldTypesEnum;
 use App\Http\Traits\AppErrorLog;
@@ -20,7 +21,7 @@ class HelpTopicList extends Component
 {
     use BasicModelQueries;
 
-    public ?Collection $helpTopicForms;
+    public ?Collection $helpTopicForms = null;
     public $deleteHelpTopicId;
     public $selectedHelpTopicName;
     public $selectedFormId;
@@ -34,7 +35,8 @@ class HelpTopicList extends Component
     public $editSelectedFieldId;
     public $editSelectedFieldName;
     public $editSelectedFieldType;
-    public $editSelectedFieldIsRequired;
+    public $editSelectedFieldRequired;
+    public $editSelectedFieldEnabled;
     public $editSelectedFieldIsCurrentlyEditing = false;
     public $deleteHelpTopicFormId;
     public $deleteHelpTopicFormName;
@@ -93,9 +95,9 @@ class HelpTopicList extends Component
             if ($helpTopicForm) {
                 $helpTopicForm->delete();
                 $this->deleteHelpTopicFormId = null;
-                $this->reset(['deleteHelpTopicFormId', 'deleteHelpTopicFormName']);
+                $this->emitSelf('loadHelpTopics');
+                $this->reset('deleteHelpTopicFormId', 'deleteHelpTopicFormName');
                 $this->dispatchBrowserEvent('close-delete-confirmation-of-helptopic-form');
-                $this->helpTopicForms = Form::with('fields')->where('id', $this->selectedFormId)->get(['id', 'name', 'visible_to']);
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
@@ -109,13 +111,31 @@ class HelpTopicList extends Component
         $this->editSelectedFieldId = $field->id;
         $this->editSelectedFieldName = $field->name;
         $this->editSelectedFieldType = $field->type;
-        $this->editSelectedFieldIsRequired = $field->is_required;
+        $this->editSelectedFieldRequired = $field->is_required;
+        $this->editSelectedFieldEnabled = $field->is_enabled;
+
+        $this->dispatchBrowserEvent('event-edit-selected-field-type', [
+            'editCurrentSelectedFieldType' => $this->editSelectedFieldType,
+            'editCurrentSelectedFieldRequired' => $this->editSelectedFieldRequired ? 'Yes' : 'No',
+            'editCurrentSelectedFieldEnabled' => $this->editSelectedFieldEnabled ? 'Yes' : 'No',
+        ]);
+    }
+
+    public function cancelEditSelectedFormField()
+    {
+        $this->editSelectedFieldIsCurrentlyEditing = false;
+        $this->editSelectedFieldFormId = null;
+        $this->editSelectedFieldId = null;
+        $this->editSelectedFieldName = null;
+        $this->editSelectedFieldType = null;
+        $this->editSelectedFieldRequired = null;
     }
 
     public function deleteFormField(Field $field)
     {
         try {
             $field->delete();
+            $this->emitSelf('loadHelpTopics');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
@@ -127,20 +147,33 @@ class HelpTopicList extends Component
         $this->selectedFormName = $form->name;
     }
 
+    public function updateSelectedFormField()
+    {
+        Field::where([
+            ['id', $this->editSelectedFieldId],
+            ['form_id', $this->editSelectedFieldFormId],
+        ])
+            ->update([
+                'name' => $this->editSelectedFieldName,
+                'label' => $this->editSelectedFieldName,
+                'type' => $this->editSelectedFieldType,
+                'variable_name' => $this->editSelectedFieldName,
+                'is_required' => FieldRequiredOptionEnum::YES->value ? true : false,
+                'is_enabled' => FieldEnableOptionEnum::YES->value ? true : false
+            ]);
+        $this->editSelectedFieldIsCurrentlyEditing = false;
+        $this->editSelectedFieldFormId = null;
+        $this->editSelectedFieldId = null;
+        $this->editSelectedFieldName = null;
+        $this->editSelectedFieldType = null;
+        $this->editSelectedFieldRequired = null;
+        $this->emitSelf('loadHelpTopics');
+    }
+
     public function cancelAddFieldToSelectedForm()
     {
         $this->editSelectedFieldIsCurrentlyEditing = false;
-        $this->helpTopicForms = Form::with('fields')->where('id', $this->selectedFormId)->get(['id', 'name', 'visible_to']);
-    }
-
-    public function convertToVariable($value)
-    {
-        return preg_replace('/[^a-zA-Z0-9_.]+/', '_', strtolower(trim($value)));
-    }
-
-    public function updatedSelectedFormFieldName($value)
-    {
-        $this->selectedFormVariableName = $this->convertToVariable($value);
+        $this->emitSelf('loadHelpTopics');
     }
 
     private function actionOnSubmit()
@@ -228,11 +261,27 @@ class HelpTopicList extends Component
         }
     }
 
+    public function convertToVariable($value)
+    {
+        return preg_replace('/[^a-zA-Z0-9_.]+/', '_', strtolower(trim($value)));
+    }
+
+    public function updatedSelectedFormFieldName($value)
+    {
+        $this->selectedFormVariableName = $this->convertToVariable($value);
+    }
+
+    public function updatedEditSelectedFieldName($value)
+    {
+        $this->editSelectedFieldName = $this->convertToVariable($value);
+    }
+
     public function render()
     {
         return view('livewire.staff.help-topic.help-topic-list', [
             'helpTopics' => $this->queryHelpTopics(),
             'addFormFieldFieldTypes' => Options::forEnum(FieldTypesEnum::class)->toArray(),
+            'addFormFieldEnableOption' => Options::forEnum(FieldEnableOptionEnum::class)->toArray(),
             'addFormFieldUserRoles' => Options::forModels(Role::class)->toArray(),
             'addFormFieldRequiredOption' => Options::forEnum(FieldRequiredOptionEnum::class)->toArray(),
         ]);
