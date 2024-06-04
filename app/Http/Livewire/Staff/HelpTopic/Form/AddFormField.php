@@ -91,8 +91,8 @@ class AddFormField extends Component
                 'label' => $this->name,
                 'type' => $this->type,
                 'variable_name' => $this->variableName,
-                'is_required' => $this->is_required == FieldRequiredOptionEnum::YES->value ? true : false,
-                'is_enabled' => $this->is_enabled == FieldEnableOptionEnum::YES->value ? true : false
+                'is_required' => $this->is_required == FieldRequiredOptionEnum::YES->value,
+                'is_enabled' => $this->is_enabled == FieldEnableOptionEnum::YES->value
             ]
         );
 
@@ -110,15 +110,14 @@ class AddFormField extends Component
                 if ($this->editingFieldId === $key) {
                     $this->editingFieldName = $field['name'];
                     $this->editingFieldType = $field['type'];
-                    $this->editingFieldRequired = $field['is_required'] == FieldRequiredOptionEnum::YES->value ? true : false;
-                    $this->editingFieldEnable = $field['is_enabled'] == FieldEnableOptionEnum::YES->value ? true : false;
+                    $this->editingFieldRequired = $field['is_required'] == FieldRequiredOptionEnum::YES->value;
+                    $this->editingFieldEnable = $field['is_enabled'] == FieldEnableOptionEnum::YES->value;
                     $this->editingFieldVariableName = $field['variable_name'];
 
                     $this->dispatchBrowserEvent('edit-added-field-show-select-field', [
-                        'isEditing' => true,
                         'currentFieldType' => $this->editingFieldType,
-                        'currentFieldRequired' => $this->editingFieldRequired == FieldRequiredOptionEnum::YES->value ? true : false,
-                        'currentFieldEnable' => $this->editingFieldEnable == FieldEnableOptionEnum::YES->value ? true : false
+                        'currentFieldRequired' => $this->editingFieldRequired == FieldRequiredOptionEnum::YES->value,
+                        'currentFieldEnable' => $this->editingFieldEnable == FieldEnableOptionEnum::YES->value
                     ]);
                 }
             }
@@ -136,8 +135,8 @@ class AddFormField extends Component
                     $field['name'] = $this->editingFieldName;
                     $field['type'] = $this->editingFieldType;
                     $field['variable_name'] = $this->editingFieldVariableName;
-                    $field['is_required'] = $this->editingFieldRequired == FieldRequiredOptionEnum::YES->value ? true : false;
-                    $field['is_enabled'] = $this->editingFieldEnable == FieldEnableOptionEnum::YES->value ? true : false;
+                    $field['is_required'] = $this->editingFieldRequired == FieldRequiredOptionEnum::YES->value;
+                    $field['is_enabled'] = $this->editingFieldEnable == FieldEnableOptionEnum::YES->value;
                 }
             }
             $this->editFieldAction();

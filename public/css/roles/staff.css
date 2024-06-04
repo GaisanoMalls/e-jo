@@ -10821,6 +10821,16 @@ input[type=checkbox]:checked + .form-check-label {
 .help__topics__section .helptopic__form__list:last-child {
   border-bottom: 0 !important;
 }
+.help__topics__section .helptopic__form__list .helptopic__form__name__header:hover .btn__edit__form__name {
+  display: flex !important;
+}
+.help__topics__section .helptopic__form__list .helptopic__form__name__header .edit__form__name__field {
+  box-shadow: none;
+  border-radius: 0 !important;
+  padding: 0 0 2px 1px !important;
+  border-bottom: 1px solid #d32839 !important;
+  font-size: 0.938rem;
+}
 .help__topics__section .form__fields__container:hover {
   border-color: #d32839 !important;
   transition: all 0.6s;

@@ -23,6 +23,9 @@ class HelpTopicList extends Component
 
     public ?Collection $helpTopicForms = null;
     public $deleteHelpTopicId;
+    public $deleteHelpTopicFormId;
+    public $deleteHelpTopicFormName;
+
     public $selectedHelpTopicName;
     public $selectedFormId;
     public $selectedFormName;
@@ -30,7 +33,9 @@ class HelpTopicList extends Component
     public $selectedFormVariableName;
     public $selectedFormFieldType;
     public $selectedFormFieldIsRequired;
+    public $selectedFormFieldIsEnabled;
     public $selectedFormAddedFields = [];
+
     public $editSelectedFieldFormId;
     public $editSelectedFieldId;
     public $editSelectedFieldName;
@@ -38,8 +43,18 @@ class HelpTopicList extends Component
     public $editSelectedFieldRequired;
     public $editSelectedFieldEnabled;
     public $editSelectedFieldIsCurrentlyEditing = false;
-    public $deleteHelpTopicFormId;
-    public $deleteHelpTopicFormName;
+
+    public $editFormId;
+    public $editFormName;
+    public $editFormNameCurrentlyEditing = false;
+
+    public $editAddedFieldId;
+    public $editAddedFieldName;
+    public $editAddedFieldType;
+    public $editAddedFieldRequired;
+    public $editAddedFieldEnabled;
+    public $editAddedFieldVariableName;
+    public $editAddedFieldIsCurrentlyEditing = false;
 
     protected $listeners = ['loadHelpTopics' => '$refresh'];
 
@@ -72,6 +87,7 @@ class HelpTopicList extends Component
 
     public function viewHelpTopicForm(HelpTopic $helpTopic)
     {
+        $this->cancelEditFormName();
         $this->editSelectedFieldIsCurrentlyEditing = false;
         $this->helpTopicForms = $helpTopic->forms()->get(['id', 'name', 'visible_to']);
     }
@@ -104,8 +120,34 @@ class HelpTopicList extends Component
         }
     }
 
+    public function editFormName(Form $form)
+    {
+        $this->editSelectedFieldIsCurrentlyEditing = false;
+        $this->resetEditProperties();
+
+        $this->editFormNameCurrentlyEditing = true;
+        $this->editFormId = $form->id;
+        $this->editFormName = $form->name;
+    }
+
+    public function updateFormName()
+    {
+        Form::where('id', $this->editFormId)->update(['name' => $this->editFormName]);
+        $this->cancelEditFormName();
+        $this->emitSelf('loadHelpTopics');
+    }
+
+    public function discardEditFormName(Form $form)
+    {
+        if ($form->id == $this->editFormId) {
+            $this->cancelEditFormName();
+        }
+    }
+
     public function editSelectedField(Field $field, Form $form)
     {
+        $this->cancelEditFormName();
+
         $this->editSelectedFieldIsCurrentlyEditing = true;
         $this->editSelectedFieldFormId = $form->id;
         $this->editSelectedFieldId = $field->id;
@@ -113,6 +155,7 @@ class HelpTopicList extends Component
         $this->editSelectedFieldType = $field->type;
         $this->editSelectedFieldRequired = $field->is_required;
         $this->editSelectedFieldEnabled = $field->is_enabled;
+        $this->resetValidation();
 
         $this->dispatchBrowserEvent('event-edit-selected-field-type', [
             'editCurrentSelectedFieldType' => $this->editSelectedFieldType,
@@ -121,14 +164,17 @@ class HelpTopicList extends Component
         ]);
     }
 
+    public function cancelEditFormName()
+    {
+        $this->editFormId = null;
+        $this->editFormName = null;
+        $this->editFormNameCurrentlyEditing = false;
+    }
+
     public function cancelEditSelectedFormField()
     {
         $this->editSelectedFieldIsCurrentlyEditing = false;
-        $this->editSelectedFieldFormId = null;
-        $this->editSelectedFieldId = null;
-        $this->editSelectedFieldName = null;
-        $this->editSelectedFieldType = null;
-        $this->editSelectedFieldRequired = null;
+        $this->resetEditProperties();
     }
 
     public function deleteFormField(Field $field)
@@ -143,12 +189,33 @@ class HelpTopicList extends Component
 
     public function addFieldToSelectedForm(Form $form)
     {
+        $this->cancelEditFormName();
         $this->selectedFormId = $form->id;
         $this->selectedFormName = $form->name;
     }
 
     public function updateSelectedFormField()
     {
+        if (!$this->editSelectedFieldName) {
+            $this->addError('editSelectedFieldName', 'Field name is required');
+            return;
+        }
+
+        if (!$this->editSelectedFieldType) {
+            $this->addError('editSelectedFieldType', 'Field type is required');
+            return;
+        }
+
+        if (!$this->editSelectedFieldRequired) {
+            $this->addError('editSelectedFieldRequired', 'This field is required');
+            return;
+        }
+
+        if (!$this->editSelectedFieldEnabled) {
+            $this->addError('editSelectedFieldEnabled', 'This field is required');
+            return;
+        }
+
         Field::where([
             ['id', $this->editSelectedFieldId],
             ['form_id', $this->editSelectedFieldFormId],
@@ -157,16 +224,14 @@ class HelpTopicList extends Component
                 'name' => $this->editSelectedFieldName,
                 'label' => $this->editSelectedFieldName,
                 'type' => $this->editSelectedFieldType,
-                'variable_name' => $this->editSelectedFieldName,
-                'is_required' => FieldRequiredOptionEnum::YES->value ? true : false,
-                'is_enabled' => FieldEnableOptionEnum::YES->value ? true : false
+                'variable_name' => $this->convertToVariable($this->editSelectedFieldName),
+                'is_required' => $this->editSelectedFieldRequired == FieldRequiredOptionEnum::YES->value,
+                'is_enabled' => $this->editSelectedFieldEnabled == FieldEnableOptionEnum::YES->value
             ]);
+
         $this->editSelectedFieldIsCurrentlyEditing = false;
-        $this->editSelectedFieldFormId = null;
-        $this->editSelectedFieldId = null;
-        $this->editSelectedFieldName = null;
-        $this->editSelectedFieldType = null;
-        $this->editSelectedFieldRequired = null;
+        $this->resetEditProperties();
+        $this->resetValidation();
         $this->emitSelf('loadHelpTopics');
     }
 
@@ -176,15 +241,7 @@ class HelpTopicList extends Component
         $this->emitSelf('loadHelpTopics');
     }
 
-    private function actionOnSubmit()
-    {
-        $this->reset();
-        $this->resetValidation();
-        $this->emit('loadHelpTopics');
-        $this->dispatchBrowserEvent('selected-form-clear-form-fields');
-    }
-
-    public function saveAddedFields()
+    public function saveSelectedFormAddedFields()
     {
         $fieldNameExists = Field::where([
             ['form_id', $this->selectedFormId],
@@ -218,16 +275,45 @@ class HelpTopicList extends Component
                 'label' => $this->selectedFormFieldName,
                 'type' => $this->selectedFormFieldType,
                 'variable_name' => $this->selectedFormVariableName,
-                'is_required' => $this->selectedFormFieldIsRequired,
+                'is_required' => $this->selectedFormFieldIsEnabled == FieldRequiredOptionEnum::YES->value,
+                'is_enabled' => $this->selectedFormFieldIsEnabled == FieldEnableOptionEnum::YES->value
             ]
         );
 
-        $this->reset('selectedFormFieldName', 'selectedFormFieldType', 'selectedFormVariableName', 'selectedFormFieldIsRequired');
+        $this->reset('selectedFormFieldName', 'selectedFormFieldType', 'selectedFormVariableName', 'selectedFormFieldIsRequired', 'selectedFormFieldIsEnabled');
         $this->resetValidation();
         $this->dispatchBrowserEvent('selected-form-clear-form-fields');
+        $this->emitSelf('loadHelpTopics');
     }
 
-    public function selectedFormRemoveField(int $fieldKey)
+    public function editSelectedFormAddedField(int $fieldKey)
+    {
+        try {
+            $this->editAddedFieldId = $fieldKey;
+
+            foreach ($this->selectedFormAddedFields as $key => $field) {
+                if ($this->editAddedFieldId === $key) {
+                    $this->editAddedFieldName = $field['name'];
+                    $this->editAddedFieldType = $field['type'];
+                    $this->editAddedFieldRequired = $field['is_required'] == FieldRequiredOptionEnum::YES->value;
+                    $this->editAddedFieldEnabled = $field['is_enabled'] == FieldEnableOptionEnum::YES->value;
+                    $this->editAddedFieldVariableName = $field['variable_name'];
+                }
+
+                $this->dispatchBrowserEvent('edit-selected-form-added-field-show-select-field', [
+                    'editAddedFieldIsEditing' => true,
+                    'editAddedFieldType' => $this->editAddedFieldType,
+                    'editAddedFieldRequired' => $this->editAddedFieldRequired == FieldRequiredOptionEnum::YES->value,
+                    'editAddedFieldEnabled' => $this->editAddedFieldEnabled == FieldEnableOptionEnum::YES->value
+                ]);
+            }
+
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+        }
+    }
+
+    public function removeSelectedFormAddedField(int $fieldKey)
     {
         foreach (array_keys($this->selectedFormAddedFields) as $key) {
             if ($fieldKey === $key) {
@@ -251,7 +337,7 @@ class HelpTopicList extends Component
                     'label' => $field['name'],
                     'type' => $field['type'],
                     'variable_name' => $field['variable_name'],
-                    'is_required' => $field['is_required'] == FieldRequiredOptionEnum::YES ? true : false
+                    'is_required' => $field['is_required'] == FieldRequiredOptionEnum::YES->value
                 ]);
             }
             $this->actionOnSubmit();
@@ -259,6 +345,23 @@ class HelpTopicList extends Component
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
+    }
+
+    private function actionOnSubmit()
+    {
+        $this->reset();
+        $this->resetValidation();
+        $this->emit('loadHelpTopics');
+        $this->dispatchBrowserEvent('selected-form-clear-form-fields');
+    }
+
+    public function resetEditProperties()
+    {
+        $this->editSelectedFieldFormId = null;
+        $this->editSelectedFieldId = null;
+        $this->editSelectedFieldName = null;
+        $this->editSelectedFieldType = null;
+        $this->editSelectedFieldRequired = null;
     }
 
     public function convertToVariable($value)
@@ -269,11 +372,6 @@ class HelpTopicList extends Component
     public function updatedSelectedFormFieldName($value)
     {
         $this->selectedFormVariableName = $this->convertToVariable($value);
-    }
-
-    public function updatedEditSelectedFieldName($value)
-    {
-        $this->editSelectedFieldName = $this->convertToVariable($value);
     }
 
     public function render()

@@ -383,51 +383,49 @@
             const currentFieldRequired = event.detail.currentFieldRequired;
             const currentFieldEnable = event.detail.currentFieldEnable;
 
-            if (isEditing) {
-                const editingSelectFieldType = document.querySelector('#editing-select-field-type');
-                const editingSelectFieldIsRequired = document.querySelector('#editing-select-field-is-required');
-                const editingSelectFieldEnable = document.querySelector('#editing-select-field-enable');
+            const editingSelectFieldType = document.querySelector('#editing-select-field-type');
+            const editingSelectFieldIsRequired = document.querySelector('#editing-select-field-is-required');
+            const editingSelectFieldEnable = document.querySelector('#editing-select-field-enable');
 
-                VirtualSelect.init({
-                    ele: editingSelectFieldType,
-                    options: fieldTypeOption,
-                    search: true,
-                    popupDropboxBreakpoint: '3000px'
-                });
+            VirtualSelect.init({
+                ele: editingSelectFieldType,
+                options: fieldTypeOption,
+                search: true,
+                popupDropboxBreakpoint: '3000px'
+            });
 
-                VirtualSelect.init({
-                    ele: editingSelectFieldIsRequired,
-                    options: selectRequiredOption,
-                    popupDropboxBreakpoint: '3000px'
-                });
+            VirtualSelect.init({
+                ele: editingSelectFieldIsRequired,
+                options: selectRequiredOption,
+                popupDropboxBreakpoint: '3000px'
+            });
 
-                VirtualSelect.init({
-                    ele: editingSelectFieldEnable,
-                    options: selectEnableOption,
-                    popupDropboxBreakpoint: '3000px'
-                });
+            VirtualSelect.init({
+                ele: editingSelectFieldEnable,
+                options: selectEnableOption,
+                popupDropboxBreakpoint: '3000px'
+            });
 
-                // Reset the select field first before assigning a new value.
-                editingSelectFieldType.reset();
-                editingSelectFieldIsRequired.reset();
-                editingSelectFieldEnable.reset();
+            // Reset the select field first before assigning a new value.
+            editingSelectFieldType.reset();
+            editingSelectFieldIsRequired.reset();
+            editingSelectFieldEnable.reset();
 
-                editingSelectFieldType.setValue(currentFieldType);
-                editingSelectFieldIsRequired.setValue(currentFieldRequired ? 'Yes' : 'No');
-                editingSelectFieldEnable.setValue(currentFieldEnable ? 'Yes' : 'No');
+            editingSelectFieldType.setValue(currentFieldType);
+            editingSelectFieldIsRequired.setValue(currentFieldRequired ? 'Yes' : 'No');
+            editingSelectFieldEnable.setValue(currentFieldEnable ? 'Yes' : 'No');
 
-                editingSelectFieldType.addEventListener('change', () => {
-                    @this.set('editingFieldType', editingSelectFieldType.value);
-                });
+            editingSelectFieldType.addEventListener('change', () => {
+                @this.set('editingFieldType', editingSelectFieldType.value);
+            });
 
-                editingSelectFieldIsRequired.addEventListener('change', () => {
-                    @this.set('editingFieldRequired', editingSelectFieldIsRequired.value);
-                });
+            editingSelectFieldIsRequired.addEventListener('change', () => {
+                @this.set('editingFieldRequired', editingSelectFieldIsRequired.value);
+            });
 
-                editingSelectFieldEnable.addEventListener('change', () => {
-                    @this.set('editingFieldEnable', editingSelectFieldEnable.value);
-                });
-            }
+            editingSelectFieldEnable.addEventListener('change', () => {
+                @this.set('editingFieldEnable', editingSelectFieldEnable.value);
+            });
         });
     </script>
 @endpush

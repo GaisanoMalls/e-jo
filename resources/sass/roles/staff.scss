@@ -4072,6 +4072,22 @@ input[type="checkbox"] {
         &:last-child {
             border-bottom: 0 !important;
         }
+
+        .helptopic__form__name__header {
+            &:hover {
+                .btn__edit__form__name {
+                    display: flex !important;
+                }
+            }
+
+            .edit__form__name__field {
+                box-shadow: none;
+                border-radius: 0 !important;
+                padding: 0 0 2px 1px !important;
+                border-bottom: 1px solid #d32839 !important;
+                font-size: $fs-15;
+            }
+        }
     }
 
     .form__fields__container:hover {
