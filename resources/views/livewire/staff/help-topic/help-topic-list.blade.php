@@ -414,9 +414,9 @@
                 </div>
                 <div class="mx-1">
                     <h6>Add field</h6>
-                    @if (session()->has('selected_form_required_form_fields_error'))
+                    @if (session()->has('selected_form_added_fields_error'))
                         <small class="fw-semibold text-danger mb-1">
-                            {{ session('selected_form_required_form_fields_error') }}
+                            {{ session('selected_form_added_fields_error') }}
                         </small>
                     @endif
                     <div class="row mb-3">

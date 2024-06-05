@@ -168,6 +168,13 @@
                                                     <span>{{ $field['name'] }}</span>
                                                 @endif
                                             </div>
+                                            @error('editingFieldName')
+                                                <span class="error__message position-absolute"
+                                                    style="bottom: -3px !important;">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start px-0 td__content"
@@ -180,6 +187,13 @@
                                                     <span>{{ $field['type'] }}</span>
                                                 @endif
                                             </div>
+                                            @error('editingFieldType')
+                                                <span class="error__message position-absolute"
+                                                    style="bottom: -3px !important;">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start px-0 td__content"
@@ -192,6 +206,13 @@
                                                     <span>{{ $field['is_required'] ? 'Yes' : 'No' }}</span>
                                                 @endif
                                             </div>
+                                            @error('editingFieldRequired')
+                                                <span class="error__message position-absolute"
+                                                    style="bottom: -3px !important;">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center text-start px-0 td__content"
@@ -204,6 +225,13 @@
                                                     <span>{{ $field['is_enabled'] ? 'Yes' : 'No' }}</span>
                                                 @endif
                                             </div>
+                                            @error('editingFieldEnable')
+                                                <span class="error__message position-absolute"
+                                                    style="bottom: -3px !important;">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
                                         </td>
                                         <td class="px-0">
                                             <div class="d-flex align-items-center gap-2 justify-content-end px-2">

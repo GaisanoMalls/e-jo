@@ -394,12 +394,12 @@ class HelpTopicList extends Component
         try {
 
             if (empty($this->selectedFormAddedFields) && $this->selectedFormFieldName && $this->selectedFormFieldType && $this->selectedFormFieldIsRequired && $this->selectedFormFieldIsEnabled) {
-                session()->flash('selected_form_required_form_fields_error', 'Please the fields first');
+                session()->flash('selected_form_added_fields_error', 'Please add the fields first');
                 return;
             }
 
             if (empty($this->selectedFormAddedFields)) {
-                session()->flash('selected_form_required_form_fields_error', 'Form fields are required');
+                session()->flash('selected_form_added_fields_error', 'Form fields are required');
                 return;
             }
 

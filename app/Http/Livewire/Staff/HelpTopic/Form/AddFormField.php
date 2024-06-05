@@ -130,6 +130,26 @@ class AddFormField extends Component
     public function updateAddedField(int $fieldKey)
     {
         try {
+            if (!$this->editingFieldName) {
+                $this->addError('editingFieldName', 'This field name is required');
+                return;
+            }
+
+            if (!$this->editingFieldType) {
+                $this->addError('editingFieldType', 'This field type is required');
+                return;
+            }
+
+            if (!$this->editingFieldRequired) {
+                $this->addError('editingFieldRequired', 'This field is required');
+                return;
+            }
+
+            if (!$this->editingFieldEnable) {
+                $this->addError('editingFieldEnable', 'This field is required');
+                return;
+            }
+
             foreach ($this->addedFields as $key => &$field) {
                 if ($this->editingFieldId === $fieldKey && $key === $fieldKey) {
                     $field['name'] = $this->editingFieldName;
@@ -177,6 +197,12 @@ class AddFormField extends Component
         $this->validate();
 
         try {
+            if (empty($this->addedFields) && $this->name && $this->type && $this->is_required && $this->is_enabled) {
+                session()->flash('required_form_fields_error', 'Please add the fields first');
+                return;
+
+            }
+
             if (empty($this->addedFields)) {
                 session()->flash('required_form_fields_error', 'Form fields are required');
                 return;
