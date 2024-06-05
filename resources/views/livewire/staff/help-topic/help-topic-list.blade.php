@@ -124,8 +124,8 @@
                             data-bs-dismiss="modal">Cancel</button>
                         <button type="submit"
                             class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
-                            wire:click="delete">
-                            <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm"
+                            wire:click="deleteForm">
+                            <span wire:loading wire:target="deleteForm" class="spinner-border spinner-border-sm"
                                 role="status" aria-hidden="true">
                             </span>
                             Yes, delete
@@ -532,6 +532,12 @@
                                                             <span>{{ $field['name'] }}</span>
                                                         @endif
                                                     </div>
+                                                    @error('editAddedFieldName')
+                                                        <span class="error__message">
+                                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
@@ -545,6 +551,12 @@
                                                             <span>{{ $field['type'] }}</span>
                                                         @endif
                                                     </div>
+                                                    @error('editAddedFieldType')
+                                                        <span class="error__message">
+                                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
@@ -558,6 +570,12 @@
                                                             <span>{{ $field['is_required'] ? 'Yes' : 'No' }}</span>
                                                         @endif
                                                     </div>
+                                                    @error('editAddedFieldRequired')
+                                                        <span class="error__message">
+                                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
@@ -571,6 +589,12 @@
                                                             <span>{{ $field['is_enabled'] ? 'Yes' : 'No' }}</span>
                                                         @endif
                                                     </div>
+                                                    @error('editAddedFieldEnabled')
+                                                        <span class="error__message">
+                                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
                                                 </td>
                                                 <td class="px-0">
                                                     <div
@@ -578,13 +602,13 @@
                                                         @if ($editAddedFieldId === $key)
                                                             <button
                                                                 class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                                wire:click="">
+                                                                wire:click="updateSelectedFormAddedField({{ $key }})">
                                                                 <i class="bi bi-check-lg"
                                                                     style="font-size: 18px;"></i>
                                                             </button>
                                                             <button
                                                                 class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                                wire:click="">
+                                                                wire:click="cancelEditSelectedFormAddedFieldAction({{ $key }})">
                                                                 <i class="bi bi-x-lg"></i>
                                                             </button>
                                                         @else
@@ -611,9 +635,9 @@
                 </div>
                 <div class="modal-footer modal__footer p-0 mt-3 justify-content-between border-0 gap-2">
                     <div class="d-flex align-items-center gap-2">
-                        <button wire:click="selectedFormSaveField" type="button"
+                        <button wire:click="selectedFormSaveAddedField" type="button"
                             class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send">
-                            <span wire:loading wire:target="selectedFormSaveField"
+                            <span wire:loading wire:target="selectedFormSaveAddedField"
                                 class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                             </span>
                             Save field
@@ -702,6 +726,7 @@
         window.addEventListener('selected-form-clear-form-fields', () => {
             addSelectedFormFieldSelectFieldType.reset();
             addSelectedFormFieldSelectRequired.reset();
+            addSelectedFormFieldSelectEnabled.reset();
         });
 
         // Edit seleted field
@@ -752,23 +777,66 @@
 
         // Edit selected form (added fields)
         window.addEventListener('edit-selected-form-added-field-show-select-field', (event) => {
+            const editAddedFieldType = event.detail.editAddedFieldType;
+            const editAddedFieldRequired = event.detail.editAddedFieldRequired;
+            const editAddedFieldEnabled = event.detail.editAddedFieldEnabled;
+
             const editAddedSelectFieldType = document.querySelector('#edit-added-select-field-type');
             const editAddedSelectFieldRequired = document.querySelector('#edit-added-select-field-required');
             const editAddedSelectFieldEnabled = document.querySelector('#edit-added-select-field-enabled');
 
             VirtualSelect.init({
                 ele: editAddedSelectFieldType,
+                options: addFormFieldFieldTypeOption,
+                search: true,
+                popupDropboxBreakpoint: '3000px'
             });
 
             VirtualSelect.init({
                 ele: editAddedSelectFieldRequired,
+                options: addFormFieldSelectRequiredOption,
+                popupDropboxBreakpoint: '3000px'
             });
 
             VirtualSelect.init({
                 ele: editAddedSelectFieldEnabled,
+                options: addFormFieldSelectEnableOption,
+                popupDropboxBreakpoint: '3000px'
+            });
+
+            editAddedSelectFieldType.reset();
+            editAddedSelectFieldRequired.reset();
+            editAddedSelectFieldEnabled.reset();
+
+            editAddedSelectFieldType.setValue(editAddedFieldType);
+            editAddedSelectFieldRequired.setValue(editAddedFieldRequired ? 'Yes' : 'No');
+            editAddedSelectFieldEnabled.setValue(editAddedFieldEnabled ? 'Yes' : 'No');
+
+            editAddedSelectFieldType.addEventListener('change', () => {
+                @this.set('editAddedFieldType', editAddedSelectFieldType.value);
+            });
+
+            editAddedSelectFieldRequired.addEventListener('change', () => {
+                @this.set('editAddedFieldRequired', editAddedSelectFieldRequired.value);
+            });
+
+            editAddedSelectFieldEnabled.addEventListener('change', () => {
+                @this.set('editAddedFieldEnabled', editAddedSelectFieldEnabled.value);
             });
         });
 
+        window.addEventListener('close-selected-form-add-field', () => {
+            $('#viewFormModal').modal('show');
+            $('#addFieldForSelectedForm').modal('hide');
+
+            addSelectedFormFieldSelectFieldType.reset();
+            addSelectedFormFieldSelectRequired.reset();
+            addSelectedFormFieldSelectEnabled.reset();
+
+            editAddedSelectFieldType.reset();
+            editAddedSelectFieldRequired.reset();
+            editAddedSelectFieldEnabled.reset();
+        });
 
         window.addEventListener('close-delete-confirmation-of-helptopic-form', () => {
             $('#viewFormModal').modal('show');

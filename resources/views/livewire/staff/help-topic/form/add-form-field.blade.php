@@ -378,7 +378,6 @@
         });
 
         window.addEventListener('edit-added-field-show-select-field', (event) => {
-            const isEditing = event.detail.isEditing
             const currentFieldType = event.detail.currentFieldType
             const currentFieldRequired = event.detail.currentFieldRequired;
             const currentFieldEnable = event.detail.currentFieldEnable;

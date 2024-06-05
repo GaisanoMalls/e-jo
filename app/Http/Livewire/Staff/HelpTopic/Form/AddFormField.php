@@ -161,7 +161,6 @@ class AddFormField extends Component
         $this->editingFieldRequired = false;
         $this->editingFieldEnable = false;
         $this->editingFieldVariableName = null;
-
     }
 
     public function removeField(int $fieldKey)
