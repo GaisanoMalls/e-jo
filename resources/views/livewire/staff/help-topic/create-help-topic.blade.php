@@ -42,7 +42,7 @@
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <label for="sla" class="form-label form__field__label">
-                                                Serice Level Agreement (SLA)
+                                                Service Level Agreement (SLA)
                                             </label>
                                             <div>
                                                 <div id="select-help-topic-sla" wire:ignore></div>
@@ -74,7 +74,7 @@
                                     <div wire:ignore class="col-md-4" id="serviceDeptChildContainer">
                                         <div class="mb-2">
                                             <label for="department" class="form-label form__field__label">
-                                                Service Dept. Children
+                                                Sub-Service Department
                                             </label>
                                             <div>
                                                 <div id="select-help-topic-service-department-children">
@@ -124,6 +124,26 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <h6 class="fw-semibold" style="font-size: 0.89rem;">Approval Configurations</h6>
+                            <div class="col-md-4">
+                                <div class="mb-2">
+                                    <label for="department" class="form-label form__field__label">
+                                        BU Department
+                                    </label>
+                                    <div>
+                                        <div id="select-help-topic-bu-department" wire:ignore></div>
+                                    </div>
+                                    @error('bu_department')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -374,6 +394,14 @@
                 });
             });
         }
+
+        // Approval Configurations
+        const buDepartmentSelect = document.querySelector('#select-help-topic-bu-department');
+        VirtualSelect.init({
+            ele: buDepartmentSelect,
+            search: true,
+            markSearchResults: true,
+        });
     </script>
 @endpush
 
