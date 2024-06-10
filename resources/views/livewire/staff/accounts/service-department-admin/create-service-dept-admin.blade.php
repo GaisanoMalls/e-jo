@@ -197,14 +197,10 @@
 
 @push('livewire-select')
     <script>
-        const serviceDeptAdminSuffixOption = [
-            @foreach ($serviceDeptAdminSuffixes as $suffix)
-                {
-                    label: "{{ $suffix->name }}",
-                    value: "{{ $suffix->name }}"
-                },
-            @endforeach
-        ];
+        const serviceDeptAdminSuffixOption = @json($serviceDeptAdminSuffixes).map(suffix => ({
+            label: suffix.name,
+            value: suffix.name
+        }));
 
         const serviceDeptAdminSuffixSelect = document.querySelector('#select-service-dept-admin-suffix');
         VirtualSelect.init({
@@ -218,14 +214,10 @@
             @this.set('suffix', serviceDeptAdminSuffixSelect.value)
         });
 
-        const serviceDeptAdminBranchOption = [
-            @foreach ($serviceDeptAdminBranches as $branch)
-                {
-                    label: "{{ $branch->name }}",
-                    value: "{{ $branch->id }}"
-                },
-            @endforeach
-        ];
+        const serviceDeptAdminBranchOption = @json($serviceDeptAdminBranches).map(branch => ({
+            label: branch.name,
+            value: branch.id
+        }));
 
         const serviceDeptAdminBranchSelect = document.querySelector('#select-service-dept-admin-branch');
         VirtualSelect.init({
@@ -246,14 +238,11 @@
             serviceDeptAdminBUDepartmentSelect.reset();
         });
 
-        const serviceDeptAdminBUDepartmentOption = [
-            @foreach ($buDepartments as $buDepartment)
-                {
-                    label: "{{ $buDepartment->name }}",
-                    value: "{{ $buDepartment->id }}"
-                },
-            @endforeach
-        ];
+        const serviceDeptAdminBUDepartmentOption = @json($buDepartments).map(buDepartment => ({
+            label: buDepartment.name,
+            value: buDepartment.id
+        }));
+
         const serviceDeptAdminBUDepartmentSelect = document.querySelector('#select-service-dept-admin-bu-department');
         VirtualSelect.init({
             ele: serviceDeptAdminBUDepartmentSelect,
@@ -266,17 +255,14 @@
             @this.set('bu_department', parseInt(serviceDeptAdminBUDepartmentSelect.value));
         });
 
-        const serviceDeptAdminServiceDepartmentOption = [
-            @foreach ($serviceDeptAdminServiceDepartments as $serviceDepartment)
-                {
-                    label: "{{ $serviceDepartment->name }}",
-                    value: "{{ $serviceDepartment->id }}"
-                },
-            @endforeach
-        ];
+        const serviceDeptAdminServiceDepartmentOption = @json($serviceDeptAdminServiceDepartments).map(serviceDepartment => ({
+            label: serviceDepartment.name,
+            value: serviceDepartment.id
+        }));
 
         const serviceDeptAdminSeviceDepartmentSelect = document.querySelector(
             '#select-service-dept-admin-service-department');
+
         VirtualSelect.init({
             ele: serviceDeptAdminSeviceDepartmentSelect,
             options: serviceDeptAdminServiceDepartmentOption,

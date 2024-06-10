@@ -42,15 +42,10 @@
 
 @push('livewire-select')
     <script>
-        const actionOptions = [
-            @foreach ($actions as $action)
-                {
-                    label: @json($action->icon) + "{{ $action->name }}",
-                    value: "{{ $action->name }}"
-                },
-            @endforeach
-
-        ];
+        const actionOptions = @json($actions).map(action => ({
+            label: action.icon + action.name,
+            value: action.name
+        }));
 
         const selectPermissionAction = document.querySelector('#select-permission-action');
         VirtualSelect.init({
@@ -61,14 +56,10 @@
             markSearchResults: true,
         });
 
-        const moduleOption = [
-            @foreach ($modules as $module)
-                {
-                    label: "{{ $module->name }}",
-                    value: "{{ $module->name }}"
-                },
-            @endforeach
-        ];
+        const moduleOption = @json($modules).map(module => ({
+            label: module.name,
+            value: module.name
+        }));
 
         const selectPermissionModule = document.querySelector('#select-module-name');
         VirtualSelect.init({

@@ -76,14 +76,11 @@
     <script>
         const permissionNumberSelectList = document.querySelector('#permission-number-select-list');
 
-        const numberListOptions = [
-            @foreach ($numberList as $number)
-                {
-                    label: "{{ $number }} items",
-                    value: "{{ $number }}"
-                },
-            @endforeach
-        ];
+        const numberListOptions = @json($numberList).map(number => ({
+            label: `${number} items`,
+            value: number
+        }));
+
         VirtualSelect.init({
             ele: permissionNumberSelectList,
             options: numberListOptions

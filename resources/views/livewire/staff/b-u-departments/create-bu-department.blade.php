@@ -70,14 +70,10 @@
 
 @push('livewire-select')
     <script>
-        let branchOption = [
-            @foreach ($branches as $branch)
-                {
-                    label: "{{ $branch->name }}",
-                    value: "{{ $branch->id }}"
-                },
-            @endforeach
-        ];
+        let branchOption = @json($branches).map(branch => ({
+            label: branch.name,
+            value: branch.id
+        }));
 
         VirtualSelect.init({
             ele: '#select-branch',

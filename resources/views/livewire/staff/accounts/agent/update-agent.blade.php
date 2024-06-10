@@ -243,14 +243,10 @@
 
 @push('livewire-select')
     <script>
-        const agentSuffixOption = [
-            @foreach ($agentSuffixes as $suffix)
-                {
-                    label: "{{ $suffix->name }}",
-                    value: "{{ $suffix->name }}"
-                },
-            @endforeach
-        ];
+        const agentSuffixOption = @json($agentSuffixes).map(suffix => ({
+            label: suffix.name,
+            value: suffix.name
+        }));
 
         const agentSuffixSelect = document.querySelector('#select-agent-suffix');
         VirtualSelect.init({
@@ -261,14 +257,10 @@
             selectedValue: '{{ $agent->profile->suffix }}'
         });
 
-        const agentBranchOption = [
-            @foreach ($agentBranches as $br)
-                {
-                    label: "{{ $br->name }}",
-                    value: "{{ $br->id }}"
-                },
-            @endforeach
-        ];
+        const agentBranchOption = @json($agentBranches).map(br => ({
+            label: br.name,
+            value: br.id
+        }));
 
         const agentBranchSelect = document.querySelector('#select-agent-branch');
         VirtualSelect.init({
@@ -319,14 +311,10 @@
             }
         });
 
-        const agentBUDepartmentOption = [
-            @foreach ($agentBUDepartments as $department)
-                {
-                    label: "{{ $department->name }}",
-                    value: "{{ $department->id }}"
-                },
-            @endforeach
-        ];
+        const agentBUDepartmentOption = @json($agentBUDepartments).map(department => ({
+            label: department.name,
+            value: department.id
+        }));
 
         const agentBUDepartmentSelect = document.querySelector('#select-agent-bu-department');
         VirtualSelect.init({
@@ -340,14 +328,10 @@
             @this.set('bu_department', parseInt(agentBUDepartmentSelect.value));
         });
 
-        const agentTeamOption = [
-            @foreach ($agentTeams as $team)
-                {
-                    label: "{{ $team->name }}",
-                    value: "{{ $team->id }}"
-                },
-            @endforeach
-        ];
+        const agentTeamOption = @json($agentTeams).map(team => ({
+            label: team.name,
+            value: team.id
+        }));
 
         const agentTeamSelect = document.querySelector('#select-agent-team');
         VirtualSelect.init({
@@ -359,15 +343,11 @@
             markSearchResults: true,
         });
 
-        const agentSubteamOption = [
-            @foreach ($agentSubteams as $subteam)
-                {
-                    label: "{{ $subteam->name }}",
-                    value: "{{ $subteam->id }}",
-                    description: "{{ $subteam->team->name }}"
-                },
-            @endforeach
-        ];
+        const agentSubteamOption = @json($agentSubteams).map(subteam => ({
+            label: subteam.name,
+            value: subteam.id,
+            description: subteam.team.name
+        }));
 
         const agentSubteamSelect = document.querySelector('#select-agent-subteam');
         VirtualSelect.init({
@@ -380,14 +360,10 @@
             hasOptionDescription: true,
         });
 
-        const agentServiceDepartmentOption = [
-            @foreach ($agentServiceDepartments as $serviceDepartment)
-                {
-                    label: "{{ $serviceDepartment->name }}",
-                    value: "{{ $serviceDepartment->id }}"
-                },
-            @endforeach
-        ];
+        const agentServiceDepartmentOption = @json($agentServiceDepartments).map(serviceDepartment => ({
+            label: serviceDepartment.name,
+            value: serviceDepartment.id
+        }));
 
         const agentServiceDepartmentSelect = document.querySelector('#select-agent-service-department');
         VirtualSelect.init({
@@ -475,14 +451,11 @@
             agentTeamSelect.setOptions([]);
         })
 
-        const agentPermissionOption = [
-            @foreach ($allPermissions as $permission)
-                {
-                    label: "{{ $permission->name }}",
-                    value: "{{ $permission->name }}"
-                },
-            @endforeach
-        ];
+        const agentPermissionOption = @json($allPermissions).map(permission => ({
+            label: permission.name,
+            value: permission.name
+        }));
+
         const selectAgentPermissions = document.querySelector('#select-agent-permissions');
         VirtualSelect.init({
             ele: selectAgentPermissions,

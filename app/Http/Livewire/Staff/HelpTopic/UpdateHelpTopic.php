@@ -25,7 +25,7 @@ class UpdateHelpTopic extends Component
     public $service_department;
     public $service_department_child;
     public $selected_child;
-    public $service_department_children = [];
+    public $serviceDepartmentChildren = [];
     public $selectedServiceDepartmentChildrenName;
     public $team;
     public $amount;
@@ -36,7 +36,7 @@ class UpdateHelpTopic extends Component
         $this->sla = $helpTopic->service_level_agreement_id;
         $this->service_department = $helpTopic->service_department_id;
         $this->service_department_child = $helpTopic->serviceDepartmentChild;
-        $this->service_department_children = $helpTopic->serviceDepartment->children()->get(['id', 'name']);
+        $this->serviceDepartmentChildren = $helpTopic->serviceDepartment->children()->get(['id', 'name']);
         $this->team = $helpTopic->team_id;
         $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
         $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get(['id', 'name']);

@@ -214,14 +214,11 @@
 
 @push('livewire-select')
     <script>
-        const serviceDepartmentOption = [
-            @foreach ($serviceDepartments as $serviceDepartment)
-                {
-                    label: "{{ $serviceDepartment->name }}",
-                    value: "{{ $serviceDepartment->id }}"
-                },
-            @endforeach
-        ];
+        const serviceDepartmentOption = @json($serviceDepartments).map(serviceDepartment => ({
+            label: serviceDepartment.name,
+            value: serviceDepartment.id
+        }));
+
         const serviceDepartmentSelect = document.querySelector('#userCreateTicketServiceDepartmentDropdown');
         VirtualSelect.init({
             ele: serviceDepartmentSelect,
@@ -246,6 +243,7 @@
             if (serviceDepartmentId) {
                 @this.set('serviceDepartment', parseInt(serviceDepartmentId));
                 helpTopicSelect.enable();
+
                 window.addEventListener('get-help-topics-from-service-department', (event) => {
                     const helpTopics = event.detail.helpTopics;
                     const helpTopicOption = [];
@@ -275,14 +273,11 @@
         });
 
         const branchSelect = document.querySelector('#userCreateTicketBranchesDropdown');
-        const branchOption = [
-            @foreach ($branches as $branch)
-                {
-                    label: "{{ $branch->name }}",
-                    value: "{{ $branch->id }}"
-                },
-            @endforeach
-        ];
+        const branchOption = @json($branches).map(branch => ({
+            label: branch.name,
+            value: branch.id
+        }));
+
         VirtualSelect.init({
             ele: '#userCreateTicketBranchesDropdown',
             options: branchOption,
@@ -361,14 +356,11 @@
 
 @push('livewire-modal')
     <script>
-        const refreshServiceDepartmentOption = [
-            @foreach ($serviceDepartments as $serviceDepartment)
-                {
-                    label: "{{ $serviceDepartment->name }}",
-                    value: "{{ $serviceDepartment->id }}"
-                },
-            @endforeach
-        ];
+        const refreshServiceDepartmentOption = @json($serviceDepartments).map(serviceDepartment => ({
+            label: serviceDepartment.name,
+            value: serviceDepartment.id
+        }));
+
         window.addEventListener('close-modal', () => {
             $('#createTicketModal').modal('hide');
             tinymce.get("createTicketDescription").setContent("");

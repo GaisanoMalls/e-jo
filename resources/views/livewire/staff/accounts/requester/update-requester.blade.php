@@ -189,14 +189,10 @@
 
 @push('livewire-select')
     <script>
-        const requesterSuffixOption = [
-            @foreach ($requesterSuffixes as $suffix)
-                {
-                    label: "{{ $suffix->name }}",
-                    value: "{{ $suffix->name }}"
-                },
-            @endforeach
-        ];
+        const requesterSuffixOption = @json($requesterSuffixes).map(suffix => ({
+            label: suffix.name,
+            value: suffix.name
+        }));
 
         const requesterSuffixSelect = document.querySelector('#select-requester-suffix');
         VirtualSelect.init({
@@ -211,14 +207,10 @@
             @this.set('suffix', requesterSuffixSelect.value);
         })
 
-        const requesterBranchOption = [
-            @foreach ($requesterBranches as $br)
-                {
-                    label: "{{ $br->name }}",
-                    value: "{{ $br->id }}"
-                },
-            @endforeach
-        ];
+        const requesterBranchOption = @json($requesterBranches).map(br => ({
+            label: br.name,
+            value: br.id
+        }));
 
         const requesterBranchSelect = document.querySelector('#select-requester-branch');
         VirtualSelect.init({
@@ -237,14 +229,10 @@
             requesterBUDepartmentSelect.setOptions([]);
         });
 
-        const requesterBUDepartmentOption = [
-            @foreach ($requesterBUDepartments as $department)
-                {
-                    label: "{{ $department->name }}",
-                    value: "{{ $department->id }}"
-                },
-            @endforeach
-        ];
+        const requesterBUDepartmentOption = @json($requesterBUDepartments).map(department => ({
+            label: department.name,
+            value: department.id
+        }));
 
         const requesterBUDepartmentSelect = document.querySelector('#select-requester-bu-department')
         VirtualSelect.init({
@@ -290,14 +278,10 @@
             @this.set('bu_department', parseInt(requesterBUDepartmentSelect.value));
         });
 
-        const requesterPermissionOption = [
-            @foreach ($allPermissions as $permission)
-                {
-                    label: "{{ $permission->name }}",
-                    value: "{{ $permission->name }}"
-                },
-            @endforeach
-        ];
+        const requesterPermissionOption = @json($allPermissions).map(permission => ({
+            label: permission.name,
+            value: permission.name
+        }));
 
         const selectRequesterPermission = document.querySelector('#select-requester-permissions');
         VirtualSelect.init({

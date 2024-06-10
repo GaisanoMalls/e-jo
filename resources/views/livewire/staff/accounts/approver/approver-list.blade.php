@@ -237,14 +237,10 @@
 {{-- Modal Scripts --}}
 @push('livewire-select')
     <script>
-        const permissionOption = [
-            @foreach ($allPermissions as $permission)
-                {
-                    label: "{{ $permission->name }}",
-                    value: "{{ $permission->name }}"
-                },
-            @endforeach
-        ];
+        const permissionOption = @json($allPermissions).map(permission => ({
+            label: permission.name,
+            value: permission.name
+        }))
 
         const selectApproverPermission = document.querySelector('#select-assign-approver-permission');
         VirtualSelect.init({

@@ -124,8 +124,8 @@
                             data-bs-dismiss="modal">Cancel</button>
                         <button type="submit"
                             class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
-                            wire:click="deleteForm">
-                            <span wire:loading wire:target="deleteForm" class="spinner-border spinner-border-sm"
+                            wire:click="delete">
+                            <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm"
                                 role="status" aria-hidden="true">
                             </span>
                             Yes, delete
@@ -669,32 +669,20 @@
         const addSelectedFormFieldSelectRequired = document.querySelector('#add-selected-form-field-select-required-field');
         const addSelectedFormFieldSelectEnabled = document.querySelector('#add-selected-form-field-select-enabled-field');
 
-        const addFormFieldFieldTypeOption = [
-            @foreach ($addFormFieldFieldTypes as $addFormFieldFieldType)
-                {
-                    label: "{{ $addFormFieldFieldType['label'] }}",
-                    value: "{{ $addFormFieldFieldType['value'] }}"
-                },
-            @endforeach
-        ];
+        const addFormFieldFieldTypeOption = @json($addFormFieldFieldTypes).map(addFormFieldFieldType => ({
+            label: addFormFieldFieldType.label,
+            value: addFormFieldFieldType.value
+        }));
 
-        const addFormFieldSelectRequiredOption = [
-            @foreach ($addFormFieldRequiredOption as $addFormFieldRequired)
-                {
-                    label: "{{ $addFormFieldRequired['label'] }}",
-                    value: "{{ $addFormFieldRequired['value'] }}"
-                },
-            @endforeach
-        ];
+        const addFormFieldSelectRequiredOption = @json($addFormFieldRequiredOption).map(addFormFieldRequired => ({
+            label: addFormFieldRequired.label,
+            value: addFormFieldRequired.value
+        }));
 
-        const addFormFieldSelectEnableOption = [
-            @foreach ($addFormFieldEnableOption as $addFormFieldEnable)
-                {
-                    label: "{{ $addFormFieldEnable['label'] }}",
-                    value: "{{ $addFormFieldEnable['value'] }}"
-                },
-            @endforeach
-        ];
+        const addFormFieldSelectEnableOption = @json($addFormFieldEnableOption).map(addFormFieldEnable => ({
+            label: addFormFieldEnable.label,
+            value: addFormFieldEnable.value
+        }));
 
         VirtualSelect.init({
             ele: addSelectedFormFieldSelectFieldType,

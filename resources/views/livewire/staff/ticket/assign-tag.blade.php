@@ -40,14 +40,10 @@
 
 @push('livewire-select')
     <script>
-        const tagOption = [
-            @foreach ($tags as $tag)
-                {
-                    label: "{{ $tag->name }}",
-                    value: "{{ $tag->id }}"
-                },
-            @endforeach
-        ];
+        const tagOption = @json($tags).map(tag => ({
+            label: tag.name,
+            value: tag.id
+        }));
 
         VirtualSelect.init({
             ele: '#select-tag',

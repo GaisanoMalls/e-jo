@@ -59,14 +59,10 @@
 
 @push('livewire-select')
     <script>
-        const teamOption = [
-            @foreach ($teams as $team)
-                {
-                    label: "{{ $team->name }}",
-                    value: "{{ $team->id }}"
-                },
-            @endforeach
-        ];
+        const teamOption = @json($teams).map(team => ({
+            label: team.name,
+            value: team.id
+        }));
 
         const teamSelect = document.querySelector('#select-team');
         const checkMultipleTeams = document.querySelector('#checkMultipleTeams');

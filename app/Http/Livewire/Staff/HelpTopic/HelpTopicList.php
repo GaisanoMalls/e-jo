@@ -70,7 +70,7 @@ class HelpTopicList extends Component
         $this->dispatchBrowserEvent('show-delete-help-topic-modal');
     }
 
-    public function deleteForm()
+    public function delete()
     {
         try {
             $helpTopic = HelpTopic::find($this->deleteHelpTopicId);
@@ -462,8 +462,8 @@ class HelpTopicList extends Component
             'helpTopics' => $this->queryHelpTopics(),
             'addFormFieldFieldTypes' => Options::forEnum(FieldTypesEnum::class)->toArray(),
             'addFormFieldEnableOption' => Options::forEnum(FieldEnableOptionEnum::class)->toArray(),
-            'addFormFieldUserRoles' => Options::forModels(Role::class)->toArray(),
             'addFormFieldRequiredOption' => Options::forEnum(FieldRequiredOptionEnum::class)->toArray(),
+            'addFormFieldUserRoles' => Options::forModels(Role::class)->toArray(),
         ]);
     }
 }

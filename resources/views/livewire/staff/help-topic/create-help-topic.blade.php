@@ -55,7 +55,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="mb-2">
                                             <label for="department" class="form-label form__field__label">
                                                 Service Department
@@ -71,21 +71,21 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div wire:ignore class="col-md-4" id="serviceDeptChildContainer">
+                                    <div wire:ignore.self class="col-md-4" id="serviceDeptChildContainer">
                                         <div class="mb-2">
                                             <label for="department" class="form-label form__field__label">
                                                 Sub-Service Department
                                             </label>
                                             <div>
-                                                <div id="select-help-topic-service-department-children">
+                                                <div id="select-help-topic-service-department-children" wire:ignore>
                                                 </div>
                                             </div>
-                                            @error('service_department')
+                                            @if (session()->has('sub_service_department_error'))
                                                 <span class="error__message">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
+                                                    {{ session('sub_service_department_error') }}
                                                 </span>
-                                            @enderror
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-md-6" id="teamSelectContainer" wire:ignore>
@@ -129,8 +129,8 @@
                         </div>
                         <hr>
                         <div class="row">
-                            <h6 class="fw-semibold" style="font-size: 0.89rem;">Approval Configurations</h6>
-                            <div class="col-md-4">
+                            <h6 class="fw-semibold mb-4" style="font-size: 0.89rem;">Approval Configurations</h6>
+                            <div class="col-md-6">
                                 <div class="mb-2">
                                     <label for="department" class="form-label form__field__label">
                                         BU Department
@@ -146,6 +146,23 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <div class="mb-2">
+                                    <label for="department" class="form-label form__field__label">
+                                        Level of Approval
+                                    </label>
+                                    <div>
+                                        <div id="select-help-topic-approval-level" wire:ignore></div>
+                                    </div>
+                                    @error('bu_department')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div wire:ignore class="row" id="dynamic-approval-container"></div>
                         </div>
                         <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
                             <div class="d-flex align-items-center gap-2">
@@ -180,14 +197,10 @@
         const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
         const serviceDepartmentChildrenSelect = document.querySelector('#select-help-topic-service-department-children');
 
-        const serviceLevelAgreementOption = [
-            @foreach ($serviceLevelAgreements as $sla)
-                {
-                    label: "{{ $sla->time_unit }}",
-                    value: "{{ $sla->id }}"
-                },
-            @endforeach
-        ];
+        const serviceLevelAgreementOption = @json($serviceLevelAgreements).map(sla => ({
+            label: sla.time_unit,
+            value: sla.id
+        }))
 
         VirtualSelect.init({
             ele: slaSelect,
@@ -201,14 +214,10 @@
             @this.set('sla', slaId);
         });
 
-        const serviceDepartmentOption = [
-            @foreach ($serviceDepartments as $serviceDepartment)
-                {
-                    label: "{{ $serviceDepartment->name }}",
-                    value: "{{ $serviceDepartment->id }}"
-                },
-            @endforeach
-        ];
+        const serviceDepartmentOption = @json($serviceDepartments).map(serviceDepartment => ({
+            label: serviceDepartment.name,
+            value: serviceDepartment.id
+        }));
 
         VirtualSelect.init({
             ele: serviceDepartmentSelect,
@@ -273,6 +282,7 @@
                 window.addEventListener('get-service-department-children', (event) => {
                     const serviceDepartmentChildren = event.detail.serviceDepartmentChildren;
                     const serviceDepartmentChildrenOption = [];
+                    console.log(serviceDepartmentChildren);
 
                     if (serviceDepartmentChildren.length > 0) {
                         serviceDepartmentChildrenSelect.enable();
@@ -397,10 +407,101 @@
 
         // Approval Configurations
         const buDepartmentSelect = document.querySelector('#select-help-topic-bu-department');
+        const approvalLevelSelect = document.querySelector('#select-help-topic-approval-level');
+
+        const buDepartments = @json($buDepartments);
+        const buDepartmentOption = buDepartments.map(buDepartment => ({
+            label: buDepartment.name,
+            value: buDepartment.id
+        }))
+
+        const approvalLevels = @json($approvalLevels);
+        const approvalLevelOption = approvalLevels.map(approvalLevel => ({
+            label: `${approvalLevel} ${approvalLevel >= 2 ? 'Levels' : 'Level'}`,
+            value: approvalLevel
+        }));
+
         VirtualSelect.init({
             ele: buDepartmentSelect,
+            options: buDepartmentOption,
             search: true,
             markSearchResults: true,
+        });
+
+        VirtualSelect.init({
+            ele: approvalLevelSelect,
+            options: approvalLevelOption,
+            search: true,
+            markSearchResults: true,
+        });
+
+        buDepartmentSelect.addEventListener('change', () => {
+            @this.set('buDepartment', parseInt(buDepartmentSelect.value));
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const dynamicApprovalLevelContainer = document.querySelector('#dynamic-approval-container');
+            const levelApprovers = @json($levelApprovers);
+            const approverOption = [];
+
+            levelApprovers.forEach((approver) => {
+                approver.roles.forEach((role) => {
+                    const middleName = `${approver.profile.middle_name ?? ''}`;
+                    const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+
+                    approverOption.push({
+                        label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                        value: approver.id,
+                        description: role.name
+                    });
+                });
+            });
+
+            approvalLevelSelect.addEventListener('change', () => {
+                dynamicApprovalLevelContainer.innerHTML = '';
+                const approver = {};
+
+                for (i = 1; i <= approvalLevelSelect.value; i++) {
+                    const approverFieldWrapper = document.createElement('div');
+                    approverFieldWrapper.className = 'col-md-4';
+
+                    approverFieldWrapper.innerHTML = `
+                        <div class="mb-2">
+                            <label for="department" class="form-label form__field__label">
+                                Level ${i} Approver
+                            </label>
+                            <div>
+                                <div id="select-help-topic-approval-level-${i}" wire:ignore></div>
+                            </div>
+                        </div>
+                    `
+
+                    dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
+
+                    approver[`level${i}`] = document.querySelector(
+                        `#select-help-topic-approval-level-${i}`);
+
+                    VirtualSelect.init({
+                        ele: approver[`level${i}`],
+                        options: approverOption,
+                        search: true,
+                        multiple: true,
+                        markSearchResults: true,
+                        hasOptionDescription: true
+                    });
+                }
+
+                const level1ApproverSelect = approver['level1'];
+                const level2ApproverSelect = approver['level2'];
+                const level3ApproverSelect = approver['level3'];
+                const level4ApproverSelect = approver['level4'];
+                const level5ApproverSelect = approver['level5'];
+
+                level1ApproverSelect.addEventListener('change', () => {
+                    @this.set('level1Approver', level1ApproverSelect.value);
+                    console.log(level1ApproverSelect.value);
+                });
+            });
         });
     </script>
 @endpush

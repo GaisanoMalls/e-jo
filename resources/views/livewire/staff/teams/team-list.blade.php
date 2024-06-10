@@ -382,14 +382,10 @@
 
         editSelectServiceDeptChildrenContainer.style.display = 'none';
 
-        const editServiceDepartmentOption = [
-            @foreach ($serviceDepartments as $serviceDepartment)
-                {
-                    label: "{{ $serviceDepartment->name }}",
-                    value: "{{ $serviceDepartment->id }}"
-                },
-            @endforeach
-        ];
+        const editServiceDepartmentOption = @json($serviceDepartments).map(serviceDepartment => ({
+            label: serviceDepartment.name,
+            value: serviceDepartment.id
+        }));
 
         VirtualSelect.init({
             ele: editServiceDepartmentSelect,
@@ -398,14 +394,10 @@
             markSearchResults: true,
         });
 
-        const editBranchOption = [
-            @foreach ($branches as $branch)
-                {
-                    label: "{{ $branch->name }}",
-                    value: "{{ $branch->id }}"
-                },
-            @endforeach
-        ];
+        const editBranchOption = @json($branches).map(branch => ({
+            label: branch.name,
+            value: branch.id
+        }));
 
         VirtualSelect.init({
             ele: editBranchSelect,

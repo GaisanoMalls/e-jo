@@ -220,14 +220,10 @@
 
 @push('livewire-select')
     <script>
-        const agentSuffixOption = [
-            @foreach ($agentSuffixes as $suffix)
-                {
-                    label: "{{ $suffix->name }}",
-                    value: "{{ $suffix->name }}"
-                },
-            @endforeach
-        ];
+        const agentSuffixOption = @json($agentSuffixes).map(suffix => ({
+            label: suffix.name,
+            value: suffix.name
+        }));
 
         const agentSuffixSelect = document.querySelector('#select-agent-suffix');
         VirtualSelect.init({
@@ -241,14 +237,10 @@
             @this.set('suffix', agentSuffixSelect.value)
         });
 
-        const agentBranchOption = [
-            @foreach ($agentBranches as $branch)
-                {
-                    label: "{{ $branch->name }}",
-                    value: "{{ $branch->id }}"
-                },
-            @endforeach
-        ];
+        const agentBranchOption = @json($agentBranches).map(branch => ({
+            label: branch.name,
+            value: branch.id
+        }));
 
         const agentBranchSelect = document.querySelector('#select-agent-branch')
         VirtualSelect.init({
@@ -297,14 +289,10 @@
             }
         })
 
-        const agentServiceDepartmentOption = [
-            @foreach ($agentServiceDepartments as $serviceDepartment)
-                {
-                    label: "{{ $serviceDepartment->name }}",
-                    value: "{{ $serviceDepartment->id }}"
-                },
-            @endforeach
-        ];
+        const agentServiceDepartmentOption = @json($agentServiceDepartments).map(serviceDepartment => ({
+            label: serviceDepartment.name,
+            value: serviceDepartment.id
+        }))
 
         const agentServiceDepartmentSelect = document.querySelector('#select-agent-service-department');
         VirtualSelect.init({

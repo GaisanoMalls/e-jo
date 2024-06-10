@@ -174,14 +174,10 @@
 
 @push('livewire-select')
     <script>
-        const approverSuffixOption = [
-            @foreach ($approverSuffixes as $suffix)
-                {
-                    label: "{{ $suffix->name }}",
-                    value: "{{ $suffix->name }}"
-                },
-            @endforeach
-        ];
+        const approverSuffixOption = @json($approverSuffixes).map(suffix => ({
+            label: suffix.name,
+            value: suffix.name
+        }));
 
         const approverSuffixSelect = document.querySelector('#select-approver-suffix');
         VirtualSelect.init({
@@ -195,14 +191,10 @@
             @this.set('suffix', approverSuffixSelect.value);
         });
 
-        const approverBranchOption = [
-            @foreach ($approverBranches as $branch)
-                {
-                    label: "{{ $branch->name }}",
-                    value: "{{ $branch->id }}"
-                },
-            @endforeach
-        ];
+        const approverBranchOption = @json($approverBranches).map(branch => ({
+            label: branch.name,
+            value: branch.id
+        }));
 
         const approverBranchSelect = document.querySelector('#select-approver-branch');
         VirtualSelect.init({
@@ -218,14 +210,10 @@
             @this.set('branches', approverBranchSelect.value);
         });
 
-        const approverBUDepartmentOption = [
-            @foreach ($approverBUDepartments as $department)
-                {
-                    label: "{{ $department->name }}",
-                    value: "{{ $department->id }}"
-                },
-            @endforeach
-        ];
+        const approverBUDepartmentOption = @json($approverBUDepartments).map(department => ({
+            label: department.name,
+            value: department.id
+        }));
 
         const approverBUDepartmentSelect = document.querySelector('#select-approver-bu-department');
         VirtualSelect.init({

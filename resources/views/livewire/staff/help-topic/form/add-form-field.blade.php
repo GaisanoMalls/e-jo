@@ -293,14 +293,10 @@
         const selectRequired = document.querySelector('#select-required-field');
         const selectEnable = document.querySelector('#select-enable-field');
 
-        const fieldTypeOption = [
-            @foreach ($fieldTypes as $fieldType)
-                {
-                    label: "{{ $fieldType['label'] }}",
-                    value: "{{ $fieldType['value'] }}"
-                },
-            @endforeach
-        ];
+        const fieldTypeOption = @json($fieldTypes).map(fieldType => ({
+            label: fieldType.label,
+            value: fieldType.value
+        }));
 
         VirtualSelect.init({
             ele: selectFieldType,
@@ -312,14 +308,10 @@
             @this.set('type', selectFieldType.value);
         });
 
-        const selectRequiredOption = [
-            @foreach ($fieldRequiredOption as $fieldRequired)
-                {
-                    label: "{{ $fieldRequired['label'] }}",
-                    value: "{{ $fieldRequired['value'] }}"
-                },
-            @endforeach
-        ];
+        const selectRequiredOption = @json($fieldRequiredOption).map(fieldRequired => ({
+            label: fieldRequired.label,
+            value: fieldRequired.value
+        }));
 
         VirtualSelect.init({
             ele: selectRequired,
@@ -330,14 +322,11 @@
             @this.set('is_required', selectRequired.value);
         });
 
-        const selectEnableOption = [
-            @foreach ($fieldEnableOption as $fieldEnable)
-                {
-                    label: "{{ $fieldEnable['label'] }}",
-                    value: "{{ $fieldEnable['value'] }}"
-                },
-            @endforeach
-        ];
+        const selectEnableOption = @json($fieldEnableOption).map(fieldEnable => ({
+            label: fieldEnable.label,
+            value: fieldEnable.value
+        }));
+
         VirtualSelect.init({
             ele: selectEnable,
             options: selectEnableOption,
@@ -347,14 +336,10 @@
             @this.set('is_enabled', selectEnable.value);
         });
 
-        const selectHelpTopicOption = [
-            @foreach ($helpTopics as $helpTopic)
-                {
-                    label: "{{ $helpTopic->name }}",
-                    value: "{{ $helpTopic->id }}"
-                },
-            @endforeach
-        ];
+        const selectHelpTopicOption = @json($helpTopics).map(helpTopic => ({
+            label: helpTopic.name,
+            value: helpTopic.id
+        }));
 
         VirtualSelect.init({
             ele: selectHelpTopic,
@@ -370,14 +355,10 @@
             @this.set('helpTopic', null);
         });
 
-        const selectFormVisibilityOption = [
-            @foreach ($userRoles as $role)
-                {
-                    label: "{{ $role['label'] }}",
-                    value: "{{ $role['label'] }}"
-                },
-            @endforeach
-        ];
+        const selectFormVisibilityOption = @json($userRoles).map(role => ({
+            label: role.label,
+            value: role.label
+        }));
 
         VirtualSelect.init({
             ele: selectFormVisibility,

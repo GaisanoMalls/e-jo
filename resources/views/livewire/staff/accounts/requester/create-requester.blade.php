@@ -169,14 +169,10 @@
 
 @push('livewire-select')
     <script>
-        const requesterSuffixOption = [
-            @foreach ($requesterSuffixes as $suffix)
-                {
-                    label: "{{ $suffix->name }}",
-                    value: "{{ $suffix->name }}"
-                },
-            @endforeach
-        ];
+        const requesterSuffixOption = @json($requesterSuffixes).map(suffix => ({
+            label: suffix.name,
+            value: suffix.name
+        }));
 
         const requesterSuffixSelect = document.querySelector('#select-requester-suffix');
         VirtualSelect.init({
@@ -190,14 +186,10 @@
             @this.set('suffix', requesterSuffixSelect.value);
         })
 
-        const requesterBranchOption = [
-            @foreach ($requesterBranches as $branch)
-                {
-                    label: "{{ $branch->name }}",
-                    value: "{{ $branch->id }}"
-                },
-            @endforeach
-        ];
+        const requesterBranchOption = @json($requesterBranches).map(branch => ({
+            label: branch.name,
+            value: branch.id
+        }));
 
         const requesterBranchSelect = document.querySelector('#select-requester-branch')
         VirtualSelect.init({

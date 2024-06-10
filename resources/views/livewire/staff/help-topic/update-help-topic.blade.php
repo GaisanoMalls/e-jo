@@ -138,14 +138,10 @@
 
 @push('livewire-select')
     <script>
-        const slaOption = [
-            @foreach ($serviceLevelAgreements as $sla)
-                {
-                    label: "{{ $sla->time_unit }}",
-                    value: "{{ $sla->id }}"
-                },
-            @endforeach
-        ];
+        const slaOption = @json($serviceLevelAgreements).map(sla => ({
+            label: sla.time_unit,
+            value: sla.id
+        }));
 
         const slaSelect = document.querySelector('#select-help-topic-sla');
         VirtualSelect.init({
@@ -156,14 +152,10 @@
             selectedValue: '{{ $helpTopic->service_level_agreement_id }}'
         });
 
-        const serviceDepartmentOption = [
-            @foreach ($serviceDepartments as $serviceDepartment)
-                {
-                    label: "{{ $serviceDepartment->name }}",
-                    value: "{{ $serviceDepartment->id }}"
-                },
-            @endforeach
-        ];
+        const serviceDepartmentOption = @json($serviceDepartments).map(serviceDepartment => ({
+            label: serviceDepartment.name,
+            value: serviceDepartment.id
+        }));
 
         const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
         VirtualSelect.init({
@@ -174,15 +166,11 @@
             selectedValue: @json($service_department)
         });
 
-        console.log(@json($service_department_child));
-        const serviceDeptChildrenOption = [
-            @foreach ($service_department_children as $child)
-                {
-                    label: "{{ $child->name }}",
-                    value: "{{ $child->id }}"
-                },
-            @endforeach
-        ]
+        const serviceDeptChildrenOption = @json($serviceDepartmentChildren).map(child => ({
+            label: child.name,
+            value: child.id
+        }));
+
         const serviceDepartmentChildrenSelect = document.querySelector('#select-help-topic-service-department-children');
         VirtualSelect.init({
             ele: serviceDepartmentChildrenSelect,
@@ -192,15 +180,10 @@
             selectedValue: @json($service_department_child?->id)
         });
 
-        const teamOption = [
-            @foreach ($teams as $t)
-                {
-                    label: "{{ $t->name }}",
-                    value: "{{ $t->id }}"
-                },
-            @endforeach
-        ];
-
+        const teamOption = @json($teams).map(tm => ({
+            label: tm.name,
+            value: tm.id
+        }));
 
         const teamSelect = document.querySelector('#select-help-topic-team');
         VirtualSelect.init({

@@ -6,9 +6,11 @@ use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
+use App\Models\Role;
 use App\Models\ServiceDepartmentChildren;
 use App\Models\SpecialProject;
 use App\Models\Team;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -17,6 +19,7 @@ use Livewire\Component;
 class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
+
     public $isSpecialProject = false;
     public $COOApprovers = [];
     public $teams = [];
@@ -30,6 +33,15 @@ class CreateHelpTopic extends Component
     public $amount; // For Special project
     public $COOApprover;
     public $serviceDepartmentAdminApprover;
+
+    // Approval Configuration
+    public $approvalLevels = [1, 2, 3, 4, 5];
+    public $level1Approver = [];
+    public $level2Approver = [];
+    public $level3Approver = [];
+    public $level4Approver = [];
+    public $level5Approver = [];
+    public $buDepartment;
 
     public function rules()
     {
@@ -55,6 +67,11 @@ class CreateHelpTopic extends Component
     public function saveHelpTopic()
     {
         $this->validate();
+
+        if ($this->isSpecialProject && !$this->selectedServiceDepartmentChildrenId) {
+            session()->flash('sub_service_department_error', 'Sub-service department is required');
+            return;
+        }
 
         try {
             DB::transaction(function () {
@@ -120,11 +137,19 @@ class CreateHelpTopic extends Component
         $this->hideSpecialProjectContainer();
     }
 
+    public function updatedApprovalLevels()
+    {
+        dump("Hello");
+    }
+
     public function render()
     {
         return view('livewire.staff.help-topic.create-help-topic', [
             'serviceLevelAgreements' => $this->queryServiceLevelAgreements(),
             'serviceDepartments' => $this->queryServiceDepartments(),
+            'buDepartments' => $this->queryBUDepartments(),
+            'approvalLevels' => $this->approvalLevels,
+            'levelApprovers' => User::with(['profile', 'roles'])->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])->orderByDesc('created_at')->get()
         ]);
     }
 }
