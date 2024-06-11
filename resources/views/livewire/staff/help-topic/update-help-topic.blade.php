@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label form__field__label">Service Dept. Children</label>
+                                        <label class="form-label form__field__label">Sub-Service Department</label>
                                         <div>
                                             <div id="select-help-topic-service-department-children" wire:ignore></div>
                                         </div>

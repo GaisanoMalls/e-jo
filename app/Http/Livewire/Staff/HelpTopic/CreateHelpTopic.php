@@ -12,6 +12,7 @@ use App\Models\SpecialProject;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -21,7 +22,6 @@ class CreateHelpTopic extends Component
     use Utils, BasicModelQueries;
 
     public $isSpecialProject = false;
-    public $COOApprovers = [];
     public $teams = [];
     public $serviceDepartmentChildren = [];
     public $selectedServiceDepartmentChildrenId;
@@ -31,17 +31,18 @@ class CreateHelpTopic extends Component
     public $service_department;
     public $team;
     public $amount; // For Special project
-    public $COOApprover;
-    public $serviceDepartmentAdminApprover;
 
     // Approval Configuration
     public $approvalLevels = [1, 2, 3, 4, 5];
-    public $level1Approver = [];
-    public $level2Approver = [];
-    public $level3Approver = [];
-    public $level4Approver = [];
-    public $level5Approver = [];
+    public $levelApprovers = null;
+    public $level1Approvers = [];
+    public $level2Approvers = [];
+    public $level3Approvers = [];
+    public $level4Approvers = [];
+    public $level5Approvers = [];
+    public $approvalLevelSelected = false;
     public $buDepartment;
+
 
     public function rules()
     {
@@ -137,9 +138,35 @@ class CreateHelpTopic extends Component
         $this->hideSpecialProjectContainer();
     }
 
-    public function updatedApprovalLevels()
+    public function updatedLevel1Approvers()
     {
-        dump("Hello");
+        $this->levelApprovers = User::with(['profile', 'roles'])->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
+            ->whereNotIn('id', array_merge($this->level1Approvers, $this->level2Approvers, $this->level3Approvers, $this->level4Approvers, $this->level5Approvers))
+            ->orderByDesc('created_at')->get();
+
+        $this->dispatchBrowserEvent('load-approvers', [
+            'levelApprovers' => $this->levelApprovers
+        ]);
+    }
+
+    public function updatedLevel2Approvers()
+    {
+        $this->levelApprovers = User::with(['profile', 'roles'])->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
+            ->whereNotIn('id', array_merge($this->level1Approvers, $this->level2Approvers, $this->level3Approvers, $this->level4Approvers, $this->level5Approvers))
+            ->orderByDesc('created_at')->get();
+
+        $this->dispatchBrowserEvent('load-approvers', [
+            'levelApprovers' => $this->levelApprovers
+        ]);
+    }
+
+    public function updatedApprovalLevelSelected()
+    {
+        $this->levelApprovers = User::with(['profile', 'roles'])->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])->orderByDesc('created_at')->get();
+        $this->dispatchBrowserEvent('load-approvers', [
+            'levelApprovers' => $this->levelApprovers
+        ]);
+
     }
 
     public function render()
@@ -148,8 +175,6 @@ class CreateHelpTopic extends Component
             'serviceLevelAgreements' => $this->queryServiceLevelAgreements(),
             'serviceDepartments' => $this->queryServiceDepartments(),
             'buDepartments' => $this->queryBUDepartments(),
-            'approvalLevels' => $this->approvalLevels,
-            'levelApprovers' => User::with(['profile', 'roles'])->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])->orderByDesc('created_at')->get()
         ]);
     }
 }

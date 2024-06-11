@@ -389,7 +389,6 @@
                                 }
                             }
                         });
-
                     });
                 });
 
@@ -439,69 +438,83 @@
             @this.set('buDepartment', parseInt(buDepartmentSelect.value));
         });
 
+        approvalLevelSelect.addEventListener('click', () => {
+            @this.set('approvalLevelSelected', true);
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             const dynamicApprovalLevelContainer = document.querySelector('#dynamic-approval-container');
-            const levelApprovers = @json($levelApprovers);
-            const approverOption = [];
 
-            levelApprovers.forEach((approver) => {
-                approver.roles.forEach((role) => {
-                    const middleName = `${approver.profile.middle_name ?? ''}`;
-                    const firstLetter = middleName.length > 0 ? middleName[0] + '.' : '';
+            window.addEventListener('load-approvers', (event) => {
+                const levelApprovers = event.detail.levelApprovers;
+                const approverOption = [];
 
-                    approverOption.push({
-                        label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
-                        value: approver.id,
-                        description: role.name
+                levelApprovers.forEach((approver) => {
+                    approver.roles.forEach((role) => {
+                        const middleName = `${approver.profile.middle_name ?? ''}`;
+                        const firstLetter = middleName.length > 0 ? middleName[0] + '.' :
+                            '';
+
+                        approverOption.push({
+                            label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                            value: approver.id,
+                            description: role.name
+                        });
                     });
                 });
-            });
 
-            approvalLevelSelect.addEventListener('change', () => {
-                dynamicApprovalLevelContainer.innerHTML = '';
-                const approver = {};
+                approvalLevelSelect.addEventListener('change', () => {
+                    dynamicApprovalLevelContainer.innerHTML = '';
+                    const approver = {};
 
-                for (i = 1; i <= approvalLevelSelect.value; i++) {
-                    const approverFieldWrapper = document.createElement('div');
-                    approverFieldWrapper.className = 'col-md-4';
+                    for (i = 1; i <= approvalLevelSelect.value; i++) {
+                        const approverFieldWrapper = document.createElement('div');
+                        approverFieldWrapper.className = 'col-md-4';
 
-                    approverFieldWrapper.innerHTML = `
-                        <div class="mb-2">
-                            <label for="department" class="form-label form__field__label">
-                                Level ${i} Approver
-                            </label>
-                            <div>
-                                <div id="select-help-topic-approval-level-${i}" wire:ignore></div>
-                            </div>
-                        </div>
-                    `
+                        approverFieldWrapper.innerHTML = `
+                            <div class="mb-2">
+                                <label for="department" class="form-label form__field__label">
+                                    Level ${i} Approver
+                                </label>
+                                <div>
+                                    <div id="select-help-topic-approval-level-${i}" wire:ignore></div>
+                                </div>
+                            </div>`
 
-                    dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
+                        dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
 
-                    approver[`level${i}`] = document.querySelector(
-                        `#select-help-topic-approval-level-${i}`);
+                        approver[`level${i}`] = document.querySelector(
+                            `#select-help-topic-approval-level-${i}`);
 
-                    VirtualSelect.init({
-                        ele: approver[`level${i}`],
-                        options: approverOption,
-                        search: true,
-                        multiple: true,
-                        markSearchResults: true,
-                        hasOptionDescription: true
-                    });
-                }
+                        VirtualSelect.init({
+                            ele: approver[`level${i}`],
+                            options: approverOption,
+                            search: true,
+                            multiple: true,
+                            markSearchResults: true,
+                            hasOptionDescription: true
+                        });
+                    }
 
-                const level1ApproverSelect = approver['level1'];
-                const level2ApproverSelect = approver['level2'];
-                const level3ApproverSelect = approver['level3'];
-                const level4ApproverSelect = approver['level4'];
-                const level5ApproverSelect = approver['level5'];
+                    const level1ApproverSelect = approver['level1'];
+                    const level2ApproverSelect = approver['level2'];
+                    const level3ApproverSelect = approver['level3'];
+                    const level4ApproverSelect = approver['level4'];
+                    const level5ApproverSelect = approver['level5'];
 
-                level1ApproverSelect.addEventListener('change', () => {
-                    @this.set('level1Approver', level1ApproverSelect.value);
-                    console.log(level1ApproverSelect.value);
+                    if (level1ApproverSelect) {
+                        level1ApproverSelect.addEventListener('change', () => {
+                            @this.set('level1Approvers', level1ApproverSelect.value);
+                        });
+                    }
+
+                    if (level2ApproverSelect) {
+                        level2ApproverSelect.addEventListener('change', () => {
+                            @this.set('level2Approvers', level2ApproverSelect.value);
+                        });
+                    }
                 });
-            });
+            })
         });
     </script>
 @endpush
