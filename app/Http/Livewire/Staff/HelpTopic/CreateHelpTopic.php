@@ -28,9 +28,11 @@ class CreateHelpTopic extends Component
     public $selectedServiceDepartmentChildrenName;
     public $name;
     public $sla;
-    public $service_department;
+    public $serviceDepartment;
     public $team;
     public $amount; // For Special project
+    public $costingApprovers = [];
+    public $showCostingApproverSelect = false;
 
     // Approval Configuration
     public $approvalLevels = [1, 2, 3, 4, 5];
@@ -40,7 +42,7 @@ class CreateHelpTopic extends Component
     public $level3Approvers = [];
     public $level4Approvers = [];
     public $level5Approvers = [];
-    public $approvalLevelSelected = false;
+    public $approvalLevelSelected; // bool
     public $buDepartment;
 
 
@@ -49,7 +51,7 @@ class CreateHelpTopic extends Component
         return [
             'name' => ['required', 'unique:help_topics,name'],
             'sla' => ['required'],
-            'service_department' => ['required'],
+            'serviceDepartment' => ['required'],
             'team' => ['nullable'],
             'amount' => ['numeric', $this->isSpecialProject ? 'required' : 'nullable'],
             'teams' => '',
@@ -77,7 +79,7 @@ class CreateHelpTopic extends Component
         try {
             DB::transaction(function () {
                 $helpTopic = HelpTopic::create([
-                    'service_department_id' => $this->service_department,
+                    'service_department_id' => $this->serviceDepartment,
                     'service_dept_child_id' => $this->selectedServiceDepartmentChildrenId,
                     'team_id' => $this->team,
                     'service_level_agreement_id' => $this->sla,
@@ -101,14 +103,23 @@ class CreateHelpTopic extends Component
         }
     }
 
-    public function updatedServiceDepartment()
+    public function updatedServiceDepartment($value)
     {
         if ($this->isSpecialProject) {
-            $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->service_department)->get(['id', 'name'])->toArray();
+            $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $value)->get(['id', 'name'])->toArray();
             $this->dispatchBrowserEvent('get-service-department-children', ['serviceDepartmentChildren' => $this->serviceDepartmentChildren]);
         } else {
-            $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->service_department))->get();
+            $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $value))->get();
             $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
+        }
+    }
+
+    public function updatedAmount($value)
+    {
+        if ($value) {
+            $this->dispatchBrowserEvent('show-select-costing-approver');
+        } else {
+            $this->dispatchBrowserEvent('hide-select-costing-approver');
         }
     }
 
@@ -120,14 +131,16 @@ class CreateHelpTopic extends Component
     public function hideSpecialProjectContainer()
     {
         $this->name = null;
+        $this->amount = null;
         $this->dispatchBrowserEvent('hide-special-project-container');
     }
 
-    public function specialProject()
+    public function updatedIsSpecialProject($value)
     {
-        ($this->isSpecialProject)
+        ($value)
             ? $this->showSpecialProjectContainer()
             : $this->hideSpecialProjectContainer();
+        $this->resetValidation();
     }
 
     public function cancel()
@@ -138,35 +151,24 @@ class CreateHelpTopic extends Component
         $this->hideSpecialProjectContainer();
     }
 
-    public function updatedLevel1Approvers()
-    {
-        $this->levelApprovers = User::with(['profile', 'roles'])->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
-            ->whereNotIn('id', array_merge($this->level1Approvers, $this->level2Approvers, $this->level3Approvers, $this->level4Approvers, $this->level5Approvers))
-            ->orderByDesc('created_at')->get();
+    // public function updatedLevel1Approvers($value)
+    // {
+    //     dump($value);
+    // }
 
-        $this->dispatchBrowserEvent('load-approvers', [
-            'levelApprovers' => $this->levelApprovers
-        ]);
-    }
+    // public function updatedLevel2Approvers()
+    // {
+    //     $this->levelApprovers = User::with(['profile', 'roles'])->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
+    //         ->whereNotIn('id', array_merge($value, $this->level2Approvers, $this->level3Approvers, $this->level4Approvers, $this->level5Approvers))
+    //         ->orderByDesc('created_at')->get();
 
-    public function updatedLevel2Approvers()
-    {
-        $this->levelApprovers = User::with(['profile', 'roles'])->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
-            ->whereNotIn('id', array_merge($this->level1Approvers, $this->level2Approvers, $this->level3Approvers, $this->level4Approvers, $this->level5Approvers))
-            ->orderByDesc('created_at')->get();
-
-        $this->dispatchBrowserEvent('load-approvers', [
-            'levelApprovers' => $this->levelApprovers
-        ]);
-    }
+    //     $this->dispatchBrowserEvent('remaining-approvers-from-level2', ['levelApprovers' => $this->levelApprovers]);
+    // }
 
     public function updatedApprovalLevelSelected()
     {
         $this->levelApprovers = User::with(['profile', 'roles'])->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])->orderByDesc('created_at')->get();
-        $this->dispatchBrowserEvent('load-approvers', [
-            'levelApprovers' => $this->levelApprovers
-        ]);
-
+        $this->dispatchBrowserEvent('load-initial-approvers', ['levelApprovers' => $this->levelApprovers]);
     }
 
     public function render()

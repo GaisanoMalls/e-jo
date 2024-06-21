@@ -496,7 +496,7 @@
         </div>
 
         <!-- Preview Ticket Costing PR Files Modal -->
-        @if ($ticket->ticketCosting->prFileAttachments->count() > 0)
+        @if ($ticket->ticketCosting->prFileAttachments)
             <div wire:ignore.self class="modal fade ticket__costing__modal" tabindex="-1"
                 id="costingPreviewPRFileAttachmentModal" aria-labelledby="modalFormLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered custom__modal">

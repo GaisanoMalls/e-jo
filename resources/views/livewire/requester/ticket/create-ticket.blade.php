@@ -268,8 +268,28 @@
             }
         });
 
+        serviceDepartmentSelect.addEventListener('reset', () => {
+            helpTopicSelect.reset();
+            helpTopicSelect.disable();
+            helpTopicSelect.setOptions([]);
+        });
+
         helpTopicSelect.addEventListener('change', () => {
-            @this.set('helpTopic', parseInt(helpTopicSelect.value))
+            @this.set('helpTopic', parseInt(helpTopicSelect.value));
+
+            window.addEventListener('get-help-topic-forms', (event) => {
+                const helpTopicForms = event.detail.helpTopicForms;
+                const helpTopicFormOptions = [];
+
+                helpTopicForms.forEach(function(form) {
+                    helpTopicFormOptions.push({
+                        label: form.name,
+                        value: form.id
+                    });
+                });
+
+                console.log(helpTopicFormOptions);
+            });
         });
 
         const branchSelect = document.querySelector('#userCreateTicketBranchesDropdown');

@@ -1,7 +1,7 @@
 <div>
     <div wire:ignore.self class="modal fade help__topic__modal" id="addNewHelpTopicModal" tabindex="-1"
         aria-labelledby="addNewHelpTopicModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0">
                     <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">Add new help topic</h1>
@@ -16,7 +16,7 @@
                                 <div class="row">
                                     <div class="col-12 mb-3">
                                         <div class="form-check" style="white-space: nowrap;">
-                                            <input wire:model="isSpecialProject" wire:change="specialProject"
+                                            <input wire:model="isSpecialProject"
                                                 class="form-check-input check__special__project" type="checkbox"
                                                 role="switch" id="specialProjectCheck" wire:loading.attr="disabled">
                                             <label class="form-check-label" for="specialProjectCheck">
@@ -24,7 +24,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-8" id="helpTopicNameContainer" wire:ignore.self>
+                                    <div wire:ignore.self class="col-md-6" id="help-topic-name-container">
                                         <div class="mb-2">
                                             <label for="helpTopicName"
                                                 class="form-label form__field__label">Name</label>
@@ -39,7 +39,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="mb-2">
                                             <label for="sla" class="form-label form__field__label">
                                                 Service Level Agreement (SLA)
@@ -63,7 +63,7 @@
                                             <div>
                                                 <div id="select-help-topic-service-department" wire:ignore></div>
                                             </div>
-                                            @error('service_department')
+                                            @error('serviceDepartment')
                                                 <span class="error__message">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                                     {{ $message }}
@@ -71,7 +71,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div wire:ignore.self class="col-md-4" id="serviceDeptChildContainer">
+                                    <div wire:ignore.self class="col-md-6" id="serviceDeptChildContainer">
                                         <div class="mb-2">
                                             <label for="department" class="form-label form__field__label">
                                                 Sub-Service Department
@@ -109,16 +109,26 @@
                                     </div>
                                     <div wire:ignore class="mt-2" id="specialProjectAmountContainer">
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="amount" class="form-label form__field__label">
                                                         Amount
                                                     </label>
                                                     <div class="d-flex position-relative amount__field__container">
                                                         <span class="currency text-muted position-absolute">₱</span>
-                                                        <input type="text" wire:model.defer="amount"
+                                                        <input type="text" wire:model="amount"
                                                             class="form-control form__field amount__field"
                                                             id="amount" placeholder="Enter amount">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div wire:ignore.self class="col-md-6" id="costing-approver-container">
+                                                <div class="mb-3">
+                                                    <label class="form-label form__field__label">
+                                                        Cost Approver
+                                                    </label>
+                                                    <div>
+                                                        <div id="select-help-topic-costing-approver" wire:ignore></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -146,7 +156,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-6">
                                 <div class="mb-2">
                                     <label for="department" class="form-label form__field__label">
                                         Level of Approval
@@ -246,7 +256,7 @@
             const serviceDepartmentId = serviceDepartmentSelect.value;
 
             if (serviceDepartmentId) {
-                @this.set('service_department', serviceDepartmentId);
+                @this.set('serviceDepartment', serviceDepartmentId);
 
                 if (!specialProjectCheck.checked) {
                     teamSelect.enable();
@@ -330,7 +340,7 @@
             serviceDeptChildContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
 
             specialProjectCheck.addEventListener('change', () => {
-                helpTopicNameContainer = document.querySelector('#helpTopicNameContainer');
+                helpTopicNameContainer = document.querySelector('#help-topic-name-container');
                 if (specialProjectCheck.checked) {
                     serviceDepartmentSelect.reset();
                 }
@@ -404,6 +414,33 @@
             });
         }
 
+        // Costing approver
+        const costingApproverContainer = document.querySelector('#costing-approver-container');
+        const selectHelpTopicCostingApprover = document.querySelector('#select-help-topic-costing-approver');
+
+        VirtualSelect.init({
+            ele: selectHelpTopicCostingApprover,
+        });
+
+        costingApproverContainer.style.display = 'none';
+
+        window.addEventListener('show-select-costing-approver', (event) => {
+            costingApproverContainer.style.display = 'block';
+        });
+
+        window.addEventListener('hide-select-costing-approver', (event) => {
+            selectHelpTopicCostingApprover.reset();
+            costingApproverContainer.style.display = 'none';
+        });
+
+        window.addEventListener('hide-special-project-container', () => {
+            selectHelpTopicCostingApprover.reset();
+        });
+
+        selectHelpTopicCostingApprover.addEventListener('change', () => {
+            @this.set('costingApprovers', selectHelpTopicCostingApprover.value);
+        });
+
         // Approval Configurations
         const buDepartmentSelect = document.querySelector('#select-help-topic-bu-department');
         const approvalLevelSelect = document.querySelector('#select-help-topic-approval-level');
@@ -438,63 +475,64 @@
             @this.set('buDepartment', parseInt(buDepartmentSelect.value));
         });
 
-        approvalLevelSelect.addEventListener('click', () => {
+        approvalLevelSelect.addEventListener('change', () => {
             @this.set('approvalLevelSelected', true);
         });
 
         document.addEventListener('DOMContentLoaded', () => {
             const dynamicApprovalLevelContainer = document.querySelector('#dynamic-approval-container');
 
-            window.addEventListener('load-approvers', (event) => {
-                const levelApprovers = event.detail.levelApprovers;
-                const approverOption = [];
+            approvalLevelSelect.addEventListener('change', () => {
+                dynamicApprovalLevelContainer.innerHTML = '';
+                const approver = {};
 
-                levelApprovers.forEach((approver) => {
-                    approver.roles.forEach((role) => {
-                        const middleName = `${approver.profile.middle_name ?? ''}`;
-                        const firstLetter = middleName.length > 0 ? middleName[0] + '.' :
-                            '';
+                for (i = 1; i <= approvalLevelSelect.value; i++) {
+                    const approverFieldWrapper = document.createElement('div');
+                    approverFieldWrapper.className = 'col-md-6';
 
-                        approverOption.push({
-                            label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
-                            value: approver.id,
-                            description: role.name
+                    approverFieldWrapper.innerHTML = `
+                        <div class="mb-2">
+                            <label for="department" class="form-label form__field__label">
+                                Level ${i} Approver
+                            </label>
+                            <div>
+                                <div id="select-help-topic-approval-level-${i}" wire:ignore></div>
+                            </div>
+                        </div>`;
+
+                    dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
+                    approver[`level${i}`] = document.querySelector(
+                        `#select-help-topic-approval-level-${i}`
+                    );
+
+                    VirtualSelect.init({
+                        ele: approver[`level${i}`],
+                        search: true,
+                        multiple: true,
+                        showValueAsTags: true,
+                        markSearchResults: true,
+                        hasOptionDescription: true
+                    });
+                }
+
+                window.addEventListener('load-initial-approvers', (event) => {
+                    const levelApprovers = event.detail.levelApprovers;
+                    const approverOption = [];
+
+                    levelApprovers.forEach((approver) => {
+                        approver.roles.forEach((role) => {
+                            const middleName =
+                                `${approver.profile.middle_name ?? ''}`;
+                            const firstLetter = middleName.length > 0 ?
+                                middleName[0] + '.' : '';
+
+                            approverOption.push({
+                                label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                                value: approver.id,
+                                description: role.name
+                            });
                         });
                     });
-                });
-
-                approvalLevelSelect.addEventListener('change', () => {
-                    dynamicApprovalLevelContainer.innerHTML = '';
-                    const approver = {};
-
-                    for (i = 1; i <= approvalLevelSelect.value; i++) {
-                        const approverFieldWrapper = document.createElement('div');
-                        approverFieldWrapper.className = 'col-md-4';
-
-                        approverFieldWrapper.innerHTML = `
-                            <div class="mb-2">
-                                <label for="department" class="form-label form__field__label">
-                                    Level ${i} Approver
-                                </label>
-                                <div>
-                                    <div id="select-help-topic-approval-level-${i}" wire:ignore></div>
-                                </div>
-                            </div>`
-
-                        dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
-
-                        approver[`level${i}`] = document.querySelector(
-                            `#select-help-topic-approval-level-${i}`);
-
-                        VirtualSelect.init({
-                            ele: approver[`level${i}`],
-                            options: approverOption,
-                            search: true,
-                            multiple: true,
-                            markSearchResults: true,
-                            hasOptionDescription: true
-                        });
-                    }
 
                     const level1ApproverSelect = approver['level1'];
                     const level2ApproverSelect = approver['level2'];
@@ -503,18 +541,99 @@
                     const level5ApproverSelect = approver['level5'];
 
                     if (level1ApproverSelect) {
+                        level1ApproverSelect.setOptions(approverOption);
                         level1ApproverSelect.addEventListener('change', () => {
                             @this.set('level1Approvers', level1ApproverSelect.value);
                         });
                     }
 
                     if (level2ApproverSelect) {
-                        level2ApproverSelect.addEventListener('change', () => {
-                            @this.set('level2Approvers', level2ApproverSelect.value);
-                        });
+                        level2ApproverSelect.setOptions(approverOption);
                     }
+
+                    if (level3ApproverSelect) {
+                        level3ApproverSelect.setOptions(approverOption);
+                    }
+
+                    if (level4ApproverSelect) {
+                        level4ApproverSelect.setOptions(approverOption);
+                    }
+
+                    if (level5ApproverSelect) {
+                        level5ApproverSelect.setOptions(approverOption);
+                    }
+
+                    // TODO: Level Approvers - Exlcude the added approvers from the updated approver list
+                    // if (level1ApproverSelect) {
+                    //     level1ApproverSelect.setOptions(approverOption);
+
+                    //     level1ApproverSelect.addEventListener('change', () => {
+                    //         @this.set('level1Approvers', level1ApproverSelect.value);
+
+                    //         window.addEventListener('remaining-approvers-from-level1', (
+                    //             event) => {
+                    //             const updatedLevelApprovers = event.detail
+                    //                 .levelApprovers;
+                    //             const updatedApproverOption = [];
+
+                    //             updatedLevelApprovers.forEach((approver) => {
+                    //                 approver.roles.forEach((role) => {
+                    //                     const middleName =
+                    //                         `${approver.profile.middle_name ?? ''}`;
+                    //                     const firstLetter =
+                    //                         middleName.length >
+                    //                         0 ?
+                    //                         middleName[0] +
+                    //                         '.' :
+                    //                         '';
+
+                    //                     updatedApproverOption
+                    //                         .push({
+                    //                             label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                    //                             value: approver
+                    //                                 .id,
+                    //                             description: role
+                    //                                 .name
+                    //                         });
+                    //                 });
+                    //             });
+                    //         });
+                    //     });
+                    // }
+
+                    // if (level2ApproverSelect) {
+                    //     level2ApproverSelect.addEventListener('change', () => {
+                    //         @this.set('level2Approvers', level2ApproverSelect.value);
+
+                    //         window.addEventListener('remaining-approvers-from-level2', (
+                    //             event) => {
+                    //             const updatedLevelApprovers = event.detail
+                    //                 .levelApprovers;
+                    //             const updatedApproverOption = [];
+
+                    //             updatedLevelApprovers.forEach((approver) => {
+                    //                 approver.roles.forEach((role) => {
+                    //                     const middleName =
+                    //                         `${approver.profile.middle_name ?? ''}`;
+                    //                     const firstLetter =
+                    //                         middleName.length > 0 ?
+                    //                         middleName[0] + '.' :
+                    //                         '';
+
+                    //                     updatedApproverOption.push({
+                    //                         label: `${approver.profile.first_name} ${firstLetter} ${approver.profile.last_name}`,
+                    //                         value: approver
+                    //                             .id,
+                    //                         description: role
+                    //                             .name
+                    //                     });
+                    //                 });
+                    //             });
+                    //         })
+                    //     });
+                    // }
                 });
-            })
+            });
         });
     </script>
 @endpush

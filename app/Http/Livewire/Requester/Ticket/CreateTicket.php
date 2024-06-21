@@ -10,6 +10,7 @@ use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\ApproverLevel;
 use App\Models\Branch;
+use App\Models\Form;
 use App\Models\HelpTopic;
 use App\Models\Level;
 use App\Models\PriorityLevel;
@@ -210,10 +211,13 @@ class CreateTicket extends Component
         $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);
     }
 
-    public function updatedHelpTopic()
+    public function updatedHelpTopic($value)
     {
         $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
         $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
+
+        $helpTopicForms = Form::with('fields')->where('help_topic_id', $value)->get();
+        $this->dispatchBrowserEvent('get-help-topic-forms', ['helpTopicForms' => $helpTopicForms]);
     }
 
     public function cancel()
