@@ -37,6 +37,7 @@ class CreateTicket extends Component
     public $upload = 0;
     public $fileAttachments = [];
     public $helpTopics = [];
+    public $helpTopicForms = [];
     public $subject;
     public $description;
     public $branch;
@@ -46,7 +47,8 @@ class CreateTicket extends Component
     public $serviceDepartment;
     public $helpTopic;
     public $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
-    public $isHelpTopicHasForms;
+    public $isHelpTopicHasForms; // bool
+    public $isClearedHelTopicSelect = false;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
@@ -219,12 +221,15 @@ class CreateTicket extends Component
 
         $helpTopicForms = Form::with('fields')->where('help_topic_id', $value)->get();
 
+        dump($this->isClearedHelTopicSelect);
         if ($helpTopicForms->isNotEmpty()) {
             $this->description = null;
             $this->isHelpTopicHasForms = true;
+            $this->helpTopicForms = $helpTopicForms;
             $this->dispatchBrowserEvent('show-help-topic-forms', ['helpTopicForms' => $helpTopicForms]);
         } else {
             $this->isHelpTopicHasForms = false;
+            $this->reset('helpTopicForms');
             $this->dispatchBrowserEvent('hide-ticket-description-container');
         }
     }
