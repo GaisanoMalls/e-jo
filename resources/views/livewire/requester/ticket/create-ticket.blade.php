@@ -89,7 +89,7 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3" id="ticket-description-container" wire:ignore>
                                 <label class="form-label input__field__label">
                                     Message
                                     <span class="text-sm text-muted">
@@ -274,22 +274,33 @@
             helpTopicSelect.setOptions([]);
         });
 
+        const ticketDescriptionContainer = document.querySelector('#ticket-description-container');
         helpTopicSelect.addEventListener('change', () => {
             @this.set('helpTopic', parseInt(helpTopicSelect.value));
 
-            window.addEventListener('get-help-topic-forms', (event) => {
+            window.addEventListener('show-help-topic-forms', (event) => {
                 const helpTopicForms = event.detail.helpTopicForms;
-                const helpTopicFormOptions = [];
+                const helpTopicFormOption = [];
 
-                helpTopicForms.forEach(function(form) {
-                    helpTopicFormOptions.push({
-                        label: form.name,
-                        value: form.id
+                if (helpTopicForms.length > 0) {
+                    ticketDescriptionContainer.style.display = 'none';
+                    helpTopicForms.forEach(function(form) {
+                        helpTopicFormOption.push({
+                            label: form.name,
+                            value: form.id
+                        });
                     });
-                });
-
-                console.log(helpTopicFormOptions);
+                    @this.set('isHelpTopicHasForms', true);
+                }
             });
+
+            window.addEventListener('hide-ticket-description-container', () => {
+                ticketDescriptionContainer.style.display = 'block';
+            });
+        });
+
+        helpTopicSelect.addEventListener('reset', () => {
+            ticketDescriptionContainer.style.display = 'block';
         });
 
         const branchSelect = document.querySelector('#userCreateTicketBranchesDropdown');
