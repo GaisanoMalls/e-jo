@@ -106,6 +106,22 @@
                                     </span>
                                 @enderror
                             </div>
+                            @if ($helpTopicForms)
+                                <div class="row mb-3">
+                                    <label class="form-label input__field__label">
+                                        Forms
+                                    </label>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        @foreach ($helpTopicForms as $form)
+                                            <div
+                                                class="card p-3 border-0 d-flex flex-row gap-2 align-items-center justify-content-center create__ticket__form__card">
+                                                <i class="bi bi-journal-text"></i>
+                                                {{ $form->name }}
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
                             <div class="row">
                                 <div class="col-md-8">
                                     <label for="ticketSubject" class="form-label input__field__label">
@@ -301,6 +317,10 @@
 
         helpTopicSelect.addEventListener('reset', () => {
             ticketDescriptionContainer.style.display = 'block';
+        });
+
+        helpTopicSelect.addEventListener('reset', () => {
+            @this.set('isClearedHelTopicSelect', true);
         });
 
         const branchSelect = document.querySelector('#userCreateTicketBranchesDropdown');
