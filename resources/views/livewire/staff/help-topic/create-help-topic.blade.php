@@ -11,9 +11,11 @@
                 </div>
                 <form wire:submit.prevent="saveHelpTopic">
                     <div class="modal-body modal__body">
+                        <!-- Form fields -->
                         <div class="row mb-2">
                             <div class="col-md-12">
                                 <div class="row">
+                                    <!-- Special Project Checkbox -->
                                     <div class="col-12 mb-3">
                                         <div class="form-check" style="white-space: nowrap;">
                                             <input wire:model="isSpecialProject"
@@ -24,6 +26,7 @@
                                             </label>
                                         </div>
                                     </div>
+                                    <!-- Name Field -->
                                     <div wire:ignore.self class="col-md-6" id="help-topic-name-container">
                                         <div class="mb-2">
                                             <label for="helpTopicName"
@@ -39,6 +42,7 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <!-- SLA Field -->
                                     <div class="col-md-6">
                                         <div class="mb-2">
                                             <label for="sla" class="form-label form__field__label">
@@ -55,6 +59,7 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <!-- Service Department Field -->
                                     <div class="col-md-6">
                                         <div class="mb-2">
                                             <label for="department" class="form-label form__field__label">
@@ -71,7 +76,9 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div wire:ignore.self class="col-md-6" id="serviceDeptChildContainer">
+
+                                    {{-- <div wire:ignore.self class="col-md-6" id="serviceDeptChildContainer"> 79
+                                        <!-- Team Field -->
                                         <div class="mb-2">
                                             <label for="department" class="form-label form__field__label">
                                                 Sub-Service Department
@@ -87,7 +94,10 @@
                                                 </span>
                                             @endif
                                         </div>
-                                    </div>
+                                    </div> --}}
+
+
+                                    <!-- Team Field -->
                                     <div class="col-md-6" id="teamSelectContainer" wire:ignore>
                                         <div class="mb-2">
                                             <label for="team" class="form-label form__field__label">
@@ -99,6 +109,12 @@
                                                     wire:ignore>
                                                 </div>
                                             </div>
+                                            @if (session()->has('team_error'))
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ session('team_error') }}
+                                                </span>
+                                            @endif
                                             @error('team')
                                                 <span class="error__message">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -107,6 +123,7 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <!-- Special Project Amount -->
                                     <div wire:ignore class="mt-2" id="specialProjectAmountContainer">
                                         <div class="row">
                                             <div class="col-md-6">
@@ -137,6 +154,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Approval Configurations -->
                         <hr>
                         <div class="row">
                             <h6 class="fw-semibold mb-4" style="font-size: 0.89rem;">Approval Configurations</h6>
@@ -174,6 +192,7 @@
                             </div>
                             <div wire:ignore class="row" id="dynamic-approval-container"></div>
                         </div>
+                        <!-- Modal Footer -->
                         <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
                             <div class="d-flex align-items-center gap-2">
                                 <button type="submit"
@@ -196,16 +215,15 @@
     </div>
 </div>
 
+
 @push('livewire-select')
     <script>
         const amountField = document.querySelector('#amount');
         const teamSelectContainer = document.querySelector('#teamSelectContainer');
         const specialProjectCheck = document.querySelector('#specialProjectCheck');
-        const specialProjectAmountContainer = document.querySelector('#specialProjectAmountContainer');
-        const serviceDeptChildContainer = document.querySelector('#serviceDeptChildContainer');
         const slaSelect = document.querySelector('#select-help-topic-sla');
+        const specialProjectAmountContainer = document.querySelector('#specialProjectAmountContainer');
         const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
-        const serviceDepartmentChildrenSelect = document.querySelector('#select-help-topic-service-department-children');
 
         const serviceLevelAgreementOption = @json($serviceLevelAgreements).map(sla => ({
             label: sla.time_unit,
@@ -218,6 +236,7 @@
             search: true,
             markSearchResults: true,
         });
+
 
         slaSelect.addEventListener('change', () => {
             const slaId = parseInt(slaSelect.value);
@@ -236,11 +255,11 @@
             markSearchResults: true,
         });
 
-        VirtualSelect.init({
-            ele: serviceDepartmentChildrenSelect,
-            search: true,
-            markSearchResults: true,
-        });
+        // VirtualSelect.init({
+        //     ele: serviceDepartmentChildrenSelect,
+        //     search: true,
+        //     markSearchResults: true,
+        // });
 
         const teamSelect = document.querySelector('#select-help-topic-team');
         VirtualSelect.init({
@@ -249,7 +268,7 @@
             markSearchResults: true,
         });
 
-        serviceDepartmentChildrenSelect.disable();
+        // serviceDepartmentChildrenSelect.disable();
         teamSelect.disable();
 
         serviceDepartmentSelect.addEventListener('change', () => {
@@ -258,9 +277,10 @@
             if (serviceDepartmentId) {
                 @this.set('serviceDepartment', serviceDepartmentId);
 
-                if (!specialProjectCheck.checked) {
-                    teamSelect.enable();
-                }
+                // if (!specialProjectCheck.checked) {
+                //     teamSelect.enable();
+                // }
+                teamSelect.enable();
 
                 window.addEventListener('get-teams-from-selected-service-department', (event) => {
                     const teams = event.detail.teams;
@@ -268,10 +288,6 @@
 
                     if (teams.length > 0) {
                         teams.forEach(function(team) {
-                            VirtualSelect.init({
-                                ele: teamSelect,
-                            });
-
                             teamOption.push({
                                 label: team.name,
                                 value: team.id
@@ -282,35 +298,32 @@
 
                         const countTeams = document.querySelector('#countTeams');
                         countTeams.textContent = `(${event.detail.teams.length})`;
-
                     } else {
                         teamSelect.disable();
                         teamSelect.setOptions([]);
                     }
                 });
+                // window.addEventListener('get-service-department-children', (event) => {
+                //     const serviceDepartmentChildren = event.detail.serviceDepartmentChildren;
+                //     const serviceDepartmentChildrenOption = [];
+                //     console.log(serviceDepartmentChildren);
 
-                window.addEventListener('get-service-department-children', (event) => {
-                    const serviceDepartmentChildren = event.detail.serviceDepartmentChildren;
-                    const serviceDepartmentChildrenOption = [];
-                    console.log(serviceDepartmentChildren);
+                //     if (serviceDepartmentChildren.length > 0) {
+                //         serviceDepartmentChildrenSelect.enable();
 
-                    if (serviceDepartmentChildren.length > 0) {
-                        serviceDepartmentChildrenSelect.enable();
+                //         serviceDepartmentChildren.forEach((child) => {
+                //             serviceDepartmentChildrenOption.push({
+                //                 label: child.name,
+                //                 value: child.id
+                //             });
+                //         });
 
-                        serviceDepartmentChildren.forEach((child) => {
-                            serviceDepartmentChildrenOption.push({
-                                label: child.name,
-                                value: child.id
-                            });
-                        });
-
-                        serviceDepartmentChildrenSelect.setOptions(serviceDepartmentChildrenOption);
-                    } else {
-                        serviceDepartmentChildrenSelect.disable();
-                        serviceDepartmentChildrenSelect.setOptions();
-                    }
-                });
-
+                //         serviceDepartmentChildrenSelect.setOptions(serviceDepartmentChildrenOption);
+                //     } else {
+                //         serviceDepartmentChildrenSelect.disable();
+                //         serviceDepartmentChildrenSelect.setOptions();
+                //     }
+                // });
             } else {
                 teamSelect.reset();
                 teamSelect.disable();
@@ -325,92 +338,95 @@
 
         serviceDepartmentSelect.addEventListener('reset', () => {
             const countTeams = document.querySelector('#countTeams');
-
             @this.set('teams', []); // Clear teams count when service department is resetted.
             @this.set('name', null);
-
             countTeams.textContent = '';
-            serviceDepartmentChildrenSelect.disable()
-            serviceDepartmentChildrenSelect.reset();
-            serviceDepartmentChildrenSelect.setOptions([]);
+            // serviceDepartmentChildrenSelect.disable()
+            // serviceDepartmentChildrenSelect.reset();
+            // serviceDepartmentChildrenSelect.setOptions([]);
+            document.querySelector('#countTeams').textContent = '';
+            teamSelect.disable();
+            teamSelect.setOptions([]);
         });
 
-        if (specialProjectCheck && specialProjectAmountContainer || serviceDeptChildContainer) {
+        if (specialProjectCheck && specialProjectAmountContainer) {
             specialProjectAmountContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
-            serviceDeptChildContainer.style.display = specialProjectCheck.checked ? 'block' : 'none';
 
             specialProjectCheck.addEventListener('change', () => {
-                helpTopicNameContainer = document.querySelector('#help-topic-name-container');
                 if (specialProjectCheck.checked) {
                     serviceDepartmentSelect.reset();
-                }
-
-                window.addEventListener('show-special-project-container', (event) => {
-                    @this.set('team', null);
-                    amountField.required = true;
                     teamSelect.disable();
-                    teamSelectContainer.style.display = 'none';
-                    helpTopicNameContainer.style.display = 'none';
                     specialProjectAmountContainer.style.display = 'block';
-                    serviceDeptChildContainer.style.display = 'block'
-
-                    serviceDepartmentSelect.addEventListener('change', () => {
-                        const serviceDepartmentId = serviceDepartmentSelect.value;
-                        const serviceDepartments = @json($serviceDepartments);
-
-                        window.addEventListener('get-service-department-children', (event) => {
-                            const serviceDepartmentChildren = event.detail
-                                .serviceDepartmentChildren;
-                            const serviceDepartmentChildrenOption = [];
-
-                            serviceDepartmentChildren.forEach((child) => {
-                                serviceDepartmentChildrenOption.push({
-                                    label: child.name,
-                                    value: child.id
-                                });
-                            });
-
-                            serviceDepartmentChildrenSelect.setOptions(
-                                serviceDepartmentChildrenOption);
-
-                            serviceDepartmentChildrenSelect.addEventListener('change',
-                                () => {
-                                    serviceDepartmentChildrenId = parseInt(
-                                        serviceDepartmentChildrenSelect.value);
-                                    serviceDepartmentChildName =
-                                        serviceDepartmentChildrenSelect
-                                        .getDisplayValue();
-
-                                    if (serviceDepartmentChildrenId) {
-                                        @this.set('selectedServiceDepartmentChildrenId',
-                                            serviceDepartmentChildrenId);
-                                        @this.set(
-                                            'selectedServiceDepartmentChildrenName',
-                                            serviceDepartmentChildName
-                                        )
-                                    }
-                                });
-                        });
-
-                        serviceDepartments.forEach((department) => {
-                            if (serviceDepartmentId == department.id) {
-                                if (specialProjectCheck.checked) {
-                                    @this.set('name', `(SP) ${department.name}`);
-                                }
-                            }
-                        });
-                    });
-                });
-
-                window.addEventListener('hide-special-project-container', () => {
+                } else {
                     teamSelect.enable();
-                    amountField.required = false;
-                    teamSelectContainer.style.display = 'block';
-                    helpTopicNameContainer.style.display = 'block';
                     specialProjectAmountContainer.style.display = 'none';
-                    serviceDeptChildContainer.style.display = 'none';
-                    serviceDepartmentSelect.reset();
-                });
+                }
+                //  window.addEventListener('show-special-project-container', (event) => {
+                // @this.set('team', null);
+                // amountField.required = true;
+                // teamSelect.disable();
+                // teamSelectContainer.style.display = 'none';
+                // helpTopicNameContainer.style.display = 'none';
+                // specialProjectAmountContainer.style.display = 'block';
+                // serviceDeptChildContainer.style.display = 'block'
+
+                // serviceDepartmentSelect.addEventListener('change', () => {
+                // const serviceDepartmentId = serviceDepartmentSelect.value;
+                // const serviceDepartments = @json($serviceDepartments);
+
+                // window.addEventListener('get-service-department-children', (event) => {
+                // const serviceDepartmentChildren = event.detail
+                // .serviceDepartmentChildren;
+                // const serviceDepartmentChildrenOption = [];
+
+                // serviceDepartmentChildren.forEach((child) => {
+                // serviceDepartmentChildrenOption.push({
+                // label: child.name,
+                // value: child.id
+                // });
+                // });
+
+                // serviceDepartmentChildrenSelect.setOptions(
+                // serviceDepartmentChildrenOption);
+
+                // serviceDepartmentChildrenSelect.addEventListener('change',
+                // () => {
+                // serviceDepartmentChildrenId = parseInt(
+                // serviceDepartmentChildrenSelect.value);
+                // serviceDepartmentChildName =
+                // serviceDepartmentChildrenSelect
+                // .getDisplayValue();
+
+                // if (serviceDepartmentChildrenId) {
+                // @this.set('selectedServiceDepartmentChildrenId',
+                // serviceDepartmentChildrenId);
+                // @this.set(
+                // 'selectedServiceDepartmentChildrenName',
+                // serviceDepartmentChildName
+                // )
+                // }
+                // });
+                // });
+
+                // serviceDepartments.forEach((department) => {
+                // if (serviceDepartmentId == department.id) {
+                // if (specialProjectCheck.checked) {
+                // @this.set('name', `(SP) ${department.name}`);
+                // }
+                // }
+                // });
+                // });
+                // });
+
+                // window.addEventListener('hide-special-project-container', () => {
+                // teamSelect.enable();
+                // amountField.required = false;
+                // teamSelectContainer.style.display = 'block';
+                // helpTopicNameContainer.style.display = 'block';
+                // specialProjectAmountContainer.style.display = 'none';
+                // serviceDeptChildContainer.style.display = 'none';
+                // serviceDepartmentSelect.reset();
+                // });
             });
         }
 
@@ -543,7 +559,8 @@
                     if (level1ApproverSelect) {
                         level1ApproverSelect.setOptions(approverOption);
                         level1ApproverSelect.addEventListener('change', () => {
-                            @this.set('level1Approvers', level1ApproverSelect.value);
+                            @this.set('level1Approvers', level1ApproverSelect
+                                .value);
                         });
                     }
 
@@ -645,16 +662,13 @@
 
             slaSelect.reset();
             serviceDepartmentSelect.reset();
-            serviceDepartmentChildrenSelect.reset();
-            serviceDepartmentChildrenSelect.setOptions([]);
-            serviceDepartmentChildrenSelect.disable();
-
+            document.querySelector('#select-help-topic-team').reset();
+            document.querySelector('#select-help-topic-team').disable();
+            document.querySelector('#select-help-topic-team').setOptions([]);
             teamSelect.reset();
             teamSelect.disable();
             teamSelect.setOptions([]);
-
-            specialProjectAmountContainer.style.display = 'none';
-            serviceDeptChildContainer.style.display = 'none';
+            document.querySelector('#specialProjectAmountContainer').style.display = 'none';
         });
     </script>
 @endpush

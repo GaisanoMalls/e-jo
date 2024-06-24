@@ -32,30 +32,28 @@ class UpdateHelpTopic extends Component
 
     public function mount(HelpTopic $helpTopic)
     {
+        $this->helpTopic = $helpTopic;
         $this->name = $helpTopic->name;
         $this->sla = $helpTopic->service_level_agreement_id;
         $this->service_department = $helpTopic->service_department_id;
-        $this->service_department_child = $helpTopic->serviceDepartmentChild;
-        $this->serviceDepartmentChildren = $helpTopic->serviceDepartment->children()->get(['id', 'name']);
         $this->team = $helpTopic->team_id;
         $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
-        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get(['id', 'name']);
+        $this->teams = Team::whereHas('serviceDepartment', fn ($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get(['id', 'name']);
         $this->isSpecialProject = $helpTopic->specialProject ? true : false;
     }
 
+
     public function rules()
     {
-        $rules = [
+        return [
             'name' => "required|unique:help_topics,name,{$this->helpTopic->id}",
             'sla' => 'required',
             'service_department' => 'required',
-            'team' => 'nullable',
-            'amount' => $this->helpTopic->specialProject ? 'required|numeric' : 'nullable|numeric',
-            'teams' => '',
+            'team' => 'nullable|required_if:isSpecialProject,true',
+            'amount' => $this->isSpecialProject ? 'required|numeric' : 'nullable|numeric',
         ];
-
-        return $rules;
     }
+
 
     public function updateHelpTopic()
     {
@@ -63,22 +61,26 @@ class UpdateHelpTopic extends Component
 
         try {
             DB::transaction(function () {
+                $teamName = $this->team ? Team::find($this->team)->name : '';
+
                 $this->helpTopic->update([
                     'service_department_id' => $this->service_department,
-                    'service_dept_child_id' => $this->selected_child,
+                    'service_dept_child_id' => null, // No sub-service department check
                     'team_id' => $this->team,
                     'service_level_agreement_id' => $this->sla,
-                    'name' => $this->name . ($this->selectedServiceDepartmentChildrenName ? " - {$this->selectedServiceDepartmentChildrenName}" : ''),
+                    'name' => $this->name . ($teamName ? " - {$teamName}" : ''),
                     'slug' => Str::slug($this->name),
                 ]);
 
-                if ($this->helpTopic->specialProject) {
-                    SpecialProject::where('help_topic_id', $this->helpTopic->id)->update(['amount' => $this->amount]);
+                if ($this->isSpecialProject) {
+                    SpecialProject::updateOrCreate(
+                        ['help_topic_id' => $this->helpTopic->id],
+                        ['amount' => $this->amount]
+                    );
                 }
             });
 
             noty()->addSuccess('Help topic successfully updated.');
-
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
@@ -86,7 +88,7 @@ class UpdateHelpTopic extends Component
 
     public function updatedServiceDepartment()
     {
-        $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->service_department))->get();
+        $this->teams = Team::whereHas('serviceDepartment', fn ($team) => $team->where('service_department_id', $this->service_department))->get(['id', 'name']);
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 

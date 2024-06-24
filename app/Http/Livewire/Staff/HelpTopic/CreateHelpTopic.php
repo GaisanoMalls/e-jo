@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Illuminate\Support\Facades\Log;
 
 class CreateHelpTopic extends Component
 {
@@ -69,47 +70,64 @@ class CreateHelpTopic extends Component
 
     public function saveHelpTopic()
     {
+        // Validate form inputs
         $this->validate();
 
-        if ($this->isSpecialProject && !$this->selectedServiceDepartmentChildrenId) {
-            session()->flash('sub_service_department_error', 'Sub-service department is required');
+        // Check if team is required for special projects
+        if ($this->isSpecialProject && !$this->team) {
+            session()->flash('team_error', 'Team is required for special projects');
+            Log::info('Team is required but not provided.');
             return;
         }
 
         try {
+            Log::info('Starting transaction to save HelpTopic.');
+
             DB::transaction(function () {
+                $teamName = $this->team ? Team::find($this->team)->name : '';
+                // Create HelpTopic
                 $helpTopic = HelpTopic::create([
                     'service_department_id' => $this->serviceDepartment,
-                    'service_dept_child_id' => $this->selectedServiceDepartmentChildrenId,
+                    'service_dept_child_id' => null, // No sub-service department check
                     'team_id' => $this->team,
                     'service_level_agreement_id' => $this->sla,
-                    'name' => $this->name . ($this->selectedServiceDepartmentChildrenName ? " - {$this->selectedServiceDepartmentChildrenName}" : ''),
+                    'name' => $this->name . ($teamName ? " - {$teamName}" : ''),
                     'slug' => Str::slug($this->name),
                 ]);
 
+                Log::info('HelpTopic created successfully.', ['help_topic_id' => $helpTopic->id]);
+
+                // Create SpecialProject if it's a special project
                 if ($this->isSpecialProject) {
                     SpecialProject::create([
                         'help_topic_id' => $helpTopic->id,
                         'amount' => $this->amount,
                     ]);
+
+                    Log::info('SpecialProject created successfully.', ['help_topic_id' => $helpTopic->id]);
                 }
             });
 
+            // Action on successful submission
             $this->actionOnSubmit();
             noty()->addSuccess('A new help topic has been created.');
-
+            Log::info('Help topic submission successful.');
         } catch (Exception $e) {
+            // Log the error
             AppErrorLog::getError($e->getMessage());
+            Log::error('Error occurred while saving help topic.', ['exception' => $e->getMessage()]);
         }
     }
+
+
 
     public function updatedServiceDepartment($value)
     {
         if ($this->isSpecialProject) {
-            $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $value)->get(['id', 'name'])->toArray();
-            $this->dispatchBrowserEvent('get-service-department-children', ['serviceDepartmentChildren' => $this->serviceDepartmentChildren]);
+            $this->teams = Team::whereHas('serviceDepartment', fn ($team) => $team->where('service_department_id', $value))->get();
+            $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
         } else {
-            $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $value))->get();
+            $this->teams = Team::whereHas('serviceDepartment', fn ($team) => $team->where('service_department_id', $value))->get();
             $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
         }
     }

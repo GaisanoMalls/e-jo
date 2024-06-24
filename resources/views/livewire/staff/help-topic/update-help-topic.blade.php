@@ -59,41 +59,24 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label form__field__label">Sub-Service Department</label>
+                                        <label class="form-label form__field__label">Team</label>
                                         <div>
-                                            <div id="select-help-topic-service-department-children" wire:ignore></div>
+                                            <div id="select-help-topic-team" wire:ignore></div>
                                         </div>
-                                        {{-- @error('service_department')
+                                        @if (session()->has('team_error'))
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ session('team_error') }}
+                                            </span>
+                                        @endif
+                                        @error('team')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
-                                        @enderror --}}
+                                        @enderror
                                     </div>
                                 </div>
-                                @if (!$helpTopic->specialProject)
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label form__field__label">
-                                                Team
-                                                @if ($teams)
-                                                    <span class="fw-normal" style="font-size: 13px;">
-                                                        ({{ $teams->count() }})
-                                                    </span>
-                                                @endif
-                                            </label>
-                                            <div>
-                                                <div id="select-help-topic-team" wire:ignore></div>
-                                            </div>
-                                            @error('team')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                @endif
                                 @if ($helpTopic->specialProject)
                                     <div class="row">
                                         <div class="col-md-3">
@@ -166,20 +149,6 @@
             selectedValue: @json($service_department)
         });
 
-        const serviceDeptChildrenOption = @json($serviceDepartmentChildren).map(child => ({
-            label: child.name,
-            value: child.id
-        }));
-
-        const serviceDepartmentChildrenSelect = document.querySelector('#select-help-topic-service-department-children');
-        VirtualSelect.init({
-            ele: serviceDepartmentChildrenSelect,
-            options: serviceDeptChildrenOption,
-            search: true,
-            markSearchResults: true,
-            selectedValue: @json($service_department_child?->id)
-        });
-
         const teamOption = @json($teams).map(tm => ({
             label: tm.name,
             value: tm.id
@@ -230,43 +199,9 @@
             }
         });
 
-        serviceDepartmentChildrenSelect.addEventListener('change', () => {
-            @this.set('selected_child', serviceDepartmentChildrenSelect.value);
-            @this.set('selectedServiceDepartmentChildrenName', serviceDepartmentChildrenSelect.getDisplayValue());
+        teamSelect.addEventListener('change', () => {
+            const teamId = parseInt(teamSelect.value);
+            @this.set('team', teamId);
         });
-
-        const isSpecialProject = @json($isSpecialProject);
-        if (isSpecialProject) {
-            serviceDepartmentSelect.addEventListener('change', () => {
-                const serviceDepartments = @json($serviceDepartments);
-
-                serviceDepartments.forEach((department) => {
-                    if (serviceDepartmentSelect.value == department.id) {
-                        @this.set('name', `(SP) ${department.name}`);
-                    }
-                });
-            });
-        }
-
-        slaSelect.addEventListener('reset', () => {
-            @this.set('sla', null);
-        });
-
-        serviceDepartmentSelect.addEventListener('reset', () => {
-            @this.set('service_department', null);
-            @this.set('teams', []); // Clear teams count when service department is resetted.
-        });
-
-        slaSelect.addEventListener('change', () => {
-            const slaId = parseInt(slaSelect.value);
-            @this.set('sla', slaId);
-        });
-
-        if (teamSelect) {
-            teamSelect.addEventListener('change', () => {
-                const teamId = parseInt(teamSelect.value);
-                @this.set('team', teamId);
-            });
-        }
     </script>
 @endpush
