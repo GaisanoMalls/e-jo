@@ -33,7 +33,7 @@ class CreateTicketsTable extends Migration
             $table->foreignIdFor(ServiceLevelAgreement::class, 'service_level_agreement_id')->nullable()->constrained('service_level_agreements')->cascadeOnDelete();
             $table->string('ticket_number')->unique();
             $table->string('subject');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->string('approval_status');
             $table->dateTime('svcdept_date_approved')->nullable();
             $table->timestamps();
