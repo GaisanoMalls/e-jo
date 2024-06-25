@@ -120,18 +120,18 @@ class CreateTeam extends Component
                         noty()->addSuccess('New team has been created.');
                     }
                 } else {
-                $team = Team::create([
-                    'service_department_id' => $this->selectedServiceDepartment,
-                    'service_dept_child_id' => $this->selectedChild ?: null,
-                    'name' => $this->name,
-                    'slug' => Str::slug($this->name),
-                ]);
+                    $team = Team::create([
+                        'service_department_id' => $this->selectedServiceDepartment,
+                        'service_dept_child_id' => $this->selectedChild ?: null,
+                        'name' => $this->name,
+                        'slug' => Str::slug($this->name),
+                    ]);
 
-                $team->branches()->attach(array_map('intval', $this->selectedBranches));
+                    $team->branches()->attach(array_map('intval', $this->selectedBranches));
 
-                $this->actionOnSubmit();
-                noty()->addSuccess('New team has been created.');
-                // }
+                    $this->actionOnSubmit();
+                    noty()->addSuccess('New team has been created.');
+                }
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
