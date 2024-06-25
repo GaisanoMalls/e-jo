@@ -10,6 +10,7 @@ use App\Models\Subteam;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -95,10 +96,10 @@ class CreateTeam extends Component
         try {
             DB::transaction(function () {
                 if ($this->hasSubteam) {
-                    if (is_null($this->subteam) && empty ($this->addedSubteam)) {
+                    if (is_null($this->subteam) && empty($this->addedSubteam)) {
                         $this->addError('subteamError', 'Subteam field is required');
 
-                    } elseif (empty ($this->addedSubteam) || empty ($this->name) && !empty ($this->subteam)) {
+                    } elseif (empty($this->addedSubteam) || empty($this->name) && !empty($this->subteam)) {
                         $this->addError('subteamError', 'Please add a subteam');
 
                     } else {
@@ -119,20 +120,19 @@ class CreateTeam extends Component
                         noty()->addSuccess('New team has been created.');
                     }
                 } else {
-                    $team = Team::create([
-                        'service_department_id' => $this->selectedServiceDepartment,
-                        'service_dept_child_id' => $this->selectedChild ?: null,
-                        'name' => $this->name,
-                        'slug' => Str::slug($this->name),
-                    ]);
+                $team = Team::create([
+                    'service_department_id' => $this->selectedServiceDepartment,
+                    'service_dept_child_id' => $this->selectedChild ?: null,
+                    'name' => $this->name,
+                    'slug' => Str::slug($this->name),
+                ]);
 
-                    $team->branches()->attach(array_map('intval', $this->selectedBranches));
+                $team->branches()->attach(array_map('intval', $this->selectedBranches));
 
-                    $this->actionOnSubmit();
-                    noty()->addSuccess('New team has been created.');
-                }
+                $this->actionOnSubmit();
+                noty()->addSuccess('New team has been created.');
+                // }
             });
-
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
