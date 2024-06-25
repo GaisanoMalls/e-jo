@@ -276,10 +276,6 @@
 
             if (serviceDepartmentId) {
                 @this.set('serviceDepartment', serviceDepartmentId);
-
-                // if (!specialProjectCheck.checked) {
-                //     teamSelect.enable();
-                // }
                 teamSelect.enable();
 
                 window.addEventListener('get-teams-from-selected-service-department', (event) => {

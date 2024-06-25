@@ -19,6 +19,7 @@ class AddFormField extends Component
     public $formName;
     public $helpTopic;
     public $visibleTo = [];
+    public $editableTo = [];
     public $name;
     public $type;
     public $variableName;
@@ -200,7 +201,6 @@ class AddFormField extends Component
             if (empty($this->addedFields) && $this->name && $this->type && $this->is_required && $this->is_enabled) {
                 session()->flash('required_form_fields_error', 'Please add the fields first');
                 return;
-
             }
 
             if (empty($this->addedFields)) {
@@ -211,6 +211,7 @@ class AddFormField extends Component
             $form = Form::create([
                 'help_topic_id' => $this->helpTopic,
                 'visible_to' => $this->visibleTo,
+                'editable_to' => $this->editableTo,
                 'name' => $this->formName
             ]);
 

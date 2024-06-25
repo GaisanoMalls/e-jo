@@ -62,7 +62,8 @@
                                         Help Topic
                                         @if ($helpTopics)
                                             <span class="fw-normal" style="font-size: 13px;">
-                                                ({{ $helpTopics->count() }})</span>
+                                                ({{ $helpTopics->count() }})
+                                            </span>
                                         @endif
                                     </label>
                                     <div>
@@ -113,10 +114,29 @@
                                     </label>
                                     <div class="d-flex flex-wrap gap-3">
                                         @foreach ($helpTopicForms as $form)
-                                            <div
-                                                class="card p-3 border-0 d-flex flex-row gap-2 align-items-center justify-content-center create__ticket__form__card">
-                                                <i class="bi bi-journal-text"></i>
-                                                {{ $form->name }}
+                                            <div class="position-relative">
+                                                <div wire:key="help-topic-form-{{ $form->id }}"
+                                                    wire:click="viewHelpTopicForm({{ $form->id }})"
+                                                    class="card p-3 border-0 d-flex flex-row gap-2 align-items-center justify-content-center create__ticket__form__card"
+                                                    data-bs-toggle="modal" data-bs-target="#helpTopicFormFields">
+                                                    <i class="bi bi-journal-text"></i>
+                                                    {{ $form->name }}
+                                                </div>
+                                                <div class="btn-group position-absolute" style="top: -1px; right: 0;">
+                                                    <button type="button"
+                                                        class="btn btn-sm d-flex align-items-center justify-content-center rounded-circle help__topic__form__menu__button"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bi bi-three-dots"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu help__topic__form__dropdown__menu">
+                                                        <li>
+                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="#">Clear form</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         @endforeach
                                     </div>
@@ -158,8 +178,8 @@
                                         x-on:livewire-upload-finish="isUploading = false"
                                         x-on:livewire-upload-error="isUploading = false"
                                         x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                        <input class="form-control form-control-sm border-0 ticket__file" type="file"
-                                            accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
+                                        <input class="form-control form-control-sm border-0 ticket__file"
+                                            type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
                                             wire:model="fileAttachments" multiple id="upload-{{ $upload }}"
                                             onchange="validateFile()">
                                         <div x-transition.duration.500ms x-show="isUploading"
@@ -208,6 +228,51 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal - Fill up help topic forms --}}
+    <div>
+        <div wire:ignore.self class="modal fade create__ticket__modal" id="helpTopicFormFields" tabindex="-1"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-lg">
+                <div class="modal-content modal__content">
+                    <form wire:submit.prevent="">
+                        <h1 class="modal-title modal__title fs-5 px-3">{{ $formName }}</h1>
+                        <div class="modal-body modal__body">
+                            <div class="row">
+                                @foreach ($formFields as $field)
+                                    <div class="col-md-6 mb-3">
+                                        <label for="ticketSubject" class="form-label input__field__label">
+                                            {{ $field->name }}
+                                        </label>
+                                        <input type="text" wire:model="{{ $field->variable_name }}"
+                                            class="form-control input__field"
+                                            placeholder="Enter {{ Str::lower($field->name) }}">
+                                        @error('{{ $field->variable_name }}')
+                                            <span class="error__message">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 p-3">
+                            <button type="button" class="btn ticket__modal__button btn__close__ticket__modal"
+                                data-bs-target="#createTicketModal" data-bs-toggle="modal">Back</button>
+                            <button type="submit"
+                                class="btn d-flex align-items-center justify-content-center gap-2 ticket__modal__button">
+                                <span wire:loading wire:target="" class="spinner-border spinner-border-sm"
+                                    role="status" aria-hidden="true">
+                                </span>
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @push('livewire-textarea')
     <script>
@@ -248,6 +313,7 @@
             ele: helpTopicSelect,
             search: true,
             markSearchResults: true,
+            hideClearButton: true
         });
         helpTopicSelect.disable();
 
@@ -284,6 +350,7 @@
             }
         });
 
+
         serviceDepartmentSelect.addEventListener('reset', () => {
             helpTopicSelect.reset();
             helpTopicSelect.disable();
@@ -317,10 +384,6 @@
 
         helpTopicSelect.addEventListener('reset', () => {
             ticketDescriptionContainer.style.display = 'block';
-        });
-
-        helpTopicSelect.addEventListener('reset', () => {
-            @this.set('isClearedHelTopicSelect', true);
         });
 
         const branchSelect = document.querySelector('#userCreateTicketBranchesDropdown');

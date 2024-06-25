@@ -76,7 +76,6 @@ class CreateHelpTopic extends Component
         // Check if team is required for special projects
         if ($this->isSpecialProject && !$this->team) {
             session()->flash('team_error', 'Team is required for special projects');
-            Log::info('Team is required but not provided.');
             return;
         }
 
@@ -124,10 +123,10 @@ class CreateHelpTopic extends Component
     public function updatedServiceDepartment($value)
     {
         if ($this->isSpecialProject) {
-            $this->teams = Team::whereHas('serviceDepartment', fn ($team) => $team->where('service_department_id', $value))->get();
+            $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $value))->get();
             $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
         } else {
-            $this->teams = Team::whereHas('serviceDepartment', fn ($team) => $team->where('service_department_id', $value))->get();
+            $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $value))->get();
             $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
         }
     }

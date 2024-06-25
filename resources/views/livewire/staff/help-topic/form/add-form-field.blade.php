@@ -5,7 +5,7 @@
 <div>
     <div class="row mb-4">
         <div class="row mb-3">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="mb-2">
                     <label for="formName" class="form-label form__field__label">Form name</label>
                     <input type="text" wire:model="formName" class="form-control form__field" id="formName"
@@ -18,7 +18,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="mb-3">
                     <label for="sla" class="form-label form__field__label">
                         Help topic
@@ -34,13 +34,29 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="mb-3">
                     <label for="sla" class="form-label form__field__label">
                         Visible to
                     </label>
                     <div>
                         <div id="select-form-visibility" wire:ignore></div>
+                    </div>
+                    @error('visibleTo')
+                        <span class="error__message">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="sla" class="form-label form__field__label">
+                        Editable to
+                    </label>
+                    <div>
+                        <div id="select-form-editable" wire:ignore></div>
                     </div>
                     @error('visibleTo')
                         <span class="error__message">
@@ -289,6 +305,7 @@
     <script>
         const selectHelpTopic = document.querySelector('#select-help-topic');
         const selectFormVisibility = document.querySelector('#select-form-visibility');
+        const selectFormEditable = document.querySelector('#select-form-editable');
         const selectFieldType = document.querySelector('#select-field-type');
         const selectRequired = document.querySelector('#select-required-field');
         const selectEnable = document.querySelector('#select-enable-field');
@@ -372,12 +389,30 @@
             @this.set('visibleTo', selectFormVisibility.value)
         });
 
+        const selectFormEditableOption = @json($userRoles).map(role => ({
+            label: role.label,
+            value: role.label
+        }));
+
+        VirtualSelect.init({
+            ele: selectFormEditable,
+            options: selectFormEditableOption,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+        });
+
+        selectFormEditable.addEventListener('change', () => {
+            @this.set('editableTo', selectFormEditable.value)
+        });
+
         window.addEventListener('clear-form', () => {
             selectFieldType.reset();
             selectRequired.reset();
             selectEnable.reset();
             selectHelpTopic.reset();
             selectFormVisibility.reset();
+            selectFormEditable.reset();
         });
 
         window.addEventListener('clear-form-fields', () => {

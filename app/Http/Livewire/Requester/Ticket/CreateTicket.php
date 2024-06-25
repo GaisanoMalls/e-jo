@@ -22,6 +22,7 @@ use App\Models\TicketApproval;
 use App\Models\TicketTeam;
 use App\Notifications\AppNotification;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\DB;
@@ -48,13 +49,18 @@ class CreateTicket extends Component
     public $helpTopic;
     public $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
     public $isHelpTopicHasForms; // bool
-    public $isClearedHelTopicSelect = false;
+
+    // Help topic form
+    public $formId;
+    public $formName;
+    public Collection $formFields;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
     public function mount()
     {
         $this->setDefaultPriorityLevel();
+        $this->formFields = collect([]);
     }
 
     public function rules()
@@ -212,6 +218,7 @@ class CreateTicket extends Component
     {
         $this->helpTopics = HelpTopic::with(['team', 'sla'])->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->serviceDepartment))->get();
         $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);
+        $this->helpTopicForms = []; // Clear help topic forms
     }
 
     public function updatedHelpTopic($value)
@@ -221,7 +228,6 @@ class CreateTicket extends Component
 
         $helpTopicForms = Form::with('fields')->where('help_topic_id', $value)->get();
 
-        dump($this->isClearedHelTopicSelect);
         if ($helpTopicForms->isNotEmpty()) {
             $this->description = null;
             $this->isHelpTopicHasForms = true;
@@ -232,6 +238,13 @@ class CreateTicket extends Component
             $this->reset('helpTopicForms');
             $this->dispatchBrowserEvent('hide-ticket-description-container');
         }
+    }
+
+    public function viewHelpTopicForm(Form $form)
+    {
+        $this->formId = $form->id;
+        $this->formName = $form->name;
+        $this->formFields = $form->fields;
     }
 
     public function cancel()
