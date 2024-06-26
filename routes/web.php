@@ -105,7 +105,6 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
                     Route::get('/service-department-admins', 'serviceDepartmentAdmins')->name('service_department_admins');
                     Route::get('/agents', 'agents')->name('agents');
                     Route::get('/requesters', 'users')->name('users');
-
                 });
                 // Approver Routes
                 Route::prefix('approver')->name('approver.')->group(function () {
@@ -158,8 +157,10 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
                 Route::controller(HelpTopicsController::class)->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::get('/{helpTopic}/edit-details', 'editDetails')->name('edit_details');
+                    Route::get('/create-help-topic', 'create')->name('create_help_topic');
                 });
             });
+
             Route::prefix('tag')->name('tag.')->group(function () {
                 Route::get('/', TagController::class)->name('index');
             });
