@@ -10,6 +10,7 @@ use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\ApproverLevel;
 use App\Models\Branch;
+use App\Models\Field;
 use App\Models\Form;
 use App\Models\HelpTopic;
 use App\Models\Level;
@@ -51,16 +52,18 @@ class CreateTicket extends Component
     public $isHelpTopicHasForms; // bool
 
     // Help topic form
+    public Form $form;
     public $formId;
     public $formName;
-    public Collection $formFields;
+    public $formFields = [];
+    public $filledForms = []; // Insert the filled forms here.
+    public $filledFormIds = []; // Insert the filled form ids
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
     public function mount()
     {
         $this->setDefaultPriorityLevel();
-        $this->formFields = collect([]);
     }
 
     public function rules()
@@ -103,6 +106,7 @@ class CreateTicket extends Component
 
     public function sendTicket()
     {
+        dump($this->filledFormIds);
         $this->validate();
 
         try {
@@ -242,9 +246,34 @@ class CreateTicket extends Component
 
     public function viewHelpTopicForm(Form $form)
     {
+        $this->form = $form;
         $this->formId = $form->id;
         $this->formName = $form->name;
-        $this->formFields = $form->fields;
+
+        $this->formFields = $form->fields->map(function ($field) {
+            return [
+                'id' => $field->id,
+                'name' => $field->name,
+                'label' => $field->label,
+                'type' => $field->type,
+                'variable_name' => $field->variable_name,
+                'is_required' => $field->is_required,
+                'is_enabled' => $field->is_enabled,
+                'value' => '', // To store the value of the given inputs
+                'form' => $this->form->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
+            ];
+        })->toArray();
+    }
+
+    public function saveHelpTopicForm()
+    {
+        array_push($this->filledForms, ['field' => $this->formFields]);
+        dump($this->filledForms);
+
+        foreach ($this->formFields as $field) {
+            $this->filledFormIds[] = $field['form']['id']; // Get the form ids and insert them into the list
+        }
+        $this->filledFormIds = array_unique($this->filledFormIds); // Remove the duplicate ids and returns a new array of id without duplicate values
     }
 
     public function cancel()
