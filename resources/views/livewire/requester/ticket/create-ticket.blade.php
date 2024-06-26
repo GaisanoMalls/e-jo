@@ -122,35 +122,41 @@
                                                 <div wire:key="help-topic-form-{{ $form->id }}"
                                                     wire:click="viewHelpTopicForm({{ $form->id }})"
                                                     class="card p-3 border-0 d-flex flex-row gap-2 align-items-center justify-content-center create__ticket__form__card"
-                                                    data-bs-toggle="modal" data-bs-target="#helpTopicFormFields">
+                                                    data-bs-toggle="modal" data-bs-target="#helpTopicFormFieldsModal">
                                                     @if ($filledFormIds)
                                                         @foreach ($filledFormIds as $formId)
                                                             @if ($formId === $form->id)
-                                                                <i class="bi bi-check2"></i>
-                                                            @else
-                                                                <i class="bi bi-journal-text"></i>
+                                                                <i class="bi bi-check2-circle"></i>
                                                             @endif
                                                         @endforeach
-                                                    @else
-                                                        <i class="bi bi-journal-text"></i>
                                                     @endif
                                                     {{ $form->name }}
                                                 </div>
-                                                <div class="btn-group position-absolute" style="top: -1px; right: 0;">
-                                                    <button type="button"
-                                                        class="btn btn-sm d-flex align-items-center justify-content-center rounded-circle help__topic__form__menu__button"
-                                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu help__topic__form__dropdown__menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">Edit</a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">Clear form</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                {{-- Display form options --}}
+                                                @if ($filledFormIds)
+                                                    @foreach ($filledFormIds as $formId)
+                                                        @if ($formId === $form->id)
+                                                            <div class="btn-group position-absolute"
+                                                                style="top: -1px; right: 0;">
+                                                                <button type="button"
+                                                                    class="btn btn-sm d-flex align-items-center justify-content-center rounded-circle help__topic__form__menu__button"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bi bi-three-dots"></i>
+                                                                </button>
+                                                                <ul
+                                                                    class="dropdown-menu help__topic__form__dropdown__menu">
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#">Clear
+                                                                            form</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
                                             </div>
                                         @endforeach
                                     </div>
@@ -245,7 +251,7 @@
 
     {{-- Modal - Fill up help topic forms --}}
     <div>
-        <div wire:ignore.self class="modal fade create__ticket__modal" id="helpTopicFormFields" tabindex="-1"
+        <div wire:ignore.self class="modal fade create__ticket__modal" id="helpTopicFormFieldsModal" tabindex="-1"
             aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-lg">
                 <div class="modal-content modal__content">
@@ -610,6 +616,12 @@
                 fileValidationMessage.innerHTML = '';
             }
         }
+
+        // Help topic form fields
+        window.addEventListener('close-help-topic-form-fields', () => {
+            $('#helpTopicFormFieldsModal').modal('hide');
+            $('#createTicketModal').modal('show');
+        });
     </script>
 @endpush
 

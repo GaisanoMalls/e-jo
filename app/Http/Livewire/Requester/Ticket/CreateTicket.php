@@ -106,7 +106,6 @@ class CreateTicket extends Component
 
     public function sendTicket()
     {
-        dump($this->filledFormIds);
         $this->validate();
 
         try {
@@ -268,12 +267,12 @@ class CreateTicket extends Component
     public function saveHelpTopicForm()
     {
         array_push($this->filledForms, ['field' => $this->formFields]);
-        dump($this->filledForms);
 
         foreach ($this->formFields as $field) {
             $this->filledFormIds[] = $field['form']['id']; // Get the form ids and insert them into the list
         }
         $this->filledFormIds = array_unique($this->filledFormIds); // Remove the duplicate ids and returns a new array of id without duplicate values
+        $this->dispatchBrowserEvent('close-help-topic-form-fields');
     }
 
     public function cancel()
