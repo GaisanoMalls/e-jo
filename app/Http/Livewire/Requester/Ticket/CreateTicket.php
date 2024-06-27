@@ -258,7 +258,7 @@ class CreateTicket extends Component
                 'variable_name' => $field->variable_name,
                 'is_required' => $field->is_required,
                 'is_enabled' => $field->is_enabled,
-                'value' => '', // To store the value of the given inputs
+                'value' => null, // To store the value of the given inputs
                 'form' => $this->form->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
             ];
         })->toArray();
