@@ -160,7 +160,6 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
                     Route::get('/create-help-topic', 'create')->name('create_help_topic');
                 });
             });
-
             Route::prefix('tag')->name('tag.')->group(function () {
                 Route::get('/', TagController::class)->name('index');
             });

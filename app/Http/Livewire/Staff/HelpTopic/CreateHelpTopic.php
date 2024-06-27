@@ -6,6 +6,8 @@ use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
+use App\Models\HelpTopicApprover;
+use App\Models\HelpTopicConfiguration;
 use App\Models\Role;
 use App\Models\ServiceDepartmentChildren;
 use App\Models\SpecialProject;
@@ -22,8 +24,21 @@ use Illuminate\Support\Facades\Log;
 class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
+    public $isSpecialProject = false;
+    public $teams = [];
+    public $serviceDepartmentChildren = [];
+    public $selectedServiceDepartmentChildrenId;
+    public $selectedServiceDepartmentChildrenName;
+    public $name;
+    public $sla;
+    public $serviceDepartment;
+    public $team;
+    public $amount; // For Special project
+    public $costingApprovers = [];
+    public $showCostingApproverSelect = false;
 
 
+    //Approval Configurations
     public $approvalLevels = [1, 2, 3, 4, 5];
     public $levelApprovers = null;
     public $level1Approvers = [];
@@ -47,31 +62,177 @@ class CreateHelpTopic extends Component
         $this->buDepartments = $this->queryBUDepartments();
     }
 
+    public function rules()
+    {
+        return [
+            'name' => ['required', 'unique:help_topics,name'],
+            'sla' => ['required'],
+            'serviceDepartment' => ['required'],
+            'team' => ['nullable'],
+            'amount' => ['numeric', $this->isSpecialProject ? 'required' : 'nullable'],
+            'teams' => '',
+        ];
+    }
+
+    private function actionOnSubmit()
+    {
+        $this->reset();
+        $this->resetValidation();
+        $this->emit('loadHelpTopics');
+        $this->dispatchBrowserEvent('close-modal');
+        $this->hideSpecialProjectContainer();
+    }
+
+    public function saveHelpTopic()
+    {
+        // Validate form inputs
+        $this->validate();
+
+        // Check if team is required for special projects
+        if ($this->isSpecialProject && !$this->team) {
+            session()->flash('team_error', 'Team is required for special projects');
+            return;
+        }
+
+        try {
+            Log::info('Starting transaction to save HelpTopic.');
+
+            DB::transaction(function () {
+                $teamName = $this->team ? Team::find($this->team)->name : '';
+                // Create HelpTopic
+                $helpTopic = HelpTopic::create([
+                    'service_department_id' => $this->serviceDepartment,
+                    'service_dept_child_id' => null, // No sub-service department check
+                    'team_id' => $this->team,
+                    'service_level_agreement_id' => $this->sla,
+                    'name' => $this->name . ($teamName ? " - {$teamName}" : ''),
+                    'slug' => Str::slug($this->name),
+                ]);
+
+                Log::info('HelpTopic created successfully.', ['help_topic_id' => $helpTopic->id]);
+
+                // Save help topic configurations
+                foreach ($this->configurations as $config) {
+                    // Create the configuration record
+                    $helpTopicConfiguration = HelpTopicConfiguration::create([
+                        'help_topic_id' => $helpTopic->id,
+                        'bu_department_id' => $config['bu_department_id'],
+                        'bu_department_name' => $config['bu_department_name'],
+                        'approvers_count' => $config['approvers_count'],
+                    ]);
+
+                    // Create the approver records
+                    foreach ($config['approvers'] as $level => $approversList) {
+                        $levelNumber = str_replace('level', '', $level);
+                        foreach ($approversList as $userId) {
+                            HelpTopicApprover::create([
+                                'help_topic_configuration_id' => $helpTopicConfiguration->id,
+                                'help_topic_id' => $helpTopic->id,
+                                'level' => $levelNumber,
+                                'user_id' => $userId,
+                            ]);
+                        }
+                    }
+                }
+
+                // Create SpecialProject if it's a special project
+                if ($this->isSpecialProject) {
+                    SpecialProject::create([
+                        'help_topic_id' => $helpTopic->id,
+                        'amount' => $this->amount,
+                    ]);
+
+                    Log::info('SpecialProject created successfully.', ['help_topic_id' => $helpTopic->id]);
+                }
+            });
+
+            // Action on successful submission
+            $this->actionOnSubmit();
+            noty()->addSuccess('A new help topic has been created.');
+            Log::info('Help topic submission successful.');
+        } catch (Exception $e) {
+            // Log the error
+            AppErrorLog::getError($e->getMessage());
+            Log::error('Error occurred while saving help topic.', ['exception' => $e->getMessage()]);
+        }
+    }
+
+
+
+
+    public function updatedServiceDepartment($value)
+    {
+        $this->teams = Team::whereHas('serviceDepartment', fn ($team) => $team->where('service_department_id', $value))->get();
+        $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
+    }
+
+    public function updatedAmount($value)
+    {
+        if ($value) {
+            $this->dispatchBrowserEvent('show-select-costing-approver');
+        } else {
+            $this->dispatchBrowserEvent('hide-select-costing-approver');
+        }
+    }
+
+    public function showSpecialProjectContainer()
+    {
+        $this->dispatchBrowserEvent('show-special-project-container');
+    }
+
+    public function hideSpecialProjectContainer()
+    {
+        $this->name = null;
+        $this->amount = null;
+        $this->dispatchBrowserEvent('hide-special-project-container');
+    }
+
+    public function updatedIsSpecialProject($value)
+    {
+        ($value)
+            ? $this->showSpecialProjectContainer()
+            : $this->hideSpecialProjectContainer();
+        $this->resetValidation();
+    }
+
+
     public function saveConfiguration()
     {
-        $approversCount = array_sum([
-            count($this->level1Approvers),
-            count($this->level2Approvers),
-            count($this->level3Approvers),
-            count($this->level4Approvers),
-            count($this->level5Approvers)
-        ]);
+        $approvers = [
+            'level1' => $this->level1Approvers,
+            'level2' => $this->level2Approvers,
+            'level3' => $this->level3Approvers,
+            'level4' => $this->level4Approvers,
+            'level5' => $this->level5Approvers,
+        ];
+
+        $approversCount = array_sum(array_map('count', $approvers));
 
         // Get the selected BU Department name
         $buDepartmentName = collect($this->buDepartments)->firstWhere('id', $this->selectedBuDepartment)['name'];
 
+        // Add to the configurations array
         $this->configurations[] = [
             'bu_department_id' => $this->selectedBuDepartment,
             'bu_department_name' => $buDepartmentName,
             'approvers_count' => $approversCount,
+            'approvers' => $approvers,
         ];
 
-        // Reset the selected fields
-        $this->selectedBuDepartment = null;
-        $this->approvalLevelSelected = false;
-        $this->dispatchBrowserEvent('reset-select-fields');
+        $this->resetApprovalConfigFields();
     }
 
+    private function resetApprovalConfigFields()
+    {
+        $this->selectedBuDepartment = null;
+        $this->approvalLevelSelected = false;
+        $this->level1Approvers = [];
+        $this->level2Approvers = [];
+        $this->level3Approvers = [];
+        $this->level4Approvers = [];
+        $this->level5Approvers = [];
+        $this->dispatchBrowserEvent('reset-select-fields');
+    }
 
     public function removeConfiguration($index)
     {
@@ -107,8 +268,6 @@ class CreateHelpTopic extends Component
     {
         $this->getFilteredApprovers($value);
     }
-
-
 
     public function getFilteredApprovers($level)
     {
