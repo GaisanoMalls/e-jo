@@ -8,6 +8,7 @@ use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
 use App\Models\HelpTopicApprover;
 use App\Models\HelpTopicConfiguration;
+use App\Models\HelpTopicCosting;
 use App\Models\Role;
 use App\Models\ServiceDepartmentChildren;
 use App\Models\SpecialProject;
@@ -33,8 +34,14 @@ class CreateHelpTopic extends Component
     public $sla;
     public $serviceDepartment;
     public $team;
-    public $amount; // For Special project
+
+    // Costing Configuration
+    public $amount;
     public $costingApprovers = [];
+    public $finalCostingApprovers = [];
+
+    public $costingApproversList  = [];
+    public $finalCostingApproversList   = [];
     public $showCostingApproverSelect = false;
 
 
@@ -57,9 +64,12 @@ class CreateHelpTopic extends Component
     public $selectedBuDepartment;
     public $selectedApproversCount = 0;
 
+
+
     public function mount()
     {
         $this->buDepartments = $this->queryBUDepartments();
+        $this->fetchCostingApprovers();
     }
 
     public function rules()
@@ -134,6 +144,14 @@ class CreateHelpTopic extends Component
                         }
                     }
                 }
+
+                // Save costing data
+                HelpTopicCosting::create([
+                    'help_topic_id' => $helpTopic->id,
+                    'costing_approvers' => $this->costingApprovers,
+                    'amount' => $this->amount,
+                    'final_costing_approvers' => $this->finalCostingApprovers,
+                ]);
 
                 // Create SpecialProject if it's a special project
                 if ($this->isSpecialProject) {
@@ -289,6 +307,23 @@ class CreateHelpTopic extends Component
     }
 
 
+    public function fetchCostingApprovers()
+    {
+        $users = User::with(['profile', 'roles'])
+            ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
+            ->get();
+
+        $this->costingApproversList = $users->map(function ($user) {
+            return [
+                'label' => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'value' => $user->id,
+                'description' => $user->roles->pluck('name')->join(', ')
+            ];
+        })->toArray();
+
+        $this->finalCostingApproversList = $this->costingApproversList;
+    }
+
     public function render()
     {
         return view('livewire.staff.help-topic.create-help-topic', [
@@ -296,6 +331,8 @@ class CreateHelpTopic extends Component
             'serviceDepartments' => $this->queryServiceDepartments(),
             'buDepartments' => $this->queryBUDepartments(),
             'configurations' => $this->configurations,
+            'costingApproversList' => $this->costingApproversList,
+            'finalCostingApproversList' => $this->finalCostingApproversList,
         ]);
     }
 }

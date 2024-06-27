@@ -91,31 +91,6 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <!-- Special Project Amount -->
-                                <div wire:ignore class="mt-2" id="specialProjectAmountContainer">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="amount"
-                                                    class="form-label form__field__label">Amount</label>
-                                                <div class="d-flex position-relative amount__field__container">
-                                                    <span class="currency text-muted position-absolute">₱</span>
-                                                    <input type="text" wire:model="amount"
-                                                        class="form-control form__field amount__field" id="amount"
-                                                        placeholder="Enter amount">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div wire:ignore.self class="col-md-6" id="costing-approver-container">
-                                            <div class="mb-3">
-                                                <label class="form-label form__field__label">Cost Approver</label>
-                                                <div>
-                                                    <div id="select-help-topic-costing-approver" wire:ignore></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -166,23 +141,75 @@
                                 <th>No.</th>
                                 <th>BU Department</th>
                                 <th>Numbers of Approvers</th>
-                                <th>Actions</th>
+                                <th class="text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($configurations as $index => $config)
+                            @forelse ($configurations as $index => $config)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $config['bu_department_name'] }}</td>
                                     <td>{{ $config['approvers_count'] }}</td>
                                     <td>
-                                        <button wire:click="removeConfiguration({{ $index }})"
-                                            class="btn btn-danger">Remove</button>
+                                        <div class="d-flex align-items-center justify-content-center pe-2 gap-1">
+                                            <button data-tooltip="Edit" data-tooltip-position="top"
+                                                data-tooltip-font-size="11px" type="button" class="btn action__button">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm action__button mt-0"
+                                                wire:click="removeConfiguration({{ $index }})">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center">No approval configuration added</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
+                </div>
+                <!-- Special Project Amount -->
+                <div wire:ignore class="mt-2" id="specialProjectAmountContainer">
+                    <hr>
+                    <h6 class="fw-semibold mb-4" style="font-size: 0.89rem;">Costing Configurations</h6>
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="costingApprover" class="form-label form__field__label">Costing
+                                            Approver</label>
+                                        <div>
+                                            <div id="help-topic-costing-approver" wire:ignore></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="amount" class="form-label form__field__label">Enter Maximum
+                                            Total Cost</label>
+                                        <div class="d-flex position-relative amount__field__container">
+                                            <span class="currency text-muted position-absolute mt-2">₱</span>
+                                            <input type="text" wire:model="amount"
+                                                class="form-control form__field max_total_cost" id="amount"
+                                                placeholder="Enter Total Cost">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" id="costing-approver-container">
+                                    <div class="mb-3">
+                                        <label class="finalCostingApprover">Final Cost Approver</label>
+                                        <div>
+                                            <div id="select-help-topic-final-costing-approver" wire:ignore></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <hr>
                 <div class="col-12">
@@ -296,12 +323,9 @@
 
         serviceDepartmentSelect.addEventListener('reset', () => {
             const countTeams = document.querySelector('#countTeams');
-            @this.set('teams', []); // Clear teams count when service department is resetted.
+            @this.set('teams', []);
             @this.set('name', null);
             countTeams.textContent = '';
-            // serviceDepartmentChildrenSelect.disable()
-            // serviceDepartmentChildrenSelect.reset();
-            // serviceDepartmentChildrenSelect.setOptions([]);
             document.querySelector('#countTeams').textContent = '';
             teamSelect.disable();
             teamSelect.setOptions([]);
@@ -321,33 +345,6 @@
                 }
             });
         }
-
-        // Costing approver
-        const costingApproverContainer = document.querySelector('#costing-approver-container');
-        const selectHelpTopicCostingApprover = document.querySelector('#select-help-topic-costing-approver');
-
-        VirtualSelect.init({
-            ele: selectHelpTopicCostingApprover,
-        });
-
-        costingApproverContainer.style.display = 'none';
-
-        window.addEventListener('show-select-costing-approver', (event) => {
-            costingApproverContainer.style.display = 'block';
-        });
-
-        window.addEventListener('hide-select-costing-approver', (event) => {
-            selectHelpTopicCostingApprover.reset();
-            costingApproverContainer.style.display = 'none';
-        });
-
-        window.addEventListener('hide-special-project-container', () => {
-            selectHelpTopicCostingApprover.reset();
-        });
-
-        selectHelpTopicCostingApprover.addEventListener('change', () => {
-            @this.set('costingApprovers', selectHelpTopicCostingApprover.value);
-        });
 
 
 
@@ -442,6 +439,7 @@
         });
 
         window.addEventListener('load-approvers', (event) => {
+
             const level = event.detail.level;
             const approverSelect = approvers[`level${level}`];
             if (approverSelect) {
@@ -461,6 +459,46 @@
             buDepartmentSelect.reset();
             approvalLevelSelect.reset();
             dynamicApprovalLevelContainer.innerHTML = '';
+        });
+
+        // Costing Approver
+        const costingApproverContainer = document.querySelector('#select-help-topic-costing-approver');
+        const selectCostingApprover = @json($costingApproversList);
+
+        VirtualSelect.init({
+            ele: '#help-topic-costing-approver',
+            options: selectCostingApprover,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            hasOptionDescription: true,
+        });
+
+        document.querySelector('#help-topic-costing-approver').addEventListener('change', (event) => {
+            const selectedCostingApprovers = event.target.value;
+            console.log('Selected Costing Approvers:', selectedCostingApprovers);
+            @this.set('costingApprovers', selectedCostingApprovers);
+        });
+
+        // Final Cost Approver
+        const finalCostingApproverContainer = document.querySelector('#select-help-topic-final-costing-approver');
+        const selectFinalCostingApprover = @json($finalCostingApproversList);
+
+        VirtualSelect.init({
+            ele: '#select-help-topic-final-costing-approver',
+            options: selectFinalCostingApprover,
+            search: true,
+            multiple: true,
+            showValueAsTags: true,
+            markSearchResults: true,
+            hasOptionDescription: true,
+        });
+
+        document.querySelector('#select-help-topic-final-costing-approver').addEventListener('change', (event) => {
+            const selectedFinalCostingApprovers = event.target.value;
+            console.log('Selected Final Costing Approvers:', selectedFinalCostingApprovers);
+            @this.set('finalCostingApprovers', selectedFinalCostingApprovers);
         });
     </script>
 @endpush
