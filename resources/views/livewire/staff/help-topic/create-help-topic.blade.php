@@ -128,13 +128,17 @@
                         </div>
                         <div wire:ignore class="row" id="dynamic-approval-container"></div>
                     </div>
-                    <button class="btn d-flex align-items-center justify-content-center gap-2 btn__add__user__account"
-                        style="width: auto; padding: 10px 20px; margin: 0 auto; display: block;"
-                        wire:click="saveConfiguration">
-                        <i class="fa-solid fa-plus"></i>
-                        <span>Add Configuration</span>
-                    </button>
-
+                    <div style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
+                        <button
+                            class="btn d-flex align-items-center justify-content-center gap-2 btn__add__user__account"
+                            style="width: auto; background-color: #d32839; color: white;"
+                            wire:click="saveConfiguration">
+                            <span>Add</span>
+                        </button>
+                        <button type="button" class="btn m-0 btn__cancel" onclick="handleCancelApprovalConfig()">
+                            Cancel
+                        </button>
+                    </div>
                     <table class="table">
                         <thead>
                             <tr>
@@ -212,21 +216,19 @@
                     </div>
                 </div>
                 <hr>
-                <div class="col-12">
-                    <div class="d-flex align-items-center gap-2 justify-content-end">
-                        <button type="button"
-                            class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
-                            wire:click="saveHelpTopic">
-                            <span wire:loading wire:target="saveHelpTopic" class="spinner-border spinner-border-sm"
-                                role="status" aria-hidden="true"></span>
-                            Submit Help Topic
-                        </button>
-                        <button type="button" class="btn m-0 btn__cancel" wire:click="cancel">
-                            Cancel
-                        </button>
-                    </div>
+                <div style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
+                    <button type="button"
+                        class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
+                        style="background-color: #d32839; color: white;" wire:click="saveHelpTopic"
+                        onclick="resetFormFields()">
+                        <span wire:loading wire:target="saveHelpTopic" class="spinner-border spinner-border-sm"
+                            role="status" aria-hidden="true"></span>
+                        Add New
+                    </button>
+                    <button type="button" class="btn m-0 btn__cancel" onclick="resetFormFields()">
+                        Cancel
+                    </button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -500,5 +502,40 @@
             console.log('Selected Final Costing Approvers:', selectedFinalCostingApprovers);
             @this.set('finalCostingApprovers', selectedFinalCostingApprovers);
         });
+
+
+        function handleCancelApprovalConfig() {
+            buDepartmentSelect.reset();
+            approvalLevelSelect.reset();
+            dynamicApprovalLevelContainer.innerHTML = '';
+        }
+
+        function resetFormFields() {
+            document.querySelector('#helpTopicName').value = '';
+            document.querySelector('#amount').value = '';
+            document.querySelector('#specialProjectCheck').checked = false;
+
+            const selectElements = [
+                '#select-help-topic-sla',
+                '#select-help-topic-service-department',
+                '#select-help-topic-team',
+                '#select-help-topic-bu-department',
+                '#select-help-topic-approval-level',
+                '#select-help-topic-costing-approver',
+                '#select-help-topic-final-costing-approver'
+            ];
+
+            selectElements.forEach(selector => {
+                const selectElement = document.querySelector(selector);
+                if (selectElement && selectElement.virtualSelect) {
+                    selectElement.virtualSelect.reset();
+                }
+            });
+
+            document.querySelector('#dynamic-approval-container').innerHTML = '';
+            document.querySelector('#countTeams').textContent = '';
+            specialProjectAmountContainer.style.display = 'none';
+            teamSelect.disable();
+        }
     </script>
 @endpush

@@ -89,7 +89,6 @@ class CreateHelpTopic extends Component
         $this->reset();
         $this->resetValidation();
         $this->emit('loadHelpTopics');
-        $this->dispatchBrowserEvent('close-modal');
         $this->hideSpecialProjectContainer();
     }
 
@@ -176,22 +175,12 @@ class CreateHelpTopic extends Component
     }
 
 
-
-
     public function updatedServiceDepartment($value)
     {
         $this->teams = Team::whereHas('serviceDepartment', fn ($team) => $team->where('service_department_id', $value))->get();
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 
-    public function updatedAmount($value)
-    {
-        if ($value) {
-            $this->dispatchBrowserEvent('show-select-costing-approver');
-        } else {
-            $this->dispatchBrowserEvent('hide-select-costing-approver');
-        }
-    }
 
     public function showSpecialProjectContainer()
     {
