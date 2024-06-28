@@ -13,8 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('help_topic_approvers', function (Blueprint $table) {
+        Schema::create('help_topic_configurations', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('help_topic_id');
+            $table->unsignedBigInteger('bu_department_id');
+            $table->string('bu_department_name');
+            $table->unsignedInteger('approvers_count');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('help_topic_approvers');
+        Schema::dropIfExists('help_topic_configurations');
     }
 };

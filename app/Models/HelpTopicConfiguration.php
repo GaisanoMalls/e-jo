@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class HelpTopicApprover extends Model
+class HelpTopicConfiguration extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'help_topic_configuration_id',
         'help_topic_id',
-        'level',
-        'user_id',
+        'bu_department_id',
+        'bu_department_name',
+        'approvers_count',
     ];
 
-    public function helpTopicConfiguration()
+    public function approvers()
     {
-        return $this->belongsTo(HelpTopicConfiguration::class);
+        return $this->hasMany(HelpTopicApprover::class, 'help_topic_configuration_id');
     }
 
     public function helpTopic()

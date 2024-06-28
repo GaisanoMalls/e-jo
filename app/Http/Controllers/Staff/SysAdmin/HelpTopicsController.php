@@ -30,6 +30,15 @@ class HelpTopicsController extends Controller
         );
     }
 
+
+    public function create()
+    {
+        return view(
+            'layouts.staff.system_admin.manage.help_topics.create_help_topic',
+            compact([])
+        );
+    }
+
     public function editDetails(HelpTopic $helpTopic)
     {
         $approvers = $this->queryApprovers();

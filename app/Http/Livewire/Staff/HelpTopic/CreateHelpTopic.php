@@ -6,6 +6,9 @@ use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
 use App\Models\HelpTopic;
+use App\Models\HelpTopicApprover;
+use App\Models\HelpTopicConfiguration;
+use App\Models\HelpTopicCosting;
 use App\Models\Role;
 use App\Models\ServiceDepartmentChildren;
 use App\Models\SpecialProject;
@@ -18,10 +21,10 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Illuminate\Support\Facades\Log;
 
+
 class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
-
     public $isSpecialProject = false;
     public $teams = [];
     public $serviceDepartmentChildren = [];
@@ -31,11 +34,18 @@ class CreateHelpTopic extends Component
     public $sla;
     public $serviceDepartment;
     public $team;
-    public $amount; // For Special project
+
+    // Costing Configuration
+    public $amount;
     public $costingApprovers = [];
+    public $finalCostingApprovers = [];
+
+    public $costingApproversList  = [];
+    public $finalCostingApproversList   = [];
     public $showCostingApproverSelect = false;
 
-    // Approval Configuration
+
+    //Approval Configurations
     public $approvalLevels = [1, 2, 3, 4, 5];
     public $levelApprovers = null;
     public $level1Approvers = [];
@@ -43,9 +53,24 @@ class CreateHelpTopic extends Component
     public $level3Approvers = [];
     public $level4Approvers = [];
     public $level5Approvers = [];
-    public $approvalLevelSelected; // bool
+    public $approvalLevelSelected = false;
+
     public $buDepartment;
 
+    public $buDepartments;
+
+    public $configurations = [];
+
+    public $selectedBuDepartment;
+    public $selectedApproversCount = 0;
+
+
+
+    public function mount()
+    {
+        $this->buDepartments = $this->queryBUDepartments();
+        $this->fetchCostingApprovers();
+    }
 
     public function rules()
     {
@@ -64,7 +89,6 @@ class CreateHelpTopic extends Component
         $this->reset();
         $this->resetValidation();
         $this->emit('loadHelpTopics');
-        $this->dispatchBrowserEvent('close-modal');
         $this->hideSpecialProjectContainer();
     }
 
@@ -96,6 +120,38 @@ class CreateHelpTopic extends Component
 
                 Log::info('HelpTopic created successfully.', ['help_topic_id' => $helpTopic->id]);
 
+                // Save help topic configurations
+                foreach ($this->configurations as $config) {
+                    // Create the configuration record
+                    $helpTopicConfiguration = HelpTopicConfiguration::create([
+                        'help_topic_id' => $helpTopic->id,
+                        'bu_department_id' => $config['bu_department_id'],
+                        'bu_department_name' => $config['bu_department_name'],
+                        'approvers_count' => $config['approvers_count'],
+                    ]);
+
+                    // Create the approver records
+                    foreach ($config['approvers'] as $level => $approversList) {
+                        $levelNumber = str_replace('level', '', $level);
+                        foreach ($approversList as $userId) {
+                            HelpTopicApprover::create([
+                                'help_topic_configuration_id' => $helpTopicConfiguration->id,
+                                'help_topic_id' => $helpTopic->id,
+                                'level' => $levelNumber,
+                                'user_id' => $userId,
+                            ]);
+                        }
+                    }
+                }
+
+                // Save costing data
+                HelpTopicCosting::create([
+                    'help_topic_id' => $helpTopic->id,
+                    'costing_approvers' => $this->costingApprovers,
+                    'amount' => $this->amount,
+                    'final_costing_approvers' => $this->finalCostingApprovers,
+                ]);
+
                 // Create SpecialProject if it's a special project
                 if ($this->isSpecialProject) {
                     SpecialProject::create([
@@ -119,26 +175,12 @@ class CreateHelpTopic extends Component
     }
 
 
-
     public function updatedServiceDepartment($value)
     {
-        if ($this->isSpecialProject) {
-            $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $value))->get();
-            $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
-        } else {
-            $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $value))->get();
-            $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
-        }
+        $this->teams = Team::whereHas('serviceDepartment', fn ($team) => $team->where('service_department_id', $value))->get();
+        $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 
-    public function updatedAmount($value)
-    {
-        if ($value) {
-            $this->dispatchBrowserEvent('show-select-costing-approver');
-        } else {
-            $this->dispatchBrowserEvent('hide-select-costing-approver');
-        }
-    }
 
     public function showSpecialProjectContainer()
     {
@@ -160,32 +202,115 @@ class CreateHelpTopic extends Component
         $this->resetValidation();
     }
 
-    public function cancel()
+
+    public function saveConfiguration()
     {
-        $this->reset();
-        $this->resetValidation();
-        $this->dispatchBrowserEvent('close-modal');
-        $this->hideSpecialProjectContainer();
+        $approvers = [
+            'level1' => $this->level1Approvers,
+            'level2' => $this->level2Approvers,
+            'level3' => $this->level3Approvers,
+            'level4' => $this->level4Approvers,
+            'level5' => $this->level5Approvers,
+        ];
+
+        $approversCount = array_sum(array_map('count', $approvers));
+
+        // Get the selected BU Department name
+        $buDepartmentName = collect($this->buDepartments)->firstWhere('id', $this->selectedBuDepartment)['name'];
+
+        // Add to the configurations array
+        $this->configurations[] = [
+            'bu_department_id' => $this->selectedBuDepartment,
+            'bu_department_name' => $buDepartmentName,
+            'approvers_count' => $approversCount,
+            'approvers' => $approvers,
+        ];
+
+        $this->resetApprovalConfigFields();
     }
 
-    // public function updatedLevel1Approvers($value)
-    // {
-    //     dump($value);
-    // }
+    private function resetApprovalConfigFields()
+    {
+        $this->selectedBuDepartment = null;
+        $this->approvalLevelSelected = false;
+        $this->level1Approvers = [];
+        $this->level2Approvers = [];
+        $this->level3Approvers = [];
+        $this->level4Approvers = [];
+        $this->level5Approvers = [];
+        $this->dispatchBrowserEvent('reset-select-fields');
+    }
 
-    // public function updatedLevel2Approvers()
-    // {
-    //     $this->levelApprovers = User::with(['profile', 'roles'])->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
-    //         ->whereNotIn('id', array_merge($value, $this->level2Approvers, $this->level3Approvers, $this->level4Approvers, $this->level5Approvers))
-    //         ->orderByDesc('created_at')->get();
+    public function removeConfiguration($index)
+    {
+        array_splice($this->configurations, $index, 1);
+    }
 
-    //     $this->dispatchBrowserEvent('remaining-approvers-from-level2', ['levelApprovers' => $this->levelApprovers]);
-    // }
 
     public function updatedApprovalLevelSelected()
     {
-        $this->levelApprovers = User::with(['profile', 'roles'])->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])->orderByDesc('created_at')->get();
-        $this->dispatchBrowserEvent('load-initial-approvers', ['levelApprovers' => $this->levelApprovers]);
+        $this->getFilteredApprovers(1);
+    }
+
+    public function updatedLevel1Approvers()
+    {
+        $this->getFilteredApprovers(2);
+    }
+
+    public function updatedLevel2Approvers()
+    {
+        $this->getFilteredApprovers(3);
+    }
+
+    public function updatedLevel3Approvers()
+    {
+        $this->getFilteredApprovers(4);
+    }
+
+    public function updatedLevel4Approvers()
+    {
+        $this->getFilteredApprovers(5);
+    }
+    public function updatedBuDepartment($value)
+    {
+        $this->getFilteredApprovers($value);
+    }
+
+    public function getFilteredApprovers($level)
+    {
+        $selectedApprovers = array_merge(
+            (array)$this->level1Approvers,
+            (array)$this->level2Approvers,
+            (array)$this->level3Approvers,
+            (array)$this->level4Approvers,
+            (array)$this->level5Approvers
+        );
+
+        $filteredApprovers = User::with(['profile', 'roles'])
+            ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
+            ->whereNotIn('id', $selectedApprovers)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $this->dispatchBrowserEvent('load-approvers', ['approvers' => $filteredApprovers, 'level' => $level]);
+    }
+
+
+    public function fetchCostingApprovers()
+    {
+        $users = User::with(['profile', 'roles'])
+            ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
+            ->get();
+
+        $this->costingApproversList = $users->map(function ($user) {
+            return [
+                'label' => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'value' => $user->id,
+                'description' => $user->roles->pluck('name')->join(', ')
+            ];
+        })->toArray();
+
+        $this->finalCostingApproversList = $this->costingApproversList;
     }
 
     public function render()
@@ -194,6 +319,9 @@ class CreateHelpTopic extends Component
             'serviceLevelAgreements' => $this->queryServiceLevelAgreements(),
             'serviceDepartments' => $this->queryServiceDepartments(),
             'buDepartments' => $this->queryBUDepartments(),
+            'configurations' => $this->configurations,
+            'costingApproversList' => $this->costingApproversList,
+            'finalCostingApproversList' => $this->finalCostingApproversList,
         ]);
     }
 }
