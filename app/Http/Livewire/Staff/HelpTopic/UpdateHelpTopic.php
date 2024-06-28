@@ -38,7 +38,7 @@ class UpdateHelpTopic extends Component
         $this->service_department = $helpTopic->service_department_id;
         $this->team = $helpTopic->team_id;
         $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
-        $this->teams = Team::whereHas('serviceDepartment', fn ($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get(['id', 'name']);
+        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get(['id', 'name']);
         $this->isSpecialProject = $helpTopic->specialProject ? true : false;
     }
 
@@ -88,7 +88,7 @@ class UpdateHelpTopic extends Component
 
     public function updatedServiceDepartment()
     {
-        $this->teams = Team::whereHas('serviceDepartment', fn ($team) => $team->where('service_department_id', $this->service_department))->get(['id', 'name']);
+        $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->service_department))->get(['id', 'name']);
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 

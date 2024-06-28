@@ -11,10 +11,11 @@ class Form extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['help_topic_id', 'visible_to', 'name'];
+    protected $fillable = ['help_topic_id', 'visible_to', 'editable_to', 'name'];
 
     protected $casts = [
-        'visible_to' => 'array'
+        'visible_to' => 'array',
+        'editable_to' => 'array'
     ];
 
     public function helpTopic(): BelongsTo

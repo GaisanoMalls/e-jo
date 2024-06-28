@@ -10,6 +10,7 @@ use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\ApproverLevel;
 use App\Models\Branch;
+use App\Models\Field;
 use App\Models\Form;
 use App\Models\HelpTopic;
 use App\Models\Level;
@@ -22,6 +23,7 @@ use App\Models\TicketApproval;
 use App\Models\TicketTeam;
 use App\Notifications\AppNotification;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\DB;
@@ -48,7 +50,14 @@ class CreateTicket extends Component
     public $helpTopic;
     public $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
     public $isHelpTopicHasForms; // bool
-    public $isClearedHelTopicSelect = false;
+
+    // Help topic form
+    public Form $form;
+    public $formId;
+    public $formName;
+    public $formFields = [];
+    public $filledForms = []; // Insert the filled forms here.
+    public $filledFormIds = []; // Insert the filled form ids
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
@@ -212,6 +221,7 @@ class CreateTicket extends Component
     {
         $this->helpTopics = HelpTopic::with(['team', 'sla'])->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->serviceDepartment))->get();
         $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);
+        $this->helpTopicForms = []; // Clear help topic forms
     }
 
     public function updatedHelpTopic($value)
@@ -221,7 +231,6 @@ class CreateTicket extends Component
 
         $helpTopicForms = Form::with('fields')->where('help_topic_id', $value)->get();
 
-        dump($this->isClearedHelTopicSelect);
         if ($helpTopicForms->isNotEmpty()) {
             $this->description = null;
             $this->isHelpTopicHasForms = true;
@@ -232,6 +241,38 @@ class CreateTicket extends Component
             $this->reset('helpTopicForms');
             $this->dispatchBrowserEvent('hide-ticket-description-container');
         }
+    }
+
+    public function viewHelpTopicForm(Form $form)
+    {
+        $this->form = $form;
+        $this->formId = $form->id;
+        $this->formName = $form->name;
+
+        $this->formFields = $form->fields->map(function ($field) {
+            return [
+                'id' => $field->id,
+                'name' => $field->name,
+                'label' => $field->label,
+                'type' => $field->type,
+                'variable_name' => $field->variable_name,
+                'is_required' => $field->is_required,
+                'is_enabled' => $field->is_enabled,
+                'value' => null, // To store the value of the given inputs
+                'form' => $this->form->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
+            ];
+        })->toArray();
+    }
+
+    public function saveHelpTopicForm()
+    {
+        array_push($this->filledForms, ['field' => $this->formFields]);
+
+        foreach ($this->formFields as $field) {
+            $this->filledFormIds[] = $field['form']['id']; // Get the form ids and insert them into the list
+        }
+        $this->filledFormIds = array_unique($this->filledFormIds); // Remove the duplicate ids and returns a new array of id without duplicate values
+        $this->dispatchBrowserEvent('close-help-topic-form-fields');
     }
 
     public function cancel()
