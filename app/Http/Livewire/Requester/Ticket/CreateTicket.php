@@ -39,7 +39,6 @@ class CreateTicket extends Component
     public $upload = 0;
     public $fileAttachments = [];
     public $helpTopics = [];
-    public $helpTopicForms = [];
     public $subject;
     public $description;
     public $branch;
@@ -49,15 +48,15 @@ class CreateTicket extends Component
     public $serviceDepartment;
     public $helpTopic;
     public $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
-    public $isHelpTopicHasForms; // bool
 
     // Help topic form
-    public Form $form;
+    public ?Form $helpTopicForm;
     public $formId;
     public $formName;
     public $formFields = [];
     public $filledForms = []; // Insert the filled forms here.
     public $filledFormIds = []; // Insert the filled form ids
+    public $isHelpTopicHasForm = false;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
@@ -106,6 +105,14 @@ class CreateTicket extends Component
 
     public function sendTicket()
     {
+        if ($this->isHelpTopicHasForm) {
+            array_push($this->filledForms, ['field' => $this->formFields]);
+            foreach ($this->formFields as $field) {
+                $this->filledFormIds[] = $field['form']['id']; // Get the form ids and insert them into the list
+            }
+            dump($this->filledForms);
+            $this->filledFormIds = array_unique($this->filledFormIds); // Remove the duplicate ids and returns a new array of id without duplicate values
+        }
         $this->validate();
 
         try {
@@ -198,6 +205,15 @@ class CreateTicket extends Component
                     });
                 }
 
+                // if ($this->isHelpTopicHasForm) {
+                //     array_push($this->filledForms, ['field' => $this->formFields]);
+                //     foreach ($this->formFields as $field) {
+                //         $this->filledFormIds[] = $field['form']['id']; // Get the form ids and insert them into the list
+                //     }
+                //     dump($this->filledForms);
+                //     $this->filledFormIds = array_unique($this->filledFormIds); // Remove the duplicate ids and returns a new array of id without duplicate values
+                // }
+
                 ActivityLog::make($ticket->id, 'created a ticket');
                 $this->actionOnSubmit();
                 noty()->addSuccess('Ticket successfully created.');
@@ -221,58 +237,40 @@ class CreateTicket extends Component
     {
         $this->helpTopics = HelpTopic::with(['team', 'sla'])->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->serviceDepartment))->get();
         $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);
-        $this->helpTopicForms = []; // Clear help topic forms
     }
 
     public function updatedHelpTopic($value)
     {
         $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
         $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
+        $helpTopicForm = Form::with('fields')->where('help_topic_id', $value)->first(); // Get the help topic form
 
-        $helpTopicForms = Form::with('fields')->where('help_topic_id', $value)->get();
+        if ($helpTopicForm) {
+            $this->isHelpTopicHasForm = true;
+            $this->helpTopicForm = $helpTopicForm;
+            $this->formId = $helpTopicForm->id;
+            $this->formName = $helpTopicForm->name;
+            $this->formFields = $helpTopicForm->fields->map(function ($field) {
+                return [
+                    'id' => $field->id,
+                    'name' => $field->name,
+                    'label' => $field->label,
+                    'type' => $field->type,
+                    'variable_name' => $field->variable_name,
+                    'is_required' => $field->is_required,
+                    'is_enabled' => $field->is_enabled,
+                    'value' => null, // To store the value of the given inputs
+                    'form' => $this->helpTopicForm->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
+                ];
+            })->toArray();
 
-        if ($helpTopicForms->isNotEmpty()) {
-            $this->description = null;
-            $this->isHelpTopicHasForms = true;
-            $this->helpTopicForms = $helpTopicForms;
-            $this->dispatchBrowserEvent('show-help-topic-forms', ['helpTopicForms' => $helpTopicForms]);
+            $this->description = null; // Not necessary when using custom form.
+            $this->helpTopicForm = $helpTopicForm; // Assign the helpTopicForm property of the selected help topic form.
+            $this->dispatchBrowserEvent('show-help-topic-forms');
         } else {
-            $this->isHelpTopicHasForms = false;
-            $this->reset('helpTopicForms');
+            $this->isHelpTopicHasForm = false;
             $this->dispatchBrowserEvent('hide-ticket-description-container');
         }
-    }
-
-    public function viewHelpTopicForm(Form $form)
-    {
-        $this->form = $form;
-        $this->formId = $form->id;
-        $this->formName = $form->name;
-
-        $this->formFields = $form->fields->map(function ($field) {
-            return [
-                'id' => $field->id,
-                'name' => $field->name,
-                'label' => $field->label,
-                'type' => $field->type,
-                'variable_name' => $field->variable_name,
-                'is_required' => $field->is_required,
-                'is_enabled' => $field->is_enabled,
-                'value' => null, // To store the value of the given inputs
-                'form' => $this->form->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
-            ];
-        })->toArray();
-    }
-
-    public function saveHelpTopicForm()
-    {
-        array_push($this->filledForms, ['field' => $this->formFields]);
-
-        foreach ($this->formFields as $field) {
-            $this->filledFormIds[] = $field['form']['id']; // Get the form ids and insert them into the list
-        }
-        $this->filledFormIds = array_unique($this->filledFormIds); // Remove the duplicate ids and returns a new array of id without duplicate values
-        $this->dispatchBrowserEvent('close-help-topic-form-fields');
     }
 
     public function cancel()

@@ -37,6 +37,7 @@ class StoreTicketRequest extends FormRequest
                 File::types(['jpeg,jpg,png,pdf,doc,docx,xlsx,xls,csv,txt'])
                     ->max(25600) //25600 (25 MB)
             ],
+            'helpTopicForm' => ''
         ];
     }
 
