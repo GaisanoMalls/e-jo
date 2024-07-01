@@ -13,7 +13,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('filled_ticket_forms', function (Blueprint $table) {
+        Schema::create('ticket_custom_forms', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
             $table->json('custom_form');
@@ -28,6 +28,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('filled_ticket_forms');
+        Schema::dropIfExists('ticket_custom_forms');
     }
 };

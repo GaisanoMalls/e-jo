@@ -144,13 +144,15 @@ class CreateHelpTopic extends Component
                     }
                 }
 
-                // Save costing data
-                HelpTopicCosting::create([
-                    'help_topic_id' => $helpTopic->id,
-                    'costing_approvers' => $this->costingApprovers,
-                    'amount' => $this->amount,
-                    'final_costing_approvers' => $this->finalCostingApprovers,
-                ]);
+                if ($this->isSpecialProject) {
+                    // Save costing data
+                    HelpTopicCosting::create([
+                        'help_topic_id' => $helpTopic->id,
+                        'costing_approvers' => $this->costingApprovers,
+                        'amount' => $this->amount,
+                        'final_costing_approvers' => $this->finalCostingApprovers,
+                    ]);
+                }
 
                 // Create SpecialProject if it's a special project
                 if ($this->isSpecialProject) {
@@ -294,7 +296,6 @@ class CreateHelpTopic extends Component
 
         $this->dispatchBrowserEvent('load-approvers', ['approvers' => $filteredApprovers, 'level' => $level]);
     }
-
 
     public function fetchCostingApprovers()
     {

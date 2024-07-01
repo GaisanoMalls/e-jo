@@ -55,7 +55,6 @@ class CreateTicket extends Component
     public $formName;
     public $formFields = [];
     public $filledForms = []; // Insert the filled forms here.
-    public $filledFormIds = []; // Insert the filled form ids
     public $isHelpTopicHasForm = false;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
@@ -106,13 +105,9 @@ class CreateTicket extends Component
     public function sendTicket()
     {
         if ($this->isHelpTopicHasForm) {
-            array_push($this->filledForms, ['field' => $this->formFields]);
-            foreach ($this->formFields as $field) {
-                $this->filledFormIds[] = $field['form']['id']; // Get the form ids and insert them into the list
-            }
-            $this->filledFormIds = array_unique($this->filledFormIds); // Remove the duplicate ids and returns a new array of id without duplicate values
+            array_push($this->filledForms, $this->formFields);
         }
-        dump($this->formFields);
+        dump($this->filledForms);
         $this->validate();
 
         try {
@@ -197,7 +192,7 @@ class CreateTicket extends Component
                             $serviceDepartmentAdmin->approver,
                             new AppNotification(
                                 ticket: $ticket,
-                                title: "New ticket created {$ticket->ticket_number}",
+                                title: "New Ticket {$ticket->ticket_number}",
                                 message: "{$ticket->user->profile->getFullName()} created a ticket"
                             )
                         );
@@ -205,14 +200,9 @@ class CreateTicket extends Component
                     });
                 }
 
-                // if ($this->isHelpTopicHasForm) {
-                //     array_push($this->filledForms, ['field' => $this->formFields]);
-                //     foreach ($this->formFields as $field) {
-                //         $this->filledFormIds[] = $field['form']['id']; // Get the form ids and insert them into the list
-                //     }
-                //     dump($this->filledForms);
-                //     $this->filledFormIds = array_unique($this->filledFormIds); // Remove the duplicate ids and returns a new array of id without duplicate values
-                // } 
+                if ($this->isHelpTopicHasForm) {
+                    array_push($this->filledForms, $this->formFields);
+                }
 
                 ActivityLog::make($ticket->id, 'created a ticket');
                 $this->actionOnSubmit();

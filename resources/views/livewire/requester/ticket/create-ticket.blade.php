@@ -13,7 +13,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-check mt-2 mb-4">
-                                    <input class="form-check-input" type="checkbox" id="checkOtherBranch">
+                                    <input class="form-check-input" type="checkbox" id="check-other-branch">
                                     <label class="form-check-label labelCheckOtherBranch" for="checkOtherBranch">
                                         This ticket is intended to other branch
                                     </label>
@@ -28,14 +28,14 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="col-12" id="branchSelectContainer" wire:ignore.self>
+                            <div class="col-12" id="branch-select-container" wire:ignore.self>
                                 <div class="col-lg-6 col-md-12">
                                     <div wire:ignore.self class="mb-3">
                                         <label class="form-label input__field__label">
                                             To which branch will this ticket be sent?
                                         </label>
                                         <div>
-                                            <div id="userCreateTicketBranchesDropdown" wire:ignore></div>
+                                            <div id="user-create-ticket-branches-dropdown" wire:ignore></div>
                                         </div>
                                         @error('branch')
                                             <span class="error__message">
@@ -50,7 +50,7 @@
                                 <div class="mb-3">
                                     <label class="form-label input__field__label">Service Department</label>
                                     <div>
-                                        <div id="userCreateTicketServiceDepartmentDropdown" wire:ignore></div>
+                                        <div id="user-create-ticket-service-department-dropdown" wire:ignore></div>
                                     </div>
                                     @error('serviceDepartment')
                                         <span class="error__message">
@@ -71,7 +71,7 @@
                                         @endif
                                     </label>
                                     <div>
-                                        <div id="userCreateTicketHelpTopicDropdown" wire:ignore></div>
+                                        <div id="user-create-ticket-help-topic-dropdown" wire:ignore></div>
                                     </div>
                                     @error('helpTopic')
                                         <span class="error__message">
@@ -332,7 +332,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <span class="error__message" id="excludeEXEfileMessage"></span>
+                                    <span class="error__message" id="exclude-exe-file-message"></span>
                                     @error('fileAttachments.*')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
@@ -385,7 +385,7 @@
             value: serviceDepartment.id
         }));
 
-        const serviceDepartmentSelect = document.querySelector('#userCreateTicketServiceDepartmentDropdown');
+        const serviceDepartmentSelect = document.querySelector('#user-create-ticket-service-department-dropdown');
         VirtualSelect.init({
             ele: serviceDepartmentSelect,
             options: serviceDepartmentOption,
@@ -393,7 +393,7 @@
             markSearchResults: true,
         });
 
-        const helpTopicSelect = document.querySelector('#userCreateTicketHelpTopicDropdown');
+        const helpTopicSelect = document.querySelector('#user-create-ticket-help-topic-dropdown');
         VirtualSelect.init({
             ele: helpTopicSelect,
             search: true,
@@ -442,7 +442,6 @@
             @this.set('helpTopicForm', null);
             @this.set('formFields', []);
             @this.set('filledForms', []);
-            @this.set('filledFormIds', []);
         });
 
         const ticketDescriptionContainer = document.querySelector('#ticket-description-container');
@@ -463,14 +462,14 @@
             ticketDescriptionContainer.style.display = 'block';
         });
 
-        const branchSelect = document.querySelector('#userCreateTicketBranchesDropdown');
+        const branchSelect = document.querySelector('#user-create-ticket-branches-dropdown');
         const branchOption = @json($branches).map(branch => ({
             label: branch.name,
             value: branch.id
         }));
 
         VirtualSelect.init({
-            ele: '#userCreateTicketBranchesDropdown',
+            ele: branchSelect,
             options: branchOption,
             search: true,
             markSearchResults: true,
@@ -480,8 +479,8 @@
             @this.set('branch', parseInt(branchSelect.value));
         });
 
-        const selectOtherBranch = document.querySelector('#checkOtherBranch');
-        const branchSelectContainer = document.querySelector('#branchSelectContainer');
+        const selectOtherBranch = document.querySelector('#check-other-branch');
+        const branchSelectContainer = document.querySelector('#branch-select-container');
         branchSelect.disable();
         branchSelectContainer.style.display = 'none';
 
@@ -522,7 +521,7 @@
 
         // Validate file
         function validateFile() {
-            const excludeEXEfileMessage = document.querySelector('#excludeEXEfileMessage');
+            const excludeEXEfileMessage = document.querySelector('#exclude-exe-file-message');
             const fileInput = document.querySelector(`#upload-{{ $upload }}`);
 
             excludeEXEfileMessage.style.display = "none";
