@@ -110,9 +110,9 @@ class CreateTicket extends Component
             foreach ($this->formFields as $field) {
                 $this->filledFormIds[] = $field['form']['id']; // Get the form ids and insert them into the list
             }
-            dump($this->filledForms);
             $this->filledFormIds = array_unique($this->filledFormIds); // Remove the duplicate ids and returns a new array of id without duplicate values
         }
+        dump($this->formFields);
         $this->validate();
 
         try {
@@ -212,7 +212,7 @@ class CreateTicket extends Component
                 //     }
                 //     dump($this->filledForms);
                 //     $this->filledFormIds = array_unique($this->filledFormIds); // Remove the duplicate ids and returns a new array of id without duplicate values
-                // }
+                // } 
 
                 ActivityLog::make($ticket->id, 'created a ticket');
                 $this->actionOnSubmit();

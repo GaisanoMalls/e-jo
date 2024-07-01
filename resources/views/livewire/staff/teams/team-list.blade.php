@@ -288,7 +288,7 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div class="ps-4 pe-0 pt-4 border-start border-bottom position-relative"
+                            <div wire:ignore class="ps-4 pe-0 pt-4 border-start border-bottom position-relative"
                                 style="height: 76px; width: 88%; margin-bottom: 1.7rem; margin-left: 40px; margin-top: -8px; border-bottom-left-radius: 10px;"
                                 id="editSelectServiceDeptChildrenContainer">
                                 <div class="d-flex align-items-center justify-content-between gap-2">

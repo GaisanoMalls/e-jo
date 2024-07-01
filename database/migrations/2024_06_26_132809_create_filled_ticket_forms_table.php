@@ -16,7 +16,7 @@ return new class extends Migration {
         Schema::create('filled_ticket_forms', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
-            $table->json('helpTopicForm');
+            $table->json('custom_form');
             $table->timestamps();
         });
     }

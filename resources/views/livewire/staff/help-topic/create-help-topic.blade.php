@@ -198,14 +198,15 @@
                                         <div class="d-flex position-relative amount__field__container">
                                             <span class="currency text-muted position-absolute mt-2">₱</span>
                                             <input type="text" wire:model="amount"
-                                                class="form-control form__field max_total_cost" id="amount"
+                                                class="form-control form__field amount__field" id="amount"
                                                 placeholder="Enter Total Cost">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4" id="costing-approver-container">
                                     <div class="mb-3">
-                                        <label class="finalCostingApprover">Final Cost Approver</label>
+                                        <label class="finalCostingApprover form-label form__field__label">Final Cost
+                                            Approver</label>
                                         <div>
                                             <div id="select-help-topic-final-costing-approver" wire:ignore></div>
                                         </div>

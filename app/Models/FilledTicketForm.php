@@ -10,7 +10,7 @@ class FilledTicketForm extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['ticket_id', 'helpTopicForm'];
+    protected $fillable = ['ticket_id', 'custom_form'];
 
     public function ticket()
     {
@@ -18,6 +18,6 @@ class FilledTicketForm extends Model
     }
 
     protected $casts = [
-        'helpTopicForm' => AsArrayObject::class,
+        'custom_form' => AsArrayObject::class,
     ];
 }

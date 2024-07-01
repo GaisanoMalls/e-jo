@@ -10730,14 +10730,6 @@ input[type=checkbox]:checked + .form-check-label {
   box-shadow: none;
   border-color: #d32839;
 }
-.help__topics__section .help__topic__modal .modal__content .amount__field__container .currency {
-  left: 17px;
-  top: 8px;
-  font-size: 20px;
-}
-.help__topics__section .help__topic__modal .modal__content .amount__field__container .amount__field {
-  padding-left: 40px !important;
-}
 .help__topics__section .help__topic__details__card {
   border: none;
   border-radius: 0.625rem;
@@ -10837,6 +10829,27 @@ input[type=checkbox]:checked + .form-check-label {
 }
 .help__topics__section .form__fields__container:hover .field__container {
   display: flex !important;
+}
+.help__topics__section .form__field {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 0.563rem;
+  border: 1px solid #e7e9eb;
+}
+.help__topics__section .form__field:focus {
+  box-shadow: none;
+  border-color: #d32839;
+}
+.help__topics__section .form__field__label {
+  font-size: 0.875rem !important;
+}
+.help__topics__section .amount__field__container .currency {
+  left: 17px;
+  top: 0px;
+  font-size: 20px;
+}
+.help__topics__section .amount__field__container .amount__field {
+  padding-left: 40px !important;
 }
 
 .sla__section .table__header {
