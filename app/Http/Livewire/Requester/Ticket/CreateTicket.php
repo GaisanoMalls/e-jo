@@ -106,8 +106,15 @@ class CreateTicket extends Component
     {
         if ($this->isHelpTopicHasForm) {
             array_push($this->filledForms, $this->formFields);
+
+            foreach ($this->filledForms as $fields) {
+                foreach ($fields as $field) {
+                    if ($field['type'] === 'file') {
+                        dump($field['value']);
+                    }
+                }
+            }
         }
-        dump($this->filledForms);
         $this->validate();
 
         try {
@@ -202,6 +209,7 @@ class CreateTicket extends Component
 
                 if ($this->isHelpTopicHasForm) {
                     array_push($this->filledForms, $this->formFields);
+                    // Iterate thee filledForms
                 }
 
                 ActivityLog::make($ticket->id, 'created a ticket');
