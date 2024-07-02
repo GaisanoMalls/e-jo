@@ -30,7 +30,7 @@ class StoreTicketRequest extends FormRequest
             'team' => ['nullable'],
             'sla' => ['required'],
             'subject' => ['required'],
-            'description' => ['required'],
+            'description' => ['nullable'],
             'priorityLevel' => ['required'],
             'fileAttachments.*' => [
                 'nullable',

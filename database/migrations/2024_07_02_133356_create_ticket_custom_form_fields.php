@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Form;
 use App\Models\Ticket;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,10 +14,17 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('ticket_custom_forms', function (Blueprint $table) {
+        Schema::create('ticket_custom_form_fields', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
-            $table->json('custom_form');
+            $table->foreignIdFor(Form::class, 'form_id')->constrained('forms')->cascadeOnDelete();
+            $table->string('value')->nullable();
+            $table->string('name');
+            $table->string('label');
+            $table->string('type');
+            $table->string('variable_name');
+            $table->boolean('is_required')->default(false);
+            $table->boolean('is_enabled')->default(false);
             $table->timestamps();
         });
     }
@@ -28,6 +36,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('ticket_custom_forms');
+        Schema::dropIfExists('ticket_custom_form_fields');
     }
 };

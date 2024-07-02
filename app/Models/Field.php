@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\FieldRequiredOptionEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Field extends Model
 {
@@ -25,17 +27,17 @@ class Field extends Model
         'is_enabled' => 'bool'
     ];
 
-    public function form()
+    public function form(): BelongsTo
     {
         return $this->belongsTo(Form::class);
     }
 
-    public function helpTopics()
+    public function helpTopics(): BelongsToMany
     {
         return $this->belongsToMany(HelpTopic::class, 'help_topic_field');
     }
 
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->is_enabled;
     }

@@ -19,17 +19,17 @@ class Role extends Model
     const AGENT = 'Agent';
     const USER = 'User';
 
-    public static function staffsOnly()
+    public static function staffsOnly(): string
     {
         return 'role:' . self::SYSTEM_ADMIN . "|" . self::SERVICE_DEPARTMENT_ADMIN . "|" . self::AGENT;
     }
 
-    public static function approversOnly()
+    public static function approversOnly(): string
     {
         return 'role:' . self::APPROVER;
     }
 
-    public static function requestersOnly()
+    public static function requestersOnly(): string
     {
         return 'role:' . self::USER;
     }

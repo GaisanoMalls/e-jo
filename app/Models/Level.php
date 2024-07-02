@@ -6,6 +6,7 @@ use App\Models\HelpTopic;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Level extends Model
 {
@@ -13,17 +14,17 @@ class Level extends Model
 
     protected $fillable = ['value', 'description'];
 
-    public function approvers()
+    public function approvers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'approver_level');
     }
 
-    public function helpTopics()
+    public function helpTopics(): BelongsToMany
     {
         return $this->belongsToMany(HelpTopic::class);
     }
 
-    public function getLevelDescription()
+    public function getLevelDescription(): string
     {
         return $this->pluck('description')->implode(', ');
     }

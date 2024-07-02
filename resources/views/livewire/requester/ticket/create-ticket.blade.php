@@ -14,7 +14,7 @@
                             <div class="col-12">
                                 <div class="form-check mt-2 mb-4">
                                     <input class="form-check-input" type="checkbox" id="check-other-branch">
-                                    <label class="form-check-label labelCheckOtherBranch" for="checkOtherBranch">
+                                    <label class="form-check-label labelCheckOtherBranch" for="check-other-branch">
                                         This ticket is intended to other branch
                                     </label>
                                     <br>
@@ -248,17 +248,50 @@
 
                                                 {{-- file upload field --}}
                                                 @if ($field['type'] === FieldType::FILE->value)
-                                                    <div class="col-md-6 mb-3">
+                                                    <div class="col-md-4 mb-3">
                                                         <label for="field-{{ $key }}"
                                                             class="form-label input__field__label">
                                                             {{ Str::title($field['label']) }}
                                                         </label>
-                                                        <input wire:model="formFields.{{ $key }}.value"
-                                                            id="field-{{ $key }}" type="file"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($field['label']) }}"
-                                                            multiple>
-                                                        </input>
+                                                        <div x-data="{ isUploadingCustomFormFile: false, progress: 1 }"
+                                                            x-on:livewire-upload-start="isUploadingCustomFormFile = true; progress = 1"
+                                                            x-on:livewire-upload-finish="isUploadingCustomFormFile = false"
+                                                            x-on:livewire-upload-error="isUploadingCustomFormFile = false"
+                                                            x-on:livewire-upload-progress="progress = $event.detail.progress">
+                                                            <input wire:model="formFields.{{ $key }}.value"
+                                                                id="field-{{ $key }}" type="file"
+                                                                class="form-control form-control-sm border-0 ticket__file"
+                                                                placeholder="Enter {{ Str::lower($field['label']) }}"
+                                                                accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
+                                                                multiple>
+                                                            </input>
+                                                            <div x-transition.duration.500ms
+                                                                x-show="isUploadingCustomFormFile"
+                                                                class="progress progress-sm mt-1"
+                                                                style="height: 10px;">
+                                                                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                                    role="progressbar"
+                                                                    aria-label="Animated striped example"
+                                                                    aria-valuenow="75" aria-valuemin="0"
+                                                                    aria-valuemax="100"
+                                                                    x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex align-items-center justify-content-between"
+                                                                x-transition.duration.500ms>
+                                                                <span x-show="isUploadingCustomFormFile"
+                                                                    x-text="progress + '%'" style="font-size: 12px;">
+                                                                </span>
+                                                                <span class="d-flex align-items-center gap-1"
+                                                                    style="font-size: 12px;">
+                                                                    <i x-show="isUploadingCustomFormFile"
+                                                                        class='bx bx-loader-circle bx-spin'
+                                                                        style="font-size: 14px;"></i>
+                                                                    <span
+                                                                        x-show="isUploadingCustomFormFile">Uploading...</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
                                                         @error('formFields.{{ $key }}.value')
                                                             <span class="error__message">
                                                                 <i class="fa-solid fa-triangle-exclamation"></i>

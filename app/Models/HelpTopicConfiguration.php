@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HelpTopicConfiguration extends Model
 {
@@ -16,12 +18,12 @@ class HelpTopicConfiguration extends Model
         'approvers_count',
     ];
 
-    public function approvers()
+    public function approvers(): HasMany
     {
         return $this->hasMany(HelpTopicApprover::class, 'help_topic_configuration_id');
     }
 
-    public function helpTopic()
+    public function helpTopic(): BelongsTo
     {
         return $this->belongsTo(HelpTopic::class);
     }

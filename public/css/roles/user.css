@@ -8505,17 +8505,17 @@ body {
 .create__ticket__modal .modal__content .modal__body .input__field:focus {
   box-shadow: none;
 }
-.create__ticket__modal .modal__content .modal__body #checkOtherBranch {
+.create__ticket__modal .modal__content .modal__body #check-other-branch {
   height: 16px;
   width: 16px;
   border: 2px solid #CED4DA;
   box-shadow: none !important;
 }
-.create__ticket__modal .modal__content .modal__body #checkOtherBranch:checked {
+.create__ticket__modal .modal__content .modal__body #check-other-branch:checked {
   background-color: #D32839;
   border-color: #D32839;
 }
-.create__ticket__modal .modal__content .modal__body #checkOtherBranch:checked + .labelCheckOtherBranch {
+.create__ticket__modal .modal__content .modal__body #check-other-branch:checked + .labelCheckOtherBranch {
   color: #d32839;
   font-weight: 600;
 }

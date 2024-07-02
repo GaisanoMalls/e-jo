@@ -44,7 +44,7 @@ class ServiceDepartment extends Model
         return $this->hasMany(HelpTopic::class);
     }
 
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany(ServiceDepartmentChildren::class);
     }
@@ -64,7 +64,7 @@ class ServiceDepartment extends Model
         return $this->updatedAt($this->created_at, $this->updated_at);
     }
 
-    public function getChildren()
+    public function getChildren(): string
     {
         $childrenNames = [];
 
@@ -72,7 +72,7 @@ class ServiceDepartment extends Model
             $childrenNames[] = $child->name;
         }
 
-        if (!empty ($childrenNames)) {
+        if (!empty($childrenNames)) {
             return implode(', ', $childrenNames);
         }
 

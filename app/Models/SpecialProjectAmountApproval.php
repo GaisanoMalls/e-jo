@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SpecialProjectAmountApproval extends Model
 {
@@ -25,17 +27,17 @@ class SpecialProjectAmountApproval extends Model
         'fpm_coo_approver' => AsArrayObject::class,
     ];
 
-    public function ticket()
+    public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);
     }
 
-    public function approvedCostings()
+    public function approvedCostings(): HasMany
     {
         return $this->hasMany(ApprovedCosting::class);
     }
 
-    public function disapprovedCostings()
+    public function disapprovedCostings(): HasMany
     {
         return $this->hasMany(DisapprovedCosting::class);
     }

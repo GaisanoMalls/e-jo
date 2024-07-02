@@ -20,10 +20,10 @@ use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
+use App\Models\TicketCustomFormField;
 use App\Models\TicketTeam;
 use App\Notifications\AppNotification;
 use Exception;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +50,7 @@ class CreateTicket extends Component
     public $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
 
     // Help topic form
-    public ?Form $helpTopicForm;
+    public $helpTopicForm;
     public $formId;
     public $formName;
     public $formFields = [];
@@ -104,17 +104,6 @@ class CreateTicket extends Component
 
     public function sendTicket()
     {
-        if ($this->isHelpTopicHasForm) {
-            array_push($this->filledForms, $this->formFields);
-
-            foreach ($this->filledForms as $fields) {
-                foreach ($fields as $field) {
-                    if ($field['type'] === 'file') {
-                        dump($field['value']);
-                    }
-                }
-            }
-        }
         $this->validate();
 
         try {
@@ -129,7 +118,7 @@ class CreateTicket extends Component
                     'service_level_agreement_id' => $this->sla,
                     'ticket_number' => $this->generatedTicketNumber(),
                     'subject' => $this->subject,
-                    'description' => $this->description,
+                    'description' => $this->description ?? null,
                     'approval_status' => ApprovalStatusEnum::FOR_APPROVAL,
                 ]);
 
@@ -209,7 +198,29 @@ class CreateTicket extends Component
 
                 if ($this->isHelpTopicHasForm) {
                     array_push($this->filledForms, $this->formFields);
-                    // Iterate thee filledForms
+
+                    foreach ($this->filledForms as $fields) {
+                        foreach ($fields as $field) {
+                            $ticketCustomFormField = TicketCustomFormField::create([
+                                'ticket_id' => $ticket->id,
+                                'form_id' => $field['form']['id'],
+                                'value' => $field['type'] !== 'file' ? $field['value'] : '',
+                                'name' => $field['name'],
+                                'label' => $field['label'],
+                                'type' => $field['type'],
+                                'variable_name' => $field['variable_name'],
+                                'is_required' => $field['is_required'],
+                            ]);
+
+                            if ($field['type'] === 'file') {
+                                foreach ($field['value'] as $uploadedCustomFile) {
+                                    $fileName = $uploadedCustomFile->getClientOriginalName();
+                                    $customFileAttachment = Storage::putFileAs("public/tiket/$ticket->ticket_number/custom_form_file", $uploadedCustomFile, $fileName);
+                                    $ticketCustomFormField->ticketCustomFormFiles()->create(['file_attachment' => $customFileAttachment]);
+                                }
+                            }
+                        }
+                    }
                 }
 
                 ActivityLog::make($ticket->id, 'created a ticket');

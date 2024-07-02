@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TicketTeam extends Model
 {
@@ -13,12 +14,12 @@ class TicketTeam extends Model
 
     protected $fillable = ['ticket_id', 'team_id'];
 
-    public function ticket()
+    public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);
     }
 
-    public function team_id()
+    public function team_id(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }

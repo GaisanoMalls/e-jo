@@ -139,9 +139,9 @@ class Ticket extends Model
         return $this->hasMany(TicketApproval::class);
     }
 
-    public function filledTicketForms()
+    public function customFormField()
     {
-        return $this->hasMany(FilledTicketForm::class);
+        return $this->hasMany(TicketCustomFormField::class);
     }
 
     public function tags(): BelongsToMany
@@ -174,7 +174,7 @@ class Ticket extends Model
         return '';
     }
 
-    public function isSpecialProject()
+    public function isSpecialProject(): bool
     {
         return !is_null($this->helpTopic->specialProject);
     }
