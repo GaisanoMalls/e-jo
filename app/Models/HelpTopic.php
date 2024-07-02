@@ -62,6 +62,15 @@ class HelpTopic extends Model
         return $this->hasMany(Ticket::class);
     }
 
+    public function costing()
+    {
+        return $this->hasOne(HelpTopicCosting::class);
+    }
+
+    public function configurations(): HasMany
+    {
+        return $this->hasMany(HelpTopicConfiguration::class);
+    }
     public function dateCreated(): string
     {
         return $this->createdAt($this->created_at);

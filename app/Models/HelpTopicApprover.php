@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class HelpTopicApprover extends Model
 {
@@ -16,9 +17,10 @@ class HelpTopicApprover extends Model
         'user_id',
     ];
 
-    public function helpTopicConfiguration()
+
+    public function configuration(): BelongsTo
     {
-        return $this->belongsTo(HelpTopicConfiguration::class);
+        return $this->belongsTo(HelpTopicConfiguration::class, 'help_topic_configuration_id');
     }
 
     public function helpTopic()
