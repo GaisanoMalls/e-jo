@@ -17,25 +17,27 @@
                             @if ($customFormFields)
                                 @foreach ($customFormFields as $key => $field)
                                     {{-- Display those fields that are set to enabled. --}}
-                                    @dump($field)
-                                    {{-- short text field --}}
-                                    {{-- @if ($field['type'] === FieldType::SHORT_ANSWER->value)
-                                        <div class="col-md-6 mb-3">
-                                            <label for="field-{{ $key }}"
-                                                class="form-label input__field__label">
-                                                {{ Str::title($field['label']) }}
-                                            </label>
-                                            <input wire:model="" type="text" value="{{ $field->value }}"
-                                                id="field-{{ $key }}" class="form-control input__field"
-                                                placeholder="Enter {{ Str::lower($field['label']) }}">
-                                            @error('formFields.{{ $key }}.value')
-                                                <span class="error__message">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    @endif --}}
+                                    @if ($field['is_enabled'])
+                                        {{-- short text field --}}
+                                        @if ($field['type'] === FieldType::SHORT_ANSWER->value)
+                                            <div class="col-md-6 mb-3">
+                                                <label for="field-{{ $key }}"
+                                                    class="form-label input__field__label">
+                                                    {{ Str::title($field['label']) }}
+                                                </label>
+                                                <input wire:model="customFormFields.{{ $key }}.value"
+                                                    type="text" id="field-{{ $key }}"
+                                                    class="form-control input__field"
+                                                    placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                @error('formFields.{{ $key }}.value')
+                                                    <span class="error__message">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        @endif
+                                    @endif
                                 @endforeach
                             @endif
                         </div>
@@ -45,8 +47,8 @@
                             data-bs-dismiss="modal">Close</button>
                         <button type="submit"
                             class="btn d-flex align-items-center justify-content-center gap-2 ticket__modal__button">
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
-                            </span>
+                            {{-- <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                            </span> --}}
                             Send Ticket
                         </button>
                     </div>
