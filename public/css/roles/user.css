@@ -7856,6 +7856,20 @@ body {
   color: #4a5568;
   font-size: 0.75rem;
 }
+.ticket__card .ticket__details__section .details__card__top .ticket__details__header .btn__purchase__request {
+  font-size: 0.813rem;
+  border: 1px solid rgb(223, 228, 233);
+  color: #3e3d3d;
+  font-weight: 500;
+  background-color: #f3f4f6;
+  outline: none;
+  padding: 6px 12px;
+  border-radius: 0.5rem;
+}
+.ticket__card .ticket__details__section .details__card__top .ticket__details__header .btn__purchase__request:hover {
+  color: black;
+  border-color: rgb(202, 208, 214);
+}
 .ticket__card .ticket__details__section .details__card__top .btn__back {
   position: absolute;
   left: -19px;

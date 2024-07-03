@@ -10,7 +10,6 @@ use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\ApproverLevel;
 use App\Models\Branch;
-use App\Models\Field;
 use App\Models\Form;
 use App\Models\HelpTopic;
 use App\Models\Level;
@@ -255,6 +254,16 @@ class CreateTicket extends Component
         $helpTopicForm = Form::with('fields')->where('help_topic_id', $value)->first(); // Get the help topic form
 
         if ($helpTopicForm) {
+            foreach ($helpTopicForm->fields as $field) {
+                // Iterate through the fields to search for a field whose type is file.
+                if ($field->type === 'file') {
+                    $this->fileAttachments = []; // Clear the file attachments associated with the ticket
+                    $this->dispatchBrowserEvent('hide-ticket-file-attachment-field-container');
+                } else {
+                    $this->dispatchBrowserEvent('show-ticket-file-attachment-field-container');
+                }
+            }
+
             $this->isHelpTopicHasForm = true;
             $this->helpTopicForm = $helpTopicForm;
             $this->formId = $helpTopicForm->id;

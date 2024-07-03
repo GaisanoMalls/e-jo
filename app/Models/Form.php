@@ -27,4 +27,9 @@ class Form extends Model
     {
         return $this->hasMany(Field::class);
     }
+
+    public function customFields(): HasMany
+    {
+        return $this->hasMany(TicketCustomFormField::class);
+    }
 }

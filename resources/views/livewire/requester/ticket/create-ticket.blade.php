@@ -330,7 +330,7 @@
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="col-md-4 mt-auto">
+                                <div class="col-md-4 mt-auto" id="ticket-file-attachment-container">
                                     <div class="d-flex align-items-center gap-3">
                                         <label for="ticketSubject" class="form-label input__field__label">
                                             Attachment
@@ -550,6 +550,15 @@
                 branchSelectContainer.style.display = 'none';
                 @this.set('branch', null);
             }
+        });
+
+        const ticketFileAttachmentContainer = document.querySelector('#ticket-file-attachment-container');
+        window.addEventListener('hide-ticket-file-attachment-field-container', () => {
+            ticketFileAttachmentContainer.style.display = 'none';
+        });
+
+        window.addEventListener('show-ticket-file-attachment-field-container', () => {
+            ticketFileAttachmentContainer.style.display = 'block';
         });
 
         // Validate file
