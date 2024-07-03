@@ -38,8 +38,8 @@ class UpdateHelpTopic extends Component
     // Costing Configuration
     public $costingApprovers = [];
     public $finalCostingApprovers = [];
-    public $costingApproversList  = [];
-    public $finalCostingApproversList   = [];
+    public $costingApproversList = [];
+    public $finalCostingApproversList = [];
     public $showCostingApproverSelect = false;
 
     // Approval Configurations
@@ -66,9 +66,9 @@ class UpdateHelpTopic extends Component
         $this->serviceDepartment = $helpTopic->service_department_id;
         $this->team = $helpTopic->team_id;
         $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
-        $this->costingApprovers = is_array($helpTopic->costing->costing_approvers) ? $helpTopic->costing->costing_approvers : json_decode($helpTopic->costing->costing_approvers, true);
-        $this->finalCostingApprovers = is_array($helpTopic->costing->final_costing_approvers) ? $helpTopic->costing->final_costing_approvers : json_decode($helpTopic->costing->final_costing_approvers, true);
-        $this->teams = Team::whereHas('serviceDepartment', fn ($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get(['id', 'name']);
+        $this->costingApprovers = is_array($helpTopic->costing?->costing_approvers) ? $helpTopic->costing->costing_approvers : json_decode($helpTopic->costing?->costing_approvers, true);
+        $this->finalCostingApprovers = is_array($helpTopic->costing?->final_costing_approvers) ? $helpTopic->costing->final_costing_approvers : json_decode($helpTopic->costing?->final_costing_approvers, true);
+        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get(['id', 'name']);
         $this->isSpecialProject = $helpTopic->specialProject ? true : false;
         $this->buDepartments = $this->queryBUDepartments();
         $this->fetchCostingApprovers();
@@ -155,7 +155,7 @@ class UpdateHelpTopic extends Component
 
     public function updatedServiceDepartment()
     {
-        $this->teams = Team::whereHas('serviceDepartment', fn ($team) => $team->where('service_department_id', $this->serviceDepartment))->get(['id', 'name']);
+        $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->serviceDepartment))->get(['id', 'name']);
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 
@@ -193,11 +193,11 @@ class UpdateHelpTopic extends Component
     public function getFilteredApprovers2($level)
     {
         $selectedApprovers = array_merge(
-            (array)$this->level1Approvers,
-            (array)$this->level2Approvers,
-            (array)$this->level3Approvers,
-            (array)$this->level4Approvers,
-            (array)$this->level5Approvers
+            (array) $this->level1Approvers,
+            (array) $this->level2Approvers,
+            (array) $this->level3Approvers,
+            (array) $this->level4Approvers,
+            (array) $this->level5Approvers
         );
 
         $filteredApprovers = User::with(['profile', 'roles'])
