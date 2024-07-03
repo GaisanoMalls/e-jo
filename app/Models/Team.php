@@ -47,7 +47,7 @@ class Team extends Model
         return $this->hasMany(HelpTopic::class);
     }
 
-    public function subteams()
+    public function subteams(): HasMany
     {
         return $this->hasMany(Subteam::class);
     }
@@ -77,7 +77,7 @@ class Team extends Model
         return '';
     }
 
-    public function getTeamServiceDeptChildren()
+    public function getTeamServiceDeptChildren(): string
     {
         $childrenNames = [];
 

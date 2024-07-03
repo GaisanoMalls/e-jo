@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DisapprovedCosting extends Model
 {
@@ -13,7 +14,7 @@ class DisapprovedCosting extends Model
 
     protected $fillable = ['special_project_amount_approval_id', 'amount', 'reason', 'disapproved_date'];
 
-    public function specialProjectAmountApproval()
+    public function specialProjectAmountApproval(): BelongsTo
     {
         return $this->belongsTo(SpecialProjectAmountApproval::class);
     }

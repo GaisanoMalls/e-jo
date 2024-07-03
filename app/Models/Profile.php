@@ -48,12 +48,12 @@ class Profile extends Model
         return $this->first_name[0] . $this->last_name[0];
     }
 
-    public function dateCreated()
+    public function dateCreated(): string
     {
         return $this->createdAt($this->created_at);
     }
 
-    public function dateUpdated()
+    public function dateUpdated(): string
     {
         return $this->updatedAt($this->created_at, $this->updated_at);
     }

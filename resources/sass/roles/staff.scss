@@ -3973,18 +3973,6 @@ input[type="checkbox"] {
                     border-color: $color-1;
                 }
             }
-
-            .amount__field__container {
-                .currency {
-                    left: 17px;
-                    top: 8px;
-                    font-size: 20px;
-                }
-
-                .amount__field {
-                    padding-left: 40px !important;
-                }
-            }
         }
     }
 
@@ -4096,6 +4084,34 @@ input[type="checkbox"] {
 
         .field__container {
             display: flex !important;
+        }
+    }
+
+    .form__field {
+        padding: 0.75rem 1rem;
+        font-size: $fs-14;
+        border-radius: $border-radius-9;
+        border: 1px solid #e7e9eb;
+
+        &:focus {
+            box-shadow: none;
+            border-color: #d32839;
+        }
+    }
+
+    .form__field__label {
+        font-size: $fs-14 !important;
+    }
+
+    .amount__field__container {
+        .currency {
+            left: 17px;
+            top: 0px;
+            font-size: 20px;
+        }
+
+        .amount__field {
+            padding-left: 40px !important;
         }
     }
 }

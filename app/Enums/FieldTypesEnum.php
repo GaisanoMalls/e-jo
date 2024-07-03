@@ -4,14 +4,11 @@ namespace App\Enums;
 
 enum FieldTypesEnum: string
 {
-    case STRING = 'string';
-    case TEXT = 'text';
-    case INTEGER = 'integer';
-    case BIG_INTEGER = 'bigInteger';
-    case BOOLEAN = 'boolean';
+    case SHORT_ANSWER = 'short_answer';
+    case LONG_ANSWER = 'long_answer';
+    case NUMBER = 'number';
     case DATE = 'date';
     case TIME = 'time';
-    case DATE_TIME = 'dateTime';
-    case DECIMAL = 'decimal';
-
+    case AMOUNT = 'amount';
+    case FILE = 'file';
 }

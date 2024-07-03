@@ -22,7 +22,7 @@ class Reply extends Model
         return $this->hasMany(ReplyFile::class);
     }
 
-    public function likes()
+    public function likes(): HasMany
     {
         return $this->hasMany(ReplyLike::class);
     }
@@ -37,7 +37,7 @@ class Reply extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function quotedReply()
+    public function quotedReply(): BelongsTo
     {
         return $this->belongsTo(Reply::class, 'quoted_reply_id');
     }

@@ -13,6 +13,7 @@ use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\Team;
 use App\Models\Ticket;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -79,7 +80,7 @@ class User extends Authenticatable
         return $this->hasMany(Bookmark::class);
     }
 
-    public function likes()
+    public function likes(): HasMany
     {
         return $this->hasMany(ReplyLike::class);
     }
@@ -101,12 +102,12 @@ class User extends Authenticatable
             ->withPivot('user_id', 'department_id');
     }
 
-    public function levels()
+    public function levels(): BelongsToMany
     {
         return $this->belongsToMany(Level::class, 'approver_level')->withPivot(['user_id', 'level_id']);
     }
 
-    public function subteams()
+    public function subteams(): BelongsToMany
     {
         return $this->belongsToMany(Subteam::class, 'user_subteams', 'user_id', 'subteam_id');
     }
@@ -178,27 +179,27 @@ class User extends Authenticatable
     }
 
     // Filter user types by roles
-    public static function systemAdmins()
+    public static function systemAdmins(): Collection
     {
         return self::with(['profile', 'branch'])->role(Role::SYSTEM_ADMIN)->orderByDesc('created_at')->get();
     }
 
-    public static function serviceDepartmentAdmins()
+    public static function serviceDepartmentAdmins(): Collection
     {
         return self::with(['profile'])->role(Role::SERVICE_DEPARTMENT_ADMIN)->orderByDesc('created_at')->get();
     }
 
-    public static function approvers()
+    public static function approvers(): Collection
     {
         return self::with(['profile'])->role(Role::APPROVER)->orderByDesc('created_at')->get();
     }
 
-    public static function agents()
+    public static function agents(): Collection
     {
         return self::with(['profile'])->role(Role::AGENT)->orderByDesc('created_at')->get();
     }
 
-    public static function requesters()
+    public static function requesters(): Collection
     {
         return self::with(['profile'])->role(Role::USER)->orderByDesc('created_at')->get();
     }
@@ -290,7 +291,7 @@ class User extends Authenticatable
         return '';
     }
 
-    public function getUserRoles()
+    public function getUserRoles(): string
     {
         $userRoles = [];
 
@@ -305,7 +306,7 @@ class User extends Authenticatable
         return '';
     }
 
-    public function getUserPermissions()
+    public function getUserPermissions(): string
     {
         $userPermissions = [];
 
@@ -321,7 +322,7 @@ class User extends Authenticatable
     }
 
     // For agent use only
-    public function getClaimedTickets()
+    public function getClaimedTickets(): int
     {
         return Ticket::withWhereHas('agent', fn($agent) => $agent->where('agent_id', $this->id))->count();
     }

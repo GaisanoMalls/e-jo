@@ -21,7 +21,7 @@ class HelpTopicList extends Component
 {
     use BasicModelQueries;
 
-    public ?Collection $helpTopicForms = null;
+    public $helpTopicForm = null;
     public $deleteHelpTopicId;
     public $deleteHelpTopicFormId;
     public $deleteHelpTopicFormName;
@@ -58,11 +58,6 @@ class HelpTopicList extends Component
 
     protected $listeners = ['loadHelpTopics' => '$refresh'];
 
-    public function mount()
-    {
-        $this->helpTopicForms = collect([]);
-    }
-
     public function deleteHelpTopic(HelpTopic $helpTopic)
     {
         $this->deleteHelpTopicId = $helpTopic->id;
@@ -89,7 +84,7 @@ class HelpTopicList extends Component
     {
         $this->cancelEditFormName();
         $this->editSelectedFieldIsCurrentlyEditing = false;
-        $this->helpTopicForms = $helpTopic->forms()->get(['id', 'name', 'visible_to']);
+        $this->helpTopicForm = $helpTopic->form;
     }
 
     public function deleteHelpTopicFormConfirm(Form $form)

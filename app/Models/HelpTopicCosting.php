@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class HelpTopicCosting extends Model
 {
@@ -22,7 +23,7 @@ class HelpTopicCosting extends Model
         'final_costing_approvers' => 'array',
     ];
 
-    public function helpTopic()
+    public function helpTopic(): BelongsTo
     {
         return $this->belongsTo(HelpTopic::class);
     }

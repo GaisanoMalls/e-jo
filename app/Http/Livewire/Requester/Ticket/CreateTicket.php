@@ -19,6 +19,7 @@ use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
+use App\Models\TicketCustomFormField;
 use App\Models\TicketTeam;
 use App\Notifications\AppNotification;
 use Exception;
@@ -37,7 +38,6 @@ class CreateTicket extends Component
     public $upload = 0;
     public $fileAttachments = [];
     public $helpTopics = [];
-    public $helpTopicForms = [];
     public $subject;
     public $description;
     public $branch;
@@ -47,8 +47,14 @@ class CreateTicket extends Component
     public $serviceDepartment;
     public $helpTopic;
     public $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
-    public $isHelpTopicHasForms; // bool
-    public $isClearedHelTopicSelect = false;
+
+    // Help topic form
+    public $helpTopicForm;
+    public $formId;
+    public $formName;
+    public $formFields = [];
+    public $filledForms = []; // Insert the filled forms here.
+    public $isHelpTopicHasForm = false;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
@@ -111,7 +117,7 @@ class CreateTicket extends Component
                     'service_level_agreement_id' => $this->sla,
                     'ticket_number' => $this->generatedTicketNumber(),
                     'subject' => $this->subject,
-                    'description' => $this->description,
+                    'description' => $this->description ?? null,
                     'approval_status' => ApprovalStatusEnum::FOR_APPROVAL,
                 ]);
 
@@ -181,7 +187,7 @@ class CreateTicket extends Component
                             $serviceDepartmentAdmin->approver,
                             new AppNotification(
                                 ticket: $ticket,
-                                title: "New ticket created {$ticket->ticket_number}",
+                                title: "New Ticket {$ticket->ticket_number}",
                                 message: "{$ticket->user->profile->getFullName()} created a ticket"
                             )
                         );
@@ -189,9 +195,36 @@ class CreateTicket extends Component
                     });
                 }
 
+                if ($this->isHelpTopicHasForm) {
+                    array_push($this->filledForms, $this->formFields);
+
+                    foreach ($this->filledForms as $fields) {
+                        foreach ($fields as $field) {
+                            $ticketCustomFormField = TicketCustomFormField::create([
+                                'ticket_id' => $ticket->id,
+                                'form_id' => $field['form']['id'],
+                                'value' => $field['type'] !== 'file' ? $field['value'] : '',
+                                'name' => $field['name'],
+                                'label' => $field['label'],
+                                'type' => $field['type'],
+                                'variable_name' => $field['variable_name'],
+                                'is_required' => $field['is_required'],
+                            ]);
+
+                            if ($field['type'] === 'file') {
+                                foreach ($field['value'] as $uploadedCustomFile) {
+                                    $fileName = $uploadedCustomFile->getClientOriginalName();
+                                    $customFileAttachment = Storage::putFileAs("public/tiket/$ticket->ticket_number/custom_form_file", $uploadedCustomFile, $fileName);
+                                    $ticketCustomFormField->ticketCustomFormFiles()->create(['file_attachment' => $customFileAttachment]);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 ActivityLog::make($ticket->id, 'created a ticket');
                 $this->actionOnSubmit();
-                noty()->addSuccess('Ticket successfully created.');
+                noty()->addSuccess('Ticket created successfully.');
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
@@ -218,18 +251,42 @@ class CreateTicket extends Component
     {
         $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
         $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $this->helpTopic))->pluck('id')->first();
+        $helpTopicForm = Form::with('fields')->where('help_topic_id', $value)->first(); // Get the help topic form
 
-        $helpTopicForms = Form::with('fields')->where('help_topic_id', $value)->get();
+        if ($helpTopicForm) {
+            foreach ($helpTopicForm->fields as $field) {
+                // Iterate through the fields to search for a field whose type is file.
+                if ($field->type === 'file') {
+                    $this->fileAttachments = []; // Clear the file attachments associated with the ticket
+                    $this->dispatchBrowserEvent('hide-ticket-file-attachment-field-container');
+                } else {
+                    $this->dispatchBrowserEvent('show-ticket-file-attachment-field-container');
+                }
+            }
 
-        dump($this->isClearedHelTopicSelect);
-        if ($helpTopicForms->isNotEmpty()) {
-            $this->description = null;
-            $this->isHelpTopicHasForms = true;
-            $this->helpTopicForms = $helpTopicForms;
-            $this->dispatchBrowserEvent('show-help-topic-forms', ['helpTopicForms' => $helpTopicForms]);
+            $this->isHelpTopicHasForm = true;
+            $this->helpTopicForm = $helpTopicForm;
+            $this->formId = $helpTopicForm->id;
+            $this->formName = $helpTopicForm->name;
+            $this->formFields = $helpTopicForm->fields->map(function ($field) {
+                return [
+                    'id' => $field->id,
+                    'name' => $field->name,
+                    'label' => $field->label,
+                    'type' => $field->type,
+                    'variable_name' => $field->variable_name,
+                    'is_required' => $field->is_required,
+                    'is_enabled' => $field->is_enabled,
+                    'value' => null, // To store the value of the given inputs
+                    'form' => $this->helpTopicForm->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
+                ];
+            })->toArray();
+
+            $this->description = null; // Not necessary when using custom form.
+            $this->helpTopicForm = $helpTopicForm; // Assign the helpTopicForm property of the selected help topic form.
+            $this->dispatchBrowserEvent('show-help-topic-forms');
         } else {
-            $this->isHelpTopicHasForms = false;
-            $this->reset('helpTopicForms');
+            $this->isHelpTopicHasForm = false;
             $this->dispatchBrowserEvent('hide-ticket-description-container');
         }
     }

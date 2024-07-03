@@ -40,8 +40,8 @@ class CreateHelpTopic extends Component
     public $costingApprovers = [];
     public $finalCostingApprovers = [];
 
-    public $costingApproversList  = [];
-    public $finalCostingApproversList   = [];
+    public $costingApproversList = [];
+    public $finalCostingApproversList = [];
     public $showCostingApproverSelect = false;
 
 
@@ -144,13 +144,15 @@ class CreateHelpTopic extends Component
                     }
                 }
 
-                // Save costing data
-                HelpTopicCosting::create([
-                    'help_topic_id' => $helpTopic->id,
-                    'costing_approvers' => $this->costingApprovers,
-                    'amount' => $this->amount,
-                    'final_costing_approvers' => $this->finalCostingApprovers,
-                ]);
+                if ($this->isSpecialProject) {
+                    // Save costing data
+                    HelpTopicCosting::create([
+                        'help_topic_id' => $helpTopic->id,
+                        'costing_approvers' => $this->costingApprovers,
+                        'amount' => $this->amount,
+                        'final_costing_approvers' => $this->finalCostingApprovers,
+                    ]);
+                }
 
                 // Create SpecialProject if it's a special project
                 if ($this->isSpecialProject) {
@@ -177,7 +179,7 @@ class CreateHelpTopic extends Component
 
     public function updatedServiceDepartment($value)
     {
-        $this->teams = Team::whereHas('serviceDepartment', fn ($team) => $team->where('service_department_id', $value))->get();
+        $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $value))->get();
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 
@@ -279,11 +281,11 @@ class CreateHelpTopic extends Component
     public function getFilteredApprovers($level)
     {
         $selectedApprovers = array_merge(
-            (array)$this->level1Approvers,
-            (array)$this->level2Approvers,
-            (array)$this->level3Approvers,
-            (array)$this->level4Approvers,
-            (array)$this->level5Approvers
+            (array) $this->level1Approvers,
+            (array) $this->level2Approvers,
+            (array) $this->level3Approvers,
+            (array) $this->level4Approvers,
+            (array) $this->level5Approvers
         );
 
         $filteredApprovers = User::with(['profile', 'roles'])
@@ -294,7 +296,6 @@ class CreateHelpTopic extends Component
 
         $this->dispatchBrowserEvent('load-approvers', ['approvers' => $filteredApprovers, 'level' => $level]);
     }
-
 
     public function fetchCostingApprovers()
     {

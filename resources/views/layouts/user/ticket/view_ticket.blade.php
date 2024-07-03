@@ -14,16 +14,20 @@
                         </div>
                         <p class="mb-0 ticket__details__priority">{{ $ticket->priorityLevel->name }}</p>
                     </div>
-                    <div class="d-flex flex-wrap justify-content-between ticket__details__header">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center ticket__details__header">
                         <div class="mb-2">
                             <h6 class="ticket__details__title mb-0">{{ $ticket->subject }}</h6>
                             <small class="ticket__details__datetime">{{ $ticket->dateCreated() }},
                                 {{ $ticket->created_at->format('D') }} @ {{ $ticket->created_at->format('g:i A') }}</small>
                         </div>
+                        <button class="btn btn-sm btn__purchase__request" data-bs-toggle="modal"
+                            data-bs-target="#createTicketModal" wire:click="clearModalErrorMessages">
+                            My Purchase Request
+                        </button>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-8 position-relative">
+                    <div class="col-md-7 position-relative">
                         @if ($isCostingAmountNeedApproval)
                             @livewire('requester.ticket.ticket-costing', ['ticket' => $ticket])
                         @endif
@@ -92,7 +96,7 @@
                     @show
                     {{-- End Replies/Comments --}}
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="container__ticket__details__right">
                         @livewire('requester.ticket.ticket-details', ['ticket' => $ticket])
                         @livewire('requester.ticket.ticket-level-approval', ['ticket' => $ticket])

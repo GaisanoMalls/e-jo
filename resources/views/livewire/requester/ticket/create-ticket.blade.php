@@ -1,3 +1,7 @@
+@php
+    use App\Enums\FieldTypesEnum as FieldType;
+@endphp
+
 <div>
     <div wire:ignore.self class="modal fade create__ticket__modal" id="createTicketModal" tabindex="-1"
         aria-labelledby="createtTicketModalLabel" aria-hidden="true">
@@ -9,8 +13,8 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-check mt-2 mb-4">
-                                    <input class="form-check-input" type="checkbox" id="checkOtherBranch">
-                                    <label class="form-check-label labelCheckOtherBranch" for="checkOtherBranch">
+                                    <input class="form-check-input" type="checkbox" id="check-other-branch">
+                                    <label class="form-check-label labelCheckOtherBranch" for="check-other-branch">
                                         This ticket is intended to other branch
                                     </label>
                                     <br>
@@ -24,14 +28,14 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="col-12" id="branchSelectContainer" wire:ignore.self>
+                            <div class="col-12" id="branch-select-container" wire:ignore.self>
                                 <div class="col-lg-6 col-md-12">
                                     <div wire:ignore.self class="mb-3">
                                         <label class="form-label input__field__label">
                                             To which branch will this ticket be sent?
                                         </label>
                                         <div>
-                                            <div id="userCreateTicketBranchesDropdown" wire:ignore></div>
+                                            <div id="user-create-ticket-branches-dropdown" wire:ignore></div>
                                         </div>
                                         @error('branch')
                                             <span class="error__message">
@@ -46,7 +50,7 @@
                                 <div class="mb-3">
                                     <label class="form-label input__field__label">Service Department</label>
                                     <div>
-                                        <div id="userCreateTicketServiceDepartmentDropdown" wire:ignore></div>
+                                        <div id="user-create-ticket-service-department-dropdown" wire:ignore></div>
                                     </div>
                                     @error('serviceDepartment')
                                         <span class="error__message">
@@ -62,11 +66,12 @@
                                         Help Topic
                                         @if ($helpTopics)
                                             <span class="fw-normal" style="font-size: 13px;">
-                                                ({{ $helpTopics->count() }})</span>
+                                                ({{ $helpTopics->count() }})
+                                            </span>
                                         @endif
                                     </label>
                                     <div>
-                                        <div id="userCreateTicketHelpTopicDropdown" wire:ignore></div>
+                                        <div id="user-create-ticket-help-topic-dropdown" wire:ignore></div>
                                     </div>
                                     @error('helpTopic')
                                         <span class="error__message">
@@ -106,18 +111,196 @@
                                     </span>
                                 @enderror
                             </div>
-                            @if ($helpTopicForms)
+                            @if ($helpTopicForm)
                                 <div class="row mb-3">
                                     <label class="form-label input__field__label">
-                                        Forms
+                                        Fill in the form
                                     </label>
-                                    <div class="d-flex flex-wrap gap-3">
-                                        @foreach ($helpTopicForms as $form)
-                                            <div
-                                                class="card p-3 border-0 d-flex flex-row gap-2 align-items-center justify-content-center create__ticket__form__card">
-                                                <i class="bi bi-journal-text"></i>
-                                                {{ $form->name }}
-                                            </div>
+                                    <label class="form-label input__field__label fw-bold mt-2">
+                                        {{ $helpTopicForm->name }}
+                                    </label>
+                                    <div class="row">
+                                        @foreach ($formFields as $key => $field)
+                                            {{-- Display those fields that are set to enabled. --}}
+                                            @if ($field['is_enabled'])
+                                                {{-- short text field --}}
+                                                @if ($field['type'] === FieldType::SHORT_ANSWER->value)
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="field-{{ $key }}"
+                                                            class="form-label input__field__label">
+                                                            {{ Str::title($field['label']) }}
+                                                        </label>
+                                                        <input wire:model="formFields.{{ $key }}.value"
+                                                            type="text" id="field-{{ $key }}"
+                                                            class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                        @error('formFields.{{ $key }}.value')
+                                                            <span class="error__message">
+                                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                @endif
+
+                                                {{-- long text field --}}
+                                                @if ($field['type'] === FieldType::LONG_ANSWER->value)
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="field-{{ $key }}"
+                                                            class="form-label input__field__label">
+                                                            {{ Str::title($field['label']) }}
+                                                        </label>
+                                                        <textarea wire:model="formFields.{{ $key }}.value" id="field-{{ $key }}"
+                                                            class="form-control input__field" placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                </textarea>
+                                                        @error('formFields.{{ $key }}.value')
+                                                            <span class="error__message">
+                                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                @endif
+
+                                                {{-- number field --}}
+                                                @if ($field['type'] === FieldType::NUMBER->value)
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="field-{{ $key }}"
+                                                            class="form-label input__field__label">
+                                                            {{ Str::title($field['label']) }}
+                                                        </label>
+                                                        <input wire:model="formFields.{{ $key }}.value"
+                                                            id="field-{{ $key }}" type="number"
+                                                            class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                        </input>
+                                                        @error('formFields.{{ $key }}.value')
+                                                            <span class="error__message">
+                                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                @endif
+
+                                                {{-- date field --}}
+                                                @if ($field['type'] === FieldType::DATE->value)
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="field-{{ $key }}"
+                                                            class="form-label input__field__label">
+                                                            {{ Str::title($field['label']) }}
+                                                        </label>
+                                                        <input wire:model="formFields.{{ $key }}.value"
+                                                            id="field-{{ $key }}" type="date"
+                                                            class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                        </input>
+                                                        @error('formFields.{{ $key }}.value')
+                                                            <span class="error__message">
+                                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                @endif
+
+                                                {{-- time field --}}
+                                                @if ($field['type'] === FieldType::TIME->value)
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="field-{{ $key }}"
+                                                            class="form-label input__field__label">
+                                                            {{ Str::title($field['label']) }}
+                                                        </label>
+                                                        <input wire:model="formFields.{{ $key }}.value"
+                                                            id="field-{{ $key }}" type="time"
+                                                            class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                        </input>
+                                                        @error('formFields.{{ $key }}.value')
+                                                            <span class="error__message">
+                                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                @endif
+
+                                                {{-- amount field --}}
+                                                @if ($field['type'] === FieldType::AMOUNT->value)
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="field-{{ $key }}"
+                                                            class="form-label input__field__label">
+                                                            {{ Str::title($field['label']) }}
+                                                        </label>
+                                                        <input wire:model="formFields.{{ $key }}.value"
+                                                            id="field-{{ $key }}" type="number"
+                                                            step=".01" class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                        </input>
+                                                        @error('formFields.{{ $key }}.value')
+                                                            <span class="error__message">
+                                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                @endif
+
+                                                {{-- file upload field --}}
+                                                @if ($field['type'] === FieldType::FILE->value)
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="field-{{ $key }}"
+                                                            class="form-label input__field__label">
+                                                            {{ Str::title($field['label']) }}
+                                                        </label>
+                                                        <div x-data="{ isUploadingCustomFormFile: false, progress: 1 }"
+                                                            x-on:livewire-upload-start="isUploadingCustomFormFile = true; progress = 1"
+                                                            x-on:livewire-upload-finish="isUploadingCustomFormFile = false"
+                                                            x-on:livewire-upload-error="isUploadingCustomFormFile = false"
+                                                            x-on:livewire-upload-progress="progress = $event.detail.progress">
+                                                            <input wire:model="formFields.{{ $key }}.value"
+                                                                id="field-{{ $key }}" type="file"
+                                                                class="form-control form-control-sm border-0 ticket__file"
+                                                                placeholder="Enter {{ Str::lower($field['label']) }}"
+                                                                accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
+                                                                multiple>
+                                                            </input>
+                                                            <div x-transition.duration.500ms
+                                                                x-show="isUploadingCustomFormFile"
+                                                                class="progress progress-sm mt-1"
+                                                                style="height: 10px;">
+                                                                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                                    role="progressbar"
+                                                                    aria-label="Animated striped example"
+                                                                    aria-valuenow="75" aria-valuemin="0"
+                                                                    aria-valuemax="100"
+                                                                    x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex align-items-center justify-content-between"
+                                                                x-transition.duration.500ms>
+                                                                <span x-show="isUploadingCustomFormFile"
+                                                                    x-text="progress + '%'" style="font-size: 12px;">
+                                                                </span>
+                                                                <span class="d-flex align-items-center gap-1"
+                                                                    style="font-size: 12px;">
+                                                                    <i x-show="isUploadingCustomFormFile"
+                                                                        class='bx bx-loader-circle bx-spin'
+                                                                        style="font-size: 14px;"></i>
+                                                                    <span
+                                                                        x-show="isUploadingCustomFormFile">Uploading...</span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        @error('formFields.{{ $key }}.value')
+                                                            <span class="error__message">
+                                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                @endif
+                                            @endif
                                         @endforeach
                                     </div>
                                 </div>
@@ -147,7 +330,7 @@
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="col-md-4 mt-auto">
+                                <div class="col-md-4 mt-auto" id="ticket-file-attachment-container">
                                     <div class="d-flex align-items-center gap-3">
                                         <label for="ticketSubject" class="form-label input__field__label">
                                             Attachment
@@ -158,8 +341,8 @@
                                         x-on:livewire-upload-finish="isUploading = false"
                                         x-on:livewire-upload-error="isUploading = false"
                                         x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                        <input class="form-control form-control-sm border-0 ticket__file" type="file"
-                                            accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
+                                        <input class="form-control form-control-sm border-0 ticket__file"
+                                            type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
                                             wire:model="fileAttachments" multiple id="upload-{{ $upload }}"
                                             onchange="validateFile()">
                                         <div x-transition.duration.500ms x-show="isUploading"
@@ -182,7 +365,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <span class="error__message" id="excludeEXEfileMessage"></span>
+                                    <span class="error__message" id="exclude-exe-file-message"></span>
                                     @error('fileAttachments.*')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
@@ -235,7 +418,7 @@
             value: serviceDepartment.id
         }));
 
-        const serviceDepartmentSelect = document.querySelector('#userCreateTicketServiceDepartmentDropdown');
+        const serviceDepartmentSelect = document.querySelector('#user-create-ticket-service-department-dropdown');
         VirtualSelect.init({
             ele: serviceDepartmentSelect,
             options: serviceDepartmentOption,
@@ -243,11 +426,12 @@
             markSearchResults: true,
         });
 
-        const helpTopicSelect = document.querySelector('#userCreateTicketHelpTopicDropdown');
+        const helpTopicSelect = document.querySelector('#user-create-ticket-help-topic-dropdown');
         VirtualSelect.init({
             ele: helpTopicSelect,
             search: true,
             markSearchResults: true,
+            hideClearButton: true
         });
         helpTopicSelect.disable();
 
@@ -288,6 +472,9 @@
             helpTopicSelect.reset();
             helpTopicSelect.disable();
             helpTopicSelect.setOptions([]);
+            @this.set('helpTopicForm', null);
+            @this.set('formFields', []);
+            @this.set('filledForms', []);
         });
 
         const ticketDescriptionContainer = document.querySelector('#ticket-description-container');
@@ -295,23 +482,12 @@
             @this.set('helpTopic', parseInt(helpTopicSelect.value));
 
             window.addEventListener('show-help-topic-forms', (event) => {
-                const helpTopicForms = event.detail.helpTopicForms;
-                const helpTopicFormOption = [];
-
-                if (helpTopicForms.length > 0) {
-                    ticketDescriptionContainer.style.display = 'none';
-                    helpTopicForms.forEach(function(form) {
-                        helpTopicFormOption.push({
-                            label: form.name,
-                            value: form.id
-                        });
-                    });
-                    @this.set('isHelpTopicHasForms', true);
-                }
+                ticketDescriptionContainer.style.display = 'none';
             });
 
             window.addEventListener('hide-ticket-description-container', () => {
                 ticketDescriptionContainer.style.display = 'block';
+                @this.set('helpTopicForm', null);
             });
         });
 
@@ -319,18 +495,14 @@
             ticketDescriptionContainer.style.display = 'block';
         });
 
-        helpTopicSelect.addEventListener('reset', () => {
-            @this.set('isClearedHelTopicSelect', true);
-        });
-
-        const branchSelect = document.querySelector('#userCreateTicketBranchesDropdown');
+        const branchSelect = document.querySelector('#user-create-ticket-branches-dropdown');
         const branchOption = @json($branches).map(branch => ({
             label: branch.name,
             value: branch.id
         }));
 
         VirtualSelect.init({
-            ele: '#userCreateTicketBranchesDropdown',
+            ele: branchSelect,
             options: branchOption,
             search: true,
             markSearchResults: true,
@@ -340,8 +512,8 @@
             @this.set('branch', parseInt(branchSelect.value));
         });
 
-        const selectOtherBranch = document.querySelector('#checkOtherBranch');
-        const branchSelectContainer = document.querySelector('#branchSelectContainer');
+        const selectOtherBranch = document.querySelector('#check-other-branch');
+        const branchSelectContainer = document.querySelector('#branch-select-container');
         branchSelect.disable();
         branchSelectContainer.style.display = 'none';
 
@@ -380,9 +552,18 @@
             }
         });
 
+        const ticketFileAttachmentContainer = document.querySelector('#ticket-file-attachment-container');
+        window.addEventListener('hide-ticket-file-attachment-field-container', () => {
+            ticketFileAttachmentContainer.style.display = 'none';
+        });
+
+        window.addEventListener('show-ticket-file-attachment-field-container', () => {
+            ticketFileAttachmentContainer.style.display = 'block';
+        });
+
         // Validate file
         function validateFile() {
-            const excludeEXEfileMessage = document.querySelector('#excludeEXEfileMessage');
+            const excludeEXEfileMessage = document.querySelector('#exclude-exe-file-message');
             const fileInput = document.querySelector(`#upload-{{ $upload }}`);
 
             excludeEXEfileMessage.style.display = "none";

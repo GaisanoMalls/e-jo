@@ -21,7 +21,7 @@ class SpecialProject extends Model
         return $this->belongsTo(HelpTopic::class);
     }
 
-    public function getAmount()
+    public function getAmount(): string
     {
         return number_format($this->amount, 2, '.', ',');
     }

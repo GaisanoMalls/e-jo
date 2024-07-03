@@ -66,14 +66,11 @@ class UpdateHelpTopic extends Component
         $this->serviceDepartment = $helpTopic->service_department_id;
         $this->team = $helpTopic->team_id;
         $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
-
         $this->costingApprovers = is_array($helpTopic->costing->costing_approvers) ? $helpTopic->costing->costing_approvers : json_decode($helpTopic->costing->costing_approvers, true);
         $this->finalCostingApprovers = is_array($helpTopic->costing->final_costing_approvers) ? $helpTopic->costing->final_costing_approvers : json_decode($helpTopic->costing->final_costing_approvers, true);
-
         $this->teams = Team::whereHas('serviceDepartment', fn ($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get(['id', 'name']);
         $this->isSpecialProject = $helpTopic->specialProject ? true : false;
         $this->buDepartments = $this->queryBUDepartments();
-
         $this->fetchCostingApprovers();
         $this->loadConfigurations();
     }

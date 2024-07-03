@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TicketCostingPRFile extends Model
 {
@@ -13,7 +14,7 @@ class TicketCostingPRFile extends Model
     protected $table = 'ticket_costing_pr_files';
     protected $fillable = ['ticket_costing_id', 'file_attachment', 'is_approved_level_1_approver', 'is_approved_level_2_approver'];
 
-    public function ticketCosting()
+    public function ticketCosting(): BelongsTo
     {
         return $this->belongsTo(TicketCosting::class);
     }
