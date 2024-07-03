@@ -17,9 +17,9 @@ class HelpTopicApprover extends Model
         'user_id',
     ];
 
-    public function helpTopicConfiguration(): BelongsTo
+    public function configuration(): BelongsTo
     {
-        return $this->belongsTo(HelpTopicConfiguration::class);
+        return $this->belongsTo(HelpTopicConfiguration::class, 'help_topic_configuration_id');
     }
 
     public function helpTopic(): BelongsTo
