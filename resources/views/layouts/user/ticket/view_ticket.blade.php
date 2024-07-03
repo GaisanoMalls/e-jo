@@ -17,13 +17,14 @@
                     <div class="d-flex flex-wrap justify-content-between align-items-center ticket__details__header">
                         <div class="mb-2">
                             <h6 class="ticket__details__title mb-0">{{ $ticket->subject }}</h6>
-                            <small class="ticket__details__datetime">{{ $ticket->dateCreated() }},
-                                {{ $ticket->created_at->format('D') }} @ {{ $ticket->created_at->format('g:i A') }}</small>
+                            <small class="ticket__details__datetime">
+                                {{ $ticket->dateCreated() }},
+                                {{ $ticket->created_at->format('D') }} @ {{ $ticket->created_at->format('g:i A') }}
+                            </small>
                         </div>
-                        <button class="btn btn-sm btn__purchase__request" data-bs-toggle="modal"
-                            data-bs-target="#createTicketModal" wire:click="clearModalErrorMessages">
-                            View Purchase Request
-                        </button>
+                        @if ($ticket->helpTopic->has('form'))
+                            @livewire('requester.ticket.load-view-purchase-request-button', ['ticket' => $ticket])
+                        @endif
                     </div>
                 </div>
                 <div class="row">
@@ -111,4 +112,7 @@
 @include('layouts.user.ticket.includes.modal.preview_ticket_files_modal')
 @livewire('requester.ticket.send-ticket-reply', ['ticket' => $ticket])
 @livewire('requester.ticket.send-clarification', ['ticket' => $ticket])
+@if ($ticket->helpTopic->has('form'))
+    @livewire('requester.ticket.ticket-custom-form', ['ticket' => $ticket])
+@endif
 @endsection

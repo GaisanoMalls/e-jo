@@ -139,7 +139,7 @@ class Ticket extends Model
         return $this->hasMany(TicketApproval::class);
     }
 
-    public function customFormField()
+    public function customFormFields()
     {
         return $this->hasMany(TicketCustomFormField::class);
     }
