@@ -209,6 +209,7 @@ class CreateTicket extends Component
                                 'type' => $field['type'],
                                 'variable_name' => $field['variable_name'],
                                 'is_required' => $field['is_required'],
+                                'is_enabled' => $field['is_enabled']
                             ]);
 
                             if ($field['type'] === 'file') {

@@ -22,9 +22,6 @@
                                 {{ $ticket->created_at->format('D') }} @ {{ $ticket->created_at->format('g:i A') }}
                             </small>
                         </div>
-                        @if ($ticket->helpTopic->has('form'))
-                            @livewire('requester.ticket.load-view-purchase-request-button', ['ticket' => $ticket])
-                        @endif
                     </div>
                 </div>
                 <div class="row">
@@ -59,6 +56,9 @@
                                 </small>
                             </div>
                             <div class="ticket__details__card__body">
+                                @if ($ticket->helpTopic->has('form'))
+                                    @livewire('requester.ticket.load-view-purchase-request-button', ['ticket' => $ticket])
+                                @endif
                                 <div class="ticket__description">{!! $ticket->description !!}</div>
                                 @if ($ticket->fileAttachments->count() > 0)
                                     <div class="ticket__attachments d-inline-flex gap-1 mb-3" data-bs-toggle="modal"

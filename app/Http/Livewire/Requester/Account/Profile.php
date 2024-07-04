@@ -40,7 +40,7 @@ class Profile extends Component
 
     public function rules()
     {
-        return(new UpdateProfileRequest())->rules();
+        return (new UpdateProfileRequest())->rules();
     }
 
     /** Reset the file input field after form submission. */

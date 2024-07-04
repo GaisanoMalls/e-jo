@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ asset('css/select/custom-virtual-select.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roles/user.css') }}">
     <link rel="stylesheet" href="{{ asset('css/navigate-indicator.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/lightbox.css') }}">
     <title>{{ $title ?? 'Dashboard' }}</title>
     @livewireStyles
 </head>
@@ -47,10 +48,20 @@
     <script src="{{ asset('js/init/tinymce-init.js') }}"></script>
     <script src="{{ asset('js/init/virtual-select-init.js') }}"></script>
     <script src="{{ asset('js/alpine.js') }}"></script>
+    <script src="{{ asset('js/lightbox.js') }}"></script>
     @stack('livewire-textarea')
     @stack('livewire-textarea-disapproval')
     @stack('livewire-modal')
     @stack('livewire-select')
+    <script>
+        lightbox.option({
+            'resizeDuration': 50,
+            'wrapAround': true,
+            'fitImagesInViewport': true,
+            'disableScrolling': true,
+            'alwaysShowNavOnTouchDevices': true
+        })
+    </script>
 </body>
 
 </html>

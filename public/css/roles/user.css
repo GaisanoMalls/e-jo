@@ -7221,7 +7221,7 @@ url(/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?4753c5ba57962b4d7bf8248a6
   .bxs-zoom-out:before {
     content: "\ef0b";
   }
-
+  
 * {
   margin: 0;
   padding: 0;
@@ -7856,20 +7856,6 @@ body {
   color: #4a5568;
   font-size: 0.75rem;
 }
-.ticket__card .ticket__details__section .details__card__top .ticket__details__header .btn__purchase__request {
-  font-size: 0.813rem;
-  border: 1px solid rgb(223, 228, 233);
-  color: #3e3d3d;
-  font-weight: 500;
-  background-color: #f3f4f6;
-  outline: none;
-  padding: 6px 12px;
-  border-radius: 0.5rem;
-}
-.ticket__card .ticket__details__section .details__card__top .ticket__details__header .btn__purchase__request:hover {
-  color: black;
-  border-color: rgb(202, 208, 214);
-}
 .ticket__card .ticket__details__section .details__card__top .btn__back {
   position: absolute;
   left: -19px;
@@ -8248,6 +8234,44 @@ body {
   font-size: 0.75rem;
   padding-top: 1px;
   font-weight: 500;
+}
+
+.btn__purchase__request {
+  font-size: 0.813rem;
+  border: 1px solid rgb(223, 228, 233);
+  color: #3e3d3d;
+  font-weight: 500;
+  background-color: #f3f4f6;
+  outline: none;
+  padding: 6px 12px;
+  border-radius: 0.5rem;
+}
+.btn__purchase__request:hover {
+  color: black;
+  border-color: rgb(202, 208, 214);
+}
+
+.custom__form__image__container .custom__form__file__attachment__image {
+  height: 4rem;
+  width: 4rem;
+  padding: 0;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 0.5rem;
+  transition: all 0.1s;
+}
+.custom__form__image__container .custom__form__file__attachment__image:hover {
+  border: 0.1rem solid #d32839;
+}
+.custom__form__image__container .btn__delete__custom__form__file {
+  height: 25px;
+  width: 25px;
+  border-radius: 0.5rem;
+  bottom: 2px;
+  left: 2px;
+  background-color: #797a7b;
+  color: #ffffff;
+  opacity: 0.75;
 }
 
 .log__container .log__icon {

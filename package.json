@@ -23,6 +23,7 @@
         "@alpinejs/persist": "^3.13.3",
         "alpinejs": "^3.13.0",
         "bootstrap-icons": "^1.10.5",
-        "boxicons": "^2.1.4"
+        "boxicons": "^2.1.4",
+        "lightbox2": "^2.11.4"
     }
 }
