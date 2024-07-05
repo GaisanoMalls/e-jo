@@ -213,6 +213,7 @@ class CreateTicket extends Component
                             ]);
 
                             if ($field['type'] === 'file') {
+                                dump($field['value']);
                                 foreach ($field['value'] as $uploadedCustomFile) {
                                     $fileName = $uploadedCustomFile->getClientOriginalName();
                                     $customFileAttachment = Storage::putFileAs("public/tiket/$ticket->ticket_number/custom_form_file", $uploadedCustomFile, $fileName);
@@ -229,6 +230,7 @@ class CreateTicket extends Component
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
+            \Log::error('Error on line: ', [$e->getLine()]);
         }
     }
 

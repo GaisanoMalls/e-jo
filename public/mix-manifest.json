@@ -2,7 +2,6 @@
     "/js/init/tinymce-init.js": "/js/init/tinymce-init.js",
     "/js/init/virtual-select-init.js": "/js/init/virtual-select-init.js",
     "/js/ticket-jquery.js": "/js/ticket-jquery.js",
-    "/js/lightbox.js": "/js/lightbox.js",
     "/js/roles/staff/staff.js": "/js/roles/staff/staff.js",
     "/js/roles/staff/dependent-dropdown.js": "/js/roles/staff/dependent-dropdown.js",
     "/js/roles/staff/approver.js": "/js/roles/staff/approver.js",

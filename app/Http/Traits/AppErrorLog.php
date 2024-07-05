@@ -10,7 +10,6 @@ trait AppErrorLog
     public static function getError(Exception|string $e, bool $notify = true)
     {
         Log::channel('appErrorLog')->error($e, [url()->full()]);
-        Log::error($e->getLine());
 
         if ($notify) {
             // Show pop-up toastr/notification

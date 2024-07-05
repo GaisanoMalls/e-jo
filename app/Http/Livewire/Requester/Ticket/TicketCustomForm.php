@@ -15,7 +15,9 @@ class TicketCustomForm extends Component
 {
     public Ticket $ticket;
     public Collection $customFormFields;
-    public Collection $customFormFiles;
+    public Collection $customFormImageFiles;
+    public Collection $customFormDocumentFiles;
+
     protected $listeners = [
         'getCustomFormData' => 'customFormData',
         'loadCustomFormFiles' => 'loadCustomFormFiles'
@@ -24,7 +26,8 @@ class TicketCustomForm extends Component
     public function mount()
     {
         $this->customFormFields = collect();
-        $this->customFormFiles = collect();
+        $this->customFormImageFiles = collect();
+        $this->customFormDocumentFiles = collect();
     }
 
     public function customFormData()
@@ -35,7 +38,20 @@ class TicketCustomForm extends Component
         ])->get();
 
         if ($queryCustomFormField) {
-            $this->customFormFiles = TicketCustomFormFile::with('ticketCustomFormField')->whereIn('ticket_custom_form_field_id', $queryCustomFormField->pluck('id')->toArray())->get();
+            $customFormFiles = TicketCustomFormFile::with('ticketCustomFormField')->whereIn('ticket_custom_form_field_id', $queryCustomFormField->pluck('id')->toArray())->get();
+
+            $this->customFormImageFiles = $customFormFiles->filter(function ($field) {
+                $imageExtensions = ['jpg', 'jpeg', 'png'];
+                $fileExtension = strtolower(pathinfo($field->file_attachment, PATHINFO_EXTENSION));
+                return in_array($fileExtension, $imageExtensions);
+            });
+
+            $this->customFormDocumentFiles = $customFormFiles->filter(function ($field) {
+                $documentExtensions = ['pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
+                $fileExtension = strtolower(pathinfo($field->file_attachment, PATHINFO_EXTENSION));
+                return in_array($fileExtension, $documentExtensions);
+            });
+
             $this->customFormFields = $queryCustomFormField->map(function ($field) {
                 return [
                     'id' => $field->id,
@@ -53,7 +69,8 @@ class TicketCustomForm extends Component
 
     public function loadCustomFormFiles()
     {
-        $this->customFormFiles;
+        $this->customFormImageFiles;
+        $this->customFormDocumentFiles;
     }
 
     public function deleteCustomFormFile(TicketCustomFormFile $file)

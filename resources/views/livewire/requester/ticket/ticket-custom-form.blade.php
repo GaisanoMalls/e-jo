@@ -147,7 +147,7 @@
 
                                         {{-- file upload field --}}
                                         @if ($field['type'] === FieldType::FILE->value)
-                                            <div class="col-md-4 mb-3">
+                                            <div class="col-md-6 mb-3">
                                                 <label for="field-{{ $key }}"
                                                     class="form-label input__field__label">
                                                     {{ Str::title($field['label']) }}
@@ -198,55 +198,122 @@
                                 @endforeach
                             @endif
                         </div>
-                        @if ($customFormFiles)
+                        @if ($customFormImageFiles->isNotEmpty() || $customFormDocumentFiles->isNotEmpty())
                             <label class="form-label input__field__label">
-                                File {{ $customFormFiles->count() === 1 ? 'Attachment' : 'Attachments' }}
+                                @php
+                                    $totalFiles = $customFormImageFiles->count() + $customFormDocumentFiles->count();
+                                @endphp
+                                File {{ $totalFiles === 1 ? 'Attachment' : 'Attachments' }}
                                 <small>
-                                    ({{ $customFormFiles->count() }}
-                                    {{ $customFormFiles->count() === 1 ? 'item' : 'items' }})
+                                    ({{ $totalFiles }}
+                                    {{ $totalFiles === 1 ? 'item' : 'items' }})
                                 </small>
                             </label>
-                            <div class="d-flex flex-wrap gap-2">
-                                @foreach ($customFormFiles as $key => $file)
-                                    <div wire:key="customFormFile-{{ $key }}"
-                                        class="custom__form__image__container position-relative">
-                                        <a href="{{ Storage::url($file->file_attachment) }}" target="_blank">
-                                            <img src="{{ Storage::url($file->file_attachment) }}"
-                                                class="custom__form__file__attachment__image">
-                                        </a>
-                                        <button wire:click="deleteCustomFormFile({{ $file->id }})"
-                                            class="btn btn-sm d-flex align-items-center justify-content-center position-absolute btn__delete__custom__form__file">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
+                            <div class="d-flex flex-column gap-4">
+                                @if ($customFormImageFiles->isNotEmpty())
+                                    <div class="d-flex flex-column gap-2">
+                                        <small class="fw-bold">Images</small>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @foreach ($customFormImageFiles as $key => $imageFile)
+                                                <div wire:key="image-{{ $key }}"
+                                                    class="custom__form__image__container position-relative">
+                                                    <a href="{{ Storage::url($imageFile->file_attachment) }}"
+                                                        target="_blank">
+                                                        <img src="{{ Storage::url($imageFile->file_attachment) }}"
+                                                            class="custom__form__file__attachment__image">
+                                                    </a>
+                                                    <div
+                                                        class="w-100 d-flex align-items-center justify-content-center position-absolute custom__form__image__action__buttons__container">
+                                                        <button wire:key="delete-{{ $key }}"
+                                                            wire:click="deleteCustomFormFile({{ $imageFile->id }})"
+                                                            class="btn btn-sm d-flex align-items-center justify-content-center btn__delete__custom__form__file">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                        <a wire:prevent
+                                                            href="{{ Storage::url($imageFile->file_attachment) }}"
+                                                            type="button"
+                                                            class="btn btn-sm d-flex align-items-center justify-content-center btn__delete__custom__form__file"
+                                                            download>
+                                                            <i class="bi bi-download"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
-                                    @switch(pathinfo(basename($file->file_attachment), PATHINFO_EXTENSION))
-                                        @case('pdf')
-                                            <i class="bi bi-filetype-pdf" style="font-size: 35px;"></i>
-                                        @break
+                                @endif
 
-                                        @case('doc')
-                                            <i class="bi bi-filetype-doc" style="font-size: 35px;"></i>
-                                        @break
+                                @if ($customFormDocumentFiles->isNotEmpty())
+                                    <div class="row gap-2">
+                                        <small class="fw-bold">Documents</small>
+                                        @foreach ($customFormDocumentFiles as $key => $documentFile)
+                                            <div wire:key="document-{{ $key }}"
+                                                class="w-auto d-inline-flex align-items-center position-relative">
+                                                <a wire:prevent
+                                                    href="{{ Storage::url($documentFile->file_attachment) }}"
+                                                    type="button"
+                                                    class="btn d-inline-flex align-items-center gap-2 d-inline-block custom__form__document__file__container"
+                                                    target="_blank">
+                                                    @switch(pathinfo(basename($documentFile->file_attachment),
+                                                        PATHINFO_EXTENSION))
+                                                        @case('pdf')
+                                                            <i class="bi bi-filetype-pdf file__type"></i>
+                                                        @break
 
-                                        @case('docx')
-                                            <i class="bi bi-filetype-docx" style="font-size: 35px;"></i>
-                                        @break
+                                                        @case('doc')
+                                                            <i class="bi bi-filetype-doc file__type"></i>
+                                                        @break
 
-                                        @case('xlsx')
-                                            <i class="bi bi-filetype-xlsx" style="font-size: 35px;"></i>
-                                        @break
+                                                        @case('docx')
+                                                            <i class="bi bi-filetype-docx file__type"></i>
+                                                        @break
 
-                                        @case('xls')
-                                            <i class="bi bi-filetype-xls" style="font-size: 35px;"></i>
-                                        @break
+                                                        @case('xlsx')
+                                                            <i class="bi bi-filetype-xlsx file__type"></i>
+                                                        @break
 
-                                        @case('csv')
-                                            <i class="bi bi-filetype-csv" style="font-size: 35px;"></i>
-                                        @break
+                                                        @case('xls')
+                                                            <i class="bi bi-filetype-xls file__type"></i>
+                                                        @break
 
-                                        @default
-                                    @endswitch
-                                @endforeach
+                                                        @case('csv')
+                                                            <i class="bi bi-filetype-csv file__type"></i>
+                                                        @break
+
+                                                        @default
+                                                    @endswitch
+                                                    {{ basename($documentFile->file_attachment) }}
+                                                </a>
+                                                <div
+                                                    class="dropdown-center custom__form__document__action__buttons__container">
+                                                    <button type="button"
+                                                        class="btn btn-sm d-flex align-items-center justify-content-center btn__dropdown__menu__custom__form__document"
+                                                        role="button" data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu border-0">
+                                                        <li>
+                                                            <button
+                                                                wire:click="deleteCustomFormFile({{ $documentFile->id }})"
+                                                                type="button" class="btn dropdown-item"
+                                                                href="#">
+                                                                Remove
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <a wire:prevent class="dropdown-item"
+                                                                href="{{ Storage::url($documentFile->file_attachment) }}"
+                                                                download="">
+                                                                Download
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         @endif
                     </div>

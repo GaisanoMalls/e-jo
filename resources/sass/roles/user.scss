@@ -1326,24 +1326,93 @@ body {
         padding: 0;
         object-fit: cover;
         border-radius: $border-radius-8;
-        transition: all 0.1s;
+        transition: all 0.4s;
 
         &:hover {
-            border: 0.1rem solid #d32839;
+            transform: scale(1.02);
         }
     }
 
-    .btn__delete__custom__form__file {
-        height: 25px;
-        width: 25px;
-        border-radius: $border-radius-8;
-        bottom: 2px;
-        left: 2px;
-        background-color: #797a7b;
-        color: $white;
-        opacity: 0.75;
+    .custom__form__image__action__buttons__container {
+        bottom: 3px;
+        gap: .27rem !important;
+        display: none !important;
+
+        .btn__delete__custom__form__file {
+            height: 24px;
+            width: 24px;
+            font-size: $fs-13;
+            border-radius: $border-radius-8;
+            background-color: #797a7b;
+            color: $white;
+        }
+    }
+
+    &:hover {
+        .custom__form__image__action__buttons__container {
+            display: flex !important;
+        }
     }
 }
+
+.custom__form__document__file__container {
+    font-size: $fs-13;
+    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+    padding: 0.6rem 1.3rem;
+    border-radius: $border-radius-8;
+    width: auto;
+    margin-right: -17px;
+
+    .file__type {
+        font-size: 1.2rem;
+    }
+}
+
+.custom__form__document__action__buttons__container {
+    position: absolute;
+    top: -11px;
+    right: -5px;
+
+    .btn__dropdown__menu__custom__form__document {
+        border: none;
+        height: 25px;
+        width: 25px;
+        font-size: $fs-13;
+        background-color: $white;
+        border-radius: $border-radius-8;
+        color: #96a0a8 !important;
+        border-radius: $border-radius-50;
+        box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+
+        &:focus {
+            color: #d32839;
+            border-color: #d32839;
+            background-color: $white;
+        }
+
+        &:hover {
+            color: black !important;
+        }
+    }
+
+    .dropdown-menu {
+        padding: 3px;
+        border-radius: $border-radius-8;
+        box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+
+        .dropdown-item {
+            font-size: $fs-13;
+            padding: 6px 12px;
+            border-radius: $border-radius-8;
+
+            &:focus {
+                background-color: #e9ecef;
+                color: black;
+            }
+        }
+    }
+}
+
 
 .log__container {
     .log__icon {
