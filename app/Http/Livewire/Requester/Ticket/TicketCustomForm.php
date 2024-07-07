@@ -14,6 +14,7 @@ use Livewire\Component;
 class TicketCustomForm extends Component
 {
     public Ticket $ticket;
+    public TicketCustomFormField $ticketCustomFormField;
     public Collection $customFormFields;
     public Collection $customFormImageFiles;
     public Collection $customFormDocumentFiles;
@@ -32,13 +33,13 @@ class TicketCustomForm extends Component
 
     public function customFormData()
     {
-        $queryCustomFormField = TicketCustomFormField::with('ticketCustomFormFiles')->where([
+        $ticketCustomFormField = TicketCustomFormField::with('ticketCustomFormFiles')->where([
             ['ticket_id', $this->ticket->id],
             ['form_id', $this->ticket->helpTopic->form->id],
-        ])->get();
+        ])->get(); // Return a single data only.
 
-        if ($queryCustomFormField) {
-            $customFormFiles = TicketCustomFormFile::with('ticketCustomFormField')->whereIn('ticket_custom_form_field_id', $queryCustomFormField->pluck('id')->toArray())->get();
+        if ($ticketCustomFormField) {
+            $customFormFiles = TicketCustomFormFile::with('ticketCustomFormField')->whereIn('ticket_custom_form_field_id', $ticketCustomFormField->pluck('id')->toArray())->get();
 
             $this->customFormImageFiles = $customFormFiles->filter(function ($field) {
                 $imageExtensions = ['jpg', 'jpeg', 'png'];
@@ -52,7 +53,7 @@ class TicketCustomForm extends Component
                 return in_array($fileExtension, $documentExtensions);
             });
 
-            $this->customFormFields = $queryCustomFormField->map(function ($field) {
+            $this->customFormFields = $ticketCustomFormField->map(function ($field) {
                 return [
                     'id' => $field->id,
                     'name' => $field->name,
@@ -65,6 +66,16 @@ class TicketCustomForm extends Component
                 ];
             });
         }
+    }
+
+    public function saveCustomFormField()
+    {
+        //
+    }
+
+    public function loadCustomFormFields()
+    {
+        return $this->customFormFields;
     }
 
     public function loadCustomFormFiles()

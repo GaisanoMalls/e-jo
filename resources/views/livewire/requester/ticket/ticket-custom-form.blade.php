@@ -13,7 +13,7 @@
                 <form wire:submit.prevent="">
                     <h1 class="modal-title modal__title fs-5 px-3">{{ $ticket->helpTopic->form->name }}</h1>
                     <div class="modal-body modal__body">
-                        <div class="row">
+                        <div wire:init="loadCustomFormFields" class="row">
                             @if ($customFormFields->isNotEmpty())
                                 @foreach ($customFormFields as $key => $field)
                                     {{-- Display those fields that are set to enabled. --}}
@@ -173,8 +173,8 @@
                                                     </div>
                                                     <div class="d-flex align-items-center justify-content-between"
                                                         x-transition.duration.500ms>
-                                                        <span x-show="isUploadingCustomFormFile" x-text="progress + '%'"
-                                                            style="font-size: 12px;">
+                                                        <span x-show="isUploadingCustomFormFile"
+                                                            x-text="progress + '%'" style="font-size: 12px;">
                                                         </span>
                                                         <span class="d-flex align-items-center gap-1"
                                                             style="font-size: 12px;">
@@ -196,6 +196,15 @@
                                         @endif
                                     @endif
                                 @endforeach
+                            @else
+                                <div class="d-flex justify-content-center">
+                                    <div class="d-flex gap-2 flex-column align-items-center justify-content-center">
+                                        <div class="spinner-border text-success" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <small>Loading...</small>
+                                    </div>
+                                </div>
                             @endif
                         </div>
                         @if ($customFormImageFiles->isNotEmpty() || $customFormDocumentFiles->isNotEmpty())
@@ -324,7 +333,7 @@
                             class="btn d-flex align-items-center justify-content-center gap-2 ticket__modal__button">
                             {{-- <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                             </span> --}}
-                            Send Ticket
+                            Save Form
                         </button>
                     </div>
                 </form>

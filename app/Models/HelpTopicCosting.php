@@ -10,7 +10,6 @@ class HelpTopicCosting extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'help_topic_id',
         'costing_approvers',

@@ -330,7 +330,7 @@
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="col-md-4 mt-auto" id="ticket-file-attachment-container">
+                                <div wire:ignore class="col-md-4 mt-auto" id="ticket-file-attachment-container">
                                     <div class="d-flex align-items-center gap-3">
                                         <label for="ticketSubject" class="form-label input__field__label">
                                             Attachment
