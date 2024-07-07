@@ -27,4 +27,9 @@ class HelpTopicConfiguration extends Model
     {
         return $this->belongsTo(HelpTopic::class);
     }
+
+    public function buDepartment(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'bu_department_id');
+    }
 }

@@ -13,8 +13,8 @@ class HelpTopicApprover extends Model
     protected $fillable = [
         'help_topic_configuration_id',
         'help_topic_id',
-        'level',
         'user_id',
+        'level',
     ];
 
     public function configuration(): BelongsTo
@@ -25,5 +25,10 @@ class HelpTopicApprover extends Model
     public function helpTopic(): BelongsTo
     {
         return $this->belongsTo(HelpTopic::class);
+    }
+
+    public function approver(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
