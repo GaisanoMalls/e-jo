@@ -14,7 +14,7 @@ class Approved extends Component
     public bool $allApprovedTickets = true;
     public bool $withCosting = false;
     public bool $withOutCosting = false;
-    public $approvedTickets = [];
+    public array $approvedTickets = [];
 
     public function mount()
     {

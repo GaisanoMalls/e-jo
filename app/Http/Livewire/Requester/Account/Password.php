@@ -9,13 +9,13 @@ use Livewire\Component;
 
 class Password extends Component
 {
-    public $current_password;
-    public $new_password;
-    public $confirm_password;
+    public ?string $current_password = null;
+    public ?string $new_password = null;
+    public ?string $confirm_password = null;
 
     public function rules()
     {
-        return(new UpdatePasswordRequest())->rules();
+        return (new UpdatePasswordRequest())->rules();
     }
 
     /** Perform livewire events upon form submission. */

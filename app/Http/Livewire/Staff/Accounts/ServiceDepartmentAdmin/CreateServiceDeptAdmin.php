@@ -5,8 +5,6 @@ namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 use App\Http\Requests\SysAdmin\Manage\Account\StoreServiceDeptAdminRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
-use App\Http\Traits\Utils;
-use App\Models\ApproverLevel;
 use App\Models\Level;
 use App\Models\Profile;
 use App\Models\Role;
@@ -20,7 +18,7 @@ use Spatie\Permission\Models\Permission;
 
 class CreateServiceDeptAdmin extends Component
 {
-    use BasicModelQueries, Utils;
+    use BasicModelQueries;
 
     public $branches = [];
     public $BUDepartments = [];
@@ -79,46 +77,6 @@ class CreateServiceDeptAdmin extends Component
                     ])),
                 ]);
 
-                if (!$this->asCostingApprover1) {
-                    ApproverLevel::create([
-                        'user_id' => $serviceDeptAdmin->id,
-                        'level_id' => Level::where('value', 1)->pluck('value')->first(),
-                    ]);
-                } else {
-                    if (!$this->hasCostingApprover1()) {
-                        if (SpecialProjectAmountApproval::whereNull('service_department_admin_approver')->exists()) {
-                            SpecialProjectAmountApproval::whereNull('service_department_admin_approver')
-                                ->update([
-                                    'service_department_admin_approver' => [
-                                        'approver_id' => $serviceDeptAdmin->id,
-                                        'is_approved' => false,
-                                        'date_approved' => null
-                                    ]
-                                ]);
-                        } elseif (SpecialProjectAmountApproval::whereNull('fpm_coo_approver')->exists()) {
-                            SpecialProjectAmountApproval::whereNull('fpm_coo_approver')
-                                ->update([
-                                    'service_department_admin_approver' => [
-                                        'approver_id' => $serviceDeptAdmin->id,
-                                        'is_approved' => false,
-                                        'date_approved' => null
-                                    ]
-                                ]);
-                        } else {
-                            // If neither field is null, create a new record
-                            SpecialProjectAmountApproval::create([
-                                'service_department_admin_approver' => [
-                                    'approver_id' => $serviceDeptAdmin->id,
-                                    'is_approved' => false,
-                                    'date_approved' => null
-                                ]
-                            ]);
-                        }
-                    } else {
-                        noty()->warning('Costing approver 1 already assigned');
-                    }
-                }
-
                 $this->actionOnSubmit();
                 noty()->addSuccess('Account successfully created');
             });
@@ -141,7 +99,6 @@ class CreateServiceDeptAdmin extends Component
             'serviceDeptAdminBranches' => $this->queryBranches(),
             'buDepartments' => $this->queryBUDepartments(),
             'serviceDeptAdminServiceDepartments' => $this->queryServiceDepartments(),
-            'hasCostingApprover1' => $this->hasCostingApprover1()
         ]);
     }
 }

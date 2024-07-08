@@ -4,14 +4,20 @@ namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Models\Clarification;
 use App\Models\Ticket;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class LatestClarification extends Component
 {
     public Ticket $ticket;
-    public $latestClarification;
+    public Collection $latestClarification;
 
     protected $listeners = ['loadLatestClarification' => '$refresh'];
+
+    public function mount()
+    {
+        $this->latestClarification = collect();
+    }
 
     public function render()
     {

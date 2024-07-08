@@ -9,7 +9,7 @@ class LoadViewPurchaseRequestButton extends Component
 {
     public Ticket $ticket;
 
-    public $customFormData = [];
+    public ?array $customFormData = [];
 
     public function loadCustomForm()
     {

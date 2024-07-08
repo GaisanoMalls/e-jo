@@ -25,9 +25,9 @@ class SendClarification extends Component
     use WithFileUploads, Utils;
 
     public Ticket $ticket;
-    public $upload = 0;
-    public $description;
-    public $clarificationFiles = [];
+    public int $upload = 0;
+    public ?string $description = null;
+    public ?array $clarificationFiles = [];
 
     public function rules()
     {

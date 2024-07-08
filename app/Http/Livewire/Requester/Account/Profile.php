@@ -16,14 +16,14 @@ class Profile extends Component
 {
     use WithFileUploads, Utils;
 
-    public $imageUpload = 0; // This property is required to re-render the field resulting in "No File Chosen".
-    public $first_name;
-    public $middle_name;
-    public $last_name;
-    public $suffix;
-    public $email;
-    public $mobile_number;
-    public $picture;
+    public int $imageUpload = 0; // This property is required to re-render the field resulting in "No File Chosen".
+    public ?string $first_name = null;
+    public ?string $middle_name = null;
+    public ?string $last_name = null;
+    public ?string $suffix = null;
+    public ?string $email = null;
+    public ?string $mobile_number = null;
+    public ?string $picture = null;
 
 
     public function mount()
@@ -46,7 +46,7 @@ class Profile extends Component
     /** Reset the file input field after form submission. */
     public function resetFileField()
     {
-        $this->picture = null;
+        $this->reset('picture');
         $this->imageUpload++;
     }
 

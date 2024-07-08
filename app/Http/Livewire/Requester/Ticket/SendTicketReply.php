@@ -22,9 +22,9 @@ class SendTicketReply extends Component
     use WithFileUploads, Utils;
 
     public Ticket $ticket;
-    public $upload = 0;
-    public $description;
-    public $replyFiles = [];
+    public int $upload = 0;
+    public ?string $description = null;
+    public ?array $replyFiles = [];
 
     public function rules()
     {

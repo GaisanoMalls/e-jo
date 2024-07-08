@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Requester\TicketFeedback;
 
+use App\Enums\TicketRatingEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Models\Feedback;
 use App\Models\Status;
@@ -14,14 +15,14 @@ class TicketList extends Component
 {
     use AppErrorLog;
 
-    public $ticket;
-    public $ticketNumber;
-    public $fullName;
-    public $email;
-    public $rating;
-    public $feedback;
-    public $suggestion;
-    public $had_issues_encountered;
+    public Ticket $ticket;
+    public ?string $ticketNumber = null;
+    public ?string $fullName = null;
+    public ?string $email = null;
+    public ?TicketRatingEnum $rating;
+    public ?string $feedback = null;
+    public ?string $suggestion = null;
+    public bool $had_issues_encountered = false;
 
     public function mount()
     {

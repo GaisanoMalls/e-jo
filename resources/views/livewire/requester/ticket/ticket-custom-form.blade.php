@@ -25,7 +25,7 @@
                             <input wire:model="customFormFields.{{ $key }}.value" type="text"
                                 id="field-{{ $key }}" class="form-control input__field"
                                 placeholder="Enter {{ Str::lower($field['label']) }}" @required($field['is_required'])
-                                @disabled(!$isUpdating)>
+                                @disabled(!$isEditing)>
                             @error('customcustomFormFields.{{ $key }}.value')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -43,7 +43,7 @@
                             </label>
                             <textarea wire:model="customFormFields.{{ $key }}.value" id="field-{{ $key }}"
                                 class="form-control input__field" placeholder="Enter {{ Str::lower($field['label']) }}" @required($field['is_required'])
-                                @disabled(!$isUpdating)>
+                                @disabled(!$isEditing)>
                                                 </textarea>
                             @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
@@ -63,7 +63,7 @@
                             <input wire:model="customFormFields.{{ $key }}.value"
                                 id="field-{{ $key }}" type="number" class="form-control input__field"
                                 placeholder="Enter {{ Str::lower($field['label']) }}" @required($field['is_required'])
-                                @disabled(!$isUpdating)>
+                                @disabled(!$isEditing)>
                             </input>
                             @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
@@ -83,7 +83,7 @@
                             <input wire:model="customFormFields.{{ $key }}.value"
                                 id="field-{{ $key }}" type="date" class="form-control input__field"
                                 placeholder="Enter {{ Str::lower($field['label']) }}" @required($field['is_required'])
-                                @disabled(!$isUpdating)>
+                                @disabled(!$isEditing)>
                             </input>
                             @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
@@ -103,7 +103,7 @@
                             <input wire:model="customFormFields.{{ $key }}.value"
                                 id="field-{{ $key }}" type="time" class="form-control input__field"
                                 placeholder="Enter {{ Str::lower($field['label']) }}" @required($field['is_required'])
-                                @disabled(!$isUpdating)>
+                                @disabled(!$isEditing)>
                             </input>
                             @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
@@ -123,7 +123,7 @@
                             <input wire:model="customFormFields.{{ $key }}.value"
                                 id="field-{{ $key }}" type="number" step=".01"
                                 class="form-control input__field" placeholder="Enter {{ Str::lower($field['label']) }}"
-                                @disabled(!$isUpdating)>
+                                @disabled(!$isEditing)>
                             </input>
                             @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
@@ -135,50 +135,52 @@
                     @endif
 
                     {{-- file upload field --}}
-                    @if ($field['type'] === FieldType::FILE->value)
-                        <div class="col-md-6 mb-3">
-                            <label for="field-{{ $key }}" class="form-label input__field__label">
-                                {{ Str::title($field['label']) }}
-                            </label>
-                            <div x-data="{ isUploadingCustomFormFile: false, progress: 1 }"
-                                x-on:livewire-upload-start="isUploadingCustomFormFile = true; progress = 1"
-                                x-on:livewire-upload-finish="isUploadingCustomFormFile = false"
-                                x-on:livewire-upload-error="isUploadingCustomFormFile = false"
-                                x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                <input wire:model="customFormFields.{{ $key }}.value"
-                                    id="field-{{ $key }}" type="file"
-                                    class="form-control form-control-sm border-0 custom__form__attachment__input"
-                                    placeholder="Enter {{ Str::lower($field['label']) }}"
-                                    accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv" multiple
-                                    @disabled(!$isUpdating)>
-                                </input>
-                                <div x-transition.duration.500ms x-show="isUploadingCustomFormFile"
-                                    class="progress progress-sm mt-1" style="height: 10px;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                        role="progressbar" aria-label="Animated striped example" aria-valuenow="75"
-                                        aria-valuemin="0" aria-valuemax="100"
-                                        x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
+                    @if ($isEditing)
+                        @if ($field['type'] === FieldType::FILE->value)
+                            <div class="col-md-6 mb-3">
+                                <label for="field-{{ $key }}" class="form-label input__field__label">
+                                    {{ Str::title($field['label']) }}
+                                </label>
+                                <div x-data="{ isUploadingCustomFormFile: false, progress: 1 }"
+                                    x-on:livewire-upload-start="isUploadingCustomFormFile = true; progress = 1"
+                                    x-on:livewire-upload-finish="isUploadingCustomFormFile = false"
+                                    x-on:livewire-upload-error="isUploadingCustomFormFile = false"
+                                    x-on:livewire-upload-progress="progress = $event.detail.progress">
+                                    <input wire:model="customFormFields.{{ $key }}.value"
+                                        id="field-{{ $key }}" type="file"
+                                        class="form-control form-control-sm border-0 custom__form__attachment__input"
+                                        placeholder="Enter {{ Str::lower($field['label']) }}"
+                                        accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv" multiple
+                                        @disabled(!$isEditing)>
+                                    </input>
+                                    <div x-transition.duration.500ms x-show="isUploadingCustomFormFile"
+                                        class="progress progress-sm mt-1" style="height: 10px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar" aria-label="Animated striped example" aria-valuenow="75"
+                                            aria-valuemin="0" aria-valuemax="100"
+                                            x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between"
+                                        x-transition.duration.500ms>
+                                        <span x-show="isUploadingCustomFormFile" x-text="progress + '%'"
+                                            style="font-size: 12px;">
+                                        </span>
+                                        <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
+                                            <i x-show="isUploadingCustomFormFile" class='bx bx-loader-circle bx-spin'
+                                                style="font-size: 14px;"></i>
+                                            <span x-show="isUploadingCustomFormFile">Uploading...</span>
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center justify-content-between"
-                                    x-transition.duration.500ms>
-                                    <span x-show="isUploadingCustomFormFile" x-text="progress + '%'"
-                                        style="font-size: 12px;">
+                                @error('customFormFields.{{ $key }}.value')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
                                     </span>
-                                    <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
-                                        <i x-show="isUploadingCustomFormFile" class='bx bx-loader-circle bx-spin'
-                                            style="font-size: 14px;"></i>
-                                        <span x-show="isUploadingCustomFormFile">Uploading...</span>
-                                    </span>
-                                </div>
+                                @enderror
                             </div>
-                            @error('customFormFields.{{ $key }}.value')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div>
+                        @endif
                     @endif
                 @endif
             @endforeach

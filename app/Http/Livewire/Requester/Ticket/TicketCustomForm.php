@@ -17,11 +17,11 @@ class TicketCustomForm extends Component
     use WithFileUploads;
 
     public Ticket $ticket;
-    public Collection $ticketCustomFormField;
-    public Collection $customFormFields;
-    public Collection $customFormImageFiles;
-    public Collection $customFormDocumentFiles;
-    public bool $isUpdating = false;
+    public ?Collection $ticketCustomFormField = null;
+    public ?Collection $customFormFields = null;
+    public ?Collection $customFormImageFiles = null;
+    public ?Collection $customFormDocumentFiles = null;
+    public bool $isEditing = false;
 
     protected $listeners = [
         'loadCustomFormFiles' => 'loadCustomFormFiles'

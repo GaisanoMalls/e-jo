@@ -94,11 +94,6 @@ class Ticket extends Model
         return $this->hasOne(TicketCosting::class);
     }
 
-    public function specialProjectAmountApproval(): HasOne
-    {
-        return $this->hasOne(SpecialProjectAmountApproval::class);
-    }
-
     public function specialProjectStatus(): HasOne
     {
         return $this->hasOne(TicketSpecialProjectStatus::class);
