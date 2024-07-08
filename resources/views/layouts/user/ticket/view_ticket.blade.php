@@ -57,7 +57,7 @@
                             </div>
                             <div class="ticket__details__card__body">
                                 @if ($ticket->helpTopic->has('form'))
-                                    @livewire('requester.ticket.load-view-purchase-request-button', ['ticket' => $ticket])
+                                    @livewire('requester.ticket.ticket-custom-form', ['ticket' => $ticket])
                                 @endif
                                 <div class="ticket__description">{!! $ticket->description !!}</div>
                                 @if ($ticket->fileAttachments->count() > 0)
@@ -112,7 +112,4 @@
 @include('layouts.user.ticket.includes.modal.preview_ticket_files_modal')
 @livewire('requester.ticket.send-ticket-reply', ['ticket' => $ticket])
 @livewire('requester.ticket.send-clarification', ['ticket' => $ticket])
-@if ($ticket->helpTopic->has('form'))
-    @livewire('requester.ticket.ticket-custom-form', ['ticket' => $ticket])
-@endif
 @endsection

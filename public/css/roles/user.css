@@ -7974,6 +7974,137 @@ body {
   font-weight: 400;
   text-transform: none;
 }
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__name {
+  font-size: 0.938rem;
+  font-weight: 500;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .btn__edit__custom__form {
+  font-size: 0.813rem;
+  border: 1px solid rgb(223, 228, 233);
+  color: #3e3d3d;
+  font-weight: 500;
+  background-color: #f3f4f6;
+  outline: none;
+  padding: 6px 12px;
+  border-radius: 0.5rem;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .btn__edit__custom__form:hover {
+  color: black;
+  border-color: rgb(202, 208, 214);
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .btn__edit__custom__form i {
+  font-size: 0.688rem;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__image__container .custom__form__file__attachment__image {
+  height: 4rem;
+  width: 4rem;
+  padding: 0;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 0.5rem;
+  transition: all 0.4s;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__image__container .custom__form__file__attachment__image:hover {
+  transform: scale(1.02);
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__image__container .custom__form__image__action__buttons__container {
+  bottom: 3px;
+  gap: 0.27rem !important;
+  display: none !important;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__image__container .custom__form__image__action__buttons__container .btn__delete__custom__form__file {
+  height: 24px;
+  width: 24px;
+  font-size: 0.813rem;
+  border-radius: 0.5rem;
+  background-color: #797a7b;
+  color: #ffffff;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__image__container:hover .custom__form__image__action__buttons__container {
+  display: flex !important;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__document__file__container {
+  text-decoration: none !important;
+  color: inherit !important;
+  font-size: 0.813rem;
+  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+  padding: 0.6rem 1.3rem;
+  border-radius: 0.5rem;
+  width: auto;
+  margin-right: -17px;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__document__file__container .file__type {
+  font-size: 1.2rem;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__document__action__buttons__container {
+  position: absolute;
+  top: -11px;
+  right: -5px;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__document__action__buttons__container .btn__dropdown__menu__custom__form__document {
+  border: none;
+  height: 25px;
+  width: 25px;
+  font-size: 0.813rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  color: #96a0a8 !important;
+  border-radius: 3.125rem;
+  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__document__action__buttons__container .btn__dropdown__menu__custom__form__document:focus {
+  color: #d32839;
+  border-color: #d32839;
+  background-color: #ffffff;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__document__action__buttons__container .btn__dropdown__menu__custom__form__document:hover {
+  color: black !important;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__document__action__buttons__container .dropdown-menu {
+  padding: 3px;
+  border-radius: 0.5rem;
+  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__document__action__buttons__container .dropdown-menu .dropdown-item {
+  text-decoration: none !important;
+  color: inherit;
+  font-size: 0.813rem;
+  padding: 6px 12px;
+  border-radius: 0.5rem;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__document__action__buttons__container .dropdown-menu .dropdown-item:focus {
+  background-color: #e9ecef;
+  color: black;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .input__field__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4a5568;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .input__field {
+  padding: 0.6rem 1rem;
+  font-size: 0.938rem;
+  border-radius: 0.5rem;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .input__field:focus {
+  border-color: #d32839;
+  box-shadow: none;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .input__field:disabled {
+  background-color: #f3f4f6;
+  border: none;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__attachment__input {
+  border: 0;
+  border-radius: 0;
+  font-size: 0.813rem;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__attachment__input:focus {
+  box-shadow: none;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form__attachment__input:disabled {
+  background-color: #f8fafd !important;
+}
 .ticket__card .ticket__details__section .card__ticket__details .ticket__details__time {
   color: #717171;
   font-size: 0.75rem;
@@ -8234,101 +8365,6 @@ body {
   font-size: 0.75rem;
   padding-top: 1px;
   font-weight: 500;
-}
-
-.btn__purchase__request {
-  font-size: 0.813rem;
-  border: 1px solid rgb(223, 228, 233);
-  color: #3e3d3d;
-  font-weight: 500;
-  background-color: #f3f4f6;
-  outline: none;
-  padding: 6px 12px;
-  border-radius: 0.5rem;
-}
-.btn__purchase__request:hover {
-  color: black;
-  border-color: rgb(202, 208, 214);
-}
-
-.custom__form__image__container .custom__form__file__attachment__image {
-  height: 4rem;
-  width: 4rem;
-  padding: 0;
-  -o-object-fit: cover;
-     object-fit: cover;
-  border-radius: 0.5rem;
-  transition: all 0.4s;
-}
-.custom__form__image__container .custom__form__file__attachment__image:hover {
-  transform: scale(1.02);
-}
-.custom__form__image__container .custom__form__image__action__buttons__container {
-  bottom: 3px;
-  gap: 0.27rem !important;
-  display: none !important;
-}
-.custom__form__image__container .custom__form__image__action__buttons__container .btn__delete__custom__form__file {
-  height: 24px;
-  width: 24px;
-  font-size: 0.813rem;
-  border-radius: 0.5rem;
-  background-color: #797a7b;
-  color: #ffffff;
-}
-.custom__form__image__container:hover .custom__form__image__action__buttons__container {
-  display: flex !important;
-}
-
-.custom__form__document__file__container {
-  font-size: 0.813rem;
-  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
-  padding: 0.6rem 1.3rem;
-  border-radius: 0.5rem;
-  width: auto;
-  margin-right: -17px;
-}
-.custom__form__document__file__container .file__type {
-  font-size: 1.2rem;
-}
-
-.custom__form__document__action__buttons__container {
-  position: absolute;
-  top: -11px;
-  right: -5px;
-}
-.custom__form__document__action__buttons__container .btn__dropdown__menu__custom__form__document {
-  border: none;
-  height: 25px;
-  width: 25px;
-  font-size: 0.813rem;
-  background-color: #ffffff;
-  border-radius: 0.5rem;
-  color: #96a0a8 !important;
-  border-radius: 3.125rem;
-  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
-}
-.custom__form__document__action__buttons__container .btn__dropdown__menu__custom__form__document:focus {
-  color: #d32839;
-  border-color: #d32839;
-  background-color: #ffffff;
-}
-.custom__form__document__action__buttons__container .btn__dropdown__menu__custom__form__document:hover {
-  color: black !important;
-}
-.custom__form__document__action__buttons__container .dropdown-menu {
-  padding: 3px;
-  border-radius: 0.5rem;
-  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
-}
-.custom__form__document__action__buttons__container .dropdown-menu .dropdown-item {
-  font-size: 0.813rem;
-  padding: 6px 12px;
-  border-radius: 0.5rem;
-}
-.custom__form__document__action__buttons__container .dropdown-menu .dropdown-item:focus {
-  background-color: #e9ecef;
-  color: black;
 }
 
 .log__container .log__icon {

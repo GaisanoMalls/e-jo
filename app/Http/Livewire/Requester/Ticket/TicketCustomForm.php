@@ -10,36 +10,37 @@ use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class TicketCustomForm extends Component
 {
+    use WithFileUploads;
+
     public Ticket $ticket;
-    public TicketCustomFormField $ticketCustomFormField;
+    public Collection $ticketCustomFormField;
     public Collection $customFormFields;
     public Collection $customFormImageFiles;
     public Collection $customFormDocumentFiles;
+    public bool $isUpdating = false;
 
     protected $listeners = [
-        'getCustomFormData' => 'customFormData',
         'loadCustomFormFiles' => 'loadCustomFormFiles'
     ];
 
     public function mount()
     {
-        $this->customFormFields = collect();
-        $this->customFormImageFiles = collect();
-        $this->customFormDocumentFiles = collect();
+        $this->customFormData();
     }
 
     public function customFormData()
     {
-        $ticketCustomFormField = TicketCustomFormField::with('ticketCustomFormFiles')->where([
+        $this->ticketCustomFormField = TicketCustomFormField::with('ticketCustomFormFiles')->where([
             ['ticket_id', $this->ticket->id],
             ['form_id', $this->ticket->helpTopic->form->id],
-        ])->get(); // Return a single data only.
+        ])->get(); // Return a single record.
 
-        if ($ticketCustomFormField) {
-            $customFormFiles = TicketCustomFormFile::with('ticketCustomFormField')->whereIn('ticket_custom_form_field_id', $ticketCustomFormField->pluck('id')->toArray())->get();
+        if ($this->ticketCustomFormField) {
+            $customFormFiles = TicketCustomFormFile::with('ticketCustomFormField')->whereIn('ticket_custom_form_field_id', $this->ticketCustomFormField->pluck('id')->toArray())->get();
 
             $this->customFormImageFiles = $customFormFiles->filter(function ($field) {
                 $imageExtensions = ['jpg', 'jpeg', 'png'];
@@ -53,7 +54,7 @@ class TicketCustomForm extends Component
                 return in_array($fileExtension, $documentExtensions);
             });
 
-            $this->customFormFields = $ticketCustomFormField->map(function ($field) {
+            $this->customFormFields = $this->ticketCustomFormField->map(function ($field) {
                 return [
                     'id' => $field->id,
                     'name' => $field->name,
@@ -70,7 +71,23 @@ class TicketCustomForm extends Component
 
     public function saveCustomFormField()
     {
-        //
+        try {
+            $ticketCustomFormField = TicketCustomFormField::where([
+                ['ticket_id', $this->ticket->id],
+                ['form_id', $this->ticket->helpTopic->form->id],
+            ])->first();
+
+            foreach ($this->customFormFields as $field) {
+                dump($field);
+                if ($field['type'] === 'file' && is_array($field['value'])) {
+                    // foreach ($field['value'] as $uploadedCustomFile) {
+                    //     dump($uploadedCustomFile);
+                    // }
+                }
+            }
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+        }
     }
 
     public function loadCustomFormFields()

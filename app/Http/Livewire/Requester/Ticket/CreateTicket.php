@@ -203,7 +203,7 @@ class CreateTicket extends Component
                             $ticketCustomFormField = TicketCustomFormField::create([
                                 'ticket_id' => $ticket->id,
                                 'form_id' => $field['form']['id'],
-                                'value' => $field['type'] !== 'file' ? $field['value'] : '',
+                                'value' => $field['type'] !== 'file' ? $field['value'] : null,
                                 'name' => $field['name'],
                                 'label' => $field['label'],
                                 'type' => $field['type'],
