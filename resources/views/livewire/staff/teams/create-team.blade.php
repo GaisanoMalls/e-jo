@@ -159,10 +159,6 @@
     <script>
         const serviceDepartmentSelect = document.querySelector('#select-service-department');
         const branchSelect = document.querySelector('#select-branch');
-        const serviceDepartmentChildSelect = document.querySelector('#select-service-department-child-select');
-        const selectServiceDeptChildrenContainer = document.querySelector('#selectServiceDeptChildrenContainer');
-
-        selectServiceDeptChildrenContainer.style.display = 'none';
 
         if (serviceDepartmentSelect) {
             const serviceDepartmentOption = [
@@ -182,50 +178,8 @@
                 markSearchResults: true,
             });
 
-            VirtualSelect.init({
-                ele: serviceDepartmentChildSelect,
-                search: true,
-                required: true,
-                markSearchResults: true,
-            });
-
-            serviceDepartmentSelect.addEventListener('reset', () => {
-                serviceDepartmentChildSelect.setOptions([]);
-                selectServiceDeptChildrenContainer.style.display = 'none';
-            });
-
-            serviceDepartmentSelect.addEventListener('change', () => {
-                const serviceDeptId = parseInt(serviceDepartmentSelect.value);
-
-                if (serviceDeptId) {
-                    @this.set('selectedServiceDepartment', serviceDeptId);
-
-                    window.addEventListener('load-service-department-children', (event) => {
-                        const children = event.detail.serviceDeptChildren
-                        const childrenOption = [];
-                        console.log(children);
-
-                        if (children.length > 0) {
-                            selectServiceDeptChildrenContainer.style.display = 'block';
-
-                            children.forEach(function(child) {
-                                childrenOption.push({
-                                    label: child.name,
-                                    value: child.id
-                                });
-                            });
-
-                            serviceDepartmentChildSelect.setOptions(childrenOption)
-                            serviceDepartmentChildSelect.addEventListener('change', () => {
-                                @this.set('selectedChild', serviceDepartmentChildSelect.value)
-                            });
-
-                        } else {
-                            selectServiceDeptChildrenContainer.style.display = 'none';
-                            serviceDepartmentChildSelect.setOptions([]);
-                        }
-                    });
-                }
+            serviceDepartmentSelect.addEventListener('change', (event) => {
+                @this.set('selectedServiceDepartment', parseInt(event.target.value));
             });
         }
 
@@ -249,8 +203,8 @@
                 markSearchResults: true,
             });
 
-            branchSelect.addEventListener('change', () => {
-                @this.set('selectedBranches', branchSelect.value);
+            branchSelect.addEventListener('change', (event) => {
+                @this.set('selectedBranches', event.target.value);
             });
         }
 

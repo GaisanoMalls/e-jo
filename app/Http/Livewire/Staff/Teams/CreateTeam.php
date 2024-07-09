@@ -18,10 +18,9 @@ class CreateTeam extends Component
 {
     use BasicModelQueries;
 
-    public $selectedBranches = [];
-    public $serviceDeptChildren = [];
-    public $addedSubteam = [];
-    public $name;
+    public ?array $selectedBranches = [];
+    public ?array $addedSubteam = [];
+    public ?string $name = null;
     public $selectedServiceDepartment;
     public $selectedChild;
     public $subteam;
@@ -45,9 +44,10 @@ class CreateTeam extends Component
         $this->dispatchBrowserEvent('clear-select-options');
     }
 
-    public function updatedSelectedServiceDepartment()
+    public function updatedSelectedServiceDepartment($value)
     {
-        $this->serviceDeptChildren = ServiceDepartmentChildren::where('service_department_id', $this->selectedServiceDepartment)->get();
+        dump($value);
+        $this->serviceDeptChildren = ServiceDepartmentChildren::where('service_department_id', $value)->get();
         $this->dispatchBrowserEvent('load-service-department-children', ['serviceDeptChildren' => $this->serviceDeptChildren]);
     }
 

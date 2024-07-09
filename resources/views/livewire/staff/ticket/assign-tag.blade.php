@@ -58,8 +58,8 @@
 
         const tagSelect = document.querySelector('#select-tag')
 
-        tagSelect.addEventListener('change', () => {
-            @this.set('selectedTags', tagSelect.value);
+        tagSelect.addEventListener('change', (event) => {
+            @this.set('selectedTags', event.target.value);
         });
 
         // Clear all selected tags in the select option when clear button is clicked.

@@ -203,8 +203,8 @@
             selectedValue: '{{ $user->profile->suffix }}'
         });
 
-        requesterSuffixSelect.addEventListener('change', () => {
-            @this.set('suffix', requesterSuffixSelect.value);
+        requesterSuffixSelect.addEventListener('change', (event) => {
+            @this.set('suffix', event.target.value);
         })
 
         const requesterBranchOption = @json($requesterBranches).map(br => ({
@@ -242,8 +242,8 @@
             markSearchResults: true,
         });
 
-        requesterBranchSelect.addEventListener('change', () => {
-            const requesterBranchId = requesterBranchSelect.value;
+        requesterBranchSelect.addEventListener('change', (event) => {
+            const requesterBranchId = event.target.value;
             if (requesterBranchId) {
                 @this.set('branch', parseInt(requesterBranchId));
                 requesterBUDepartmentSelect.enable();
@@ -274,8 +274,8 @@
             }
         });
 
-        requesterBUDepartmentSelect.addEventListener('change', () => {
-            @this.set('bu_department', parseInt(requesterBUDepartmentSelect.value));
+        requesterBUDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('bu_department', parseInt(event.target.value));
         });
 
         const requesterPermissionOption = @json($allPermissions).map(permission => ({
@@ -294,8 +294,8 @@
             selectedValue: @json($currentPermissions),
         });
 
-        selectRequesterPermission.addEventListener('change', () => {
-            @this.set('permissions', selectRequesterPermission.value);
+        selectRequesterPermission.addEventListener('change', (event) => {
+            @this.set('permissions', event.target.value);
         });
 
         selectRequesterPermission.addEventListener('reset', () => {

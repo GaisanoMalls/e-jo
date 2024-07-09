@@ -102,12 +102,12 @@
             teamSelect.setValue(event.detail.ticket.team_id);
         });
 
-        agentSelect.addEventListener('change', () => {
-            @this.set('agent', agentSelect.value);
+        agentSelect.addEventListener('change', (event) => {
+            @this.set('agent', event.target.value);
         });
 
-        teamSelect.addEventListener('change', () => {
-            const teamId = teamSelect.value;
+        teamSelect.addEventListener('change', (event) => {
+            const teamId = event.target.value;
             @this.set('selectedTeams', teamId);
 
             if (teamId) {

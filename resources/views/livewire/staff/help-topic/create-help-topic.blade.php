@@ -257,8 +257,8 @@
         });
 
 
-        slaSelect.addEventListener('change', () => {
-            const slaId = parseInt(slaSelect.value);
+        slaSelect.addEventListener('change', (event) => {
+            const slaId = parseInt(event.target.value);
             @this.set('sla', slaId);
         });
 
@@ -283,8 +283,8 @@
 
         teamSelect.disable();
 
-        serviceDepartmentSelect.addEventListener('change', () => {
-            const serviceDepartmentId = serviceDepartmentSelect.value;
+        serviceDepartmentSelect.addEventListener('change', (event) => {
+            const serviceDepartmentId = event.target.value;
 
             if (serviceDepartmentId) {
                 @this.set('serviceDepartment', serviceDepartmentId);
@@ -319,8 +319,8 @@
             }
         });
 
-        teamSelect.addEventListener('change', () => {
-            const teamId = parseInt(teamSelect.value);
+        teamSelect.addEventListener('change', (event) => {
+            const teamId = parseInt(event.target.value);
             if (teamId) @this.set('team', teamId);
         });
 
@@ -381,8 +381,8 @@
             markSearchResults: true,
         });
 
-        buDepartmentSelect.addEventListener('change', () => {
-            @this.set('selectedBuDepartment', buDepartmentSelect.value);
+        buDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('selectedBuDepartment', event.target.value);
         });
 
         approvalLevelSelect.addEventListener('change', () => {

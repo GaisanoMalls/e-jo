@@ -250,8 +250,8 @@
             selectedValue: '{{ $serviceDeptAdmin->profile->suffix }}'
         });
 
-        serviceDeptAdminSuffixSelect.addEventListener('change', () => {
-            @this.set('suffix', serviceDeptAdminSuffixSelect.value)
+        serviceDeptAdminSuffixSelect.addEventListener('change', (event) => {
+            @this.set('suffix', event.target.value)
         });
 
         const serviceDeptAdminBranchOption = @json($serviceDeptAdminBranches).map(branch => ({
@@ -278,8 +278,8 @@
             serviceDeptAdminBUDepartmentSelect.setOptions([]);
         });
 
-        serviceDeptAdminBranchSelect.addEventListener('change', () => {
-            const serviceDeptAdminBranchIds = serviceDeptAdminBranchSelect.value;
+        serviceDeptAdminBranchSelect.addEventListener('change', (event) => {
+            const serviceDeptAdminBranchIds = event.target.value;
             if (serviceDeptAdminBranchIds) {
                 @this.set('branches', serviceDeptAdminBranchIds);
                 serviceDeptAdminBUDepartmentSelect.enable();
@@ -319,8 +319,8 @@
             selectedValue: @json($bu_department)
         });
 
-        serviceDeptAdminBUDepartmentSelect.addEventListener('change', () => {
-            @this.set('bu_department', parseInt(serviceDeptAdminBUDepartmentSelect.value));
+        serviceDeptAdminBUDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('bu_department', parseInt(event.target.value));
         });
 
         const serviceDeptAdminServiceDepartmentOption = @json($serviceDeptAdminServiceDepartments).map(serviceDepartment => ({
@@ -340,8 +340,8 @@
             selectedValue: @json($service_departments)
         });
 
-        serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', () => {
-            @this.set('service_departments', serviceDeptAdminSeviceDepartmentSelect.value);
+        serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('service_departments', event.target.value);
         });
 
         const serviceDeptAdminPermissionOption = @json($allPermissions).map(permission => ({
@@ -360,8 +360,8 @@
             selectedValue: @json($currentPermissions),
         });
 
-        selectServiceDeptAdminPermission.addEventListener('change', () => {
-            @this.set('permissions', selectServiceDeptAdminPermission.value);
+        selectServiceDeptAdminPermission.addEventListener('change', (event) => {
+            @this.set('permissions', event.target.value);
         });
 
         selectServiceDeptAdminPermission.addEventListener('reset', () => {

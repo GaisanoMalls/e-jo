@@ -690,16 +690,16 @@
             options: addFormFieldSelectEnableOption
         });
 
-        addSelectedFormFieldSelectFieldType.addEventListener('change', () => {
-            @this.set('selectedFormFieldType', addSelectedFormFieldSelectFieldType.value)
+        addSelectedFormFieldSelectFieldType.addEventListener('change', (event) => {
+            @this.set('selectedFormFieldType', event.target.value)
         });
 
-        addSelectedFormFieldSelectRequired.addEventListener('change', () => {
-            @this.set('selectedFormFieldIsRequired', addSelectedFormFieldSelectRequired.value)
+        addSelectedFormFieldSelectRequired.addEventListener('change', (event) => {
+            @this.set('selectedFormFieldIsRequired', event.target.value)
         });
 
-        addSelectedFormFieldSelectEnabled.addEventListener('change', () => {
-            @this.set('selectedFormFieldIsEnabled', addSelectedFormFieldSelectEnabled.value);
+        addSelectedFormFieldSelectEnabled.addEventListener('change', (event) => {
+            @this.set('selectedFormFieldIsEnabled', event.target.value);
         });
 
         window.addEventListener('selected-form-clear-form-fields', () => {
@@ -741,16 +741,16 @@
             editSelectedFieldRequired.setValue(editCurrentSelectedFieldRequired);
             editSelectedFieldEnabled.setValue(editCurrentSelectedFieldEnabled);
 
-            editSelectedFieldType.addEventListener('change', () => {
-                @this.set('editSelectedFieldType', editSelectedFieldType.value);
+            editSelectedFieldType.addEventListener('change', (event) => {
+                @this.set('editSelectedFieldType', event.target.value);
             });
 
-            editSelectedFieldRequired.addEventListener('change', () => {
-                @this.set('editSelectedFieldRequired', editSelectedFieldRequired.value);
+            editSelectedFieldRequired.addEventListener('change', (event) => {
+                @this.set('editSelectedFieldRequired', event.target.value);
             });
 
-            editSelectedFieldEnabled.addEventListener('change', () => {
-                @this.set('editSelectedFieldEnabled', editSelectedFieldEnabled.value);
+            editSelectedFieldEnabled.addEventListener('change', (event) => {
+                @this.set('editSelectedFieldEnabled', event.target.value);
             });
         });
 
@@ -791,16 +791,16 @@
             editAddedSelectFieldRequired.setValue(editAddedFieldRequired ? 'Yes' : 'No');
             editAddedSelectFieldEnabled.setValue(editAddedFieldEnabled ? 'Yes' : 'No');
 
-            editAddedSelectFieldType.addEventListener('change', () => {
-                @this.set('editAddedFieldType', editAddedSelectFieldType.value);
+            editAddedSelectFieldType.addEventListener('change', (event) => {
+                @this.set('editAddedFieldType', event.target.value);
             });
 
-            editAddedSelectFieldRequired.addEventListener('change', () => {
-                @this.set('editAddedFieldRequired', editAddedSelectFieldRequired.value);
+            editAddedSelectFieldRequired.addEventListener('change', (event) => {
+                @this.set('editAddedFieldRequired', event.target.value);
             });
 
-            editAddedSelectFieldEnabled.addEventListener('change', () => {
-                @this.set('editAddedFieldEnabled', editAddedSelectFieldEnabled.value);
+            editAddedSelectFieldEnabled.addEventListener('change', (event) => {
+                @this.set('editAddedFieldEnabled', event.target.value);
             });
         });
 

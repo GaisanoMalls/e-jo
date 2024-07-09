@@ -199,8 +199,8 @@
             markSearchResults: true,
         });
 
-        serviceDeptAdminSuffixSelect.addEventListener('change', () => {
-            @this.set('suffix', serviceDeptAdminSuffixSelect.value)
+        serviceDeptAdminSuffixSelect.addEventListener('change', (event) => {
+            @this.set('suffix', event.target.value);
         });
 
         const serviceDeptAdminBranchOption = @json($serviceDeptAdminBranches).map(branch => ({
@@ -218,8 +218,8 @@
             markSearchResults: true,
         });
 
-        serviceDeptAdminBranchSelect.addEventListener('change', () => {
-            const branchIds = serviceDeptAdminBranchSelect.value;
+        serviceDeptAdminBranchSelect.addEventListener('change', (event) => {
+            const branchIds = event.target.value;
             @this.set('branches', branchIds);
         });
 
@@ -240,8 +240,8 @@
             markSearchResults: true,
         });
 
-        serviceDeptAdminBUDepartmentSelect.addEventListener('change', () => {
-            @this.set('bu_department', parseInt(serviceDeptAdminBUDepartmentSelect.value));
+        serviceDeptAdminBUDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('bu_department', parseInt(event.target.value));
         });
 
         const serviceDeptAdminServiceDepartmentOption = @json($serviceDeptAdminServiceDepartments).map(serviceDepartment => ({
@@ -261,8 +261,8 @@
             markSearchResults: true,
         });
 
-        serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', () => {
-            @this.set('service_departments', serviceDeptAdminSeviceDepartmentSelect.value);
+        serviceDeptAdminSeviceDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('service_departments', event.target.value);
         });
     </script>
 @endpush

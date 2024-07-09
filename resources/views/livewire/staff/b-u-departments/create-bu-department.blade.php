@@ -88,8 +88,8 @@
 
         let branchSelect = document.querySelector('#select-branch')
 
-        branchSelect.addEventListener('change', () => {
-            @this.set('selectedBranches', branchSelect.value);
+        branchSelect.addEventListener('change', (event) => {
+            @this.set('selectedBranches', event.target.value);
         });
 
         // Clear all selected branches in the select option.

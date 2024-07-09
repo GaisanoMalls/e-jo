@@ -86,8 +86,8 @@
             options: numberListOptions
         });
 
-        permissionNumberSelectList.addEventListener('change', () => {
-            @this.set('paginatePageNumber', permissionNumberSelectList.value);
+        permissionNumberSelectList.addEventListener('change', (event) => {
+            @this.set('paginatePageNumber', event.target.value);
         });
 
         permissionNumberSelectList.addEventListener('reset', () => {

@@ -321,8 +321,8 @@
             search: true,
         });
 
-        selectFieldType.addEventListener('change', () => {
-            @this.set('type', selectFieldType.value);
+        selectFieldType.addEventListener('change', (event) => {
+            @this.set('type', event.target.value);
         });
 
         const selectRequiredOption = @json($fieldRequiredOption).map(fieldRequired => ({
@@ -335,8 +335,8 @@
             options: selectRequiredOption,
         });
 
-        selectRequired.addEventListener('change', () => {
-            @this.set('is_required', selectRequired.value);
+        selectRequired.addEventListener('change', (event) => {
+            @this.set('is_required', event.target.value);
         });
 
         const selectEnableOption = @json($fieldEnableOption).map(fieldEnable => ({
@@ -349,8 +349,8 @@
             options: selectEnableOption,
         });
 
-        selectEnable.addEventListener('change', () => {
-            @this.set('is_enabled', selectEnable.value);
+        selectEnable.addEventListener('change', (event) => {
+            @this.set('is_enabled', event.target.value);
         });
 
         const selectHelpTopicOption = @json($helpTopics).map(helpTopic => ({
@@ -364,8 +364,8 @@
             search: true,
         });
 
-        selectHelpTopic.addEventListener('change', () => {
-            @this.set('helpTopic', parseInt(selectHelpTopic.value));
+        selectHelpTopic.addEventListener('change', (event) => {
+            @this.set('helpTopic', parseInt(event.target.value));
         });
 
         selectHelpTopic.addEventListener('reset', () => {
@@ -385,8 +385,8 @@
             showValueAsTags: true,
         });
 
-        selectFormVisibility.addEventListener('change', () => {
-            @this.set('visibleTo', selectFormVisibility.value)
+        selectFormVisibility.addEventListener('change', (event) => {
+            @this.set('visibleTo', event.target.value)
         });
 
         const selectFormEditableOption = @json($userRoles).map(role => ({
@@ -402,8 +402,8 @@
             showValueAsTags: true,
         });
 
-        selectFormEditable.addEventListener('change', () => {
-            @this.set('editableTo', selectFormEditable.value)
+        selectFormEditable.addEventListener('change', (event) => {
+            @this.set('editableTo', event.target.value)
         });
 
         window.addEventListener('clear-form', () => {
@@ -458,16 +458,16 @@
             editingSelectFieldIsRequired.setValue(currentFieldRequired ? 'Yes' : 'No');
             editingSelectFieldEnable.setValue(currentFieldEnable ? 'Yes' : 'No');
 
-            editingSelectFieldType.addEventListener('change', () => {
-                @this.set('editingFieldType', editingSelectFieldType.value);
+            editingSelectFieldType.addEventListener('change', (event) => {
+                @this.set('editingFieldType', event.target.value);
             });
 
-            editingSelectFieldIsRequired.addEventListener('change', () => {
-                @this.set('editingFieldRequired', editingSelectFieldIsRequired.value);
+            editingSelectFieldIsRequired.addEventListener('change', (event) => {
+                @this.set('editingFieldRequired', event.target.value);
             });
 
-            editingSelectFieldEnable.addEventListener('change', () => {
-                @this.set('editingFieldEnable', editingSelectFieldEnable.value);
+            editingSelectFieldEnable.addEventListener('change', (event) => {
+                @this.set('editingFieldEnable', event.target.value);
             });
         });
     </script>

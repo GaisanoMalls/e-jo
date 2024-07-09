@@ -233,8 +233,8 @@
             markSearchResults: true,
         });
 
-        agentSuffixSelect.addEventListener('change', () => {
-            @this.set('suffix', agentSuffixSelect.value)
+        agentSuffixSelect.addEventListener('change', (event) => {
+            @this.set('suffix', event.target.value)
         });
 
         const agentBranchOption = @json($agentBranches).map(branch => ({
@@ -258,8 +258,8 @@
         });
         agentBUDepartmentSelect.disable();
 
-        agentBranchSelect.addEventListener('change', () => {
-            const agentBranchId = agentBranchSelect.value;
+        agentBranchSelect.addEventListener('change', (event) => {
+            const agentBranchId = event.target.value;
             if (agentBranchId) {
                 @this.set('branch', parseInt(agentBranchId));
                 agentBUDepartmentSelect.enable();
@@ -312,8 +312,8 @@
         });
         agentTeamSelect.disable();
 
-        agentServiceDepartmentSelect.addEventListener('change', () => {
-            @this.set('service_department', parseInt(agentServiceDepartmentSelect.value));
+        agentServiceDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('service_department', parseInt(event.target.value));
             agentTeamSelect.enable();
 
             window.addEventListener('get-teams-service-department', (event) => {
@@ -372,8 +372,8 @@
                 createAgentSubteamContainer.style.display = 'block';
                 agentSubteamSelect.setOptions(subteamOption);
 
-                agentSubteamSelect.addEventListener('change', () => {
-                    @this.set('selectedSubteams', agentSubteamSelect.value);
+                agentSubteamSelect.addEventListener('change', (event) => {
+                    @this.set('selectedSubteams', event.target.value);
                 });
 
             } else {
@@ -395,11 +395,12 @@
             agentBUDepartmentSelect.setOptions([]);
         });
 
-        agentBUDepartmentSelect.addEventListener('change', () => {
-            @this.set('bu_department', parseInt(agentBUDepartmentSelect.value));
+        agentBUDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('bu_department', parseInt(event.target.value));
         });
-        agentTeamSelect.addEventListener('change', () => {
-            @this.set('selectedTeams', agentTeamSelect.value);
+
+        agentTeamSelect.addEventListener('change', (event) => {
+            @this.set('selectedTeams', event.target.value);
         });
     </script>
 @endpush

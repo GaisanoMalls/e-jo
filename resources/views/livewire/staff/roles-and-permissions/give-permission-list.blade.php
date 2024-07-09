@@ -147,8 +147,8 @@
         });
 
         // Set value for permissions
-        selectPermission.addEventListener('change', () => {
-            @this.set('permissions', selectPermission.value);
+        selectPermission.addEventListener('change', (event) => {
+            @this.set('permissions', event.target.value);
         });
     </script>
 @endpush

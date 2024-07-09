@@ -7,6 +7,7 @@ use App\Http\Traits\BasicModelQueries;
 use App\Models\ServiceDepartment;
 use App\Models\ServiceDepartmentChildren;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -15,16 +16,10 @@ class ServiceDepartmentList extends Component
 {
     use BasicModelQueries;
 
-    public $isCurrentServiceDepartmentHasChildren;
-    public $serviceDepartments = [];
-    public $newlyAddedChildren = [];
-    public $serviceDepartmentEditId;
-    public $serviceDepartmentDeleteId;
-    public $childEditId;
-    public $childEditName;
-    public $childName;
-    public $serviceDeptHasChildren = false;
-    public $name;
+    public ?Collection $serviceDepartments = null;
+    public ?int $serviceDepartmentEditId = null;
+    public ?int $serviceDepartmentDeleteId = null;
+    public ?string $name = null;
 
     protected $listeners = ['loadServiceDepartments' => 'fetchServiceDepartments'];
 
@@ -50,20 +45,8 @@ class ServiceDepartmentList extends Component
     {
         $this->serviceDepartmentEditId = $serviceDepartment->id;
         $this->name = $serviceDepartment->name;
-        $this->isCurrentServiceDepartmentHasChildren();
-        $this->serviceDepartmentChildren();
         $this->dispatchBrowserEvent('show-edit-service-department-modal');
         $this->resetValidation();
-    }
-
-    public function isCurrentServiceDepartmentHasChildren()
-    {
-        return ServiceDepartmentChildren::where('service_department_id', $this->serviceDepartmentEditId)->exists();
-    }
-
-    public function serviceDepartmentChildren()
-    {
-        return ServiceDepartmentChildren::where('service_department_id', $this->serviceDepartmentEditId)->orderByDesc('created_at')->get();
     }
 
     public function updateServiceDepartment()
@@ -71,46 +54,19 @@ class ServiceDepartmentList extends Component
         $this->validate();
 
         try {
-            if (!empty($this->name) && !empty($this->childName)) {
-                $this->addError('childName', 'Please add the subdepartment');
-
-            } else {
-                $serviceDepartment = ServiceDepartment::findOrFail($this->serviceDepartmentEditId);
-                $childrenUpdated = false; // Flag to track if children have been updated
-
-                collect($this->newlyAddedChildren)->each(function ($child) use ($serviceDepartment, &$childrenUpdated) {
-                    if ($serviceDepartment->children()->where('name', $child)->doesntExist()) {
-                        $serviceDepartment->children()->create(['name' => $child]);
-                        $childrenUpdated = true; // Set flag to true since a child has been added
-                    }
-                });
-
-                if ($childrenUpdated) {
-                    noty()->addSuccess('A new subdepartment have been added');
-                    $this->newlyAddedChildren = [];
-                }
-
-                $serviceDepartment->update([
+            ServiceDepartment::findOrFail($this->serviceDepartmentEditId)
+                ->update([
                     'name' => $this->name,
                     'slug' => Str::slug($this->name),
                 ]);
-                noty()->addSuccess('Service department successfully updated');
 
-                $this->dispatchBrowserEvent('close-modal');
-                $this->clearFormField();
-                $this->fetchServiceDepartments();
-            }
+            noty()->addSuccess('Service department successfully updated');
+            $this->dispatchBrowserEvent('close-modal');
+            $this->clearFormField();
+            $this->fetchServiceDepartments();
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
-        }
-    }
-
-    public function updatedserviceDeptHasChildren()
-    {
-        if (!empty($this->newlyAddedChildren)) {
-            // Clear the added children inside the array when unchecked.
-            $this->newlyAddedChildren = [];
         }
     }
 
@@ -132,79 +88,6 @@ class ServiceDepartmentList extends Component
             noty()->addSuccess('Service department successfully deleted');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
-        }
-    }
-
-    public function addChildren()
-    {
-        try {
-            if (!is_null($this->childName)) {
-                $isExistsInDB = ServiceDepartmentChildren::where('name', $this->childName)->exists();
-                $childNameLowerCase = strtolower($this->childName);
-                $newlyAddedChildrenrenLowerCase = array_map('strtolower', $this->newlyAddedChildren);
-
-                if ($isExistsInDB) {
-                    $this->addError('childName', 'Subdepartment name is already exists');
-
-                } elseif (in_array($childNameLowerCase, $newlyAddedChildrenrenLowerCase)) {
-                    $this->addError('childName', 'Subdepartment name is already added');
-
-                } else {
-                    array_push($this->newlyAddedChildren, $this->childName);
-                    $this->reset('childName');
-                }
-            } else {
-                $this->addError('childName', 'The subdepartment field is required');
-            }
-        } catch (Exception $e) {
-            AppErrorLog::getError($e->getMessage());
-        }
-    }
-
-    public function removeChild(int $child_key)
-    {
-        foreach (array_keys($this->newlyAddedChildren) as $key) {
-            if ($child_key === $key) {
-                unset($this->newlyAddedChildren[$key]);
-            }
-        }
-    }
-
-    public function deleteChild(ServiceDepartmentChildren $serviceDepartmentChild)
-    {
-        try {
-            $serviceDepartmentChild->delete();
-        } catch (Exception $e) {
-            AppErrorLog::getError($e->getMessage());
-        }
-    }
-
-    public function editChild(ServiceDepartmentChildren $serviceDepartmentChild)
-    {
-        try {
-            $this->childEditId = $serviceDepartmentChild->id;
-            $this->childEditName = $serviceDepartmentChild->name;
-        } catch (Exception $e) {
-            AppErrorLog::getError($e->getMessage());
-        }
-    }
-
-    public function updateChild(ServiceDepartmentChildren $serviceDepartmentChild)
-    {
-        try {
-            $serviceDepartmentChild->update(['name' => $this->childEditName]);
-            $this->childEditId = null;
-            $this->childEditName = '';
-        } catch (Exception $e) {
-            AppErrorLog::getError($e->getMessage());
-        }
-    }
-
-    public function cancelEditChild(ServiceDepartmentChildren $serviceDepartmentChild)
-    {
-        if ($this->childEditId === $serviceDepartmentChild->id) {
-            $this->childEditId = null;
-            $this->childEditName = '';
         }
     }
 

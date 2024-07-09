@@ -74,12 +74,12 @@
         });
 
         // Set Value
-        selectPermissionAction.addEventListener('change', () => {
-            @this.set('permissionAction', selectPermissionAction.value);
+        selectPermissionAction.addEventListener('change', (event) => {
+            @this.set('permissionAction', event.target.value);
         });
 
-        selectPermissionModule.addEventListener('change', () => {
-            @this.set('permissionModules', selectPermissionModule.value);
+        selectPermissionModule.addEventListener('change', (event) => {
+            @this.set('permissionModules', event.target.value);
         });
 
         // Reset select options

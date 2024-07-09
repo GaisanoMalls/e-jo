@@ -403,7 +403,7 @@
                 editor.on('init change', function() {
                     editor.save();
                 });
-                editor.on('change', function(e) {
+                editor.on('change', function() {
                     @this.set('description', editor.getContent());
                 });
             }
@@ -438,8 +438,8 @@
         const team = document.querySelector('#team');
         const sla = document.querySelector('#sla');
 
-        serviceDepartmentSelect.addEventListener('change', () => {
-            const serviceDepartmentId = serviceDepartmentSelect.value;
+        serviceDepartmentSelect.addEventListener('change', (event) => {
+            const serviceDepartmentId = event.target.value;
             if (serviceDepartmentId) {
                 @this.set('serviceDepartment', parseInt(serviceDepartmentId));
                 helpTopicSelect.enable();
@@ -478,10 +478,10 @@
         });
 
         const ticketDescriptionContainer = document.querySelector('#ticket-description-container');
-        helpTopicSelect.addEventListener('change', () => {
-            @this.set('helpTopic', parseInt(helpTopicSelect.value));
+        helpTopicSelect.addEventListener('change', (event) => {
+            @this.set('helpTopic', parseInt(event.target.value));
 
-            window.addEventListener('show-help-topic-forms', (event) => {
+            window.addEventListener('show-help-topic-forms', () => {
                 ticketDescriptionContainer.style.display = 'none';
             });
 
@@ -508,8 +508,8 @@
             markSearchResults: true,
         });
 
-        branchSelect.addEventListener('change', () => {
-            @this.set('branch', parseInt(branchSelect.value));
+        branchSelect.addEventListener('change', (event) => {
+            @this.set('branch', parseInt(event.target.value));
         });
 
         const selectOtherBranch = document.querySelector('#check-other-branch');

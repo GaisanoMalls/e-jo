@@ -150,11 +150,11 @@
                 selectEditRequiredField.setValue(event.detail.currentRequiredField);
             }
 
-            selectEditFieldType.addEventListener('change', () => {
-                @this.set('type', selectEditFieldType.value);
+            selectEditFieldType.addEventListener('change', (event) => {
+                @this.set('type', event.target.value);
             });
-            selectEditRequiredField.addEventListener('change', () => {
-                @this.set('is_required', selectEditRequiredField.value);
+            selectEditRequiredField.addEventListener('change', (event) => {
+                @this.set('is_required', event.target.value);
             });
 
             window.addEventListener('get-added-fields', function(event) {

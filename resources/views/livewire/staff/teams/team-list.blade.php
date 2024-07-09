@@ -414,8 +414,8 @@
             markSearchResults: true,
         });
 
-        editBranchSelect.addEventListener('change', () => {
-            @this.set('editSelectedBranches', editBranchSelect.value);
+        editBranchSelect.addEventListener('change', (event) => {
+            @this.set('editSelectedBranches', event.target.value);
         });
 
         // Clear all selected branches in the select option.
@@ -433,8 +433,8 @@
             editSelectServiceDeptChildrenContainer.style.display = 'none';
         });
 
-        editServiceDepartmentSelect.addEventListener('change', () => {
-            const serviceDeptId = parseInt(editServiceDepartmentSelect.value);
+        editServiceDepartmentSelect.addEventListener('change', (event) => {
+            const serviceDeptId = parseInt(event.target.value);
 
             if (serviceDeptId) {
                 @this.set('editSelectedServiceDepartment', serviceDeptId);
@@ -460,8 +460,8 @@
                 editServiceDepartmentChildSelect.setOptions(editServiceDeptChildrenOption);
                 editServiceDepartmentChildSelect.setValue(currentServiceDeptChild);
 
-                editServiceDepartmentChildSelect.addEventListener('change', () => {
-                    @this.set('selectedServiceDeptChild', editServiceDepartmentChildSelect.value);
+                editServiceDepartmentChildSelect.addEventListener('change', (event) => {
+                    @this.set('selectedServiceDeptChild', event.target.value);
                 });
 
             } else {

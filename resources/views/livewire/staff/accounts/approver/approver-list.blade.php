@@ -268,8 +268,8 @@
             selectApproverPermission.setOptions(refreshPermissionOption);
         });
 
-        selectApproverPermission.addEventListener('change', () => {
-            @this.set('approverPermissions', selectApproverPermission.value);
+        selectApproverPermission.addEventListener('change', (event) => {
+            @this.set('approverPermissions', event.target.value);
         });
     </script>
 @endpush

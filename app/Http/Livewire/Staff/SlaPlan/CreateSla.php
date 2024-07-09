@@ -15,7 +15,7 @@ class CreateSla extends Component
 
     public function rules()
     {
-        return(new StoreSLARequest())->rules();
+        return (new StoreSLARequest())->rules();
     }
 
     public function clearFormFields()

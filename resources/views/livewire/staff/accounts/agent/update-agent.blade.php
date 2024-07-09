@@ -281,8 +281,8 @@
 
         });
 
-        agentBranchSelect.addEventListener('change', () => {
-            const agentBranchId = agentBranchSelect.value;
+        agentBranchSelect.addEventListener('change', (event) => {
+            const agentBranchId = event.target.value;
             if (agentBranchId) {
                 @this.set('branch', parseInt(agentBranchId));
                 agentBUDepartmentSelect.enable();
@@ -324,8 +324,8 @@
             markSearchResults: true,
         });
 
-        agentBUDepartmentSelect.addEventListener('change', () => {
-            @this.set('bu_department', parseInt(agentBUDepartmentSelect.value));
+        agentBUDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('bu_department', parseInt(event.target.value));
         });
 
         const agentTeamOption = @json($agentTeams).map(team => ({
@@ -374,8 +374,8 @@
             selectedValue: @json($service_department)
         });
 
-        agentServiceDepartmentSelect.addEventListener('change', () => {
-            serviceDepartmentId = agentServiceDepartmentSelect.value;
+        agentServiceDepartmentSelect.addEventListener('change', (event) => {
+            serviceDepartmentId = event.target.value;
 
             if (serviceDepartmentId) {
                 @this.set('service_department', parseInt(serviceDepartmentId));
@@ -410,8 +410,8 @@
             }
         });
 
-        agentTeamSelect.addEventListener('change', () => {
-            @this.set('selectedTeams', agentTeamSelect.value);
+        agentTeamSelect.addEventListener('change', (event) => {
+            @this.set('selectedTeams', event.target.value);
 
             window.addEventListener('get-subteams', (event) => {
                 const subteams = event.detail.subteams;
@@ -436,8 +436,8 @@
             });
         });
 
-        agentSubteamSelect.addEventListener('change', () => {
-            @this.set('selectedSubteams', agentSubteamSelect.value);
+        agentSubteamSelect.addEventListener('change', (event) => {
+            @this.set('selectedSubteams', event.target.value);
         });
 
         agentTeamSelect.addEventListener('reset', () => {
@@ -467,8 +467,8 @@
             selectedValue: @json($currentPermissions)
         });
 
-        selectAgentPermissions.addEventListener('change', () => {
-            @this.set('permissions', selectAgentPermissions.value);
+        selectAgentPermissions.addEventListener('change', (event) => {
+            @this.set('permissions', event.target.value);
         });
 
         selectAgentPermissions.addEventListener('reset', () => {

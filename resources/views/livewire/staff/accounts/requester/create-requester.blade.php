@@ -182,8 +182,8 @@
             markSearchResults: true,
         });
 
-        requesterSuffixSelect.addEventListener('change', () => {
-            @this.set('suffix', requesterSuffixSelect.value);
+        requesterSuffixSelect.addEventListener('change', (event) => {
+            @this.set('suffix', event.target.value);
         })
 
         const requesterBranchOption = @json($requesterBranches).map(branch => ({
@@ -207,8 +207,8 @@
         });
         requesterBUDepartmentSelect.disable();
 
-        requesterBranchSelect.addEventListener('change', () => {
-            const requesterBranchId = requesterBranchSelect.value;
+        requesterBranchSelect.addEventListener('change', (event) => {
+            const requesterBranchId = event.target.value;
             if (requesterBranchId) {
                 @this.set('branch', parseInt(requesterBranchId));
                 requesterBUDepartmentSelect.enable();
@@ -237,8 +237,8 @@
             }
         });
 
-        requesterBUDepartmentSelect.addEventListener('change', () => {
-            @this.set('department', parseInt(requesterBUDepartmentSelect.value));
+        requesterBUDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('department', parseInt(event.target.value));
         });
 
         requesterBranchSelect.addEventListener('reset', () => {

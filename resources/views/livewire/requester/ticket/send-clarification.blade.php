@@ -70,7 +70,7 @@
                 editor.on('init change', function() {
                     editor.save();
                 });
-                editor.on('change', function(e) {
+                editor.on('change', function() {
                     @this.set('description', editor.getContent());
                 });
             }

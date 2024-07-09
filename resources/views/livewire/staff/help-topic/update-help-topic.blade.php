@@ -249,9 +249,8 @@
                 selectedValue: '{{ $sla }}'
             });
 
-            slaSelect.addEventListener('change', () => {
-                const slaId = parseInt(slaSelect.value);
-                @this.set('sla', slaId);
+            slaSelect.addEventListener('change', (event) => {
+                @this.set('sla', parseInt(event.target.value));
             });
 
             const serviceDepartmentOption = @json($serviceDepartments).map(serviceDepartment => ({
@@ -283,8 +282,8 @@
 
             teamSelect.disable();
 
-            serviceDepartmentSelect.addEventListener('change', () => {
-                const serviceDepartmentId = parseInt(serviceDepartmentSelect.value);
+            serviceDepartmentSelect.addEventListener('change', (event) => {
+                const serviceDepartmentId = parseInt(event.target.value);
                 if (serviceDepartmentId) {
                     @this.set('serviceDepartment', serviceDepartmentId);
                     if (teamSelect) teamSelect.enable();
@@ -319,8 +318,8 @@
                 }
             });
 
-            teamSelect.addEventListener('change', () => {
-                const teamId = parseInt(teamSelect.value);
+            teamSelect.addEventListener('change', (event) => {
+                const teamId = parseInt(event.target.value);
                 @this.set('team', teamId);
             });
 
@@ -382,12 +381,12 @@
                 selectedValue: '{{ $approvalLevelSelected }}'
             });
 
-            buDepartmentSelect.addEventListener('change', () => {
-                @this.set('selectedBuDepartment', buDepartmentSelect.value);
+            buDepartmentSelect.addEventListener('change', (event) => {
+                @this.set('selectedBuDepartment', event.target.value);
             });
 
-            approvalLevelSelect.addEventListener('change', () => {
-                @this.set('approvalLevelSelected', approvalLevelSelect.value);
+            approvalLevelSelect.addEventListener('change', (event) => {
+                @this.set('approvalLevelSelected', event.target.value);
             });
 
             const dynamicApprovalLevelContainer = document.querySelector('#dynamic-approval-container');

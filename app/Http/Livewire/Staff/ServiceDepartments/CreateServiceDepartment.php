@@ -13,10 +13,7 @@ use Livewire\Component;
 
 class CreateServiceDepartment extends Component
 {
-    public $name;
-    public $children;
-    public $hasChildren = false;
-    public $addedChildren = [];
+    public ?string $name = null;
 
     public function rules()
     {
@@ -35,79 +32,19 @@ class CreateServiceDepartment extends Component
         $this->emit('loadServiceDepartments');
     }
 
-    public function addChildren()
-    {
-        if ($this->hasChildren) {
-            if (!is_null($this->children)) {
-                $isServiceDeptChildExists = ServiceDepartmentChildren::where('name', $this->children)->exists();
-
-                if ($isServiceDeptChildExists) {
-                    $this->addError('children', 'Subdepartment is already exists');
-
-                } elseif (in_array(strtolower($this->children), array_map('strtolower', $this->addedChildren))) {
-                    $this->addError('children', 'Subdepartment is already added');
-
-                } else {
-                    array_push($this->addedChildren, $this->children);
-                    $this->reset('children');
-                }
-            } else {
-                $this->addError('children', 'The subdepartment field is required');
-            }
-        }
-    }
-
-    public function removeChild(int $child_key)
-    {
-        foreach (array_keys($this->addedChildren) as $key) {
-            if ($child_key === $key) {
-                unset($this->addedChildren[$key]);
-            }
-        }
-    }
-
-    public function updatedHasChildren()
-    {
-        // Clear the added children inside the array when unchecked.
-        if (!empty($this->addedChildren)) {
-            $this->addedChildren = [];
-        }
-    }
-
     public function saveServiceDepartment()
     {
         $this->validate();
+
         try {
             DB::transaction(function () {
-                if ($this->hasChildren) {
-                    if (is_null($this->children) && empty ($this->addedChildren)) {
-                        $this->addError('children', 'Subdepartment field is required');
+                ServiceDepartment::create([
+                    'name' => $this->name,
+                    'slug' => Str::slug($this->name),
+                ]);
 
-                    } elseif (empty ($this->addedChildren) || !empty ($this->name) && !empty ($this->children)) {
-                        $this->addError('children', 'Please add the subdepartment');
-
-                    } else {
-                        $service_department = ServiceDepartment::create([
-                            'name' => $this->name,
-                            'slug' => Str::slug($this->name),
-                        ]);
-
-                        foreach ($this->addedChildren as $child) {
-                            $service_department->children()->create(['name' => $child]);
-                        }
-
-                        $this->actionOnSubmit();
-                        noty()->addSuccess('A new service department has been created.');
-                    }
-                } else {
-                    $service_department = ServiceDepartment::create([
-                        'name' => $this->name,
-                        'slug' => Str::slug($this->name),
-                    ]);
-
-                    $this->actionOnSubmit();
-                    noty()->addSuccess('A new service department has been created.');
-                }
+                $this->actionOnSubmit();
+                noty()->addSuccess('A new service department has been created.');
             });
 
         } catch (Exception $e) {

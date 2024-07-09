@@ -176,8 +176,8 @@
             markSearchResults: true,
         });
 
-        approverSuffixSelect.addEventListener('change', () => {
-            @this.set('suffix', approverSuffixSelect.value);
+        approverSuffixSelect.addEventListener('change', (event) => {
+            @this.set('suffix', event.target.value);
         });
 
         const approverBranchOption = @json($approverBranches).map(branch => ({
@@ -195,8 +195,8 @@
             markSearchResults: true,
         });
 
-        approverBranchSelect.addEventListener('change', () => {
-            @this.set('branches', approverBranchSelect.value);
+        approverBranchSelect.addEventListener('change', (event) => {
+            @this.set('branches', event.target.value);
         });
 
         const approverBUDepartmentOption = @json($approverBUDepartments).map(department => ({
@@ -213,8 +213,9 @@
             showValueAsTags: true,
             markSearchResults: true,
         });
-        approverBUDepartmentSelect.addEventListener('change', () => {
-            @this.set('bu_departments', approverBUDepartmentSelect.value);
+
+        approverBUDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('bu_departments', event.target.value);
         });
     </script>
 @endpush

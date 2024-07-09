@@ -170,8 +170,8 @@
         });
 
         const editBranchSelect = document.querySelector('#edit-select-branch')
-        editBranchSelect.addEventListener('change', () => {
-            @this.set('editSelectedBranches', editBranchSelect.value);
+        editBranchSelect.addEventListener('change', (event) => {
+            @this.set('editSelectedBranches', event.target.value);
         });
 
         // Check the current branches assigned to the selected BU/Department.

@@ -228,8 +228,8 @@
             selectedValue: '{{ $approver->profile->suffix }}'
         });
 
-        approverSuffixSelect.addEventListener('change', () => {
-            @this.set('suffix', approverSuffixSelect.value);
+        approverSuffixSelect.addEventListener('change', (event) => {
+            @this.set('suffix', event.target.value);
         });
 
         const approverBranchOption = @json($approverBranches).map(branch => ({
@@ -248,8 +248,8 @@
             selectedValue: @json($branches)
         });
 
-        approverBranchSelect.addEventListener('change', () => {
-            @this.set('branches', approverBranchSelect.value);
+        approverBranchSelect.addEventListener('change', (event) => {
+            @this.set('branches', event.target.value);
         });
 
         const approverBUDepartmentOption = @json($approverBUDepartments).map(department => ({
@@ -267,8 +267,8 @@
             markSearchResults: true,
             selectedValue: @json($bu_departments)
         });
-        approverBUDepartmentSelect.addEventListener('change', () => {
-            @this.set('bu_departments', approverBUDepartmentSelect.value);
+        approverBUDepartmentSelect.addEventListener('change', (event) => {
+            @this.set('bu_departments', event.target.value);
         });
 
         const approverPermissionOption = @json($allPermissions).map(permission => ({
@@ -297,8 +297,8 @@
             }
         });
 
-        approverPermissionSelect.addEventListener('change', () => {
-            @this.set('permissions', approverPermissionSelect.value);
+        approverPermissionSelect.addEventListener('change', (event) => {
+            @this.set('permissions', event.target.value);
         });
 
         approverPermissionSelect.addEventListener('reset', () => {
