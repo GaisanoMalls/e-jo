@@ -118,7 +118,7 @@
                                 <div>
                                     <div id="select-help-topic-approval-level" wire:ignore></div>
                                 </div>
-                                @error('bu_department')
+                                @error('approvalLevelSelected')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}

@@ -74,7 +74,7 @@ class CreateHelpTopic extends Component
             'name' => ['required', 'unique:help_topics,name'],
             'sla' => ['required'],
             'serviceDepartment' => ['required'],
-            'team' => ['nullable'],
+            'team' => ['required'],
             'amount' => ['numeric', $this->isSpecialProject ? 'required' : 'nullable'],
             'teams' => '',
         ];
@@ -171,9 +171,17 @@ class CreateHelpTopic extends Component
         }
     }
 
+    public function updatedSla()
+    {
+        // Clear the validation error everytime thee field is selected.
+        $this->clearValidation('sla');
+    }
 
     public function updatedServiceDepartment($value)
     {
+        // Clear the validation error everytime thee field is selected.
+        $this->clearValidation('serviceDepartment');
+
         $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $value))->get();
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
@@ -214,18 +222,24 @@ class CreateHelpTopic extends Component
 
         if (!$this->selectedBuDepartment) {
             $this->addError('selectedBuDepartment', 'BU department field is required');
-            return;
+
+            if ($this->approvalLevelSelected) {
+                $this->clearValidation('approvalLevelSelected');
+            }
         }
 
         if (!$this->approvalLevelSelected) {
-            $this->addError('selectedBuDepartment', 'Level approval field is required');
-            return;
+            $this->addError('approvalLevelSelected', 'Level approval field is required');
+
+            if ($this->selectedBuDepartment) {
+                $this->clearValidation('selectedBuDepartment');
+            }
         }
 
+        // Check if BU department and level of approval is selected
         if ($this->selectedBuDepartment && $this->approvalLevelSelected) {
             // Get the selected BU Department name
             $this->buDepartmentName = collect($this->buDepartments)->firstWhere('id', $this->selectedBuDepartment)['name'];
-
             // Add to the configurations array
             $this->configurations[] = [
                 'bu_department_id' => $this->selectedBuDepartment,
@@ -255,9 +269,16 @@ class CreateHelpTopic extends Component
         array_splice($this->configurations, $index, 1);
     }
 
+    public function updatedSelectedBuDepartment()
+    {
+        // Clear the validation error everytime thee field is selected.
+        $this->clearValidation('selectedBuDepartment');
+    }
 
     public function updatedApprovalLevelSelected()
     {
+        // Clear the validation error everytime thee field is selected.
+        $this->clearValidation('approvalLevelSelected');
         $this->getFilteredApprovers(1);
     }
 
