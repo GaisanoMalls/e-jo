@@ -13,9 +13,9 @@ class LatestReply extends Component
     use Tickets;
 
     public Ticket $ticket;
-    public ?Collection $latestReply = null;
+    public ?Reply $latestReply = null;
 
-    protected $listeners = ['loadLatestReply' => '$refresh'];
+    protected $listeners = ['loadLatestReply' => 'mount'];
 
     public function mount()
     {

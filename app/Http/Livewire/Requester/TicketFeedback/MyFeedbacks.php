@@ -2,29 +2,35 @@
 
 namespace App\Http\Livewire\Requester\TicketFeedback;
 
+use App\Enums\TicketRatingEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Models\Feedback;
 use Exception;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class MyFeedbacks extends Component
 {
     use AppErrorLog;
 
-    public $userId;
-    public $feedbackId;
-    public $ticket;
-    public $ticketNumber;
-    public $fullName;
-    public $email;
-    public $rating;
-    public $feedback;
-    public $suggestion;
-    public $had_issues_encountered;
+    public TicketRatingEnum $rating;
+    public Collection $feedbacks;
+    public int $userId;
+    public int $feedbackId;
+    public int $ticket;
+    public string $ticketNumber;
+    public string $fullName;
+    public string $email;
+    public string $feedback;
+    public string $suggestion;
+    public bool $had_issues_encountered = false;
 
     public function mount()
     {
         $this->userId = auth()->user()->id;
+        $this->feedbacks = Feedback::where('user_id', auth()->user()->id)
+            ->orderByDesc('created_at')
+            ->get();
     }
 
     public function rules()
@@ -90,12 +96,6 @@ class MyFeedbacks extends Component
 
     public function render()
     {
-        $feedbacks = Feedback::where('user_id', auth()->user()->id)
-            ->orderByDesc('created_at')
-            ->get();
-
-        return view('livewire.requester.ticket-feedback.my-feedbacks', [
-            'feedbacks' => $feedbacks
-        ]);
+        return view('livewire.requester.ticket-feedback.my-feedbacks');
     }
 }

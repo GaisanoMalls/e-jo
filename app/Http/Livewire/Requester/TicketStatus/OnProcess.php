@@ -3,15 +3,22 @@
 namespace App\Http\Livewire\Requester\TicketStatus;
 
 use App\Http\Traits\Requester\Tickets;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class OnProcess extends Component
 {
     use Tickets;
 
+    public Collection $onProcessTickets;
+
+    public function mount()
+    {
+        $this->onProcessTickets = $this->getOnProcessTickets();
+    }
+
     public function render()
     {
-        $onProcessTickets = $this->getOnProcessTickets();
-        return view('livewire.requester.ticket-status.on-process', compact('onProcessTickets'));
+        return view('livewire.requester.ticket-status.on-process');
     }
 }

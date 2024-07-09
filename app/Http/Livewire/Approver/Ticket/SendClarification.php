@@ -22,8 +22,8 @@ class SendClarification extends Component
 
     public Ticket $ticket;
     public int $upload = 0;
-    public string $description;
-    public $clarificationFiles = [];
+    public ?string $description = null;
+    public ?array $clarificationFiles = [];
 
     public function rules()
     {

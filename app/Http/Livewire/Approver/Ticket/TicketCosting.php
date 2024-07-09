@@ -22,18 +22,18 @@ class TicketCosting extends Component
     use Utils;
 
     public Ticket $ticket;
-    public string $reasonOfDisapproval = '';
+    public ?string $reasonOfDisapproval = null;
 
     protected $listeners = ['loadApproverTicketCosting' => '$refresh'];
 
     public function rules()
     {
-        return(new ReasonOfDisapprovalRequest())->rules();
+        return (new ReasonOfDisapprovalRequest())->rules();
     }
 
     public function messages()
     {
-        return(new ReasonOfDisapprovalRequest())->messages();
+        return (new ReasonOfDisapprovalRequest())->messages();
     }
 
     private function actionOnSubmit()

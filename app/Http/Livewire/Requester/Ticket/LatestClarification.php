@@ -13,9 +13,9 @@ class LatestClarification extends Component
     use Tickets;
 
     public Ticket $ticket;
-    public ?Collection $latestClarification = null;
+    public ?Clarification $latestClarification = null;
 
-    protected $listeners = ['loadLatestClarification' => '$refresh'];
+    protected $listeners = ['loadLatestClarification' => 'mount'];
 
     public function mount()
     {

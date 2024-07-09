@@ -49,12 +49,12 @@ class CreateTicket extends Component
     public array $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
 
     // Help topic form
-    public $helpTopicForm;
-    public $formId;
-    public $formName;
-    public $formFields = [];
-    public $filledForms = []; // Insert the filled forms here.
-    public $isHelpTopicHasForm = false;
+    public ?Form $helpTopicForm = null;
+    public ?int $formId = null;
+    public ?string $formName = null;
+    public array $formFields = [];
+    public array $filledForms = []; // Insert the filled forms here.
+    public bool $isHelpTopicHasForm = false;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 

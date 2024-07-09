@@ -4,28 +4,32 @@ namespace App\Http\Livewire\Approver;
 
 use App\Http\Traits\Approver\Tickets;
 use App\Http\Traits\Utils;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class TicketTab extends Component
 {
     use Tickets, Utils;
 
+    public Collection $openTickets;
+    public Collection $viewedTickets;
+    public Collection $approvedTickets;
+    public Collection $disapprovedTickets;
+    public Collection $onProcessTickets;
+    public Collection $forApprovalTickets;
+
+    public function mount()
+    {
+        $this->openTickets = $this->getOpenTickets();
+        $this->viewedTickets = $this->getViewedTickets();
+        $this->approvedTickets = $this->getApprovedTickets();
+        $this->disapprovedTickets = $this->getDisapprovedTickets();
+        $this->onProcessTickets = $this->getOnProcessTickets();
+        $this->forApprovalTickets = $this->getForApprovalTickets();
+    }
+
     public function render()
     {
-        $openTickets = $this->getOpenTickets();
-        $viewedTickets = $this->getViewedTickets();
-        $approvedTickets = $this->getApprovedTickets();
-        $disapprovedTickets = $this->getDisapprovedTickets();
-        $onProcessTickets = $this->getOnProcessTickets();
-        $forApprovalTickets = $this->getForApprovalTickets();
-
-        return view('livewire.approver.ticket-tab', compact([
-            'openTickets',
-            'viewedTickets',
-            'approvedTickets',
-            'disapprovedTickets',
-            'onProcessTickets',
-            'forApprovalTickets',
-        ]));
+        return view('livewire.approver.ticket-tab');
     }
 }

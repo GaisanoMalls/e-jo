@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Requester\TicketStatus;
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\Requester\Tickets;
 use App\Models\Ticket;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Approved extends Component
@@ -14,7 +15,7 @@ class Approved extends Component
     public bool $allApprovedTickets = true;
     public bool $withCosting = false;
     public bool $withOutCosting = false;
-    public array $approvedTickets = [];
+    public Collection $approvedTickets;
 
     public function mount()
     {

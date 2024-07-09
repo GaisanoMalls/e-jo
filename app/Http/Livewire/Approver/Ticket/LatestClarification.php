@@ -12,20 +12,18 @@ class LatestClarification extends Component
     public Ticket $ticket;
     public Collection $latestClarification;
 
-    protected $listeners = ['loadLatestClarification' => '$refresh'];
+    protected $listeners = ['loadLatestClarification' => 'mount'];
 
     public function mount()
-    {
-        $this->latestClarification = collect();
-    }
-
-    public function render()
     {
         $this->latestClarification = Clarification::whereHas('ticket', fn($query) => $query->where('ticket_id', $this->ticket->id))
             ->whereHas('user', fn($user) => $user->where('user_id', '!=', auth()->user()->id))
             ->orderByDesc('created_at')
             ->first();
+    }
 
+    public function render()
+    {
         return view('livewire.approver.ticket.latest-clarification');
     }
 }

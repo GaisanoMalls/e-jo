@@ -3,12 +3,13 @@
 namespace App\Http\Livewire\Approver;
 
 use App\Models\Ticket;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class TicketClarifications extends Component
 {
     public Ticket $ticket;
-    public $clarifications = null;
+    public ?Collection $clarifications = null;
 
     protected $listeners = ['loadClarifications' => '$refresh'];
 

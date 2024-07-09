@@ -6,7 +6,6 @@ use Livewire\Component;
 
 class CreateTicketButton extends Component
 {
-
     public function clearModalErrorMessages(): void
     {
         $this->emit('clearTicketErrorMessages');
