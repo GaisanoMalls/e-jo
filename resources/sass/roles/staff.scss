@@ -4101,6 +4101,18 @@ input[type="checkbox"] {
             padding-left: 40px !important;
         }
     }
+
+    .btn__modal__footer {
+        @include generic.button-config;
+
+        &.btn__cancel {
+            @include generic.form-button-cancel;
+        }
+
+        &.btn__send {
+            @include generic.form-button-submit;
+        }
+    }
 }
 
 .sla__section {

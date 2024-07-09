@@ -104,7 +104,7 @@
                                 <div>
                                     <div id="select-help-topic-bu-department" wire:ignore></div>
                                 </div>
-                                @error('bu_department')
+                                @error('selectedBuDepartment')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -129,13 +129,14 @@
                         <div wire:ignore class="row" id="dynamic-approval-container"></div>
                     </div>
                     <div style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
-                        <button
-                            class="btn d-flex align-items-center justify-content-center gap-2 btn__add__user__account"
-                            style="width: auto; background-color: #d32839; color: white;"
-                            wire:click="saveConfiguration">
-                            <span>Add</span>
+                        <button wire:click="saveConfiguration"
+                            class="btn d-flex align-items-center justify-content-center rounded-3"
+                            style="width: auto; height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
+                            Add approval
                         </button>
-                        <button type="button" class="btn m-0 btn__cancel" onclick="handleCancelApprovalConfig()">
+                        <button onclick="handleCancelApprovalConfig()" type="button"
+                            class="btn d-flex align-items-center justify-content-center rounded-3"
+                            style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
                             Cancel
                         </button>
                     </div>
@@ -226,9 +227,10 @@
                             role="status" aria-hidden="true"></span>
                         Add New
                     </button>
-                    <button type="button" class="btn m-0 btn__cancel" onclick="resetFormFields()">
+                    <a href="{{ route('staff.manage.help_topic.index') }}" type="button"
+                        class="btn m-0 btn__modal__footer btn__cancel" onclick="resetFormFields()">
                         Cancel
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -382,7 +384,7 @@
         });
 
         buDepartmentSelect.addEventListener('change', (event) => {
-            @this.set('selectedBuDepartment', event.target.value);
+            @this.set('selectedBuDepartment', parseInt(event.target.value));
         });
 
         approvalLevelSelect.addEventListener('change', () => {

@@ -51,12 +51,13 @@ class CreateHelpTopic extends Component
     public $approvalLevelSelected = false;
 
     public $buDepartment;
+    public ?string $buDepartmentName = null;
 
     public $buDepartments;
 
     public $configurations = [];
 
-    public $selectedBuDepartment;
+    public ?int $selectedBuDepartment = null;
     public $selectedApproversCount = 0;
 
 
@@ -211,18 +212,30 @@ class CreateHelpTopic extends Component
 
         $approversCount = array_sum(array_map('count', $approvers));
 
-        // Get the selected BU Department name
-        $buDepartmentName = collect($this->buDepartments)->firstWhere('id', $this->selectedBuDepartment)['name'];
+        if (!$this->selectedBuDepartment) {
+            $this->addError('selectedBuDepartment', 'BU department field is required');
+            return;
+        }
 
-        // Add to the configurations array
-        $this->configurations[] = [
-            'bu_department_id' => $this->selectedBuDepartment,
-            'bu_department_name' => $buDepartmentName,
-            'approvers_count' => $approversCount,
-            'approvers' => $approvers,
-        ];
+        if (!$this->approvalLevelSelected) {
+            $this->addError('selectedBuDepartment', 'Level approval field is required');
+            return;
+        }
 
-        $this->resetApprovalConfigFields();
+        if ($this->selectedBuDepartment && $this->approvalLevelSelected) {
+            // Get the selected BU Department name
+            $this->buDepartmentName = collect($this->buDepartments)->firstWhere('id', $this->selectedBuDepartment)['name'];
+
+            // Add to the configurations array
+            $this->configurations[] = [
+                'bu_department_id' => $this->selectedBuDepartment,
+                'bu_department_name' => $this->buDepartmentName,
+                'approvers_count' => $approversCount,
+                'approvers' => $approvers,
+            ];
+
+            $this->resetApprovalConfigFields();
+        }
     }
 
     private function resetApprovalConfigFields()
