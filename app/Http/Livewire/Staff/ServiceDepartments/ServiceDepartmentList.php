@@ -5,10 +5,8 @@ namespace App\Http\Livewire\Staff\ServiceDepartments;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\ServiceDepartment;
-use App\Models\ServiceDepartmentChildren;
 use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
 

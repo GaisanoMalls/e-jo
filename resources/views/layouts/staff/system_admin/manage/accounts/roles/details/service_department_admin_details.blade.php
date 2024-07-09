@@ -14,7 +14,7 @@
 
 @section('manage-content')
     <div class="row accounts__section justify-content-center">
-        <div class="col-xxl-9 col-lg-12">
+        <div class="col-lg-12">
             <div class="card d-flex flex-column gap-2 users__account__card">
                 <div class="user__details__container d-flex flex-wrap mb-4 justify-content-between">
                     <h6 class="card__title">Service Dept. Admin Information</h6>
@@ -128,16 +128,6 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($serviceDeptAdmin->levels->isNotEmpty())
-                            <div class="col-md-6">
-                                <h6 class="mb-3 fw-bold text-muted" style="font-size: 15px;">Level of Approval</h6>
-                                <div class="mb-3">
-                                    <label class="form-label form__field__label">Level</label>
-                                    <input type="text" name="email" class="form-control form__field" id="email"
-                                        value="{{ $serviceDeptAdmin->levels->pluck('description')->first() }}" readonly>
-                                </div>
-                            </div>
-                        @endif
                     </div>
                     <div class="col-12">
                         <div class="d-flex align-items-center gap-2">

@@ -1,7 +1,7 @@
 <div>
     @livewire('staff.accounts.approver.update-approver-password', ['approver' => $approver])
     <div class="row justify-content-center accounts__section">
-        <div class="col-xxl-9 col-lg-12">
+        <div class="col-lg-12">
             <div class="card d-flex flex-column gap-2 users__account__card">
                 <div class="user__details__container d-flex flex-wrap mb-4 justify-content-between">
                     <h6 class="card__title">Approver's Information</h6>

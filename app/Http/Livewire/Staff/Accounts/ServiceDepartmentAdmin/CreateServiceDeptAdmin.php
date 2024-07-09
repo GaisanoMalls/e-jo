@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Accounts\ServiceDepartmentAdmin;
 use App\Http\Requests\SysAdmin\Manage\Account\StoreServiceDeptAdminRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
+use App\Http\Traits\Utils;
 use App\Models\Level;
 use App\Models\Profile;
 use App\Models\Role;
@@ -18,7 +19,7 @@ use Spatie\Permission\Models\Permission;
 
 class CreateServiceDeptAdmin extends Component
 {
-    use BasicModelQueries;
+    use BasicModelQueries, Utils;
 
     public $branches = [];
     public $BUDepartments = [];

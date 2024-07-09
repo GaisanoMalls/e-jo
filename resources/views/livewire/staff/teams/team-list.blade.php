@@ -39,7 +39,6 @@
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Team</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Sub-teams</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Service Department</th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Sub-Service Dept.</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Branches</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
@@ -61,11 +60,6 @@
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
                                     <span>{{ $team->serviceDepartment->name ?? '' }}</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center text-start td__content">
-                                    <span>{{ $team->serviceDepartmentChild?->name }}</span>
                                 </div>
                             </td>
                             <td>
@@ -276,7 +270,7 @@
                                 @endforeach
                             @endif
 
-                            <div class="mb-2" style="z-index: 2;">
+                            <div class="mb-2">
                                 <label class="form-label form__field__label">Service Department</label>
                                 <div>
                                     <div id="edit-select-service-department" wire:ignore></div>
@@ -288,27 +282,6 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div wire:ignore class="ps-4 pe-0 pt-4 border-start border-bottom position-relative"
-                                style="height: 76px; width: 88%; margin-bottom: 1.7rem; margin-left: 40px; margin-top: -8px; border-bottom-left-radius: 10px;"
-                                id="editSelectServiceDeptChildrenContainer">
-                                <div class="d-flex align-items-center justify-content-between gap-2">
-                                    <label for="childInput" class="form-label form__field__label">
-                                        Select Sub-Service Department
-                                    </label>
-                                    @error('selectedServiceDeptChild')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                    @enderror
-                                </div>
-                                <div class="position-relative">
-                                    <div>
-                                        <div id="edit-select-service-department-children" wire:ignore></div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="mb-2">
                                 <label class="form-label form__field__label">Assign to branch</label>
                                 <div>
@@ -377,10 +350,6 @@
     <script>
         const editServiceDepartmentSelect = document.querySelector('#edit-select-service-department');
         const editBranchSelect = document.querySelector('#edit-select-branch');
-        const editServiceDepartmentChildSelect = document.querySelector('#edit-select-service-department-children');
-        const editSelectServiceDeptChildrenContainer = document.querySelector('#editSelectServiceDeptChildrenContainer');
-
-        editSelectServiceDeptChildrenContainer.style.display = 'none';
 
         const editServiceDepartmentOption = @json($serviceDepartments).map(serviceDepartment => ({
             label: serviceDepartment.name,
@@ -408,12 +377,6 @@
             markSearchResults: true,
         });
 
-        VirtualSelect.init({
-            ele: editServiceDepartmentChildSelect,
-            search: true,
-            markSearchResults: true,
-        });
-
         editBranchSelect.addEventListener('change', (event) => {
             @this.set('editSelectedBranches', event.target.value);
         });
@@ -428,11 +391,6 @@
             editServiceDepartmentSelect.setValue(event.detail.serviceDepartmentId);
         });
 
-        editServiceDepartmentSelect.addEventListener('reset', () => {
-            editServiceDepartmentChildSelect.setOptions([])
-            editSelectServiceDeptChildrenContainer.style.display = 'none';
-        });
-
         editServiceDepartmentSelect.addEventListener('change', (event) => {
             const serviceDeptId = parseInt(event.target.value);
 
@@ -440,36 +398,6 @@
                 @this.set('editSelectedServiceDepartment', serviceDeptId);
             }
         });
-
-        window.addEventListener('edit-current-service-department-children', (event) => {
-            const serviceDepartmentChildren = event.detail.serviceDepartmentChildren;
-            const currentServiceDeptChild = event.detail.currentServiceDeptChild;
-            const editServiceDeptChildrenOption = [];
-            console.log(currentServiceDeptChild);
-
-            if (serviceDepartmentChildren.length > 0) {
-                editSelectServiceDeptChildrenContainer.style.display = 'block';
-
-                serviceDepartmentChildren.forEach(function(child) {
-                    editServiceDeptChildrenOption.push({
-                        label: child.name,
-                        value: child.id
-                    });
-                });
-
-                editServiceDepartmentChildSelect.setOptions(editServiceDeptChildrenOption);
-                editServiceDepartmentChildSelect.setValue(currentServiceDeptChild);
-
-                editServiceDepartmentChildSelect.addEventListener('change', (event) => {
-                    @this.set('selectedServiceDeptChild', event.target.value);
-                });
-
-            } else {
-                // If no children, hide the child select
-                editSelectServiceDeptChildrenContainer.style.display = 'none';
-            }
-        });
-
 
         window.addEventListener('edit-current-branches', (event) => {
             editBranchSelect.setValue(event.detail.branchIds);

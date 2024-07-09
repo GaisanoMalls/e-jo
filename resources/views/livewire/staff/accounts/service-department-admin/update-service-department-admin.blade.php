@@ -1,7 +1,7 @@
 <div>
     @livewire('staff.accounts.service-department-admin.update-service-dept-admin-password', ['serviceDeptAdmin' => $serviceDeptAdmin])
     <div class="row accounts__section justify-content-center">
-        <div class="col-xxl-9 col-lg-12">
+        <div class="col-lg-12">
             <div class="card d-flex flex-column gap-2 users__account__card">
                 <div class="user__details__container d-flex flex-wrap mb-4 justify-content-between">
                     <h6 class="card__title">Service Dept. Admin's Information</h6>

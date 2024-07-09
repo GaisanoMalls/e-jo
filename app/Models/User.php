@@ -102,11 +102,6 @@ class User extends Authenticatable
             ->withPivot('user_id', 'department_id');
     }
 
-    public function levels(): BelongsToMany
-    {
-        return $this->belongsToMany(Level::class, 'approver_level')->withPivot(['user_id', 'level_id']);
-    }
-
     public function subteams(): BelongsToMany
     {
         return $this->belongsToMany(Subteam::class, 'user_subteams', 'user_id', 'subteam_id');

@@ -44,11 +44,6 @@ class ServiceDepartment extends Model
         return $this->hasMany(HelpTopic::class);
     }
 
-    public function children(): HasMany
-    {
-        return $this->hasMany(ServiceDepartmentChildren::class);
-    }
-
     public function serviceDepartmentAdmins(): Builder|BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_service_department')->role(Role::APPROVER);
@@ -62,20 +57,5 @@ class ServiceDepartment extends Model
     public function dateUpdated(): string
     {
         return $this->updatedAt($this->created_at, $this->updated_at);
-    }
-
-    public function getChildren(): string
-    {
-        $childrenNames = [];
-
-        foreach ($this->children as $child) {
-            $childrenNames[] = $child->name;
-        }
-
-        if (!empty($childrenNames)) {
-            return implode(', ', $childrenNames);
-        }
-
-        return '';
     }
 }

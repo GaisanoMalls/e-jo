@@ -10,12 +10,10 @@ use App\Models\HelpTopicApprover;
 use App\Models\HelpTopicConfiguration;
 use App\Models\HelpTopicCosting;
 use App\Models\Role;
-use App\Models\ServiceDepartmentChildren;
 use App\Models\SpecialProject;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -27,9 +25,6 @@ class CreateHelpTopic extends Component
     use Utils, BasicModelQueries;
     public $isSpecialProject = false;
     public $teams = [];
-    public $serviceDepartmentChildren = [];
-    public $selectedServiceDepartmentChildrenId;
-    public $selectedServiceDepartmentChildrenName;
     public $name;
     public $sla;
     public $serviceDepartment;
@@ -111,7 +106,6 @@ class CreateHelpTopic extends Component
                 // Create HelpTopic
                 $helpTopic = HelpTopic::create([
                     'service_department_id' => $this->serviceDepartment,
-                    'service_dept_child_id' => null, // No sub-service department check
                     'team_id' => $this->team,
                     'service_level_agreement_id' => $this->sla,
                     'name' => $this->name . ($teamName ? " - {$teamName}" : ''),

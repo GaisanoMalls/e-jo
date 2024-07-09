@@ -5,12 +5,10 @@ namespace App\Http\Livewire\Staff\Teams;
 use App\Http\Requests\SysAdmin\Manage\Team\StoreTeamRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
-use App\Models\ServiceDepartmentChildren;
 use App\Models\Subteam;
 use App\Models\Team;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -21,10 +19,9 @@ class CreateTeam extends Component
     public ?array $selectedBranches = [];
     public ?array $addedSubteam = [];
     public ?string $name = null;
-    public $selectedServiceDepartment;
-    public $selectedChild;
-    public $subteam;
-    public $hasSubteam = false;
+    public ?int $selectedServiceDepartment = null;
+    public ?string $subteam = null;
+    public bool $hasSubteam = false;
 
     public function rules()
     {
@@ -42,13 +39,6 @@ class CreateTeam extends Component
         $this->resetValidation();
         $this->emit('loadTeams');
         $this->dispatchBrowserEvent('clear-select-options');
-    }
-
-    public function updatedSelectedServiceDepartment($value)
-    {
-        dump($value);
-        $this->serviceDeptChildren = ServiceDepartmentChildren::where('service_department_id', $value)->get();
-        $this->dispatchBrowserEvent('load-service-department-children', ['serviceDeptChildren' => $this->serviceDeptChildren]);
     }
 
     public function addSubteam()
@@ -105,7 +95,6 @@ class CreateTeam extends Component
                     } else {
                         $team = Team::create([
                             'service_department_id' => $this->selectedServiceDepartment,
-                            'service_dept_child_id' => $this->selectedChild ?: null,
                             'name' => $this->name,
                             'slug' => Str::slug($this->name),
                         ]);
@@ -122,7 +111,6 @@ class CreateTeam extends Component
                 } else {
                     $team = Team::create([
                         'service_department_id' => $this->selectedServiceDepartment,
-                        'service_dept_child_id' => $this->selectedChild ?: null,
                         'name' => $this->name,
                         'slug' => Str::slug($this->name),
                     ]);

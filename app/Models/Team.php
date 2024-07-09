@@ -22,7 +22,6 @@ class Team extends Model
 
     protected $fillable = [
         'service_department_id',
-        'service_dept_child_id',
         'name',
         'slug',
     ];
@@ -30,11 +29,6 @@ class Team extends Model
     public function serviceDepartment(): BelongsTo
     {
         return $this->belongsTo(ServiceDepartment::class);
-    }
-
-    public function serviceDepartmentChild(): BelongsTo
-    {
-        return $this->belongsTo(ServiceDepartmentChildren::class, 'service_dept_child_id');
     }
 
     public function tickets(): HasMany
@@ -72,21 +66,6 @@ class Team extends Model
 
         if (!empty($branchNames)) {
             return implode(', ', $branchNames);
-        }
-
-        return '';
-    }
-
-    public function getTeamServiceDeptChildren(): string
-    {
-        $childrenNames = [];
-
-        foreach ($this->serviceDepartmentChildren as $child) {
-            $childrenNames[] = $child->name;
-        }
-
-        if (!empty($childrenNames)) {
-            return implode(', ', $childrenNames);
         }
 
         return '';

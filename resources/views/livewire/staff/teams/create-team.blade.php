@@ -14,8 +14,8 @@
                         <div class="row mb-2">
                             <div class="col-12 mb-3 d-flex">
                                 <input wire:model="hasSubteam" class="form-check-input check__special__project"
-                                    type="checkbox" role="switch" id="checkHasChildren" wire:loading.attr="disabled">
-                                <label class="form-check-label" for="checkHasChildren"
+                                    type="checkbox" role="switch" id="checkHasSubTeam" wire:loading.attr="disabled">
+                                <label class="form-check-label" for="checkHasSubTeam"
                                     style="margin-top: 0.2rem !important;">
                                     Has subteam
                                 </label>
@@ -101,26 +101,6 @@
                                         {{ $message }}
                                     </span>
                                 @enderror
-                            </div>
-                            <div wire:ignore class="ps-4 pe-0 pt-4 border-start border-bottom position-relative"
-                                style="height: 76px; width: 88%; margin-bottom: 1.7rem; margin-left: 40px; margin-top: -8px; border-bottom-left-radius: 10px;"
-                                id="selectServiceDeptChildrenContainer">
-                                <div class="d-flex align-items-center justify-content-between gap-2">
-                                    <label for="childInput" class="form-label form__field__label">
-                                        Select Sub-Service Department
-                                    </label>
-                                    @error('selectedChild')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                    @enderror
-                                </div>
-                                <div class="position-relative">
-                                    <div>
-                                        <div id="select-service-department-child-select" wire:ignore></div>
-                                    </div>
-                                </div>
                             </div>
                             <div class="mb-2">
                                 <label class="form-label form__field__label">Assign to branch</label>

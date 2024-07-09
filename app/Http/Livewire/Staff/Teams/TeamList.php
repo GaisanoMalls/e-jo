@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Staff\Teams;
 
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
-use App\Models\ServiceDepartmentChildren;
 use App\Models\Subteam;
 use App\Models\Team;
 use Exception;
@@ -17,21 +16,18 @@ class TeamList extends Component
 {
     use BasicModelQueries, WithPagination;
 
-    public $addedSubteams = [];
-    public $currentSubteams = [];
-    public $editSelectedBranches = [];
-    public $serviceDepartmentChildren = [];
-    public $currentServiceDeptChild;
-    public $selectedServiceDeptChild;
-    public $teamEditId;
-    public $teamDeleteId;
-    public $editSelectedServiceDepartment;
-    public $name;
-    public $subteam;
-    public $subteamEditId;
-    public $subteamEditName;
-    public $hasSubteam = false;
-    public $searchTeam = '';
+    public ?array $addedSubteams = [];
+    public ?array $currentSubteams = [];
+    public ?array $editSelectedBranches = [];
+    public ?int $teamEditId = null;
+    public ?int $teamDeleteId = null;
+    public ?int $editSelectedServiceDepartment = null;
+    public ?string $name = null;
+    public ?string $subteam = null;
+    public ?int $subteamEditId = null;
+    public ?string $subteamEditName = null;
+    public bool $hasSubteam = false;
+    public ?string $searchTeam = null;
 
     protected $paginationTheme = 'bootstrap';
     protected $listeners = ['loadTeams' => '$refresh'];
@@ -66,9 +62,7 @@ class TeamList extends Component
         $this->teamEditId = $team->id;
         $this->name = $team->name;
         $this->editSelectedServiceDepartment = $team->service_department_id;
-        $this->currentServiceDeptChild = $team->service_dept_child_id;
         $this->editSelectedBranches = $team->branches->pluck('id')->toArray();
-        $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->editSelectedServiceDepartment)->get(['id', 'name'])->toArray();
         $this->isCurrentTeamHasSubteams();
         $this->subteams();
 
@@ -86,15 +80,6 @@ class TeamList extends Component
     public function subteams()
     {
         return Subteam::where('team_id', $this->teamEditId)->get();
-    }
-
-    public function updatedEditSelectedServiceDepartment()
-    {
-        $this->serviceDepartmentChildren = ServiceDepartmentChildren::where('service_department_id', $this->editSelectedServiceDepartment)->get()->toArray();
-        $this->dispatchBrowserEvent('edit-current-service-department-children', [
-            'serviceDepartmentChildren' => $this->serviceDepartmentChildren,
-            'currentServiceDeptChild' => $this->currentServiceDeptChild
-        ]);
     }
 
     public function addSubteam()
@@ -146,11 +131,6 @@ class TeamList extends Component
         $this->validate();
 
         try {
-            if (!empty($this->serviceDepartmentChildren) && empty($this->selectedServiceDeptChild)) {
-                $this->addError('selectedServiceDeptChild', 'The sub-service department field is required.');
-                return;
-            }
-
             if (!empty($this->name) && !empty($this->subteam)) {
                 $this->addError('subteam', 'Please add the subteam');
                 return;
@@ -176,7 +156,6 @@ class TeamList extends Component
                     $team->update([
                         'name' => $this->name,
                         'service_department_id' => $this->editSelectedServiceDepartment,
-                        'service_dept_child_id' => $this->selectedServiceDeptChild ?: null,
                         'slug' => Str::slug($this->name),
                     ]);
 
@@ -264,7 +243,6 @@ class TeamList extends Component
             'teams' => Team::where('name', 'like', '%' . $this->searchTeam . '%')
                 ->orWhereHas('subteams', fn($subteam) => $subteam->where('name', 'like', '%' . $this->searchTeam . '%'))
                 ->orWhereHas('serviceDepartment', fn($serviceDepartment) => $serviceDepartment->where('name', 'like', '%' . $this->searchTeam . '%'))
-                ->orWhereHas('serviceDepartmentChild', fn($subServiceDepartment) => $subServiceDepartment->where('name', 'like', '%' . $this->searchTeam . '%'))
                 ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', '%' . $this->searchTeam . '%'))
                 ->orderByDesc('created_at')
                 ->paginate(15),
