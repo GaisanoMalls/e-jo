@@ -54,7 +54,7 @@ class Department extends Model
             $branchNames[] = $branch->name;
         }
 
-        if (!empty ($branchNames)) {
+        if (!empty($branchNames)) {
             return implode(', ', $branchNames);
         }
 

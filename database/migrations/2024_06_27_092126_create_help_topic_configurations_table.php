@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained('help_topics')->cascadeOnDelete();
             $table->foreignIdFor(Department::class, 'bu_department_id')->constrained('departments')->cascadeOnDelete();
-            $table->string('bu_department_name');
             $table->unsignedInteger('approvers_count');
             $table->timestamps();
         });

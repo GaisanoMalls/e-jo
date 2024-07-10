@@ -68,21 +68,19 @@
                                     </div>
                                 </div>
                                 <!-- Team Field -->
-                                <div class="col-md-6" id="teamSelectContainer" wire:ignore>
+                                <div class="col-md-6">
                                     <div class="mb-2">
-                                        <label for="team" class="form-label form__field__label">Team <span
-                                                class="fw-normal" style="font-size: 13px;"
-                                                id="countTeams"></span></label>
+                                        <label for="team" class="form-label form__field__label">Team
+                                            <span class="fw-normal" style="font-size: 13px;">
+                                                @if ($teams && $teams->count() !== 0)
+                                                    ({{ $teams->count() }})
+                                                @endif
+                                            </span>
+                                        </label>
                                         <div>
                                             <div id="select-help-topic-team" placeholder="Select (optional)"
                                                 wire:ignore></div>
                                         </div>
-                                        @if (session()->has('team_error'))
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ session('team_error') }}
-                                            </span>
-                                        @endif
                                         @error('team')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -97,7 +95,20 @@
                     <!-- Form fields -->
                     <hr>
                     <div class="row">
-                        <h6 class="fw-semibold mb-4" style="font-size: 0.89rem;">Approval Configurations</h6>
+                        <h6 class="mb-0 fw-bold">Configurations</h6>
+                    </div>
+                    <div class="row mb-3">
+                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
+                            style="font-size: 0.89rem; color: #9da85c;">
+                            <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
+                            Approval
+                        </h6>
+                        @if (session()->has('approval_config_error'))
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ session('approval_config_error') }}
+                            </span>
+                        @endif
                         <div class="col-md-6">
                             <div class="mb-2">
                                 <label for="department" class="form-label form__field__label">BU Department</label>
@@ -127,59 +138,66 @@
                             </div>
                         </div>
                         <div wire:ignore class="row" id="dynamic-approval-container"></div>
+                        <div class="my-2"
+                            style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
+                            <button wire:click="saveConfiguration"
+                                class="btn d-flex align-items-center justify-content-center rounded-3"
+                                style="width: auto; height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
+                                Add approval
+                            </button>
+                            <button onclick="handleCancelApprovalConfig()" type="button"
+                                class="btn d-flex align-items-center justify-content-center rounded-3"
+                                style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
+                                Cancel
+                            </button>
+                        </div>
+                        @if (!empty($configurations))
+                            <table class="table mt-3" style="margin-left: 11px; margin-right: 11px;">
+                                <thead>
+                                    <tr>
+                                        <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
+                                        <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
+                                        <th style="font-size: 0.85rem; padding: 17px 21px;">Numbers of Approvers</th>
+                                        <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($configurations as $index => $config)
+                                        <tr>
+                                            <td class="td__content" style="font-size: 0.85rem;">{{ $index + 1 }}</td>
+                                            <td class="td__content" style="font-size: 0.85rem;">
+                                                {{ $config['bu_department_name'] }}</td>
+                                            <td class="td__content" style="font-size: 0.85rem;">
+                                                {{ $config['approvers_count'] }}</td>
+                                            <td>
+                                                <div
+                                                    class="d-flex align-items-center justify-content-center pe-2 gap-1">
+                                                    <button data-tooltip="Edit" data-tooltip-position="top"
+                                                        data-tooltip-font-size="11px" type="button"
+                                                        class="btn action__button">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm action__button mt-0"
+                                                        wire:click="removeConfiguration({{ $index }})">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
                     </div>
-                    <div style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
-                        <button wire:click="saveConfiguration"
-                            class="btn d-flex align-items-center justify-content-center rounded-3"
-                            style="width: auto; height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
-                            Add approval
-                        </button>
-                        <button onclick="handleCancelApprovalConfig()" type="button"
-                            class="btn d-flex align-items-center justify-content-center rounded-3"
-                            style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
-                            Cancel
-                        </button>
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>BU Department</th>
-                                <th>Numbers of Approvers</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($configurations as $index => $config)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $config['bu_department_name'] }}</td>
-                                    <td>{{ $config['approvers_count'] }}</td>
-                                    <td>
-                                        <div class="d-flex align-items-center justify-content-center pe-2 gap-1">
-                                            <button data-tooltip="Edit" data-tooltip-position="top"
-                                                data-tooltip-font-size="11px" type="button" class="btn action__button">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-sm action__button mt-0"
-                                                wire:click="removeConfiguration({{ $index }})">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center">No approval configuration added</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
                 </div>
                 <!-- Special Project Amount -->
-                <div wire:ignore class="mt-2" id="specialProjectAmountContainer">
-                    <hr>
-                    <h6 class="fw-semibold mb-4" style="font-size: 0.89rem;">Costing Configurations</h6>
+                <div wire:ignore id="specialProjectAmountContainer">
+                    <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
+                        style="font-size: 0.89rem; color: #196837;">
+                        <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
+                        Costing
+                    </h6>
                     <div class="row mb-2">
                         <div class="col-md-12">
                             <div class="row">
@@ -217,7 +235,6 @@
                         </div>
                     </div>
                 </div>
-                <hr>
                 <div style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
                     <button type="button"
                         class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
@@ -240,7 +257,6 @@
 @push('livewire-select')
     <script>
         const amountField = document.querySelector('#amount');
-        const teamSelectContainer = document.querySelector('#teamSelectContainer');
         const specialProjectCheck = document.querySelector('#specialProjectCheck');
         const slaSelect = document.querySelector('#select-help-topic-sla');
         const specialProjectAmountContainer = document.querySelector('#specialProjectAmountContainer');
@@ -305,9 +321,6 @@
                         });
 
                         teamSelect.setOptions(teamOption);
-
-                        const countTeams = document.querySelector('#countTeams');
-                        countTeams.textContent = `(${event.detail.teams.length})`;
                     } else {
                         teamSelect.disable();
                         teamSelect.setOptions([]);
@@ -323,15 +336,12 @@
 
         teamSelect.addEventListener('change', (event) => {
             const teamId = parseInt(event.target.value);
-            if (teamId) @this.set('team', teamId);
+            @this.set('team', teamId);
         });
 
         serviceDepartmentSelect.addEventListener('reset', () => {
-            const countTeams = document.querySelector('#countTeams');
             @this.set('teams', []);
             @this.set('name', null);
-            countTeams.textContent = '';
-            document.querySelector('#countTeams').textContent = '';
             teamSelect.disable();
             teamSelect.setOptions([]);
         });
@@ -391,6 +401,10 @@
             @this.set('approvalLevelSelected', true);
         });
 
+        approvalLevelSelect.addEventListener('reset', () => {
+            @this.set('approvalLevelSelected', false);
+        });
+
         const dynamicApprovalLevelContainer = document.querySelector('#dynamic-approval-container');
         const approvers = {};
         let selectedApprovers = [];
@@ -410,6 +424,7 @@
             approvers[`level${level}`].addEventListener('change', () => {
                 selectedApprovers[level - 1] = approvers[`level${level}`].value;
                 @this.set(`level${level}Approvers`, approvers[`level${level}`].value);
+
                 window.dispatchEvent(new CustomEvent('approver-level-changed', {
                     detail: {
                         level
@@ -444,9 +459,9 @@
         });
 
         window.addEventListener('load-approvers', (event) => {
-
             const level = event.detail.level;
             const approverSelect = approvers[`level${level}`];
+
             if (approverSelect) {
                 const approverOptions = event.detail.approvers.filter(approver => {
                     return !selectedApprovers.flat().includes(approver.id);
@@ -455,6 +470,7 @@
                     value: approver.id,
                     description: approver.roles.map(role => role.name).join(', ')
                 }));
+
                 approverSelect.setOptions(approverOptions);
             }
         });
@@ -536,7 +552,6 @@
             });
 
             document.querySelector('#dynamic-approval-container').innerHTML = '';
-            document.querySelector('#countTeams').textContent = '';
             specialProjectAmountContainer.style.display = 'none';
             teamSelect.disable();
         }

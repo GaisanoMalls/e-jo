@@ -14,7 +14,6 @@ class HelpTopicConfiguration extends Model
     protected $fillable = [
         'help_topic_id',
         'bu_department_id',
-        'bu_department_name',
         'approvers_count',
     ];
 
