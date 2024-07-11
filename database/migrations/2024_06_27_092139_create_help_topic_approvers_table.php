@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->foreignIdFor(HelpTopicConfiguration::class, 'help_topic_configuration_id')->constrained('help_topic_configurations')->cascadeOnDelete();
             $table->foreignIdFor(HelpTopic::class, 'help_topic_id')->constrained('help_topics')->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'user_id')->constrained('users')->cascadeOnDelete();
+            $table->boolean('is_approved')->default(false);
             $table->unsignedInteger('level');
             $table->timestamps();
         });

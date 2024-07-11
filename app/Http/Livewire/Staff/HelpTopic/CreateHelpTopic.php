@@ -18,14 +18,13 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
-use Illuminate\Support\Facades\Log;
 
 
 class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
     public bool $isSpecialProject = false;
-    public $teams;
+    public ?Collection $teams = null;
     public ?string $name = null;
     public ?int $sla = null;
     public ?int $serviceDepartment = null;
@@ -46,9 +45,10 @@ class CreateHelpTopic extends Component
     public array $level3Approvers = [];
     public array $level4Approvers = [];
     public array $level5Approvers = [];
+    public array $selectedApprovers = [];
     public bool $approvalLevelSelected = false;
 
-    public array $configurations = [];
+    public ?array $configurations = [];
     public ?int $buDepartment = null;
     public ?string $buDepartmentName = null;
     public ?Collection $buDepartments = null;
@@ -60,11 +60,6 @@ class CreateHelpTopic extends Component
         $this->fetchCostingApprovers();
     }
 
-    public function updatedIsSpecialProject()
-    {
-        gettype($this->teams);
-    }
-
     public function rules()
     {
         return [
@@ -72,8 +67,17 @@ class CreateHelpTopic extends Component
             'sla' => ['required'],
             'serviceDepartment' => ['required'],
             'team' => ['required'],
-            'amount' => ['decimal:2', $this->isSpecialProject ? 'required' : 'nullable'],
+            'selectedBuDepartment' => [empty($this->configurations) ? 'required' : 'nullable'],
+            'approvalLevelSelected' => [empty($this->configurations) ? 'accepted' : 'nullable'],
             'teams' => '',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'selectedBuDepartment.required' => 'BU department field is required',
+            'approvalLevelSelected.accepted' => 'Level of approval field is required'
         ];
     }
 
@@ -82,91 +86,88 @@ class CreateHelpTopic extends Component
         $this->reset();
         $this->resetValidation();
         $this->emit('loadHelpTopics');
+        $this->dispatchBrowserEvent('reset-help-topic-form-fields');
     }
 
     public function saveHelpTopic()
     {
-        // Validate form inputs
         $this->validate();
 
         try {
-            Log::info('Starting transaction to save HelpTopic.');
-
             DB::transaction(function () {
-                $teamName = $this->team ? Team::find($this->team)->name : '';
+                // Save help topic and its configurations
+                if (!empty($this->configurations)) {
+                    $teamName = $this->team ? Team::find($this->team)->name : '';
 
-                // Create HelpTopic
-                $helpTopic = HelpTopic::create([
-                    'service_department_id' => $this->serviceDepartment,
-                    'team_id' => $this->team,
-                    'service_level_agreement_id' => $this->sla,
-                    'name' => $this->name . ($teamName ? " - {$teamName}" : ''),
-                    'slug' => Str::slug($this->name),
-                ]);
-
-                // Save help topic configurations
-                foreach ($this->configurations as $config) {
-                    // Create the configuration record
-                    $helpTopicConfiguration = HelpTopicConfiguration::create([
-                        'help_topic_id' => $helpTopic->id,
-                        'bu_department_id' => $config['bu_department_id'],
-                        'bu_department_name' => $config['bu_department_name'],
-                        'approvers_count' => $config['approvers_count'],
+                    $helpTopic = HelpTopic::create([
+                        'service_department_id' => $this->serviceDepartment,
+                        'team_id' => $this->team,
+                        'service_level_agreement_id' => $this->sla,
+                        'name' => $this->name . ($teamName ? " - {$teamName}" : ''),
+                        'slug' => Str::slug($this->name),
                     ]);
 
-                    // Create the approver records
-                    foreach ($config['approvers'] as $level => $approversList) {
-                        $levelNumber = str_replace('level', '', $level);
-                        foreach ($approversList as $userId) {
-                            HelpTopicApprover::create([
-                                'help_topic_configuration_id' => $helpTopicConfiguration->id,
-                                'help_topic_id' => $helpTopic->id,
-                                'level' => $levelNumber,
-                                'user_id' => $userId,
-                            ]);
+                    foreach ($this->configurations as $config) {
+                        $helpTopicConfiguration = HelpTopicConfiguration::create([
+                            'help_topic_id' => $helpTopic->id,
+                            'bu_department_id' => $config['bu_department_id'],
+                            'approvers_count' => $config['approvers_count'],
+                        ]);
+
+                        foreach ($config['approvers'] as $level => $approversList) {
+                            $levelNumber = str_replace('level', '', $level);
+                            foreach ($approversList as $userId) {
+                                HelpTopicApprover::create([
+                                    'help_topic_configuration_id' => $helpTopicConfiguration->id,
+                                    'help_topic_id' => $helpTopic->id,
+                                    'level' => $levelNumber,
+                                    'user_id' => $userId,
+                                ]);
+                            }
                         }
                     }
                 }
 
                 if ($this->isSpecialProject) {
-                    // Save costing data
+                    if (!$this->amount) {
+                        $this->addError('amount', 'Amount field is required');
+                        return;
+                    }
+
+                    $amount = number_format((float) $this->amount, 2, thousands_separator: '');
+
                     HelpTopicCosting::create([
                         'help_topic_id' => $helpTopic->id,
                         'costing_approvers' => $this->costingApprovers,
-                        'amount' => number_format((float) $this->amount, 2),
+                        'amount' => $amount,
                         'final_costing_approvers' => $this->finalCostingApprovers,
                     ]);
 
-                    // Create SpecialProject if it's a special project
                     SpecialProject::create([
                         'help_topic_id' => $helpTopic->id,
-                        'amount' => $this->amount,
+                        'amount' => $amount,
                     ]);
                 }
+
+                $this->actionOnSubmit();
+                noty()->addSuccess('Help topic created successfully.');
             });
-
-            // Action on successful submission
-            $this->actionOnSubmit();
-            noty()->addSuccess('A new help topic has been created.');
-            Log::info('Help topic submission successful.');
-
         } catch (Exception $e) {
-            // Log the error
             AppErrorLog::getError($e->getMessage());
-            Log::error('Error occurred while saving help topic.', ['exception' => $e->getMessage()]);
         }
     }
 
-    public function updatedSla()
+    public function updatedIsSpecialProject($value)
     {
-        $this->clearValidation('sla'); // Clear the validation error everytime thee field is selected.
+        if ($value) {
+            $this->dispatchBrowserEvent('show-costing-section');
+        }
     }
 
     public function updatedServiceDepartment($value)
     {
         $this->teams = Team::where('service_department_id', $value)->get();
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
-        $this->clearValidation('serviceDepartment'); // Clear the validation error everytime thee field is selected.
     }
 
     public function saveConfiguration()
@@ -183,18 +184,10 @@ class CreateHelpTopic extends Component
 
         if (!$this->selectedBuDepartment) {
             $this->addError('selectedBuDepartment', 'BU department field is required');
-
-            if ($this->approvalLevelSelected) {
-                $this->clearValidation('approvalLevelSelected');
-            }
         }
 
         if (!$this->approvalLevelSelected) {
             $this->addError('approvalLevelSelected', 'Level of approval field is required');
-
-            if ($this->selectedBuDepartment) {
-                $this->clearValidation('selectedBuDepartment');
-            }
         }
 
         // Check if BU department and level of approval is selected
@@ -231,16 +224,9 @@ class CreateHelpTopic extends Component
         array_splice($this->configurations, $index, 1);
     }
 
-    public function updatedSelectedBuDepartment()
-    {
-        // Clear the validation error everytime thee field is selected.
-        $this->clearValidation('selectedBuDepartment');
-    }
 
     public function updatedApprovalLevelSelected()
     {
-        // Clear the validation error everytime thee field is selected.
-        $this->clearValidation('approvalLevelSelected');
         $this->getFilteredApprovers(1);
     }
 
@@ -270,7 +256,7 @@ class CreateHelpTopic extends Component
 
     public function getFilteredApprovers($level)
     {
-        $selectedApprovers = array_merge(
+        $this->selectedApprovers = array_merge(
             (array) $this->level1Approvers,
             (array) $this->level2Approvers,
             (array) $this->level3Approvers,
@@ -280,7 +266,7 @@ class CreateHelpTopic extends Component
 
         $filteredApprovers = User::with(['profile', 'roles'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
-            ->whereNotIn('id', $selectedApprovers)
+            ->whereNotIn('id', $this->selectedApprovers)
             ->orderByDesc('created_at')
             ->get();
 
@@ -306,7 +292,6 @@ class CreateHelpTopic extends Component
 
     public function render()
     {
-
         return view('livewire.staff.help-topic.create-help-topic', [
             'serviceLevelAgreements' => $this->queryServiceLevelAgreements(),
             'serviceDepartments' => $this->queryServiceDepartments(),
