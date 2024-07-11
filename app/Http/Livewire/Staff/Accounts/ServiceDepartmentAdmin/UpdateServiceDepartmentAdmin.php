@@ -29,33 +29,23 @@ class UpdateServiceDepartmentAdmin extends Component
     public $bu_department;
     public $permissions = [];
     public $currentPermissions = [];
-    public $asCostingApprover1 = false;
 
-    public function mount(User $serviceDeptAdmin)
+    public function mount()
     {
-        $this->serviceDeptAdmin = $serviceDeptAdmin;
-        $this->branches = $serviceDeptAdmin->branches->pluck('id')->toArray();
-        $this->service_departments = $serviceDeptAdmin->serviceDepartments->pluck('id')->toArray();
-        $this->bu_department = $serviceDeptAdmin->buDepartments->pluck('id');
-        $this->first_name = $serviceDeptAdmin->profile->first_name;
-        $this->middle_name = $serviceDeptAdmin->profile->middle_name;
-        $this->last_name = $serviceDeptAdmin->profile->last_name;
-        $this->suffix = $serviceDeptAdmin->profile->suffix;
-        $this->email = $serviceDeptAdmin->email;
-        $this->asCostingApprover1 = $this->isCostingApprover1();
-        $this->currentPermissions = $serviceDeptAdmin->getDirectPermissions()->pluck('name')->toArray();
+        $this->branches = $this->serviceDeptAdmin->branches->pluck('id')->toArray();
+        $this->service_departments = $this->serviceDeptAdmin->serviceDepartments->pluck('id')->toArray();
+        $this->bu_department = $this->serviceDeptAdmin->buDepartments->pluck('id');
+        $this->first_name = $this->serviceDeptAdmin->profile->first_name;
+        $this->middle_name = $this->serviceDeptAdmin->profile->middle_name;
+        $this->last_name = $this->serviceDeptAdmin->profile->last_name;
+        $this->suffix = $this->serviceDeptAdmin->profile->suffix;
+        $this->email = $this->serviceDeptAdmin->email;
+        $this->currentPermissions = $this->serviceDeptAdmin->getDirectPermissions()->pluck('name')->toArray();
     }
 
     private function isCostingApprover1()
     {
         return SpecialProjectAmountApproval::where('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->exists();
-    }
-
-    public function currentUserAsCostingApprover1()
-    {
-        return SpecialProjectAmountApproval::whereNotNull('service_department_admin_approver')
-            ->whereJsonContains('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)
-            ->exists();
     }
 
     public function rules()
@@ -97,51 +87,6 @@ class UpdateServiceDepartmentAdmin extends Component
                     ])),
                 ]);
 
-                if ($this->asCostingApprover1) {
-                    if (!$this->hasCostingApprover1()) {
-                        if (SpecialProjectAmountApproval::whereNull('service_department_admin_approver')->exists()) {
-                            SpecialProjectAmountApproval::whereNull('service_department_admin_approver')
-                                ->update([
-                                    'service_department_admin_approver' => [
-                                        'approver_id' => $this->serviceDeptAdmin->id,
-                                        'is_approved' => false,
-                                        'date_approved' => null
-                                    ]
-                                ]);
-                        } elseif (SpecialProjectAmountApproval::whereNull('fpm_coo_approver')->exists()) {
-                            SpecialProjectAmountApproval::whereNull('fpm_coo_approver')
-                                ->update([
-                                    'service_department_admin_approver' => [
-                                        'approver_id' => $this->serviceDeptAdmin->id,
-                                        'is_approved' => false,
-                                        'date_approved' => null
-                                    ]
-                                ]);
-                        } else {
-                            // If neither field is null, create a new record
-                            SpecialProjectAmountApproval::create([
-                                'service_department_admin_approver' => [
-                                    'approver_id' => $this->serviceDeptAdmin->id,
-                                    'is_approved' => false,
-                                    'date_approved' => null
-                                ]
-                            ]);
-                        }
-                    } else {
-                        noty()->warning('Costing approver 1 already assigned');
-                    }
-                } else {
-                    if (SpecialProjectAmountApproval::whereJsonContains('service_department_admin_approver->approver_id', $this->serviceDeptAdmin->id)->exists()) {
-                        if ($this->hasCostingApprover2()) {
-                            SpecialProjectAmountApproval::whereNotNull('fpm_coo_approver')
-                                ->update(['service_department_admin_approver' => null]);
-                        }
-                        if ($this->hasCostingApprover1() && !$this->hasCostingApprover2()) {
-                            SpecialProjectAmountApproval::query()->delete();
-                        }
-                    }
-                }
-
                 noty()->addSuccess("You have successfully updated the account for {$this->serviceDeptAdmin->profile->getFullName()}.");
             });
         } catch (Exception $e) {
@@ -156,8 +101,6 @@ class UpdateServiceDepartmentAdmin extends Component
             'serviceDeptAdminBranches' => $this->queryBranches(),
             'serviceDeptAdminBUDepartments' => $this->queryBUDepartments(),
             'serviceDeptAdminServiceDepartments' => $this->queryServiceDepartments(),
-            'currentUserAsCostingApprover1' => $this->currentUserAsCostingApprover1(),
-            'hasCostingApprover1' => $this->hasCostingApprover1(),
             'allPermissions' => Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::SERVICE_DEPARTMENT_ADMIN))->get()
         ]);
     }

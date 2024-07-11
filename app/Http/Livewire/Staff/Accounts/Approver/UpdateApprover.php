@@ -29,17 +29,16 @@ class UpdateApprover extends Component
     public $currentPermissions = [];
     public $asCostingApprover2 = false;
 
-    public function mount(User $approver)
+    public function mount()
     {
-        $this->approver = $approver;
-        $this->first_name = $approver->profile->first_name;
-        $this->middle_name = $approver->profile->middle_name;
-        $this->last_name = $approver->profile->last_name;
-        $this->email = $approver->email;
-        $this->suffix = $approver->profile->suffix;
-        $this->branches = $approver->branches->pluck("id")->toArray();
-        $this->bu_departments = $approver->buDepartments->pluck("id")->toArray();
-        $this->currentPermissions = $approver->getDirectPermissions()->pluck('name')->toArray();
+        $this->first_name = $this->approver->profile->first_name;
+        $this->middle_name = $this->approver->profile->middle_name;
+        $this->last_name = $this->approver->profile->last_name;
+        $this->email = $this->approver->email;
+        $this->suffix = $this->approver->profile->suffix;
+        $this->branches = $this->approver->branches->pluck("id")->toArray();
+        $this->bu_departments = $this->approver->buDepartments->pluck("id")->toArray();
+        $this->currentPermissions = $this->approver->getDirectPermissions()->pluck('name')->toArray();
         $this->asCostingApprover2 = $this->isCostingApprover2();
     }
 

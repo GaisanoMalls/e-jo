@@ -38,22 +38,21 @@ class UpdateAgent extends Component
     public $bu_department;
     public $service_department;
 
-    public function mount(User $agent)
+    public function mount()
     {
-        $this->agent = $agent;
-        $this->first_name = $agent->profile->first_name;
-        $this->middle_name = $agent->profile->middle_name;
-        $this->last_name = $agent->profile->last_name;
-        $this->suffix = $agent->profile->suffix;
-        $this->email = $agent->email;
-        $this->branch = $agent->branches->pluck('id');
-        $this->bu_department = $agent->buDepartments->pluck('id')->first();
-        $this->service_department = $agent->serviceDepartments->pluck('id');
+        $this->first_name = $this->agent->profile->first_name;
+        $this->middle_name = $this->agent->profile->middle_name;
+        $this->last_name = $this->agent->profile->last_name;
+        $this->suffix = $this->agent->profile->suffix;
+        $this->email = $this->agent->email;
+        $this->branch = $this->agent->branches->pluck('id');
+        $this->bu_department = $this->agent->buDepartments->pluck('id')->first();
+        $this->service_department = $this->agent->serviceDepartments->pluck('id');
         $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->teams = Team::withWhereHas('serviceDepartment', fn($query) => $query->where('service_departments.id', $this->service_department))->get();
         $this->subteams = Subteam::withWhereHas('team', fn($query) => $query->whereIn('teams.id', $this->teams->pluck('id')->toArray()))->get();
-        $this->currentTeams = $agent->teams->pluck('id')->toArray();
-        $this->currentSubteams = $agent->subteams->pluck('id')->toArray();
+        $this->currentTeams = $this->agent->teams->pluck('id')->toArray();
+        $this->currentSubteams = $this->agent->subteams->pluck('id')->toArray();
         $this->currentPermissions = $this->agent->getDirectPermissions()->pluck('name')->toArray();
     }
 

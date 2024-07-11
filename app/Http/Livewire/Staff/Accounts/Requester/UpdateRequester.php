@@ -29,18 +29,17 @@ class UpdateRequester extends Component
     public $branch;
     public $bu_department;
 
-    public function mount(User $user)
+    public function mount()
     {
-        $this->user = $user;
-        $this->first_name = $user->profile->first_name;
-        $this->middle_name = $user->profile->middle_name;
-        $this->last_name = $user->profile->last_name;
-        $this->suffix = $user->profile->suffix;
-        $this->email = $user->email;
-        $this->branch = $user->branches->pluck('id')->first();
-        $this->bu_department = $user->buDepartments->pluck('id')->first();
+        $this->first_name = $this->user->profile->first_name;
+        $this->middle_name = $this->user->profile->middle_name;
+        $this->last_name = $this->user->profile->last_name;
+        $this->suffix = $this->user->profile->suffix;
+        $this->email = $this->user->email;
+        $this->branch = $this->user->branches->pluck('id')->first();
+        $this->bu_department = $this->user->buDepartments->pluck('id')->first();
         $this->BUDepartments = Department::whereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
-        $this->currentPermissions = $user->getDirectPermissions()->pluck('name')->toArray();
+        $this->currentPermissions = $this->user->getDirectPermissions()->pluck('name')->toArray();
     }
 
     protected function rules()

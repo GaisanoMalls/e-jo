@@ -54,18 +54,17 @@ class UpdateHelpTopic extends Component
     public $selectedBuDepartment;
     public $selectedApproversCount = 0;
 
-    public function mount(HelpTopic $helpTopic)
+    public function mount()
     {
-        $this->helpTopic = $helpTopic;
-        $this->name = preg_replace('/ - [^-]+$/', '', $helpTopic->name);
-        $this->sla = $helpTopic->service_level_agreement_id;
-        $this->serviceDepartment = $helpTopic->service_department_id;
-        $this->team = $helpTopic->team_id;
-        $this->amount = $helpTopic->specialProject ? $helpTopic->specialProject->amount : null;
-        $this->costingApprovers = is_array($helpTopic->costing?->costing_approvers) ? $helpTopic->costing->costing_approvers : json_decode($helpTopic->costing?->costing_approvers, true);
-        $this->finalCostingApprovers = is_array($helpTopic->costing?->final_costing_approvers) ? $helpTopic->costing->final_costing_approvers : json_decode($helpTopic->costing?->final_costing_approvers, true);
-        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $helpTopic->service_department_id))->get(['id', 'name']);
-        $this->isSpecialProject = $helpTopic->specialProject ? true : false;
+        $this->name = preg_replace('/ - [^-]+$/', '', $this->helpTopic->name);
+        $this->sla = $this->helpTopic->service_level_agreement_id;
+        $this->serviceDepartment = $this->helpTopic->service_department_id;
+        $this->team = $this->helpTopic->team_id;
+        $this->amount = $this->helpTopic->specialProject ? $this->helpTopic->specialProject->amount : null;
+        $this->costingApprovers = is_array($this->helpTopic->costing?->costing_approvers) ? $this->helpTopic->costing->costing_approvers : json_decode($this->helpTopic->costing?->costing_approvers, true);
+        $this->finalCostingApprovers = is_array($this->helpTopic->costing?->final_costing_approvers) ? $this->helpTopic->costing->final_costing_approvers : json_decode($this->helpTopic->costing?->final_costing_approvers, true);
+        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->helpTopic->service_department_id))->get(['id', 'name']);
+        $this->isSpecialProject = $this->helpTopic->specialProject ? true : false;
         $this->buDepartments = $this->queryBUDepartments();
         $this->fetchCostingApprovers();
         $this->loadConfigurations();
