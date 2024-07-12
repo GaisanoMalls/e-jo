@@ -142,10 +142,10 @@
                             style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
                             <button wire:click="saveConfiguration"
                                 class="btn d-flex align-items-center justify-content-center rounded-3"
-                                style="width: auto; height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
+                                style="height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
                                 Add approval
                             </button>
-                            <button onclick="handleCancelApprovalConfig()" type="button"
+                            <button type="button"
                                 class="btn d-flex align-items-center justify-content-center rounded-3"
                                 style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
                                 Cancel
@@ -193,7 +193,7 @@
                 </div>
                 <!-- Special Project Amount -->
                 @if ($isSpecialProject)
-                    <div wire:ignore id="specialProjectAmountContainer">
+                    <div class="row">
                         <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
                             style="font-size: 0.89rem; color: #196837;">
                             <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
@@ -266,7 +266,6 @@
     <script>
         const amountField = document.querySelector('#amount');
         const slaSelect = document.querySelector('#select-help-topic-sla');
-        const specialProjectAmountContainer = document.querySelector('#specialProjectAmountContainer');
         const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
 
         const serviceLevelAgreementOption = @json($serviceLevelAgreements).map(sla => ({
@@ -511,16 +510,7 @@
             });
         });
 
-        function handleCancelApprovalConfig() {
-            buDepartmentSelect.reset();
-            approvalLevelSelect.reset();
-            dynamicApprovalLevelContainer.innerHTML = '';
-        }
-
         window.addEventListener('reset-help-topic-form-fields', () => {
-            document.querySelector('#helpTopicName').value = '';
-            document.querySelector('#amount').value = '';
-
             const selectElements = [
                 '#select-help-topic-sla',
                 '#select-help-topic-service-department',
@@ -539,7 +529,6 @@
             });
 
             document.querySelector('#dynamic-approval-container').innerHTML = '';
-            specialProjectAmountContainer.style.display = 'none';
             teamSelect.disable();
         });
     </script>

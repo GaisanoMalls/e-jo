@@ -65,6 +65,12 @@ class HelpTopic extends Model
     {
         return $this->hasMany(HelpTopicConfiguration::class);
     }
+
+    public function approvers()
+    {
+        return $this->hasMany(HelpTopicApprover::class);
+    }
+
     public function dateCreated(): string
     {
         return $this->createdAt($this->created_at);

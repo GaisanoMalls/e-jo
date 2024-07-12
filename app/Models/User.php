@@ -85,6 +85,11 @@ class User extends Authenticatable
         return $this->hasMany(ReplyLike::class);
     }
 
+    public function helTopicApprovals(): HasMany
+    {
+        return $this->hasMany(HelpTopicApprover::class);
+    }
+
     public function serviceDepartments(): BelongsToMany
     {
         return $this->belongsToMany(ServiceDepartment::class, 'user_service_department', 'user_id', 'service_department_id');

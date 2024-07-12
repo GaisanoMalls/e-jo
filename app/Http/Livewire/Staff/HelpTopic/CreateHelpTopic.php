@@ -50,7 +50,6 @@ class CreateHelpTopic extends Component
 
     public ?array $configurations = [];
     public ?int $buDepartment = null;
-    public ?string $buDepartmentName = null;
     public ?Collection $buDepartments = null;
     public ?int $selectedBuDepartment = null;
 
@@ -135,12 +134,11 @@ class CreateHelpTopic extends Component
                     }
 
                     $amount = number_format((float) $this->amount, 2, thousands_separator: '');
-
                     HelpTopicCosting::create([
                         'help_topic_id' => $helpTopic->id,
-                        'costing_approvers' => $this->costingApprovers,
+                        'costing_approvers' => array_map('intval', $this->costingApprovers),
                         'amount' => $amount,
-                        'final_costing_approvers' => $this->finalCostingApprovers,
+                        'final_costing_approvers' => array_map('intval', $this->finalCostingApprovers),
                     ]);
 
                     SpecialProject::create([
@@ -193,11 +191,11 @@ class CreateHelpTopic extends Component
         // Check if BU department and level of approval is selected
         if ($this->selectedBuDepartment && $this->approvalLevelSelected) {
             // Get the selected BU Department name
-            $this->buDepartmentName = collect($this->buDepartments)->firstWhere('id', $this->selectedBuDepartment)['name'];
+            $buDepartmentName = collect($this->buDepartments)->firstWhere('id', $this->selectedBuDepartment)['name'];
             // Add to the configurations array
             $this->configurations[] = [
                 'bu_department_id' => $this->selectedBuDepartment,
-                'bu_department_name' => $this->buDepartmentName,
+                'bu_department_name' => $buDepartmentName,
                 'approvers_count' => $approversCount,
                 'approvers' => $approvers,
             ];

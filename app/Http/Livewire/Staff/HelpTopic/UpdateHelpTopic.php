@@ -122,7 +122,6 @@ class UpdateHelpTopic extends Component
                     $helpTopicConfiguration = HelpTopicConfiguration::create([
                         'help_topic_id' => $this->helpTopic->id,
                         'bu_department_id' => $config['bu_department_id'],
-                        'bu_department_name' => $config['bu_department_name'],
                         'approvers_count' => $config['approvers_count'],
                     ]);
 
@@ -172,10 +171,11 @@ class UpdateHelpTopic extends Component
 
     public function loadConfigurations()
     {
-        $this->configurations = $this->helpTopic->configurations->map(function ($config) {
+        $config = $this->helpTopic->configurations()->with('buDepartment')->get();
+        $this->configurations = $config->map(function ($config) {
             return [
                 'bu_department_id' => $config->bu_department_id,
-                'bu_department_name' => $config->bu_department_name,
+                'bu_department_name' => $config->buDepartment->name,
                 'approvers_count' => $config->approvers_count,
                 'approvers' => $config->approvers->groupBy('level')->map(function ($approvers) {
                     return $approvers->pluck('user_id');

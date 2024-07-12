@@ -84,91 +84,111 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <h6 class="fw-semibold mb-4" style="font-size: 0.89rem;">Approval Configurations</h6>
-                        <div class="col-md-6">
-                            <div class="mb-2">
-                                <label for="department" class="form-label form__field__label">BU Department</label>
-                                <div>
-                                    <div id="select-help-topic-bu-department" wire:ignore></div>
-                                </div>
-                                @error('bu_department')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                @enderror
-                            </div>
+                        <hr>
+                        <div class="row">
+                            <h6 class="mb-0 fw-bold">Configurations</h6>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-2">
-                                <label for="department" class="form-label form__field__label">Level of Approval</label>
-                                <div>
-                                    <div id="select-help-topic-approval-level" wire:ignore></div>
+                        <div class="row mb-3">
+                            <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
+                                style="font-size: 0.89rem; color: #9da85c;">
+                                <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
+                                Approval
+                            </h6>
+                            <div class="col-md-6">
+                                <div class="mb-2">
+                                    <label for="department" class="form-label form__field__label">BU Department</label>
+                                    <div>
+                                        <div id="select-help-topic-bu-department" wire:ignore></div>
+                                    </div>
+                                    @error('bu_department')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
                                 </div>
-                                @error('bu_department')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                @enderror
                             </div>
+                            <div class="col-md-6">
+                                <div class="mb-2">
+                                    <label for="department" class="form-label form__field__label">Level of
+                                        Approval</label>
+                                    <div>
+                                        <div id="select-help-topic-approval-level" wire:ignore></div>
+                                    </div>
+                                    @error('bu_department')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div wire:ignore class="row" id="dynamic-approval-container"></div>
+                            <div class="my-2"
+                                style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
+                                <button wire:click="saveConfiguration"
+                                    class="btn d-flex align-items-center justify-content-center rounded-3"
+                                    style="height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
+                                    Add approval
+                                </button>
+                                <button type="button"
+                                    class="btn d-flex align-items-center justify-content-center rounded-3"
+                                    style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
+                                    Cancel
+                                </button>
+                            </div>
+                            @if (!empty($configurations))
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">Numbers of Approvers
+                                            </th>
+                                            <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
+                                                Actions
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($configurations as $index => $config)
+                                            <tr>
+                                                <td class="td__content" style="font-size: 0.85rem;">{{ $index + 1 }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $config['bu_department_name'] }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $config['approvers_count'] }}</td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-center pe-2 gap-1">
+                                                        <button data-tooltip="Edit" data-tooltip-position="top"
+                                                            data-tooltip-font-size="11px" type="button"
+                                                            class="btn action__button">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm action__button mt-0"
+                                                            wire:click="removeConfiguration({{ $index }})">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
                         </div>
-                        <div wire:ignore class="row" id="dynamic-approval-container"></div>
                     </div>
-                    <div style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
-                        <button
-                            class="btn d-flex align-items-center justify-content-center gap-2 btn__add__user__account"
-                            style="width: auto; background-color: #d32839; color: white;"
-                            wire:click="saveConfiguration">
-                            <span>Add</span>
-                        </button>
-                        <button type="button" class="btn m-0 btn__cancel" onclick="handleCancelApprovalConfig()">
-                            Cancel
-                        </button>
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>BU Department</th>
-                                <th>Numbers of Approvers</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($configurations as $index => $config)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $config['bu_department_name'] }}</td>
-                                    <td>{{ $config['approvers_count'] }}</td>
-                                    <td>
-                                        <div class="d-flex align-items-center justify-content-center pe-2 gap-1">
-                                            <button data-tooltip="Edit" data-tooltip-position="top"
-                                                data-tooltip-font-size="11px" type="button" class="btn action__button">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-sm action__button mt-0"
-                                                wire:click="removeConfiguration({{ $index }})">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center">No approval configuration added</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
 
                     <!-- Costing Configuration -->
-                    <hr>
-                    <div class="mt-2" id="specialProjectAmountContainer">
-                        <h6 class="fw-semibold mb-4" style="font-size: 0.89rem;">Costing Configurations</h6>
+                    <div class="row">
+                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
+                            style="font-size: 0.89rem; color: #196837;">
+                            <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
+                            Costing
+                        </h6>
                         <div class="row mb-2">
                             <div class="col-md-12">
                                 <div class="row">
@@ -183,21 +203,24 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label for="amount" class="form-label form__field__label">Enter Maximum
+                                            <label for="amount" class="form-label form__field__label">Enter
+                                                Maximum
                                                 Total Cost</label>
                                             <div class="d-flex position-relative amount__field__container">
                                                 <span class="currency text-muted position-absolute mt-2">₱</span>
                                                 <input type="text" wire:model="amount"
-                                                    class="form-control form__field max_total_cost" id="amount"
+                                                    class="form-control form__field amount__field" id="amount"
                                                     placeholder="Enter Total Cost">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4" id="costing-approver-container">
                                         <div class="mb-3">
-                                            <label class="finalCostingApprover">Final Cost Approver</label>
+                                            <label class="form-label form__field__label">Final Cost
+                                                Approver</label>
                                             <div>
-                                                <div id="select-help-topic-final-costing-approver" wire:ignore></div>
+                                                <div id="select-help-topic-final-costing-approver" wire:ignore>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -205,20 +228,20 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
                     <div class="col-12">
                         <div class="d-flex align-items-center gap-2">
-                            <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"
-                                data-bs-dismiss="modal"
-                                onclick="window.location.href='{{ route('staff.manage.help_topic.index') }}'">Cancel</button>
                             <button type="submit"
-                                class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__details btn__send"
-                                style="background-color: #d32839; color: white;" wire:click="saveHelpTopic">
+                                class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
+                                style="background-color: #d32839; color: white;" wire:click="updateHelpTopic">
                                 <span wire:loading wire:target="updateHelpTopic"
                                     class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                                 </span>
                                 Update
                             </button>
+                            <a href="{{ route('staff.manage.help_topic.index') }}" type="button"
+                                class="btn m-0 btn__modal__footer btn__cancel">
+                                Cancel
+                            </a>
                         </div>
                     </div>
                 </form>
