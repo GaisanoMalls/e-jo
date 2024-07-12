@@ -11,12 +11,12 @@ use Livewire\Component;
 class UpdateApproverPassword extends Component
 {
     public User $approver;
-    public $new_password;
-    public $confirm_password;
+    public ?string $new_password = null;
+    public ?string $confirm_password = null;
 
     public function rules()
     {
-        return(new UpdatePasswordRequest())->rules();
+        return (new UpdatePasswordRequest())->rules();
     }
 
     public function clearFormFields()

@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -17,12 +18,12 @@ class ApproverList extends Component
 {
     use Utils, WithPagination;
 
-    public $allPermissions;
-    public $approverDeleteId;
-    public $approverAssignPermissionId;
-    public $approverFullName;
-    public $approverPermissions = [];
-    public $searchApprover = '';
+    public ?Collection $allPermissions = null;
+    public ?int $approverDeleteId = null;
+    public ?int $approverAssignPermissionId = null;
+    public ?string $approverFullName = null;
+    public array $approverPermissions = [];
+    public ?string $searchApprover = null;
 
     public function mount()
     {

@@ -18,16 +18,15 @@ class UpdateApprover extends Component
     use BasicModelQueries, Utils;
 
     public User $approver;
-    public $bu_departments = [];
-    public $branches = [];
-    public $first_name;
-    public $middle_name;
-    public $last_name;
-    public $email;
-    public $suffix;
-    public $permissions = [];
-    public $currentPermissions = [];
-    public $asCostingApprover2 = false;
+    public array $bu_departments = [];
+    public array $branches = [];
+    public string $first_name;
+    public ?string $middle_name;
+    public string $last_name;
+    public string $email;
+    public ?string $suffix;
+    public array $permissions = [];
+    public array $currentPermissions = [];
 
     public function mount()
     {
@@ -39,7 +38,6 @@ class UpdateApprover extends Component
         $this->branches = $this->approver->branches->pluck("id")->toArray();
         $this->bu_departments = $this->approver->buDepartments->pluck("id")->toArray();
         $this->currentPermissions = $this->approver->getDirectPermissions()->pluck('name')->toArray();
-        $this->asCostingApprover2 = $this->isCostingApprover2();
     }
 
     public function rules(): array
@@ -54,11 +52,6 @@ class UpdateApprover extends Component
             'permissions' => 'nullable',
             'email' => "required|max:80|unique:users,email,{$this->approver->id}"
         ];
-    }
-
-    private function isCostingApprover2()
-    {
-        return SpecialProjectAmountApproval::where('fpm_coo_approver->approver_id', $this->approver->id)->exists();
     }
 
     public function updatedUseDirectPermission()

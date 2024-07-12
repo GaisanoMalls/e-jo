@@ -11,12 +11,12 @@ use Livewire\Component;
 class UpdateServiceDeptAdminPassword extends Component
 {
     public User $serviceDeptAdmin;
-    public $new_password;
-    public $confirm_password;
+    public ?string $new_password = null;
+    public ?string $confirm_password = null;
 
     public function rules()
     {
-        return(new UpdatePasswordRequest())->rules();
+        return (new UpdatePasswordRequest())->rules();
     }
 
     public function clearFormFields()

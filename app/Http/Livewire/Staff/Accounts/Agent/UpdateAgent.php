@@ -11,6 +11,7 @@ use App\Models\Subteam;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
@@ -20,23 +21,23 @@ class UpdateAgent extends Component
     use BasicModelQueries, Utils;
 
     public User $agent;
-    public $BUDepartments = [];
-    public $teams = [];
-    public $currentTeams = [];
-    public $currentSubteams = [];
-    public $selectedTeams = [];
-    public $selectedSubteams = [];
-    public $currentPermissions = [];
-    public $permissions = [];
-    public $subteams = [];
-    public $first_name;
-    public $middle_name;
-    public $last_name;
-    public $suffix;
-    public $email;
-    public $branch;
-    public $bu_department;
-    public $service_department;
+    public ?Collection $BUDepartments = null;
+    public ?Collection $teams = null;
+    public ?Collection $subteams = null;
+    public array $currentTeams = [];
+    public array $currentSubteams = [];
+    public array $selectedTeams = [];
+    public array $selectedSubteams = [];
+    public array $currentPermissions = [];
+    public array $permissions = [];
+    public string $first_name;
+    public ?string $middle_name = null;
+    public string $last_name;
+    public ?string $suffix = null;
+    public string $email;
+    public int $branch;
+    public int $bu_department;
+    public int $service_department;
 
     public function mount()
     {
@@ -45,9 +46,9 @@ class UpdateAgent extends Component
         $this->last_name = $this->agent->profile->last_name;
         $this->suffix = $this->agent->profile->suffix;
         $this->email = $this->agent->email;
-        $this->branch = $this->agent->branches->pluck('id');
+        $this->branch = $this->agent->branches->pluck('id')[0];
         $this->bu_department = $this->agent->buDepartments->pluck('id')->first();
-        $this->service_department = $this->agent->serviceDepartments->pluck('id');
+        $this->service_department = $this->agent->serviceDepartments->pluck('id')->first();
         $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
         $this->teams = Team::withWhereHas('serviceDepartment', fn($query) => $query->where('service_departments.id', $this->service_department))->get();
         $this->subteams = Subteam::withWhereHas('team', fn($query) => $query->whereIn('teams.id', $this->teams->pluck('id')->toArray()))->get();
@@ -109,10 +110,10 @@ class UpdateAgent extends Component
         try {
             DB::transaction(function () {
                 $this->agent->update(['email' => $this->email]);
-                $this->agent->branches()->sync($this->branch);
+                $this->agent->branches()->sync([$this->branch]);
                 $this->agent->teams()->sync($this->selectedTeams);
-                $this->agent->buDepartments()->sync($this->bu_department);
-                $this->agent->serviceDepartments()->sync($this->service_department);
+                $this->agent->buDepartments()->sync([$this->bu_department]);
+                $this->agent->serviceDepartments()->sync([$this->service_department]);
                 $this->agent->subteams()->sync(array_map('intval', $this->selectedSubteams));
                 $this->agent->syncPermissions($this->permissions);
 

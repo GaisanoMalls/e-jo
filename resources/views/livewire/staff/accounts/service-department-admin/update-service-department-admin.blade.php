@@ -131,10 +131,6 @@
                                             id="serviceDeptAdminCurrentBUDepartmentId">
                                         <label for="branch" class="form-label form__field__label">
                                             BU/Department
-                                            @if ($BUDepartments)
-                                                <span class="fw-normal" style="font-size: 13px;">
-                                                    ({{ $BUDepartments->count() }})</span>
-                                            @endif
                                         </label>
                                         <div>
                                             <div id="select-service-dept-admin-bu-department" wire:ignore></div>
@@ -252,30 +248,7 @@
         });
 
         serviceDeptAdminBranchSelect.addEventListener('change', (event) => {
-            const serviceDeptAdminBranchIds = event.target.value;
-            if (serviceDeptAdminBranchIds) {
-                @this.set('branches', serviceDeptAdminBranchIds);
-                serviceDeptAdminBUDepartmentSelect.enable();
-
-                window.addEventListener('get-branch-bu-departments', (event) => {
-                    const serviceDeptAdminBUDepartments = event.detail.BUDepartments;
-                    const serviceDeptAdminBUDepartmentOption = [];
-
-                    if (serviceDeptAdminBUDepartments.length > 0) {
-                        serviceDeptAdminBUDepartments.forEach(function(serviceDeptAdminBUDepartment) {
-                            VirtualSelect.init({
-                                ele: serviceDeptAdminBUDepartmentSelect
-                            });
-
-                            serviceDeptAdminBUDepartmentOption.push({
-                                label: serviceDeptAdminBUDepartment.name,
-                                value: serviceDeptAdminBUDepartment.id
-                            });
-                        });
-                        serviceDeptAdminBUDepartmentSelect.setOptions(serviceDeptAdminBUDepartmentOption);
-                    }
-                })
-            }
+            @this.set('branches', event.target.value);
         })
 
         const serviceDeptAdminBUDepartmentOption = @json($serviceDeptAdminBUDepartments).map(department => ({
@@ -293,6 +266,7 @@
         });
 
         serviceDeptAdminBUDepartmentSelect.addEventListener('change', (event) => {
+            console.log(event);
             @this.set('bu_department', parseInt(event.target.value));
         });
 

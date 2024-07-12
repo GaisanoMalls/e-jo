@@ -310,6 +310,7 @@
             showValueAsTags: true,
             markSearchResults: true,
         });
+
         agentTeamSelect.disable();
 
         agentServiceDepartmentSelect.addEventListener('change', (event) => {

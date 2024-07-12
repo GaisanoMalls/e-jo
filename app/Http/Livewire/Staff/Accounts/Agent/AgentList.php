@@ -14,9 +14,9 @@ class AgentList extends Component
 {
     use WithPagination;
 
-    public $agentDeleteId;
-    public $agentFullName;
-    public $searchAgent = '';
+    public ?int $agentDeleteId = null;
+    public ?string $agentFullName = null;
+    public ?string $searchAgent = null;
 
     protected $listeners = ['loadAgentList' => '$refresh'];
 

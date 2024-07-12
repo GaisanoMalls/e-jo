@@ -164,33 +164,6 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($currentUserAsCostingApprover2)
-                            <div class="col-12 mb-3 d-flex">
-                                <input wire:model="asCostingApprover2"
-                                    class="form-check-input check__special__project" type="checkbox" role="switch"
-                                    id="checkCostingApprover2" wire:loading.attr="disabled"
-                                    style="margin-top: 7px !important;">
-                                <label class="form-check-label" for="checkCostingApprover2">
-                                    @if ($asCostingApprover2)
-                                        Costing Approver 2
-                                    @else
-                                        Add as costing approver 2
-                                    @endif
-                                </label>
-                            </div>
-                        @endif
-
-                        @if (!$hasCostingApprover2)
-                            <div class="col-12 mb-3 d-flex">
-                                <input wire:model="asCostingApprover2"
-                                    class="form-check-input check__special__project" type="checkbox" role="switch"
-                                    id="checkCostingApprover2" wire:loading.attr="disabled"
-                                    style="margin-top: 7px !important;">
-                                <label class="form-check-label" for="checkCostingApprover2">
-                                    Add as costing approver 2
-                                </label>
-                            </div>
-                        @endif
                         <div class="col-12">
                             <div class="d-flex align-items-center gap-2">
                                 <button type="button" class="btn m-0 btn__details btn__cancel" id="btnCloseModal"

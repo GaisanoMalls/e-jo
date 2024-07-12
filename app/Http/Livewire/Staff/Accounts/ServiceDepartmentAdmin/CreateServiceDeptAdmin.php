@@ -21,16 +21,15 @@ class CreateServiceDeptAdmin extends Component
 {
     use BasicModelQueries, Utils;
 
-    public $branches = [];
-    public $BUDepartments = [];
-    public $service_departments = [];
-    public $first_name;
-    public $middle_name;
-    public $last_name;
-    public $email;
-    public $suffix;
-    public $bu_department;
-    public $asCostingApprover1 = false;
+    public array $branches = [];
+    public array $BUDepartments = [];
+    public array $service_departments = [];
+    public ?string $first_name = null;
+    public ?string $middle_name = null;
+    public ?string $last_name = null;
+    public ?string $email = null;
+    public ?string $suffix = null;
+    public ?int $bu_department = null;
 
     public function rules()
     {

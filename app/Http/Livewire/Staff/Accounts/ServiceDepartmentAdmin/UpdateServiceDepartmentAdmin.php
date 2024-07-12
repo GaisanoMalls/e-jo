@@ -18,23 +18,22 @@ class UpdateServiceDepartmentAdmin extends Component
     use BasicModelQueries, Utils;
 
     public User $serviceDeptAdmin;
-    public $branches = [];
-    public $BUDepartments = [];
-    public $service_departments = [];
-    public $first_name;
-    public $middle_name;
-    public $last_name;
-    public $email;
-    public $suffix;
-    public $bu_department;
-    public $permissions = [];
-    public $currentPermissions = [];
+    public array $branches = [];
+    public array $service_departments = [];
+    public string $first_name;
+    public ?string $middle_name = null;
+    public string $last_name;
+    public string $email;
+    public ?string $suffix = null;
+    public int $bu_department;
+    public array $permissions = [];
+    public array $currentPermissions = [];
 
     public function mount()
     {
         $this->branches = $this->serviceDeptAdmin->branches->pluck('id')->toArray();
         $this->service_departments = $this->serviceDeptAdmin->serviceDepartments->pluck('id')->toArray();
-        $this->bu_department = $this->serviceDeptAdmin->buDepartments->pluck('id');
+        $this->bu_department = $this->serviceDeptAdmin->buDepartments->pluck('id')->first();
         $this->first_name = $this->serviceDeptAdmin->profile->first_name;
         $this->middle_name = $this->serviceDeptAdmin->profile->middle_name;
         $this->last_name = $this->serviceDeptAdmin->profile->last_name;
@@ -70,7 +69,7 @@ class UpdateServiceDepartmentAdmin extends Component
             DB::transaction(function () {
                 $this->serviceDeptAdmin->update(['email' => $this->email]);
                 $this->serviceDeptAdmin->branches()->sync($this->branches);
-                $this->serviceDeptAdmin->buDepartments()->sync($this->bu_department);
+                $this->serviceDeptAdmin->buDepartments()->sync([$this->bu_department]);
                 $this->serviceDeptAdmin->serviceDepartments()->sync($this->service_departments);
                 $this->serviceDeptAdmin->syncPermissions($this->permissions);
 

@@ -11,6 +11,7 @@ use App\Models\Profile;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
@@ -20,14 +21,14 @@ class CreateRequester extends Component
 {
     use BasicModelQueries, Utils;
 
-    public $BUDepartments = [];
-    public $first_name;
-    public $middle_name;
-    public $last_name;
-    public $email;
-    public $suffix;
-    public $branch;
-    public $department;
+    public ?Collection $BUDepartments = null;
+    public ?string $first_name = null;
+    public ?string $middle_name = null;
+    public ?string $last_name = null;
+    public ?string $email = null;
+    public ?string $suffix = null;
+    public ?int $branch = null;
+    public ?int $department = null;
 
     public function rules()
     {

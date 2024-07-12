@@ -122,10 +122,6 @@
                                             <div class="mb-2">
                                                 <label for="department" class="form-label form__field__label">
                                                     BU/Department
-                                                    @if ($BUDepartments)
-                                                        <span class="fw-normal" style="font-size: 13px;">
-                                                            ({{ $BUDepartments->count() }})</span>
-                                                    @endif
                                                 </label>
                                                 <div>
                                                     <div id="select-service-dept-admin-bu-department" wire:ignore></div>
@@ -219,8 +215,7 @@
         });
 
         serviceDeptAdminBranchSelect.addEventListener('change', (event) => {
-            const branchIds = event.target.value;
-            @this.set('branches', branchIds);
+            @this.set('branches', event.target.value);
         });
 
         serviceDeptAdminBranchSelect.addEventListener('reset', () => {

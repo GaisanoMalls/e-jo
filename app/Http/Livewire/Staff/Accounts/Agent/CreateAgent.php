@@ -13,6 +13,7 @@ use App\Models\Subteam;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
@@ -22,20 +23,20 @@ class CreateAgent extends Component
 {
     use BasicModelQueries, Utils;
 
-    public $BUDepartments = [];
-    public $teams = [];
-    public $selectedTeams = [];
-    public $subteams = [];
-    public $selectedSubteams = [];
-    public $first_name;
-    public $middle_name;
-    public $last_name;
-    public $suffix;
-    public $email;
-    public $branch;
-    public $bu_department;
-    public $service_department;
-    public $hasSubteams = false;
+    public ?Collection $BUDepartments = null;
+    public ?Collection $teams = null;
+    public ?Collection $subteams = null;
+    public array $selectedTeams = [];
+    public array $selectedSubteams = [];
+    public ?string $first_name = null;
+    public ?string $middle_name = null;
+    public ?string $last_name = null;
+    public ?string $suffix = null;
+    public ?string $email = null;
+    public ?int $branch = null;
+    public ?int $bu_department = null;
+    public ?int $service_department = null;
+    public bool $hasSubteams = false;
 
     public function rules()
     {

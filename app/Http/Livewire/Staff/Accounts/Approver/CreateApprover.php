@@ -21,14 +21,14 @@ class CreateApprover extends Component
 {
     use BasicModelQueries, Utils;
 
-    public $bu_departments = [];
-    public $branches = [];
-    public $first_name;
-    public $middle_name;
-    public $last_name;
-    public $email;
-    public $suffix;
-    public $asCostingApprover2 = false;
+    public array $bu_departments = [];
+    public array $branches = [];
+    public ?string $first_name = null;
+    public ?string $middle_name = null;
+    public ?string $last_name = null;
+    public ?string $email = null;
+    public ?string $suffix = null;
+    public bool $asCostingApprover2 = false;
 
     public function rules()
     {

@@ -341,6 +341,7 @@
             multiple: true,
             showValueAsTags: true,
             markSearchResults: true,
+            selectedValue: @json($currentTeams)
         });
 
         const agentSubteamOption = @json($agentSubteams).map(subteam => ({
@@ -381,7 +382,7 @@
                 @this.set('service_department', parseInt(serviceDepartmentId));
                 agentBUDepartmentSelect.enable();
 
-                window.addEventListener('get-teams-service-department', () => {
+                window.addEventListener('get-teams-service-department', (event) => {
                     const agentTeams = event.detail.teams;
                     const agentTeamOption = [];
 
@@ -399,8 +400,10 @@
                                 value: agentTeam.id
                             });
                         });
+
                         agentTeamSelect.setOptions(agentTeamOption);
                         agentTeamSelect.setValue(@json($currentTeams));
+
                     } else {
                         agentTeamSelect.reset();
                         agentTeamSelect.disable();

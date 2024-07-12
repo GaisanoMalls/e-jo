@@ -16,9 +16,9 @@ class ServiceDeptAdminList extends Component
 {
     use Utils, WithPagination;
 
-    public $serviceDeptAdminDeleteId;
-    public $serviceDeptAdminFullName;
-    public $searchServiceDeptAdmin = '';
+    public ?int $serviceDeptAdminDeleteId = null;
+    public ?string $serviceDeptAdminFullName = null;
+    public ?string $searchServiceDeptAdmin = null;
 
     protected $paginationTheme = 'bootstrap';
     protected $listeners = ['loadServiceDeptAdminList' => '$refresh'];
