@@ -7,6 +7,7 @@ use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
+use App\Mail\Requester\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\Branch;
 use App\Models\Form;
@@ -20,10 +21,12 @@ use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\TicketCustomFormField;
 use App\Models\TicketTeam;
+use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
@@ -131,69 +134,22 @@ class CreateTicket extends Component
                     }
                 }
 
-                // $approverLevel = ApproverLevel::with('approver.profile')
-                //     ->withWhereHas('approver.buDepartments', fn($query) => $query->whereIn('departments.id', auth()->user()->buDepartments()->pluck('departments.id')->toArray()))
-                //     ->withWhereHas('approver.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches()->pluck('branches.id')->toArray()))
-                //     ->get();
+                $approvers = User::withWhereHas('helpTopicApprovals', function ($approval) use ($ticket) {
+                    $approval->where('help_topic_id', $ticket->helptopic->id);
+                })->get();
 
-                // $filteredLevel1Approvers = $approverLevel->where('level_id', Level::where('value', 1)->pluck('value')->first());
-                // $filteredLevel2Approvers = $approverLevel->where('level_id', Level::where('value', 2)->pluck('value')->first());
+                $approvers->each(function ($approver) use ($ticket) {
+                    Notification::send(
+                        $approver,
+                        new AppNotification(
+                            ticket: $ticket,
+                            title: "New Ticket {$ticket->ticket_number}",
+                            message: "{$ticket->user->profile->getFullName()} created a ticket"
+                        )
+                    );
 
-                // if ($filteredLevel1Approvers->isNotEmpty()) {
-                //     if (!is_null($ticket->isSpecialProject())) {
-                //         // Filter approver ids by level
-                //         $level1ApproverIds = $filteredLevel1Approvers->isNotEmpty()
-                //             ? $filteredLevel1Approvers->pluck('user_id')->toArray()
-                //             : null;
-
-                //         $level2ApproverIds = $filteredLevel2Approvers->isNotEmpty()
-                //             ? $filteredLevel2Approvers->pluck('user_id')->toArray()
-                //             : null;
-
-                //         TicketApproval::create([
-                //             'ticket_id' => $ticket->id,
-                //             'approval_1' => [
-                //                 'level_1_approver' => [
-                //                     'approver_id' => $level1ApproverIds, // array<int>
-                //                     'approved_by' => null,
-                //                     'is_approved' => false,
-                //                 ],
-                //                 'level_2_approver' => [
-                //                     'approver_id' => $level2ApproverIds, // array<int>
-                //                     'approved_by' => null,
-                //                     'is_approved' => false,
-                //                 ],
-                //                 'is_all_approved' => false,
-                //             ],
-                //             'approval_2' => [
-                //                 'level_1_approver' => [
-                //                     'approver_id' => $level1ApproverIds, // array<int>
-                //                     'approved_by' => null,
-                //                     'is_approved' => false,
-                //                 ],
-                //                 'level_2_approver' => [
-                //                     'approver_id' => $level2ApproverIds, // array<int>
-                //                     'approved_by' => null,
-                //                     'is_approved' => false,
-                //                 ],
-                //                 'is_all_approved' => false,
-                //             ],
-                //             'is_all_approval_done' => false
-                //         ]);
-                //     }
-
-                //     $filteredLevel1Approvers->each(function ($serviceDepartmentAdmin) use ($ticket) {
-                //         Notification::send(
-                //             $serviceDepartmentAdmin->approver,
-                //             new AppNotification(
-                //                 ticket: $ticket,
-                //                 title: "New Ticket {$ticket->ticket_number}",
-                //                 message: "{$ticket->user->profile->getFullName()} created a ticket"
-                //             )
-                //         );
-                //         // Mail::to($serviceDepartmentAdmin->approver)->send(new TicketCreatedMail($ticket, $serviceDepartmentAdmin->approver));
-                //     });
-                // }
+                    Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
+                });
 
                 if ($this->isHelpTopicHasForm) {
                     array_push($this->filledForms, $this->formFields);

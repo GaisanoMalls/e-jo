@@ -85,7 +85,7 @@ class User extends Authenticatable
         return $this->hasMany(ReplyLike::class);
     }
 
-    public function helTopicApprovals(): HasMany
+    public function helpTopicApprovals(): HasMany
     {
         return $this->hasMany(HelpTopicApprover::class);
     }

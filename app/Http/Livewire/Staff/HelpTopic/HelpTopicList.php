@@ -12,10 +12,8 @@ use App\Models\Form;
 use App\Models\HelpTopic;
 use App\Models\Role;
 use Exception;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
-use stdClass;
 
 class HelpTopicList extends Component
 {

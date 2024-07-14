@@ -13,6 +13,7 @@ use App\Models\SpecialProject;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -23,13 +24,13 @@ class UpdateHelpTopic extends Component
     use BasicModelQueries;
 
     public HelpTopic $helpTopic;
-    public $isSpecialProject = false;
-    public $teams = [];
-    public $name;
-    public $sla;
-    public $serviceDepartment;
-    public $team;
-    public $amount;
+    public bool $isSpecialProject = false;
+    public Collection $teams;
+    public string $name;
+    public int $sla;
+    public int $serviceDepartment;
+    public int $team;
+    public float $amount;
 
     // Costing Configuration
     public $costingApprovers = [];
