@@ -17,7 +17,7 @@ class NotificationList extends Component
         $this->emit('requesterLoadNotificationCanvas');
         $this->emit('requesterLoadNavlinkNotification');
 
-        return(array_key_exists('for_clarification', $notification->data)) && $notification->data['for_clarification'] === true
+        return (array_key_exists('for_clarification', $notification->data)) && $notification->data['for_clarification'] === true
             ? redirect()->route('user.ticket.ticket_clarifications', $notification->data['ticket']['id'])
             : redirect()->route('user.ticket.view_ticket', $notification->data['ticket']['id']);
     }

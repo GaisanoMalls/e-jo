@@ -3657,7 +3657,7 @@
     };
 
     const value$1 = value => {
-      const applyHelper = fn => fn(value);
+      const applyHelper = fn => fn (value);
       const constHelper = constant(value);
       const outputHelper = () => output;
       const output = {
@@ -3677,7 +3677,7 @@
         orThunk: outputHelper,
         getOrDie: constHelper,
         each: fn => {
-          fn(value);
+          fn (value);
         },
         toOptional: () => Optional.some(value)
       };

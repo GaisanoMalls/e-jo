@@ -129,11 +129,6 @@ class Ticket extends Model
         return $this->hasMany(ActivityLog::class)->orderByDesc('created_at');
     }
 
-    public function ticketApprovals(): HasMany
-    {
-        return $this->hasMany(TicketApproval::class);
-    }
-
     public function customFormFields()
     {
         return $this->hasMany(TicketCustomFormField::class);

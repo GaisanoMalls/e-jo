@@ -14,42 +14,42 @@ class ApproverTicketsController extends Controller
 
     public function openTickets()
     {
-        return(!$this->costingApprover2Only())
+        return (!$this->costingApprover2Only())
             ? view('layouts.staff.approver.ticket.statuses.open')
             : abort(403, 'Unauthorized access');
     }
 
     public function viewedTickets()
     {
-        return(!$this->costingApprover2Only())
+        return (!$this->costingApprover2Only())
             ? view('layouts.staff.approver.ticket.statuses.viewed')
             : abort(403, 'Unauthorized access');
     }
 
     public function approvedTickets()
     {
-        return(!$this->costingApprover2Only())
+        return (!$this->costingApprover2Only())
             ? view('layouts.staff.approver.ticket.statuses.approved')
             : abort(403, 'Unauthorized access');
     }
 
     public function disapprovedTickets()
     {
-        return(!$this->costingApprover2Only())
+        return (!$this->costingApprover2Only())
             ? view('layouts.staff.approver.ticket.statuses.disapproved')
             : abort(403, 'Unauthorized access');
     }
 
     public function onProcessTickets()
     {
-        return(!$this->costingApprover2Only())
+        return (!$this->costingApprover2Only())
             ? view('layouts.staff.approver.ticket.statuses.on_process')
             : abort(403, 'Unauthorized access');
     }
 
     public function costingApprovals()
     {
-        return($this->costingApprover2Only())
+        return ($this->costingApprover2Only())
             ? view('layouts.staff.approver.ticket.consting_approval', [
                 'forApprovalCostings' => $this->getForApprovalCostings()
             ])

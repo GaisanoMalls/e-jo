@@ -209,27 +209,6 @@ trait Utils
         return trim(str_replace($this->getSLADays($ticket), "", $ticket->sla->time_unit));
     }
 
-    /**
-     * @return bool
-     */
-    public function isApproved2LevelsOfApproverAndHasSpecialProject()
-    {
-        $ticketHasAllApproved = Ticket::has('helpTopic.specialProject')
-            ->withWhereHas('ticketApprovals', fn($ticketApproval) => $ticketApproval->whereNotNull('approval_1->level_1_approver->approver_id')
-                ->whereNotNull('approval_1->level_2_approver->approver_id')
-                ->whereNotNull('approval_1->level_1_approver->approved_by')
-                ->whereNotNull('approval_1->level_2_approver->approved_by')
-                ->where([
-                    ['approval_1->level_1_approver->is_approved', true],
-                    ['approval_1->level_2_approver->is_approved', true],
-                    ['approval_1->is_all_approved', true],
-                ]))->get();
-
-        return ($ticketHasAllApproved->isNotEmpty())
-            ? true
-            : false;
-    }
-
     public function isOnlyAgent(?int $agentId)
     {
         return auth()->user()->id === $agentId && auth()->user()->hasRole(Role::AGENT);

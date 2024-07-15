@@ -699,7 +699,7 @@ InterceptorManager.prototype.eject = function eject(id) {
 InterceptorManager.prototype.forEach = function forEach(fn) {
   utils.forEach(this.handlers, function forEachHandler(h) {
     if (h !== null) {
-      fn(h);
+      fn (h);
     }
   });
 };
@@ -19756,7 +19756,7 @@ process.umask = function() { return 0; };
 /******/ 				}
 /******/ 				if(fulfilled) {
 /******/ 					deferred.splice(i--, 1)
-/******/ 					var r = fn();
+/******/ 					var r = fn ();
 /******/ 					if (r !== undefined) result = r;
 /******/ 				}
 /******/ 			}

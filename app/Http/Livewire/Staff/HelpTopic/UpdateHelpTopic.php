@@ -30,7 +30,7 @@ class UpdateHelpTopic extends Component
     public int $sla;
     public int $serviceDepartment;
     public int $team;
-    public float $amount;
+    public ?float $amount = null;
 
     // Costing Configuration
     public $costingApprovers = [];
@@ -61,7 +61,7 @@ class UpdateHelpTopic extends Component
         $this->sla = $this->helpTopic->service_level_agreement_id;
         $this->serviceDepartment = $this->helpTopic->service_department_id;
         $this->team = $this->helpTopic->team_id;
-        $this->amount = $this->helpTopic->specialProject ? $this->helpTopic->specialProject->amount : null;
+        $this->amount = $this->helpTopic->specialProject ? (float) $this->helpTopic->specialProject->amount : null;
         $this->costingApprovers = is_array($this->helpTopic->costing?->costing_approvers) ? $this->helpTopic->costing->costing_approvers : json_decode($this->helpTopic->costing?->costing_approvers, true);
         $this->finalCostingApprovers = is_array($this->helpTopic->costing?->final_costing_approvers) ? $this->helpTopic->costing->final_costing_approvers : json_decode($this->helpTopic->costing?->final_costing_approvers, true);
         $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->helpTopic->service_department_id))->get(['id', 'name']);

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Models\ActivityLog;
+use App\Models\HelpTopicApprover;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -15,7 +16,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
@@ -45,12 +45,16 @@ class ApproveTicket extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
+    public function isCurrentLevelApprover()
+    {
+        return $this->ticket->helpTopic->approvers()->where('user_id', auth()->user()->id)->exists();
+    }
+
     public function approveTicket()
     {
         try {
-            if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+            if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) && $this->isCurrentLevelApprover()) {
                 DB::transaction(function () {
-                    // Update the ticket status if approved.
                     if ($this->ticket->status_id != Status::APPROVED && $this->ticket->approval_status != ApprovalStatusEnum::APPROVED) {
                         $this->ticket->update([
                             'status_id' => Status::APPROVED,
@@ -124,19 +128,14 @@ class ApproveTicket extends Component
                                 message: "{$serviceDepartmentAdmin->profile->getFullName()} approved the level 1 approval"
                             )
                         );
-
-                        ActivityLog::make($this->ticket->id, 'approved the ticket');
-
                         $this->actionOnSubmit();
-                        noty()->addSuccess('Ticket has been approved');
+                        ActivityLog::make($this->ticket->id, 'approved the ticket');
 
                     } else {
                         noty()->addInfo('Ticket has already been approved by other service dept. admin');
                     }
-
                     return redirect()->route('staff.tickets.open_tickets');
                 });
-
             } else {
                 noty()->addError('You have no rights/permission to approve the ticket');
             }

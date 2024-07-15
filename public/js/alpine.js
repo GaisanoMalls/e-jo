@@ -234,10 +234,10 @@ function start() {
 var rootSelectorCallbacks = [];
 var initSelectorCallbacks = [];
 function rootSelectors() {
-  return rootSelectorCallbacks.map((fn) => fn());
+  return rootSelectorCallbacks.map((fn) => fn ());
 }
 function allSelectors() {
-  return rootSelectorCallbacks.concat(initSelectorCallbacks).map((fn) => fn());
+  return rootSelectorCallbacks.concat(initSelectorCallbacks).map((fn) => fn ());
 }
 function addRootSelector(selectorCallback) {
   rootSelectorCallbacks.push(selectorCallback);
@@ -1770,7 +1770,7 @@ var cacheStringFunction = (fn) => {
   const cache = /* @__PURE__ */ Object.create(null);
   return (str) => {
     const hit = cache[str];
-    return hit || (cache[str] = fn(str));
+    return hit || (cache[str] = fn (str));
   };
 };
 var camelizeRE = /-(\w)/g;
@@ -1815,7 +1815,7 @@ var uid = 0;
 function createReactiveEffect(fn, options) {
   const effect3 = function reactiveEffect() {
     if (!effect3.active) {
-      return fn();
+      return fn ();
     }
     if (!effectStack.includes(effect3)) {
       cleanup(effect3);
@@ -1823,7 +1823,7 @@ function createReactiveEffect(fn, options) {
         enableTracking();
         effectStack.push(effect3);
         activeEffect = effect3;
-        return fn();
+        return fn ();
       } finally {
         effectStack.pop();
         resetTracking();

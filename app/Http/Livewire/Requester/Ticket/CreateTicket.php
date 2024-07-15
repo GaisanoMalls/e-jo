@@ -148,7 +148,7 @@ class CreateTicket extends Component
                         )
                     );
 
-                    Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
+                    // Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
                 });
 
                 if ($this->isHelpTopicHasForm) {
