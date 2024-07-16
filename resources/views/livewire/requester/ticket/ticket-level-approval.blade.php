@@ -2,7 +2,7 @@
     <div class="card border-0 p-0 card__ticket__details">
         <div class="d-flex flex-column gap-3 ticket__details__card__body__right">
             <label class="ticket__actions__label">Level of Approval</label>
-            <div class="d-flex flex-column level__approval__container">
+            {{-- <div class="d-flex flex-column level__approval__container">
                 <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
                     <small class="level__number__label">
                         Level 1 {{ $this->getLevel1Approvers()->count() > 1 ? 'Approvers' : 'Approver' }}
@@ -55,8 +55,8 @@
                         </div>
                     </div>
                 @endforeach
-            </div>
-            <div class="d-flex flex-column level__approval__container text-muted">
+            </div> --}}
+            {{-- <div class="d-flex flex-column level__approval__container text-muted">
                 <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
                     <small class="level__number__label">
                         Level 2 {{ $this->getLevel2Approvers()->count() > 1 ? 'Approvers' : 'Approver' }}
@@ -106,7 +106,7 @@
                         </div>
                     </div>
                 @endforeach
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

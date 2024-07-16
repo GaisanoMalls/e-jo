@@ -14,24 +14,17 @@ class TicketApproval extends Model
     protected $table = 'ticket_approval';
     protected $fillable = [
         'ticket_id',
-        'approval_1',
-        'approval_2',
-        'is_all_approval_done',
-    ];
-
-    /**
-     * Properties Approval 1 and 2: 
-     * level_1_approver - approver_id, approved_by, and is_approved
-     * level_2_approver - approver_id, approved_by, and is_approved
-     * is_all_approved
-     */
-    protected $casts = [
-        'approval_1' => AsArrayObject::class,
-        'approval_2' => AsArrayObject::class,
+        'help_topic_approver_id',
+        'is_approved'
     ];
 
     public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);
+    }
+
+    public function helpTopicApprover(): BelongsTo
+    {
+        return $this->belongsTo(HelpTopicApprover::class);
     }
 }

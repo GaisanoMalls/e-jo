@@ -5,13 +5,26 @@
 <div class="mb-4">
     <div wire:init="loadCustomFormFields" class="row">
         @if ($customFormFields->isNotEmpty())
-            <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+            <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
                 <h6 class="mb-0 custom__form__name">{{ $ticket->helpTopic->form->name }}</h6>
-                <button class="btn d-flex align-items-center justify-content-center gap-2 btn-sm btn__edit__custom__form"
-                    data-bs-toggle="modal" data-bs-target="#ticketCustomFormModal">
-                    <i class="bi bi-pencil"></i>
-                    Edit
-                </button>
+                <div class="d-flex align-items-center gap-2">
+                    <button wire:click="editCustomForm({{ $ticket->helpTopic->form->id }})"
+                        class="btn d-flex align-items-center justify-content-center gap-2 btn-sm btn__edit__custom__form"
+                        @style(['color: red' => $isEditing])>
+                        @if ($isEditing)
+                            Cancel
+                        @else
+                            Edit
+                        @endif
+                    </button>
+                    @if ($isEditing)
+                        <button wire:click="updateCustomForm({{ $ticket->helpTopic->form->id }})"
+                            class="btn d-flex align-items-center justify-content-center gap-2 btn-sm btn__edit__custom__form"
+                            @style(['background-color: #d32839' => $isEditing, 'color: #FFFFFF' => $isEditing])>
+                            Update
+                        </button>
+                    @endif
+                </div>
             </div>
             @foreach ($customFormFields as $key => $field)
                 {{-- Display those fields that are set to enabled. --}}
@@ -146,8 +159,8 @@
                                     x-on:livewire-upload-finish="isUploadingCustomFormFile = false"
                                     x-on:livewire-upload-error="isUploadingCustomFormFile = false"
                                     x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                    <input wire:model="customFormFields.{{ $key }}.value"
-                                        id="field-{{ $key }}" type="file"
+                                    <input wire:model="customFormFieldFiles" id="field-{{ $key }}"
+                                        type="file"
                                         class="form-control form-control-sm border-0 custom__form__attachment__input"
                                         placeholder="Enter {{ Str::lower($field['label']) }}"
                                         accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv" multiple
@@ -283,19 +296,44 @@
                                     role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-three-dots-vertical"></i>
                                 </button>
-                                <ul class="dropdown-menu border-0">
-                                    <li>
-                                        <button wire:click="deleteCustomFormFile({{ $documentFile->id }})"
-                                            type="button" class="btn dropdown-item" href="#">
-                                            Remove
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <a wire:prevent class="dropdown-item"
-                                            href="{{ Storage::url($documentFile->file_attachment) }}" download="">
-                                            Download
-                                        </a>
-                                    </li>
+                                <ul class="dropdown-menu border-0 {{ $isDeleting && $deleteDocumentFileId === $documentFile->id ? 'show' : '' }}"
+                                    style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(-67.3333px, 27px, 0px);">
+                                    @if ($isDeleting && $deleteDocumentFileId === $documentFile->id)
+                                        <div class="d-flex flex-column">
+                                            <small class="text-center mt-1">Delete file?</small>
+                                            <div class="d-flex align-items-center gap-1">
+                                                <button wire:click="deleteCustomFormFile({{ $documentFile->id }})"
+                                                    type="button"
+                                                    class="btn dropdown-item d-flex align-items-center justify-content-center text-danger"
+                                                    style="background-color: #eaecf3;">
+                                                    Delete
+                                                </button>
+                                                <button wire:click="cancelDeleteCustomFile({{ $documentFile->id }})"
+                                                    type="button"
+                                                    class="btn dropdown-item d-flex align-items-center justify-content-center">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <li>
+                                            <button wire:click="deleteFileConfirm({{ $documentFile->id }})"
+                                                type="button"
+                                                class="btn dropdown-item d-flex align-items-center gap-2 text-danger">
+                                                <i class="bi bi-trash"></i>
+                                                Delete
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <a wire:prevent
+                                                class="dropdown-item d-flex align-items-center gap-2 text-dark"
+                                                href="{{ Storage::url($documentFile->file_attachment) }}"
+                                                download="">
+                                                <i class="bi bi-download"></i>
+                                                Download
+                                            </a>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                         </div>

@@ -1488,7 +1488,7 @@
         }
       }
       const walkFn = isForward ? walker.next.bind(walker) : walker.prev2.bind(walker);
-      while (node = walkfn ()) {
+      while (node = walkFn()) {
         if (node.nodeName === 'LI' && !node.hasChildNodes()) {
           return node;
         }

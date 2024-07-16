@@ -4553,7 +4553,7 @@
             each$e(classes, c => {
               if (isNonNullable(state)) {
                 const fn = state ? add$2 : remove$7;
-                fn ($elm, c);
+                fn($elm, c);
               } else {
                 toggle$1($elm, c);
               }
@@ -6321,7 +6321,7 @@
     const getUndoBookmark = curry(getOffsetBookmark, identity, true);
 
     const value$1 = value => {
-      const applyHelper = fn => fn (value);
+      const applyHelper = fn => fn(value);
       const constHelper = constant(value);
       const outputHelper = () => output;
       const output = {
@@ -6341,7 +6341,7 @@
         orThunk: outputHelper,
         getOrDie: constHelper,
         each: fn => {
-          fn (value);
+          fn(value);
         },
         toOptional: () => Optional.some(value)
       };
@@ -6589,7 +6589,7 @@
     };
     const fromRawPatternsLookup = lookupFn => {
       return ctx => {
-        const rawPatterns = lookupfn (ctx);
+        const rawPatterns = lookupFn(ctx);
         return fromRawPatterns(rawPatterns);
       };
     };
@@ -7691,12 +7691,12 @@
       if (isBackwards(direction)) {
         if (isCefOrCaretContainer) {
           tempNode = skipCaretContainers(walker.prev.bind(walker), true);
-          if (predicatefn (tempNode)) {
+          if (predicateFn(tempNode)) {
             return tempNode;
           }
         }
         while (tempNode = skipCaretContainers(walker.prev.bind(walker), shallow)) {
-          if (predicatefn (tempNode)) {
+          if (predicateFn(tempNode)) {
             return tempNode;
           }
         }
@@ -7704,12 +7704,12 @@
       if (isForwards(direction)) {
         if (isCefOrCaretContainer) {
           tempNode = skipCaretContainers(walker.next.bind(walker), true);
-          if (predicatefn (tempNode)) {
+          if (predicateFn(tempNode)) {
             return tempNode;
           }
         }
         while (tempNode = skipCaretContainers(walker.next.bind(walker), shallow)) {
-          if (predicatefn (tempNode)) {
+          if (predicateFn(tempNode)) {
             return tempNode;
           }
         }
@@ -7872,7 +7872,7 @@
     const getElementFromPrevPosition = pos => Optional.from(pos.getNode(true)).map(SugarElement.fromDom);
     const getVisualCaretPosition = (walkFn, caretPosition) => {
       let pos = caretPosition;
-      while (pos = walkfn (pos)) {
+      while (pos = walkFn(pos)) {
         if (pos.isVisible()) {
           return pos;
         }
@@ -10581,7 +10581,7 @@
       const toggleContentAreaOnFocus = (editor, fn) => {
         if (shouldHighlightOnFocus(editor) && editor.inline !== true) {
           const contentArea = SugarElement.fromDom(editor.getContainer());
-          fn (contentArea, 'tox-edit-focus');
+          fn(contentArea, 'tox-edit-focus');
         }
       };
       editor.on('focusin', () => {
@@ -12333,7 +12333,7 @@
     const traverse = (root, fn) => {
       let node = root;
       while (node = node.walk()) {
-        fn (node);
+        fn(node);
       }
     };
     const matchNode$1 = (nodeFilters, attributeFilters, node, matches) => {
@@ -21129,15 +21129,15 @@
       const getNextPosFn = curry(getVisualCaretPosition, forward ? caretWalker.next : caretWalker.prev);
       const isBeforeFn = forward ? isBeforeBoundary : isAfterBoundary;
       const caretPosition = getNormalizedRangeEndPoint(direction, editor.getBody(), range);
-      const nextCaretPosition = getNextPosfn (caretPosition);
+      const nextCaretPosition = getNextPosFn(caretPosition);
       const normalizedNextCaretPosition = nextCaretPosition ? normalizePosition(forward, nextCaretPosition) : nextCaretPosition;
       if (!normalizedNextCaretPosition || !isMoveInsideSameBlock(caretPosition, normalizedNextCaretPosition)) {
         return Optional.none();
-      } else if (isBeforefn (normalizedNextCaretPosition)) {
+      } else if (isBeforeFn(normalizedNextCaretPosition)) {
         return Optional.some(() => deleteContentAndShowCaret(editor, range, caretPosition.getNode(), direction, forward, normalizedNextCaretPosition));
       }
-      const peekCaretPosition = getNextPosfn (normalizedNextCaretPosition);
-      if (peekCaretPosition && isBeforefn (peekCaretPosition)) {
+      const peekCaretPosition = getNextPosFn(normalizedNextCaretPosition);
+      if (peekCaretPosition && isBeforeFn(peekCaretPosition)) {
         if (isMoveInsideSameBlock(normalizedNextCaretPosition, peekCaretPosition)) {
           return Optional.some(() => deleteContentAndShowCaret(editor, range, caretPosition.getNode(), direction, forward, peekCaretPosition));
         }
@@ -21644,7 +21644,7 @@
     const findUntil = (direction, root, predicateFn, node) => {
       let currentNode = node;
       while (currentNode = findNode(currentNode, direction, isEditableCaretCandidate$1, root)) {
-        if (predicatefn (currentNode)) {
+        if (predicateFn(currentNode)) {
           return;
         }
       }
@@ -21659,14 +21659,14 @@
         }
         for (let i = 0; i < clientRects.length; i++) {
           const clientRect = clientRects[i];
-          if (isBeflowfn (clientRect, targetClientRect)) {
+          if (isBeflowFn(clientRect, targetClientRect)) {
             continue;
           }
-          if (result.length > 0 && isAbovefn (clientRect, last$2(result))) {
+          if (result.length > 0 && isAboveFn(clientRect, last$2(result))) {
             line++;
           }
           clientRect.line = line;
-          if (predicatefn (clientRect)) {
+          if (predicateFn(clientRect)) {
             return true;
           }
           result.push(clientRect);
@@ -21716,20 +21716,20 @@
           continue;
         }
         const rect = getLastClientRect(caretPosition);
-        if (isAbovefn (rect, targetClientRect)) {
+        if (isAboveFn(rect, targetClientRect)) {
           continue;
         }
-        if (result.length > 0 && isBelowfn (rect, last$2(result))) {
+        if (result.length > 0 && isBelowFn(rect, last$2(result))) {
           line++;
         }
         const clientRect = clone$1(rect);
         clientRect.position = caretPosition;
         clientRect.line = line;
-        if (predicatefn (clientRect)) {
+        if (predicateFn(clientRect)) {
           return result;
         }
         result.push(clientRect);
-      } while (caretPosition = walkfn (caretPosition));
+      } while (caretPosition = walkFn(caretPosition));
       return result;
     };
     const isAboveLine = lineNumber => clientRect => aboveLineNumber(lineNumber, clientRect);
@@ -21756,21 +21756,21 @@
         }
       }
       const caretPosition = getNormalizedRangeEndPoint(direction, editor.getBody(), range);
-      if (isBeforefn (caretPosition)) {
+      if (isBeforeFn(caretPosition)) {
         return selectNode(editor, caretPosition.getNode(!forwards));
       }
-      let nextCaretPosition = getNextPosfn (caretPosition);
+      let nextCaretPosition = getNextPosFn(caretPosition);
       const rangeIsInContainerBlock = isRangeInCaretContainerBlock(range);
       if (!nextCaretPosition) {
         return rangeIsInContainerBlock ? Optional.some(range) : Optional.none();
       } else {
         nextCaretPosition = normalizePosition(forwards, nextCaretPosition);
       }
-      if (isBeforefn (nextCaretPosition)) {
+      if (isBeforeFn(nextCaretPosition)) {
         return showCaret(direction, editor, nextCaretPosition.getNode(!forwards), forwards, false);
       }
-      const peekCaretPosition = getNextPosfn (nextCaretPosition);
-      if (peekCaretPosition && isBeforefn (peekCaretPosition)) {
+      const peekCaretPosition = getNextPosFn(nextCaretPosition);
+      if (peekCaretPosition && isBeforeFn(peekCaretPosition)) {
         if (isMoveInsideSameBlock(nextCaretPosition, peekCaretPosition)) {
           return showCaret(direction, editor, peekCaretPosition.getNode(!forwards), forwards, false);
         }
@@ -21791,10 +21791,10 @@
       if (isCefAtEdgeSelected(editor)) {
         const caretPosition = forwards ? CaretPosition.fromRangeEnd(range) : CaretPosition.fromRangeStart(range);
         const getClosestFn = !forwards ? getClosestPositionAbove : getClosestPositionBelow;
-        return getClosestfn (root, caretPosition).orThunk(() => Optional.from(caretPosition)).map(pos => pos.toRange());
+        return getClosestFn(root, caretPosition).orThunk(() => Optional.from(caretPosition)).map(pos => pos.toRange());
       }
       const walkerFn = forwards ? downUntil : upUntil;
-      const linePositions = walkerfn (root, isAboveLine(1), caretPosition);
+      const linePositions = walkerFn(root, isAboveLine(1), caretPosition);
       const nextLinePositions = filter$5(linePositions, isLine(1));
       const clientX = caretClientRect.left;
       const nextLineRect = findClosestClientRect(nextLinePositions, clientX);
@@ -25334,10 +25334,10 @@
       const dt = transfer;
       dt[eventId] = type;
     };
-    const setEvent = (transfer, type) => mkSetEventfn (type)(transfer);
-    const setDragstartEvent = mkSetEventfn (0);
-    const setDropEvent = mkSetEventfn (2);
-    const setDragendEvent = mkSetEventfn (1);
+    const setEvent = (transfer, type) => mkSetEventFn(type)(transfer);
+    const setDragstartEvent = mkSetEventFn(0);
+    const setDropEvent = mkSetEventFn(2);
+    const setDragendEvent = mkSetEventFn(1);
     const checkEvent = expectedType => transfer => {
       const dt = transfer;
       return Optional.from(dt[eventId]).exists(type => type === expectedType);
@@ -25358,10 +25358,10 @@
       const dt = transfer;
       dt[modeId] = mode;
     };
-    const setMode$1 = (transfer, mode) => mkSetModefn (mode)(transfer);
-    const setReadWriteMode = mkSetModefn (0);
-    const setReadOnlyMode = mkSetModefn (2);
-    const setProtectedMode = mkSetModefn (1);
+    const setMode$1 = (transfer, mode) => mkSetModeFn(mode)(transfer);
+    const setReadWriteMode = mkSetModeFn(0);
+    const setReadOnlyMode = mkSetModeFn(2);
+    const setProtectedMode = mkSetModeFn(1);
     const checkMode = expectedMode => transfer => {
       const dt = transfer;
       return Optional.from(dt[modeId]).exists(mode => mode === expectedMode);
@@ -25752,7 +25752,7 @@
     };
     const createImage = (editor, url, pasteHtmlFn) => {
       editor.undoManager.extra(() => {
-        pasteHtmlfn (editor, url);
+        pasteHtmlFn(editor, url);
       }, () => {
         editor.insertContent('<img src="' + url + '">');
       });
@@ -25760,7 +25760,7 @@
     };
     const createLink = (editor, url, pasteHtmlFn) => {
       editor.undoManager.extra(() => {
-        pasteHtmlfn (editor, url);
+        pasteHtmlFn(editor, url);
       }, () => {
         editor.execCommand('mceInsertLink', false, url);
       });
@@ -29431,7 +29431,7 @@
       const newBlockName = getForcedRootBlock(editor);
       getTopParentBlock(editor, node, root, container).each(parentBlock => {
         const newBlock = createNewBlock(editor, container, parentBlock.dom, root, false, newBlockName);
-        insertfn (parentBlock, SugarElement.fromDom(newBlock));
+        insertFn(parentBlock, SugarElement.fromDom(newBlock));
         editor.selection.setCursorLocation(newBlock, 0);
         editor.dispatch('NewBlock', { newBlock });
         fireInputEvent(editor, 'insertParagraph');

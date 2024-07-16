@@ -129,7 +129,7 @@ class CreateTicket extends Component
                 if (!empty($this->fileAttachments)) {
                     foreach ($this->fileAttachments as $uploadedFile) {
                         $fileName = $uploadedFile->getClientOriginalName();
-                        $fileAttachment = Storage::putFileAs("public/ticket/$ticket->ticket_number/creation_attachments", $uploadedFile, $fileName);
+                        $fileAttachment = Storage::putFileAs("public/ticket/{$ticket->ticket_number}/creation_attachments", $uploadedFile, $fileName);
                         $ticket->fileAttachments()->create(['file_attachment' => $fileAttachment]);
                     }
                 }
@@ -171,7 +171,7 @@ class CreateTicket extends Component
                             if ($field['type'] === 'file') {
                                 foreach ($field['value'] as $uploadedCustomFile) {
                                     $fileName = $uploadedCustomFile->getClientOriginalName();
-                                    $customFileAttachment = Storage::putFileAs("public/tiket/$ticket->ticket_number/custom_form_file", $uploadedCustomFile, $fileName);
+                                    $customFileAttachment = Storage::putFileAs("public/tiket/{$ticket->ticket_number}/custom_form_file", $uploadedCustomFile, $fileName);
                                     $ticketCustomFormField->ticketCustomFormFiles()->create(['file_attachment' => $customFileAttachment]);
                                 }
                             }

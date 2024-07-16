@@ -1477,7 +1477,7 @@
     var global$a = tinymce.util.Tools.resolve('tinymce.ThemeManager');
 
     const value$4 = value => {
-      const applyHelper = fn => fn (value);
+      const applyHelper = fn => fn(value);
       const constHelper = constant$1(value);
       const outputHelper = () => output;
       const output = {
@@ -1497,7 +1497,7 @@
         orThunk: outputHelper,
         getOrDie: constHelper,
         each: fn => {
-          fn (value);
+          fn(value);
         },
         toOptional: () => Optional.some(value)
       };
@@ -8403,7 +8403,7 @@
       ToolbarLocation['bottom'] = 'bottom';
     }(ToolbarLocation$1 || (ToolbarLocation$1 = {})));
     const option$2 = name => editor => editor.options.get(name);
-    const wrapOptional = fn => editor => Optional.from(fn (editor));
+    const wrapOptional = fn => editor => Optional.from(fn(editor));
     const register$e = editor => {
       const isPhone = global$5.deviceType.isPhone();
       const isMobile = global$5.deviceType.isTablet() || isPhone;
@@ -11238,7 +11238,7 @@
           }, 0);
         });
       };
-      basefn (set);
+      baseFn(set);
       return {
         get,
         map,
@@ -11415,7 +11415,7 @@
         set$7(menu.element, buttonWidth);
       }
     };
-    const getSink = (anyInSystem, sinkDetail) => anyInSystem.getSystem().getByUid(sinkDetail.uid + '-' + suffix()).map(internalSink => () => Result.value(internalSink)).getOrThunk(() => sinkDetail.lazySink.fold(() => () => Result.error(new Error('No internal sink is specified, nor could an external sink be found')), lazySinkFn => () => lazySinkfn (anyInSystem)));
+    const getSink = (anyInSystem, sinkDetail) => anyInSystem.getSystem().getByUid(sinkDetail.uid + '-' + suffix()).map(internalSink => () => Result.value(internalSink)).getOrThunk(() => sinkDetail.lazySink.fold(() => () => Result.error(new Error('No internal sink is specified, nor could an external sink be found')), lazySinkFn => () => lazySinkFn(anyInSystem)));
     const doRepositionMenus = sandbox => {
       Sandboxing.getState(sandbox).each(tmenu => {
         tieredMenu.repositionMenus(tmenu);

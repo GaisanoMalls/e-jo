@@ -79,10 +79,10 @@ class Profile extends Component
                             $user->profile->picture != null && Storage::exists($user->profile->picture)
                             ? (
                                 Storage::delete($user->profile->picture)
-                                ? (Storage::putFileAs("public/profile_picture/" . $this->fileDirByUserType(), $this->picture, $pictureName))
+                                ? (Storage::putFileAs("public/profile_picture/{$this->fileDirByUserType()}", $this->picture, $pictureName))
                                 : $this->picture
                             )
-                            : (Storage::putFileAs("public/profile_picture/" . $this->fileDirByUserType(), $this->picture, $pictureName))
+                            : (Storage::putFileAs("public/profile_picture/{$this->fileDirByUserType()}", $this->picture, $pictureName))
                         )
                         : $user->profile->picture
                 ]);

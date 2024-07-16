@@ -372,7 +372,7 @@
     });
     const toLeaf = (node, offset) => leaf(SugarElement.fromDom(node), offset);
     const walk = (dom, walkerFn, startNode, callbacks, endNode, skipStart = true) => {
-      let next = skipStart ? walkerfn (false) : startNode;
+      let next = skipStart ? walkerFn(false) : startNode;
       while (next) {
         const isCefNode = isContentEditableFalse(dom, next);
         if (isCefNode || isHidden(dom, next)) {
@@ -380,7 +380,7 @@
           if (stopWalking) {
             break;
           } else {
-            next = walkerfn (true);
+            next = walkerFn(true);
             continue;
           }
         } else if (isSimpleBoundary(dom, next)) {
@@ -393,7 +393,7 @@
         if (next === endNode) {
           break;
         } else {
-          next = walkerfn (false);
+          next = walkerFn(false);
         }
       }
     };

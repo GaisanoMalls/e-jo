@@ -15,7 +15,6 @@ class HelpTopicApprover extends Model
         'help_topic_id',
         'user_id',
         'level',
-        'is_approved'
     ];
 
     public function configuration(): BelongsTo
