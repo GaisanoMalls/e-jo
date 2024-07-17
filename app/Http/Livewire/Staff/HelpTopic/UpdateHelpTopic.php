@@ -55,6 +55,8 @@ class UpdateHelpTopic extends Component
     public $selectedBuDepartment;
     public $selectedApproversCount = 0;
 
+    protected $listeners = ['reMount' => 'mount'];
+
     public function mount()
     {
         $this->name = preg_replace('/ - [^-]+$/', '', $this->helpTopic->name);
@@ -161,7 +163,7 @@ class UpdateHelpTopic extends Component
 
         $this->costingApproversList = $users->map(function ($user) {
             return [
-                'label' => $user->profile->first_name . ' ' . $user->profile->last_name,
+                'label' => "{$user->profile->first_name} {$user->profile->last_name}",
                 'value' => $user->id,
                 'description' => $user->roles->pluck('name')->join(', ')
             ];
@@ -175,6 +177,7 @@ class UpdateHelpTopic extends Component
         $config = $this->helpTopic->configurations()->with('buDepartment')->get();
         $this->configurations = $config->map(function ($config) {
             return [
+                'id' => $config->id,
                 'bu_department_id' => $config->bu_department_id,
                 'bu_department_name' => $config->buDepartment->name,
                 'approvers_count' => $config->approvers_count,
@@ -229,6 +232,7 @@ class UpdateHelpTopic extends Component
 
         $this->resetApprovalConfigFields();
     }
+
     private function resetApprovalConfigFields()
     {
         $this->selectedBuDepartment = null;
@@ -240,9 +244,14 @@ class UpdateHelpTopic extends Component
         $this->level5Approvers = [];
         $this->dispatchBrowserEvent('reset-select-fields');
     }
-    public function removeConfiguration($index)
+
+    public function deleteConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
     {
-        array_splice($this->configurations, $index, 1);
+        try {
+            $helpTopicConfiguration->delete();
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+        }
     }
 
     public function render()

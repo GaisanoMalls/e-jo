@@ -134,6 +134,11 @@ class Ticket extends Model
         return $this->hasMany(TicketCustomFormField::class);
     }
 
+    public function ticketApprovals()
+    {
+        return $this->hasMany(TicketApproval::class);
+    }
+
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'ticket_tag');

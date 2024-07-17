@@ -17,10 +17,7 @@ trait Tickets
             ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray()));
 
         $openTicketsQuery->when($openTicketsQuery->has('ticketApprovals'), function ($query) {
-            $query->withWhereHas('ticketApprovals', fn($approval) => $approval->orWhere([
-                ['approval_1->level_1_approver->is_approved', true],
-                ['approval_1->level_2_approver->is_approved', true],
-            ]));
+            $query->withWhereHas('ticketApprovals', fn($approval) => $approval->orWhere('is_approved', true));
         });
 
         return $openTicketsQuery
@@ -40,10 +37,7 @@ trait Tickets
             ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray()));
 
         $claimedTicketsQuery->when($claimedTicketsQuery->has('ticketApprovals'), function ($query) {
-            $query->withWhereHas('ticketApprovals', fn($approval) => $approval->orWhere([
-                ['approval_1->level_1_approver->is_approved', true],
-                ['approval_1->level_2_approver->is_approved', true],
-            ]));
+            $query->withWhereHas('ticketApprovals', fn($approval) => $approval->orWhere('is_approved', true));
         });
 
         return $claimedTicketsQuery
@@ -61,10 +55,7 @@ trait Tickets
             ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray()));
 
         $onProcessTicketsQuery->when($onProcessTicketsQuery->has('ticketApprovals'), function ($query) {
-            $query->withWhereHas('ticketApprovals', fn($approval) => $approval->orWhere([
-                ['approval_1->level_1_approver->is_approved', true],
-                ['approval_1->level_2_approver->is_approved', true],
-            ]));
+            $query->withWhereHas('ticketApprovals', fn($approval) => $approval->orWhere('is_approved', true));
         });
 
         return $onProcessTicketsQuery
@@ -94,10 +85,7 @@ trait Tickets
             ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray()));
 
         $closedTicketsQuery->when($closedTicketsQuery->has('ticketApprovals'), function ($query) {
-            $query->withWhereHas('ticketApprovals', fn($approval) => $approval->orWhere([
-                ['approval_1->level_1_approver->is_approved', true],
-                ['approval_1->level_2_approver->is_approved', true],
-            ]));
+            $query->withWhereHas('ticketApprovals', fn($approval) => $approval->orWhere('is_approved', true));
         });
 
         return $closedTicketsQuery

@@ -152,7 +152,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($configurations as $index => $config)
-                                            <tr>
+                                            <tr wire:key="config-{{ $index + 1 }}">
                                                 <td class="td__content" style="font-size: 0.85rem;">{{ $index + 1 }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
@@ -169,7 +169,7 @@
                                                             <i class="bi bi-pencil"></i>
                                                         </button>
                                                         <button class="btn btn-sm action__button mt-0"
-                                                            wire:click="removeConfiguration({{ $index }})">
+                                                            wire:click="deleteConfiguration({{ $config['id'] }})">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </div>

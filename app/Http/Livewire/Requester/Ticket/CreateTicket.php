@@ -12,7 +12,6 @@ use App\Models\ActivityLog;
 use App\Models\Branch;
 use App\Models\Form;
 use App\Models\HelpTopic;
-use App\Models\Level;
 use App\Models\PriorityLevel;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
@@ -134,22 +133,22 @@ class CreateTicket extends Component
                     }
                 }
 
-                $approvers = User::withWhereHas('helpTopicApprovals', function ($approval) use ($ticket) {
-                    $approval->where('help_topic_id', $ticket->helptopic->id);
-                })->get();
+                // $approvers = User::withWhereHas('helpTopicApprovals', function ($approval) use ($ticket) {
+                //     $approval->where('help_topic_id', $ticket->helptopic->id);
+                // })->get();
 
-                $approvers->each(function ($approver) use ($ticket) {
-                    Notification::send(
-                        $approver,
-                        new AppNotification(
-                            ticket: $ticket,
-                            title: "New Ticket {$ticket->ticket_number}",
-                            message: "{$ticket->user->profile->getFullName()} created a ticket"
-                        )
-                    );
+                // $approvers->each(function ($approver) use ($ticket) {
+                //     Notification::send(
+                //         $approver,
+                //         new AppNotification(
+                //             ticket: $ticket,
+                //             title: "New Ticket {$ticket->ticket_number}",
+                //             message: "{$ticket->user->profile->getFullName()} created a ticket"
+                //         )
+                //     );
 
-                    // Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
-                });
+                //     // Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
+                // });
 
                 if ($this->isHelpTopicHasForm) {
                     array_push($this->filledForms, $this->formFields);

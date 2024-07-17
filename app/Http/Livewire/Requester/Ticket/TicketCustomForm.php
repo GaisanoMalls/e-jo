@@ -27,9 +27,7 @@ class TicketCustomForm extends Component
     public ?int $deleteDocumentFileId = null;
     public $customFormFieldFiles = [];
 
-    protected $listeners = [
-        'loadCustomFormFiles' => 'loadCustomFormFiles',
-    ];
+    protected $listeners = ['reMount' => 'mount'];
 
     public function mount()
     {
@@ -104,7 +102,7 @@ class TicketCustomForm extends Component
                     }
                 }
                 $this->isEditing = false;
-                return redirect()->route('user.ticket.view_ticket', $this->ticket->id);
+                $this->emit('reMount');
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
@@ -114,7 +112,7 @@ class TicketCustomForm extends Component
 
     public function editCustomForm(Form $form)
     {
-        if ($form->helpTopic->form->id === $form->id) {
+        if ($form->helpTopic?->form->id === $form->id) {
             $this->isEditing = !$this->isEditing;
 
             if (!$this->isEditing) {
@@ -126,12 +124,6 @@ class TicketCustomForm extends Component
     public function loadCustomFormFields()
     {
         return $this->customFormFields;
-    }
-
-    public function loadCustomFormFiles()
-    {
-        $this->customFormImageFiles;
-        $this->customFormDocumentFiles;
     }
 
     public function deleteFileConfirm(TicketCustomFormFile $file)
@@ -146,7 +138,7 @@ class TicketCustomForm extends Component
             if ($file->file_attachment && Storage::exists($file->file_attachment)) {
                 $file->delete();
                 Storage::delete($file->file_attachment);
-                $this->emitSelf('loadCustomFormFiles'); // Reload the file attachments
+                $this->emitSelf('reMount'); // Reload the file attachments
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

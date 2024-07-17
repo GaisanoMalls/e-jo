@@ -22,11 +22,7 @@ trait Tickets
                     ['is_approved_level_1_approver', true],
                     ['is_approved_level_2_approver', true],
                 ])))
-            // ->withWhereHas('ticketApprovals', fn ($ticketApproval) => $ticketApproval->where([
-            //     ['approval_1->level_1_approver->is_approved', true],
-            //     ['approval_1->level_2_approver->is_approved', true],
-            //     ['approval_1->is_all_approved', true],
-            // ]))
+            ->withWhereHas('ticketApprovals', fn($ticketApproval) => $ticketApproval->where('is_approved', true))
             ->orderByDesc('created_at')
             ->get();
     }
@@ -42,7 +38,6 @@ trait Tickets
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL))
             ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
-            ->withWhereHas('helpTopic.approvers', fn($approver) => $approver->where('is_approved', false))
             ->orderByDesc('created_at')
             ->get();
     }
