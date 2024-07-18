@@ -60,7 +60,7 @@ class AssignedAgentMail extends Mailable
                 'requesterFullName' => $this->ticket->user->profile->getFullName(),
                 'requesterOtherInfo' => "{$this->ticket->user->getBUDepartments()} - {$this->ticket->user->getBranches()}",
                 'approver' => auth()->user()->profile->getFullName(),
-                'url' => "http://10.10.99.81/staff/ticket/{$this->ticket->id}/view",
+                'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/view",
             ]
         );
     }

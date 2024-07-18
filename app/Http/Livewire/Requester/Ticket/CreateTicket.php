@@ -12,7 +12,10 @@ use App\Models\ActivityLog;
 use App\Models\Branch;
 use App\Models\Form;
 use App\Models\HelpTopic;
+use App\Models\HelpTopicApprover;
+use App\Models\HelpTopicConfiguration;
 use App\Models\PriorityLevel;
+use App\Models\Role;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
 use App\Models\Team;
@@ -123,7 +126,12 @@ class CreateTicket extends Component
                     'approval_status' => ApprovalStatusEnum::FOR_APPROVAL,
                 ]);
 
-                TicketTeam::create(['ticket_id' => $ticket->id, 'team_id' => $this->team != 'undefined' ? $this->team : null]);
+                TicketTeam::create([
+                    'ticket_id' => $ticket->id,
+                    'team_id' => $this->team != 'undefined' ? $this->team : null
+                ]);
+
+
 
                 if (!empty($this->fileAttachments)) {
                     foreach ($this->fileAttachments as $uploadedFile) {
@@ -133,22 +141,35 @@ class CreateTicket extends Component
                     }
                 }
 
-                // $approvers = User::withWhereHas('helpTopicApprovals', function ($approval) use ($ticket) {
-                //     $approval->where('help_topic_id', $ticket->helptopic->id);
-                // })->get();
+                $approvers = User::withWhereHas('helpTopicApprovals', function ($query) use ($ticket) {
+                    $query->withWhereHas('configuration', function ($config) use ($ticket) {
+                        $config->with('approvers')
+                            ->where('help_topic_id', $ticket->help_topic_id)
+                            ->where('bu_department_id', $ticket->user->buDepartments->pluck('id')->first());
+                    });
+                })->get();
 
-                // $approvers->each(function ($approver) use ($ticket) {
-                //     Notification::send(
-                //         $approver,
-                //         new AppNotification(
-                //             ticket: $ticket,
-                //             title: "New Ticket {$ticket->ticket_number}",
-                //             message: "{$ticket->user->profile->getFullName()} created a ticket"
-                //         )
-                //     );
+                $helpTopicApprovers = HelpTopicApprover::where('help_topic_id', $ticket->help_topic_id)->get();
+                $approvers->each(function ($approver) use ($ticket, $helpTopicApprovers) {
+                    $helpTopicApprovers->each(function ($helpTopicApprover) use ($approver, $ticket) {
+                        if ($approver->id === $helpTopicApprover->user_id) {
+                            TicketApproval::create([
+                                'ticket_id' => $ticket->id,
+                                'help_topic_approver_id' => $helpTopicApprover->id,
+                            ]);
+                        }
+                    });
 
-                //     // Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
-                // });
+                    Notification::send(
+                        $approver,
+                        new AppNotification(
+                            ticket: $ticket,
+                            title: "New Ticket {$ticket->ticket_number}",
+                            message: "{$ticket->user->profile->getFullName()} created a ticket"
+                        )
+                    );
+                    Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
+                });
 
                 if ($this->isHelpTopicHasForm) {
                     array_push($this->filledForms, $this->formFields);

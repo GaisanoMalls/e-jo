@@ -55,7 +55,7 @@ class TicketCreatedMail extends Mailable implements ShouldQueue
             with: [
                 'newTicketMessage' => "New Ticket - {$this->ticket->ticket_number}",
                 'message' => "A new ticket has been created by {$this->ticket->user->profile->getFullName()}",
-                'url' => "http://10.10.99.81/staff/ticket/{$this->ticket->id}/view"
+                'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/view"
             ]
         );
     }

@@ -384,7 +384,8 @@
                             <span wire:loading wire:target="sendTicket" class="spinner-border spinner-border-sm"
                                 role="status" aria-hidden="true">
                             </span>
-                            Send Ticket
+                            <span wire:loading.remove wire:target="sendTicket">Send Ticket</span>
+                            <span wire:loading wire:target="sendTicket">Sending...</span>
                         </button>
                     </div>
                 </form>

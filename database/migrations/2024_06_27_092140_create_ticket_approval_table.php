@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
             $table->foreignIdFor(HelpTopicApprover::class, 'help_topic_approver_id')->constrained('help_topic_approvers')->cascadeOnDelete();
-            $table->boolean('is_approved');
+            $table->boolean('is_approved')->default(false);
             $table->timestamps();
         });
     }
