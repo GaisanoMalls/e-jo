@@ -1,139 +1,70 @@
+@php
+    use App\Models\Role;
+@endphp
+
 <div wire:poll.7s>
     <div class="card border-0 p-0 card__ticket__details">
         <div class="d-flex flex-column gap-3 ticket__details__card__body__right">
             <label class="ticket__actions__label">Level of Approval</label>
-            @if ($ticket->isSpecialProject())
-                <div class="d-flex gap-2 border-0 rounded-3"
-                    style="color: #664d03; font-size: 13px; background-color: #FFF3CD; padding: 8px 9px; line-height: 18px;">
-                    <i class="bi bi-info-circle-fill" style="color: #D32839;"></i>
-                    This ticket is associated with a special project.
-                </div>
-            @endif
-            <div class="d-flex flex-column level__approval__container">
-                <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
-                    <small class="level__number__label">
-                        Level 1 {{ $this->getLevel1Approvers()->count() > 1 ? 'Approvers' : 'Approver' }}
-                        ({{ $this->isTicketApproval1Level1Approved() && !$this->isTicketApproval2Level1Approved() ? '1' : ($this->isTicketApproval2Level1Approved() ? '2' : '0') }}/2)
-                    </small>
-                    @if (
-                        $this->isTicketApproval1Level1Approved() &&
-                            $this->isTicketApproval1Level2Approved() &&
-                            !$this->isTicketApproval2Level1Approved())
-                        @if ($this->isOnlyServiceDeptAdminForLastApproval() && !$this->isTicketApproval2Level1Approved())
-                            @if ($this->isRequesterDonePR($ticket))
-                                <button wire:click="approveApproval2Level1Approver" wire:loading.class="disabled"
-                                    class="btn btn-sm d-flex align-items-center gap-2 btn__approve" type="button">
-                                    <div wire:loading wire:target="approveApproval2Level1Approver"
-                                        class="spinner-border spinner-border-sm loading__spinner" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
-                                    Approve
-                                </button>
-                            @else
-                                <div class="d-flex align-items-center gap-1">
-                                    <i class="bi bi-check-circle-fill ms-1"
-                                        style="font-size: 11px; color: #D32839;"></i>
-                                    <div class="border-0 text-muted" style="font-size: 0.75rem;">
-                                        Approved
-                                    </div>
-                                </div>
-                            @endif
-                        @else
-                            @if ($this->isTicketApproval1Level1Approved() || $this->isTicketApproval2Level1Approved())
-                                <div class="d-flex align-items-center gap-1">
-                                    <i class="bi bi-check-circle-fill ms-1"
-                                        style="font-size: 11px; color: #D32839;"></i>
-                                    <div class="border-0 text-muted" style="font-size: 0.75rem;">
-                                        Approved
-                                    </div>
-                                </div>
-                            @endif
-                        @endif
-                    @else
-                        @if ($this->isTicketApproval2Level1Approved())
-                            <div class="d-flex align-items-center gap-1">
-                                <i class="bi bi-check-circle-fill ms-1" style="font-size: 11px; color: #D32839;"></i>
-                                <div class="border-0 text-muted" style="font-size: 0.75rem;">
-                                    Approved
-                                </div>
-                            </div>
-                        @endif
-                    @endif
-                </div>
-                @foreach ($this->getLevel1Approvers() as $level1Approver)
-                    <div class="d-flex flex-column">
-                        <div
-                            class="d-flex align-items-center justify-content-between ps-3 position-relative level__approver__container">
-                            <div class="level__approval__approver__dot position-absolute rounded-circle"></div>
-                            <div class="d-flex align-items-center" style="padding: 4px 0 4px 0;">
-                                @if ($level1Approver->profile->picture)
-                                    <img src="{{ Storage::url($level1Approver->profile->picture) }}" alt=""
-                                        class="image-fluid level__approval__approver__picture">
-                                @else
-                                    <div class="level__approval__approver__name__initial d-flex align-items-center p-2 me-2 justify-content-center
-                                        text-white"
-                                        style="background-color: {{ $this->isTicketApproval1Level1Approved() ? '#9DA85C' : '#757a8f' }};">
-                                        {{ $level1Approver->profile->getNameInitial() }}
-                                    </div>
-                                @endif
-                                <small class="approver__name">
-                                    {{ $level1Approver->profile->getFullName() }}
-                                    @if ($level1Approver->id == auth()->user()->id)
-                                        <span class="text-muted">(You)</span>
-                                    @endif
-                                    @if ($this->ticketLevel1ApprovalApprovedBy() == $level1Approver->id)
-                                        <i class="bi bi-check-lg text-muted"></i>
-                                    @endif
+            @foreach ($approvalLevels as $level)
+                @php
+                    // To check if the particular level has already been displayed
+                    $levelDisplayed = false;
+                @endphp
+
+                @foreach ($ticketApprovals as $ticketApproval)
+                    {{-- Check the equality of the help topic approver's level and the level of approvals, and display the approval level if it hasn't been shown yet. --}}
+                    @if ($ticketApproval->helpTopicApprover->level === $level && !$levelDisplayed)
+                        @php
+                            $levelDisplayed = true;
+                        @endphp
+
+                        <div class="d-flex flex-column level__approval__container">
+                            <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
+                                <small class="level__number__label">
+                                    Level {{ $level }}
                                 </small>
+                                @if ($this->islevelApproved($level))
+                                    <small class="fw-bold" style="color: #C73C3C; font-size: 0.75rem;">Approved</small>
+                                @endif
                             </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-            <div class="d-flex flex-column level__approval__container text-muted">
-                <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
-                    <small class="level__number__label"
-                        style="{{ !$this->isTicketApproval1Level1Approved() ? 'color: #adadad !important;' : '' }}">
-                        Level 2 {{ $this->getLevel2Approvers()->count() > 1 ? 'Approvers' : 'Approver' }}
-                        ({{ $this->isTicketApproval1Level2Approved() && !$this->isTicketApproval2Level2Approved() ? '1' : ($this->isTicketApproval2Level2Approved() ? '2' : '0') }}/2)
-                    </small>
-                    @if ($this->isTicketApproval1Level2Approved())
-                        <div class="d-flex align-items-center gap-1">
-                            <i class="bi bi-check-circle-fill ms-1" style="font-size: 11px; color: #D32839;"></i>
-                            <div class="border-0 text-muted" style="font-size: 0.75rem;">
-                                Approved
-                            </div>
+                            @foreach ($this->fetchedApprovers($level) as $approver)
+                                <div class="d-flex flex-column">
+                                    <div
+                                        class="d-flex align-items-center justify-content-between position-relative ps-3 level__approver__container">
+                                        <div class="level__approval__approver__dot position-absolute rounded-circle">
+                                        </div>
+                                        <div class="d-flex align-items-center" style="padding: 4px 0 4px 0;">
+                                            @if ($approver->profile->picture)
+                                                <img src="{{ Storage::url($approver->profile->picture) }}"
+                                                    alt=""
+                                                    class="image-fluid level__approval__approver__picture">
+                                            @else
+                                                <div class="level__approval__approver__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
+                                                    @style([
+                                                        'background-color: #3b4053' => $approver->hasRole(Role::APPROVER),
+                                                        'background-color: #9DA85C' => $approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN),
+                                                    ])>
+                                                    {{ $approver->profile->getNameInitial() }}
+                                                </div>
+                                            @endif
+                                            <small class="approver__name">
+                                                {{ $approver->profile->getFullName() }}
+                                                @if ($approver->id == auth()->user()->id)
+                                                    <span class="text-muted">(You)</span>
+                                                @endif
+                                            </small>
+                                        </div>
+                                        @if ($ticketApproval->helpTopicApprover->user_id === $approver->id && $ticketApproval->is_approved)
+                                            <i class="bi bi-check2-circle"></i>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     @endif
-                </div>
-                @foreach ($this->getLevel2Approvers() as $level2Approver)
-                    <div class="d-flex flex-column">
-                        <div
-                            class="d-flex align-items-center justify-content-between ps-3 position-relative level__approver__container">
-                            <div class="level__approval__approver__dot position-absolute rounded-circle"></div>
-                            <div class="d-flex align-items-center" style="padding: 4px 0 4px 0;">
-                                @if ($level2Approver->profile->picture)
-                                    <img src="{{ Storage::url($level2Approver->profile->picture) }}" alt=""
-                                        class="image-fluid level__approval__approver__picture">
-                                @else
-                                    <div class="level__approval__approver__name__initial d-flex align-items-center p-2 me-2 justify-content-center
-                                        text-white"
-                                        style="background-color: {{ $this->isTicketApproval1Level2Approved() ? '#3B4053' : '#757a8f' }};">
-                                        {{ $level2Approver->profile->getNameInitial() }}
-                                    </div>
-                                @endif
-                                <small
-                                    class="approver__name {{ $this->isTicketApproval1Level1Approved() ? 'text-dark' : '' }}">
-                                    {{ $level2Approver->profile->getFullName() }}
-                                    @if ($this->ticketLevel2ApprovalApprovedBy() == $level2Approver->id)
-                                        <i class="bi bi-check-lg text-muted"></i>
-                                    @endif
-                                </small>
-                            </div>
-                        </div>
-                    </div>
                 @endforeach
-            </div>
+            @endforeach
         </div>
     </div>
 </div>

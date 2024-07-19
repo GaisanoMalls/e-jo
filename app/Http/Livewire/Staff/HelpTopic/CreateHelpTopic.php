@@ -115,12 +115,12 @@ class CreateHelpTopic extends Component
 
                         foreach ($config['approvers'] as $level => $approversList) {
                             $levelNumber = str_replace('level', '', $level);
-                            foreach ($approversList as $userId) {
+                            foreach ($approversList as $approverId) {
                                 HelpTopicApprover::create([
                                     'help_topic_configuration_id' => $helpTopicConfiguration->id,
                                     'help_topic_id' => $helpTopic->id,
                                     'level' => $levelNumber,
-                                    'user_id' => $userId,
+                                    'user_id' => $approverId,
                                 ]);
                             }
                         }

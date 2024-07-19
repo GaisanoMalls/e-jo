@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Models\ActivityLog;
-use App\Models\HelpTopicApprover;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -47,7 +46,7 @@ class ApproveTicket extends Component
 
     public function isCurrentLevelApprover()
     {
-        return $this->ticket->helpTopic->approvers()->where('user_id', auth()->user()->id)->exists();
+        return $this->ticket->helpTopic->withWhereHas('approvers', fn($approver) => $approver->where('user_id', auth()->user()->id))->get();
     }
 
     public function approveTicket()
@@ -68,51 +67,60 @@ class ApproveTicket extends Component
                             ->where('id', auth()->user()->id)
                             ->first();
 
-                        // Do this process if ticket's help topic has special project.
-                        if ($this->ticket->isSpecialProject()) {
-                            // Update ticket approval based on current approver (Level 1 - Service Dept. Admin)
-                            TicketApproval::where('ticket_id', $this->ticket->id)
-                                ->whereNotNull('approval_1->level_1_approver->approver_id')
-                                ->whereJsonContains('approval_1->level_1_approver->approver_id', auth()->user()->id)
-                                ->update([
-                                    'approval_1->level_1_approver->approved_by' => auth()->user()->id,
-                                    'approval_1->level_1_approver->is_approved' => true,
+                        // Update into approved
+                        TicketApproval::where('ticket_id', $this->ticket->id)
+                            ->withWhereHas('helpTopicApprover', function ($approver) {
+                                $approver->where('help_topic_id', $this->ticket->help_topic_id)
+                                    ->where('user_id', auth()->user()->id);
+                            })->update([
+                                    'is_approved' => true
                                 ]);
 
-                            // Retrieve the newly updated record to filter the level 2 approver and send a notification.
-                            $filteredLevel2Approvers = TicketApproval::where('ticket_id', $this->ticket->id)
-                                ->whereJsonContains('approval_1->level_2_approver->is_approved', false)
-                                ->whereNotNull('approval_1->level_2_approver->approver_id')
-                                ->get();
+                        // Do this process if ticket's help topic has special project.
+                        // if ($this->ticket->isSpecialProject()) {
+                        //     // Update ticket approval based on current approver (Level 1 - Service Dept. Admin)
+                        //     TicketApproval::where('ticket_id', $this->ticket->id)
+                        //         ->whereNotNull('approval_1->level_1_approver->approver_id')
+                        //         ->whereJsonContains('approval_1->level_1_approver->approver_id', auth()->user()->id)
+                        //         ->update([
+                        //             'approval_1->level_1_approver->approved_by' => auth()->user()->id,
+                        //             'approval_1->level_1_approver->is_approved' => true,
+                        //         ]);
 
-                            if ($filteredLevel2Approvers->isNotEmpty()) {
-                                $level2Approvers = User::with('profile')
-                                    ->role(Role::APPROVER)
-                                    ->whereIn('id', $filteredLevel2Approvers->pluck('approval_1.level_2_approver.approver_id')->flatten()->toArray())
-                                    ->get();
+                        //     // Retrieve the newly updated record to filter the level 2 approver and send a notification.
+                        //     $filteredLevel2Approvers = TicketApproval::where('ticket_id', $this->ticket->id)
+                        //         ->whereJsonContains('approval_1->level_2_approver->is_approved', false)
+                        //         ->whereNotNull('approval_1->level_2_approver->approver_id')
+                        //         ->get();
 
-                                if ($level2Approvers->isNotEmpty()) {
-                                    $level2Approvers->each(function ($level2Approver) use ($serviceDepartmentAdmin) {
-                                        Notification::send(
-                                            $level2Approver,
-                                            new AppNotification(
-                                                ticket: $this->ticket,
-                                                title: "Level 1 approved (Ticket #{$this->ticket->ticket_number})",
-                                                message: "{$serviceDepartmentAdmin->profile->getFullName()} approved the level 1 approval. You can now approved the approval for level 2"
-                                            )
-                                        );
-                                    });
-                                } else {
-                                    AppErrorLog::getError("No level 2 approvers have been found");
-                                }
+                        //     if ($filteredLevel2Approvers->isNotEmpty()) {
+                        //         $level2Approvers = User::with('profile')
+                        //             ->role(Role::APPROVER)
+                        //             ->whereIn('id', $filteredLevel2Approvers->pluck('approval_1.level_2_approver.approver_id')->flatten()->toArray())
+                        //             ->get();
 
-                                ActivityLog::make($this->ticket->id, 'approved the level 1 approval');
-                                $this->actionOnSubmit();
+                        //         if ($level2Approvers->isNotEmpty()) {
+                        //             $level2Approvers->each(function ($level2Approver) use ($serviceDepartmentAdmin) {
+                        //                 Notification::send(
+                        //                     $level2Approver,
+                        //                     new AppNotification(
+                        //                         ticket: $this->ticket,
+                        //                         title: "Level 1 approved (Ticket #{$this->ticket->ticket_number})",
+                        //                         message: "{$serviceDepartmentAdmin->profile->getFullName()} approved the level 1 approval. You can now approved the approval for level 2"
+                        //                     )
+                        //                 );
+                        //             });
+                        //         } else {
+                        //             AppErrorLog::getError("No level 2 approvers have been found");
+                        //         }
 
-                            } else {
-                                AppErrorLog::getError("Empty filters for level 2 approvers in ticket approval");
-                            }
-                        }
+                        //         ActivityLog::make($this->ticket->id, 'approved the level 1 approval');
+                        //         $this->actionOnSubmit();
+
+                        //     } else {
+                        //         AppErrorLog::getError("Empty filters for level 2 approvers in ticket approval");
+                        //     }
+                        // }
 
                         // Delete the ticket notification of the currently logged in service department admin.
                         auth()->user()->notifications->each(

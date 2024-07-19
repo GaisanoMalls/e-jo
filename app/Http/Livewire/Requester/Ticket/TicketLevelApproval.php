@@ -34,6 +34,16 @@ class TicketLevelApproval extends Component
         })->get();
     }
 
+    public function islevelApproved(int $level)
+    {
+        return TicketApproval::where('is_approved', true)
+            ->withWhereHas('helpTopicApprover', fn($approver) =>
+                $approver->where('level', $level)
+                    ->where('help_topic_id', $this->ticket->help_topic_id))
+            ->withWhereHas('ticket', fn($ticket) => $ticket->where('id', $this->ticket->id))
+            ->exists();
+    }
+
     public function render()
     {
         return view('livewire.requester.ticket.ticket-level-approval');
