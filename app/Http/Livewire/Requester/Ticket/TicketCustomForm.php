@@ -54,7 +54,7 @@ class TicketCustomForm extends Component
     {
         $this->ticketCustomFormField = TicketCustomFormField::with('ticketCustomFormFiles')->where([
             ['ticket_id', $this->ticket->id],
-            ['form_id', $this->ticket->helpTopic->form->id],
+            ['form_id', $this->ticket->helpTopic->form?->id],
         ])->get(); // Return a single record.
 
         if ($this->ticketCustomFormField) {
