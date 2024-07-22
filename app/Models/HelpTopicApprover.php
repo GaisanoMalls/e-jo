@@ -29,6 +29,6 @@ class HelpTopicApprover extends Model
 
     public function approver(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

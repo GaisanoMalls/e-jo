@@ -139,6 +139,11 @@ class Ticket extends Model
         return $this->hasMany(TicketApproval::class);
     }
 
+    public function ictRecommendations(): HasMany
+    {
+        return $this->hasMany(IctRecommendation::class);
+    }
+
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'ticket_tag');

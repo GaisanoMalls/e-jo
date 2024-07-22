@@ -7,24 +7,18 @@
         <div class="d-flex flex-column gap-3 ticket__details__card__body__right">
             <label class="ticket__actions__label">Level of Approval</label>
             @foreach ($approvalLevels as $level)
-                @php
-                    // To check if the particular level has already been displayed
-                    $levelDisplayed = false;
-                @endphp
-
+                {{-- To check if the particular level has already been displayed --}}
+                @php $levelDisplayed = false; @endphp
                 @foreach ($ticketApprovals as $ticketApproval)
                     {{-- Check the equality of the help topic approver's level and the level of approvals, and display the approval level if it hasn't been shown yet. --}}
                     @if ($ticketApproval->helpTopicApprover->level === $level && !$levelDisplayed)
-                        @php
-                            $levelDisplayed = true;
-                        @endphp
-
+                        @php $levelDisplayed = true; @endphp
                         <div class="d-flex flex-column level__approval__container">
                             <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
                                 <small class="level__number__label">
                                     Level {{ $level }}
                                 </small>
-                                @if ($this->islevelApproved($level))
+                                @if ($this->islevelApproved($level) && $this->isNoMoreStraightForwardApproval())
                                     <small class="fw-bold" style="color: #C73C3C; font-size: 0.75rem;">Approved</small>
                                 @endif
                             </div>
