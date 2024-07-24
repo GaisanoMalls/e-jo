@@ -71,7 +71,7 @@
                                                 @endif
                                             </div>
                                             <div class="d-flex flex-column gap-1 ms-3 w-100">
-                                                <span class="user__name">{{ $approver->profile->getFullName() }}</span>
+                                                <span class="user__name">{{ $approver->profile->getFullName }}</span>
                                                 <small>{{ $approver->email }}</small>
                                             </div>
                                         </div>

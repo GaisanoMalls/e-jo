@@ -84,7 +84,7 @@ class UpdateRequester extends Component
                         $this->suffix,
                     ])),
                 ]);
-                noty()->addSuccess("You have successfully updated the account for {$this->user->profile->getFullName()}.");
+                noty()->addSuccess("You have successfully updated the account for {$this->user->profile->getFullName}.");
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

@@ -43,15 +43,15 @@
                                                 </div>
                                             @endif
                                             <small class="approver__name">
-                                                {{ $approver->profile->getFullName() }}
+                                                {{ $approver->profile->getFullName }}
                                                 @if ($approver->id == auth()->user()->id)
                                                     <span class="text-muted">(You)</span>
                                                 @endif
                                             </small>
+                                            @if ($ticketApproval->helpTopicApprover->user_id === $approver->id && $ticketApproval->is_approved)
+                                                <i class="bi bi-check2 ms-2"></i>
+                                            @endif
                                         </div>
-                                        @if ($ticketApproval->helpTopicApprover->user_id === $approver->id && $ticketApproval->is_approved)
-                                            <i class="bi bi-check2-circle"></i>
-                                        @endif
                                     </div>
                                 </div>
                             @endforeach

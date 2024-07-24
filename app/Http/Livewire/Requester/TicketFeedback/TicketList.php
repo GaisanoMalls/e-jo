@@ -28,7 +28,7 @@ class TicketList extends Component
     public function mount()
     {
         $this->email = auth()->user()->email;
-        $this->fullName = auth()->user()->profile->getFullName();
+        $this->fullName = auth()->user()->profile->getFullName;
         $this->toRateTickets = Ticket::where('status_id', Status::CLOSED)
             ->whereDoesntHave('feedback')
             ->where('user_id', auth()->user()->id)

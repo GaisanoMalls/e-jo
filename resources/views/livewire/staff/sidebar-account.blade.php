@@ -35,7 +35,7 @@
         </div>
         <a href="">
             <h6 class="my-3 sidebar__userfullname">
-                {{ auth()->user()->profile->getFullName() }}
+                {{ auth()->user()->profile->getFullName }}
             </h6>
         </a>
         @if (!auth()->user()->hasRole(Role::SYSTEM_ADMIN))

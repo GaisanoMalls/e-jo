@@ -88,7 +88,7 @@
                                                 <div class="flex-grow-1 ms-3 w-100">
                                                     <a href="" class="d-flex flex-column gap-1 w-100">
                                                         <span
-                                                            class="user__name">{{ $approver->profile->getFullName() }}</span>
+                                                            class="user__name">{{ $approver->profile->getFullName }}</span>
                                                     </a>
                                                 </div>
                                             </div>

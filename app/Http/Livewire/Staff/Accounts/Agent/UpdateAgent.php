@@ -130,7 +130,7 @@ class UpdateAgent extends Component
                     ])),
                 ]);
 
-                noty()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName()}.");
+                noty()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName}.");
             });
 
         } catch (Exception $e) {

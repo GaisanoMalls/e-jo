@@ -92,7 +92,7 @@ class AssignTicket extends Component
                         new AppNotification(
                             ticket: $this->ticket,
                             title: "Assigned Ticket {$this->ticket->ticket_number}",
-                            message: "{$serviceDepartmentAdmin->profile->getFullName()} assign this ticket to you."
+                            message: "{$serviceDepartmentAdmin->profile->getFullName} assign this ticket to you."
                         )
                     );
                     // Mail::to($this->ticket->agent)->send(new AssignedAgentMail($this->ticket, $this->ticket->agent));

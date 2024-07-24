@@ -26,7 +26,7 @@ class ServiceDeptAdminList extends Component
     public function deleteServiceDepartmentAdmin(User $serviceDepartmentAdmin)
     {
         $this->serviceDeptAdminDeleteId = $serviceDepartmentAdmin->id;
-        $this->serviceDeptAdminFullName = $serviceDepartmentAdmin->profile->getFullName();
+        $this->serviceDeptAdminFullName = $serviceDepartmentAdmin->profile->getFullName;
         $this->dispatchBrowserEvent('show-delete-service-dept-admin-modal');
     }
 

@@ -41,8 +41,8 @@ class FromRequesterClarificationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address(auth()->user()->email, auth()->user()->profile->getFullName()),
-            replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName())],
+            from: new Address(auth()->user()->email, auth()->user()->profile->getFullName),
+            replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
             subject: "Clarification for ticket {$this->ticket->ticket_number}",
         );
     }
@@ -59,7 +59,7 @@ class FromRequesterClarificationMail extends Mailable implements ShouldQueue
             with: [
                 'ticketSubject' => "Requester's Clarification",
                 'message' => "{$this->clarificationDescription}",
-                'sender' => auth()->user()->profile->getFullName(),
+                'sender' => auth()->user()->profile->getFullName,
                 'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/clarifications",
             ]
         );

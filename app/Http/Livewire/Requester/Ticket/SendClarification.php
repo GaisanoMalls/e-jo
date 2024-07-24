@@ -89,7 +89,7 @@ class SendClarification extends Component
                 $logClarificationDescription = $this->ticket->clarifications()
                     ->where('user_id', '!=', auth()->user()->id)->count() === 0
                     ? 'sent a clarification'
-                    : 'replied a clarification to ' . $latestStaff->user->profile->getFullName();
+                    : 'replied a clarification to ' . $latestStaff->user->profile->getFullName;
 
                 // Get the department admin (approver) when there is no latest staff in the clarifications
                 $initialServiceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
@@ -102,7 +102,7 @@ class SendClarification extends Component
                         new AppNotification(
                             ticket: $this->ticket,
                             title: "Clarification for ticket {$this->ticket->ticket_number}",
-                            message: "Ticket clarification sent by {$this->ticket->user->profile->getFullName()}",
+                            message: "Ticket clarification sent by {$this->ticket->user->profile->getFullName}",
                             forClarification: true
                         )
                     );

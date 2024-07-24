@@ -18,7 +18,7 @@
                     <div class="w-100 d-flex gap-2 flex-wrap align-items-center justify-content-between">
                         <div class="d-flex flex-column me-2">
                             <small class="ticket__details__user__fullname">
-                                <span>{{ $ticket->agent->profile->getFullName() }}</span>
+                                <span>{{ $ticket->agent->profile->getFullName }}</span>
                             </small>
                             <small class="ticket__details__user__department">
                                 {{ $ticket->agent->email }}

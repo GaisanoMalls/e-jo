@@ -8,7 +8,7 @@
                             class="user__picture" alt="">
                         <div class="d-flex flex-column">
                             <span class="user__name">
-                                {{ auth()->user()->profile->getFullName() }}
+                                {{ auth()->user()->profile->getFullName }}
                                 @if (auth()->user()->id === $feedback->user_id)
                                     <small style="font-size: 11px; color: #808080;">
                                         <i class="fa-solid fa-check"></i>

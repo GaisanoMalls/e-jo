@@ -123,7 +123,7 @@ trait Utils
      * */
     public function generateNewProfilePictureName($picture)
     {
-        return time() . "_" . Str::slug(auth()->user()->profile->getFullName()) . "." . $picture->getClientOriginalExtension();
+        return time() . "_" . Str::slug(auth()->user()->profile->getFullName) . "." . $picture->getClientOriginalExtension();
     }
 
     public function ticketSLATimer(Ticket $ticket)

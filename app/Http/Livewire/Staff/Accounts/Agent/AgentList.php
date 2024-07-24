@@ -23,7 +23,7 @@ class AgentList extends Component
     public function deleteAgent(User $agent)
     {
         $this->agentDeleteId = $agent->id;
-        $this->agentFullName = $agent->profile->getFullName();
+        $this->agentFullName = $agent->profile->getFullName;
         $this->dispatchBrowserEvent('show-delete-agent-modal');
     }
 

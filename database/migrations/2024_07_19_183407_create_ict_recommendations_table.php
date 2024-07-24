@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Team;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +17,7 @@ return new class extends Migration {
         Schema::create('ict_recommendations', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
-            $table->foreignIdFor(Team::class, 'current_team_id')->constrained('teams')->cascadeOnDelete();
+            $table->foreignIdFor(User::class, 'approver_id')->constrained('users')->cascadeOnDelete();
             $table->boolean('is_requesting_ict_approval')->default(false);
             $table->boolean('is_approved')->default(false);
             $table->timestamps();

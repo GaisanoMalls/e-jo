@@ -81,7 +81,7 @@
                                         @endif
                                         <div class="d-flex flex-column">
                                             <small class="ticket__details__user__fullname">
-                                                <span>{{ $ticket->user->profile->getFullName() }}</span>
+                                                <span>{{ $ticket->user->profile->getFullName }}</span>
                                             </small>
                                             <small class="ticket__details__user__department">
                                                 {{ $ticket->user->getBUDepartments() }} -
@@ -139,9 +139,7 @@
                             <div class="container__ticket__details__right">
                                 @livewire('staff.ticket.ticket-details', ['ticket' => $ticket])
                                 @livewire('staff.ticket.ticket-level-approval', ['ticket' => $ticket])
-                                @if ($ticket->approval_status === ApprovalStatusEnum::APPROVED)
-                                    @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
-                                @endif
+                                @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
                                 @livewire('staff.ticket.ticket-tag', ['ticket' => $ticket])
                                 @livewire('ticket-activity-logs', ['ticket' => $ticket])
                             </div>
@@ -156,6 +154,9 @@
             @endif
             @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                 @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
+            @endif
+            @if (auth()->user()->hasRole(Role::AGENT))
+                @livewire('staff.ticket.request-approval', ['ticket' => $ticket])
             @endif
             @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])
         </div>

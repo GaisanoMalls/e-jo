@@ -1,4 +1,4 @@
-@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'Edit - ' . $user->profile->getFullName()])
+@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'Edit - ' . $user->profile->getFullName])
 
 @section('manage-header-title')
     Edit Requester

@@ -80,7 +80,7 @@
                                                 @endif
                                             </div>
                                             <div class="d-flex flex-column gap-1 ms-3 w-100">
-                                                <span class="user__name">{{ $agent->profile->getFullName() }}</span>
+                                                <span class="user__name">{{ $agent->profile->getFullName }}</span>
                                                 <small>{{ $agent->email }}</small>
                                             </div>
                                         </div>

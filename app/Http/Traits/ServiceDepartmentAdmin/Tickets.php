@@ -147,7 +147,7 @@ trait Tickets
 
     public function serviceDeptAdminGetClosedTickets()
     {
-        return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->orWhereIn('approval_status', [ApprovalStatusEnum::APPROVED]))
+        return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::DISAPPROVED]))
             ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                 ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
             ->orderByDesc('created_at')

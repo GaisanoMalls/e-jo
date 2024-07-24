@@ -9,7 +9,7 @@
                     {{ auth()->user()->profile->getNameInitial() }}</div>
             @endif
             <div class="d-flex flex-column mt-3 text-center">
-                <h6 class="mb-0 user__full__name">{{ auth()->user()->profile->getFullName() }}</h6>
+                <h6 class="mb-0 user__full__name">{{ auth()->user()->profile->getFullName }}</h6>
                 <small>{{ auth()->user()->email }}</small>
                 <p class="mb-0 mt-3">{{ auth()->user()->getBUDepartments() }}</p>
                 <p class="mb-0 mt-4 user__date__joined">

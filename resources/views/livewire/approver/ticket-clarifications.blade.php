@@ -36,7 +36,7 @@
                                     @if ($clarification->user->hasRole(Role::USER))
                                         <small
                                             class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
-                                            {{ $clarification->user->profile->getFullName() }}
+                                            {{ $clarification->user->profile->getFullName }}
                                         </small>
                                     @else
                                         <small class="pe-3 text-muted" style="font-size: 12px;">Sent</small>

@@ -51,7 +51,7 @@
                                         </td>
                                         <td class="custom__table__data">
                                             @if ($ticket->agent)
-                                                <p class="mb-0">{{ $ticket->agent->profile->getFullName() }}</p>
+                                                <p class="mb-0">{{ $ticket->agent->profile->getFullName }}</p>
                                             @else
                                                 <p class="mb-0">----</p>
                                             @endif

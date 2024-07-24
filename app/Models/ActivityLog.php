@@ -33,7 +33,7 @@ class ActivityLog extends Model
     public function causerDetails(): string
     {
         return $this->user_id != auth()->user()->id
-            ? $this->causer->profile->getFullName()
+            ? $this->causer->profile->getFullName
             : 'You';
     }
 

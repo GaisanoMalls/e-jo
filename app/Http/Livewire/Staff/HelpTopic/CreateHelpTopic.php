@@ -222,7 +222,6 @@ class CreateHelpTopic extends Component
         array_splice($this->configurations, $index, 1);
     }
 
-
     public function updatedApprovalLevelSelected()
     {
         $this->getFilteredApprovers(1);
@@ -247,6 +246,7 @@ class CreateHelpTopic extends Component
     {
         $this->getFilteredApprovers(5);
     }
+
     public function updatedBuDepartment($value)
     {
         $this->getFilteredApprovers($value);
@@ -262,7 +262,7 @@ class CreateHelpTopic extends Component
             (array) $this->level5Approvers
         );
 
-        $filteredApprovers = User::with(['profile', 'roles'])
+        $filteredApprovers = User::with(['profile', 'roles', 'buDepartments'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->whereNotIn('id', $this->selectedApprovers)
             ->orderByDesc('created_at')

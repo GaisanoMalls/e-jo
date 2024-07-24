@@ -72,7 +72,7 @@
                                                 @endif
                                             </div>
                                             <div class="d-flex flex-column gap-1 ms-3 w-100">
-                                                <span class="user__name">{{ $user->profile->getFullName() }}</span>
+                                                <span class="user__name">{{ $user->profile->getFullName }}</span>
                                                 <small>{{ $user->email }}</small>
                                             </div>
                                         </div>

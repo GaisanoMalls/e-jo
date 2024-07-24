@@ -48,7 +48,7 @@
                                     @endif
                                     <div class="d-flex flex-column">
                                         <small class="ticket__details__user__fullname">
-                                            <span>{{ $ticket->user->profile->getFullName() }}</span>
+                                            <span>{{ $ticket->user->profile->getFullName }}</span>
                                         </small>
                                         <small class="ticket__details__user__department">
                                             {{ $ticket->user->getBUDepartments() }} - {{ $ticket->user->getBranches() }}

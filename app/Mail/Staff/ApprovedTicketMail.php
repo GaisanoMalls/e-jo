@@ -37,9 +37,9 @@ class ApprovedTicketMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address(auth()->user()->email, auth()->user()->profile->getFullName()),
-            replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName())],
-            subject: 'You have a new ticket approved by your Service Dept. Admin',
+            from: new Address(auth()->user()->email, auth()->user()->profile->getFullName),
+            replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
+            subject: 'You have a new ticket',
         );
     }
 
@@ -56,9 +56,9 @@ class ApprovedTicketMail extends Mailable implements ShouldQueue
                 'ticketNumber' => "Ticket #{$this->ticket->ticket_number}",
                 'ticketSubject' => $this->ticket->subject,
                 'ticketDescription' => $this->ticket->description,
-                'requesterFullName' => $this->ticket->user->profile->getFullName(),
+                'requesterFullName' => $this->ticket->user->profile->getFullName,
                 'requesterOtherInfo' => "{$this->ticket->user->getBUDepartments()} - {$this->ticket->user->getBranches()}",
-                'approver' => auth()->user()->profile->getFullName(),
+                'approver' => auth()->user()->profile->getFullName,
                 'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/view",
             ]
         );

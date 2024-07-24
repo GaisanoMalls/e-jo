@@ -29,7 +29,7 @@
                                     @if (!$reply->user->hasRole(Role::USER))
                                         <small
                                             class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
-                                            {{ $reply->user->profile->getFullName() }}
+                                            {{ $reply->user->profile->getFullName }}
                                             @if ($reply->user->hasRole(Role::SYSTEM_ADMIN))
                                                 <i class="bi bi-person-fill-gear text-muted ms-1"
                                                     title="System Admin"></i>

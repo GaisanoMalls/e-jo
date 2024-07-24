@@ -87,7 +87,7 @@ class SendClarification extends Component
                 // * CONSTRUCT A LOG DESCRIPTION
                 $logDescription = ($this->ticket->clarifications()->where('user_id', '!=', auth()->user()->id)->count() === 0)
                     ? 'sent a clarification'
-                    : 'replied a clarification to ' . $requester->user->profile->getFullName();
+                    : 'replied a clarification to ' . $requester->user->profile->getFullName;
 
                 // Retrieve the service department administrator responsible for approving the ticket. For notification use only
                 $serviceDepartmentAdmin = User::with('profile')->where('id', auth()->user()->id)->role(Role::SERVICE_DEPARTMENT_ADMIN)->first();
@@ -97,7 +97,7 @@ class SendClarification extends Component
                     new AppNotification(
                         ticket: $this->ticket,
                         title: "Clarification for ticket {$this->ticket->ticket_number}",
-                        message: "Ticket clarification sent by {$serviceDepartmentAdmin->profile->getFullName()} ",
+                        message: "Ticket clarification sent by {$serviceDepartmentAdmin->profile->getFullName} ",
                         forClarification: true
                     )
                 );

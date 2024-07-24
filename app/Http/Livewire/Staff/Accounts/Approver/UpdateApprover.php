@@ -129,7 +129,7 @@ class UpdateApprover extends Component
                     }
                 }
 
-                noty()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName()}.");
+                noty()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName}.");
             });
 
         } catch (Exception $e) {

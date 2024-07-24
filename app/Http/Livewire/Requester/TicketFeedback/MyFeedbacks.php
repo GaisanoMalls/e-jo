@@ -46,7 +46,7 @@ class MyFeedbacks extends Component
     {
         $this->ticketNumber = $feedback->ticket->ticket_number;
         $this->ticket = $feedback->ticket->id;
-        $this->fullName = auth()->user()->profile->getFullName();
+        $this->fullName = auth()->user()->profile->getFullName;
         $this->email = auth()->user()->email;
 
         $this->feedbackId = $feedback->id;

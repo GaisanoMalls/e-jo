@@ -1,4 +1,4 @@
-@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'Edit - ' . $agent->profile->getFullName()])
+@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'Edit - ' . $agent->profile->getFullName])
 
 @section('manage-header-title')
     Edit Agent

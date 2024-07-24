@@ -45,7 +45,7 @@ class ApproverList extends Component
     public function deleteApprover(User $approver)
     {
         $this->approverDeleteId = $approver->id;
-        $this->approverFullName = $approver->profile->getFullName();
+        $this->approverFullName = $approver->profile->getFullName;
     }
 
     public function delete()

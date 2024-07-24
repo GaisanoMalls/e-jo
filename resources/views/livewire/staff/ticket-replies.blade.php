@@ -48,7 +48,7 @@
                                                 {{ $reply->quotedReply->user->profile->getNameInitial() }}</div>
                                         @endif
                                         <small
-                                            style="font-size: 0.7rem;">{{ $reply->quotedReply->user->profile->getFullName() }}</small>
+                                            style="font-size: 0.7rem;">{{ $reply->quotedReply->user->profile->getFullName }}</small>
                                     </div>
                                     {!! Str::limit($reply->quotedReply?->description, 200, '...') !!}
                                     <a href="#reply-{{ $reply->quotedReply->id }}" class="position-absolute"
@@ -76,7 +76,7 @@
                                         @if ($reply->user->id !== auth()->user()->id)
                                             <small
                                                 class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
-                                                {{ $reply->user->profile->getFullName() }}
+                                                {{ $reply->user->profile->getFullName }}
                                                 @if ($reply->user->hasRole(Role::SYSTEM_ADMIN))
                                                     <i class="bi bi-person-fill-gear text-muted ms-1"
                                                         title="System Admin"></i>

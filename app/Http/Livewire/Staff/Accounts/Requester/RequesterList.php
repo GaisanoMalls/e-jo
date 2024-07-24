@@ -23,7 +23,7 @@ class RequesterList extends Component
     public function deleteRequester(User $requester)
     {
         $this->requesterDeleteId = $requester->id;
-        $this->requesterFullName = $requester->profile->getFullName();
+        $this->requesterFullName = $requester->profile->getFullName;
         $this->dispatchBrowserEvent('show-delete-requester-modal');
     }
 

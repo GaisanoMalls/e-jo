@@ -77,7 +77,7 @@
                     <small
                         class="position-relative ticket__details__info {{ $ticket->agent_id != null ? '' : 'not__set' }}">
                         <i class="fa-solid fa-user-check me-1 text-muted" style="font-size: 11px;"></i>
-                        {{ $ticket->agent_id != null ? $ticket->agent->profile->getFullName() : '' }}
+                        {{ $ticket->agent_id != null ? $ticket->agent->profile->getFullName : '' }}
                         @if (
                             $ticket->agent_id &&
                                 auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
@@ -157,11 +157,8 @@
             })
 
             function percentageToDegrees(percentage) {
-
                 return percentage / 100 * 360
-
             }
-
         });
     </script>
 @endpush

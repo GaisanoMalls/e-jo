@@ -57,7 +57,7 @@
                                             <div class="d-flex position-relative">
                                                 <img class="costing__approver__picture rounded-circle"
                                                     src="https://avatars.githubusercontent.com/u/63698615?s=400&u=49142410ee5c191a78412e36511c8b927fc6b1b1&v=4"
-                                                    data-tooltip="{{ $costingApprover->profile->getFullName() }}"
+                                                    data-tooltip="{{ $costingApprover->profile->getFullName }}"
                                                     data-tooltip-position="top" data-tooltip-font-size="11px">
                                                 @if (
                                                     $this->approvedByCostingApprover1($costingApprover, $ticket) ||
@@ -77,7 +77,7 @@
                                                 <small
                                                     class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial"
                                                     style="background-color: {{ $costingApprover->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) ? '#9DA85C' : '#3B4053' }}"
-                                                    data-tooltip="{{ $costingApprover->profile->getFullName() }}  {{ $this->isDoneCostingApproval1($ticket) ? '(Approved)' : '(For approval)' }}"
+                                                    data-tooltip="{{ $costingApprover->profile->getFullName }}  {{ $this->isDoneCostingApproval1($ticket) ? '(Approved)' : '(For approval)' }}"
                                                     data-tooltip-position="top" data-tooltip-font-size="11px">
                                                     {{ $costingApprover->profile->getNameInitial() }}
                                                 </small>

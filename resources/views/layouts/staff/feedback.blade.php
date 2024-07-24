@@ -75,7 +75,7 @@
                                                             <div class="d-flex flex-column">
                                                                 <small class="fw-semibold ticket__details__user__fullname"
                                                                     style="font-size: 0.8rem;">
-                                                                    {{ $feedback->ticket->user->profile->getFullName() }}
+                                                                    {{ $feedback->ticket->user->profile->getFullName }}
                                                                 </small>
                                                                 <small class="ticket__details__user__department">
                                                                     {{ $feedback->ticket->user->getBUDepartments() }} -
@@ -160,7 +160,7 @@
                                                                     <small
                                                                         class="fw-semibold ticket__details__user__fullname"
                                                                         style="font-size: 0.8rem;">
-                                                                        {{ $feedback->ticket->agent->profile->getFullName() }}
+                                                                        {{ $feedback->ticket->agent->profile->getFullName }}
                                                                     </small>
                                                                     <small class="ticket__details__user__department">
                                                                         {{ $feedback->ticket->agent->getBUDepartments() }}

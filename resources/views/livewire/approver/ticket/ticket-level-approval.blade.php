@@ -43,7 +43,7 @@
                                     </div>
                                 @endif
                                 <small class="approver__name">
-                                    {{ $level1Approver->profile->getFullName() }}
+                                    {{ $level1Approver->profile->getFullName }}
                                     @if ($level1Approver->id == auth()->user()->id)
                                         <span class="text-muted">(You)</span>
                                     @endif
@@ -115,7 +115,7 @@
                                 @endif
                                 <small
                                     class="approver__name {{ $this->isTicketApproval1Level2Approved() ? 'text-dark' : '' }}">
-                                    {{ $level2Approver->profile->getFullName() }}
+                                    {{ $level2Approver->profile->getFullName }}
                                     @if ($level2Approver->id == auth()->user()->id)
                                         <span class="text-muted">(You)</span>
                                     @endif

@@ -79,7 +79,7 @@
                                             </div>
                                             <div class="d-flex flex-column gap-1 ms-3 w-100">
                                                 <span
-                                                    class="user__name">{{ $serviceDepartmentAdmin->profile->getFullName() }}</span>
+                                                    class="user__name">{{ $serviceDepartmentAdmin->profile->getFullName }}</span>
                                                 <small>{{ $serviceDepartmentAdmin->email }}</small>
                                             </div>
                                         </div>

@@ -87,7 +87,7 @@ class SendClarification extends Component
                 // Make a log message.
                 $logDescription = $this->ticket->clarifications()->where('user_id', '!=', auth()->user()->id)->count() == 0
                     ? 'sent a clarification'
-                    : 'replied a clarification to ' . $requester->user->profile->getFullName();
+                    : 'replied a clarification to ' . $requester->user->profile->getFullName;
 
                 ActivityLog::make($this->ticket->id, $logDescription);
                 // Mail::to($ticket->user)->send(new FromApproverClarificationMail($ticket, $request->description));

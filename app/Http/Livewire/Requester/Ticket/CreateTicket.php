@@ -165,7 +165,7 @@ class CreateTicket extends Component
                         new AppNotification(
                             ticket: $ticket,
                             title: "New Ticket {$ticket->ticket_number}",
-                            message: "{$ticket->user->profile->getFullName()} created a ticket"
+                            message: "{$ticket->user->profile->getFullName} created a ticket"
                         )
                     );
                     Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
@@ -188,7 +188,7 @@ class CreateTicket extends Component
                                 'is_enabled' => $field['is_enabled']
                             ]);
 
-                            if ($field['type'] === 'file') {
+                            if ($field['type'] === 'file' && !is_null($field['value'])) {
                                 foreach ($field['value'] as $uploadedCustomFile) {
                                     $fileName = $uploadedCustomFile->getClientOriginalName();
                                     $customFileAttachment = Storage::putFileAs("public/tiket/{$ticket->ticket_number}/custom_form_file", $uploadedCustomFile, $fileName);

@@ -102,7 +102,7 @@
                                                     <div class="d-flex align-items-center text-start td__content">
                                                         <span>
                                                             @if ($ticket->agent)
-                                                                {{ $ticket->agent->profile->getFullName() }}
+                                                                {{ $ticket->agent->profile->getFullName }}
                                                             @else
                                                                 ----
                                                             @endif

@@ -49,7 +49,7 @@
                                                 </div>
                                             @endif
                                             <small class="approver__name">
-                                                {{ $approver->profile->getFullName() }}
+                                                {{ $approver->profile->getFullName }}
                                                 @if ($approver->id == auth()->user()->id)
                                                     <span class="text-muted">(You)</span>
                                                 @endif

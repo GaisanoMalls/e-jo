@@ -30,12 +30,14 @@ class Profile extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getFullName(): string
+    public function getFullName(): Attribute
     {
         $middleInitial = $this->middle_name ? $this->middle_name[0] . '.' : '';
         $suffix = $this->suffix ?? '';
 
-        return "$this->first_name $middleInitial $this->last_name $suffix";
+        return Attribute::make(
+            get: fn() => "$this->first_name $middleInitial $this->last_name $suffix"
+        );
     }
 
     public function getNameInitial(): string

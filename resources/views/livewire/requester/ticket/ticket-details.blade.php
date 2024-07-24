@@ -72,7 +72,7 @@
                     <small class="ticket__details__info {{ $ticket->agent_id !== null ? '' : 'not__set' }}">
                         <i class="fa-solid fa-user-check me-1 text-muted" style="font-size: 11px;"></i>
                         @if ($ticket->agent)
-                            {{ $ticket->agent->profile->getFullName() }}
+                            {{ $ticket->agent->profile->getFullName }}
                         @else
                             No agent
                         @endif

@@ -1,4 +1,4 @@
-@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'Details - ' . $approver->profile->getFullName()])
+@extends('layouts.staff.system_admin.manage.manage_main', ['title' => 'Details - ' . $approver->profile->getFullName])
 
 @section('manage-header-title')
     Approver Details

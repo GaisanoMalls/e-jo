@@ -43,7 +43,7 @@
                                     @endif
                                     <div class="d-flex flex-column">
                                         <small class="ticket__details__user__fullname">
-                                            <span>{{ $ticket->user->profile->getFullName() }}</span>
+                                            <span>{{ $ticket->user->profile->getFullName }}</span>
                                         </small>
                                         <small class="ticket__details__user__department">
                                             {{ $ticket->user->getBUDepartments() }} - {{ $ticket->user->getBranches() }}
@@ -56,7 +56,7 @@
                                 </small>
                             </div>
                             <div class="ticket__details__card__body">
-                                @if ($ticket->helpTopic->has('form'))
+                                @if ($ticket->helpTopic->form)
                                     @livewire('requester.ticket.ticket-custom-form', ['ticket' => $ticket])
                                 @endif
                                 <div class="ticket__description">{!! $ticket->description !!}</div>

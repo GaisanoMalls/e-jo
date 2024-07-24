@@ -32,7 +32,7 @@
                                     @if (!$clarification->user->hasRole(Role::USER))
                                         <small
                                             class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
-                                            {{ $clarification->user->profile->getFullName() }}
+                                            {{ $clarification->user->profile->getFullName }}
                                             {{ $clarification->user_id === auth()->user()->id ? '(me)' : '' }}
                                         </small>
                                     @else
