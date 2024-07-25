@@ -61,7 +61,8 @@ trait Tickets
         return Ticket::where([
             ['status_id', Status::APPROVED],
             ['approval_status', ApprovalStatusEnum::APPROVED],
-        ])->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+        ])
+            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
             ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
             ->orderByDesc('created_at')
             ->get();

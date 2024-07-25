@@ -10,7 +10,7 @@ use Livewire\Component;
 class TicketActions extends Component
 {
     public Ticket $ticket;
-    public IctRecommendation $ictRecommendationApprover;
+    public ?IctRecommendation $ictRecommendationApprover = null;
 
     protected $listeners = ['loadTicketActions' => '$refresh'];
 

@@ -39,7 +39,7 @@ class TicketLevelApproval extends Component
         })->get();
     }
 
-    public function isNoMoreStraightForwardApproval()
+    public function isApprovalApproved()
     {
         return TicketApproval::where([
             ['ticket_id', $this->ticket->id],

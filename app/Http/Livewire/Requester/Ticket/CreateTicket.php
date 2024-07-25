@@ -131,8 +131,6 @@ class CreateTicket extends Component
                     'team_id' => $this->team != 'undefined' ? $this->team : null
                 ]);
 
-
-
                 if (!empty($this->fileAttachments)) {
                     foreach ($this->fileAttachments as $uploadedFile) {
                         $fileName = $uploadedFile->getClientOriginalName();

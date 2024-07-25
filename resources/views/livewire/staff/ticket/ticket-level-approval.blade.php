@@ -18,7 +18,7 @@
                                 <small class="level__number__label">
                                     Level {{ $level }}
                                 </small>
-                                @if ($this->islevelApproved($level) && $this->isNoMoreStraightForwardApproval())
+                                @if ($this->islevelApproved($level) && $this->isApprovalApproved())
                                     <small class="fw-bold" style="color: #C73C3C; font-size: 0.75rem;">Approved</small>
                                 @endif
                             </div>
@@ -31,7 +31,6 @@
                                         <div class="d-flex align-items-center" style="padding: 4px 0 4px 0;">
                                             @if ($approver->profile->picture)
                                                 <img src="{{ Storage::url($approver->profile->picture) }}"
-                                                    alt=""
                                                     class="image-fluid level__approval__approver__picture">
                                             @else
                                                 <div class="level__approval__approver__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
@@ -48,7 +47,7 @@
                                                     <span class="text-muted">(You)</span>
                                                 @endif
                                             </small>
-                                            @if ($ticketApproval->helpTopicApprover->user_id === $approver->id && $ticketApproval->is_approved)
+                                            @if ($ticketApproval->helpTopicApprover->user_id === $approver->id && $this->isApprovalApproved())
                                                 <i class="bi bi-check2 ms-2"></i>
                                             @endif
                                         </div>

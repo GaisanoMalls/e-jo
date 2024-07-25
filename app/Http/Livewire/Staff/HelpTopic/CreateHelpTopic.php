@@ -191,7 +191,7 @@ class CreateHelpTopic extends Component
         // Check if BU department and level of approval is selected
         if ($this->selectedBuDepartment && $this->approvalLevelSelected) {
             // Get the selected BU Department name
-            $buDepartmentName = collect($this->buDepartments)->firstWhere('id', $this->selectedBuDepartment)['name'];
+            $buDepartmentName = collect($this->queryBUDepartments())->firstWhere('id', $this->selectedBuDepartment)['name'];
             // Add to the configurations array
             $this->configurations[] = [
                 'bu_department_id' => $this->selectedBuDepartment,

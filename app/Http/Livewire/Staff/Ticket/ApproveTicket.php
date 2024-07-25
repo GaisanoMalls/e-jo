@@ -70,13 +70,12 @@ class ApproveTicket extends Component
                             ->first();
 
                         // Update into approved
-                        TicketApproval::where('ticket_id', $this->ticket->id)
+                        $ticketApproval = TicketApproval::where('ticket_id', $this->ticket->id)
                             ->withWhereHas('helpTopicApprover', function ($approver) {
                                 $approver->where('help_topic_id', $this->ticket->help_topic_id)
                                     ->where('user_id', auth()->user()->id);
-                            })->update([
-                                    'is_approved' => true
-                                ]);
+                            })->get();
+                        $ticketApproval->update(['is_approved' => true]);
 
                         // Delete the ticket notification of the currently logged in service department admin.
                         auth()->user()->notifications->each(

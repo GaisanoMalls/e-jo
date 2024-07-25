@@ -25,7 +25,7 @@
                                     <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
                                     The approval for the recommendation is requested.
                                 </span>
-                                {{ $ictRecommendationApprover->approver->profile->getFullName }}
+                                {{ $ictRecommendationApprover?->approver->profile->getFullName }}
                             @else
                                 <button class="btn d-flex align-items-center justify-content-center"
                                     data-bs-toggle="modal" data-bs-target="#requestForApprovalModal"
