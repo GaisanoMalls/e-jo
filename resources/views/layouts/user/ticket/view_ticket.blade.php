@@ -100,7 +100,7 @@
                 <div class="col-md-5">
                     <div class="container__ticket__details__right">
                         @livewire('requester.ticket.ticket-details', ['ticket' => $ticket])
-                        @livewire('requester.ticket.ticket-level-approval', ['ticket' => $ticket])
+                        {{-- @livewire('requester.ticket.ticket-level-approval', ['ticket' => $ticket]) --}}
                         @livewire('requester.ticket.assigned-agent', ['ticket' => $ticket])
                         @livewire('requester.ticket.ticket-logs', ['ticket' => $ticket])
                     </div>

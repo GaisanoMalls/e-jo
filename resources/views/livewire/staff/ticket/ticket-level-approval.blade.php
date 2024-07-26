@@ -20,6 +20,8 @@
                                 </small>
                                 @if ($this->islevelApproved($level) && $this->isApprovalApproved())
                                     <small class="fw-bold" style="color: #C73C3C; font-size: 0.75rem;">Approved</small>
+                                @else
+                                    <small class="fw-bold" style="color: #C73C3C; font-size: 0.75rem;">Pending</small>
                                 @endif
                             </div>
                             @foreach ($this->fetchedApprovers($level) as $approver)

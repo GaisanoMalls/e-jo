@@ -142,21 +142,15 @@ class CreateTicket extends Component
                 $approvers = User::withWhereHas('helpTopicApprovals', function ($query) use ($ticket) {
                     $query->withWhereHas('configuration', function ($config) use ($ticket) {
                         $config->with('approvers')
-                            ->where('help_topic_id', $ticket->help_topic_id)
                             ->where('bu_department_id', $ticket->user->buDepartments->pluck('id')->first());
                     });
                 })->get();
 
-                $helpTopicApprovers = HelpTopicApprover::where('help_topic_id', $ticket->help_topic_id)->get();
-                $approvers->each(function ($approver) use ($ticket, $helpTopicApprovers) {
-                    $helpTopicApprovers->each(function ($helpTopicApprover) use ($approver, $ticket) {
-                        if ($approver->id === $helpTopicApprover->user_id) {
-                            TicketApproval::create([
-                                'ticket_id' => $ticket->id,
-                                'help_topic_approver_id' => $helpTopicApprover->id,
-                            ]);
-                        }
-                    });
+                $approvers->each(function ($approver) use ($ticket) {
+                    TicketApproval::create([
+                        'ticket_id' => $ticket->id,
+                        'help_topic_approver_id' => $approver->id,
+                    ]);
 
                     Notification::send(
                         $approver,
