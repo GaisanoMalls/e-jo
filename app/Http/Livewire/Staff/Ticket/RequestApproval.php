@@ -3,12 +3,17 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\AppErrorLog;
+use App\Mail\Staff\RecommendationRequestMail;
 use App\Models\IctRecommendation;
 use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Log;
 
@@ -42,13 +47,30 @@ class RequestApproval extends Component
         $this->validate();
 
         try {
-            IctRecommendation::create([
-                'ticket_id' => $this->ticket->id,
-                'approver_id' => $this->recommendationApprover,
-                'is_requesting_ict_approval' => true
-            ]);
-            $this->actionOnSubmit();
+            DB::transaction(function () {
+                IctRecommendation::create([
+                    'ticket_id' => $this->ticket->id,
+                    'approver_id' => $this->recommendationApprover,
+                    'is_requesting_ict_approval' => true
+                ]);
 
+                $serviceDeptAdmin = User::withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))->firstOrFail();
+                $agentRequester = User::withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
+                    ->where('id', auth()->user()->id)
+                    ->first();
+
+                Mail::to($serviceDeptAdmin)->send(new RecommendationRequestMail(ticket: $this->ticket, recipient: $serviceDeptAdmin, agentRequester: $agentRequester));
+                Notification::send(
+                    $serviceDeptAdmin,
+                    new AppNotification(
+                        ticket: $this->ticket,
+                        title: "Request for recommendation approval ({$this->ticket->ticket_number}})",
+                        message: "You have a new recommendation approval"
+                    )
+                );
+
+                $this->actionOnSubmit();
+            });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
             Log::error('Error while sending recommendation request.', [$e->getLine()]);

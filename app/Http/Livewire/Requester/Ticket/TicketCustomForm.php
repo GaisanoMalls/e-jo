@@ -27,7 +27,7 @@ class TicketCustomForm extends Component
     public ?int $deleteDocumentFileId = null;
     public $customFormFieldFiles = [];
 
-    protected $listeners = ['reMount' => 'mount'];
+    protected $listeners = ['remountRequesterCustomForm' => 'mount'];
 
     public function mount()
     {
@@ -102,7 +102,7 @@ class TicketCustomForm extends Component
                     }
                 }
                 $this->isEditing = false;
-                $this->emit('reMount');
+                $this->emit('remountRequesterCustomForm');
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
@@ -138,7 +138,7 @@ class TicketCustomForm extends Component
             if ($file->file_attachment && Storage::exists($file->file_attachment)) {
                 $file->delete();
                 Storage::delete($file->file_attachment);
-                $this->emitSelf('reMount'); // Reload the file attachments
+                $this->emitSelf('remountRequesterCustomForm'); // Reload the file attachments
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
