@@ -147,10 +147,13 @@ class CreateTicket extends Component
                 })->get();
 
                 $approvers->each(function ($approver) use ($ticket) {
-                    TicketApproval::create([
-                        'ticket_id' => $ticket->id,
-                        'help_topic_approver_id' => $approver->id,
-                    ]);
+                    $approver->helpTopicApprovals->each(function ($helpTopicApproval) use ($ticket, $approver) {
+                        TicketApproval::create([
+                            'ticket_id' => $ticket->id,
+                            'help_topic_approver_id' => $helpTopicApproval->id,
+                        ]);
+
+                    });
 
                     Notification::send(
                         $approver,

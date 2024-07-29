@@ -48,6 +48,8 @@ class NotificationList extends Component
     public function deleteNotification($notificationId)
     {
         auth()->user()->notifications->find($notificationId)->delete();
+        $this->emit('staffLoadNotificationList');
+        $this->emit('staffLoadUnreadNotificationCount');
         $this->emit('staffLoadNotificationCanvas');
         $this->emit('staffLoadNavlinkNotification');
     }

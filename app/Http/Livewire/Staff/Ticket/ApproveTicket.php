@@ -81,9 +81,15 @@ class ApproveTicket extends Component
                             fn($notification) => $notification->data['ticket']['id'] === $this->ticket->id ? $notification->delete() : null
                         );
 
-                        $agents = User::with('profile')->withWhereHas('serviceDepartments', function ($serviceDepartment) {
-                            $serviceDepartment->where('service_departments.id', $this->ticket->service_department_id);
-                        })->role(Role::AGENT)->get();
+                        $agents = User::with('profile')
+                            ->withWhereHas('teams', function ($team) {
+                                $team->whereIn('teams.id', $this->ticket->teams->pluck('id')->toArray());
+                            })
+                            ->withWhereHas('serviceDepartments', function ($serviceDepartment) {
+                                $serviceDepartment->where('service_departments.id', $this->ticket->service_department_id);
+                            })
+                            ->role(Role::AGENT)
+                            ->get();
 
                         // Notify the agents through app and email.
                         $agents->each(function ($agent) {
