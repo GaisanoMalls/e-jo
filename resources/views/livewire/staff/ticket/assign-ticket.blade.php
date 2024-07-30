@@ -130,7 +130,8 @@
 
                             agentOption.push({
                                 label: `${agent.profile.first_name} ${firstLetter} ${agent.profile.last_name}`,
-                                value: agent.id
+                                value: agent.id,
+                                description: `${agent.teams.map(team => team.name).join(', ')}`
                             });
                         });
                         agentSelect.setOptions(agentOption);
