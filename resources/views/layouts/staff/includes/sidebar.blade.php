@@ -19,7 +19,7 @@
                         Dashboard
                     </a>
                 </li>
-                @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+                {{-- @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                     <li class="mb-1">
                         <a href="{{ route('staff.manual_ticket_assign.to_assign') }}"
                             class="btn d-flex gap-3 btn-block align-items-center w-100 border-0 sidebar__buttons -bottom-3
@@ -31,7 +31,7 @@
                             Ticket Assigning
                         </a>
                     </li>
-                @endif
+                @endif --}}
                 <li class="mb-1">
                     @livewire('staff.collapse-ticket-status')
                 </li>
