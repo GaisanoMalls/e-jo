@@ -23,6 +23,7 @@ class ClaimTicket extends Component
     {
         $this->emit('loadTicketLogs');
         $this->emit('loadClaimTicket');
+        $this->emit('loadTicketActions');
         $this->emit('loadTicketDetails');
         $this->emit('loadLevelOfApproval');
         $this->emit('loadBackButtonHeader');

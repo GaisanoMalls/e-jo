@@ -1,9 +1,63 @@
 @php
+    use App\Models\Role;
     use App\Enums\FieldTypesEnum as FieldType;
 @endphp
 
 <div class="mb-4">
-    <div wire:init="loadCustomFormFields" class="row">
+    @if ($this->isRecommendationRequested())
+        @if ($this->isTicketIctRecommendationIsApproved())
+            <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
+                style="font-size: 13px; background-color: #dffdef;">
+                <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
+                The recommendation for this ticket has been approved
+            </div>
+        @else
+            @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+                <div class="mb-4 d-flex flex-wrap gap-2 border-0 flex-row rounded-3 align-items-center justify-content-between p-3"
+                    style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;">
+                    <span class="border-0 d-flex align-items-center" style="font-size: 0.9rem;">
+                        <span class="me-2">
+                            <div class="d-flex align-items-center">
+                                @if ($ictRecommendationAgent->requestedByAgent->profile->picture)
+                                    <img src="{{ Storage::url($ictRecommendationAgent->requestedByAgent->profile->picture) }}"
+                                        class="image-fluid rounded-circle"
+                                        style="height: 26px !important; width: 26px !important;">
+                                @else
+                                    <div class="d-flex align-items-center p-2 me-1 justify-content-center text-white rounded-circle"
+                                        style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
+                                        {{ $ictRecommendationAgent->requestedByAgent->profile->getNameInitial() }}
+                                    </div>
+                                @endif
+                                <strong class="text-muted">
+                                    {{ $ictRecommendationAgent->requestedByAgent->profile->getFullName }}
+                                </strong>
+                            </div>
+                        </span>
+                        is requesting for recommendation
+                        approval
+                    </span>
+                    <button class="btn d-flex align-items-center justify-content-center"
+                        wire:click="approveIctRecommendation"
+                        style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #FFF; font-weight: 500; background-color: #D32839;">
+                        <span wire:loading wire:target="approveIctRecommendation"
+                            class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                        </span>
+                        <span wire:loading.remove wire:target="approveIctRecommendation">Approve</span>
+                        <span wire:loading wire:target="approveIctRecommendation">Processing...</span>
+                    </button>
+                </div>
+            @endif
+
+            @if (auth()->user()->hasRole(Role::AGENT))
+                <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
+                    style="font-size: 13px; background-color: #cff4fc; color: #055160;">
+                    <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
+                    The ticket's recommendation approval is pending
+                </div>
+            @endif
+        @endif
+    @endif
+    <div class="row">
         @if ($customFormFields->isNotEmpty())
             <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
                 <h6 class="mb-0 custom__form__name">{{ $ticket->helpTopic->form->name }}</h6>
@@ -19,7 +73,7 @@
                             </label>
                             <input wire:model="customFormFields.{{ $key }}.value" type="text"
                                 id="field-{{ $key }}" class="form-control input__field"
-                                placeholder="Enter {{ Str::lower($field['label']) }}" readonly>
+                                placeholder="Enter {{ Str::lower($field['label']) }}" readonly disabled>
                             @error('customcustomFormFields.{{ $key }}.value')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -36,7 +90,7 @@
                                 {{ Str::title($field['label']) }}
                             </label>
                             <textarea wire:model="customFormFields.{{ $key }}.value" id="field-{{ $key }}"
-                                class="form-control input__field" placeholder="Enter {{ Str::lower($field['label']) }}" readonly>
+                                class="form-control input__field" placeholder="Enter {{ Str::lower($field['label']) }}" readonly disabled>
                                                 </textarea>
                             @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
@@ -55,7 +109,7 @@
                             </label>
                             <input wire:model="customFormFields.{{ $key }}.value"
                                 id="field-{{ $key }}" type="number" class="form-control input__field"
-                                placeholder="Enter {{ Str::lower($field['label']) }}" readonly>
+                                placeholder="Enter {{ Str::lower($field['label']) }}" readonly disabled>
                             </input>
                             @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
@@ -74,7 +128,7 @@
                             </label>
                             <input wire:model="customFormFields.{{ $key }}.value"
                                 id="field-{{ $key }}" type="date" class="form-control input__field"
-                                placeholder="Enter {{ Str::lower($field['label']) }}" readonly>
+                                placeholder="Enter {{ Str::lower($field['label']) }}" readonly disabled>
                             </input>
                             @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
@@ -93,7 +147,7 @@
                             </label>
                             <input wire:model="customFormFields.{{ $key }}.value"
                                 id="field-{{ $key }}" type="time" class="form-control input__field"
-                                placeholder="Enter {{ Str::lower($field['label']) }}" readonly>
+                                placeholder="Enter {{ Str::lower($field['label']) }}" readonly disabled>
                             </input>
                             @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
@@ -112,8 +166,8 @@
                             </label>
                             <input wire:model="customFormFields.{{ $key }}.value"
                                 id="field-{{ $key }}" type="number" step=".01"
-                                class="form-control input__field"
-                                placeholder="Enter {{ Str::lower($field['label']) }}">
+                                class="form-control input__field" placeholder="Enter {{ Str::lower($field['label']) }}"
+                                readonly disabled>
                             </input>
                             @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
@@ -125,15 +179,6 @@
                     @endif
                 @endif
             @endforeach
-        @else
-            <div class="d-flex justify-content-center">
-                <div class="d-flex gap-2 flex-column align-items-center justify-content-center">
-                    <div class="spinner-border text-success" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <small>Loading...</small>
-                </div>
-            </div>
         @endif
     </div>
     @if ($customFormImageFiles->isNotEmpty() || $customFormDocumentFiles->isNotEmpty())

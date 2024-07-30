@@ -1,5 +1,6 @@
 @php
     use App\Enums\FieldTypesEnum as FieldType;
+    use App\Enums\ApprovalStatusEnum as Status;
 @endphp
 
 <div class="mb-4">
@@ -7,24 +8,26 @@
         @if ($customFormFields->isNotEmpty())
             <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-2">
                 <h6 class="mb-0 custom__form__name">{{ $ticket->helpTopic->form->name }}</h6>
-                <div class="d-flex align-items-center gap-2">
-                    <button wire:click="editCustomForm({{ $ticket->helpTopic->form->id }})"
-                        class="btn d-flex align-items-center justify-content-center gap-2 btn-sm btn__edit__custom__form"
-                        @style(['color: red' => $isEditing])>
-                        @if ($isEditing)
-                            Cancel
-                        @else
-                            Edit
-                        @endif
-                    </button>
-                    @if ($isEditing)
-                        <button wire:click="updateCustomForm({{ $ticket->helpTopic->form->id }})"
+                @if ($ticket->approval_status === Status::FOR_APPROVAL)
+                    <div class="d-flex align-items-center gap-2">
+                        <button wire:click="editCustomForm({{ $ticket->helpTopic->form->id }})"
                             class="btn d-flex align-items-center justify-content-center gap-2 btn-sm btn__edit__custom__form"
-                            @style(['background-color: #d32839' => $isEditing, 'color: #FFFFFF' => $isEditing])>
-                            Update
+                            @style(['color: red' => $isEditing])>
+                            @if ($isEditing)
+                                Cancel
+                            @else
+                                Edit
+                            @endif
                         </button>
-                    @endif
-                </div>
+                        @if ($isEditing)
+                            <button wire:click="updateCustomForm({{ $ticket->helpTopic->form->id }})"
+                                class="btn d-flex align-items-center justify-content-center gap-2 btn-sm btn__edit__custom__form"
+                                @style(['background-color: #d32839' => $isEditing, 'color: #FFFFFF' => $isEditing])>
+                                Update
+                            </button>
+                        @endif
+                    </div>
+                @endif
             </div>
             @foreach ($customFormFields as $key => $field)
                 {{-- Display those fields that are set to enabled. --}}

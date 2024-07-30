@@ -13,6 +13,7 @@ class IctRecommendation extends Model
     protected $fillable = [
         'ticket_id',
         'approver_id',
+        'requested_by_agent_id',
         'is_requesting_ict_approval',
         'is_approved'
     ];
@@ -20,6 +21,11 @@ class IctRecommendation extends Model
     public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);
+    }
+
+    public function requestedByAgent(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'requested_by_agent_id')->role(Role::AGENT);
     }
 
     public function approver(): BelongsTo

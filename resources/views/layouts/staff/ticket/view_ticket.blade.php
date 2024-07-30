@@ -157,7 +157,7 @@
                     auth()->user()->hasRole(Role::AGENT))
                 @livewire('staff.ticket.add-costing', ['ticket' => $ticket])
             @endif
-            @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+            @if (auth()->user()->hasRole([Role::SERVICE_DEPARTMENT_ADMIN, Role::AGENT]))
                 @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
             @endif
             @if (auth()->user()->hasRole(Role::AGENT))

@@ -48,28 +48,32 @@ class RequestApproval extends Component
 
         try {
             DB::transaction(function () {
-                IctRecommendation::create([
-                    'ticket_id' => $this->ticket->id,
-                    'approver_id' => $this->recommendationApprover,
-                    'is_requesting_ict_approval' => true
-                ]);
-
-                $serviceDeptAdmin = User::withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))->firstOrFail();
-                $agentRequester = User::withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
-                    ->where('id', auth()->user()->id)
+                $serviceDeptAdmin = User::findOrFail($this->recommendationApprover)
+                    ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
                     ->first();
+                $agentRequester = User::findOrFail(auth()->user()->id)
+                    ->withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
+                    ->first('id');
 
-                Mail::to($serviceDeptAdmin)->send(new RecommendationRequestMail(ticket: $this->ticket, recipient: $serviceDeptAdmin, agentRequester: $agentRequester));
-                Notification::send(
-                    $serviceDeptAdmin,
-                    new AppNotification(
-                        ticket: $this->ticket,
-                        title: "Request for recommendation approval ({$this->ticket->ticket_number}})",
-                        message: "You have a new recommendation approval"
-                    )
-                );
+                if ($serviceDeptAdmin && $agentRequester) {
+                    IctRecommendation::create([
+                        'ticket_id' => $this->ticket->id,
+                        'approver_id' => $serviceDeptAdmin->id,
+                        'requested_by_agent_id' => $agentRequester->id,
+                        'is_requesting_ict_approval' => true
+                    ]);
 
-                $this->actionOnSubmit();
+                    // Mail::to($serviceDeptAdmin)->send(new RecommendationRequestMail(ticket: $this->ticket, recipient: $serviceDeptAdmin, agentRequester: $agentRequester));
+                    Notification::send(
+                        $serviceDeptAdmin,
+                        new AppNotification(
+                            ticket: $this->ticket,
+                            title: "Request for recommendation approval ({$this->ticket->ticket_number}})",
+                            message: "You have a new recommendation approval"
+                        )
+                    );
+                    $this->actionOnSubmit();
+                }
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
@@ -80,6 +84,7 @@ class RequestApproval extends Component
     private function actionOnSubmit()
     {
         $this->emit('loadTicketActions');
+        $this->emit('refreshCustomForm');
         $this->reset('recommendationApprover');
         $this->dispatchBrowserEvent('close-request-recommendation-approval-modal');
     }

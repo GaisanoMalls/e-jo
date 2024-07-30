@@ -81,6 +81,29 @@ class ApproveTicket extends Component
                             fn($notification) => $notification->data['ticket']['id'] === $this->ticket->id ? $notification->delete() : null
                         );
 
+                        // Get the service department administrator to which the ticket is intended.
+                        $serviceDepartmentAdmins = User::with('profile')
+                            ->withWhereHas('branches', function ($branch) {
+                                $branch->where('branches.id', $this->ticket->branch_id);
+                            })
+                            ->withWhereHas('serviceDepartments', function ($serviceDepartment) {
+                                $serviceDepartment->where('service_departments.id', $this->ticket->service_department_id);
+                            })
+                            ->role(Role::SERVICE_DEPARTMENT_ADMIN)
+                            ->get();
+
+                        $serviceDepartmentAdmins->each(function ($serviceDeptAdmin) {
+                            Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
+                            Notification::send(
+                                $serviceDeptAdmin,
+                                new AppNotification(
+                                    ticket: $this->ticket,
+                                    title: "Approved Ticket {$this->ticket->ticket_number}",
+                                    message: "You have a new ticket. "
+                                )
+                            );
+                        });
+
                         $agents = User::with('profile')
                             ->withWhereHas('teams', function ($team) {
                                 $team->whereIn('teams.id', $this->ticket->teams->pluck('id')->toArray());

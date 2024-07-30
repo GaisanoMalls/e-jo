@@ -2,22 +2,32 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Http\Traits\AppErrorLog;
+use App\Models\IctRecommendation;
 use App\Models\Ticket;
 use App\Models\TicketCustomFormField;
 use App\Models\TicketCustomFormFile;
+use App\Models\User;
+use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class TicketCustomForm extends Component
 {
     public Ticket $ticket;
+    public ?IctRecommendation $ictRecommendationAgent = null;
     public ?Collection $ticketCustomFormField = null;
     public ?Collection $customFormFields = null;
     public ?Collection $customFormImageFiles = null;
     public ?Collection $customFormDocumentFiles = null;
 
+    protected $listeners = ['refreshCustomForm' => '$refresh'];
+
     public function mount()
     {
+        $this->ictRecommendationAgent = IctRecommendation::with('requestedByAgent.profile')->where('ticket_id', $this->ticket->id)->first();
         $this->customFormData();
     }
 
@@ -65,9 +75,34 @@ class TicketCustomForm extends Component
         }
     }
 
-    public function loadCustomFormFields()
+    public function approveIctRecommendation()
     {
-        return $this->customFormFields;
+        try {
+            DB::transaction(function () {
+                IctRecommendation::where('ticket_id', $this->ticket->id)->update(['is_approved' => true]);
+                $this->emit('refreshCustomForm');
+            });
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+            Log::error('Error while sending recommendation request.', [$e->getLine()]);
+        }
+    }
+
+    public function isTicketIctRecommendationIsApproved()
+    {
+        return IctRecommendation::where([
+            ['ticket_id', $this->ticket->id],
+            ['is_approved', true]
+        ])->exists();
+    }
+
+
+    public function isRecommendationRequested()
+    {
+        return IctRecommendation::where([
+            ['ticket_id', $this->ticket->id],
+            ['is_requesting_ict_approval', true],
+        ])->exists();
     }
 
     public function render()
