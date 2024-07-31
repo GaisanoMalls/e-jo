@@ -48,37 +48,62 @@ class RequestApproval extends Component
 
         try {
             DB::transaction(function () {
-                $serviceDeptAdmin = User::findOrFail($this->recommendationApprover)
-                    ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
-                    ->first();
-                $agentRequester = User::findOrFail(auth()->user()->id)
-                    ->withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
-                    ->first('id');
+                if ($this->isRequesterServiceDeptAdmin()) {
+                    $serviceDeptAdmin = User::findOrFail($this->recommendationApprover)
+                        ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
+                        ->first();
 
-                if ($serviceDeptAdmin && $agentRequester) {
-                    IctRecommendation::create([
-                        'ticket_id' => $this->ticket->id,
-                        'approver_id' => $serviceDeptAdmin->id,
-                        'requested_by_agent_id' => $agentRequester->id,
-                        'is_requesting_ict_approval' => true
-                    ]);
+                    $requesterServiceDeptAdmin = User::findOrFail(auth()->user()->id)
+                        ->withWhereHas('branches', function ($branch) {
+                            $branch->whereIn('branches.id', $this->ticket->user->branches->pluck('id')->toArray());
+                        })
+                        ->withWhereHas('buDepartments', function ($department) {
+                            $department->whereIn('departments.id', $this->ticket->user->buDepartments->pluck('id')->toArray());
+                        })
+                        ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
+                        ->first();
 
-                    // Mail::to($serviceDeptAdmin)->send(new RecommendationRequestMail(ticket: $this->ticket, recipient: $serviceDeptAdmin, agentRequester: $agentRequester));
-                    Notification::send(
-                        $serviceDeptAdmin,
-                        new AppNotification(
-                            ticket: $this->ticket,
-                            title: "Request for recommendation approval ({$this->ticket->ticket_number}})",
-                            message: "You have a new recommendation approval"
-                        )
-                    );
-                    $this->actionOnSubmit();
+                    if ($serviceDeptAdmin && $requesterServiceDeptAdmin) {
+                        IctRecommendation::create([
+                            'ticket_id' => $this->ticket->id,
+                            'approver_id' => $serviceDeptAdmin->id,
+                            'requested_by_sda_id' => $requesterServiceDeptAdmin->id,
+                            'is_requesting_ict_approval' => true
+                        ]);
+
+                        // Mail::to($serviceDeptAdmin)->send(new RecommendationRequestMail(ticket: $this->ticket, recipient: $serviceDeptAdmin, agentRequester: $agentRequester));
+                        Notification::send(
+                            $serviceDeptAdmin,
+                            new AppNotification(
+                                ticket: $this->ticket,
+                                title: "Request for recommendation approval ({$this->ticket->ticket_number}})",
+                                message: "You have a new recommendation approval"
+                            )
+                        );
+                        $this->actionOnSubmit();
+                    }
                 }
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
             Log::error('Error while sending recommendation request.', [$e->getLine()]);
         }
+    }
+
+    /**
+     * Verify whether the business unit of the ticket requester matches the business unit of the Service Department Admin.
+     */
+    public function isRequesterServiceDeptAdmin()
+    {
+        return User::where('id', auth()->user()->id)
+            ->withWhereHas('branches', function ($branch) {
+                $branch->whereIn('branches.id', $this->ticket->user->branches->pluck('id')->toArray());
+            })
+            ->withWhereHas('buDepartments', function ($department) {
+                $department->whereIn('departments.id', $this->ticket->user->buDepartments->pluck('id')->toArray());
+            })
+            ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
+            ->exists();
     }
 
     private function actionOnSubmit()

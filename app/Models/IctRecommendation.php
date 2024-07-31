@@ -13,7 +13,7 @@ class IctRecommendation extends Model
     protected $fillable = [
         'ticket_id',
         'approver_id',
-        'requested_by_agent_id',
+        'requested_by_sda_id',
         'is_requesting_ict_approval',
         'is_approved'
     ];
@@ -23,14 +23,14 @@ class IctRecommendation extends Model
         return $this->belongsTo(Ticket::class);
     }
 
-    public function requestedByAgent(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'requested_by_agent_id')->role(Role::AGENT);
-    }
-
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approver_id')->role(Role::SERVICE_DEPARTMENT_ADMIN);
+    }
+
+    public function requestedByServiceDeptAdmin(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'requested_by_sda_id')->role(Role::SERVICE_DEPARTMENT_ADMIN);
     }
 
     public function currentTeam(): BelongsTo

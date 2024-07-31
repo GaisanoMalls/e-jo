@@ -13,47 +13,47 @@
             </div>
         @else
             @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
-                <div class="mb-4 d-flex flex-wrap gap-2 border-0 flex-row rounded-3 align-items-center justify-content-between p-3"
-                    style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;">
-                    <span class="border-0 d-flex align-items-center" style="font-size: 0.9rem;">
-                        <span class="me-2">
-                            <div class="d-flex align-items-center">
-                                @if ($ictRecommendationAgent->requestedByAgent->profile->picture)
-                                    <img src="{{ Storage::url($ictRecommendationAgent->requestedByAgent->profile->picture) }}"
-                                        class="image-fluid rounded-circle"
-                                        style="height: 26px !important; width: 26px !important;">
-                                @else
-                                    <div class="d-flex align-items-center p-2 me-1 justify-content-center text-white rounded-circle"
-                                        style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
-                                        {{ $ictRecommendationAgent->requestedByAgent->profile->getNameInitial() }}
-                                    </div>
-                                @endif
-                                <strong class="text-muted">
-                                    {{ $ictRecommendationAgent->requestedByAgent->profile->getFullName }}
-                                </strong>
-                            </div>
+                @if ($this->isRequesterServiceDeptAdmin())
+                    <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
+                        style="font-size: 13px; background-color: #cff4fc; color: #055160;">
+                        <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
+                        The ticket's recommendation approval is pending
+                    </div>
+                @else
+                    <div class="mb-4 d-flex flex-wrap gap-2 border-0 flex-row rounded-3 align-items-center justify-content-between p-3"
+                        style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;">
+                        <span class="border-0 d-flex align-items-center" style="font-size: 0.9rem;">
+                            <span class="me-2">
+                                <div class="d-flex align-items-center">
+                                    @if ($ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->picture)
+                                        <img src="{{ Storage::url($ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->picture) }}"
+                                            class="image-fluid rounded-circle"
+                                            style="height: 26px !important; width: 26px !important;">
+                                    @else
+                                        <div class="d-flex align-items-center p-2 me-1 justify-content-center text-white rounded-circle"
+                                            style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
+                                            {{ $ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->getNameInitial() }}
+                                        </div>
+                                    @endif
+                                    <strong class="text-muted">
+                                        {{ $ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->getFullName }}
+                                    </strong>
+                                </div>
+                            </span>
+                            is requesting for recommendation
+                            approval
                         </span>
-                        is requesting for recommendation
-                        approval
-                    </span>
-                    <button class="btn d-flex align-items-center justify-content-center"
-                        wire:click="approveIctRecommendation"
-                        style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #FFF; font-weight: 500; background-color: #D32839;">
-                        <span wire:loading wire:target="approveIctRecommendation"
-                            class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
-                        </span>
-                        <span wire:loading.remove wire:target="approveIctRecommendation">Approve</span>
-                        <span wire:loading wire:target="approveIctRecommendation">Processing...</span>
-                    </button>
-                </div>
-            @endif
-
-            @if (auth()->user()->hasRole(Role::AGENT))
-                <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
-                    style="font-size: 13px; background-color: #cff4fc; color: #055160;">
-                    <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
-                    The ticket's recommendation approval is pending
-                </div>
+                        <button class="btn d-flex align-items-center justify-content-center"
+                            wire:click="approveIctRecommendation"
+                            style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #FFF; font-weight: 500; background-color: #D32839;">
+                            <span wire:loading wire:target="approveIctRecommendation"
+                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                            </span>
+                            <span wire:loading.remove wire:target="approveIctRecommendation">Approve</span>
+                            <span wire:loading wire:target="approveIctRecommendation">Processing...</span>
+                        </button>
+                    </div>
+                @endif
             @endif
         @endif
     @endif

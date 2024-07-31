@@ -160,7 +160,7 @@
             @if (auth()->user()->hasRole([Role::SERVICE_DEPARTMENT_ADMIN, Role::AGENT]))
                 @livewire('staff.ticket.assign-ticket', ['ticket' => $ticket])
             @endif
-            @if (auth()->user()->hasRole(Role::AGENT))
+            @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                 @livewire('staff.ticket.request-approval', ['ticket' => $ticket])
             @endif
             @livewire('staff.ticket.update-priority-level', ['ticket' => $ticket])

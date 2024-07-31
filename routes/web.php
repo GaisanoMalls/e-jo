@@ -8,6 +8,7 @@ use App\Http\Controllers\Staff\Approver\NotificationController as ApproverNotifi
 use App\Http\Controllers\Staff\DashboardController;
 use App\Http\Controllers\Staff\DirectoryController;
 use App\Http\Controllers\Staff\FeedbackController as StaffFeedbackContoller;
+use App\Http\Controllers\Staff\RecommendationsController;
 use App\Http\Controllers\Staff\ServiceDeptAdmin\AnnouncementController;
 use App\Http\Controllers\Staff\ServiceDeptAdmin\TicketClarificationController;
 use App\Http\Controllers\Staff\SysAdmin\AccountAgentController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\User\AccountController as UserAccountSettingsController
 use App\Http\Controllers\User\Dashboard as UserDashboardController;
 use App\Http\Controllers\User\FeedbackController as UserFeedbackController;
 use App\Http\Controllers\User\TicketsController as UserTicketsController;
+use App\Http\Livewire\Staff\Ticket\Recommendations;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +57,7 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
         Route::controller(StaffTicketController::class)->group(function () {
             Route::get('/level-approval', 'ticketLevelApproval')->name('ticket_level_approval');
         });
+        Route::get('/recommendations', RecommendationsController::class)->name('recommendations');
         Route::prefix('tickets')->name('tickets.')->group(function () {
             Route::controller(StaffTicketController::class)->group(function () {
                 Route::get('/approved', 'approvedTickets')->name('approved_tickets');

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\AppErrorLog;
 use App\Models\IctRecommendation;
+use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\TicketCustomFormField;
 use App\Models\TicketCustomFormFile;
@@ -17,7 +18,7 @@ use Livewire\Component;
 class TicketCustomForm extends Component
 {
     public Ticket $ticket;
-    public ?IctRecommendation $ictRecommendationAgent = null;
+    public ?IctRecommendation $ictRecommendationServiceDeptAdmin = null;
     public ?Collection $ticketCustomFormField = null;
     public ?Collection $customFormFields = null;
     public ?Collection $customFormImageFiles = null;
@@ -27,7 +28,7 @@ class TicketCustomForm extends Component
 
     public function mount()
     {
-        $this->ictRecommendationAgent = IctRecommendation::with('requestedByAgent.profile')->where('ticket_id', $this->ticket->id)->first();
+        $this->ictRecommendationServiceDeptAdmin = IctRecommendation::where('ticket_id', $this->ticket->id)->first();
         $this->customFormData();
     }
 
@@ -96,13 +97,28 @@ class TicketCustomForm extends Component
         ])->exists();
     }
 
-
     public function isRecommendationRequested()
     {
         return IctRecommendation::where([
             ['ticket_id', $this->ticket->id],
             ['is_requesting_ict_approval', true],
         ])->exists();
+    }
+
+    /**
+     * Verify whether the business unit of the ticket requester matches the business unit of the Service Department Admin.
+     */
+    public function isRequesterServiceDeptAdmin()
+    {
+        return User::where('id', auth()->user()->id)
+            ->withWhereHas('branches', function ($branch) {
+                $branch->whereIn('branches.id', $this->ticket->user->branches->pluck('id')->toArray());
+            })
+            ->withWhereHas('buDepartments', function ($department) {
+                $department->whereIn('departments.id', $this->ticket->user->buDepartments->pluck('id')->toArray());
+            })
+            ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
+            ->exists();
     }
 
     public function render()

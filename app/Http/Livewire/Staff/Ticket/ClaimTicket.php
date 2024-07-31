@@ -78,8 +78,7 @@ class ClaimTicket extends Component
     {
         return TicketApproval::where([
             ['ticket_id', $this->ticket->id],
-            ['approval_1->level_1_approver->is_approved', true],
-            ['approval_1->level_2_approver->is_approved', true],
+            ['is_approved', true],
         ])->exists();
     }
 
