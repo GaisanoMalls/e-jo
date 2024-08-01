@@ -247,6 +247,7 @@
             ele: agentBranchSelect,
             options: agentBranchOption,
             search: true,
+            multiple: true,
             markSearchResults: true,
         });
 
@@ -261,7 +262,7 @@
         agentBranchSelect.addEventListener('change', (event) => {
             const agentBranchId = event.target.value;
             if (agentBranchId) {
-                @this.set('branch', parseInt(agentBranchId));
+                @this.set('selectedBranches', agentBranchId);
                 agentBUDepartmentSelect.enable();
                 window.addEventListener('get-branch-bu-departments', (event) => {
                     const agentBUDepartments = event.detail.BUDepartments;

@@ -143,7 +143,6 @@ class ApproveTicket extends Component
                     } else {
                         noty()->addInfo('Ticket has already been approved by other service dept. admin');
                     }
-                    return redirect()->route('staff.tickets.open_tickets');
                 });
             } else {
                 noty()->addError('You have no rights/permission to approve the ticket');

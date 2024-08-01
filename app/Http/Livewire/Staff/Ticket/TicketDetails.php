@@ -46,6 +46,7 @@ class TicketDetails extends Component
                 'agent_id' => null,
                 'status_id' => Status::APPROVED,
             ]);
+
             $this->actionOnSubmit();
             ActivityLog::make($this->ticket->id, 'removed the agent assigned on this ticket');
         } else {
@@ -55,6 +56,9 @@ class TicketDetails extends Component
 
     public function render()
     {
+        if ($this->isSlaOverdue($this->ticket)) {
+            $this->ticket->update(['status_id', Status::OVERDUE]);
+        }
         return view('livewire.staff.ticket.ticket-details');
     }
 }

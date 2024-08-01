@@ -9,7 +9,7 @@
             <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
                 style="font-size: 13px; background-color: #dffdef;">
                 <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
-                The recommendation for this ticket has been approved
+                The recommendation has been approved
             </div>
         @else
             @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
@@ -40,8 +40,7 @@
                                     </strong>
                                 </div>
                             </span>
-                            is requesting for recommendation
-                            approval
+                            is requesting for recommendation approval
                         </span>
                         <button class="btn d-flex align-items-center justify-content-center"
                             wire:click="approveIctRecommendation"

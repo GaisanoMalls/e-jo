@@ -62,7 +62,6 @@ trait Tickets
             ['status_id', Status::APPROVED],
             ['approval_status', ApprovalStatusEnum::APPROVED],
         ])
-            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
             ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
             ->orderByDesc('created_at')
             ->get();
@@ -139,9 +138,8 @@ trait Tickets
 
     public function serviceDeptAdminGetOverdueTickets()
     {
-        return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OVERDUE)->where('approval_status', ApprovalStatusEnum::APPROVED))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
+        return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OVERDUE)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED]))
+            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray())))
             ->orderByDesc('created_at')
             ->get();
     }

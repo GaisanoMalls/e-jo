@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Requester\Ticket;
 
 use App\Http\Traits\AppErrorLog;
 use App\Models\Form;
+use App\Models\IctRecommendation;
 use App\Models\Ticket;
 use App\Models\TicketCustomFormField;
 use App\Models\TicketCustomFormFile;
@@ -18,6 +19,7 @@ class TicketCustomForm extends Component
     use WithFileUploads;
 
     public Ticket $ticket;
+    public ?IctRecommendation $ictRecommendationServiceDeptAdmin = null;
     public ?Collection $ticketCustomFormField = null;
     public ?Collection $customFormFields = null;
     public ?Collection $customFormImageFiles = null;
@@ -31,6 +33,7 @@ class TicketCustomForm extends Component
 
     public function mount()
     {
+        $this->ictRecommendationServiceDeptAdmin = IctRecommendation::where('ticket_id', $this->ticket->id)->first();
         $this->customFormData();
     }
 
@@ -149,6 +152,22 @@ class TicketCustomForm extends Component
     {
         $this->isDeleting = false;
         $this->deleteDocumentFileId = null;
+    }
+
+    public function isTicketIctRecommendationIsApproved()
+    {
+        return IctRecommendation::where([
+            ['ticket_id', $this->ticket->id],
+            ['is_approved', true]
+        ])->exists();
+    }
+
+    public function isRecommendationRequested()
+    {
+        return IctRecommendation::where([
+            ['ticket_id', $this->ticket->id],
+            ['is_requesting_ict_approval', true],
+        ])->exists();
     }
 
     public function render()

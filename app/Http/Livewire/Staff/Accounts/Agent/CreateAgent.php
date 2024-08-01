@@ -28,12 +28,12 @@ class CreateAgent extends Component
     public ?Collection $subteams = null;
     public array $selectedTeams = [];
     public array $selectedSubteams = [];
+    public array $selectedBranches = [];
     public ?string $first_name = null;
     public ?string $middle_name = null;
     public ?string $last_name = null;
     public ?string $suffix = null;
     public ?string $email = null;
-    public ?int $branch = null;
     public ?int $bu_department = null;
     public ?int $service_department = null;
     public bool $hasSubteams = false;
@@ -43,9 +43,9 @@ class CreateAgent extends Component
         return (new StoreAgenRequest())->rules();
     }
 
-    public function updatedBranch()
+    public function updatedSelectedBranches()
     {
-        $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
+        $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->whereIn('branches.id', $this->selectedBranches))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments', [
             'BUDepartments' => $this->BUDepartments,
         ]);
@@ -87,7 +87,7 @@ class CreateAgent extends Component
                 ]);
 
                 $agent->assignRole(Role::AGENT);
-                $agent->branches()->attach($this->branch);
+                $agent->branches()->attach($this->selectedBranches);
                 $agent->teams()->attach($this->selectedTeams);
                 $agent->buDepartments()->attach($this->bu_department);
                 $agent->serviceDepartments()->attach($this->service_department);

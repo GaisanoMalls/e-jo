@@ -160,5 +160,9 @@
                 return percentage / 100 * 360
             }
         });
+
+        window.addEventListener('update-ticket-status-to-overdue', () => {
+            console.log('Updated');
+        });
     </script>
 @endpush

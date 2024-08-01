@@ -35,7 +35,7 @@ class UpdateAgent extends Component
     public string $last_name;
     public ?string $suffix = null;
     public string $email;
-    public int $branch;
+    public array $branches = [];
     public int $bu_department;
     public int $service_department;
 
@@ -46,10 +46,10 @@ class UpdateAgent extends Component
         $this->last_name = $this->agent->profile->last_name;
         $this->suffix = $this->agent->profile->suffix;
         $this->email = $this->agent->email;
-        $this->branch = $this->agent->branches->pluck('id')[0];
+        $this->branches = $this->agent->branches->pluck('id')->toArray();
         $this->bu_department = $this->agent->buDepartments->pluck('id')->first();
         $this->service_department = $this->agent->serviceDepartments->pluck('id')->first();
-        $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
+        $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->whereIn('branches.id', $this->branches))->get();
         $this->teams = Team::withWhereHas('serviceDepartment', fn($query) => $query->where('service_departments.id', $this->service_department))->get();
         $this->subteams = Subteam::withWhereHas('team', fn($query) => $query->whereIn('teams.id', $this->teams->pluck('id')->toArray()))->get();
         $this->currentTeams = $this->agent->teams->pluck('id')->toArray();
@@ -60,7 +60,7 @@ class UpdateAgent extends Component
     public function rules()
     {
         return [
-            'branch' => 'required',
+            'branches' => 'required',
             'bu_department' => 'required',
             'selectedTeams' => 'required',
             'service_department' => 'required',
@@ -79,9 +79,9 @@ class UpdateAgent extends Component
         ];
     }
 
-    public function updatedBranch()
+    public function updatedBranches()
     {
-        $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->where('branches.id', $this->branch))->get();
+        $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->whereIn('branches.id', $this->branches))->get();
         $this->dispatchBrowserEvent('get-branch-bu-departments', [
             'BUDepartments' => $this->BUDepartments,
         ]);
@@ -110,7 +110,7 @@ class UpdateAgent extends Component
         try {
             DB::transaction(function () {
                 $this->agent->update(['email' => $this->email]);
-                $this->agent->branches()->sync([$this->branch]);
+                $this->agent->branches()->sync($this->branches);
                 $this->agent->teams()->sync($this->selectedTeams);
                 $this->agent->buDepartments()->sync([$this->bu_department]);
                 $this->agent->serviceDepartments()->sync([$this->service_department]);

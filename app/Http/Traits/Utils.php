@@ -128,7 +128,7 @@ trait Utils
 
     public function ticketSLATimer(Ticket $ticket)
     {
-        $slaHours = (int) $this->ticket->sla->hours; // Assuming SLA is in hours
+        $slaHours = (int) $ticket->sla->hours; // Assuming SLA is in hours
 
         // Get the current date and time
         $currentDate = now()->timestamp;
@@ -181,9 +181,9 @@ trait Utils
      */
     public function isSlaApproved(Ticket $ticket)
     {
-        return ($this->ticket->status_id == Status::APPROVED
-            || $this->ticket->approval_status == ApprovalStatusEnum::APPROVED
-            && !is_null($this->ticket->svcdept_date_approved))
+        return ($ticket->status_id == Status::APPROVED
+            || $ticket->approval_status == ApprovalStatusEnum::APPROVED
+            && !is_null($ticket->svcdept_date_approved))
             ? true
             : false;
     }
@@ -194,7 +194,7 @@ trait Utils
      */
     public function isSlaOverdue(Ticket $ticket)
     {
-        return $this->ticketSLATimer($this->ticket)['timer'] === 'OVERDUE';
+        return $this->ticketSLATimer($ticket)['timer'] === 'OVERDUE';
     }
 
     public function getSLADays(Ticket $ticket)

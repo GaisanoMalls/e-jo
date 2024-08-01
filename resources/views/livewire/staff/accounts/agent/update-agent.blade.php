@@ -267,8 +267,9 @@
             ele: agentBranchSelect,
             options: agentBranchOption,
             search: true,
+            multiple: true,
             markSearchResults: true,
-            selectedValue: @json($branch)
+            selectedValue: @json($branches)
         });
 
         agentBranchSelect.addEventListener('reset', () => {
@@ -284,7 +285,7 @@
         agentBranchSelect.addEventListener('change', (event) => {
             const agentBranchId = event.target.value;
             if (agentBranchId) {
-                @this.set('branch', parseInt(agentBranchId));
+                @this.set('branches', agentBranchId);
                 agentBUDepartmentSelect.enable();
 
                 window.addEventListener('get-branch-bu-departments', (event) => {
