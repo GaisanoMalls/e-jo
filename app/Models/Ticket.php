@@ -42,6 +42,7 @@ class Ticket extends Model
         'description',
         'approval_status',
         'svcdept_date_approved',
+        'is_overdue'
     ];
 
     public function user(): BelongsTo|Builder

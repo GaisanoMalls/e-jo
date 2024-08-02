@@ -34,10 +34,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Search for overdue tickets and update their status to 'Overdue.
-        Ticket::each(function ($ticket, $key) {
-            if ($this->isSlaOverdue($ticket)) {
-                $ticket->update(['status_id' => Status::OVERDUE]);
-            }
-        });
+        Ticket::whereNot('status_id', Status::CLOSED)
+            ->each(function ($ticket, $key) {
+                if ($this->isSlaOverdue($ticket)) {
+                    $ticket->update(['is_overdue' => true]);
+                }
+            });
     }
 }

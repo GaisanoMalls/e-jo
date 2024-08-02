@@ -5,7 +5,9 @@
 @endphp
 
 <div class="mb-4">
-    @if ($this->isRecommendationRequested())
+    @if (
+        $this->isRecommendationRequested() &&
+            auth()->user()->hasRole(Role::USER))
         @if ($this->isTicketIctRecommendationIsApproved())
             <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
                 style="font-size: 13px; background-color: #dffdef;">
@@ -13,31 +15,29 @@
                 The recommendation has been approved
             </div>
         @else
-            @if (auth()->user()->hasRole(Role::AGENT))
-                <div class="mb-4 d-flex flex-wrap gap-2 border-0 flex-row rounded-3 align-items-center justify-content-between p-3"
-                    style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;">
-                    <span class="border-0 d-flex align-items-center" style="font-size: 0.9rem;">
-                        <span class="me-2">
-                            <div class="d-flex align-items-center">
-                                @if ($ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->picture)
-                                    <img src="{{ Storage::url($ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->picture) }}"
-                                        class="image-fluid rounded-circle"
-                                        style="height: 26px !important; width: 26px !important;">
-                                @else
-                                    <div class="d-flex align-items-center p-2 me-1 justify-content-center text-white rounded-circle"
-                                        style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
-                                        {{ $ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->getNameInitial() }}
-                                    </div>
-                                @endif
-                                <strong class="text-muted">
-                                    {{ $ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->getFullName }}
-                                </strong>
-                            </div>
-                        </span>
-                        is requesting for recommendation approval
+            <div class="mb-4 d-flex flex-wrap gap-2 border-0 flex-row rounded-3 align-items-center justify-content-between p-3"
+                style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;">
+                <span class="border-0 d-flex align-items-center" style="font-size: 0.9rem;">
+                    <span class="me-2">
+                        <div class="d-flex align-items-center">
+                            @if ($ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin?->profile->picture)
+                                <img src="{{ Storage::url($ictRecommendationServiceDeptAdmin?->requestedByServiceDeptAdmin->profile->picture) }}"
+                                    class="image-fluid rounded-circle"
+                                    style="height: 26px !important; width: 26px !important;">
+                            @else
+                                <div class="d-flex align-items-center p-2 me-1 justify-content-center text-white rounded-circle"
+                                    style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
+                                    {{ $ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin?->profile->getNameInitial() }}
+                                </div>
+                            @endif
+                            <strong class="text-muted">
+                                {{ $ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin?->profile->getFullName }}
+                            </strong>
+                        </div>
                     </span>
-                </div>
-            @endif
+                    is requesting for recommendation approval
+                </span>
+            </div>
         @endif
     @endif
     <div wire:init="loadCustomFormFields" class="row">

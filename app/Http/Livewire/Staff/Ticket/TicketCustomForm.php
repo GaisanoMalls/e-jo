@@ -28,7 +28,6 @@ class TicketCustomForm extends Component
 
     public function mount()
     {
-        $this->ictRecommendationServiceDeptAdmin = IctRecommendation::where('ticket_id', $this->ticket->id)->first();
         $this->customFormData();
     }
 
@@ -123,6 +122,7 @@ class TicketCustomForm extends Component
 
     public function render()
     {
+        $this->ictRecommendationServiceDeptAdmin = IctRecommendation::with('requestedByServiceDeptAdmin.profile')->where('ticket_id', $this->ticket->id)->first();
         return view('livewire.staff.ticket.ticket-custom-form');
     }
 }

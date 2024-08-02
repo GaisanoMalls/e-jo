@@ -268,6 +268,7 @@
             options: agentBranchOption,
             search: true,
             multiple: true,
+            showValueAsTags: true,
             markSearchResults: true,
             selectedValue: @json($branches)
         });

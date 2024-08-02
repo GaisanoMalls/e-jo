@@ -25,7 +25,7 @@ class StoreAgenRequest extends FormRequest
     public function rules()
     {
         return [
-            'branch' => ['required'],
+            'selectedBranches' => ['required'],
             'bu_department' => ['required'],
             'teams' => ['required'],
             'service_department' => ['required'],

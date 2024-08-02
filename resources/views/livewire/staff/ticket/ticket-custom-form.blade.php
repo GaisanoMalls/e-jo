@@ -25,18 +25,18 @@
                         <span class="border-0 d-flex align-items-center" style="font-size: 0.9rem;">
                             <span class="me-2">
                                 <div class="d-flex align-items-center">
-                                    @if ($ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->picture)
-                                        <img src="{{ Storage::url($ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->picture) }}"
+                                    @if ($ictRecommendationServiceDeptAdmin?->requestedByServiceDeptAdmin->profile->picture)
+                                        <img src="{{ Storage::url($ictRecommendationServiceDeptAdmin?->requestedByServiceDeptAdmin->profile->picture) }}"
                                             class="image-fluid rounded-circle"
                                             style="height: 26px !important; width: 26px !important;">
                                     @else
                                         <div class="d-flex align-items-center p-2 me-1 justify-content-center text-white rounded-circle"
                                             style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
-                                            {{ $ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->getNameInitial() }}
+                                            {{ $ictRecommendationServiceDeptAdmin?->requestedByServiceDeptAdmin->profile->getNameInitial() }}
                                         </div>
                                     @endif
                                     <strong class="text-muted">
-                                        {{ $ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin->profile->getFullName }}
+                                        {{ $ictRecommendationServiceDeptAdmin?->requestedByServiceDeptAdmin->profile->getFullName }}
                                     </strong>
                                 </div>
                             </span>
@@ -51,6 +51,20 @@
                             <span wire:loading.remove wire:target="approveIctRecommendation">Approve</span>
                             <span wire:loading wire:target="approveIctRecommendation">Processing...</span>
                         </button>
+                    </div>
+                @endif
+            @elseif (auth()->user()->hasRole(Role::AGENT))
+                @if ($this->isTicketIctRecommendationIsApproved())
+                    <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
+                        style="font-size: 13px; background-color: #dffdef;">
+                        <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
+                        The recommendation has been approved
+                    </div>
+                @else
+                    <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
+                        style="font-size: 13px; background-color: #cff4fc; color: #055160;">
+                        <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
+                        The ticket's recommendation approval is pending
                     </div>
                 @endif
             @endif
@@ -165,8 +179,8 @@
                             </label>
                             <input wire:model="customFormFields.{{ $key }}.value"
                                 id="field-{{ $key }}" type="number" step=".01"
-                                class="form-control input__field" placeholder="Enter {{ Str::lower($field['label']) }}"
-                                readonly disabled>
+                                class="form-control input__field"
+                                placeholder="Enter {{ Str::lower($field['label']) }}" readonly disabled>
                             </input>
                             @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
