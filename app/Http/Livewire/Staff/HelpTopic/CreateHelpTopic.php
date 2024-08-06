@@ -188,6 +188,12 @@ class CreateHelpTopic extends Component
             $this->addError('approvalLevelSelected', 'Level of approval field is required');
         }
 
+        foreach ($this->configurations as $config) {
+            if ($config['bu_department_id'] == $this->selectedBuDepartment) {
+                return $this->addError('selectedBuDepartment', 'BU department already exists');
+            }
+        }
+
         // Check if BU department and level of approval is selected
         if ($this->selectedBuDepartment && $this->approvalLevelSelected) {
             // Get the selected BU Department name

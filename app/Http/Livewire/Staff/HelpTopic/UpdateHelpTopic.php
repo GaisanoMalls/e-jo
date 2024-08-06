@@ -198,7 +198,7 @@ class UpdateHelpTopic extends Component
             (array) $this->level5Approvers
         );
 
-        $filteredApprovers = User::with(['profile', 'roles'])
+        $filteredApprovers = User::with(['profile', 'roles', 'buDepartments'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->whereNotIn('id', $selectedApprovers)
             ->orderByDesc('created_at')
@@ -243,6 +243,12 @@ class UpdateHelpTopic extends Component
         $this->level4Approvers = [];
         $this->level5Approvers = [];
         $this->dispatchBrowserEvent('reset-select-fields');
+    }
+
+
+    public function editConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
+    {
+        dump($helpTopicConfiguration->approvers()->with('approver.profile')->get());
     }
 
     public function deleteConfiguration(HelpTopicConfiguration $helpTopicConfiguration)

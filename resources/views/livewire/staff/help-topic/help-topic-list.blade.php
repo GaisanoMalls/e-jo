@@ -20,7 +20,7 @@
                                 <div
                                     class="d-flex gap-4 justify-content-between align-items-center text-start td__content">
                                     <span>{{ $helpTopic->name }}</span>
-                                    @if ($helpTopic->specialProject?->amount)
+                                    {{-- @if ($helpTopic->specialProject?->amount)
                                         <div class="d-flex align-items-center rounded-4"
                                             style="background-color: #f1f3ef; padding: 0.1rem 0.4rem;">
                                             <span style="font-size: 11px; color: #D32839;">₱</span>
@@ -28,7 +28,7 @@
                                                 {{ number_format($helpTopic->specialProject?->amount, 2) }}
                                             </span>
                                         </div>
-                                    @endif
+                                    @endif --}}
                                 </div>
                             </td>
                             <td>

@@ -163,12 +163,11 @@
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     <div
                                                         class="d-flex align-items-center justify-content-center pe-2 gap-1">
-                                                        <button data-tooltip="Edit" data-tooltip-position="top"
-                                                            data-tooltip-font-size="11px" type="button"
-                                                            class="btn action__button">
+                                                        <button type="button" class="btn btn-sm action__button"
+                                                            wire:click="editConfiguration({{ $config['id'] }})">
                                                             <i class="bi bi-pencil"></i>
                                                         </button>
-                                                        <button class="btn btn-sm action__button mt-0"
+                                                        <button type="button" class="btn btn-sm action__button mt-0"
                                                             wire:click="deleteConfiguration({{ $config['id'] }})">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
@@ -469,11 +468,12 @@
             window.addEventListener('load-approvers2', (event) => {
                 const level = event.detail.level;
                 const approverSelect = approvers[`level${level}`];
+
                 if (approverSelect) {
                     const approverOptions = event.detail.approvers.map(approver => ({
                         label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
                         value: approver.id,
-                        description: approver.roles.map(role => role.name).join(', ')
+                        description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
                     }));
                     approverSelect.setOptions(approverOptions);
                 }

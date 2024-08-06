@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\Utils;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,11 +36,19 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Search for overdue tickets and update their status to 'Overdue.
-        Ticket::whereNot('status_id', Status::CLOSED)
-            ->each(function ($ticket, $key) {
-                if ($this->isSlaOverdue($ticket)) {
-                    $ticket->update(['is_overdue' => true]);
-                }
-            });
+        if (Schema::hasTable('tickets')) {
+            Ticket::whereNot('status_id', Status::CLOSED)
+                ->where('approval_status', ApprovalStatusEnum::APPROVED)
+                ->each(function ($ticket, $key) {
+                    if ($this->isSlaOverdue($ticket)) {
+                        $ticket->update([
+                            'is_overdue' => true,
+                            'status_id' => Status::OVERDUE
+                        ]);
+                    }
+                });
+        } else {
+            \Log::info('Cannot find table "tickets" in database ' . '"' . env('DB_DATABASE') . '"');
+        }
     }
 }

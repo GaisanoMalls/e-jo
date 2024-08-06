@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\AppErrorLog;
 use App\Mail\Staff\RecommendationRequestMail;
+use App\Models\ActivityLog;
 use App\Models\IctRecommendation;
 use App\Models\Role;
 use App\Models\Ticket;
@@ -73,6 +74,8 @@ class RequestApproval extends Component
                             message: "You have a new recommendation approval"
                         )
                     );
+
+                    ActivityLog::make($this->ticket->id, 'created a recommendation');
                     $this->actionOnSubmit();
                 }
             });
@@ -86,6 +89,7 @@ class RequestApproval extends Component
     {
         $this->emit('loadTicketActions');
         $this->emit('refreshCustomForm');
+        $this->emit('loadTicketLogs');
         $this->reset('recommendationApprover');
         $this->dispatchBrowserEvent('close-request-recommendation-approval-modal');
     }
