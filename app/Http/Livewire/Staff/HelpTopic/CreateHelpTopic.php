@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\HelpTopic;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
+use App\Models\Department;
 use App\Models\HelpTopic;
 use App\Models\HelpTopicApprover;
 use App\Models\HelpTopicConfiguration;
@@ -47,11 +48,16 @@ class CreateHelpTopic extends Component
     public array $level5Approvers = [];
     public array $selectedApprovers = [];
     public bool $approvalLevelSelected = false;
+    public ?int $levelOfApproval = null;
 
     public ?array $configurations = [];
     public ?int $buDepartment = null;
     public ?Collection $buDepartments = null;
     public ?int $selectedBuDepartment = null;
+
+    public ?Department $editConfigBUDept = null;
+    public ?int $editSelectedBuDepartment = null;
+    public ?int $editLevelOfApproval = null;
 
     public function mount()
     {
@@ -111,6 +117,7 @@ class CreateHelpTopic extends Component
                             'help_topic_id' => $helpTopic->id,
                             'bu_department_id' => $config['bu_department_id'],
                             'approvers_count' => $config['approvers_count'],
+                            'level_of_approval' => $config['level_of_approval']
                         ]);
 
                         foreach ($config['approvers'] as $level => $approversList) {
@@ -180,18 +187,18 @@ class CreateHelpTopic extends Component
 
         $approversCount = array_sum(array_map('count', $approvers));
 
-        if (!$this->selectedBuDepartment) {
-            $this->addError('selectedBuDepartment', 'BU department field is required');
+        foreach ($this->configurations as $config) {
+            if ($config['bu_department_id'] == $this->selectedBuDepartment) {
+                return $this->addError('selectedBuDepartment', 'BU department already exists');
+            }
         }
 
         if (!$this->approvalLevelSelected) {
             $this->addError('approvalLevelSelected', 'Level of approval field is required');
         }
 
-        foreach ($this->configurations as $config) {
-            if ($config['bu_department_id'] == $this->selectedBuDepartment) {
-                return $this->addError('selectedBuDepartment', 'BU department already exists');
-            }
+        if (!$this->selectedBuDepartment) {
+            $this->addError('selectedBuDepartment', 'BU department field is required');
         }
 
         // Check if BU department and level of approval is selected
@@ -203,6 +210,7 @@ class CreateHelpTopic extends Component
                 'bu_department_id' => $this->selectedBuDepartment,
                 'bu_department_name' => $buDepartmentName,
                 'approvers_count' => $approversCount,
+                'level_of_approval' => $this->levelOfApproval,
                 'approvers' => $approvers,
             ];
 
@@ -223,9 +231,26 @@ class CreateHelpTopic extends Component
         $this->dispatchBrowserEvent('reset-select-fields');
     }
 
-    public function removeConfiguration($index)
+    public function removeConfiguration(int $index)
     {
         array_splice($this->configurations, $index, 1);
+    }
+
+    public function editConfiguration(int $index)
+    {
+        foreach ($this->configurations as $config) {
+            $this->editConfigBUDept = Department::findOrFail($config['bu_department_id']);
+            $levelOfApproval = $config['level_of_approval'];
+            $this->dispatchBrowserEvent('get-config-bu-department', [
+                'configBuDepartment' => $this->editConfigBUDept->id,
+                'levelOfApproval' => $levelOfApproval
+            ]);
+        }
+    }
+
+    public function cancelConfiguration()
+    {
+        $this->resetApprovalConfigFields();
     }
 
     public function updatedApprovalLevelSelected()

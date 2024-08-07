@@ -145,7 +145,7 @@
                                 style="height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
                                 Add approval
                             </button>
-                            <button type="button"
+                            <button wire:click="cancelConfiguration" type="button"
                                 class="btn d-flex align-items-center justify-content-center rounded-3"
                                 style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
                                 Cancel
@@ -173,13 +173,14 @@
                                             <td>
                                                 <div
                                                     class="d-flex align-items-center justify-content-center pe-2 gap-1">
-                                                    <button data-tooltip="Edit" data-tooltip-position="top"
-                                                        data-tooltip-font-size="11px" type="button"
-                                                        class="btn action__button">
+                                                    <button wire:click="editConfiguration({{ $index }})"
+                                                        type="button" class="btn action__button"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editConfigurationModal">
                                                         <i class="bi bi-pencil"></i>
                                                     </button>
-                                                    <button class="btn btn-sm action__button mt-0"
-                                                        wire:click="removeConfiguration({{ $index }})">
+                                                    <button wire:click="removeConfiguration({{ $index }})"
+                                                        type="button" class="btn action__button">
                                                         <i class="bi bi-trash"></i>
                                                     </button>
                                                 </div>
@@ -191,6 +192,7 @@
                         @endif
                     </div>
                 </div>
+
                 <!-- Special Project Amount -->
                 @if ($isSpecialProject)
                     <div class="row">
@@ -259,7 +261,69 @@
                 </div>
             </div>
         </div>
+        {{-- Edit Configuration --}}
+        <div wire:ignore.self class="modal fade help__topic__modal" id="editConfigurationModal" tabindex="-1"
+            aria-labelledby="editConfigurationModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content modal__content">
+                    <div class="modal-header modal__header p-0 border-0">
+                        <h1 class="modal-title modal__title" id="addNewTeamModalLabel">Edit team</h1>
+                        <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
+                            <i class="fa-sharp fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <form wire:submit.prevent="">
+                        <div class="modal-body modal__body">
+                            <div class="row mb-2">
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label form__field__label">
+                                        BU Department
+                                    </label>
+                                    <div>
+                                        <div id="select-edit-config-bu-department" wire:ignore></div>
+                                    </div>
+                                    @error('editSelectedBuDepartment')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label form__field__label">
+                                        BU Department
+                                    </label>
+                                    <div>
+                                        <div id="select-edit-config-level-of-approval" wire:ignore></div>
+                                    </div>
+                                    @error('editSelectedBuDepartment')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="submit"
+                                    class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__modal__footer btn__send">
+                                    <span wire:loading wire:target="update" class="spinner-border spinner-border-sm"
+                                        role="status" aria-hidden="true">
+                                    </span>
+                                    Add New
+                                </button>
+                                <button type="button" class="btn m-0 btn__modal__footer btn__cancel"
+                                    wire:click="cancel" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
 
 @push('livewire-select')
@@ -384,8 +448,9 @@
             @this.set('selectedBuDepartment', parseInt(event.target.value));
         });
 
-        approvalLevelSelect.addEventListener('change', () => {
+        approvalLevelSelect.addEventListener('change', (event) => {
             @this.set('approvalLevelSelected', true);
+            @this.set('levelOfApproval', parseInt(event.target.value));
         });
 
         approvalLevelSelect.addEventListener('reset', () => {
@@ -530,6 +595,32 @@
 
             document.querySelector('#dynamic-approval-container').innerHTML = '';
             teamSelect.disable();
+        });
+
+
+        window.addEventListener('get-config-bu-department', (event) => {
+            const buDeptId = event.detail.configBuDepartment
+            const levelOfApproval = event.detail.levelOfApproval;
+            const selectEditConfigBuDepartment = document.querySelector('#select-edit-config-bu-department');
+            const selectEditConfigLevelOfApproval = document.querySelector('#select-edit-config-level-of-approval');
+
+            VirtualSelect.init({
+                ele: selectEditConfigBuDepartment,
+                options: buDepartmentOption,
+                search: true,
+            });
+            VirtualSelect.init({
+                ele: selectEditConfigLevelOfApproval,
+                options: approvalLevelOption,
+            });
+
+            selectEditConfigBuDepartment.reset();
+            selectEditConfigLevelOfApproval.reset();
+
+            if (buDeptId && levelOfApproval) {
+                selectEditConfigBuDepartment.setValue(buDeptId);
+                selectEditConfigLevelOfApproval.setValue(levelOfApproval);
+            }
         });
     </script>
 @endpush

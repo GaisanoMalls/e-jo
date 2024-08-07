@@ -15,6 +15,7 @@ class HelpTopicConfiguration extends Model
         'help_topic_id',
         'bu_department_id',
         'approvers_count',
+        'level_of_approval'
     ];
 
     public function approvers(): HasMany

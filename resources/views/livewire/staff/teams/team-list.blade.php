@@ -117,7 +117,6 @@
         </div>
     </div>
 
-
     {{-- Edit Team Modal --}}
     <div wire:ignore.self class="modal fade team__modal" id="editTeamModal" tabindex="-1"
         aria-labelledby="editTeamModalLabel" aria-hidden="true">
