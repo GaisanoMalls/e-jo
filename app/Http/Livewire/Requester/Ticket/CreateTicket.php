@@ -12,10 +12,7 @@ use App\Models\ActivityLog;
 use App\Models\Branch;
 use App\Models\Form;
 use App\Models\HelpTopic;
-use App\Models\HelpTopicApprover;
-use App\Models\HelpTopicConfiguration;
 use App\Models\PriorityLevel;
-use App\Models\Role;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
 use App\Models\Team;
@@ -50,7 +47,7 @@ class CreateTicket extends Component
     public ?int $priorityLevel = null;
     public ?int $serviceDepartment = null;
     public ?int $helpTopic = null;
-    public ?array $fileAttachments = [];
+    public $fileAttachments = [];
     public array $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
 
     // Help topic form
@@ -204,7 +201,7 @@ class CreateTicket extends Component
         }
     }
 
-    public function updatedFileAttachments()
+    public function updatedFileAttachments(&$value)
     {
         $this->validate([
             'fileAttachments.*' => [

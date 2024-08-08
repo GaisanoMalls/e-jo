@@ -79,7 +79,8 @@
                                         </label>
                                         <div>
                                             <div id="select-help-topic-team" placeholder="Select (optional)"
-                                                wire:ignore></div>
+                                                wire:ignore>
+                                            </div>
                                         </div>
                                         @error('team')
                                             <span class="error__message">
@@ -137,7 +138,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div wire:ignore class="row" id="dynamic-approval-container"></div>
+                        <div wire:ignore class="row" id="help-topic-approval-container"></div>
                         <div class="my-2"
                             style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
                             <button wire:click="saveConfiguration"
@@ -291,7 +292,7 @@
                                 </div>
                                 <div class="col-md-6 mb-2">
                                     <label class="form-label form__field__label">
-                                        BU Department
+                                        Level of Approval
                                     </label>
                                     <div>
                                         <div id="select-edit-config-level-of-approval" wire:ignore></div>
@@ -303,6 +304,7 @@
                                         </span>
                                     @enderror
                                 </div>
+                                <div wire:ignore class="row" id="edit-help-topic-approval-config-container"></div>
                             </div>
                         </div>
                         <div class="modal-footer modal__footer p-0 justify-content-between border-0 gap-2">
@@ -457,7 +459,7 @@
             @this.set('approvalLevelSelected', false);
         });
 
-        const dynamicApprovalLevelContainer = document.querySelector('#dynamic-approval-container');
+        const dynamicApprovalLevelContainer = document.querySelector('#help-topic-approval-container');
         const approvers = {};
         let selectedApprovers = [];
 
@@ -482,7 +484,6 @@
                         level
                     }
                 }));
-                // console.log(`Level ${level} Approvers:`, approvers[`level${level}`].value);
             });
 
             approvers[`level${level}`].addEventListener('virtual-select:option-click', () => {
@@ -593,34 +594,92 @@
                 }
             });
 
-            document.querySelector('#dynamic-approval-container').innerHTML = '';
+            document.querySelector('#help-topic-approval-container').innerHTML = '';
             teamSelect.disable();
         });
 
+        // Edit Configucation
+        const selectEditConfigBuDepartment = document.querySelector('#select-edit-config-bu-department');
+        const selectEditConfigLevelOfApproval = document.querySelector('#select-edit-config-level-of-approval');
+        VirtualSelect.init({
+            ele: selectEditConfigBuDepartment,
+            options: buDepartmentOption,
+        });
+        VirtualSelect.init({
+            ele: selectEditConfigLevelOfApproval,
+            options: approvalLevelOption,
+        });
 
         window.addEventListener('get-config-bu-department', (event) => {
-            const buDeptId = event.detail.configBuDepartment
+            const buDeptId = event.detail.configBuDepartment;
             const levelOfApproval = event.detail.levelOfApproval;
-            const selectEditConfigBuDepartment = document.querySelector('#select-edit-config-bu-department');
-            const selectEditConfigLevelOfApproval = document.querySelector('#select-edit-config-level-of-approval');
-
-            VirtualSelect.init({
-                ele: selectEditConfigBuDepartment,
-                options: buDepartmentOption,
-                search: true,
-            });
-            VirtualSelect.init({
-                ele: selectEditConfigLevelOfApproval,
-                options: approvalLevelOption,
-            });
 
             selectEditConfigBuDepartment.reset();
             selectEditConfigLevelOfApproval.reset();
 
-            if (buDeptId && levelOfApproval) {
-                selectEditConfigBuDepartment.setValue(buDeptId);
-                selectEditConfigLevelOfApproval.setValue(levelOfApproval);
+            selectEditConfigBuDepartment.setValue(buDeptId);
+            selectEditConfigLevelOfApproval.setValue(levelOfApproval);
+        });
+
+        selectEditConfigBuDepartment.addEventListener('change', (event) => {
+            @this.set('editConfigBUDept', parseInt(event.target.value));
+        });
+
+        selectEditConfigLevelOfApproval.addEventListener('change', (event) => {
+            @this.set('editLevelOfApproval', parseInt(event.target.value));
+        });
+
+        const editHelpTopicApprovalConfigContainer = document.querySelector('#edit-help-topic-approval-config-container');
+        let editSelectedApprovers = []
+        let editApprovers = {};
+
+        const editInitializeApproverSelect = (level) => {
+            editApprovers[`level${level}`] = document.querySelector(
+                `#edit-select-help-topic-approval-level-${level}`);
+
+            VirtualSelect.init({
+                ele: editApprovers[`level${level}`],
+                search: true,
+                multiple: true,
+                showValueAsTags: true,
+                markSearchResults: true,
+                hasOptionDescription: true
+            });
+
+            editApprovers[`level${level}`].addEventListener('change', () => {
+                editSelectedApprovers[level - 1] = editApprovers[`level${level}`].value;
+                @this.set(`editLevel${level}Approvers`, editApprovers[`level${level}`].value);
+
+                window.dispatchEvent(new CustomEvent('edit-approver-level-changed', {
+                    detail: {
+                        level
+                    }
+                }));
+            });
+
+            editApprovers[`level${level}`].addEventListener('virtual-select:option-click', () => {
+                @this.call('getFilteredApprovers', level);
+            });
+        }
+
+        selectEditConfigLevelOfApproval.addEventListener('change', () => {
+            editHelpTopicApprovalConfigContainer.innerHTML = '';
+            editSelectedApprovers = [];
+
+            for (let i = 1; i <= selectEditConfigLevelOfApproval.value; i++) {
+                const approverFieldWrapper = document.createElement('div');
+                approverFieldWrapper.className = 'col-md-6';
+                approverFieldWrapper.innerHTML = `
+                    <div class="mb-2">
+                        <label for="department" class="form-label form__field__label">Level ${i} Approver</label>
+                        <div>
+                            <div id="edit-select-help-topic-approval-level-${i}" wire:ignore></div>
+                        </div>
+                    </div>`;
+                editHelpTopicApprovalConfigContainer.appendChild(approverFieldWrapper);
+                editInitializeApproverSelect(i);
             }
+            window.dispatchEvent(new CustomEvent('edit-approval-level-selected'));
         });
     </script>
 @endpush

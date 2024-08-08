@@ -55,7 +55,7 @@ class CreateHelpTopic extends Component
     public ?Collection $buDepartments = null;
     public ?int $selectedBuDepartment = null;
 
-    public ?Department $editConfigBUDept = null;
+    public ?int $editConfigBUDept = null;
     public ?int $editSelectedBuDepartment = null;
     public ?int $editLevelOfApproval = null;
 
@@ -75,6 +75,8 @@ class CreateHelpTopic extends Component
             'selectedBuDepartment' => [empty($this->configurations) ? 'required' : 'nullable'],
             'approvalLevelSelected' => [empty($this->configurations) ? 'accepted' : 'nullable'],
             'teams' => '',
+            'editConfigBUDept' => ['required'],
+            'editSelectedBuDepartment' => ['required']
         ];
     }
 
@@ -238,14 +240,37 @@ class CreateHelpTopic extends Component
 
     public function editConfiguration(int $index)
     {
-        foreach ($this->configurations as $config) {
-            $this->editConfigBUDept = Department::findOrFail($config['bu_department_id']);
-            $levelOfApproval = $config['level_of_approval'];
-            $this->dispatchBrowserEvent('get-config-bu-department', [
-                'configBuDepartment' => $this->editConfigBUDept->id,
-                'levelOfApproval' => $levelOfApproval
-            ]);
+        foreach ($this->configurations as $configIndex => $config) {
+            if ($configIndex == $index) {
+                $buDepartment = Department::findOrFail($config['bu_department_id'], 'id');
+                $this->editConfigBUDept = $buDepartment->id;
+                $levelOfApproval = $config['level_of_approval'];
+
+                $this->dispatchBrowserEvent('get-config-bu-department', [
+                    'configBuDepartment' => $this->editConfigBUDept,
+                    'levelOfApproval' => $levelOfApproval
+                ]);
+            }
         }
+    }
+
+    public function updateHelpTopicConfiguration()
+    {
+        try {
+            // 
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+        }
+    }
+
+    public function updatedEditConfigBUDept($value)
+    {
+        $this->editConfigBUDept = $value;
+    }
+
+    public function updatedEditLevelOfApproval($value)
+    {
+        $this->editLevelOfApproval = $value;
     }
 
     public function cancelConfiguration()

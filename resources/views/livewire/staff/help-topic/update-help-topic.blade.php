@@ -182,43 +182,46 @@
                     </div>
 
                     <!-- Costing Configuration -->
-                    <div class="row">
-                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
-                            style="font-size: 0.89rem; color: #196837;">
-                            <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
-                            Costing
-                        </h6>
-                        <div class="row mb-2">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label for="costingApprover" class="form-label form__field__label">Costing
-                                                Approver</label>
-                                            <div>
-                                                <div id="select-help-topic-costing-approver" wire:ignore></div>
+                    @if ($isSpecialProject)
+                        <div class="row">
+                            <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
+                                style="font-size: 0.89rem; color: #196837;">
+                                <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
+                                Costing
+                            </h6>
+                            <div class="row mb-2">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="costingApprover"
+                                                    class="form-label form__field__label">Costing
+                                                    Approver</label>
+                                                <div>
+                                                    <div id="select-help-topic-costing-approver" wire:ignore></div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label for="amount" class="form-label form__field__label">Enter
-                                                Maximum
-                                                Total Cost</label>
-                                            <div class="d-flex position-relative amount__field__container">
-                                                <span class="currency text-muted position-absolute mt-2">₱</span>
-                                                <input type="text" wire:model="amount"
-                                                    class="form-control form__field amount__field" id="amount"
-                                                    placeholder="Enter Total Cost">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="amount" class="form-label form__field__label">Enter
+                                                    Maximum
+                                                    Total Cost</label>
+                                                <div class="d-flex position-relative amount__field__container">
+                                                    <span class="currency text-muted position-absolute mt-2">₱</span>
+                                                    <input type="text" wire:model="amount"
+                                                        class="form-control form__field amount__field" id="amount"
+                                                        placeholder="Enter Total Cost">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4" id="costing-approver-container">
-                                        <div class="mb-3">
-                                            <label class="form-label form__field__label">Final Cost
-                                                Approver</label>
-                                            <div>
-                                                <div id="select-help-topic-final-costing-approver" wire:ignore>
+                                        <div class="col-md-4" id="costing-approver-container">
+                                            <div class="mb-3">
+                                                <label class="form-label form__field__label">Final Cost
+                                                    Approver</label>
+                                                <div>
+                                                    <div id="select-help-topic-final-costing-approver" wire:ignore>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -226,7 +229,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                     <div class="col-12">
                         <div class="d-flex align-items-center gap-2">
                             <button type="submit"
@@ -487,40 +490,43 @@
             });
 
             // Costing Approver
-            const selectCostingApprover = @json($costingApproversList);
-            VirtualSelect.init({
-                ele: '#select-help-topic-costing-approver',
-                options: selectCostingApprover,
-                search: true,
-                multiple: true,
-                showValueAsTags: true,
-                markSearchResults: true,
-                hasOptionDescription: true,
-                selectedValue: @json($costingApprovers)
-            });
+            if (@json($isSpecialProject)) {
+                const selectCostingApprover = @json($costingApproversList);
+                VirtualSelect.init({
+                    ele: '#select-help-topic-costing-approver',
+                    options: selectCostingApprover,
+                    search: true,
+                    multiple: true,
+                    showValueAsTags: true,
+                    markSearchResults: true,
+                    hasOptionDescription: true,
+                    selectedValue: @json($costingApprovers)
+                });
 
-            document.querySelector('#select-help-topic-costing-approver').addEventListener('change', (event) => {
-                const selectedCostingApprovers = event.target.value;
-                @this.set('costingApprovers', selectedCostingApprovers);
-            });
+                document.querySelector('#select-help-topic-costing-approver').addEventListener('change', (
+                    event) => {
+                    const selectedCostingApprovers = event.target.value;
+                    @this.set('costingApprovers', selectedCostingApprovers);
+                });
 
-            const selectFinalCostingApprover = @json($finalCostingApproversList);
-            VirtualSelect.init({
-                ele: '#select-help-topic-final-costing-approver',
-                options: selectFinalCostingApprover,
-                search: true,
-                multiple: true,
-                showValueAsTags: true,
-                markSearchResults: true,
-                hasOptionDescription: true,
-                selectedValue: @json($finalCostingApprovers)
-            });
+                const selectFinalCostingApprover = @json($finalCostingApproversList);
+                VirtualSelect.init({
+                    ele: '#select-help-topic-final-costing-approver',
+                    options: selectFinalCostingApprover,
+                    search: true,
+                    multiple: true,
+                    showValueAsTags: true,
+                    markSearchResults: true,
+                    hasOptionDescription: true,
+                    selectedValue: @json($finalCostingApprovers)
+                });
 
-            document.querySelector('#select-help-topic-final-costing-approver').addEventListener('change', (
-                event) => {
-                const selectedFinalCostingApprovers = event.target.value;
-                @this.set('finalCostingApprovers', selectedFinalCostingApprovers);
-            });
+                document.querySelector('#select-help-topic-final-costing-approver').addEventListener('change', (
+                    event) => {
+                    const selectedFinalCostingApprovers = event.target.value;
+                    @this.set('finalCostingApprovers', selectedFinalCostingApprovers);
+                });
+            }
 
             function handleCancelApprovalConfig() {
                 buDepartmentSelect.reset();
