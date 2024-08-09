@@ -273,7 +273,7 @@
                             <i class="fa-sharp fa-solid fa-xmark"></i>
                         </button>
                     </div>
-                    <form wire:submit.prevent="">
+                    <form wire:submit.prevent="saveEditConfiguration">
                         <div class="modal-body modal__body">
                             <div class="row mb-2">
                                 <div class="col-md-6 mb-2">
@@ -297,7 +297,7 @@
                                     <div>
                                         <div id="select-edit-config-level-of-approval" wire:ignore></div>
                                     </div>
-                                    @error('editSelectedBuDepartment')
+                                    @error('editLevelOfApproval')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}
@@ -311,8 +311,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <button type="submit"
                                     class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__modal__footer btn__send">
-                                    <span wire:loading wire:target="update" class="spinner-border spinner-border-sm"
-                                        role="status" aria-hidden="true">
+                                    <span wire:loading wire:target="saveEditConfiguration"
+                                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                                     </span>
                                     Add New
                                 </button>
@@ -599,10 +599,10 @@
         });
 
         // Edit Configucation
-        const selectEditConfigBuDepartment = document.querySelector('#select-edit-config-bu-department');
+        const selectEditBuDepartment = document.querySelector('#select-edit-config-bu-department');
         const selectEditConfigLevelOfApproval = document.querySelector('#select-edit-config-level-of-approval');
         VirtualSelect.init({
-            ele: selectEditConfigBuDepartment,
+            ele: selectEditBuDepartment,
             options: buDepartmentOption,
         });
         VirtualSelect.init({
@@ -611,18 +611,18 @@
         });
 
         window.addEventListener('get-config-bu-department', (event) => {
-            const buDeptId = event.detail.configBuDepartment;
+            const buDeptId = event.detail.editBuDepartment;
             const levelOfApproval = event.detail.levelOfApproval;
 
-            selectEditConfigBuDepartment.reset();
+            selectEditBuDepartment.reset();
             selectEditConfigLevelOfApproval.reset();
 
-            selectEditConfigBuDepartment.setValue(buDeptId);
+            selectEditBuDepartment.setValue(buDeptId);
             selectEditConfigLevelOfApproval.setValue(levelOfApproval);
         });
 
-        selectEditConfigBuDepartment.addEventListener('change', (event) => {
-            @this.set('editConfigBUDept', parseInt(event.target.value));
+        selectEditBuDepartment.addEventListener('change', (event) => {
+            @this.set('editSelectedBuDepartment', parseInt(event.target.value));
         });
 
         selectEditConfigLevelOfApproval.addEventListener('change', (event) => {
@@ -680,6 +680,23 @@
                 editInitializeApproverSelect(i);
             }
             window.dispatchEvent(new CustomEvent('edit-approval-level-selected'));
+        });
+
+        window.addEventListener('edit-load-approvers', (event) => {
+            const level = event.detail.level;
+            const editApproverSelect = editApprovers[`level${level}`];
+
+            if (editApproverSelect) {
+                const approverOptions = event.detail.approvers.filter(approver => {
+                    return !selectedApprovers.flat().includes(approver.id);
+                }).map(approver => ({
+                    label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
+                    value: approver.id,
+                    description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
+                }));
+
+                editApproverSelect.setOptions(approverOptions);
+            }
         });
     </script>
 @endpush

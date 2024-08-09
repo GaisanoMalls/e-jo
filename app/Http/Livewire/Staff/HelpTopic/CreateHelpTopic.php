@@ -55,9 +55,16 @@ class CreateHelpTopic extends Component
     public ?Collection $buDepartments = null;
     public ?int $selectedBuDepartment = null;
 
-    public ?int $editConfigBUDept = null;
+    // Edit help topic config
     public ?int $editSelectedBuDepartment = null;
     public ?int $editLevelOfApproval = null;
+    public array $editLevel1Approvers = [];
+    public array $editLevel2Approvers = [];
+    public array $editLevel3Approvers = [];
+    public array $editLevel4Approvers = [];
+    public array $editLevel5Approvers = [];
+    public array $editSelectedApprovers = [];
+    public array $editConfigurations = [];
 
     public function mount()
     {
@@ -75,8 +82,7 @@ class CreateHelpTopic extends Component
             'selectedBuDepartment' => [empty($this->configurations) ? 'required' : 'nullable'],
             'approvalLevelSelected' => [empty($this->configurations) ? 'accepted' : 'nullable'],
             'teams' => '',
-            'editConfigBUDept' => ['required'],
-            'editSelectedBuDepartment' => ['required']
+            'editSelectedBuDepartment' => ['required'],
         ];
     }
 
@@ -187,37 +193,39 @@ class CreateHelpTopic extends Component
             'level5' => $this->level5Approvers,
         ];
 
-        $approversCount = array_sum(array_map('count', $approvers));
-
         foreach ($this->configurations as $config) {
             if ($config['bu_department_id'] == $this->selectedBuDepartment) {
-                return $this->addError('selectedBuDepartment', 'BU department already exists');
+                $this->addError('selectedBuDepartment', 'BU department already exists');
             }
         }
 
         if (!$this->approvalLevelSelected) {
-            $this->addError('approvalLevelSelected', 'Level of approval field is required');
+            $this->addError('approvalLevelSelected', 'Level of approval field is required.');
         }
 
         if (!$this->selectedBuDepartment) {
-            $this->addError('selectedBuDepartment', 'BU department field is required');
+            $this->addError('selectedBuDepartment', 'BU department field is required.');
         }
 
-        // Check if BU department and level of approval is selected
-        if ($this->selectedBuDepartment && $this->approvalLevelSelected) {
-            // Get the selected BU Department name
-            $buDepartmentName = collect($this->queryBUDepartments())->firstWhere('id', $this->selectedBuDepartment)['name'];
-            // Add to the configurations array
-            $this->configurations[] = [
-                'bu_department_id' => $this->selectedBuDepartment,
-                'bu_department_name' => $buDepartmentName,
-                'approvers_count' => $approversCount,
-                'level_of_approval' => $this->levelOfApproval,
-                'approvers' => $approvers,
-            ];
+        $approversCount = array_sum(array_map('count', $approvers));
 
-            $this->clearValidation();
-            $this->resetApprovalConfigFields();
+        if ($this->approvalLevelSelected && $this->selectedBuDepartment) {
+            // Check if BU department and level of approval is selected
+            if ($this->selectedBuDepartment && $this->approvalLevelSelected) {
+                // Get the selected BU Department name
+                $buDepartmentName = collect($this->queryBUDepartments())->firstWhere('id', $this->selectedBuDepartment)['name'];
+                // Add to the configurations array
+                $this->configurations[] = [
+                    'bu_department_id' => $this->selectedBuDepartment,
+                    'bu_department_name' => $buDepartmentName,
+                    'approvers_count' => $approversCount,
+                    'level_of_approval' => $this->levelOfApproval,
+                    'approvers' => $approvers,
+                ];
+
+                $this->clearValidation();
+                $this->resetApprovalConfigFields();
+            }
         }
     }
 
@@ -243,11 +251,11 @@ class CreateHelpTopic extends Component
         foreach ($this->configurations as $configIndex => $config) {
             if ($configIndex == $index) {
                 $buDepartment = Department::findOrFail($config['bu_department_id'], 'id');
-                $this->editConfigBUDept = $buDepartment->id;
+                $this->editSelectedBuDepartment = $buDepartment->id;
                 $levelOfApproval = $config['level_of_approval'];
 
                 $this->dispatchBrowserEvent('get-config-bu-department', [
-                    'configBuDepartment' => $this->editConfigBUDept,
+                    'editBuDepartment' => $this->editSelectedBuDepartment,
                     'levelOfApproval' => $levelOfApproval
                 ]);
             }
@@ -263,14 +271,9 @@ class CreateHelpTopic extends Component
         }
     }
 
-    public function updatedEditConfigBUDept($value)
+    public function updatedEditSelectedBuDepartment($value)
     {
-        $this->editConfigBUDept = $value;
-    }
-
-    public function updatedEditLevelOfApproval($value)
-    {
-        $this->editLevelOfApproval = $value;
+        $this->editSelectedBuDepartment = $value;
     }
 
     public function cancelConfiguration()
@@ -303,6 +306,51 @@ class CreateHelpTopic extends Component
         $this->getFilteredApprovers(5);
     }
 
+    // Edit configuration\
+    public function updatedEditLevelOfApproval($value)
+    {
+        $this->editLevelOfApproval = $value;
+        $this->getEditFilteredApprovers(1);
+    }
+
+    public function updatedEditLevel1Approvers()
+    {
+        $this->getEditFilteredApprovers(2);
+    }
+
+    public function updatedEditLevel2Approvers()
+    {
+        $this->getEditFilteredApprovers(3);
+    }
+
+    public function saveEditConfiguration()
+    {
+        $approvers = [
+            'level1' => $this->editLevel1Approvers,
+            'level2' => $this->editLevel2Approvers,
+            'level3' => $this->editLevel3Approvers,
+            'level4' => $this->editLevel4Approvers,
+            'level5' => $this->editLevel5Approvers,
+        ];
+
+        foreach ($this->editConfigurations as $config) {
+            if ($config['bu_department_id'] == $this->selectedBuDepartment) {
+                return $this->addError('editSelectedBuDepartment', 'BU department already exists');
+            }
+        }
+
+        $approversCount = array_sum(array_map('count', $approvers));
+
+        if (!$this->editLevelOfApproval) {
+            $this->addError('editLevelOfApproval', 'Level of approval field is required.');
+        }
+
+        if (!$this->editSelectedBuDepartment) {
+            $this->addError('editSelectedBuDepartment', 'BU department field is required.');
+        }
+    }
+    // End edit configuration
+
     public function updatedBuDepartment($value)
     {
         $this->getFilteredApprovers($value);
@@ -325,6 +373,25 @@ class CreateHelpTopic extends Component
             ->get();
 
         $this->dispatchBrowserEvent('load-approvers', ['approvers' => $filteredApprovers, 'level' => $level]);
+    }
+
+    public function getEditFilteredApprovers($level)
+    {
+        $this->editSelectedApprovers = array_merge(
+            (array) $this->editLevel1Approvers,
+            (array) $this->editLevel2Approvers,
+            (array) $this->editLevel3Approvers,
+            (array) $this->editLevel4Approvers,
+            (array) $this->editLevel5Approvers
+        );
+
+        $filteredApprovers = User::with(['profile', 'roles', 'buDepartments'])
+            ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
+            ->whereNotIn('id', $this->editSelectedApprovers)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $this->dispatchBrowserEvent('edit-load-approvers', ['approvers' => $filteredApprovers, 'level' => $level]);
     }
 
     public function fetchCostingApprovers()
