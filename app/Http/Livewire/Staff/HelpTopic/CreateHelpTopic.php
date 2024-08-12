@@ -102,7 +102,6 @@ class CreateHelpTopic extends Component
 
     public function saveHelpTopic()
     {
-        dump($this->configurations);
         $this->validate();
 
         try {
