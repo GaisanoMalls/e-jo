@@ -166,7 +166,7 @@
                                 <tbody>
                                     @foreach ($configurations as $index => $config)
                                         <tr>
-                                            <td class="td__content" style="font-size: 0.85rem;">{{ $index + 1 }}</td>
+                                            <td class="td__content" style="font-size: 0.85rem;">{{ $index }}</td>
                                             <td class="td__content" style="font-size: 0.85rem;">
                                                 {{ $config['bu_department_name'] }}</td>
                                             <td class="td__content" style="font-size: 0.85rem;">
@@ -268,7 +268,7 @@
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content modal__content">
                     <div class="modal-header modal__header p-0 border-0">
-                        <h1 class="modal-title modal__title" id="addNewTeamModalLabel">Edit team</h1>
+                        <h1 class="modal-title modal__title" id="addNewTeamModalLabel">Edit Configuration</h1>
                         <button class="btn btn-sm btn__x" data-bs-dismiss="modal">
                             <i class="fa-sharp fa-solid fa-xmark"></i>
                         </button>
@@ -314,10 +314,10 @@
                                     <span wire:loading wire:target="saveEditConfiguration"
                                         class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                                     </span>
-                                    Add New
+                                    Update
                                 </button>
-                                <button type="button" class="btn m-0 btn__modal__footer btn__cancel"
-                                    wire:click="cancel" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn m-0 btn__modal__footer btn__cancel" wire:click=""
+                                    data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </div>
                     </form>
@@ -610,7 +610,7 @@
             options: approvalLevelOption,
         });
 
-        window.addEventListener('get-config-bu-department', (event) => {
+        window.addEventListener('edit-help-topic-configuration', (event) => {
             const buDeptId = event.detail.editBuDepartment;
             const levelOfApproval = event.detail.levelOfApproval;
 
@@ -683,6 +683,7 @@
         });
 
         window.addEventListener('edit-load-approvers', (event) => {
+            const levelApprovers = event.detail.currentEditLevelApprovers
             const level = event.detail.level;
             const editApproverSelect = editApprovers[`level${level}`];
 
@@ -694,9 +695,30 @@
                     value: approver.id,
                     description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
                 }));
-
                 editApproverSelect.setOptions(approverOptions);
+
+                if (Array.isArray(levelApprovers)) {
+                    const approverKey = `level${level}`;
+
+                    levelApprovers.forEach(lvl => {
+                        const approverValue = lvl.approvers[approverKey];
+                        if (approverValue !== undefined) {
+                            editApproverSelect.setValue(approverValue);
+                        } else {
+                            console.warn(`Approver for ${approverKey} not found in`, lvl);
+                        }
+                    });
+                } else {
+                    console.error('levelApprovers is not an array:', levelApprovers);
+                }
             }
+        });
+
+        window.addEventListener('edit-reset-select-fields', () => {
+            selectEditBuDepartment.reset();
+            selectEditConfigLevelOfApproval.reset();
+            editHelpTopicApprovalConfigContainer.innerHTML = '';
+            $('#editConfigurationModal').modal('hide');
         });
     </script>
 @endpush
