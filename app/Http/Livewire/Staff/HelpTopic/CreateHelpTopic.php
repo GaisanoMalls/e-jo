@@ -264,7 +264,7 @@ class CreateHelpTopic extends Component
     public function updateHelpTopicConfiguration()
     {
         try {
-            // 
+            //
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }

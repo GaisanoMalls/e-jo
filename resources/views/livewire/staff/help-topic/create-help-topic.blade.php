@@ -165,6 +165,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($configurations as $index => $config)
+                                        @dd($config)
                                         <tr>
                                             <td class="td__content" style="font-size: 0.85rem;">{{ $index }}</td>
                                             <td class="td__content" style="font-size: 0.85rem;">
