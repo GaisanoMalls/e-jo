@@ -764,44 +764,46 @@
             const editAddedSelectFieldRequired = document.querySelector('#edit-added-select-field-required');
             const editAddedSelectFieldEnabled = document.querySelector('#edit-added-select-field-enabled');
 
-            VirtualSelect.init({
-                ele: editAddedSelectFieldType,
-                options: addFormFieldFieldTypeOption,
-                search: true,
-                popupDropboxBreakpoint: '3000px'
-            });
+            if (editAddedSelectFieldType && editAddedSelectFieldRequired && editAddedSelectFieldEnabled) {
+                VirtualSelect.init({
+                    ele: editAddedSelectFieldType,
+                    options: addFormFieldFieldTypeOption,
+                    search: true,
+                    popupDropboxBreakpoint: '3000px'
+                });
 
-            VirtualSelect.init({
-                ele: editAddedSelectFieldRequired,
-                options: addFormFieldSelectRequiredOption,
-                popupDropboxBreakpoint: '3000px'
-            });
+                VirtualSelect.init({
+                    ele: editAddedSelectFieldRequired,
+                    options: addFormFieldSelectRequiredOption,
+                    popupDropboxBreakpoint: '3000px'
+                });
 
-            VirtualSelect.init({
-                ele: editAddedSelectFieldEnabled,
-                options: addFormFieldSelectEnableOption,
-                popupDropboxBreakpoint: '3000px'
-            });
+                VirtualSelect.init({
+                    ele: editAddedSelectFieldEnabled,
+                    options: addFormFieldSelectEnableOption,
+                    popupDropboxBreakpoint: '3000px'
+                });
 
-            editAddedSelectFieldType.reset();
-            editAddedSelectFieldRequired.reset();
-            editAddedSelectFieldEnabled.reset();
+                editAddedSelectFieldType.reset();
+                editAddedSelectFieldRequired.reset();
+                editAddedSelectFieldEnabled.reset();
 
-            editAddedSelectFieldType.setValue(editAddedFieldType);
-            editAddedSelectFieldRequired.setValue(editAddedFieldRequired ? 'Yes' : 'No');
-            editAddedSelectFieldEnabled.setValue(editAddedFieldEnabled ? 'Yes' : 'No');
+                editAddedSelectFieldType.setValue(editAddedFieldType);
+                editAddedSelectFieldRequired.setValue(editAddedFieldRequired ? 'Yes' : 'No');
+                editAddedSelectFieldEnabled.setValue(editAddedFieldEnabled ? 'Yes' : 'No');
 
-            editAddedSelectFieldType.addEventListener('change', (event) => {
-                @this.set('editAddedFieldType', event.target.value);
-            });
+                editAddedSelectFieldType.addEventListener('change', (event) => {
+                    @this.set('editAddedFieldType', event.target.value);
+                });
 
-            editAddedSelectFieldRequired.addEventListener('change', (event) => {
-                @this.set('editAddedFieldRequired', event.target.value);
-            });
+                editAddedSelectFieldRequired.addEventListener('change', (event) => {
+                    @this.set('editAddedFieldRequired', event.target.value);
+                });
 
-            editAddedSelectFieldEnabled.addEventListener('change', (event) => {
-                @this.set('editAddedFieldEnabled', event.target.value);
-            });
+                editAddedSelectFieldEnabled.addEventListener('change', (event) => {
+                    @this.set('editAddedFieldEnabled', event.target.value);
+                });
+            }
         });
 
         window.addEventListener('close-selected-form-add-field', () => {

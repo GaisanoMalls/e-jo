@@ -166,7 +166,7 @@
                                 <tbody>
                                     @foreach ($configurations as $index => $config)
                                         <tr>
-                                            <td class="td__content" style="font-size: 0.85rem;">{{ $index }}</td>
+                                            <td class="td__content" style="font-size: 0.85rem;">{{ $index + 1 }}</td>
                                             <td class="td__content" style="font-size: 0.85rem;">
                                                 {{ $config['bu_department_name'] }}</td>
                                             <td class="td__content" style="font-size: 0.85rem;">

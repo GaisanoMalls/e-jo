@@ -148,7 +148,6 @@ class UpdateHelpTopic extends Component
         }
     }
 
-
     public function updatedServiceDepartment()
     {
         $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->serviceDepartment))->get(['id', 'name']);
@@ -244,7 +243,6 @@ class UpdateHelpTopic extends Component
         $this->level5Approvers = [];
         $this->dispatchBrowserEvent('reset-select-fields');
     }
-
 
     public function editConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
     {

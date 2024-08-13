@@ -9,6 +9,7 @@ use App\Http\Traits\Utils;
 use App\Models\Reply;
 use App\Models\Ticket;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 class TicketController extends Controller
 {
@@ -79,6 +80,7 @@ class TicketController extends Controller
 
     public function viewTicket(Ticket $ticket)
     {
+        // Gate::authorize('canViewTicket', $ticket);
         $teams = $this->queryTeams();
         $departments = $this->queryBUDepartments();
         $priorityLevels = $this->queryPriorityLevels();

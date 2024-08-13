@@ -141,7 +141,7 @@
                         <div class="col-md-4">
                             <div class="container__ticket__details__right">
                                 @livewire('staff.ticket.ticket-details', ['ticket' => $ticket])
-                                {{-- @livewire('staff.ticket.ticket-level-approval', ['ticket' => $ticket]) --}}
+                                @livewire('staff.ticket.ticket-level-approval', ['ticket' => $ticket])
                                 @if ($ticket->approval_status === ApprovalStatusEnum::APPROVED)
                                     @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
                                 @endif

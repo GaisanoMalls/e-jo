@@ -9,8 +9,10 @@ use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\User;
+use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
 class ClaimTicket extends Component
@@ -61,8 +63,21 @@ class ClaimTicket extends Component
                     'agent_id' => auth()->user()->id,
                     'status_id' => Status::CLAIMED,
                 ]);
-
                 $this->ticket->teams()->attach($this->ticket->agent->teams->pluck('id')->toArray());
+
+                $agent = User::where(['id', auth()->user()->id])
+                    ->with('profile')
+                    ->role(Role::AGENT)
+                    ->first();
+
+                Notification::send(
+                    $this->ticket->user,
+                    new AppNotification(
+                        ticket: $this->ticket,
+                        title: "Ticket {$this->ticket->ticket_number} - Claimed",
+                        message: "{$agent->profile->getFullName} has claimed your ticket."
+                    )
+                );
                 ActivityLog::make($this->ticket->id, 'claimed the ticket');
 
                 $this->actionOnSubmit();

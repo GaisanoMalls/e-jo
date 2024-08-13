@@ -7,6 +7,7 @@ use App\Mail\Staff\RecommendationRequestMail;
 use App\Models\ActivityLog;
 use App\Models\IctRecommendation;
 use App\Models\Role;
+use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\AppNotification;
@@ -58,6 +59,8 @@ class RequestApproval extends Component
                     ->first();
 
                 if ($serviceDeptAdmin && $requesterServiceDeptAdmin) {
+                    $this->ticket->update(['status_id', Status::OPEN]);
+
                     IctRecommendation::create([
                         'ticket_id' => $this->ticket->id,
                         'approver_id' => $serviceDeptAdmin->id,
@@ -75,7 +78,7 @@ class RequestApproval extends Component
                         )
                     );
 
-                    ActivityLog::make($this->ticket->id, 'created a recommendation');
+                    ActivityLog::make($this->ticket->id, 'requested for approval');
                     $this->actionOnSubmit();
                 }
             });

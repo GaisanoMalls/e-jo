@@ -365,7 +365,6 @@ class CreateHelpTopic extends Component
         }
     }
 
-
     private function resetEditApprovalConfigFields()
     {
         $this->editSelectedBuDepartment = null;
