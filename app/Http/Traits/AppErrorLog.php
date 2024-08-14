@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Log;
 
 trait AppErrorLog
 {
-    public static function getError(Exception|string $e, bool $notify = true)
+    public static function getError(Exception|string $exception, bool $notify = true)
     {
-        Log::channel('appErrorLog')->error($e, [url()->full()]);
+        Log::channel('appErrorLog')->error($exception, [url()->full()]);
 
         if ($notify) {
             // Show pop-up toastr/notification

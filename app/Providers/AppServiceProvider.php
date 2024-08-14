@@ -48,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
                     }
                 });
         } else {
-            \Log::info('Cannot find table "tickets" in database ' . '"' . env('DB_DATABASE') . '"');
+            \Log::info('Cannot find table name "tickets" in database ' . '"' . env('DB_DATABASE') . '"');
         }
     }
 }

@@ -138,7 +138,7 @@ class ApproveTicket extends Component
                         );
 
                         $this->actionOnSubmit();
-                        ActivityLog::make($this->ticket->id, 'approved the ticket');
+                        ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
 
                     } else {
                         noty()->addInfo('Ticket has already been approved by other service dept. admin');

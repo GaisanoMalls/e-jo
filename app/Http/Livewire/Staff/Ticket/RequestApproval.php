@@ -78,7 +78,7 @@ class RequestApproval extends Component
                         )
                     );
 
-                    ActivityLog::make($this->ticket->id, 'requested for approval');
+                    ActivityLog::make(ticket_id: $this->ticket->id, description: 'requested for approval');
                     $this->actionOnSubmit();
                 }
             });

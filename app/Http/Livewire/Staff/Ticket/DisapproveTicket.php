@@ -30,21 +30,7 @@ class DisapproveTicket extends Component
 
     private function actionOnSubmit()
     {
-        $this->reset('reasonDescription');
-        $this->emit('loadTicketTags');
-        $this->emit('loadTicketLogs');
-        $this->emit('loadTicketDetails');
-        $this->emit('loadTicketActions');
-        $this->emit('loadBackButtonHeader');
-        $this->emit('loadReplyButtonHeader');
-        $this->emit('loadDisapprovalReason');
-        $this->emit('loadDropdownApprovalButton');
-        $this->emit('loadTicketStatusTextHeader');
-        $this->emit('loadTicketStatusButtonHeader');
-        $this->emit('loadClarificationButtonHeader');
-        $this->emit('loadSidebarCollapseTicketStatus');
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('reload-modal');
+        return redirect()->route('staff.ticket.view_ticket', $this->ticket->id);
     }
 
     public function disapproveTicket(): void
@@ -75,7 +61,7 @@ class DisapproveTicket extends Component
                     )
                 );
 
-                ActivityLog::make($this->ticket->id, 'disapproved the ticket');
+                ActivityLog::make(ticket_id: $this->ticket->id, description: 'disapproved the ticket');
             });
 
             $this->actionOnSubmit();

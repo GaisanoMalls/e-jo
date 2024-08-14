@@ -1,5 +1,6 @@
 @php
     use App\Models\Role;
+    use App\Models\Status;
 @endphp
 
 <div wire:poll.7s>
@@ -18,10 +19,13 @@
                                 <small class="level__number__label">
                                     Level {{ $level }}
                                 </small>
-                                @if ($this->islevelApproved($level) && $this->isApprovalApproved())
-                                    <small class="fw-bold" style="color: #C73C3C; font-size: 0.75rem;">Approved</small>
-                                @else
-                                    <small class="fw-bold" style="color: #C73C3C; font-size: 0.75rem;">Pending</small>
+                                @if ($ticket->status_id !== Status::DISAPPROVED)
+                                    @if ($this->islevelApproved($level) && $this->isApprovalApproved())
+                                        <small class="fw-bold"
+                                            style="color: #C73C3C; font-size: 0.75rem;">Approved</small>
+                                    @else
+                                        <small class="fw-bold" style="color: #C73C3C; font-size: 0.75rem;">Pending</small>
+                                    @endif
                                 @endif
                             </div>
                             @foreach ($this->fetchedApprovers($level) as $approver)

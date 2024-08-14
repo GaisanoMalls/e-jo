@@ -5,15 +5,14 @@
 <div>
     @if ($ticket->approval_status === ApprovalStatusEnum::DISAPPROVED)
         <div class="alert alert-warning p-3 rounded-3 border-0 mt-4 mb-3" role="alert" style="font-size: 13px;">
-            <div class="mb-2">We regret to inform you that the approver has disapproved your ticket. After careful
-                consideration, the
-                decision has been made not to proceed with the requested action at this time.
+            <div class="mb-2">
+                We apologize to inform you that your ticket has been disapproved by the approver. After
+                careful consideration, the decision has been made not to proceed with the requested action at this time.
                 <br>
-                Please feel free to reach out
-                to the approver or the relevant team if you have any questions or require further
+                Please feel free to reach out to the approver or the relevant team if you have any questions or require
+                further
                 clarification on the disapproval decision. They will be more than willing to assist you with any
-                concerns
-                you may have.
+                concerns you may have.
             </div>
             @if ($reason)
                 <button type="button"

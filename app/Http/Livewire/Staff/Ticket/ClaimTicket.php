@@ -43,21 +43,22 @@ class ClaimTicket extends Component
                     return;
                 }
 
-                if (!is_null($this->ticket->isSpecialProject())) {
-                    $agent = User::where('id', auth()->user()->id)
-                        ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', $this->ticket->teams->pluck('id')->toArray()))
-                        ->first();
+                // if (!is_null($this->ticket->isSpecialProject())) {
+                //     $agent = User::find(auth()->user()->id)
+                //         ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', $this->ticket->teams->pluck('id')->toArray()))
+                //         ->withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
+                //         ->first();
 
-                    // Pratially disabled
-                    // if (is_null($agent)) {
-                    //     if ($this->ticket->teams()->count() === 0) {
-                    //         noty()->addWarning("Unable to claim this ticket. Please wait for the service dept admin to assign this ticket directly to you or to your team.");
-                    //     } else {
-                    //         noty()->addWarning("Unable to claim this ticket since you're not part of these teams: {$this->ticket->getTeams()}");
-                    //     }
-                    //     return;
-                    // }
-                }
+                //     // Pratially disabled
+                //     // if (is_null($agent)) {
+                //     //     if ($this->ticket->teams()->count() === 0) {
+                //     //         noty()->addWarning("Unable to claim this ticket. Please wait for the service dept admin to assign this ticket directly to you or to your team.");
+                //     //     } else {
+                //     //         noty()->addWarning("Unable to claim this ticket since you're not part of these teams: {$this->ticket->getTeams()}");
+                //     //     }
+                //     //     return;
+                //     // }
+                // }
 
                 $this->ticket->update([
                     'agent_id' => auth()->user()->id,
@@ -65,9 +66,9 @@ class ClaimTicket extends Component
                 ]);
                 $this->ticket->teams()->attach($this->ticket->agent->teams->pluck('id')->toArray());
 
-                $agent = User::where(['id', auth()->user()->id])
+                $agent = User::find(auth()->user()->id)
                     ->with('profile')
-                    ->role(Role::AGENT)
+                    ->withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
                     ->first();
 
                 Notification::send(
@@ -78,7 +79,7 @@ class ClaimTicket extends Component
                         message: "{$agent->profile->getFullName} has claimed your ticket."
                     )
                 );
-                ActivityLog::make($this->ticket->id, 'claimed the ticket');
+                ActivityLog::make(ticket_id: $this->ticket->id, description: 'claimed the ticket');
 
                 $this->actionOnSubmit();
                 noty()->addSuccess("You have claimed the ticket - {$this->ticket->ticket_number}.");

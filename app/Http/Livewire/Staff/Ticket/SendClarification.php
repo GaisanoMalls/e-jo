@@ -103,7 +103,7 @@ class SendClarification extends Component
                 );
                 // Mail::to($this->ticket->user)->send(new FromApproverClarificationMail($this->ticket, $this->ticket->user, $this->description));
 
-                ActivityLog::make($this->ticket->id, $logDescription);
+                ActivityLog::make(ticket_id: $this->ticket->id, description: $logDescription);
             });
 
             $this->actionOnSubmit();

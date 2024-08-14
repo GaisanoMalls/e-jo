@@ -191,7 +191,7 @@ class CreateTicket extends Component
                     }
                 }
 
-                ActivityLog::make($ticket->id, 'created a ticket');
+                ActivityLog::make(ticket_id: $ticket->id, description: 'created a ticket');
                 $this->actionOnSubmit();
                 noty()->addSuccess('Ticket created successfully.');
             });

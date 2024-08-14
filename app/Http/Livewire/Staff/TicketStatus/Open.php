@@ -83,7 +83,7 @@ class Open extends Component
 
         if ($ticket->status_id !== Status::VIEWED) {
             $ticket->update(['status_id' => Status::VIEWED]);
-            ActivityLog::make($id, 'seen the ticket');
+            ActivityLog::make(ticket_id: $id, description: 'seen the ticket');
         }
 
         return redirect()->route('staff.ticket.view_ticket', $id);

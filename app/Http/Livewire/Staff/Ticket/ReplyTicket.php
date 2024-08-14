@@ -76,7 +76,7 @@ class ReplyTicket extends Component
                     });
                 }
 
-                ActivityLog::make($this->ticket->id, "replied to {$this->ticket->user->profile->getFullName}");
+                ActivityLog::make(ticket_id: $this->ticket->id, description: "replied to {$this->ticket->user->profile->getFullName}");
             });
 
             $this->actionOnSubmit();

@@ -13,6 +13,18 @@
                 <div class="modal__body">
                     <form wire:submit.prevent="saveAssignTicket">
                         <div class="my-2">
+                            <label class="ticket__actions__label mb-2">Service Department</label>
+                            <div>
+                                <div id="select-service-department" wire:ignore></div>
+                            </div>
+                            @error('team')
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="my-2">
                             <label class="ticket__actions__label mb-2">Assign to team</label>
                             <div>
                                 <div id="select-team" wire:ignore></div>
@@ -27,7 +39,7 @@
                         <div class="my-2">
                             <label class="ticket__actions__label mb-2">
                                 Assign to agent <span class="text-muted">(Optional)</span>
-                                @if (count($agents) > 0)
+                                @if ($agents?->count() > 0)
                                     <span class="fw-normal" style="font-size: 13px;">
                                         ({{ $agents->count() }})
                                     </span>
@@ -48,7 +60,7 @@
                             <span wire:loading wire:target="saveAssignTicket" class="spinner-border spinner-border-sm"
                                 role="status" aria-hidden="true">
                             </span>
-                            Save
+                            Assign
                         </button>
                     </form>
                 </div>
@@ -59,13 +71,20 @@
 
 @push('livewire-select')
     <script>
+        const serviceDepartmentSelect = document.querySelector('#select-service-department');
+        const teamSelect = document.querySelector('#select-team');
+        const checkMultipleTeams = document.querySelector('#checkMultipleTeams');
+        const agentSelect = document.querySelector('#select-agent');
+
+        const serviceDepartmentOption = @json($serviceDepartments).map(serviceDepartment => ({
+            label: serviceDepartment.name,
+            value: serviceDepartment.id
+        }));
+
         const teamOption = @json($teams).map(team => ({
             label: team.name,
             value: team.id
         }));
-
-        const teamSelect = document.querySelector('#select-team');
-        const checkMultipleTeams = document.querySelector('#checkMultipleTeams');
 
         if (@json($isSpecialProject)) {
             VirtualSelect.init({
@@ -87,7 +106,47 @@
         }
         teamSelect.setValue(@json($currentlyAssignedTeams))
 
-        const agentSelect = document.querySelector('#select-agent');
+        VirtualSelect.init({
+            ele: serviceDepartmentSelect,
+            options: serviceDepartmentOption,
+            search: true,
+            markSearchResults: true,
+            hasOptionDescription: true
+        });
+
+        serviceDepartmentSelect.setValue(@json($currentlyAssignedServiceDepartment->id))
+
+        serviceDepartmentSelect.addEventListener('change', (event) => {
+            const serviceDepartmentId = parseInt(event.target.value);
+            @this.set('selectedServiceDepartment', serviceDepartmentId);
+
+            if (serviceDepartmentId) {
+                window.addEventListener('selected-service-department', (event) => {
+                    const teams = event.detail.teams;
+                    console.log(teams);
+
+                    const teamOption = [];
+
+                    if (teams.length > 0) {
+                        teamSelect.enable()
+                        teams.forEach(function(team) {
+                            teamOption.push({
+                                label: team.name,
+                                value: team.id,
+                            });
+                        });
+
+                        teamSelect.setOptions(teamOption);
+                        teamSelect.setValue(@json($currentlyAssignedTeams))
+
+                    } else {
+                        teamSelect.reset();
+                        teamSelect.disable()
+                    }
+                });
+            }
+        });
+
         // Initialize the agent select dropdown
         VirtualSelect.init({
             ele: agentSelect,
@@ -144,6 +203,11 @@
                 });
             }
         });
+
+        serviceDepartmentSelect.addEventListener('reset', () => {
+            teamSelect.setOptions([]);
+            teamSelect.disable();
+        })
 
         teamSelect.addEventListener('reset', () => {
             agentSelect.setOptions([]);

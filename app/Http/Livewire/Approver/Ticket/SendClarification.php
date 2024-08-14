@@ -89,7 +89,7 @@ class SendClarification extends Component
                     ? 'sent a clarification'
                     : 'replied a clarification to ' . $requester->user->profile->getFullName;
 
-                ActivityLog::make($this->ticket->id, $logDescription);
+                ActivityLog::make(ticket_id: $this->ticket->id, description: $logDescription);
                 // Mail::to($ticket->user)->send(new FromApproverClarificationMail($ticket, $request->description));
             });
 

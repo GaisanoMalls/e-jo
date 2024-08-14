@@ -5,13 +5,16 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
+use App\Models\Department;
 use App\Models\Role;
+use App\Models\ServiceDepartment;
 use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
@@ -21,9 +24,13 @@ class AssignTicket extends Component
     use BasicModelQueries;
 
     public Ticket $ticket;
-    public $agents = [];
+    public ?Collection $agents = null;
+    public ?Collection $serviceDepartments = null;
+    public ?ServiceDepartment $currentlyAssignedServiceDepartment = null;
+    public ?int $selectedServiceDepartment = null;
     public $teams = [];
     public $selectedTeams = [];
+    public $currentlyAssignedBuDepartment = null;
     public $currentlyAssignedTeams = [];
     public $currentlyAssignedAgent;
     public $agent;
@@ -36,10 +43,13 @@ class AssignTicket extends Component
 
     public function mount()
     {
+        $this->isSpecialProject = !is_null($this->ticket->isSpecialProject());
         $this->currentlyAssignedAgent = $this->ticket->agent_id;
         $this->currentlyAssignedTeams = $this->ticket->teams->pluck('id')->toArray();
-        $this->isSpecialProject = !is_null($this->ticket->isSpecialProject());
-        $this->teams = Team::where('service_department_id', $this->ticket->serviceDepartment->id)
+        $this->currentlyAssignedServiceDepartment = $this->ticket->serviceDepartment;
+        $this->serviceDepartments = ServiceDepartment::get();
+        $this->teams = $this->currentlyAssignedServiceDepartment
+            ->teams()
             ->withWhereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
             ->get();
     }
@@ -47,6 +57,7 @@ class AssignTicket extends Component
     private function actionOnSubmit()
     {
         $this->emit('loadTicketDetails');
+        $this->emit('loadTicketActions');
         $this->emit('loadBackButtonHeader');
         $this->emit('loadTicketStatusTextHeader');
         $this->dispatchBrowserEvent('close-modal');
@@ -62,6 +73,14 @@ class AssignTicket extends Component
         $this->dispatchBrowserEvent('get-agents-from-team', ['agents' => $this->agents]);
     }
 
+    public function updatedSelectedServiceDepartment($value)
+    {
+        $this->teams = Team::where('service_department_id', $value)
+            ->withWhereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
+            ->get();
+        $this->dispatchBrowserEvent('selected-service-department', ['teams' => $this->teams]);
+    }
+
     // public function updatedIsMultipleTeams()
     // {
 
@@ -72,6 +91,7 @@ class AssignTicket extends Component
         try {
             DB::transaction(function () {
                 $this->ticket->update([
+                    'service_department_id' => $this->selectedServiceDepartment,
                     'agent_id' => $this->agent ?: null,
                     'status_id' => Status::APPROVED
                 ]);

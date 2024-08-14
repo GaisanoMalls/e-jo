@@ -27,7 +27,7 @@ class NotificationList extends Component
 
                     if ($ticket->status_id != Status::VIEWED) {
                         $ticket->update(['status_id' => Status::VIEWED]);
-                        ActivityLog::make($ticket->id, 'seen the ticket');
+                        ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');
                     }
                 }
 

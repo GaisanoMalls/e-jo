@@ -25,9 +25,9 @@ class NotificationList extends Component
                 if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
 
-                    if ($ticket->status_id != Status::VIEWED) {
+                    if ($ticket->status_id !== Status::VIEWED && ($ticket->status_id !== Status::APPROVED || $ticket->status_id !== Status::ON_PROCESS)) {
                         $ticket->update(['status_id' => Status::VIEWED]);
-                        ActivityLog::make($ticket->id, 'seen the ticket');
+                        ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');
                     }
                 }
 

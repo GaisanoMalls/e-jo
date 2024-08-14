@@ -109,7 +109,7 @@ class SendClarification extends Component
                     // Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
                 });
 
-                ActivityLog::make($this->ticket->id, $logClarificationDescription);
+                ActivityLog::make(ticket_id: $this->ticket->id, description: $logClarificationDescription);
                 $this->actionOnSubmit();
             });
         } catch (Exception $e) {
