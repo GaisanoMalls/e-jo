@@ -39,7 +39,6 @@ class NotificationList extends Component
                     ? redirect()->route('staff.ticket.ticket_clarifications', $notification->data['ticket']['id'])
                     : redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
             });
-
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
