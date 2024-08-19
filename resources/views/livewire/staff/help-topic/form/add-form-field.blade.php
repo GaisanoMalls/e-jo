@@ -66,10 +66,38 @@
             </div>
         </div>
     </div>
-    <div class="mx-1">
-        <h6>Add field</h6>
+    <div class="row">
+        <h6>Add fields</h6>
         @if (session()->has('required_form_fields_error'))
             <small class="fw-semibold text-danger mb-1">{{ session('required_form_fields_error') }}</small>
+        @endif
+        <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
+            <input wire:model="asHeaderField" class="form-check-input check__special__project" type="checkbox"
+                role="switch" id="headerFieldCheck" wire:loading.attr="disabled">
+            <label class="form-check-label" for="headerFieldCheck">
+                As header field
+            </label>
+        </div>
+        @if ($asHeaderField)
+            <div class="row">
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                    <div class="mb-2">
+                        <label for="fieldName" class="form-label text-muted form__field__label"
+                            style="font-weight: 500;">
+                            Assign column
+                        </label>
+                        <div>
+                            <div id="select-field-column-number" wire:ignore></div>
+                        </div>
+                        @error('name')
+                            <span class="error__message position-absolute" style="bottom: -5px !important;">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ $message }}
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+            </div>
         @endif
         <div class="row mb-3">
             <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
@@ -138,10 +166,10 @@
                     </span>
                 @enderror
             </div>
-            <div class="col-12 mt-3 col-md-6 d-flex flex-column justify-content-end">
+            <div class="col-12 mt-3 col-md-6 d-flex flex-column justify-content-end mx-0">
                 <div class="mb-2">
                     <button wire:click="addField" type="button"
-                        class="btn btn-sm d-flex gap-2 ms-1 align-items-center justify-content-center outline-none px-3 rounded-3"
+                        class="btn btn-sm d-flex gap-2 align-items-center justify-content-center outline-none px-3 rounded-3"
                         style="height: 45px; background-color: #edeef0; border: 1px solid #e7e9eb; margin-bottom: 10px;">
                         <span wire:loading.remove wire:target="addField">
                             <i class="bi bi-save"></i>
@@ -280,8 +308,8 @@
             </div>
         @endif
     </div>
-    <div class="modal-footer modal__footer p-0 mt-3 mx-2 justify-content-between border-0 gap-2">
-        <div class="d-flex align-items-center gap-2">
+    <div class="modal-footer modal__footer p-0 mt-3 justify-content-between border-0 gap-2">
+        <div class="d-flex align-items-center m-0 gap-2">
             <button wire:click="saveForm" type="button"
                 class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send">
                 <span wire:loading wire:target="saveForm" class="spinner-border spinner-border-sm" role="status"
@@ -304,6 +332,24 @@
         const selectFieldType = document.querySelector('#select-field-type');
         const selectRequired = document.querySelector('#select-required-field');
         const selectEnable = document.querySelector('#select-enable-field');
+
+        window.addEventListener('show-select-column-number', () => {
+            const selectFieldAssignColumn = document.querySelector('#select-field-column-number');
+            const columnNumberOption = @json($fieldColumnNumber).map(colNumber => ({
+                label: `Column ${colNumber}`,
+                value: colNumber
+            }));
+
+            VirtualSelect.init({
+                ele: selectFieldAssignColumn,
+                options: columnNumberOption,
+            });
+
+            selectFieldAssignColumn.addEventListener('change', (event) => {
+                const column = parseInt(event.target.value);
+                @this.set('selectedFieldColumnNumber', column);
+            });
+        })
 
         const fieldTypeOption = @json($fieldTypes).map(fieldType => ({
             label: fieldType.label,

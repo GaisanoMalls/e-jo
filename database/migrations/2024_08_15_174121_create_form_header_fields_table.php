@@ -20,7 +20,9 @@ return new class extends Migration {
             $table->string('label');
             $table->string('type');
             $table->string('variable_name');
-            $table->integer('assigned_column');
+            $table->boolean('is_required')->default(false);
+            $table->boolean('is_enabled')->default(false);
+            $table->integer('assigned_column')->default(1);
             $table->timestamps();
         });
     }

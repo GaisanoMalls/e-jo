@@ -24,6 +24,10 @@ class AddFormField extends Component
     public $type;
     public $variableName;
     public $addedFields = [];
+    public $addedHeaderFields = [];
+    public $fieldColumnNumber = [1, 2];
+    public ?int $selectedFieldColumnNumber = null;
+    public $asHeaderField = false;
     public $is_required = false;
     public $is_enabled = false;
     public $editingFieldId;
@@ -58,6 +62,13 @@ class AddFormField extends Component
         return preg_replace('/[^a-zA-Z0-9_.]+/', '_', strtolower(trim($value)));
     }
 
+    public function updatedAsHeaderField($value)
+    {
+        if ($value) {
+            $this->dispatchBrowserEvent('show-select-column-number');
+        }
+    }
+
     public function updatedName($value)
     {
         $this->variableName = $this->convertToVariable($value);
@@ -85,15 +96,17 @@ class AddFormField extends Component
             return;
         }
 
+        $fields = $this->asHeaderField ? $this->addedHeaderFields : $this->addedFields;
         array_push(
-            $this->addedFields,
+            $fields,
             [
                 'name' => $this->name,
                 'label' => $this->name,
                 'type' => $this->type,
                 'variable_name' => $this->variableName,
                 'is_required' => $this->is_required == FieldRequiredOptionEnum::YES->value,
-                'is_enabled' => $this->is_enabled == FieldEnableOptionEnum::YES->value
+                'is_enabled' => $this->is_enabled == FieldEnableOptionEnum::YES->value,
+
             ]
         );
 
@@ -225,6 +238,7 @@ class AddFormField extends Component
                     'is_enabled' => $field['is_enabled'],
                 ]);
             }
+
             $this->actionOnSubmit();
 
         } catch (Exception $e) {
