@@ -20,6 +20,8 @@ class Field extends Model
         'variable_name',
         'is_required',
         'is_enabled',
+        'assigned_column',
+        'is_header_field'
     ];
 
     protected $casts = [

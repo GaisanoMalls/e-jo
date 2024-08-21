@@ -19,40 +19,40 @@ class HelpTopicList extends Component
 {
     use BasicModelQueries;
 
-    public $helpTopicForm = null;
-    public $deleteHelpTopicId;
-    public $deleteHelpTopicFormId;
-    public $deleteHelpTopicFormName;
+    public ?Form $helpTopicForm = null;
+    public ?int $deleteHelpTopicId = null;
+    public ?int $deleteHelpTopicFormId = null;
+    public ?string $deleteHelpTopicFormName = null;
 
-    public $selectedHelpTopicName;
-    public $selectedFormId;
-    public $selectedFormName;
-    public $selectedFormFieldName;
-    public $selectedFormVariableName;
-    public $selectedFormFieldType;
-    public $selectedFormFieldIsRequired;
-    public $selectedFormFieldIsEnabled;
-    public $selectedFormAddedFields = [];
+    public ?string $selectedHelpTopicName = null;
+    public ?int $selectedFormId = null;
+    public ?string $selectedFormName = null;
+    public ?string $selectedFormFieldName = null;
+    public ?string $selectedFormVariableName = null;
+    public ?string $selectedFormFieldType = null;
+    public ?string $selectedFormFieldIsRequired = null;
+    public ?string $selectedFormFieldIsEnabled = null;
+    public array $selectedFormAddedFields = [];
 
-    public $editSelectedFieldFormId;
-    public $editSelectedFieldId;
-    public $editSelectedFieldName;
-    public $editSelectedFieldType;
-    public $editSelectedFieldRequired;
-    public $editSelectedFieldEnabled;
-    public $editSelectedFieldIsCurrentlyEditing = false;
+    public ?int $editSelectedFieldFormId = null;
+    public ?int $editSelectedFieldId = null;
+    public ?string $editSelectedFieldName = null;
+    public ?string $editSelectedFieldType = null;
+    public ?string $editSelectedFieldRequired = null;
+    public ?string $editSelectedFieldEnabled = null;
+    public bool $editSelectedFieldIsCurrentlyEditing = false;
 
-    public $editFormId;
-    public $editFormName;
-    public $editFormNameCurrentlyEditing = false;
+    public ?int $editFormId = null;
+    public ?string $editFormName = null;
+    public bool $editFormNameCurrentlyEditing = false;
 
-    public $editAddedFieldId;
-    public $editAddedFieldName;
-    public $editAddedFieldType;
-    public $editAddedFieldRequired;
-    public $editAddedFieldEnabled;
-    public $editAddedFieldVariableName;
-    public $editAddedFieldIsCurrentlyEditing = false;
+    public ?int $editAddedFieldId = null;
+    public ?string $editAddedFieldName = null;
+    public ?string $editAddedFieldType = null;
+    public bool $editAddedFieldRequired = false;
+    public bool $editAddedFieldEnabled = false;
+    public ?string $editAddedFieldVariableName = null;
+    public bool $editAddedFieldIsCurrentlyEditing = false;
 
     protected $listeners = ['loadHelpTopics' => '$refresh'];
 
@@ -100,7 +100,7 @@ class HelpTopicList extends Component
     public function deleteHelpTopicForm()
     {
         try {
-            $helpTopicForm = Form::find($this->deleteHelpTopicFormId);
+            $helpTopicForm = Form::findOrFail($this->deleteHelpTopicFormId);
             if ($helpTopicForm) {
                 $helpTopicForm->delete();
                 $this->deleteHelpTopicFormId = null;

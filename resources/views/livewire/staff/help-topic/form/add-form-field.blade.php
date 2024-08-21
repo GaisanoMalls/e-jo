@@ -144,7 +144,7 @@
                     </div>
                 </div>
                 @error('is_required')
-                    <span class="error__message position-absolute" style="bottom: -24px !important;">
+                    <span class="error__message position-absolute" style="bottom: -5px !important;">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         {{ $message }}
                     </span>
@@ -160,7 +160,7 @@
                     </div>
                 </div>
                 @error('is_enabled')
-                    <span class="error__message position-absolute" style="bottom: -24px !important;">
+                    <span class="error__message position-absolute" style="bottom: -5px !important;">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         {{ $message }}
                     </span>
@@ -183,22 +183,26 @@
                 </div>
             </div>
         </div>
+
         @if (!empty($addedFields))
             <div class="row my-4 px-3">
+                <h6 class="p-0 mx-2" style="font-size: 15px;">Form fields</h6>
                 <div class="table-responsive custom__table">
-                    <table class="table mb-0">
+                    <table class="table mb-0 border-0">
                         <thead>
                             <tr>
                                 <th class="border-0 table__head__label px-2">Name</th>
                                 <th class="border-0 table__head__label px-2">Type</th>
                                 <th class="border-0 table__head__label px-2">Required</th>
                                 <th class="border-0 table__head__label px-2">Enable</th>
+                                <th class="border-0 table__head__label px-2">Header Field</th>
+                                <th class="border-0 table__head__label px-2">Assigned Column</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($addedFields as $key => $field)
-                                <tr wire:key="field-{{ $key }}">
-                                    <td>
+                                <tr wire:key="normal-field-{{ $key + 1 }}">
+                                    <td class="position-relative">
                                         <div class="d-flex align-items-center text-start px-0 td__content"
                                             style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
@@ -210,13 +214,13 @@
                                         </div>
                                         @error('editingFieldName')
                                             <span class="error__message position-absolute"
-                                                style="bottom: -3px !important;">
+                                                style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
                                         @enderror
                                     </td>
-                                    <td>
+                                    <td class="position-relative">
                                         <div class="d-flex align-items-center text-start px-0 td__content"
                                             style="height: 0;">
                                             @if ($editingFieldId === $key)
@@ -229,13 +233,13 @@
                                         </div>
                                         @error('editingFieldType')
                                             <span class="error__message position-absolute"
-                                                style="bottom: -3px !important;">
+                                                style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
                                         @enderror
                                     </td>
-                                    <td>
+                                    <td class="position-relative">
                                         <div class="d-flex align-items-center text-start px-0 td__content"
                                             style="height: 0;">
                                             @if ($editingFieldId === $key)
@@ -248,13 +252,13 @@
                                         </div>
                                         @error('editingFieldRequired')
                                             <span class="error__message position-absolute"
-                                                style="bottom: -3px !important;">
+                                                style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
                                         @enderror
                                     </td>
-                                    <td>
+                                    <td class="position-relative">
                                         <div class="d-flex align-items-center text-start px-0 td__content"
                                             style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
@@ -267,7 +271,45 @@
                                         </div>
                                         @error('editingFieldEnable')
                                             <span class="error__message position-absolute"
-                                                style="bottom: -3px !important;">
+                                                style="bottom: -10px !important;">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </td>
+                                    <td class="position-relative">
+                                        <div class="d-flex align-items-center text-start px-0 td__content"
+                                            style="height: 0; min-width: 200px;">
+                                            @if ($editingFieldId === $key)
+                                                <div class="w-100">
+                                                    <div id="editing-select-as-header-field" wire:ignore></div>
+                                                </div>
+                                            @else
+                                                <span>{{ $field['as_header_field'] }}</span>
+                                            @endif
+                                        </div>
+                                        @error('editingAsHeaderField')
+                                            <span class="error__message position-absolute"
+                                                style="bottom: -10px !important;">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </td>
+                                    <td class="position-relative">
+                                        <div class="d-flex align-items-center text-start px-0 td__content"
+                                            style="height: 0; min-width: 200px;">
+                                            @if ($editingFieldId === $key)
+                                                <div class="w-100">
+                                                    <div id="editing-select-assigned-column" wire:ignore></div>
+                                                </div>
+                                            @else
+                                                <span>{{ $field['assigned_column'] ?? 'None' }}</span>
+                                            @endif
+                                        </div>
+                                        @error('editingAssignedColumn')
+                                            <span class="error__message position-absolute"
+                                                style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
@@ -347,7 +389,7 @@
 
             selectFieldAssignColumn.addEventListener('change', (event) => {
                 const column = parseInt(event.target.value);
-                @this.set('selectedFieldColumnNumber', column);
+                @this.set('assignedColumn', column);
             });
         })
 
@@ -413,6 +455,10 @@
             @this.set('helpTopic', null);
         });
 
+        selectFormVisibility.addEventListener('change', (event) => {
+            @this.set('visibleTo', event.target.value)
+        });
+
         const selectFormVisibilityOption = @json($userRoles).map(role => ({
             label: role.label,
             value: role.label
@@ -424,10 +470,6 @@
             search: true,
             multiple: true,
             showValueAsTags: true,
-        });
-
-        selectFormVisibility.addEventListener('change', (event) => {
-            @this.set('visibleTo', event.target.value)
         });
 
         const selectFormEditableOption = @json($userRoles).map(role => ({
@@ -466,10 +508,14 @@
             const currentFieldType = event.detail.currentFieldType
             const currentFieldRequired = event.detail.currentFieldRequired;
             const currentFieldEnable = event.detail.currentFieldEnable;
+            const currentAsHeaderField = event.detail.currentAsHeaderField;
+            const currentAssignedCoumn = event.detail.currentAssignedCoumn;
 
             const editingSelectFieldType = document.querySelector('#editing-select-field-type');
             const editingSelectFieldIsRequired = document.querySelector('#editing-select-field-is-required');
             const editingSelectFieldEnable = document.querySelector('#editing-select-field-enable');
+            const editingSelectAsHeaderField = document.querySelector('#editing-select-as-header-field');
+            const editingSelectAssignedColumn = document.querySelector('#editing-select-assigned-column');
 
             VirtualSelect.init({
                 ele: editingSelectFieldType,
@@ -490,14 +536,41 @@
                 popupDropboxBreakpoint: '3000px'
             });
 
+            const asHeaderFielOption = ['Yes', 'No'].map(header => ({
+                label: header,
+                value: header
+            }));
+
+            VirtualSelect.init({
+                ele: editingSelectAsHeaderField,
+                options: asHeaderFielOption,
+                popupDropboxBreakpoint: '3000px'
+            });
+
+            const headerFieldColumnOption = [1, 2, 'None'].map(column => ({
+                label: column,
+                value: column
+            }));
+
+            VirtualSelect.init({
+                ele: editingSelectAssignedColumn,
+                options: headerFieldColumnOption,
+                popupDropboxBreakpoint: '3000px'
+            });
+
             // Reset the select field first before assigning a new value.
             editingSelectFieldType.reset();
             editingSelectFieldIsRequired.reset();
             editingSelectFieldEnable.reset();
+            editingSelectAsHeaderField.reset();
+            editingSelectAssignedColumn.reset();
 
             editingSelectFieldType.setValue(currentFieldType);
             editingSelectFieldIsRequired.setValue(currentFieldRequired ? 'Yes' : 'No');
             editingSelectFieldEnable.setValue(currentFieldEnable ? 'Yes' : 'No');
+            editingSelectAsHeaderField.setValue(currentAsHeaderField);
+            editingSelectAsHeaderField.setValue(currentAsHeaderField);
+            editingSelectAssignedColumn.setValue(currentAssignedCoumn == null ? 'None' : currentAssignedCoumn);
 
             editingSelectFieldType.addEventListener('change', (event) => {
                 @this.set('editingFieldType', event.target.value);
@@ -509,6 +582,22 @@
 
             editingSelectFieldEnable.addEventListener('change', (event) => {
                 @this.set('editingFieldEnable', event.target.value);
+            });
+
+            editingSelectAsHeaderField.addEventListener('change', (event) => {
+                @this.set('editingAsHeaderField', event.target.value);
+            });
+
+            editingSelectAsHeaderField.addEventListener('reset', () => {
+                @this.set('editingAsHeaderField', null);
+            });
+
+            editingSelectAssignedColumn.addEventListener('change', (event) => {
+                @this.set('editingAssignedColumn', event.target.value);
+            });
+
+            editingSelectAssignedColumn.addEventListener('reset', () => {
+                @this.set('editingAssignedColumn', null);
             });
         });
     </script>

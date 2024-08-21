@@ -167,7 +167,7 @@
     {{-- View help topic form --}}
     <div wire:ignore.self class="modal fade help__topic__modal" id="viewFormModal" tabindex="-1"
         aria-labelledby="viewFormModalModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 90rem !important;">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0 mb-3">
                     <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">
@@ -396,7 +396,7 @@
     {{-- Add field to the selected form --}}
     <div wire:ignore.self class="modal fade help__topic__modal" id="addFieldForSelectedForm" tabindex="-1"
         aria-labelledby="addFieldForSelectedFormModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 90rem !important;">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0 mb-3">
                     <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">

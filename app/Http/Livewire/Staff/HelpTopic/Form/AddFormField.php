@@ -16,26 +16,29 @@ use Spatie\LaravelOptions\Options;
 
 class AddFormField extends Component
 {
-    public $formName;
-    public $helpTopic;
-    public $visibleTo = [];
-    public $editableTo = [];
-    public $name;
-    public $type;
-    public $variableName;
-    public $addedFields = [];
-    public $addedHeaderFields = [];
-    public $fieldColumnNumber = [1, 2];
-    public ?int $selectedFieldColumnNumber = null;
-    public $asHeaderField = false;
-    public $is_required = false;
-    public $is_enabled = false;
-    public $editingFieldId;
-    public $editingFieldName;
-    public $editingFieldType;
-    public $editingFieldRequired;
-    public $editingFieldEnable;
-    public $editingFieldVariableName;
+    public ?string $formName = null;
+    public ?int $helpTopic = null;
+    public array $visibleTo = [];
+    public array $editableTo = [];
+    public ?string $name = null;
+    public ?string $type = null;
+    public ?string $variableName = null;
+    public array $addedFields = [];
+    public array $addedHeaderFields = [];
+    public array $fieldColumnNumber = [1, 2];
+    public ?int $assignedColumn = null;
+    public ?string $asHeaderField = null;
+    public bool $is_required = false;
+    public bool $is_enabled = false;
+    public ?int $editingFieldId = null;
+    public ?int $editingHeaderFieldId = null;
+    public ?string $editingFieldName = null;
+    public ?string $editingFieldType = null;
+    public ?string $editingFieldRequired = null;
+    public ?string $editingFieldEnable = null;
+    public ?string $editingFieldVariableName = null;
+    public ?string $editingAsHeaderField = null; // 'Yes' or 'No'
+    public ?string $editingAssignedColumn = null; // 1, 2, 'None'
 
     public function rules()
     {
@@ -64,9 +67,9 @@ class AddFormField extends Component
 
     public function updatedAsHeaderField($value)
     {
-        if ($value) {
-            $this->dispatchBrowserEvent('show-select-column-number');
-        }
+        $value
+            ? $this->dispatchBrowserEvent('show-select-column-number')
+            : $this->assignedColumn = null;
     }
 
     public function updatedName($value)
@@ -92,25 +95,27 @@ class AddFormField extends Component
         }
 
         if (!$this->is_required) {
-            $this->addError('is_required', 'Please choose if this field is required or not');
+            $this->addError('is_required', 'This field is required');
             return;
         }
 
-        $fields = $this->asHeaderField ? $this->addedHeaderFields : $this->addedFields;
-        array_push(
-            $fields,
-            [
-                'name' => $this->name,
-                'label' => $this->name,
-                'type' => $this->type,
-                'variable_name' => $this->variableName,
-                'is_required' => $this->is_required == FieldRequiredOptionEnum::YES->value,
-                'is_enabled' => $this->is_enabled == FieldEnableOptionEnum::YES->value,
+        if (!$this->is_enabled) {
+            $this->addError('is_enabled', 'This field is required');
+            return;
+        }
 
-            ]
-        );
+        array_push($this->addedFields, [
+            'name' => $this->name,
+            'label' => $this->name,
+            'type' => $this->type,
+            'variable_name' => $this->variableName,
+            'is_required' => $this->is_required == FieldRequiredOptionEnum::YES->value,
+            'is_enabled' => $this->is_enabled == FieldEnableOptionEnum::YES->value,
+            'as_header_field' => $this->asHeaderField ? 'Yes' : 'No',
+            'assigned_column' => $this->asHeaderField ? $this->assignedColumn : null,
+        ]);
 
-        $this->reset('name', 'type', 'variableName', 'is_required', 'is_enabled');
+        $this->reset('name', 'type', 'variableName', 'is_required', 'is_enabled', 'assignedColumn', 'asHeaderField');
         $this->resetValidation();
         $this->dispatchBrowserEvent('clear-form-fields');
     }
@@ -127,11 +132,15 @@ class AddFormField extends Component
                     $this->editingFieldRequired = $field['is_required'] == FieldRequiredOptionEnum::YES->value;
                     $this->editingFieldEnable = $field['is_enabled'] == FieldEnableOptionEnum::YES->value;
                     $this->editingFieldVariableName = $field['variable_name'];
+                    $this->editingAsHeaderField = $field['as_header_field'];
+                    $this->editingAssignedColumn = $field['assigned_column'];
 
                     $this->dispatchBrowserEvent('edit-added-field-show-select-field', [
                         'currentFieldType' => $this->editingFieldType,
                         'currentFieldRequired' => $this->editingFieldRequired == FieldRequiredOptionEnum::YES->value,
-                        'currentFieldEnable' => $this->editingFieldEnable == FieldEnableOptionEnum::YES->value
+                        'currentFieldEnable' => $this->editingFieldEnable == FieldEnableOptionEnum::YES->value,
+                        'currentAsHeaderField' => $this->editingAsHeaderField,
+                        'currentAssignedCoumn' => $this->editingAssignedColumn,
                     ]);
                 }
             }
@@ -164,6 +173,16 @@ class AddFormField extends Component
                 return;
             }
 
+            if (!$this->editingAsHeaderField) {
+                $this->addError('editingAsHeaderField', 'This field is required');
+                return;
+            }
+
+            if (!$this->editingAssignedColumn) {
+                $this->addError('editingAssignedColumn', 'This field is required');
+                return;
+            }
+
             foreach ($this->addedFields as $key => &$field) {
                 if ($this->editingFieldId === $fieldKey && $key === $fieldKey) {
                     $field['name'] = $this->editingFieldName;
@@ -171,6 +190,8 @@ class AddFormField extends Component
                     $field['variable_name'] = $this->editingFieldVariableName;
                     $field['is_required'] = $this->editingFieldRequired == FieldRequiredOptionEnum::YES->value;
                     $field['is_enabled'] = $this->editingFieldEnable == FieldEnableOptionEnum::YES->value;
+                    $field['as_header_field'] = $this->editingAsHeaderField;
+                    $field['assigned_column'] = $this->editingAssignedColumn;
                 }
             }
             $this->editFieldAction();
@@ -195,6 +216,9 @@ class AddFormField extends Component
         $this->editingFieldRequired = false;
         $this->editingFieldEnable = false;
         $this->editingFieldVariableName = null;
+        $this->editingAsHeaderField = null;
+        $this->editingAssignedColumn = null;
+        $this->resetValidation();
     }
 
     public function removeField(int $fieldKey)
@@ -236,6 +260,8 @@ class AddFormField extends Component
                     'variable_name' => $field['variable_name'],
                     'is_required' => $field['is_required'],
                     'is_enabled' => $field['is_enabled'],
+                    'assigned_column' => $field['assigned_column'],
+                    'is_header_field' => $field['as_header_field'] == 'Yes' ? true : false
                 ]);
             }
 

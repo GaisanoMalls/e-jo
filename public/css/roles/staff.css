@@ -8693,7 +8693,7 @@ a:hover {
 }
 .ticket__section .card__ticket__details .form-check-label {
   font-size: 0.813rem !important;
-  margin-top: 0px !important;
+  margin-top: 1px !important;
 }
 .ticket__section .card__ticket__details .reload__section:hover {
   cursor: pointer;
