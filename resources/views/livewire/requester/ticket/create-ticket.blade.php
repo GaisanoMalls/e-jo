@@ -111,197 +111,116 @@
                                     </span>
                                 @enderror
                             </div>
+
+                            {{-- Help topic form --}}
                             @if ($helpTopicForm)
-                                <div class="row mb-3">
-                                    <label class="form-label input__field__label">
-                                        Fill in the form
-                                    </label>
-                                    <label class="form-label input__field__label fw-bold mt-2">
-                                        {{ $helpTopicForm->name }}
-                                    </label>
-                                    <div class="row">
-                                        @foreach ($formFields as $key => $field)
-                                            {{-- Display those fields that are set to enabled. --}}
-                                            @if ($field['is_enabled'])
-                                                {{-- short text field --}}
-                                                @if ($field['type'] === FieldType::SHORT_ANSWER->value)
-                                                    <div class="col-md-6 mb-3">
-                                                        <label for="field-{{ $key }}"
-                                                            class="form-label input__field__label">
-                                                            {{ Str::title($field['label']) }}
-                                                        </label>
-                                                        <input wire:model="formFields.{{ $key }}.value"
-                                                            type="text" id="field-{{ $key }}"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($field['label']) }}">
-                                                        @error('formFields.{{ $key }}.value')
-                                                            <span class="error__message">
-                                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                @endif
-
-                                                {{-- long text field --}}
-                                                @if ($field['type'] === FieldType::LONG_ANSWER->value)
-                                                    <div class="col-md-6 mb-3">
-                                                        <label for="field-{{ $key }}"
-                                                            class="form-label input__field__label">
-                                                            {{ Str::title($field['label']) }}
-                                                        </label>
-                                                        <textarea wire:model="formFields.{{ $key }}.value" id="field-{{ $key }}"
-                                                            class="form-control input__field" placeholder="Enter {{ Str::lower($field['label']) }}">
-                                                </textarea>
-                                                        @error('formFields.{{ $key }}.value')
-                                                            <span class="error__message">
-                                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                @endif
-
-                                                {{-- number field --}}
-                                                @if ($field['type'] === FieldType::NUMBER->value)
-                                                    <div class="col-md-6 mb-3">
-                                                        <label for="field-{{ $key }}"
-                                                            class="form-label input__field__label">
-                                                            {{ Str::title($field['label']) }}
-                                                        </label>
-                                                        <input wire:model="formFields.{{ $key }}.value"
-                                                            id="field-{{ $key }}" type="number"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($field['label']) }}">
-                                                        </input>
-                                                        @error('formFields.{{ $key }}.value')
-                                                            <span class="error__message">
-                                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                @endif
-
-                                                {{-- date field --}}
-                                                @if ($field['type'] === FieldType::DATE->value)
-                                                    <div class="col-md-6 mb-3">
-                                                        <label for="field-{{ $key }}"
-                                                            class="form-label input__field__label">
-                                                            {{ Str::title($field['label']) }}
-                                                        </label>
-                                                        <input wire:model="formFields.{{ $key }}.value"
-                                                            id="field-{{ $key }}" type="date"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($field['label']) }}">
-                                                        </input>
-                                                        @error('formFields.{{ $key }}.value')
-                                                            <span class="error__message">
-                                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                @endif
-
-                                                {{-- time field --}}
-                                                @if ($field['type'] === FieldType::TIME->value)
-                                                    <div class="col-md-6 mb-3">
-                                                        <label for="field-{{ $key }}"
-                                                            class="form-label input__field__label">
-                                                            {{ Str::title($field['label']) }}
-                                                        </label>
-                                                        <input wire:model="formFields.{{ $key }}.value"
-                                                            id="field-{{ $key }}" type="time"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($field['label']) }}">
-                                                        </input>
-                                                        @error('formFields.{{ $key }}.value')
-                                                            <span class="error__message">
-                                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                @endif
-
-                                                {{-- amount field --}}
-                                                @if ($field['type'] === FieldType::AMOUNT->value)
-                                                    <div class="col-md-6 mb-3">
-                                                        <label for="field-{{ $key }}"
-                                                            class="form-label input__field__label">
-                                                            {{ Str::title($field['label']) }}
-                                                        </label>
-                                                        <input wire:model="formFields.{{ $key }}.value"
-                                                            id="field-{{ $key }}" type="number"
-                                                            step=".01" class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($field['label']) }}">
-                                                        </input>
-                                                        @error('formFields.{{ $key }}.value')
-                                                            <span class="error__message">
-                                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                @endif
-
-                                                {{-- file upload field --}}
-                                                @if ($field['type'] === FieldType::FILE->value)
-                                                    <div class="col-md-4 mb-3">
-                                                        <label for="field-{{ $key }}"
-                                                            class="form-label input__field__label">
-                                                            {{ Str::title($field['label']) }}
-                                                        </label>
-                                                        <div x-data="{ isUploadingCustomFormFile: false, progress: 1 }"
-                                                            x-on:livewire-upload-start="isUploadingCustomFormFile = true; progress = 1"
-                                                            x-on:livewire-upload-finish="isUploadingCustomFormFile = false"
-                                                            x-on:livewire-upload-error="isUploadingCustomFormFile = false"
-                                                            x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                                            <input wire:model="formFields.{{ $key }}.value"
-                                                                id="field-{{ $key }}" type="file"
-                                                                class="form-control form-control-sm border-0 ticket__file"
-                                                                placeholder="Enter {{ Str::lower($field['label']) }}"
-                                                                accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
-                                                                multiple>
-                                                            </input>
-                                                            <div x-transition.duration.500ms
-                                                                x-show="isUploadingCustomFormFile"
-                                                                class="progress progress-sm mt-1"
-                                                                style="height: 10px;">
-                                                                <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                                                    role="progressbar"
-                                                                    aria-label="Animated striped example"
-                                                                    aria-valuenow="75" aria-valuemin="0"
-                                                                    aria-valuemax="100"
-                                                                    x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex align-items-center justify-content-between"
-                                                                x-transition.duration.500ms>
-                                                                <span x-show="isUploadingCustomFormFile"
-                                                                    x-text="progress + '%'" style="font-size: 12px;">
-                                                                </span>
-                                                                <span class="d-flex align-items-center gap-1"
-                                                                    style="font-size: 12px;">
-                                                                    <i x-show="isUploadingCustomFormFile"
-                                                                        class='bx bx-loader-circle bx-spin'
-                                                                        style="font-size: 14px;"></i>
-                                                                    <span
-                                                                        x-show="isUploadingCustomFormFile">Uploading...</span>
-                                                                </span>
-                                                            </div>
+                                <div class="col-12">
+                                    <div class="row mb-3 pb-3 mx-auto ps-1 rounded-3 custom__form">
+                                        <div class="d-flex align-items-center justify-content-between flex-row mb-3">
+                                            <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name">
+                                                {{ $helpTopicForm->name }}
+                                            </h6>
+                                            {{-- <img src="{{ asset('images/gmall-davao-pr-form.png') }}"
+                                                class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System"> --}}
+                                        </div>
+                                        <div
+                                            class="w-100 d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap overflow-scroll">
+                                            @foreach ($formFields as $key => $field)
+                                                @if ($field['is_enabled'])
+                                                    <div class="d-flex flex-column border w-100">
+                                                        <div class="form__label border-bottom px-2 py-1">
+                                                            <label for="field-{{ $key }}"
+                                                                class="input__field__label">
+                                                                {{ Str::title($field['label']) }}
+                                                            </label>
                                                         </div>
-                                                        @error('formFields.{{ $key }}.value')
-                                                            <span class="error__message">
-                                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
+                                                        <div class="form__field">
+                                                            {{-- Text field --}}
+                                                            @if ($field['type'] === FieldType::TEXT->value)
+                                                                <input
+                                                                    wire:model="formFields.{{ $key }}.value"
+                                                                    type="text" id="field-{{ $key }}"
+                                                                    class="w-100 px-2 py-1 border-0 rounded-0 form-control input__field custom__field"
+                                                                    placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                                @error('formFields.{{ $key }}.value')
+                                                                    <span class="error__message">
+                                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
+                                                            @endif
+
+                                                            {{-- Number field --}}
+                                                            @if ($field['type'] === FieldType::NUMBER->value)
+                                                                <input
+                                                                    wire:model="formFields.{{ $key }}.value"
+                                                                    type="number" id="field-{{ $key }}"
+                                                                    class="w-100 px-2 py-1 border-0 rounded-0 form-control input__field custom__field"
+                                                                    placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                                @error('formFields.{{ $key }}.value')
+                                                                    <span class="error__message">
+                                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
+                                                            @endif
+
+                                                            {{-- Date field --}}
+                                                            @if ($field['type'] === FieldType::DATE->value)
+                                                                <input
+                                                                    wire:model="formFields.{{ $key }}.value"
+                                                                    type="date" id="field-{{ $key }}"
+                                                                    class="w-100 px-2 py-1 border-0 rounded-0 form-control input__field custom__field"
+                                                                    placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                                @error('formFields.{{ $key }}.value')
+                                                                    <span class="error__message">
+                                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
+                                                            @endif
+
+                                                            {{-- Time field --}}
+                                                            @if ($field['type'] === FieldType::TIME->value)
+                                                                <input
+                                                                    wire:model="formFields.{{ $key }}.value"
+                                                                    type="time" id="field-{{ $key }}"
+                                                                    class="w-100 px-2 py-1 border-0 rounded-0 form-control input__field custom__field"
+                                                                    placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                                @error('formFields.{{ $key }}.value')
+                                                                    <span class="error__message">
+                                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
+                                                            @endif
+
+                                                            {{-- Amount field --}}
+                                                            @if ($field['type'] === FieldType::AMOUNT->value)
+                                                                <input
+                                                                    wire:model="formFields.{{ $key }}.value"
+                                                                    type="number" id="field-{{ $key }}"
+                                                                    class="w-100 px-2 py-1 border-0 rounded-0 form-control input__field custom__field"
+                                                                    placeholder="Enter {{ Str::lower($field['label']) }}">
+                                                                @error('formFields.{{ $key }}.value')
+                                                                    <span class="error__message">
+                                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 @endif
-                                            @endif
-                                        @endforeach
+                                            @endforeach
+                                        </div>
+                                        <div class="new__field__row position-relative">
+                                            <div class="row__line"></div>
+                                            <button type="button"
+                                                class="btn btn-sm d-flex align-items-center justify-content-center position-absolute btn__add__new__field__row">
+                                                <i class="bi bi-plus-lg"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             @endif

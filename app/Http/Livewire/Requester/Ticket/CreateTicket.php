@@ -149,7 +149,6 @@ class CreateTicket extends Component
                             'ticket_id' => $ticket->id,
                             'help_topic_approver_id' => $helpTopicApproval->id,
                         ]);
-
                     });
 
                     Notification::send(
@@ -160,7 +159,7 @@ class CreateTicket extends Component
                             message: "{$ticket->user->profile->getFullName} created a ticket"
                         )
                     );
-                    Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
+                    // Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
                 });
 
                 if ($this->isHelpTopicHasForm) {
@@ -177,7 +176,9 @@ class CreateTicket extends Component
                                 'type' => $field['type'],
                                 'variable_name' => $field['variable_name'],
                                 'is_required' => $field['is_required'],
-                                'is_enabled' => $field['is_enabled']
+                                'is_enabled' => $field['is_enabled'],
+                                'assigned_column' => $field['assigned_column'],
+                                'is_header_field' => $field['is_header_field'],
                             ]);
 
                             if ($field['type'] === 'file' && !is_null($field['value'])) {
@@ -248,6 +249,8 @@ class CreateTicket extends Component
                     'is_required' => $field->is_required,
                     'is_enabled' => $field->is_enabled,
                     'value' => null, // To store the value of the given inputs
+                    'assigned_column' => $field->assigned_column,
+                    'is_header_field' => $field->is_header_field,
                     'form' => $this->helpTopicForm->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
                 ];
             })->toArray();

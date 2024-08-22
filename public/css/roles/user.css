@@ -8731,6 +8731,44 @@ body {
   font-weight: 600;
   color: #4a5568;
 }
+.create__ticket__modal .modal__content .custom__form {
+  border: 1px solid #ced4da;
+}
+.create__ticket__modal .modal__content .custom__form .form__name {
+  font-size: 1.02rem;
+  text-transform: uppercase;
+}
+.create__ticket__modal .modal__content .custom__form .form__label {
+  white-space: nowrap;
+}
+.create__ticket__modal .modal__content .custom__form .pr__form__gmall__logo {
+  height: 50px;
+}
+.create__ticket__modal .modal__content .custom__form .custom__field:focus {
+  border: 1px solid #d32839 !important;
+}
+.create__ticket__modal .modal__content .custom__form .new__field__row {
+  margin: -5px;
+  display: none;
+}
+.create__ticket__modal .modal__content .custom__form .new__field__row .row__line {
+  width: 100%;
+  height: 1px;
+  background-color: rgb(169, 207, 211);
+}
+.create__ticket__modal .modal__content .custom__form .new__field__row .btn__add__new__field__row {
+  height: 18px;
+  width: 18px;
+  font-size: 0.65rem;
+  border-radius: 3.125rem;
+  background-color: rgb(150, 192, 197);
+  color: white;
+  left: 5px;
+  top: -8px;
+}
+.create__ticket__modal .modal__content .custom__form:hover .new__field__row {
+  display: flex;
+}
 
 @media (max-width: 767px) {
   .btn__reply__ticket .lbl__reply {

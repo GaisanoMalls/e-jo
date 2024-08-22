@@ -68,8 +68,8 @@
             @foreach ($customFormFields as $key => $field)
                 {{-- Display those fields that are set to enabled. --}}
                 @if ($field['is_enabled'])
-                    {{-- short text field --}}
-                    @if ($field['type'] === FieldType::SHORT_ANSWER->value)
+                    {{--  text field --}}
+                    @if ($field['type'] === FieldType::TEXT->value)
                         <div class="col-md-6 mb-3">
                             <label for="field-{{ $key }}" class="form-label input__field__label">
                                 {{ Str::title($field['label']) }}
@@ -79,25 +79,6 @@
                                 placeholder="Enter {{ Str::lower($field['label']) }}" @required($field['is_required'])
                                 @disabled(!$isEditing)>
                             @error('customcustomFormFields.{{ $key }}.value')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div>
-                    @endif
-
-                    {{-- long text field --}}
-                    @if ($field['type'] === FieldType::LONG_ANSWER->value)
-                        <div class="col-md-6 mb-3">
-                            <label for="field-{{ $key }}" class="form-label input__field__label">
-                                {{ Str::title($field['label']) }}
-                            </label>
-                            <textarea wire:model="customFormFields.{{ $key }}.value" id="field-{{ $key }}"
-                                class="form-control input__field" placeholder="Enter {{ Str::lower($field['label']) }}" @required($field['is_required'])
-                                @disabled(!$isEditing)>
-                                                </textarea>
-                            @error('customFormFields.{{ $key }}.value')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}
@@ -208,8 +189,8 @@
                                     <div x-transition.duration.500ms x-show="isUploadingCustomFormFile"
                                         class="progress progress-sm mt-1" style="height: 10px;">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                            role="progressbar" aria-label="Animated striped example"
-                                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                                            role="progressbar" aria-label="Animated striped example" aria-valuenow="75"
+                                            aria-valuemin="0" aria-valuemax="100"
                                             x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
                                         </div>
                                     </div>

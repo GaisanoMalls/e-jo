@@ -4,8 +4,7 @@ namespace App\Enums;
 
 enum FieldTypesEnum: string
 {
-    case SHORT_ANSWER = 'short_answer';
-    case LONG_ANSWER = 'long_answer';
+    case TEXT = 'text';
     case NUMBER = 'number';
     case DATE = 'date';
     case TIME = 'time';

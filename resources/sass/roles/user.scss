@@ -1874,6 +1874,57 @@ body {
             font-weight: $fw-600;
             color: #4a5568;
         }
+
+        .custom__form {
+            border: 1px solid #ced4da;
+
+            .form__name {
+                font-size: 1.02rem;
+                text-transform: uppercase;
+            }
+
+            .form__label {
+                white-space: nowrap;
+            }
+
+            .pr__form__gmall__logo {
+                height: 50px;
+            }
+
+            .custom__field {
+                &:focus {
+                    border: 1px solid #d32839 !important;
+                }
+            }
+
+            .new__field__row {
+                margin: -5px;
+                display: none;
+
+                .row__line {
+                    width: 100%;
+                    height: 1px;
+                    background-color: rgb(169, 207, 211);
+                }
+
+                .btn__add__new__field__row {
+                    height: 18px;
+                    width: 18px;
+                    font-size: 0.65rem;
+                    border-radius: $border-radius-50;
+                    background-color: rgb(150, 192, 197);
+                    color: white;
+                    left: 5px;
+                    top: -8px;
+                }
+            }
+
+            &:hover {
+                .new__field__row {
+                    display: flex;
+                }
+            }
+        }
     }
 }
 
