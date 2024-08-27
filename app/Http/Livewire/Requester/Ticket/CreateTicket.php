@@ -56,6 +56,8 @@ class CreateTicket extends Component
     public ?string $formName = null;
     public array $formFields = [];
     public array $filledForms = []; // Insert the filled forms here.
+    public array $fieldValues = [];
+    public array $fieldRows = [];
     public bool $isHelpTopicHasForm = false;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
@@ -202,12 +204,18 @@ class CreateTicket extends Component
         }
     }
 
+    public function addFieldRow()
+    {
+        $this->dispatchBrowserEvent('add-field-row');
+    }
+
     public function updatedFileAttachments(&$value)
     {
         $this->validate([
             'fileAttachments.*' => [
                 'nullable',
-                File::types($this->allowedExtensions)->max(25600) //25600 (25 MB)
+                File::types($this->allowedExtensions)
+                    ->max(25600) //25600 (25 MB)
             ],
         ]);
     }

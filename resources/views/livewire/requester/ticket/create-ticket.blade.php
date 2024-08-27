@@ -210,13 +210,16 @@
                                                                 @enderror
                                                             @endif
                                                         </div>
+                                                        <div id="new-row-field-container">
+                                                            {{-- New field row  --}}
+                                                        </div>
                                                     </div>
                                                 @endif
                                             @endforeach
                                         </div>
                                         <div class="new__field__row position-relative">
                                             <div class="row__line"></div>
-                                            <button type="button"
+                                            <button type="button" id="add-field-row"
                                                 class="btn btn-sm d-flex align-items-center justify-content-center position-absolute btn__add__new__field__row">
                                                 <i class="bi bi-plus-lg"></i>
                                             </button>
