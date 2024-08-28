@@ -58,6 +58,7 @@ class CreateTicket extends Component
     public array $filledForms = []; // Insert the filled forms here.
     public array $fieldValues = [];
     public array $fieldRows = [];
+    public array $addedFieldValues = [];
     public bool $isHelpTopicHasForm = false;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
@@ -107,6 +108,7 @@ class CreateTicket extends Component
 
     public function sendTicket()
     {
+        dd($this->addedFieldValues);
         $this->validate();
 
         try {
@@ -206,7 +208,16 @@ class CreateTicket extends Component
 
     public function addFieldRow()
     {
-        $this->dispatchBrowserEvent('add-field-row');
+        // Add new field row
+        foreach ($this->formFields as $field) {
+            $this->fieldRows[] = [
+                'name' => $field['name'],
+                'value' => $field['value'],
+            ];
+        }
+
+        // Assign the fields rows with it's value to a new array
+        $this->addedFieldValues[] = $this->fieldRows;
     }
 
     public function updatedFileAttachments(&$value)
@@ -228,6 +239,7 @@ class CreateTicket extends Component
 
     public function updatedHelpTopic($value)
     {
+        $this->fieldRows = [];
         $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $value))->pluck('id')->first();
         $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $value))->pluck('id')->first();
         $helpTopicForm = Form::with('fields')->where('help_topic_id', $value)->first(); // Get the help topic form

@@ -8744,6 +8744,9 @@ body {
 .create__ticket__modal .modal__content .custom__form .pr__form__gmall__logo {
   height: 50px;
 }
+.create__ticket__modal .modal__content .custom__form .custom__field {
+  border-bottom: 1px solid #ced4da !important;
+}
 .create__ticket__modal .modal__content .custom__form .custom__field:focus {
   border: 1px solid #d32839 !important;
 }
