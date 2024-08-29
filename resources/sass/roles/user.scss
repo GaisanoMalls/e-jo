@@ -1899,6 +1899,14 @@ body {
                 }
             }
 
+            .header__field {
+                border-bottom: 0.08rem solid #ced4da !important;
+
+                &:focus {
+                     border-bottom-color: #d32839 !important;
+                }
+            }
+
             .new__field__row {
                 margin: -5px;
                 display: none;
@@ -1926,6 +1934,8 @@ body {
                     display: flex;
                 }
             }
+
+
         }
     }
 }

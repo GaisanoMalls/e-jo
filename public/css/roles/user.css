@@ -8750,6 +8750,12 @@ body {
 .create__ticket__modal .modal__content .custom__form .custom__field:focus {
   border: 1px solid #d32839 !important;
 }
+.create__ticket__modal .modal__content .custom__form .header__field {
+  border-bottom: 0.08rem solid #ced4da !important;
+}
+.create__ticket__modal .modal__content .custom__form .header__field:focus {
+  border-bottom-color: #d32839 !important;
+}
 .create__ticket__modal .modal__content .custom__form .new__field__row {
   margin: -5px;
   display: none;

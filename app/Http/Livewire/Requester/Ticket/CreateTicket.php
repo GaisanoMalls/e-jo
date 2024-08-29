@@ -61,7 +61,8 @@ class CreateTicket extends Component
     public array $fieldValues = [];
     public array $fieldRows = [];
     public array $fieldRowValues = [];
-    public array $addedFieldValues = [];
+    public array $rowFieldValues = [];
+    public array $headerFieldValues = [];
     public bool $isHelpTopicHasForm = false;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
@@ -111,7 +112,8 @@ class CreateTicket extends Component
 
     public function sendTicket()
     {
-        dd($this->addedFieldValues);
+        array_push($this->rowFieldValues, $this->fieldRows);
+        dd($this->rowFieldValues);
         $this->validate();
 
         try {
@@ -197,6 +199,9 @@ class CreateTicket extends Component
                     //         }
                     //     }
                     // }
+
+                    array_push($this->headerFieldValues, $this->headerFields);
+                    array_push($this->rowFieldValues, $this->fieldRows);
                 }
 
                 ActivityLog::make(ticket_id: $ticket->id, description: 'created a ticket');
@@ -222,7 +227,7 @@ class CreateTicket extends Component
         }
 
         // Assign the fields rows with it's value to a new array
-        $this->addedFieldValues[] = $this->fieldRows;
+        $this->rowFieldValues[] = $this->fieldRows;
     }
 
     public function updatedFileAttachments(&$value)
