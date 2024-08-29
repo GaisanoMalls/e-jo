@@ -54,10 +54,13 @@ class CreateTicket extends Component
     public ?Form $helpTopicForm = null;
     public ?int $formId = null;
     public ?string $formName = null;
+    public array $headerFields = [];
+    public array $nonHeaderFields = [];
     public array $formFields = [];
     public array $filledForms = []; // Insert the filled forms here.
     public array $fieldValues = [];
     public array $fieldRows = [];
+    public array $fieldRowValues = [];
     public array $addedFieldValues = [];
     public bool $isHelpTopicHasForm = false;
 
@@ -169,31 +172,31 @@ class CreateTicket extends Component
                 if ($this->isHelpTopicHasForm) {
                     array_push($this->filledForms, $this->formFields);
 
-                    foreach ($this->filledForms as $fields) {
-                        foreach ($fields as $field) {
-                            $ticketCustomFormField = TicketCustomFormField::create([
-                                'ticket_id' => $ticket->id,
-                                'form_id' => $field['form']['id'],
-                                'value' => $field['type'] !== 'file' ? $field['value'] : null,
-                                'name' => $field['name'],
-                                'label' => $field['label'],
-                                'type' => $field['type'],
-                                'variable_name' => $field['variable_name'],
-                                'is_required' => $field['is_required'],
-                                'is_enabled' => $field['is_enabled'],
-                                'assigned_column' => $field['assigned_column'],
-                                'is_header_field' => $field['is_header_field'],
-                            ]);
+                    // foreach ($this->filledForms as $fields) {
+                    //     foreach ($fields as $field) {
+                    //         $ticketCustomFormField = TicketCustomFormField::create([
+                    //             'ticket_id' => $ticket->id,
+                    //             'form_id' => $field['form']['id'],
+                    //             'value' => $field['type'] !== 'file' ? $field['value'] : null,
+                    //             'name' => $field['name'],
+                    //             'label' => $field['label'],
+                    //             'type' => $field['type'],
+                    //             'variable_name' => $field['variable_name'],
+                    //             'is_required' => $field['is_required'],
+                    //             'is_enabled' => $field['is_enabled'],
+                    //             'assigned_column' => $field['assigned_column'],
+                    //             'is_header_field' => $field['is_header_field'],
+                    //         ]);
 
-                            if ($field['type'] === 'file' && !is_null($field['value'])) {
-                                foreach ($field['value'] as $uploadedCustomFile) {
-                                    $fileName = $uploadedCustomFile->getClientOriginalName();
-                                    $customFileAttachment = Storage::putFileAs("public/tiket/{$ticket->ticket_number}/custom_form_file", $uploadedCustomFile, $fileName);
-                                    $ticketCustomFormField->ticketCustomFormFiles()->create(['file_attachment' => $customFileAttachment]);
-                                }
-                            }
-                        }
-                    }
+                    //         if ($field['type'] === 'file' && !is_null($field['value'])) {
+                    //             foreach ($field['value'] as $uploadedCustomFile) {
+                    //                 $fileName = $uploadedCustomFile->getClientOriginalName();
+                    //                 $customFileAttachment = Storage::putFileAs("public/tiket/{$ticket->ticket_number}/custom_form_file", $uploadedCustomFile, $fileName);
+                    //                 $ticketCustomFormField->ticketCustomFormFiles()->create(['file_attachment' => $customFileAttachment]);
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 }
 
                 ActivityLog::make(ticket_id: $ticket->id, description: 'created a ticket');
@@ -209,10 +212,12 @@ class CreateTicket extends Component
     public function addFieldRow()
     {
         // Add new field row
-        foreach ($this->formFields as $field) {
+        foreach ($this->nonHeaderFields as $field) {
             $this->fieldRows[] = [
                 'name' => $field['name'],
                 'value' => $field['value'],
+                'assigned_column' => $field['assigned_column'],
+                'is_header_field' => $field['is_header_field']
             ];
         }
 
@@ -274,6 +279,9 @@ class CreateTicket extends Component
                     'form' => $this->helpTopicForm->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
                 ];
             })->toArray();
+
+            $this->headerFields = array_filter($this->formFields, fn($field) => $field['is_header_field']);
+            $this->nonHeaderFields = array_filter($this->formFields, fn($field) => !$field['is_header_field']);
 
             $this->description = null; // Not necessary when using custom form.
             $this->helpTopicForm = $helpTopicForm; // Assign the helpTopicForm property of the selected help topic form.

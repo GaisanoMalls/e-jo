@@ -123,9 +123,124 @@
                                             <img src="{{ asset('images/gmall-davao-pr-form.png') }}"
                                                 class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System">
                                         </div>
+                                        @if (!empty($headerFields))
+                                            <div class="row mx-auto my-3">
+                                                @foreach ($headerFields as $hfKey => $headerField)
+                                                    @if ($headerField['assigned_column'] == 1)
+                                                        <div
+                                                            class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <label class="form-label mb-0 input__field__label"
+                                                                    style="white-space: nowrap">Service
+                                                                    {{ $headerField['label'] }}:
+                                                                </label>
+                                                                {{-- Text field --}}
+                                                                @if ($headerField['type'] === FieldType::TEXT->value)
+                                                                    <input
+                                                                        wire:model="fieldRows.{{ $hfKey }}.value"
+                                                                        type="text" id="field-{{ $hfKey }}"
+                                                                        class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field custom__field"
+                                                                        placeholder="Enter {{ Str::lower($headerField['label']) }}">
+                                                                @endif
+
+                                                                {{-- Number field --}}
+                                                                @if ($headerField['type'] === FieldType::NUMBER->value)
+                                                                    <input
+                                                                        wire:model="fieldRows.{{ $hfKey }}.value"
+                                                                        type="number" id="field-{{ $hfKey }}"
+                                                                        class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field custom__field"
+                                                                        placeholder="Enter {{ Str::lower($headerField['label']) }}">
+                                                                @endif
+
+                                                                {{-- Date field --}}
+                                                                @if ($headerField['type'] === FieldType::DATE->value)
+                                                                    <input
+                                                                        wire:model="fieldRows.{{ $hfKey }}.value"
+                                                                        type="date" id="field-{{ $hfKey }}"
+                                                                        class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field custom__field"
+                                                                        placeholder="Enter {{ Str::lower($headerField['label']) }}">
+                                                                @endif
+
+                                                                {{-- Time field --}}
+                                                                @if ($headerField['type'] === FieldType::TIME->value)
+                                                                    <input
+                                                                        wire:model="fieldRows.{{ $hfKey }}.value"
+                                                                        type="time" id="field-{{ $hfKey }}"
+                                                                        class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field custom__field"
+                                                                        placeholder="Enter {{ Str::lower($headerField['label']) }}">
+                                                                @endif
+
+                                                                {{-- Amount field --}}
+                                                                @if ($headerField['type'] === FieldType::AMOUNT->value)
+                                                                    <input
+                                                                        wire:model="fieldRows.{{ $hfKey }}.value"
+                                                                        type="number" id="field-{{ $hfKey }}"
+                                                                        class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field custom__field"
+                                                                        placeholder="Enter {{ Str::lower($headerField['label']) }}">
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                    @if ($headerField['assigned_column'] == 2)
+                                                        <div class="col-lg-6 col-md-12 col-sm-12 px-0 mb-2">
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <label class="form-label mb-0 input__field__label"
+                                                                    style="white-space: nowrap">Service
+                                                                    {{ $headerField['label'] }}:
+                                                                </label>
+                                                                {{-- Text field --}}
+                                                                @if ($headerField['type'] === FieldType::TEXT->value)
+                                                                    <input
+                                                                        wire:model="fieldRows.{{ $hfKey }}.value"
+                                                                        type="text" id="field-{{ $hfKey }}"
+                                                                        class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field custom__field"
+                                                                        placeholder="Enter {{ Str::lower($headerField['label']) }}">
+                                                                @endif
+
+                                                                {{-- Number field --}}
+                                                                @if ($headerField['type'] === FieldType::NUMBER->value)
+                                                                    <input
+                                                                        wire:model="fieldRows.{{ $hfKey }}.value"
+                                                                        type="number" id="field-{{ $hfKey }}"
+                                                                        class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field custom__field"
+                                                                        placeholder="Enter {{ Str::lower($headerField['label']) }}">
+                                                                @endif
+
+                                                                {{-- Date field --}}
+                                                                @if ($headerField['type'] === FieldType::DATE->value)
+                                                                    <input
+                                                                        wire:model="fieldRows.{{ $hfKey }}.value"
+                                                                        type="date" id="field-{{ $hfKey }}"
+                                                                        class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field custom__field"
+                                                                        placeholder="Enter {{ Str::lower($headerField['label']) }}">
+                                                                @endif
+
+                                                                {{-- Time field --}}
+                                                                @if ($headerField['type'] === FieldType::TIME->value)
+                                                                    <input
+                                                                        wire:model="fieldRows.{{ $hfKey }}.value"
+                                                                        type="time" id="field-{{ $hfKey }}"
+                                                                        class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field custom__field"
+                                                                        placeholder="Enter {{ Str::lower($headerField['label']) }}">
+                                                                @endif
+
+                                                                {{-- Amount field --}}
+                                                                @if ($headerField['type'] === FieldType::AMOUNT->value)
+                                                                    <input
+                                                                        wire:model="fieldRows.{{ $hfKey }}.value"
+                                                                        type="number" id="field-{{ $hfKey }}"
+                                                                        class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field custom__field"
+                                                                        placeholder="Enter {{ Str::lower($headerField['label']) }}">
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        @endif
                                         <div
                                             class="w-100 d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap overflow-scroll">
-                                            @foreach ($formFields as $key => $field)
+                                            @foreach ($nonHeaderFields as $key => $field)
                                                 @if ($field['is_enabled'])
                                                     <div class="d-flex flex-column border w-100">
                                                         <div class="form__label border-bottom px-2 py-1">
