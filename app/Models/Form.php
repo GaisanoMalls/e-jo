@@ -32,9 +32,4 @@ class Form extends Model
     {
         return $this->hasMany(TicketCustomFormField::class);
     }
-
-    public function headerFields(): HasMany
-    {
-        return $this->hasMany(FormHeaderField::class);
-    }
 }

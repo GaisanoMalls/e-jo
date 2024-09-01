@@ -115,13 +115,13 @@
                             {{-- Help topic form --}}
                             @if ($helpTopicForm)
                                 <div class="col-12">
-                                    <div class="row mb-3 pb-3 mx-auto ps-1 rounded-3 custom__form">
+                                    <div class="row mb-3 pb-4 mx-auto ps-1 rounded-3 custom__form">
                                         <div class="d-flex align-items-center justify-content-between flex-row mb-3">
                                             <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name">
                                                 {{ $helpTopicForm->name }}
                                             </h6>
-                                            <img src="{{ asset('images/gmall-davao-pr-form.png') }}"
-                                                class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System">
+                                            {{-- <img src="{{ asset('images/gmall-davao-pr-form.png') }}"
+                                                class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System"> --}}
                                         </div>
                                         @if (!empty($headerFields))
                                             <div class="row mx-auto my-3">
@@ -238,8 +238,7 @@
                                                 @endforeach
                                             </div>
                                         @endif
-                                        <div
-                                            class="w-100 d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap overflow-scroll">
+                                        <div class="w-100 d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap">
                                             @foreach ($nonHeaderFields as $key => $field)
                                                 @if ($field['is_enabled'])
                                                     <div class="d-flex flex-column border w-100">
@@ -313,9 +312,17 @@
                                             <div class="row__line"></div>
                                             <button wire:click="addFieldRow" type="button" id="add-field-row"
                                                 class="btn btn-sm d-flex align-items-center justify-content-center position-absolute btn__add__new__field__row">
-                                                <i class="bi bi-plus-lg"></i>
+                                                <i class="bi bi-plus-lg" wire:loading.remove
+                                                    wire:target="addFieldRow"></i>
+                                                <i wire:target="addFieldRow" wire:loading
+                                                    class='bx bx-loader-alt bx-spin'></i>
                                             </button>
                                         </div>
+                                        {{-- <div class="d-flex align-items-center gap-2 mt-2">
+                                            <button wire:click="addFieldRow" type="button" class="btn btn-sm">
+                                                Insert fields
+                                            </button>
+                                        </div> --}}
                                     </div>
                                 </div>
                             @endif
@@ -488,7 +495,6 @@
             helpTopicSelect.disable();
             helpTopicSelect.setOptions([]);
             @this.set('helpTopicForm', null);
-            @this.set('formFields', []);
             @this.set('filledForms', []);
         });
 

@@ -56,7 +56,6 @@ class CreateTicket extends Component
     public ?string $formName = null;
     public array $headerFields = [];
     public array $nonHeaderFields = [];
-    public array $formFields = [];
     public array $filledForms = []; // Insert the filled forms here.
     public array $fieldValues = [];
     public array $fieldRows = [];
@@ -112,7 +111,6 @@ class CreateTicket extends Component
 
     public function sendTicket()
     {
-        array_push($this->rowFieldValues, $this->fieldRows);
         dd($this->rowFieldValues);
         $this->validate();
 
@@ -172,7 +170,7 @@ class CreateTicket extends Component
                 });
 
                 if ($this->isHelpTopicHasForm) {
-                    array_push($this->filledForms, $this->formFields);
+                    // array_push($this->filledForms, $this->formFields);
 
                     // foreach ($this->filledForms as $fields) {
                     //     foreach ($fields as $field) {
@@ -200,8 +198,9 @@ class CreateTicket extends Component
                     //     }
                     // }
 
-                    array_push($this->headerFieldValues, $this->headerFields);
-                    array_push($this->rowFieldValues, $this->fieldRows);
+
+                    // array_push($this->headerFieldValues, $this->headerFields);
+                    // array_push($this->rowFieldValues, $this->fieldRows);
                 }
 
                 ActivityLog::make(ticket_id: $ticket->id, description: 'created a ticket');
@@ -212,22 +211,6 @@ class CreateTicket extends Component
             AppErrorLog::getError($e->getMessage());
             \Log::error('Error on line: ', [$e->getLine()]);
         }
-    }
-
-    public function addFieldRow()
-    {
-        // Add new field row
-        foreach ($this->nonHeaderFields as $field) {
-            $this->fieldRows[] = [
-                'name' => $field['name'],
-                'value' => $field['value'],
-                'assigned_column' => $field['assigned_column'],
-                'is_header_field' => $field['is_header_field']
-            ];
-        }
-
-        // Assign the fields rows with it's value to a new array
-        $this->rowFieldValues[] = $this->fieldRows;
     }
 
     public function updatedFileAttachments(&$value)
@@ -269,7 +252,8 @@ class CreateTicket extends Component
             $this->helpTopicForm = $helpTopicForm;
             $this->formId = $helpTopicForm->id;
             $this->formName = $helpTopicForm->name;
-            $this->formFields = $helpTopicForm->fields->map(function ($field) {
+
+            $formFields = $helpTopicForm->fields->map(function ($field) {
                 return [
                     'id' => $field->id,
                     'name' => $field->name,
@@ -285,8 +269,8 @@ class CreateTicket extends Component
                 ];
             })->toArray();
 
-            $this->headerFields = array_filter($this->formFields, fn($field) => $field['is_header_field']);
-            $this->nonHeaderFields = array_filter($this->formFields, fn($field) => !$field['is_header_field']);
+            $this->headerFields = array_filter($formFields, fn($field) => $field['is_header_field']);
+            $this->nonHeaderFields = array_filter($formFields, fn($field) => !$field['is_header_field']);
 
             $this->description = null; // Not necessary when using custom form.
             $this->helpTopicForm = $helpTopicForm; // Assign the helpTopicForm property of the selected help topic form.
@@ -294,6 +278,26 @@ class CreateTicket extends Component
         } else {
             $this->isHelpTopicHasForm = false;
             $this->dispatchBrowserEvent('hide-ticket-description-container');
+        }
+    }
+
+    public function addFieldRow()
+    {
+        // Add new field row
+        foreach ($this->nonHeaderFields as $field) {
+            $this->fieldRows[] = [
+                'name' => $field['name'],
+                'value' => $field['value'],
+            ];
+        }
+
+        foreach ($this->fieldRows as $fieldRow) {
+            if ($fieldRow['value']) {
+                $this->rowFieldValues[] = [
+                    'name' => $fieldRow['name'],
+                    'value' => $fieldRow['value'],
+                ];
+            }
         }
     }
 
