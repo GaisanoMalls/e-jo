@@ -12,7 +12,8 @@ class FieldValue extends Model
 
     protected $fillable = [
         'field_id',
-        'value'
+        'value',
+        'row'
     ];
 
     public function field(): BelongsTo
