@@ -59,7 +59,7 @@ class CreateTicket extends Component
     public array $formFields = [];
     public array $filledForms = []; // Insert the filled forms here.
     public array $addedHeaderFields = [];
-    public array $addedNonHeaderFields = [];
+    public array $rowFields = [];
     public int $rowCount = 1;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
@@ -209,45 +209,45 @@ class CreateTicket extends Component
 
     public function saveFieldValues()
     {
-        // Add the current set of fields with the current row number
-        $batchWithRowNumber = array_map(function ($field) {
+        $formFields = array_map(function ($field) {
             $field['row'] = $this->rowCount;
             return $field;
         }, $this->formFields);
 
-        // Add the current batch to filledForms
-        $this->filledForms[] = $batchWithRowNumber;
-
-        // Increment the row count for the next batch
+        $this->filledForms[] = $formFields;
         $this->rowCount++;
 
-        // Update addedHeaderFields and addedNonHeaderFields
         $this->addedHeaderFields = array_filter($this->filledForms, function ($fields) {
             return array_filter($fields, fn($field) => $field['is_header_field']);
         });
-
-        $this->addedNonHeaderFields = array_filter($this->filledForms, function ($fields) {
+        $this->rowFields = array_filter($this->filledForms, function ($fields) {
             return array_filter($fields, fn($field) => !$field['is_header_field']);
         });
 
         $this->resetFormFields();
     }
 
+    public function getFilteredFields()
+    {
+        $headers = array_unique(array_column(array_merge(...$this->rowFields), 'name'));
+
+        $filteredFields = [];
+        foreach ($headers as $header) {
+            $filteredFields[$header] = array_map(function ($fields) use ($header) {
+                return array_filter($fields, function ($field) use ($header) {
+                    return $field['name'] === $header;
+                });
+            }, $this->rowFields);
+        }
+
+        return ['headers' => $headers, 'fields' => $filteredFields];
+    }
+
     public function resetFormFields()
     {
         foreach ($this->formFields as &$field) {
-            // Reset value based on the type of field
-            switch ($field['type']) {
-                case FieldTypesEnum::TEXT->value:
-                case FieldTypesEnum::NUMBER->value:
-                case FieldTypesEnum::DATE->value:
-                case FieldTypesEnum::TIME->value:
-                case FieldTypesEnum::AMOUNT->value:
-                    $field['value'] = '';
-                    break;
-            }
+            $field['value'] = '';
         }
-        unset($field);
     }
 
     public function updatedFileAttachments(&$value)

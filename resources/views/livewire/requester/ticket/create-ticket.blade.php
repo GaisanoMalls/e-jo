@@ -122,7 +122,7 @@
                                                 {{ $helpTopicForm->name }}
                                             </h6>
                                             @foreach ($formFields as $fieldKey => $formField)
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
                                                     <label class="form-label input__field__label"
                                                         style="white-space: nowrap">
                                                         {{ $formField['label'] }}
@@ -168,210 +168,201 @@
                                                     @endif
                                                 </div>
                                             @endforeach
-                                            <div class="d-flex align-items-center">
-                                                <button wire:click="saveFieldValues" type="button"
-                                                    class="btn d-flex align-items-center justify-content-center rounded-3 gap-2"
-                                                    style="height: 35px;
-                                                        background-color: #3B4053;
-                                                        color: white;
-                                                        font-size: 0.75rem;">
-                                                    <span wire:loading wire:target="saveFieldValues"
-                                                        class="spinner-border spinner-border-sm" role="status"
-                                                        aria-hidden="true">
-                                                    </span>
-                                                    Add fields
-                                                </button>
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                    <div class="row my-3 pb-4 mx-auto ps-1 rounded-3 custom__form">
-                                        <div class="d-flex align-items-center justify-content-between flex-row mb-3">
-                                            <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name">
-                                                {{ $helpTopicForm->name }}
-                                            </h6>
-                                            {{-- <img src="{{ asset('images/gmall-davao-pr-form.png') }}"
-                                                class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System"> --}}
-                                        </div>
-                                        @if (!empty($addedHeaderFields))
-                                            <div class="row mx-auto my-3">
-                                                @foreach ($addedHeaderFields as $headerFields)
-                                                    @foreach ($headerFields as $key => $headerField)
-                                                        @if ($headerField['assigned_column'] == 1)
-                                                            <div
-                                                                class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
-                                                                <div class="d-flex align-items-center gap-2">
-                                                                    <label class="form-label mb-0 input__field__label"
-                                                                        style="white-space: nowrap">
-                                                                        {{ $headerField['label'] }}:
-                                                                    </label>
-                                                                    {{-- Text field --}}
-                                                                    @if ($headerField['type'] === FieldType::TEXT->value)
-                                                                        <input
-                                                                            wire:model="headerFields.{{ $key }}.value"
-                                                                            type="text"
-                                                                            id="field-{{ $key }}"
-                                                                            class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field ">
-                                                                    @endif
-
-                                                                    {{-- Number field --}}
-                                                                    @if ($headerField['type'] === FieldType::NUMBER->value)
-                                                                        <input
-                                                                            wire:model="headerFields.{{ $key }}.value"
-                                                                            type="number"
-                                                                            id="field-{{ $key }}"
-                                                                            class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
-                                                                    @endif
-
-                                                                    {{-- Date field --}}
-                                                                    @if ($headerField['type'] === FieldType::DATE->value)
-                                                                        <input
-                                                                            wire:model="headerFields.{{ $key }}.value"
-                                                                            type="date"
-                                                                            id="field-{{ $key }}"
-                                                                            class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
-                                                                    @endif
-
-                                                                    {{-- Time field --}}
-                                                                    @if ($headerField['type'] === FieldType::TIME->value)
-                                                                        <input
-                                                                            wire:model="headerFields.{{ $key }}.value"
-                                                                            type="time"
-                                                                            id="field-{{ $key }}"
-                                                                            class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
-                                                                    @endif
-
-                                                                    {{-- Amount field --}}
-                                                                    @if ($headerField['type'] === FieldType::AMOUNT->value)
-                                                                        <input
-                                                                            wire:model="headerFields.{{ $key }}.value"
-                                                                            type="number"
-                                                                            id="field-{{ $key }}"
-                                                                            class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        @if ($headerField['assigned_column'] == 2)
-                                                            <div class="col-lg-6 col-md-12 col-sm-12 px-0 mb-2">
-                                                                <div class="d-flex align-items-center gap-2">
-                                                                    <label class="form-label mb-0 input__field__label"
-                                                                        style="white-space: nowrap">
-                                                                        {{ $headerField['label'] }}:
-                                                                    </label>
-                                                                    {{-- Text field --}}
-                                                                    @if ($headerField['type'] === FieldType::TEXT->value)
-                                                                        <input
-                                                                            wire:model="headerFields.{{ $key }}.value"
-                                                                            type="text"
-                                                                            id="field-{{ $key }}"
-                                                                            class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
-                                                                    @endif
-
-                                                                    {{-- Number field --}}
-                                                                    @if ($headerField['type'] === FieldType::NUMBER->value)
-                                                                        <input
-                                                                            wire:model="headerFields.{{ $key }}.value"
-                                                                            type="number"
-                                                                            id="field-{{ $key }}"
-                                                                            class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
-                                                                    @endif
-
-                                                                    {{-- Date field --}}
-                                                                    @if ($headerField['type'] === FieldType::DATE->value)
-                                                                        <input
-                                                                            wire:model="headerFields.{{ $key }}.value"
-                                                                            type="date"
-                                                                            id="field-{{ $key }}"
-                                                                            class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
-                                                                    @endif
-
-                                                                    {{-- Time field --}}
-                                                                    @if ($headerField['type'] === FieldType::TIME->value)
-                                                                        <input
-                                                                            wire:model="headerFields.{{ $key }}.value"
-                                                                            type="time"
-                                                                            id="field-{{ $key }}"
-                                                                            class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
-                                                                    @endif
-
-                                                                    {{-- Amount field --}}
-                                                                    @if ($headerField['type'] === FieldType::AMOUNT->value)
-                                                                        <input
-                                                                            wire:model="headerFields.{{ $key }}.value"
-                                                                            type="number"
-                                                                            id="field-{{ $key }}"
-                                                                            class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    @endforeach
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                        @if (!empty($addedNonHeaderFields))
-                                            <div
-                                                class="w-100 d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap">
-                                                @foreach ($addedNonHeaderFields as $fields)
-                                                    @foreach ($fields as $key => $field)
-                                                        <div class="d-flex flex-column border w-100">
-                                                            <div class="form__label border-bottom px-2 py-1">
-                                                                <label for="field-{{ $key }}"
-                                                                    class="input__field__label">
-                                                                    {{ Str::title($field['label']) }}
-                                                                </label>
-                                                            </div>
-
-                                                            <div class="form__field"
-                                                                id="field-row-{{ $key }}">
-                                                                {{-- Text field --}}
-                                                                @if ($field['type'] === FieldType::TEXT->value)
-                                                                    <input
-                                                                        wire:model="fieldRows.{{ $key }}.value"
-                                                                        type="text" id="field-{{ $key }}"
-                                                                        class="w-100 px-2 py-1 border-0 rounded-0 form-control input__field custom__field">
-                                                                @endif
-
-                                                                {{-- Number field --}}
-                                                                @if ($field['type'] === FieldType::NUMBER->value)
-                                                                    <input
-                                                                        wire:model="fieldRows.{{ $key }}.value"
-                                                                        type="number" id="field-{{ $key }}"
-                                                                        class="w-100 px-2 py-1 border-0 rounded-0 form-control input__field custom__field">
-                                                                @endif
-
-                                                                {{-- Date field --}}
-                                                                @if ($field['type'] === FieldType::DATE->value)
-                                                                    <input
-                                                                        wire:model="fieldRows.{{ $key }}.value"
-                                                                        type="date" id="field-{{ $key }}"
-                                                                        class="w-100 px-2 py-1 border-0 rounded-0 form-control input__field custom__field">
-                                                                @endif
-
-                                                                {{-- Time field --}}
-                                                                @if ($field['type'] === FieldType::TIME->value)
-                                                                    <input
-                                                                        wire:model="fieldRows.{{ $key }}.value"
-                                                                        type="time" id="field-{{ $key }}"
-                                                                        class="w-100 px-2 py-1 border-0 rounded-0 form-control input__field custom__field">
-                                                                @endif
-
-                                                                {{-- Amount field --}}
-                                                                @if ($field['type'] === FieldType::AMOUNT->value)
-                                                                    <input
-                                                                        wire:model="fieldRows.{{ $key }}.value"
-                                                                        type="number" id="field-{{ $key }}"
-                                                                        class="w-100 px-2 py-1 border-0 rounded-0 form-control input__field custom__field">
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                @endforeach
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-center">
+                                                    <button wire:click="saveFieldValues" type="button"
+                                                        class="btn d-flex align-items-center justify-content-center rounded-3 gap-2"
+                                                        style="height: 35px;
+                                                            background-color: #3B4053;
+                                                            color: white;
+                                                            font-size: 0.75rem;">
+                                                        <span wire:loading wire:target="saveFieldValues"
+                                                            class="spinner-border spinner-border-sm" role="status"
+                                                            aria-hidden="true">
+                                                        </span>
+                                                        Add fields
+                                                    </button>
+                                                </div>
                                             </div>
                                         @endif
                                     </div>
                                 </div>
+
+                                @if (!empty($addedHeaderFields) || !empty($rowFields))
+                                    <div class="col-12">
+                                        <div class="row my-3 pb-4 mx-auto ps-1 rounded-3 custom__form">
+                                            <div
+                                                class="d-flex align-items-center justify-content-between flex-row mb-3">
+                                                <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name">
+                                                    {{ $helpTopicForm->name }}
+                                                </h6>
+                                                <img src="{{ asset('images/gmall-davao-pr-form.png') }}"
+                                                    class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System">
+                                            </div>
+                                            @if (!empty($addedHeaderFields))
+                                                <div class="row mx-auto my-3">
+                                                    @foreach ($addedHeaderFields as $headerFields)
+                                                        @foreach ($headerFields as $key => $headerField)
+                                                            @if ($headerField['assigned_column'] == 1)
+                                                                <div
+                                                                    class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
+                                                                    <div class="d-flex align-items-center gap-2">
+                                                                        <label
+                                                                            class="form-label mb-0 input__field__label"
+                                                                            style="white-space: nowrap">
+                                                                            {{ $headerField['label'] }}:
+                                                                        </label>
+                                                                        {{-- Text field --}}
+                                                                        @if ($headerField['type'] === FieldType::TEXT->value)
+                                                                            <input
+                                                                                wire:model="headerFields.{{ $key }}.value"
+                                                                                type="text"
+                                                                                id="field-{{ $key }}"
+                                                                                class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field ">
+                                                                        @endif
+
+                                                                        {{-- Number field --}}
+                                                                        @if ($headerField['type'] === FieldType::NUMBER->value)
+                                                                            <input
+                                                                                wire:model="headerFields.{{ $key }}.value"
+                                                                                type="number"
+                                                                                id="field-{{ $key }}"
+                                                                                class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
+                                                                        @endif
+
+                                                                        {{-- Date field --}}
+                                                                        @if ($headerField['type'] === FieldType::DATE->value)
+                                                                            <input
+                                                                                wire:model="headerFields.{{ $key }}.value"
+                                                                                type="date"
+                                                                                id="field-{{ $key }}"
+                                                                                class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
+                                                                        @endif
+
+                                                                        {{-- Time field --}}
+                                                                        @if ($headerField['type'] === FieldType::TIME->value)
+                                                                            <input
+                                                                                wire:model="headerFields.{{ $key }}.value"
+                                                                                type="time"
+                                                                                id="field-{{ $key }}"
+                                                                                class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
+                                                                        @endif
+
+                                                                        {{-- Amount field --}}
+                                                                        @if ($headerField['type'] === FieldType::AMOUNT->value)
+                                                                            <input
+                                                                                wire:model="headerFields.{{ $key }}.value"
+                                                                                type="number"
+                                                                                id="field-{{ $key }}"
+                                                                                class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                            @if ($headerField['assigned_column'] == 2)
+                                                                <div class="col-lg-6 col-md-12 col-sm-12 px-0 mb-2">
+                                                                    <div class="d-flex align-items-center gap-2">
+                                                                        <label
+                                                                            class="form-label mb-0 input__field__label"
+                                                                            style="white-space: nowrap">
+                                                                            {{ $headerField['label'] }}
+                                                                        </label>
+                                                                        {{-- Text field --}}
+                                                                        @if ($headerField['type'] === FieldType::TEXT->value)
+                                                                            <input
+                                                                                wire:model="headerFields.{{ $key }}.value"
+                                                                                type="text"
+                                                                                id="field-{{ $key }}"
+                                                                                class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
+                                                                        @endif
+
+                                                                        {{-- Number field --}}
+                                                                        @if ($headerField['type'] === FieldType::NUMBER->value)
+                                                                            <input
+                                                                                wire:model="headerFields.{{ $key }}.value"
+                                                                                type="number"
+                                                                                id="field-{{ $key }}"
+                                                                                class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
+                                                                        @endif
+
+                                                                        {{-- Date field --}}
+                                                                        @if ($headerField['type'] === FieldType::DATE->value)
+                                                                            <input
+                                                                                wire:model="headerFields.{{ $key }}.value"
+                                                                                type="date"
+                                                                                id="field-{{ $key }}"
+                                                                                class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
+                                                                        @endif
+
+                                                                        {{-- Time field --}}
+                                                                        @if ($headerField['type'] === FieldType::TIME->value)
+                                                                            <input
+                                                                                wire:model="headerFields.{{ $key }}.value"
+                                                                                type="time"
+                                                                                id="field-{{ $key }}"
+                                                                                class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
+                                                                        @endif
+
+                                                                        {{-- Amount field --}}
+                                                                        @if ($headerField['type'] === FieldType::AMOUNT->value)
+                                                                            <input
+                                                                                wire:model="headerFields.{{ $key }}.value"
+                                                                                type="number"
+                                                                                id="field-{{ $key }}"
+                                                                                class="w-100 px-0 py-0 border-0 rounded-0 form-control input__field header__field">
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                            @if (!empty($rowFields))
+                                                <div
+                                                    class="w-100 d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap">
+                                                    @php
+                                                        $filteredData = $this->getFilteredFields();
+                                                        $headers = $filteredData['headers'];
+                                                        $fields = $filteredData['fields'];
+                                                    @endphp
+                                                    @if (!empty($headers) && !empty($fields))
+                                                        <div class="w-100">
+                                                            <table class="table table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        @foreach ($headers as $header)
+                                                                            <th class="input__field__label">
+                                                                                {{ Str::title($header) }}
+                                                                            </th>
+                                                                        @endforeach
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach ($rowFields as $row)
+                                                                        <tr class="row__field">
+                                                                            @foreach ($headers as $header)
+                                                                                @php
+                                                                                    $field = collect($row)->firstWhere(
+                                                                                        'name',
+                                                                                        $header,
+                                                                                    );
+                                                                                @endphp
+                                                                                <td class="field__value">
+                                                                                    {{ $field['value'] ?? '' }}
+                                                                                </td>
+                                                                            @endforeach
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
                             @endif
                             <div class="row">
                                 <div class="col-md-8">

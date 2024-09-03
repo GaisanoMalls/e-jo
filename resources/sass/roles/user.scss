@@ -1891,19 +1891,17 @@ body {
                 height: 50px;
             }
 
-            .custom__field {
-                border-bottom: 1px solid #ced4da !important;
-
-                &:focus {
-                    border: 1px solid #d32839 !important;
-                }
-            }
-
             .header__field {
                 border-bottom: 0.08rem solid #ced4da !important;
 
                 &:focus {
                     border-bottom-color: #d32839 !important;
+                }
+            }
+
+            .row__field {
+                .field__value {
+                    font-size: $fs-14;
                 }
             }
         }

@@ -8744,17 +8744,14 @@ body {
 .create__ticket__modal .modal__content .custom__form .pr__form__gmall__logo {
   height: 50px;
 }
-.create__ticket__modal .modal__content .custom__form .custom__field {
-  border-bottom: 1px solid #ced4da !important;
-}
-.create__ticket__modal .modal__content .custom__form .custom__field:focus {
-  border: 1px solid #d32839 !important;
-}
 .create__ticket__modal .modal__content .custom__form .header__field {
   border-bottom: 0.08rem solid #ced4da !important;
 }
 .create__ticket__modal .modal__content .custom__form .header__field:focus {
   border-bottom-color: #d32839 !important;
+}
+.create__ticket__modal .modal__content .custom__form .row__field .field__value {
+  font-size: 0.875rem;
 }
 
 @media (max-width: 767px) {
