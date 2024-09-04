@@ -21,7 +21,8 @@ class Field extends Model
         'is_required',
         'is_enabled',
         'assigned_column',
-        'is_header_field'
+        'is_header_field',
+        'is_for_ticket_number'
     ];
 
     protected $casts = [
