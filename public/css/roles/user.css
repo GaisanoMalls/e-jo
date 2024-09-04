@@ -8745,6 +8745,7 @@ body {
   height: 50px;
 }
 .create__ticket__modal .modal__content .custom__form .header__field {
+  font-size: 0.875rem;
   border-bottom: 0.08rem solid #ced4da !important;
 }
 .create__ticket__modal .modal__content .custom__form .header__field:focus {

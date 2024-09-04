@@ -56,9 +56,11 @@ class CreateTicket extends Component
     public ?int $formId = null;
     public ?string $formName = null;
     public bool $isHelpTopicHasForm = false;
+    public bool $isHeaderFieldSet = false;
+    public bool $isHeaderFieldsHasValues = false;
     public array $formFields = [];
     public array $filledForms = []; // Insert the filled forms here.
-    public array $addedHeaderFields = [];
+    public array $headerFields = [];
     public array $rowFields = [];
     public int $rowCount = 1;
 
@@ -109,7 +111,6 @@ class CreateTicket extends Component
 
     public function sendTicket()
     {
-        dd($this->filledForms);
         $this->validate();
 
         try {
@@ -217,17 +218,22 @@ class CreateTicket extends Component
         $this->filledForms[] = $formFields;
         $this->rowCount++;
 
-        $this->addedHeaderFields = array_filter($this->filledForms, function ($fields) {
-            return array_filter($fields, fn($field) => $field['is_header_field']);
-        });
-        $this->rowFields = array_filter($this->filledForms, function ($fields) {
+        if (!$this->isHeaderFieldSet) {
+            $this->headerFields = array_filter($this->filledForms, function ($fields) {
+                return array_filter($fields, fn($field) => $field['is_header_field']);
+            });
+
+            $this->isHeaderFieldSet = true;
+        }
+
+        $this->rowFields = array_map(function ($fields) {
             return array_filter($fields, fn($field) => !$field['is_header_field']);
-        });
+        }, $this->filledForms);
 
         $this->resetFormFields();
     }
 
-    public function getFilteredFields()
+    public function getFilteredRowFields()
     {
         $headers = array_unique(array_column(array_merge(...$this->rowFields), 'name'));
 
@@ -246,7 +252,9 @@ class CreateTicket extends Component
     public function resetFormFields()
     {
         foreach ($this->formFields as &$field) {
-            $field['value'] = '';
+            if (!$field['is_header_field'] && !empty($field['value'])) {
+                $field['value'] = '';
+            }
         }
     }
 
@@ -269,6 +277,11 @@ class CreateTicket extends Component
 
     public function updatedHelpTopic($value)
     {
+        $this->headerFields = [];
+        $this->rowFields = [];
+        $this->filledForms = [];
+        $this->isHeaderFieldSet = false;
+
         $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $value))->pluck('id')->first();
         $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $value))->pluck('id')->first();
         $helpTopicForm = Form::with('fields')->where('help_topic_id', $value)->first(); // Get the help topic form
