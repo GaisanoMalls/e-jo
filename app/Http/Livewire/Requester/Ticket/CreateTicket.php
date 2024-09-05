@@ -315,6 +315,7 @@ class CreateTicket extends Component
                     'value' => null, // To store the value of the given inputs
                     'assigned_column' => $field->assigned_column,
                     'is_header_field' => $field->is_header_field,
+                    'is_for_ticket_number' => $field->is_for_ticket_number,
                     'form' => $this->helpTopicForm->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
                 ];
             })->toArray();

@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->string('variable_name');
             $table->boolean('is_required')->default(false);
             $table->boolean('is_enabled')->default(false);
-            $table->enum('assigned_column', [1, 2]);
+            $table->enum('assigned_column', [1, 2, null])->nullable();
             $table->boolean('is_header_field')->default(0);
             $table->boolean('is_for_ticket_number')->default(0);
             $table->timestamps();

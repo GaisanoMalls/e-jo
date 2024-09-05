@@ -28,17 +28,19 @@ class AddFormField extends Component
     public array $fieldColumnNumber = [1, 2];
     public ?int $assignedColumn = null;
     public ?string $asHeaderField = null;
-    public bool $is_required = false;
-    public bool $is_enabled = false;
+    public bool $isForTicketNumber = false;
+    public bool $isRequired = false;
+    public bool $isEnabled = false;
     public ?int $editingFieldId = null;
     public ?int $editingHeaderFieldId = null;
     public ?string $editingFieldName = null;
     public ?string $editingFieldType = null;
-    public ?string $editingFieldRequired = null;
-    public ?string $editingFieldEnable = null;
     public ?string $editingFieldVariableName = null;
-    public ?string $editingAsHeaderField = null; // 'Yes' or 'No'
     public ?string $editingAssignedColumn = null; // 1, 2, 'None'
+    public bool $editingFieldRequired = false;
+    public bool $editingFieldEnable = false;
+    public bool $editingAsHeaderField = false;
+    public bool $editingIsForTicketNumber = false;
 
     public function rules()
     {
@@ -84,24 +86,41 @@ class AddFormField extends Component
 
     public function addField()
     {
+        if ($this->asHeaderField) {
+            if (!$this->assignedColumn) {
+                $this->addError('assignedColumn', 'This field is required');
+                return;
+            } else {
+                $this->resetValidation('assignedColumn');
+            }
+        }
+
         if (!$this->name) {
             $this->addError('name', 'Field name is required');
             return;
+        } else {
+            $this->resetValidation('name');
         }
 
         if (!$this->type) {
             $this->addError('type', 'Field type is required');
             return;
+        } else {
+            $this->resetValidation('type');
         }
 
-        if (!$this->is_required) {
-            $this->addError('is_required', 'This field is required');
+        if (!$this->isRequired) {
+            $this->addError('isRequired', 'This field is required');
             return;
+        } else {
+            $this->resetValidation('isRequired');
         }
 
-        if (!$this->is_enabled) {
-            $this->addError('is_enabled', 'This field is required');
+        if (!$this->isEnabled) {
+            $this->addError('isEnabled', 'This field is required');
             return;
+        } else {
+            $this->resetValidation('isEnabled');
         }
 
         array_push($this->addedFields, [
@@ -109,13 +128,14 @@ class AddFormField extends Component
             'label' => $this->name,
             'type' => $this->type,
             'variable_name' => $this->variableName,
-            'is_required' => $this->is_required == FieldRequiredOptionEnum::YES->value,
-            'is_enabled' => $this->is_enabled == FieldEnableOptionEnum::YES->value,
-            'as_header_field' => $this->asHeaderField ? 'Yes' : 'No',
-            'assigned_column' => $this->asHeaderField ? $this->assignedColumn : null,
+            'isRequired' => $this->isRequired,
+            'isEnabled' => $this->isEnabled,
+            'asHeaderField' => $this->asHeaderField ? 'Yes' : 'No',
+            'assignedColumn' => $this->asHeaderField ? $this->assignedColumn : null,
+            'isForTicketNumber' => $this->isForTicketNumber
         ]);
 
-        $this->reset('name', 'type', 'variableName', 'is_required', 'is_enabled', 'assignedColumn', 'asHeaderField');
+        $this->reset('name', 'type', 'variableName', 'isRequired', 'isEnabled', 'assignedColumn', 'asHeaderField', 'isForTicketNumber');
         $this->resetValidation();
         $this->dispatchBrowserEvent('clear-form-fields');
     }
@@ -129,17 +149,15 @@ class AddFormField extends Component
                 if ($this->editingFieldId === $key) {
                     $this->editingFieldName = $field['name'];
                     $this->editingFieldType = $field['type'];
-                    $this->editingFieldRequired = $field['is_required'] == FieldRequiredOptionEnum::YES->value;
-                    $this->editingFieldEnable = $field['is_enabled'] == FieldEnableOptionEnum::YES->value;
+                    $this->editingFieldRequired = $field['isRequired'];
+                    $this->editingFieldEnable = $field['isEnabled'] == FieldEnableOptionEnum::YES->value;
                     $this->editingFieldVariableName = $field['variable_name'];
-                    $this->editingAsHeaderField = $field['as_header_field'];
-                    $this->editingAssignedColumn = $field['assigned_column'];
+                    $this->editingAsHeaderField = $field['asHeaderField'];
+                    $this->editingAssignedColumn = $field['assignedColumn'];
+                    $this->editingIsForTicketNumber = $field['isForTicketNumber'];
 
                     $this->dispatchBrowserEvent('edit-added-field-show-select-field', [
                         'currentFieldType' => $this->editingFieldType,
-                        'currentFieldRequired' => $this->editingFieldRequired == FieldRequiredOptionEnum::YES->value,
-                        'currentFieldEnable' => $this->editingFieldEnable == FieldEnableOptionEnum::YES->value,
-                        'currentAsHeaderField' => $this->editingAsHeaderField,
                         'currentAssignedCoumn' => $this->editingAssignedColumn,
                     ]);
                 }
@@ -153,34 +171,25 @@ class AddFormField extends Component
     public function updateAddedField(int $fieldKey)
     {
         try {
+            if (!$this->editingAssignedColumn) {
+                $this->addError('editingAssignedColumn', 'This field is required');
+                return;
+            } else {
+                $this->resetValidation('editingAssignedColumn');
+            }
+
             if (!$this->editingFieldName) {
                 $this->addError('editingFieldName', 'This field name is required');
                 return;
+            } else {
+                $this->resetValidation('editingFieldName');
             }
 
             if (!$this->editingFieldType) {
                 $this->addError('editingFieldType', 'This field type is required');
                 return;
-            }
-
-            if (!$this->editingFieldRequired) {
-                $this->addError('editingFieldRequired', 'This field is required');
-                return;
-            }
-
-            if (!$this->editingFieldEnable) {
-                $this->addError('editingFieldEnable', 'This field is required');
-                return;
-            }
-
-            if (!$this->editingAsHeaderField) {
-                $this->addError('editingAsHeaderField', 'This field is required');
-                return;
-            }
-
-            if (!$this->editingAssignedColumn) {
-                $this->addError('editingAssignedColumn', 'This field is required');
-                return;
+            } else {
+                $this->resetValidation('editingFieldType');
             }
 
             foreach ($this->addedFields as $key => &$field) {
@@ -188,10 +197,11 @@ class AddFormField extends Component
                     $field['name'] = $this->editingFieldName;
                     $field['type'] = $this->editingFieldType;
                     $field['variable_name'] = $this->editingFieldVariableName;
-                    $field['is_required'] = $this->editingFieldRequired == FieldRequiredOptionEnum::YES->value;
-                    $field['is_enabled'] = $this->editingFieldEnable == FieldEnableOptionEnum::YES->value;
-                    $field['as_header_field'] = $this->editingAsHeaderField;
-                    $field['assigned_column'] = $this->editingAssignedColumn;
+                    $field['isRequired'] = $this->editingFieldRequired;
+                    $field['isEnabled'] = $this->editingFieldEnable;
+                    $field['asHeaderField'] = $this->editingAsHeaderField;
+                    $field['assignedColumn'] = $this->editingAssignedColumn;
+                    $field['isForTicketNumber'] = $this->editingIsForTicketNumber;
                 }
             }
             $this->editFieldAction();
@@ -213,11 +223,12 @@ class AddFormField extends Component
         $this->editingFieldId = null;
         $this->editingFieldName = null;
         $this->editingFieldType = null;
+        $this->editingAssignedColumn = null;
+        $this->editingFieldVariableName = null;
         $this->editingFieldRequired = false;
         $this->editingFieldEnable = false;
-        $this->editingFieldVariableName = null;
-        $this->editingAsHeaderField = null;
-        $this->editingAssignedColumn = null;
+        $this->editingAsHeaderField = false;
+        $this->editingIsForTicketNumber = false;
         $this->resetValidation();
     }
 
@@ -235,7 +246,7 @@ class AddFormField extends Component
         $this->validate();
 
         try {
-            if (empty($this->addedFields) && $this->name && $this->type && $this->is_required && $this->is_enabled) {
+            if (empty($this->addedFields) && $this->name && $this->type && $this->isRequired && $this->isEnabled) {
                 session()->flash('required_form_fields_error', 'Please add the fields first');
                 return;
             }
@@ -258,10 +269,11 @@ class AddFormField extends Component
                     'label' => $field['name'],
                     'type' => $field['type'],
                     'variable_name' => $field['variable_name'],
-                    'is_required' => $field['is_required'],
-                    'is_enabled' => $field['is_enabled'],
-                    'assigned_column' => $field['assigned_column'],
-                    'is_header_field' => $field['as_header_field'] == 'Yes' ? true : false
+                    'is_required' => $field['isRequired'],
+                    'is_enabled' => $field['isEnabled'],
+                    'assigned_column' => $field['assignedColumn'],
+                    'is_header_field' => $field['asHeaderField'] == 'Yes' ? true : false,
+                    'is_for_ticket_number' => $field['isForTicketNumber']
                 ]);
             }
 

@@ -72,14 +72,14 @@
             <small class="fw-semibold text-danger mb-1">{{ session('required_form_fields_error') }}</small>
         @endif
         <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
-            <input wire:model="asHeaderField" class="form-check-input check__special__project" type="checkbox"
-                role="switch" id="headerFieldCheck" wire:loading.attr="disabled">
+            <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch"
+                id="headerFieldCheck" wire:loading.attr="disabled" style="margin-right: 10px !important;">
             <label class="form-check-label" for="headerFieldCheck">
                 As header field
             </label>
         </div>
         @if ($asHeaderField)
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                     <div class="mb-2">
                         <label for="fieldName" class="form-label text-muted form__field__label"
@@ -89,12 +89,21 @@
                         <div>
                             <div id="select-field-column-number" wire:ignore></div>
                         </div>
-                        @error('name')
-                            <span class="error__message position-absolute" style="bottom: -5px !important;">
+                        @error('assignedColumn')
+                            <span class="error__message position-absolute" style="bottom: -13px !important;">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 {{ $message }}
                             </span>
                         @enderror
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                    <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
+                        <input wire:model="isForTicketNumber" class="form-check-input" type="checkbox" role="switch"
+                            id="forTicketNumber" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                        <label class="form-check-label" for="forTicketNumber">
+                            Associate with the ticket number
+                        </label>
                     </div>
                 </div>
             </div>
@@ -143,7 +152,7 @@
                         </div>
                     </div>
                 </div>
-                @error('is_required')
+                @error('isRequired')
                     <span class="error__message position-absolute" style="bottom: -5px !important;">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         {{ $message }}
@@ -159,7 +168,7 @@
                         </div>
                     </div>
                 </div>
-                @error('is_enabled')
+                @error('isEnabled')
                     <span class="error__message position-absolute" style="bottom: -5px !important;">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         {{ $message }}
@@ -188,15 +197,16 @@
             <div class="row my-4 px-3">
                 <h6 class="p-0 mx-2" style="font-size: 15px;">Form fields</h6>
                 <div class="table-responsive custom__table">
-                    <table class="table mb-0 border-0">
+                    <table class="table mb-0 border-0" style="table-layout: fixed;">
                         <thead>
                             <tr>
+                                <th class="border-0 table__head__label px-2">Assigned Column</th>
                                 <th class="border-0 table__head__label px-2">Name</th>
                                 <th class="border-0 table__head__label px-2">Type</th>
                                 <th class="border-0 table__head__label px-2">Required</th>
                                 <th class="border-0 table__head__label px-2">Enable</th>
                                 <th class="border-0 table__head__label px-2">Header Field</th>
-                                <th class="border-0 table__head__label px-2">Assigned Column</th>
+                                <th class="border-0 table__head__label px-2">For Ticket Number</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -205,6 +215,25 @@
                                     <td class="position-relative">
                                         <div class="d-flex align-items-center text-start px-0 td__content"
                                             style="height: 0; min-width: 200px;">
+                                            @if ($editingFieldId === $key)
+                                                <div style="min-width: 40px;">
+                                                    <div id="editing-select-assigned-column" wire:ignore></div>
+                                                </div>
+                                            @else
+                                                <span>{{ $field['assignedColumn'] ?? 'None' }}</span>
+                                            @endif
+                                        </div>
+                                        @error('editingAssignedColumn')
+                                            <span class="error__message position-absolute"
+                                                style="bottom: -10px !important;">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </td>
+                                    <td class="position-relative">
+                                        <div class="d-flex align-items-center text-start px-0 td__content"
+                                            style="height: 0;">
                                             @if ($editingFieldId === $key)
                                                 <input wire:model="editingFieldName" class="form-control form__field"
                                                     type="text" placeholder="Enter field name">
@@ -224,7 +253,7 @@
                                         <div class="d-flex align-items-center text-start px-0 td__content"
                                             style="height: 0;">
                                             @if ($editingFieldId === $key)
-                                                <div class="w-100">
+                                                <div>
                                                     <div id="editing-select-field-type" wire:ignore></div>
                                                 </div>
                                             @else
@@ -244,10 +273,19 @@
                                             style="height: 0;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
-                                                    <div id="editing-select-field-is-required" wire:ignore></div>
+                                                    <div class="form-check mx-0"
+                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingFieldRequired"
+                                                            class="form-check-input" type="checkbox" role="switch"
+                                                            id="editing-field-required" wire:loading.attr="disabled"
+                                                            style="margin-right: 10px !important;">
+                                                        <label class="form-check-label" for="editing-field-required">
+                                                            {{ $editingFieldRequired ? 'Yes' : 'No' }}
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             @else
-                                                <span>{{ $field['is_required'] ? 'Yes' : 'No' }}</span>
+                                                <span>{{ $field['isRequired'] ? 'Yes' : 'No' }}</span>
                                             @endif
                                         </div>
                                         @error('editingFieldRequired')
@@ -263,10 +301,19 @@
                                             style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
-                                                    <div id="editing-select-field-enable" wire:ignore></div>
+                                                    <div class="form-check mx-0"
+                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingFieldEnable"
+                                                            class="form-check-input" type="checkbox" role="switch"
+                                                            id="editing-field-enable" wire:loading.attr="disabled"
+                                                            style="margin-right: 10px !important;">
+                                                        <label class="form-check-label" for="editing-field-enable">
+                                                            {{ $editingFieldEnable ? 'Yes' : 'No' }}
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             @else
-                                                <span>{{ $field['is_enabled'] ? 'Yes' : 'No' }}</span>
+                                                <span>{{ $field['isEnabled'] ? 'Yes' : 'No' }}</span>
                                             @endif
                                         </div>
                                         @error('editingFieldEnable')
@@ -282,10 +329,19 @@
                                             style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
-                                                    <div id="editing-select-as-header-field" wire:ignore></div>
+                                                    <div class="form-check mx-0"
+                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingAsHeaderField"
+                                                            class="form-check-input" type="checkbox" role="switch"
+                                                            id="editing-as-header-field" wire:loading.attr="disabled"
+                                                            style="margin-right: 10px !important;">
+                                                        <label class="form-check-label" for="editing-as-header-field">
+                                                            {{ $editingAsHeaderField ? 'Yes' : 'No' }}
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             @else
-                                                <span>{{ $field['as_header_field'] }}</span>
+                                                <span>{{ $field['asHeaderField'] ? 'Yes' : 'No' }}</span>
                                             @endif
                                         </div>
                                         @error('editingAsHeaderField')
@@ -301,13 +357,24 @@
                                             style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
-                                                    <div id="editing-select-assigned-column" wire:ignore></div>
+                                                    <div class="form-check mx-0"
+                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingIsForTicketNumber"
+                                                            class="form-check-input" type="checkbox" role="switch"
+                                                            id="editing-for-ticket-number"
+                                                            wire:loading.attr="disabled"
+                                                            style="margin-right: 10px !important;">
+                                                        <label class="form-check-label"
+                                                            for="editing-for-ticket-number">
+                                                            {{ $editingIsForTicketNumber ? 'Yes' : 'No' }}
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             @else
-                                                <span>{{ $field['assigned_column'] ?? 'None' }}</span>
+                                                <span>{{ $field['isForTicketNumber'] ? 'Yes' : 'No' }}</span>
                                             @endif
                                         </div>
-                                        @error('editingAssignedColumn')
+                                        @error('editingIsForTicketNumber')
                                             <span class="error__message position-absolute"
                                                 style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -419,7 +486,7 @@
         });
 
         selectRequired.addEventListener('change', (event) => {
-            @this.set('is_required', event.target.value);
+            @this.set('isRequired', event.target.value);
         });
 
         const selectEnableOption = @json($fieldEnableOption).map(fieldEnable => ({
@@ -433,7 +500,7 @@
         });
 
         selectEnable.addEventListener('change', (event) => {
-            @this.set('is_enabled', event.target.value);
+            @this.set('isEnabled', event.target.value);
         });
 
         const selectHelpTopicOption = @json($helpTopics).map(helpTopic => ({
@@ -506,44 +573,15 @@
 
         window.addEventListener('edit-added-field-show-select-field', (event) => {
             const currentFieldType = event.detail.currentFieldType
-            const currentFieldRequired = event.detail.currentFieldRequired;
-            const currentFieldEnable = event.detail.currentFieldEnable;
-            const currentAsHeaderField = event.detail.currentAsHeaderField;
             const currentAssignedCoumn = event.detail.currentAssignedCoumn;
 
             const editingSelectFieldType = document.querySelector('#editing-select-field-type');
-            const editingSelectFieldIsRequired = document.querySelector('#editing-select-field-is-required');
-            const editingSelectFieldEnable = document.querySelector('#editing-select-field-enable');
-            const editingSelectAsHeaderField = document.querySelector('#editing-select-as-header-field');
             const editingSelectAssignedColumn = document.querySelector('#editing-select-assigned-column');
 
             VirtualSelect.init({
                 ele: editingSelectFieldType,
                 options: fieldTypeOption,
                 search: true,
-                popupDropboxBreakpoint: '3000px'
-            });
-
-            VirtualSelect.init({
-                ele: editingSelectFieldIsRequired,
-                options: selectRequiredOption,
-                popupDropboxBreakpoint: '3000px'
-            });
-
-            VirtualSelect.init({
-                ele: editingSelectFieldEnable,
-                options: selectEnableOption,
-                popupDropboxBreakpoint: '3000px'
-            });
-
-            const asHeaderFielOption = ['Yes', 'No'].map(header => ({
-                label: header,
-                value: header
-            }));
-
-            VirtualSelect.init({
-                ele: editingSelectAsHeaderField,
-                options: asHeaderFielOption,
                 popupDropboxBreakpoint: '3000px'
             });
 
@@ -560,36 +598,13 @@
 
             // Reset the select field first before assigning a new value.
             editingSelectFieldType.reset();
-            editingSelectFieldIsRequired.reset();
-            editingSelectFieldEnable.reset();
-            editingSelectAsHeaderField.reset();
             editingSelectAssignedColumn.reset();
 
             editingSelectFieldType.setValue(currentFieldType);
-            editingSelectFieldIsRequired.setValue(currentFieldRequired ? 'Yes' : 'No');
-            editingSelectFieldEnable.setValue(currentFieldEnable ? 'Yes' : 'No');
-            editingSelectAsHeaderField.setValue(currentAsHeaderField);
-            editingSelectAsHeaderField.setValue(currentAsHeaderField);
             editingSelectAssignedColumn.setValue(currentAssignedCoumn == null ? 'None' : currentAssignedCoumn);
 
             editingSelectFieldType.addEventListener('change', (event) => {
                 @this.set('editingFieldType', event.target.value);
-            });
-
-            editingSelectFieldIsRequired.addEventListener('change', (event) => {
-                @this.set('editingFieldRequired', event.target.value);
-            });
-
-            editingSelectFieldEnable.addEventListener('change', (event) => {
-                @this.set('editingFieldEnable', event.target.value);
-            });
-
-            editingSelectAsHeaderField.addEventListener('change', (event) => {
-                @this.set('editingAsHeaderField', event.target.value);
-            });
-
-            editingSelectAsHeaderField.addEventListener('reset', () => {
-                @this.set('editingAsHeaderField', null);
             });
 
             editingSelectAssignedColumn.addEventListener('change', (event) => {
