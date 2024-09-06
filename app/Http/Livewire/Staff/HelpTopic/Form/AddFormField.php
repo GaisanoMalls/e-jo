@@ -69,9 +69,12 @@ class AddFormField extends Component
 
     public function updatedAsHeaderField($value)
     {
-        $value
-            ? $this->dispatchBrowserEvent('show-select-column-number')
-            : $this->assignedColumn = null;
+        if ($value) {
+            $this->dispatchBrowserEvent('show-select-column-number');
+            $this->hasAssociatedTicketField();
+        } else {
+            $this->assignedColumn = null;
+        }
     }
 
     public function updatedName($value)
@@ -84,6 +87,23 @@ class AddFormField extends Component
         $this->editingFieldVariableName = $this->convertToVariable($value);
     }
 
+    public function updatEdeditingAsHeaderField($value)
+    {
+        if (!$value) {
+            $this->editingIsForTicketNumber = false;
+            $this->dispatchBrowserEvent('disable-assigned-column-field');
+        } else {
+            $this->dispatchBrowserEvent('enable-assigned-column-field');
+        }
+    }
+
+    public function hasAssociatedTicketField()
+    {
+        return !empty(array_filter($this->addedFields, function ($field) {
+            return $field['isForTicketNumber'];
+        }));
+    }
+
     public function addField()
     {
         if ($this->asHeaderField) {
@@ -93,6 +113,10 @@ class AddFormField extends Component
             } else {
                 $this->resetValidation('assignedColumn');
             }
+        }
+
+        if ($this->hasAssociatedTicketField()) {
+            session()->flash('has_associated_ticket_field', 'Oops! There is already a field associated with the ticket number.');
         }
 
         if (!$this->name) {
@@ -135,7 +159,17 @@ class AddFormField extends Component
             'isForTicketNumber' => $this->isForTicketNumber
         ]);
 
-        $this->reset('name', 'type', 'variableName', 'isRequired', 'isEnabled', 'assignedColumn', 'asHeaderField', 'isForTicketNumber');
+        $this->reset(
+            'name',
+            'type',
+            'variableName',
+            'isRequired',
+            'isEnabled',
+            'assignedColumn',
+            'asHeaderField',
+            'isForTicketNumber',
+            'isForTicketNumber'
+        );
         $this->resetValidation();
         $this->dispatchBrowserEvent('clear-form-fields');
     }

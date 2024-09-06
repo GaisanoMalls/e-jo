@@ -71,6 +71,9 @@
         @if (session()->has('required_form_fields_error'))
             <small class="fw-semibold text-danger mb-1">{{ session('required_form_fields_error') }}</small>
         @endif
+        @if (session()->has('has_associated_ticket_field'))
+            <small class="fw-semibold text-danger mb-1">{{ session('has_associated_ticket_field') }}</small>
+        @endif
         <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
             <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch"
                 id="headerFieldCheck" wire:loading.attr="disabled" style="margin-right: 10px !important;">
@@ -97,15 +100,18 @@
                         @enderror
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                    <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
-                        <input wire:model="isForTicketNumber" class="form-check-input" type="checkbox" role="switch"
-                            id="forTicketNumber" wire:loading.attr="disabled" style="margin-right: 10px !important;">
-                        <label class="form-check-label" for="forTicketNumber">
-                            Associate with the ticket number
-                        </label>
+                @if (!$this->hasAssociatedTicketField())
+                    <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                        <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
+                            <input wire:model="isForTicketNumber" class="form-check-input" type="checkbox"
+                                role="switch" id="forTicketNumber" wire:loading.attr="disabled"
+                                style="margin-right: 10px !important;">
+                            <label class="form-check-label" for="forTicketNumber">
+                                Associate with the ticket number
+                            </label>
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
         @endif
         <div class="row mb-3">
@@ -200,37 +206,18 @@
                     <table class="table mb-0 border-0" style="table-layout: fixed;">
                         <thead>
                             <tr>
-                                <th class="border-0 table__head__label px-2">Assigned Column</th>
                                 <th class="border-0 table__head__label px-2">Name</th>
                                 <th class="border-0 table__head__label px-2">Type</th>
-                                <th class="border-0 table__head__label px-2">Required</th>
-                                <th class="border-0 table__head__label px-2">Enable</th>
+                                <th class="border-0 table__head__label px-2">Assigned Column</th>
                                 <th class="border-0 table__head__label px-2">Header Field</th>
                                 <th class="border-0 table__head__label px-2">For Ticket Number</th>
+                                <th class="border-0 table__head__label px-2">Required</th>
+                                <th class="border-0 table__head__label px-2">Enable</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($addedFields as $key => $field)
                                 <tr wire:key="normal-field-{{ $key + 1 }}">
-                                    <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0; min-width: 200px;">
-                                            @if ($editingFieldId === $key)
-                                                <div style="min-width: 40px;">
-                                                    <div id="editing-select-assigned-column" wire:ignore></div>
-                                                </div>
-                                            @else
-                                                <span>{{ $field['assignedColumn'] ?? 'None' }}</span>
-                                            @endif
-                                        </div>
-                                        @error('editingAssignedColumn')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -10px !important;">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </td>
                                     <td class="position-relative">
                                         <div class="d-flex align-items-center text-start px-0 td__content"
                                             style="height: 0;">
@@ -261,6 +248,84 @@
                                             @endif
                                         </div>
                                         @error('editingFieldType')
+                                            <span class="error__message position-absolute"
+                                                style="bottom: -10px !important;">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </td>
+                                    <td class="position-relative">
+                                        <div class="d-flex align-items-center text-start px-0 td__content"
+                                            style="height: 0; min-width: 200px;">
+                                            @if ($editingFieldId === $key)
+                                                <div style="min-width: 40px;">
+                                                    <div id="editing-select-assigned-column" wire:ignore></div>
+                                                </div>
+                                            @else
+                                                <span>{{ $field['assignedColumn'] ?? 'None' }}</span>
+                                            @endif
+                                        </div>
+                                        @error('editingAssignedColumn')
+                                            <span class="error__message position-absolute"
+                                                style="bottom: -10px !important;">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </td>
+                                    <td class="position-relative">
+                                        <div class="d-flex align-items-center text-start px-0 td__content"
+                                            style="height: 0; min-width: 200px;">
+                                            @if ($editingFieldId === $key)
+                                                <div class="w-100">
+                                                    <div class="form-check mx-0"
+                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingAsHeaderField"
+                                                            class="form-check-input" type="checkbox" role="switch"
+                                                            id="editing-as-header-field" wire:loading.attr="disabled"
+                                                            style="margin-right: 10px !important;">
+                                                        <label class="form-check-label" for="editing-as-header-field">
+                                                            {{ $editingAsHeaderField ? 'Yes' : 'No' }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <span>{{ $field['asHeaderField'] ? 'Yes' : 'No' }}</span>
+                                            @endif
+                                        </div>
+                                        @error('editingAsHeaderField')
+                                            <span class="error__message position-absolute"
+                                                style="bottom: -10px !important;">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </td>
+                                    <td class="position-relative">
+                                        <div class="d-flex align-items-center text-start px-0 td__content"
+                                            style="height: 0; min-width: 200px;">
+                                            @if ($editingFieldId === $key)
+                                                <div class="w-100">
+                                                    <div class="form-check mx-0"
+                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingIsForTicketNumber"
+                                                            class="form-check-input" type="checkbox" role="switch"
+                                                            id="editing-for-ticket-number"
+                                                            wire:loading.attr="disabled"
+                                                            style="margin-right: 10px !important;"
+                                                            @disabled(!$editingAsHeaderField)>
+                                                        <label class="form-check-label"
+                                                            for="editing-for-ticket-number">
+                                                            {{ $editingIsForTicketNumber ? 'Yes' : 'No' }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <span>{{ $field['isForTicketNumber'] ? 'Yes' : 'No' }}</span>
+                                            @endif
+                                        </div>
+                                        @error('editingIsForTicketNumber')
                                             <span class="error__message position-absolute"
                                                 style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -317,64 +382,6 @@
                                             @endif
                                         </div>
                                         @error('editingFieldEnable')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -10px !important;">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </td>
-                                    <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0; min-width: 200px;">
-                                            @if ($editingFieldId === $key)
-                                                <div class="w-100">
-                                                    <div class="form-check mx-0"
-                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingAsHeaderField"
-                                                            class="form-check-input" type="checkbox" role="switch"
-                                                            id="editing-as-header-field" wire:loading.attr="disabled"
-                                                            style="margin-right: 10px !important;">
-                                                        <label class="form-check-label" for="editing-as-header-field">
-                                                            {{ $editingAsHeaderField ? 'Yes' : 'No' }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            @else
-                                                <span>{{ $field['asHeaderField'] ? 'Yes' : 'No' }}</span>
-                                            @endif
-                                        </div>
-                                        @error('editingAsHeaderField')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -10px !important;">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </td>
-                                    <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0; min-width: 200px;">
-                                            @if ($editingFieldId === $key)
-                                                <div class="w-100">
-                                                    <div class="form-check mx-0"
-                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingIsForTicketNumber"
-                                                            class="form-check-input" type="checkbox" role="switch"
-                                                            id="editing-for-ticket-number"
-                                                            wire:loading.attr="disabled"
-                                                            style="margin-right: 10px !important;">
-                                                        <label class="form-check-label"
-                                                            for="editing-for-ticket-number">
-                                                            {{ $editingIsForTicketNumber ? 'Yes' : 'No' }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            @else
-                                                <span>{{ $field['isForTicketNumber'] ? 'Yes' : 'No' }}</span>
-                                            @endif
-                                        </div>
-                                        @error('editingIsForTicketNumber')
                                             <span class="error__message position-absolute"
                                                 style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -613,6 +620,15 @@
 
             editingSelectAssignedColumn.addEventListener('reset', () => {
                 @this.set('editingAssignedColumn', null);
+            });
+
+            window.addEventListener('disable-assigned-column-field', () => {
+                editingSelectAssignedColumn.reset();
+                editingSelectAssignedColumn.disable();
+            });
+
+            window.addEventListener('enable-assigned-column-field', () => {
+                editingSelectAssignedColumn.enable();
             });
         });
     </script>
