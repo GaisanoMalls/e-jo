@@ -45,7 +45,6 @@ class HelpTopicList extends Component
     public ?int $editFormId = null;
     public ?string $editFormName = null;
     public bool $editFormNameCurrentlyEditing = false;
-
     public ?int $editAddedFieldId = null;
     public ?string $editAddedFieldName = null;
     public ?string $editAddedFieldType = null;

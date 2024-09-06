@@ -245,7 +245,7 @@
                                 @foreach ($helpTopicForm->fields as $field)
                                     <span wire:key="field-{{ $field->id }}"
                                         class="d-flex align-items-center gap-2 form__fields__container"
-                                        style="font-size: 0.65rem; border: 1px solid #dddddd; border-radius: 20px; padding: 3px 7px 3px 8px; {{ $field->is_enabled ? 'color: black;' : 'color: #6b7280;' }} {{ $editSelectedFieldIsCurrentlyEditing && $editSelectedFieldId === $field->id ? 'border: 0.08rem solid #d32839; font-weight: 500; color: #d32839;' : '' }}">
+                                        style="font-size: 0.75rem; border: 1px solid #dddddd; border-radius: 20px; padding: 3px 7px 3px 8px; {{ $field->is_enabled ? 'color: black;' : 'color: #6b7280;' }} {{ $editSelectedFieldIsCurrentlyEditing && $editSelectedFieldId === $field->id ? 'border: 0.08rem solid #d32839; font-weight: 500; color: #d32839;' : '' }}">
                                         {{ $field->name }}
                                         @if (!$editSelectedFieldIsCurrentlyEditing || $editSelectedFieldId !== $field->id)
                                             <div class="d-flex align-items-center gap-1 d-none field__container">
@@ -256,10 +256,10 @@
                                                     style="height: 4px; width: 4px;">
                                                     <i wire:loading.remove
                                                         wire:target="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
-                                                        class="bi bi-pencil" style="font-size: 9px;"></i>
+                                                        class="bi bi-pencil" style="font-size: 11px;"></i>
                                                     <i wire:loading
                                                         wire:target="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
-                                                        class='bx bx-loader bx-spin'></i>
+                                                        class='bx bx-loader bx-spin' style="font-size: 13px;"></i>
                                                 </button>
                                                 <button wire:click="deleteFormField({{ $field->id }})"
                                                     type="button"
@@ -267,10 +267,10 @@
                                                     style="height: 4px; width: 4px;">
                                                     <i wire:loading.remove
                                                         wire:target="deleteFormField({{ $field->id }})"
-                                                        class="bi bi-x"></i>
+                                                        class="bi bi-x-lg" style="font-size: 11px;"></i>
                                                     <i wire:loading="deleteFormField({{ $field->id }})"
                                                         wire:target="deleteFormField({{ $field->id }})"
-                                                        class="bx bx-loader bx-spin"></i>
+                                                        class="bx bx-loader bx-spin" style="font-size: 13px;"></i>
                                                 </button>
                                             </div>
                                         @endif

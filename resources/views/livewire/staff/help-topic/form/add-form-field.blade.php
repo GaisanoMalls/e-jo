@@ -263,7 +263,11 @@
                                                     <div id="editing-select-assigned-column" wire:ignore></div>
                                                 </div>
                                             @else
-                                                <span>{{ $field['assignedColumn'] ?? 'None' }}</span>
+                                                @if (in_array($field['assignedColumn'], [1, 2]))
+                                                    {{ $field['assignedColumn'] }}
+                                                @else
+                                                    ---
+                                                @endif
                                             @endif
                                         </div>
                                         @error('editingAssignedColumn')
@@ -283,15 +287,16 @@
                                                         style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
                                                         <input wire:model="editingAsHeaderField"
                                                             class="form-check-input" type="checkbox" role="switch"
-                                                            id="editing-as-header-field" wire:loading.attr="disabled"
+                                                            wire:loading.attr="disabled"
                                                             style="margin-right: 10px !important;">
-                                                        <label class="form-check-label" for="editing-as-header-field">
-                                                            {{ $editingAsHeaderField ? 'Yes' : 'No' }}
-                                                        </label>
                                                     </div>
                                                 </div>
                                             @else
-                                                <span>{{ $field['asHeaderField'] ? 'Yes' : 'No' }}</span>
+                                                @if ($field['asHeaderField'])
+                                                    <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
+                                                @else
+                                                    <i class="bi bi-x-circle text-muted"></i>
+                                                @endif
                                             @endif
                                         </div>
                                         @error('editingAsHeaderField')
@@ -311,18 +316,17 @@
                                                         style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
                                                         <input wire:model="editingIsForTicketNumber"
                                                             class="form-check-input" type="checkbox" role="switch"
-                                                            id="editing-for-ticket-number"
                                                             wire:loading.attr="disabled"
                                                             style="margin-right: 10px !important;"
                                                             @disabled(!$editingAsHeaderField)>
-                                                        <label class="form-check-label"
-                                                            for="editing-for-ticket-number">
-                                                            {{ $editingIsForTicketNumber ? 'Yes' : 'No' }}
-                                                        </label>
                                                     </div>
                                                 </div>
                                             @else
-                                                <span>{{ $field['isForTicketNumber'] ? 'Yes' : 'No' }}</span>
+                                                @if ($field['isForTicketNumber'])
+                                                    <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
+                                                @else
+                                                    <i class="bi bi-x-circle text-muted"></i>
+                                                @endif
                                             @endif
                                         </div>
                                         @error('editingIsForTicketNumber')
@@ -342,15 +346,16 @@
                                                         style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
                                                         <input wire:model="editingFieldRequired"
                                                             class="form-check-input" type="checkbox" role="switch"
-                                                            id="editing-field-required" wire:loading.attr="disabled"
+                                                            wire:loading.attr="disabled"
                                                             style="margin-right: 10px !important;">
-                                                        <label class="form-check-label" for="editing-field-required">
-                                                            {{ $editingFieldRequired ? 'Yes' : 'No' }}
-                                                        </label>
                                                     </div>
                                                 </div>
                                             @else
-                                                <span>{{ $field['isRequired'] ? 'Yes' : 'No' }}</span>
+                                                @if ($field['isRequired'])
+                                                    <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
+                                                @else
+                                                    <i class="bi bi-x-circle text-muted"></i>
+                                                @endif
                                             @endif
                                         </div>
                                         @error('editingFieldRequired')
@@ -370,15 +375,16 @@
                                                         style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
                                                         <input wire:model="editingFieldEnable"
                                                             class="form-check-input" type="checkbox" role="switch"
-                                                            id="editing-field-enable" wire:loading.attr="disabled"
+                                                            wire:loading.attr="disabled"
                                                             style="margin-right: 10px !important;">
-                                                        <label class="form-check-label" for="editing-field-enable">
-                                                            {{ $editingFieldEnable ? 'Yes' : 'No' }}
-                                                        </label>
                                                     </div>
                                                 </div>
                                             @else
-                                                <span>{{ $field['isEnabled'] ? 'Yes' : 'No' }}</span>
+                                                @if ($field['isEnabled'])
+                                                    <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
+                                                @else
+                                                    <i class="bi bi-x-circle text-muted"></i>
+                                                @endif
                                             @endif
                                         </div>
                                         @error('editingFieldEnable')
@@ -628,6 +634,14 @@
             });
 
             window.addEventListener('enable-assigned-column-field', () => {
+                editingSelectAssignedColumn.enable();
+            });
+
+            window.addEventListener('editing-disable-current-assigned-column', () => {
+                editingSelectAssignedColumn.disable();
+            });
+
+            window.addEventListener('editing-enable-current-assigned-column', () => {
                 editingSelectAssignedColumn.enable();
             });
         });

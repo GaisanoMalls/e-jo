@@ -27,7 +27,7 @@ class AddFormField extends Component
     public array $addedHeaderFields = [];
     public array $fieldColumnNumber = [1, 2];
     public ?int $assignedColumn = null;
-    public ?string $asHeaderField = null;
+    public ?bool $asHeaderField = false;
     public bool $isForTicketNumber = false;
     public bool $isRequired = false;
     public bool $isEnabled = false;
@@ -74,6 +74,7 @@ class AddFormField extends Component
             $this->hasAssociatedTicketField();
         } else {
             $this->assignedColumn = null;
+            $this->isForTicketNumber = false;
         }
     }
 
@@ -115,7 +116,7 @@ class AddFormField extends Component
             }
         }
 
-        if ($this->hasAssociatedTicketField()) {
+        if ($this->asHeaderField && $this->hasAssociatedTicketField()) {
             session()->flash('has_associated_ticket_field', 'Oops! There is already a field associated with the ticket number.');
         }
 
@@ -154,7 +155,7 @@ class AddFormField extends Component
             'variable_name' => $this->variableName,
             'isRequired' => $this->isRequired,
             'isEnabled' => $this->isEnabled,
-            'asHeaderField' => $this->asHeaderField ? 'Yes' : 'No',
+            'asHeaderField' => $this->asHeaderField,
             'assignedColumn' => $this->asHeaderField ? $this->assignedColumn : null,
             'isForTicketNumber' => $this->isForTicketNumber
         ]);
@@ -190,6 +191,12 @@ class AddFormField extends Component
                     $this->editingAssignedColumn = $field['assignedColumn'];
                     $this->editingIsForTicketNumber = $field['isForTicketNumber'];
 
+                    if (!$this->editingAsHeaderField) {
+                        $this->dispatchBrowserEvent('editing-disable-current-assigned-column');
+                    } else {
+                        $this->dispatchBrowserEvent('editing-enable-current-assigned-column');
+                    }
+
                     $this->dispatchBrowserEvent('edit-added-field-show-select-field', [
                         'currentFieldType' => $this->editingFieldType,
                         'currentAssignedCoumn' => $this->editingAssignedColumn,
@@ -205,12 +212,12 @@ class AddFormField extends Component
     public function updateAddedField(int $fieldKey)
     {
         try {
-            if (!$this->editingAssignedColumn) {
-                $this->addError('editingAssignedColumn', 'This field is required');
-                return;
-            } else {
-                $this->resetValidation('editingAssignedColumn');
-            }
+            // if (!$this->editingAssignedColumn) {
+            //     $this->addError('editingAssignedColumn', 'This field is required');
+            //     return;
+            // } else {
+            //     $this->resetValidation('editingAssignedColumn');
+            // }
 
             if (!$this->editingFieldName) {
                 $this->addError('editingFieldName', 'This field name is required');
@@ -234,7 +241,7 @@ class AddFormField extends Component
                     $field['isRequired'] = $this->editingFieldRequired;
                     $field['isEnabled'] = $this->editingFieldEnable;
                     $field['asHeaderField'] = $this->editingAsHeaderField;
-                    $field['assignedColumn'] = $this->editingAssignedColumn;
+                    $field['assignedColumn'] = $this->editingAssignedColumn == 'None' ? null : $this->editingAssignedColumn;
                     $field['isForTicketNumber'] = $this->editingIsForTicketNumber;
                 }
             }
