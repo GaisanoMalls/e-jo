@@ -9,5 +9,4 @@ enum FieldTypesEnum: string
     case DATE = 'date';
     case TIME = 'time';
     case AMOUNT = 'amount';
-    case FILE = 'file';
 }

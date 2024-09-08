@@ -10,7 +10,6 @@ use App\Http\Traits\BasicModelQueries;
 use App\Models\Field;
 use App\Models\Form;
 use App\Models\HelpTopic;
-use App\Models\Role;
 use Exception;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
@@ -30,16 +29,16 @@ class HelpTopicList extends Component
     public ?string $selectedFormFieldName = null;
     public ?string $selectedFormVariableName = null;
     public ?string $selectedFormFieldType = null;
-    public ?string $selectedFormFieldIsRequired = null;
-    public ?string $selectedFormFieldIsEnabled = null;
+    public bool $selectedFormFieldIsRequired = false;
+    public bool $selectedFormFieldIsEnabled = false;
     public array $selectedFormAddedFields = [];
 
     public ?int $editSelectedFieldFormId = null;
     public ?int $editSelectedFieldId = null;
     public ?string $editSelectedFieldName = null;
     public ?string $editSelectedFieldType = null;
-    public ?string $editSelectedFieldRequired = null;
-    public ?string $editSelectedFieldEnabled = null;
+    public bool $editSelectedFieldRequired = false;
+    public bool $editSelectedFieldEnabled = false;
     public bool $editSelectedFieldIsCurrentlyEditing = false;
 
     public ?int $editFormId = null;
@@ -48,9 +47,9 @@ class HelpTopicList extends Component
     public ?int $editAddedFieldId = null;
     public ?string $editAddedFieldName = null;
     public ?string $editAddedFieldType = null;
+    public ?string $editAddedFieldVariableName = null;
     public bool $editAddedFieldRequired = false;
     public bool $editAddedFieldEnabled = false;
-    public ?string $editAddedFieldVariableName = null;
     public bool $editAddedFieldIsCurrentlyEditing = false;
 
     protected $listeners = ['loadHelpTopics' => '$refresh'];
@@ -151,8 +150,6 @@ class HelpTopicList extends Component
 
         $this->dispatchBrowserEvent('event-edit-selected-field-type', [
             'editCurrentSelectedFieldType' => $this->editSelectedFieldType,
-            'editCurrentSelectedFieldRequired' => $this->editSelectedFieldRequired ? 'Yes' : 'No',
-            'editCurrentSelectedFieldEnabled' => $this->editSelectedFieldEnabled ? 'Yes' : 'No',
         ]);
     }
 
@@ -198,16 +195,6 @@ class HelpTopicList extends Component
             return;
         }
 
-        if (!$this->editSelectedFieldRequired) {
-            $this->addError('editSelectedFieldRequired', 'This field is required');
-            return;
-        }
-
-        if (!$this->editSelectedFieldEnabled) {
-            $this->addError('editSelectedFieldEnabled', 'This field is required');
-            return;
-        }
-
         Field::where([
             ['id', $this->editSelectedFieldId],
             ['form_id', $this->editSelectedFieldFormId],
@@ -217,8 +204,8 @@ class HelpTopicList extends Component
                 'label' => $this->editSelectedFieldName,
                 'type' => $this->editSelectedFieldType,
                 'variable_name' => $this->convertToVariable($this->editSelectedFieldName),
-                'is_required' => $this->editSelectedFieldRequired == FieldRequiredOptionEnum::YES->value,
-                'is_enabled' => $this->editSelectedFieldEnabled == FieldEnableOptionEnum::YES->value
+                'is_required' => $this->editSelectedFieldRequired,
+                'is_enabled' => $this->editSelectedFieldEnabled
             ]);
 
         $this->editSelectedFieldIsCurrentlyEditing = false;
@@ -233,8 +220,8 @@ class HelpTopicList extends Component
         $this->cancelEditSelectedFormField();
         $this->selectedFormFieldName = null;
         $this->selectedFormFieldType = null;
-        $this->selectedFormFieldIsRequired = null;
-        $this->selectedFormFieldIsEnabled = null;
+        $this->selectedFormFieldIsRequired = false;
+        $this->selectedFormFieldIsEnabled = false;
     }
 
     public function saveSelectedFormAddedFields()
@@ -259,16 +246,6 @@ class HelpTopicList extends Component
             return;
         }
 
-        if (!$this->selectedFormFieldIsRequired) {
-            $this->addError('selectedFormFieldIsRequired', 'This field is required');
-            return;
-        }
-
-        if (!$this->selectedFormFieldIsEnabled) {
-            $this->addError('selectedFormFieldIsEnabled', 'This field is required');
-            return;
-        }
-
         array_push(
             $this->selectedFormAddedFields,
             [
@@ -276,8 +253,8 @@ class HelpTopicList extends Component
                 'label' => $this->selectedFormFieldName,
                 'type' => $this->selectedFormFieldType,
                 'variable_name' => $this->selectedFormVariableName,
-                'is_required' => $this->selectedFormFieldIsRequired == FieldRequiredOptionEnum::YES->value,
-                'is_enabled' => $this->selectedFormFieldIsEnabled == FieldEnableOptionEnum::YES->value
+                'is_required' => $this->selectedFormFieldIsRequired,
+                'is_enabled' => $this->selectedFormFieldIsEnabled
             ]
         );
 
@@ -303,8 +280,6 @@ class HelpTopicList extends Component
 
                 $this->dispatchBrowserEvent('edit-selected-form-added-field-show-select-field', [
                     'editAddedFieldType' => $this->editAddedFieldType,
-                    'editAddedFieldRequired' => $this->editAddedFieldRequired == FieldRequiredOptionEnum::YES->value,
-                    'editAddedFieldEnabled' => $this->editAddedFieldEnabled == FieldEnableOptionEnum::YES->value
                 ]);
             }
             $this->resetValidation();
@@ -327,23 +302,13 @@ class HelpTopicList extends Component
                 return;
             }
 
-            if (!$this->editAddedFieldRequired) {
-                $this->addError('editAddedFieldRequired', 'This field is required');
-                return;
-            }
-
-            if (!$this->editAddedFieldEnabled) {
-                $this->addError('editAddedFieldEnabled', 'This field is required');
-                return;
-            }
-
             foreach ($this->selectedFormAddedFields as $key => &$field) {
                 if ($this->editAddedFieldId === $fieldKey && $key === $fieldKey) {
                     $field['name'] = $this->editAddedFieldName;
                     $field['type'] = $this->editAddedFieldType;
                     $field['variable_name'] = $this->editAddedFieldVariableName;
-                    $field['is_required'] = $this->editAddedFieldRequired == FieldRequiredOptionEnum::YES->value;
-                    $field['is_enabled'] = $this->editAddedFieldEnabled == FieldEnableOptionEnum::YES->value;
+                    $field['is_required'] = $this->editAddedFieldRequired;
+                    $field['is_enabled'] = $this->editAddedFieldEnabled;
                 }
             }
             $this->editSelectedFormAddedFieldAction();
@@ -385,7 +350,7 @@ class HelpTopicList extends Component
     {
         try {
 
-            if (empty($this->selectedFormAddedFields) && $this->selectedFormFieldName && $this->selectedFormFieldType && $this->selectedFormFieldIsRequired && $this->selectedFormFieldIsEnabled) {
+            if (empty($this->selectedFormAddedFields) && $this->selectedFormFieldName && $this->selectedFormFieldType) {
                 session()->flash('selected_form_added_fields_error', 'Please add the fields first');
                 return;
             }
@@ -435,7 +400,7 @@ class HelpTopicList extends Component
         $this->editSelectedFieldId = null;
         $this->editSelectedFieldName = null;
         $this->editSelectedFieldType = null;
-        $this->editSelectedFieldRequired = null;
+        $this->editSelectedFieldRequired = false;
     }
 
     public function convertToVariable($value)
@@ -453,9 +418,6 @@ class HelpTopicList extends Component
         return view('livewire.staff.help-topic.help-topic-list', [
             'helpTopics' => $this->queryHelpTopics(),
             'addFormFieldFieldTypes' => Options::forEnum(FieldTypesEnum::class)->toArray(),
-            'addFormFieldEnableOption' => Options::forEnum(FieldEnableOptionEnum::class)->toArray(),
-            'addFormFieldRequiredOption' => Options::forEnum(FieldRequiredOptionEnum::class)->toArray(),
-            'addFormFieldUserRoles' => Options::forModels(Role::class)->toArray(),
         ]);
     }
 }

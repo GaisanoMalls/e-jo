@@ -100,9 +100,10 @@ class AddFormField extends Component
 
     public function hasAssociatedTicketField()
     {
-        return !empty(array_filter($this->addedFields, function ($field) {
-            return $field['isForTicketNumber'];
-        }));
+        return $this->asHeaderField
+            && !empty(array_filter($this->addedFields, function ($field) {
+                return $field['isForTicketNumber'];
+            }));
     }
 
     public function addField()
@@ -116,7 +117,7 @@ class AddFormField extends Component
             }
         }
 
-        if ($this->asHeaderField && $this->hasAssociatedTicketField()) {
+        if ($this->hasAssociatedTicketField()) {
             session()->flash('has_associated_ticket_field', 'Oops! There is already a field associated with the ticket number.');
         }
 

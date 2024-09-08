@@ -322,17 +322,15 @@
                                             <label class="form-label text-muted form__field__label"
                                                 style="font-weight: 500;">Required</label>
                                             <div class="w-100">
-                                                <div id="edit-selected-field-required" wire:ignore>
+                                                <div class="form-check mx-0"
+                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                    <input wire:model="editSelectedFieldRequired"
+                                                        class="form-check-input" type="checkbox" role="switch"
+                                                        wire:loading.attr="disabled"
+                                                        style="margin-right: 10px !important;">
                                                 </div>
                                             </div>
                                         </div>
-                                        @error('editSelectedFieldRequired')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -3px !important;">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
                                     </div>
                                     <div
                                         class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
@@ -340,17 +338,15 @@
                                             <label class="form-label text-muted form__field__label"
                                                 style="font-weight: 500;">Enabled</label>
                                             <div class="w-100">
-                                                <div id="edit-selected-field-enabled" wire:ignore>
+                                                <div class="form-check mx-0"
+                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                    <input wire:model="editSelectedFieldEnabled"
+                                                        class="form-check-input" type="checkbox" role="switch"
+                                                        wire:loading.attr="disabled"
+                                                        style="margin-right: 10px !important;">
                                                 </div>
                                             </div>
                                         </div>
-                                        @error('editSelectedFieldEnabled')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -3px !important;">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
                                     </div>
                                     <div class="mt-2 d-flex align-items-center gap-2">
                                         <button wire:click="updateSelectedFormField" type="button"
@@ -451,34 +447,29 @@
                             <div class="mb-2">
                                 <label class="form-label text-muted form__field__label"
                                     style="font-weight: 500;">Required</label>
-                                <div class="d-flex align-items-center text-start px-0 td__content">
-                                    <div class="w-100">
-                                        <div id="add-selected-form-field-select-required-field" wire:ignore></div>
+                                <div class="w-100">
+                                    <div class="form-check mx-0"
+                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                        <input wire:model="selectedFormFieldIsRequired" class="form-check-input"
+                                            type="checkbox" role="switch" wire:loading.attr="disabled"
+                                            style="margin-right: 10px !important;">
                                     </div>
                                 </div>
                             </div>
-                            @error('selectedFormFieldIsRequired')
-                                <span class="error__message position-absolute" style="bottom: -24px !important;">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
                         </div>
                         <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                             <div class="mb-3">
                                 <label class="form-label text-muted form__field__label"
                                     style="font-weight: 500;">Enabled</label>
                                 <div class="w-100">
-                                    <div id="add-selected-form-field-select-enabled-field" wire:ignore>
+                                    <div class="form-check mx-0"
+                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                        <input wire:model="selectedFormFieldIsEnabled" class="form-check-input"
+                                            type="checkbox" role="switch" wire:loading.attr="disabled"
+                                            style="margin-right: 10px !important;">
                                     </div>
                                 </div>
                             </div>
-                            @error('selectedFormFieldIsEnabled')
-                                <span class="error__message position-absolute" style="bottom: -3px !important;">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
                         </div>
                         <div class="col-12 mt-3 col-md-6 d-flex flex-column justify-content-end">
                             <div class="mb-2">
@@ -554,30 +545,44 @@
                                                         style="height: 0;">
                                                         @if ($editAddedFieldId === $key)
                                                             <div class="w-100">
-                                                                <div id="edit-added-select-field-required" wire:ignore>
+                                                                <div class="form-check mx-0"
+                                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                                    <input wire:model="editAddedFieldRequired"
+                                                                        class="form-check-input" type="checkbox"
+                                                                        role="switch" wire:loading.attr="disabled"
+                                                                        style="margin-right: 10px !important;">
                                                                 </div>
                                                             </div>
                                                         @else
-                                                            <span>{{ $field['is_required'] ? 'Yes' : 'No' }}</span>
+                                                            @if ($field['is_required'])
+                                                                <i class="bi bi-check-circle-fill"
+                                                                    style="color: #9da85c;"></i>
+                                                            @else
+                                                                <i class="bi bi-x-circle text-muted"></i>
+                                                            @endif
                                                         @endif
                                                     </div>
-                                                    @error('editAddedFieldRequired')
-                                                        <span class="error__message">
-                                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
                                                         style="height: 0; min-width: 200px;">
                                                         @if ($editAddedFieldId === $key)
                                                             <div class="w-100">
-                                                                <div id="edit-added-select-field-enabled" wire:ignore>
+                                                                <div class="form-check mx-0"
+                                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                                    <input wire:model="editAddedFieldEnabled"
+                                                                        class="form-check-input" type="checkbox"
+                                                                        role="switch" wire:loading.attr="disabled"
+                                                                        style="margin-right: 10px !important;">
                                                                 </div>
                                                             </div>
                                                         @else
-                                                            <span>{{ $field['is_enabled'] ? 'Yes' : 'No' }}</span>
+                                                            @if ($field['is_enabled'])
+                                                                <i class="bi bi-check-circle-fill"
+                                                                    style="color: #9da85c;"></i>
+                                                            @else
+                                                                <i class="bi bi-x-circle text-muted"></i>
+                                                            @endif
                                                         @endif
                                                     </div>
                                                     @error('editAddedFieldEnabled')
@@ -657,22 +662,9 @@
         });
 
         const addSelectedFormFieldSelectFieldType = document.querySelector('#add-selected-form-field-select-field-type');
-        const addSelectedFormFieldSelectRequired = document.querySelector('#add-selected-form-field-select-required-field');
-        const addSelectedFormFieldSelectEnabled = document.querySelector('#add-selected-form-field-select-enabled-field');
-
         const addFormFieldFieldTypeOption = @json($addFormFieldFieldTypes).map(addFormFieldFieldType => ({
             label: addFormFieldFieldType.label,
             value: addFormFieldFieldType.value
-        }));
-
-        const addFormFieldSelectRequiredOption = @json($addFormFieldRequiredOption).map(addFormFieldRequired => ({
-            label: addFormFieldRequired.label,
-            value: addFormFieldRequired.value
-        }));
-
-        const addFormFieldSelectEnableOption = @json($addFormFieldEnableOption).map(addFormFieldEnable => ({
-            label: addFormFieldEnable.label,
-            value: addFormFieldEnable.value
         }));
 
         VirtualSelect.init({
@@ -680,91 +672,40 @@
             options: addFormFieldFieldTypeOption
         });
 
-        VirtualSelect.init({
-            ele: addSelectedFormFieldSelectRequired,
-            options: addFormFieldSelectRequiredOption
-        });
-
-        VirtualSelect.init({
-            ele: addSelectedFormFieldSelectEnabled,
-            options: addFormFieldSelectEnableOption
-        });
-
         addSelectedFormFieldSelectFieldType.addEventListener('change', (event) => {
             @this.set('selectedFormFieldType', event.target.value)
         });
 
-        addSelectedFormFieldSelectRequired.addEventListener('change', (event) => {
-            @this.set('selectedFormFieldIsRequired', event.target.value)
-        });
-
-        addSelectedFormFieldSelectEnabled.addEventListener('change', (event) => {
-            @this.set('selectedFormFieldIsEnabled', event.target.value);
-        });
-
         window.addEventListener('selected-form-clear-form-fields', () => {
             addSelectedFormFieldSelectFieldType.reset();
-            addSelectedFormFieldSelectRequired.reset();
-            addSelectedFormFieldSelectEnabled.reset();
         });
 
         // Edit seleted field
         window.addEventListener('event-edit-selected-field-type', (event) => {
             const editSelectedFieldType = document.querySelector('#edit-selected-field-type');
-            const editSelectedFieldRequired = document.querySelector('#edit-selected-field-required');
-            const editSelectedFieldEnabled = document.querySelector('#edit-selected-field-enabled');
 
             const editCurrentSelectedFieldType = event.detail.editCurrentSelectedFieldType;
-            const editCurrentSelectedFieldRequired = event.detail.editCurrentSelectedFieldRequired;
-            const editCurrentSelectedFieldEnabled = event.detail.editCurrentSelectedFieldEnabled;
 
             VirtualSelect.init({
                 ele: editSelectedFieldType,
                 options: addFormFieldFieldTypeOption,
             });
 
-            VirtualSelect.init({
-                ele: editSelectedFieldRequired,
-                options: addFormFieldSelectRequiredOption,
-            });
-
-            VirtualSelect.init({
-                ele: editSelectedFieldEnabled,
-                options: addFormFieldSelectEnableOption,
-            });
-
             editSelectedFieldType.reset();
-            editSelectedFieldRequired.reset();
-            editSelectedFieldEnabled.reset();
-
             editSelectedFieldType.setValue(editCurrentSelectedFieldType);
-            editSelectedFieldRequired.setValue(editCurrentSelectedFieldRequired);
-            editSelectedFieldEnabled.setValue(editCurrentSelectedFieldEnabled);
 
             editSelectedFieldType.addEventListener('change', (event) => {
                 @this.set('editSelectedFieldType', event.target.value);
-            });
-
-            editSelectedFieldRequired.addEventListener('change', (event) => {
-                @this.set('editSelectedFieldRequired', event.target.value);
-            });
-
-            editSelectedFieldEnabled.addEventListener('change', (event) => {
-                @this.set('editSelectedFieldEnabled', event.target.value);
             });
         });
 
         // Edit selected form (added fields)
         window.addEventListener('edit-selected-form-added-field-show-select-field', (event) => {
             const editAddedFieldType = event.detail.editAddedFieldType;
-            const editAddedFieldRequired = event.detail.editAddedFieldRequired;
-            const editAddedFieldEnabled = event.detail.editAddedFieldEnabled;
 
             const editAddedSelectFieldType = document.querySelector('#edit-added-select-field-type');
-            const editAddedSelectFieldRequired = document.querySelector('#edit-added-select-field-required');
-            const editAddedSelectFieldEnabled = document.querySelector('#edit-added-select-field-enabled');
 
-            if (editAddedSelectFieldType && editAddedSelectFieldRequired && editAddedSelectFieldEnabled) {
+            if (editAddedSelectFieldType) {
                 VirtualSelect.init({
                     ele: editAddedSelectFieldType,
                     options: addFormFieldFieldTypeOption,
@@ -772,36 +713,11 @@
                     popupDropboxBreakpoint: '3000px'
                 });
 
-                VirtualSelect.init({
-                    ele: editAddedSelectFieldRequired,
-                    options: addFormFieldSelectRequiredOption,
-                    popupDropboxBreakpoint: '3000px'
-                });
-
-                VirtualSelect.init({
-                    ele: editAddedSelectFieldEnabled,
-                    options: addFormFieldSelectEnableOption,
-                    popupDropboxBreakpoint: '3000px'
-                });
-
                 editAddedSelectFieldType.reset();
-                editAddedSelectFieldRequired.reset();
-                editAddedSelectFieldEnabled.reset();
-
                 editAddedSelectFieldType.setValue(editAddedFieldType);
-                editAddedSelectFieldRequired.setValue(editAddedFieldRequired ? 'Yes' : 'No');
-                editAddedSelectFieldEnabled.setValue(editAddedFieldEnabled ? 'Yes' : 'No');
 
                 editAddedSelectFieldType.addEventListener('change', (event) => {
                     @this.set('editAddedFieldType', event.target.value);
-                });
-
-                editAddedSelectFieldRequired.addEventListener('change', (event) => {
-                    @this.set('editAddedFieldRequired', event.target.value);
-                });
-
-                editAddedSelectFieldEnabled.addEventListener('change', (event) => {
-                    @this.set('editAddedFieldEnabled', event.target.value);
                 });
             }
         });
@@ -811,12 +727,7 @@
             $('#addFieldForSelectedForm').modal('hide');
 
             addSelectedFormFieldSelectFieldType.reset();
-            addSelectedFormFieldSelectRequired.reset();
-            addSelectedFormFieldSelectEnabled.reset();
-
             editAddedSelectFieldType.reset();
-            editAddedSelectFieldRequired.reset();
-            editAddedSelectFieldEnabled.reset();
         });
 
         window.addEventListener('close-delete-confirmation-of-helptopic-form', () => {

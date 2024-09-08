@@ -111,6 +111,7 @@ class CreateTicket extends Component
 
     public function sendTicket()
     {
+        dd($this->filledForms);
         $this->validate();
 
         try {
