@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Throwable;
 
 class CreateTicket extends Component
 {
@@ -111,7 +112,6 @@ class CreateTicket extends Component
 
     public function sendTicket()
     {
-        dd($this->filledForms);
         $this->validate();
 
         try {
@@ -249,6 +249,44 @@ class CreateTicket extends Component
         }
 
         return ['headers' => $headers, 'fields' => $filteredFields];
+    }
+
+    public function removeField(int $fieldKey)
+    {
+        try {
+            if (count($this->rowFields) === count($this->filledForms)) {
+                foreach ($this->rowFields as $key => $rowField) {
+                    if ($fieldKey === $key) {
+                        unset($this->rowFields[$key]);
+                    }
+                }
+
+                foreach ($this->filledForms as $key => $filledForm) {
+                    if ($fieldKey === $key) {
+                        unset($this->filledForms[$key]);
+                    }
+                }
+            }
+
+            // // Check if the counts are equal before proceeding
+            // if (count($this->rowFields) === count($this->filledForms)) {
+            //     // Use array_filter to remove the element more efficiently
+            //     $this->rowFields = array_filter(
+            //         $this->rowFields,
+            //         fn($key) => $key !== $fieldKey,
+            //         ARRAY_FILTER_USE_KEY
+            //     );
+
+            //     $this->filledForms = array_filter(
+            //         $this->filledForms,
+            //         fn($key) => $key !== $fieldKey,
+            //         ARRAY_FILTER_USE_KEY
+            //     );
+            // }
+        } catch (Throwable $e) {
+            AppErrorLog::getError($e->getMessage());
+            \Log::error('Error on line: ', [$e->getLine()]);
+        }
     }
 
     public function resetFormFields()

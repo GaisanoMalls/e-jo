@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Field::class, 'field_id')->constrained('fields')->cascadeOnDelete();
             $table->string('value');
-            $table->smallInteger('row');
+            $table->smallInteger('row')->nullable();
             $table->timestamps();
         });
     }

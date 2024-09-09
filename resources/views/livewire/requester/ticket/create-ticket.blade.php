@@ -259,10 +259,14 @@
                                                                                 {{ Str::title($header) }}
                                                                             </th>
                                                                         @endforeach
+                                                                        <th class="input__field__label text-center">
+                                                                            Action
+                                                                        </th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    @foreach ($rowFields as $row)
+                                                                    @foreach ($rowFields as $key => $row)
+                                                                        {{ $key }}
                                                                         <tr class="row__field">
                                                                             @foreach ($headers as $header)
                                                                                 @php
@@ -275,6 +279,16 @@
                                                                                     {{ $field['value'] ?? '' }}
                                                                                 </td>
                                                                             @endforeach
+                                                                            <td>
+                                                                                <button
+                                                                                    wire:click="removeField({{ $key }})"
+                                                                                    type="button"
+                                                                                    class="btn p-0 m-auto d-flex align-items-center justify-content-center gap-1"
+                                                                                    style="font-size: 0.8rem; color: red;">
+                                                                                    <i class="bi bi-trash"></i>
+                                                                                    Remove
+                                                                                </button>
+                                                                            </td>
                                                                         </tr>
                                                                     @endforeach
                                                                 </tbody>
