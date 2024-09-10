@@ -11,6 +11,7 @@ use App\Http\Traits\Utils;
 use App\Mail\Requester\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\Branch;
+use App\Models\FieldHeaderValue;
 use App\Models\FieldRowValue;
 use App\Models\Form;
 use App\Models\HelpTopic;
@@ -171,7 +172,7 @@ class CreateTicket extends Component
                 });
 
                 if ($this->isHelpTopicHasForm) {
-                    $this->saveFieldValues();
+                    $this->saveFieldValues($ticket);
 
                     // TO BE REVISED
                     // foreach ($this->filledForms as $fields) {
@@ -211,11 +212,22 @@ class CreateTicket extends Component
         }
     }
 
-    public function saveFieldValues()
+    public function saveFieldValues(Ticket $ticket)
     {
-        foreach ($this->filledForms as $filledFields) {
-            foreach ($filledFields as $field) {
+        foreach ($this->headerFields as $fields) {
+            foreach ($fields as $field) {
+                FieldHeaderValue::create([
+                    'ticket_id' => $ticket->id,
+                    'field_id' => $field['id'],
+                    'value' => $field['value']
+                ]);
+            }
+        }
+
+        foreach ($this->rowFields as $fields) {
+            foreach ($fields as $field) {
                 FieldRowValue::create([
+                    'ticket_id' => $ticket->id,
                     'field_id' => $field['id'],
                     'value' => $field['value'],
                     'row' => $field['row']
