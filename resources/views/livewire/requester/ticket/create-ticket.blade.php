@@ -175,13 +175,13 @@
                                             @endforeach
                                             <div class="col-12">
                                                 <div class="d-flex align-items-center">
-                                                    <button wire:click="saveFieldValues" type="button"
+                                                    <button wire:click="addFieldValues" type="button"
                                                         class="btn d-flex align-items-center justify-content-center rounded-3 gap-2"
                                                         style="height: 35px;
                                                             background-color: #3B4053;
                                                             color: white;
                                                             font-size: 0.75rem;">
-                                                        <span wire:loading wire:target="saveFieldValues"
+                                                        <span wire:loading wire:target="addFieldValues"
                                                             class="spinner-border spinner-border-sm" role="status"
                                                             aria-hidden="true">
                                                         </span>
@@ -266,7 +266,6 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     @foreach ($rowFields as $key => $row)
-                                                                        {{ $key }}
                                                                         <tr class="row__field">
                                                                             @foreach ($headers as $header)
                                                                                 @php

@@ -339,17 +339,16 @@ class HelpTopicList extends Component
 
     public function removeSelectedFormAddedField(int $fieldKey)
     {
-        foreach (array_keys($this->selectedFormAddedFields) as $key) {
-            if ($fieldKey === $key) {
-                unset($this->selectedFormAddedFields[$key]);
-            }
-        }
+        $this->selectedFormAddedFields = array_filter(
+            $this->selectedFormAddedFields,
+            fn($key) => $key !== $fieldKey,
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
     public function selectedFormSaveAddedField()
     {
         try {
-
             if (empty($this->selectedFormAddedFields) && $this->selectedFormFieldName && $this->selectedFormFieldType) {
                 session()->flash('selected_form_added_fields_error', 'Please add the fields first');
                 return;

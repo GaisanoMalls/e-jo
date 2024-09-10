@@ -2,6 +2,7 @@
 
 use App\Models\Field;
 use App\Models\Form;
+use App\Models\Ticket;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,8 +15,9 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('field_values', function (Blueprint $table) {
+        Schema::create('field_row_values', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
             $table->foreignIdFor(Field::class, 'field_id')->constrained('fields')->cascadeOnDelete();
             $table->string('value');
             $table->smallInteger('row')->nullable();
@@ -30,6 +32,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('field_values');
+        Schema::dropIfExists('field_row_values');
     }
 };

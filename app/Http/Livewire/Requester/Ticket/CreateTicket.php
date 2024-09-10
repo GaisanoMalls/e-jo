@@ -11,6 +11,7 @@ use App\Http\Traits\Utils;
 use App\Mail\Requester\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\Branch;
+use App\Models\FieldRowValue;
 use App\Models\Form;
 use App\Models\HelpTopic;
 use App\Models\PriorityLevel;
@@ -170,7 +171,7 @@ class CreateTicket extends Component
                 });
 
                 if ($this->isHelpTopicHasForm) {
-                    array_push($this->filledForms, $this->formFields);
+                    $this->saveFieldValues();
 
                     // TO BE REVISED
                     // foreach ($this->filledForms as $fields) {
@@ -212,8 +213,23 @@ class CreateTicket extends Component
 
     public function saveFieldValues()
     {
+        foreach ($this->filledForms as $filledFields) {
+            foreach ($filledFields as $field) {
+                FieldRowValue::create([
+                    'field_id' => $field['id'],
+                    'value' => $field['value'],
+                    'row' => $field['row']
+                ]);
+            }
+        }
+    }
+
+    public function addFieldValues()
+    {
         $formFields = array_map(function ($field) {
-            $field['row'] = $this->rowCount;
+            if (!isset($field['is_header_field']) || !$field['is_header_field']) {
+                $field['row'] = $this->rowCount;
+            }
             return $field;
         }, $this->formFields);
 
@@ -221,9 +237,9 @@ class CreateTicket extends Component
         $this->rowCount++;
 
         if (!$this->isHeaderFieldSet) {
-            $this->headerFields = array_filter($this->filledForms, function ($fields) {
+            $this->headerFields = array_map(function ($fields) {
                 return array_filter($fields, fn($field) => $field['is_header_field']);
-            });
+            }, $this->filledForms);
 
             $this->isHeaderFieldSet = true;
         }
@@ -254,39 +270,27 @@ class CreateTicket extends Component
     public function removeField(int $fieldKey)
     {
         try {
+            // Check if the counts are equal before proceeding
             if (count($this->rowFields) === count($this->filledForms)) {
-                foreach ($this->rowFields as $key => $rowField) {
-                    if ($fieldKey === $key) {
-                        unset($this->rowFields[$key]);
-                    }
-                }
+                // Use array_filter to remove the element more efficiently
+                $this->rowFields = array_filter(
+                    $this->rowFields,
+                    fn($key) => $key !== $fieldKey,
+                    ARRAY_FILTER_USE_KEY
+                );
 
-                foreach ($this->filledForms as $key => $filledForm) {
-                    if ($fieldKey === $key) {
-                        unset($this->filledForms[$key]);
-                    }
-                }
+                $this->filledForms = array_filter(
+                    $this->filledForms,
+                    fn($key) => $key !== $fieldKey,
+                    ARRAY_FILTER_USE_KEY
+                );
             }
 
-            // // Check if the counts are equal before proceeding
-            // if (count($this->rowFields) === count($this->filledForms)) {
-            //     // Use array_filter to remove the element more efficiently
-            //     $this->rowFields = array_filter(
-            //         $this->rowFields,
-            //         fn($key) => $key !== $fieldKey,
-            //         ARRAY_FILTER_USE_KEY
-            //     );
-
-            //     $this->filledForms = array_filter(
-            //         $this->filledForms,
-            //         fn($key) => $key !== $fieldKey,
-            //         ARRAY_FILTER_USE_KEY
-            //     );
-            // }
         } catch (Throwable $e) {
             AppErrorLog::getError($e->getMessage());
             \Log::error('Error on line: ', [$e->getLine()]);
         }
+
     }
 
     public function resetFormFields()

@@ -221,7 +221,7 @@ class CreateHelpTopic extends Component
                     'approvers' => $approvers,
                 ];
 
-                $this->clearValidation();
+                $this->resetValidation();
                 $this->resetApprovalConfigFields();
             }
         }
@@ -360,7 +360,7 @@ class CreateHelpTopic extends Component
             $this->configurations['level_of_approval'] = $this->editLevelOfApproval;
             $this->configurations['approvers'] = $approvers;
 
-            $this->clearValidation();
+            $this->resetValidation();
             $this->resetEditApprovalConfigFields();
         }
     }

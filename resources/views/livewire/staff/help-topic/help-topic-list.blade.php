@@ -444,7 +444,7 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                            <div class="mb-2">
+                            <div class="mb-4 d-flex flex-column gap-2">
                                 <label class="form-label text-muted form__field__label"
                                     style="font-weight: 500;">Required</label>
                                 <div class="w-100">
@@ -458,7 +458,7 @@
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                            <div class="mb-3">
+                            <div class="mb-4 d-flex flex-column gap-2">
                                 <label class="form-label text-muted form__field__label"
                                     style="font-weight: 500;">Enabled</label>
                                 <div class="w-100">

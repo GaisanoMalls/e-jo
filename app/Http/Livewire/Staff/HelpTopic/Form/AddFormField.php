@@ -11,6 +11,7 @@ use App\Models\Form;
 use App\Models\HelpTopic;
 use App\Models\Role;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
 
@@ -88,13 +89,22 @@ class AddFormField extends Component
         $this->editingFieldVariableName = $this->convertToVariable($value);
     }
 
-    public function updatEdeditingAsHeaderField($value)
+    public function updatedEdeditingAsHeaderField($value)
     {
         if (!$value) {
             $this->editingIsForTicketNumber = false;
             $this->dispatchBrowserEvent('disable-assigned-column-field');
         } else {
             $this->dispatchBrowserEvent('enable-assigned-column-field');
+        }
+    }
+
+    public function updatedHelpTopic()
+    {
+        if ($this->helpTopicHasExistingForm()) {
+            $this->addError('helpTopic', 'There is already an existing form for this help topic');
+        } else {
+            $this->resetValidation('helpTopic');
         }
     }
 
@@ -213,13 +223,6 @@ class AddFormField extends Component
     public function updateAddedField(int $fieldKey)
     {
         try {
-            // if (!$this->editingAssignedColumn) {
-            //     $this->addError('editingAssignedColumn', 'This field is required');
-            //     return;
-            // } else {
-            //     $this->resetValidation('editingAssignedColumn');
-            // }
-
             if (!$this->editingFieldName) {
                 $this->addError('editingFieldName', 'This field name is required');
                 return;
@@ -276,11 +279,16 @@ class AddFormField extends Component
 
     public function removeField(int $fieldKey)
     {
-        foreach (array_keys($this->addedFields) as $key) {
-            if ($fieldKey === $key) {
-                unset($this->addedFields[$key]);
-            }
-        }
+        $this->addedFields = array_filter(
+            $this->addedFields,
+            fn($key) => $key !== $fieldKey,
+            ARRAY_FILTER_USE_KEY
+        );
+    }
+
+    public function helpTopicHasExistingForm()
+    {
+        return Form::where('help_topic_id', $this->helpTopic)->exists();
     }
 
     public function saveForm()
@@ -298,29 +306,34 @@ class AddFormField extends Component
                 return;
             }
 
-            $form = Form::create([
-                'help_topic_id' => $this->helpTopic,
-                'visible_to' => $this->visibleTo,
-                'editable_to' => $this->editableTo,
-                'name' => $this->formName
-            ]);
+            DB::transaction(function () {
+                if (!$this->helpTopicHasExistingForm()) {
+                    $form = Form::create([
+                        'help_topic_id' => $this->helpTopic,
+                        'visible_to' => $this->visibleTo,
+                        'editable_to' => $this->editableTo,
+                        'name' => $this->formName
+                    ]);
 
-            foreach ($this->addedFields as $field) {
-                $form->fields()->create([
-                    'name' => $field['name'],
-                    'label' => $field['name'],
-                    'type' => $field['type'],
-                    'variable_name' => $field['variable_name'],
-                    'is_required' => $field['isRequired'],
-                    'is_enabled' => $field['isEnabled'],
-                    'assigned_column' => $field['assignedColumn'],
-                    'is_header_field' => $field['asHeaderField'] == 'Yes' ? true : false,
-                    'is_for_ticket_number' => $field['isForTicketNumber']
-                ]);
-            }
+                    foreach ($this->addedFields as $field) {
+                        $form->fields()->create([
+                            'name' => $field['name'],
+                            'label' => $field['name'],
+                            'type' => $field['type'],
+                            'variable_name' => $field['variable_name'],
+                            'is_required' => $field['isRequired'],
+                            'is_enabled' => $field['isEnabled'],
+                            'assigned_column' => $field['assignedColumn'],
+                            'is_header_field' => $field['asHeaderField'] == 'Yes' ? true : false,
+                            'is_for_ticket_number' => $field['isForTicketNumber']
+                        ]);
+                    }
+                    $this->actionOnSubmit();
 
-            $this->actionOnSubmit();
-
+                } else {
+                    $this->addError('helpTopic', 'There is already an existing form for this help topic');
+                }
+            });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }

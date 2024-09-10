@@ -61,13 +61,13 @@ class CreateTeam extends Component
         }
     }
 
-    public function removeSubteam(int $subteam_key)
+    public function removeSubteam(int $subteamKey)
     {
-        foreach (array_keys($this->addedSubteam) as $key) {
-            if ($subteam_key === $key) {
-                unset($this->addedSubteam[$key]);
-            }
-        }
+        $this->addedSubteam = array_filter(
+            $this->addedSubteam,
+            fn($key) => $key !== $subteamKey,
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
 

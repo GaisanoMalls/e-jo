@@ -32,7 +32,7 @@ class AuthUser extends Component
             return;
         }
 
-        $this->clearValidation('email');
+        $this->resetValidation('email');
     }
 
     public function login()

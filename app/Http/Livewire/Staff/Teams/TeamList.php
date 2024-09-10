@@ -108,13 +108,13 @@ class TeamList extends Component
         }
     }
 
-    public function removeSubteam(int $subteam_key)
+    public function removeSubteam(int $subteamKey)
     {
-        foreach (array_keys($this->addedSubteams) as $key) {
-            if ($subteam_key === $key) {
-                unset($this->addedSubteams[$key]);
-            }
-        }
+        $this->addedSubteams = array_filter(
+            $this->addedSubteams,
+            fn($key) => $key !== $subteamKey,
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
     public function deleteSubteam(Subteam $subteam)
