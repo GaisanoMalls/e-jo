@@ -41,6 +41,12 @@ trait Utils
             : Carbon::parse($updated_field)->format('M d, Y | h:i A');
     }
 
+    public function formatDate($value)
+    {
+        $formattedDate = Carbon::parse($value);
+        return $formattedDate->format('F j, Y');
+    }
+
     /**
      * Ticket Number Generator
      * Methods:

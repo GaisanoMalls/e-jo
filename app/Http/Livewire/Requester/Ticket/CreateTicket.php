@@ -21,7 +21,6 @@ use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
-use App\Models\TicketCustomFormField;
 use App\Models\TicketTeam;
 use App\Models\User;
 use App\Notifications\AppNotification;
@@ -66,6 +65,7 @@ class CreateTicket extends Component
     public array $headerFields = [];
     public array $rowFields = [];
     public int $rowCount = 1;
+    public ?string $poNumber = null;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
@@ -126,9 +126,9 @@ class CreateTicket extends Component
                     'status_id' => Status::OPEN,
                     'priority_level_id' => $this->priorityLevel,
                     'service_level_agreement_id' => $this->sla,
-                    'ticket_number' => $this->generatedTicketNumber(),
+                    'ticket_number' => $this->poNumber ?: $this->generatedTicketNumber(),
                     'subject' => $this->subject,
-                    'description' => $this->description ?? null,
+                    'description' => $this->description ?: null,
                     'approval_status' => ApprovalStatusEnum::FOR_APPROVAL,
                 ]);
 
@@ -173,33 +173,6 @@ class CreateTicket extends Component
 
                 if ($this->isHelpTopicHasForm) {
                     $this->saveFieldValues($ticket);
-
-                    // TO BE REVISED
-                    // foreach ($this->filledForms as $fields) {
-                    //     foreach ($fields as $field) {
-                    //         $ticketCustomFormField = TicketCustomFormField::create([
-                    //             'ticket_id' => $ticket->id,
-                    //             'form_id' => $field['form']['id'],
-                    //             'value' => $field['type'] !== 'file' ? $field['value'] : null,
-                    //             'name' => $field['name'],
-                    //             'label' => $field['label'],
-                    //             'type' => $field['type'],
-                    //             'variable_name' => $field['variable_name'],
-                    //             'is_required' => $field['is_required'],
-                    //             'is_enabled' => $field['is_enabled'],
-                    //             'assigned_column' => $field['assigned_column'],
-                    //             'is_header_field' => $field['is_header_field'],
-                    //         ]);
-
-                    //         if ($field['type'] === 'file' && !is_null($field['value'])) {
-                    //             foreach ($field['value'] as $uploadedCustomFile) {
-                    //                 $fileName = $uploadedCustomFile->getClientOriginalName();
-                    //                 $customFileAttachment = Storage::putFileAs("public/tiket/{$ticket->ticket_number}/custom_form_file", $uploadedCustomFile, $fileName);
-                    //                 $ticketCustomFormField->ticketCustomFormFiles()->create(['file_attachment' => $customFileAttachment]);
-                    //             }
-                    //         }
-                    //     }
-                    // }
                 }
 
                 ActivityLog::make(ticket_id: $ticket->id, description: 'created a ticket');
@@ -236,11 +209,24 @@ class CreateTicket extends Component
         }
     }
 
+    public function generatePONUmber()
+    {
+        return $this->poNumber = $this->generatedTicketNumber();
+    }
+
     public function addFieldValues()
     {
+        if (!$this->poNumber) {
+            $this->generatePONUmber();
+        }
+
         $formFields = array_map(function ($field) {
             if (!isset($field['is_header_field']) || !$field['is_header_field']) {
                 $field['row'] = $this->rowCount;
+            }
+
+            if ($field['is_header_field'] && $field['is_for_ticket_number']) {
+                $field['value'] = $this->poNumber;
             }
             return $field;
         }, $this->formFields);

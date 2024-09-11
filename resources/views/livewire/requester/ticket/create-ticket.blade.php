@@ -122,56 +122,58 @@
                                                 {{ $helpTopicForm->name }}
                                             </h6>
                                             @foreach ($formFields as $fieldKey => $formField)
-                                                <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
-                                                    <label class="form-label input__field__label"
-                                                        style="white-space: nowrap">
-                                                        {{ $formField['label'] }}
-                                                    </label>
-                                                    {{-- Text field --}}
-                                                    @if ($formField['type'] === FieldType::TEXT->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                            type="text" id="field-{{ $fieldKey }}"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                    @endif
+                                                @if (!$formField['is_for_ticket_number'])
+                                                    <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
+                                                        <label class="form-label input__field__label"
+                                                            style="white-space: nowrap">
+                                                            {{ $formField['label'] }}
+                                                        </label>
+                                                        {{-- Text field --}}
+                                                        @if ($formField['type'] === FieldType::TEXT->value)
+                                                            <input wire:model="formFields.{{ $fieldKey }}.value"
+                                                                type="text" id="field-{{ $fieldKey }}"
+                                                                class="form-control input__field"
+                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        @endif
 
-                                                    {{-- Number field --}}
-                                                    @if ($formField['type'] === FieldType::NUMBER->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                            type="number" id="field-{{ $fieldKey }}"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                    @endif
+                                                        {{-- Number field --}}
+                                                        @if ($formField['type'] === FieldType::NUMBER->value)
+                                                            <input wire:model="formFields.{{ $fieldKey }}.value"
+                                                                type="number" id="field-{{ $fieldKey }}"
+                                                                class="form-control input__field"
+                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        @endif
 
-                                                    {{-- Date field --}}
-                                                    @if ($formField['type'] === FieldType::DATE->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                            type="date" id="field-{{ $fieldKey }}"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                    @endif
+                                                        {{-- Date field --}}
+                                                        @if ($formField['type'] === FieldType::DATE->value)
+                                                            <input wire:model="formFields.{{ $fieldKey }}.value"
+                                                                type="date" id="field-{{ $fieldKey }}"
+                                                                class="form-control input__field"
+                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        @endif
 
-                                                    {{-- Time field --}}
-                                                    @if ($formField['type'] === FieldType::TIME->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                            type="time" id="field-{{ $fieldKey }}"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                    @endif
+                                                        {{-- Time field --}}
+                                                        @if ($formField['type'] === FieldType::TIME->value)
+                                                            <input wire:model="formFields.{{ $fieldKey }}.value"
+                                                                type="time" id="field-{{ $fieldKey }}"
+                                                                class="form-control input__field"
+                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        @endif
 
-                                                    {{-- Amount field --}}
-                                                    @if ($formField['type'] === FieldType::AMOUNT->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                            type="number" id="field-{{ $fieldKey }}"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                    @endif
-                                                </div>
+                                                        {{-- Amount field --}}
+                                                        @if ($formField['type'] === FieldType::AMOUNT->value)
+                                                            <input wire:model="formFields.{{ $fieldKey }}.value"
+                                                                type="number" id="field-{{ $fieldKey }}"
+                                                                class="form-control input__field"
+                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                             @endforeach
                                             <div class="col-12">
                                                 <div class="d-flex align-items-center">
@@ -218,7 +220,11 @@
                                                                             {{ $headerField['label'] }}:
                                                                         </label>
                                                                         <label class="w-100 header__field">
-                                                                            {{ $headerField['value'] }}
+                                                                            @if ($headerField['type'] == 'date')
+                                                                                {{ date('F j, Y', strtotime($headerField['value'])) }}
+                                                                            @else
+                                                                                {{ $headerField['value'] }}
+                                                                            @endif
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -232,7 +238,11 @@
                                                                             {{ $headerField['label'] }}:
                                                                         </label>
                                                                         <label class="w-100 header__field">
-                                                                            {{ $headerField['value'] }}
+                                                                            @if ($headerField['type'] == 'date')
+                                                                                {{ date('F j, Y', strtotime($headerField['value'])) }}
+                                                                            @else
+                                                                                {{ $headerField['value'] }}
+                                                                            @endif
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -275,7 +285,11 @@
                                                                                     );
                                                                                 @endphp
                                                                                 <td class="field__value">
-                                                                                    {{ $field['value'] ?? '' }}
+                                                                                    @if ($field['type'] == 'date')
+                                                                                        {{ date('F j, Y', strtotime($field['value'])) }}
+                                                                                    @else
+                                                                                        {{ $field['value'] ?? '' }}
+                                                                                    @endif
                                                                                 </td>
                                                                             @endforeach
                                                                             <td>
