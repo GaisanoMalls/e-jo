@@ -91,7 +91,7 @@
                             @endforeach
                         </div>
                     @endif
-                    {{-- @if ($customFormRowFields->isNotEmpty())
+                    @if ($customFormRowFields->isNotEmpty())
                         <div class="w-100 msx-auto d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap">
                             @php
                                 $filteredRowField = $this->getFilteredRowFields();
@@ -114,19 +114,23 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($rowFields as $key => $row)
+                                            @foreach ($customFormRowFields->toArray() as $rowField)
+                                                @dump($rowField)
                                                 <tr class="row__field">
                                                     @foreach ($headers as $header)
-                                                        @php
-                                                            $field = collect($row)->firstWhere('name', $header);
-                                                        @endphp
-                                                        <td class="field__value">
-                                                            {{ $field['value'] ?? '' }}
-                                                        </td>
+                                                        {{-- @foreach ($fields as $field)
+                                                            @dump($field)
+                                                        @endforeach --}}
+                                                        {{-- <td class="field__value">
+                                                            @if ($field['field']['type'] == 'date')
+                                                                {{ date('F j, Y', strtotime($field['value'])) }}
+                                                            @else
+                                                                {{ $field['value'] ?? '' }}
+                                                            @endif
+                                                        </td> --}}
                                                     @endforeach
                                                     <td>
-                                                        <button wire:click="removeField({{ $key }})"
-                                                            type="button"
+                                                        <button wire:click="" type="button"
                                                             class="btn p-0 m-auto d-flex align-items-center justify-content-center gap-1"
                                                             style="font-size: 0.8rem; color: red;">
                                                             <i class="bi bi-trash"></i>
@@ -140,7 +144,7 @@
                                 </div>
                             @endif
                         </div>
-                    @endif --}}
+                    @endif
                 </div>
             </div>
         @endif

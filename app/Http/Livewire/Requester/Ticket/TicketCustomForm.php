@@ -26,19 +26,27 @@ class TicketCustomForm extends Component
         $this->ictRecommendationServiceDeptAdmin = IctRecommendation::where('ticket_id', $this->ticket->id)->first();
         $this->customFormHeaderFields = FieldHeaderValue::with('field')->where('ticket_id', $this->ticket->id)->get();
         $this->customFormRowFields = FieldRowValue::with('field')->where('ticket_id', $this->ticket->id)->get();
-        dd($this->getFilteredRowFields());
     }
 
     public function getFilteredRowFields()
     {
+        $headers = [];
         $filteredFields = [];
+
         foreach ($this->customFormRowFields->toArray() as $headerFields) {
-            // Check if 'field' key exists and is an array
             if (isset($headerFields['field']) && is_array($headerFields['field'])) {
-                // Extract 'name' from 'field' if it exists
-                $fieldName = $headerFields['field']['name'] ?? null;
+                $fieldName = $headerFields['field']['name'];
+
                 if ($fieldName) {
-                    $headers[] = $fieldName;
+                    if (!isset($filteredFields[$fieldName])) {
+                        $filteredFields[$fieldName] = [];
+                    }
+
+                    $filteredFields[$fieldName][][] = $headerFields;
+
+                    if (!in_array($fieldName, $headers)) {
+                        $headers[] = $fieldName;
+                    }
                 }
             }
         }
