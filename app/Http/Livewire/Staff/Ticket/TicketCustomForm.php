@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\AppErrorLog;
+use App\Models\FieldHeaderValue;
+use App\Models\FieldRowValue;
 use App\Models\IctRecommendation;
 use App\Models\Role;
 use App\Models\Ticket;
@@ -19,60 +21,40 @@ class TicketCustomForm extends Component
 {
     public Ticket $ticket;
     public ?IctRecommendation $ictRecommendationServiceDeptAdmin = null;
-    public ?Collection $ticketCustomFormField = null;
-    public ?Collection $customFormFields = null;
-    public ?Collection $customFormImageFiles = null;
-    public ?Collection $customFormDocumentFiles = null;
+    public array $customFormHeaderFields = [];
+    public array $customFormRowFields = [];
 
     protected $listeners = ['refreshCustomForm' => '$refresh'];
 
     public function mount()
     {
-        $this->customFormData();
+        $this->customFormHeaderFields = FieldHeaderValue::with('field')->where('ticket_id', $this->ticket->id)->get()->toArray();
+        $this->customFormRowFields = FieldRowValue::with('field')->where('ticket_id', $this->ticket->id)->get()->toArray();
     }
 
-    public function getCustomFormFieldsWithValues()
+    public function getFilteredRowFields()
     {
-        $this->customFormFields = $this->ticketCustomFormField->map(function ($field) {
-            return [
-                'id' => $field->id,
-                'name' => $field->name,
-                'label' => $field->label,
-                'type' => $field->type,
-                'variable_name' => $field->variable_name,
-                'is_required' => $field->is_required,
-                'is_enabled' => $field->is_enabled,
-                'value' => $field->value, // To store the value of the given inputs
-            ];
-        });
-    }
+        $headers = [];
+        $fields = [];
 
-    public function customFormData()
-    {
-        $this->ticketCustomFormField = TicketCustomFormField::with('ticketCustomFormFiles')->where([
-            ['ticket_id', $this->ticket->id],
-            ['form_id', $this->ticket->helpTopic->form?->id],
-        ])->get(); // Return a single record.
+        foreach ($this->customFormRowFields as $fieldData) {
+            $fieldName = $fieldData['field']['name'];
+            $rowId = $fieldData['row'];
 
-        if ($this->ticketCustomFormField) {
-            $customFormFiles = TicketCustomFormFile::with('ticketCustomFormField')
-                ->whereIn('ticket_custom_form_field_id', $this->ticketCustomFormField->pluck('id')->toArray())
-                ->get();
+            if (!isset($fields[$rowId])) {
+                $fields[$rowId] = [];
+            }
 
-            $this->customFormImageFiles = $customFormFiles->filter(function ($field) {
-                $imageExtensions = ['jpg', 'jpeg', 'png'];
-                $fileExtension = strtolower(pathinfo($field->file_attachment, PATHINFO_EXTENSION));
-                return in_array($fileExtension, $imageExtensions);
-            });
+            if (!in_array($fieldName, $headers)) {
+                $headers[] = $fieldName;
+            }
 
-            $this->customFormDocumentFiles = $customFormFiles->filter(function ($field) {
-                $documentExtensions = ['pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
-                $fileExtension = strtolower(pathinfo($field->file_attachment, PATHINFO_EXTENSION));
-                return in_array($fileExtension, $documentExtensions);
-            });
-
-            $this->getCustomFormFieldsWithValues();
+            $fields[$rowId][$fieldName] = $fieldData['value'];
         }
+
+        sort($headers);
+
+        return ['headers' => $headers, 'fields' => $fields];
     }
 
     public function approveIctRecommendation()

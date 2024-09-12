@@ -6,7 +6,6 @@ use App\Models\FieldHeaderValue;
 use App\Models\FieldRowValue;
 use App\Models\IctRecommendation;
 use App\Models\Ticket;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 

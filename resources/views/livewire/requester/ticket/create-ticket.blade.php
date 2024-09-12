@@ -215,7 +215,7 @@
                                                                     class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
                                                                     <div class="d-flex align-items-center gap-2">
                                                                         <label
-                                                                            class="form-label mb-0 input__field__label"
+                                                                            class="form-label mb-0 fw-bold input__field__label"
                                                                             style="white-space: nowrap">
                                                                             {{ $headerField['label'] }}:
                                                                         </label>
@@ -230,10 +230,11 @@
                                                                 </div>
                                                             @endif
                                                             @if ($headerField['assigned_column'] == 2)
-                                                                <div class="col-lg-6 col-md-12 col-sm-12 px-0 mb-2">
+                                                                <div
+                                                                    class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
                                                                     <div class="d-flex align-items-center gap-2">
                                                                         <label
-                                                                            class="form-label mb-0 input__field__label"
+                                                                            class="form-label mb-0 fw-bold input__field__label"
                                                                             style="white-space: nowrap">
                                                                             {{ $headerField['label'] }}:
                                                                         </label>
@@ -265,11 +266,12 @@
                                                                 <thead>
                                                                     <tr>
                                                                         @foreach ($headers as $header)
-                                                                            <th class="input__field__label">
+                                                                            <th class="fw-bold input__field__label">
                                                                                 {{ Str::title($header) }}
                                                                             </th>
                                                                         @endforeach
-                                                                        <th class="input__field__label text-center">
+                                                                        <th
+                                                                            class="text-center fw-bold input__field__label">
                                                                             Action
                                                                         </th>
                                                                     </tr>

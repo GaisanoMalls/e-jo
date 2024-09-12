@@ -40,16 +40,16 @@
             </div>
         @endif
     @endif
-    <div class="row">
+    <div class="row" id="ticket-custom-form">
         @if (!empty($customFormHeaderFields) && !empty($customFormRowFields))
             <div class="col-12">
-                <div class="row my-3 mx-auto ps-1 rounded-3 custom__form">
+                <div class="row my-3 mx-auto ps-1 rounded-3 custom__form" style="border: 1px solid #ced4da;">
                     <div class="d-flex align-items-center justify-content-between flex-row mb-3">
-                        <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name">
+                        <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name" style="text-transform: uppercase;">
                             {{ $ticket->helpTopic->form->name }}
                         </h6>
                         <img src="{{ asset('images/gmall-davao-pr-form.png') }}" class="pr__form__gmall__logo mt-3"
-                            alt="GMall Ticketing System">
+                            alt="GMall Ticketing System" height="50px;">
                     </div>
                     @if (!empty($customFormHeaderFields))
                         <div class="row mx-auto my-3">
@@ -57,7 +57,7 @@
                                 @if ($headerField['field']['assigned_column'] == 1)
                                     <div class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
                                         <div class="d-flex align-items-center gap-2">
-                                            <label class="form-label mb-0 input__field__label"
+                                            <label class="form-label fw-bold mb-0 input__field__label"
                                                 style="white-space: nowrap">
                                                 {{ $headerField['field']['label'] }}:
                                             </label>
@@ -72,9 +72,9 @@
                                     </div>
                                 @endif
                                 @if ($headerField['field']['assigned_column'] == 2)
-                                    <div class="col-lg-6 col-md-12 col-sm-12 px-0 mb-2">
+                                    <div class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
                                         <div class="d-flex align-items-center gap-2">
-                                            <label class="form-label mb-0 input__field__label"
+                                            <label class="form-label mb-0 fw-bold input__field__label"
                                                 style="white-space: nowrap">
                                                 {{ $headerField['field']['label'] }}:
                                             </label>
@@ -104,13 +104,10 @@
                                         <thead>
                                             <tr>
                                                 @foreach ($headers as $header)
-                                                    <th class="input__field__label">
+                                                    <th class="fw-bold input__field__label">
                                                         {{ Str::title($header) }}
                                                     </th>
                                                 @endforeach
-                                                <th class="input__field__label text-center">
-                                                    Action
-                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -133,4 +130,38 @@
             </div>
         @endif
     </div>
+    <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center gap-2"
+        id="save-custom-form-as-pdf">
+        <i class="bi bi-download"></i>
+        Download PDF
+    </button>
 </div>
+@push('extra')
+    <script src="{{ asset('js/jspdf.debug.js') }}"></script>
+    <script src="{{ asset('js/html2canvas.min.js') }}"></script>
+    <script src="{{ asset('js/html2pdf.min.js') }}"></script>
+    <script>
+        const options = {
+            margin: 0.5,
+            filename: 'invoice.pdf',
+            image: {
+                type: 'jpeg',
+                quality: 500
+            },
+            html2canvas: {
+                scale: 1
+            },
+            jsPDF: {
+                unit: 'in',
+                format: 'letter',
+                orientation: 'portrait'
+            }
+        }
+
+        $('#save-custom-form-as-pdf').click(function(e) {
+            e.preventDefault();
+            const element = document.getElementById('ticket-custom-form');
+            html2pdf().from(element).set(options).save();
+        });
+    </script>
+@endpush

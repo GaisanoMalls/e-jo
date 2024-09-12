@@ -53,6 +53,7 @@
     @stack('livewire-textarea-disapproval')
     @stack('livewire-modal')
     @stack('livewire-select')
+    @stack('extra')
     <script>
         lightbox.option({
             'resizeDuration': 50,
