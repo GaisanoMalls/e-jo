@@ -41,7 +41,7 @@
         @endif
     @endif
     <div class="row">
-        @if ($customFormHeaderFields->isNotEmpty() && $customFormRowFields->isNotEmpty())
+        @if (!empty($customFormHeaderFields) && !empty($customFormRowFields))
             <div class="col-12">
                 <div class="row my-3 mx-auto ps-1 rounded-3 custom__form">
                     <div class="d-flex align-items-center justify-content-between flex-row mb-3">
@@ -51,38 +51,38 @@
                         <img src="{{ asset('images/gmall-davao-pr-form.png') }}" class="pr__form__gmall__logo mt-3"
                             alt="GMall Ticketing System">
                     </div>
-                    @if ($customFormHeaderFields->isNotEmpty())
+                    @if (!empty($customFormHeaderFields))
                         <div class="row mx-auto my-3">
                             @foreach ($customFormHeaderFields as $key => $headerField)
-                                @if ($headerField->field->assigned_column == 1)
+                                @if ($headerField['field']['assigned_column'] == 1)
                                     <div class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
                                         <div class="d-flex align-items-center gap-2">
                                             <label class="form-label mb-0 input__field__label"
                                                 style="white-space: nowrap">
-                                                {{ $headerField->field->label }}:
+                                                {{ $headerField['field']['label'] }}:
                                             </label>
                                             <label class="w-100 header__field">
-                                                @if ($headerField->field->type == 'date')
-                                                    {{ date('F j, Y', strtotime($headerField->value)) }}
+                                                @if ($headerField['field']['type'] == 'date')
+                                                    {{ date('F j, Y', strtotime($headerField['value'])) }}
                                                 @else
-                                                    {{ $headerField->value }}
+                                                    {{ $headerField['value'] }}
                                                 @endif
                                             </label>
                                         </div>
                                     </div>
                                 @endif
-                                @if ($headerField->field->assigned_column == 2)
+                                @if ($headerField['field']['assigned_column'] == 2)
                                     <div class="col-lg-6 col-md-12 col-sm-12 px-0 mb-2">
                                         <div class="d-flex align-items-center gap-2">
                                             <label class="form-label mb-0 input__field__label"
                                                 style="white-space: nowrap">
-                                                {{ $headerField->field->label }}:
+                                                {{ $headerField['field']['label'] }}:
                                             </label>
                                             <label class="w-100 header__field">
-                                                @if ($headerField->field->type == 'date')
-                                                    {{ date('F j, Y', strtotime($headerField->value)) }}
+                                                @if ($headerField['field']['type'] == 'date')
+                                                    {{ date('F j, Y', strtotime($headerField['value'])) }}
                                                 @else
-                                                    {{ $headerField->value }}
+                                                    {{ $headerField['value'] }}
                                                 @endif
                                             </label>
                                         </div>
@@ -91,7 +91,7 @@
                             @endforeach
                         </div>
                     @endif
-                    @if ($customFormRowFields->isNotEmpty())
+                    @if (!empty($customFormRowFields))
                         <div class="w-100 msx-auto d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap">
                             @php
                                 $filteredRowField = $this->getFilteredRowFields();
@@ -114,29 +114,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($customFormRowFields->toArray() as $rowField)
-                                                @dump($rowField)
+                                            @foreach ($fields as $field)
                                                 <tr class="row__field">
                                                     @foreach ($headers as $header)
-                                                        {{-- @foreach ($fields as $field)
-                                                            @dump($field)
-                                                        @endforeach --}}
-                                                        {{-- <td class="field__value">
-                                                            @if ($field['field']['type'] == 'date')
-                                                                {{ date('F j, Y', strtotime($field['value'])) }}
-                                                            @else
-                                                                {{ $field['value'] ?? '' }}
-                                                            @endif
-                                                        </td> --}}
+                                                        <td class="field__value">
+                                                            {{ $field[$header] ?? '' }}
+                                                        </td>
                                                     @endforeach
-                                                    <td>
-                                                        <button wire:click="" type="button"
-                                                            class="btn p-0 m-auto d-flex align-items-center justify-content-center gap-1"
-                                                            style="font-size: 0.8rem; color: red;">
-                                                            <i class="bi bi-trash"></i>
-                                                            Remove
-                                                        </button>
-                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

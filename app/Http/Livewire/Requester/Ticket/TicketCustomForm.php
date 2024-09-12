@@ -16,42 +16,41 @@ class TicketCustomForm extends Component
 
     public Ticket $ticket;
     public ?IctRecommendation $ictRecommendationServiceDeptAdmin = null;
-    public Collection $customFormHeaderFields;
-    public Collection $customFormRowFields;
+    public array $customFormHeaderFields = [];
+    public array $customFormRowFields = [];
 
     protected $listeners = ['remountRequesterCustomForm' => 'mount'];
 
     public function mount()
     {
         $this->ictRecommendationServiceDeptAdmin = IctRecommendation::where('ticket_id', $this->ticket->id)->first();
-        $this->customFormHeaderFields = FieldHeaderValue::with('field')->where('ticket_id', $this->ticket->id)->get();
-        $this->customFormRowFields = FieldRowValue::with('field')->where('ticket_id', $this->ticket->id)->get();
+        $this->customFormHeaderFields = FieldHeaderValue::with('field')->where('ticket_id', $this->ticket->id)->get()->toArray();
+        $this->customFormRowFields = FieldRowValue::with('field')->where('ticket_id', $this->ticket->id)->get()->toArray();
     }
 
     public function getFilteredRowFields()
     {
         $headers = [];
-        $filteredFields = [];
+        $fields = [];
 
-        foreach ($this->customFormRowFields->toArray() as $headerFields) {
-            if (isset($headerFields['field']) && is_array($headerFields['field'])) {
-                $fieldName = $headerFields['field']['name'];
+        foreach ($this->customFormRowFields as $fieldData) {
+            $fieldName = $fieldData['field']['name'];
+            $rowId = $fieldData['row'];
 
-                if ($fieldName) {
-                    if (!isset($filteredFields[$fieldName])) {
-                        $filteredFields[$fieldName] = [];
-                    }
-
-                    $filteredFields[$fieldName][][] = $headerFields;
-
-                    if (!in_array($fieldName, $headers)) {
-                        $headers[] = $fieldName;
-                    }
-                }
+            if (!isset($fields[$rowId])) {
+                $fields[$rowId] = [];
             }
+
+            if (!in_array($fieldName, $headers)) {
+                $headers[] = $fieldName;
+            }
+
+            $fields[$rowId][$fieldName] = $fieldData['value'];
         }
 
-        return ['headers' => $headers, 'fields' => $filteredFields];
+        sort($headers);
+
+        return ['headers' => $headers, 'fields' => $fields];
     }
 
     public function isTicketIctRecommendationIsApproved()

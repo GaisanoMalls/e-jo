@@ -276,7 +276,6 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     @foreach ($rowFields as $key => $row)
-                                                                        @dump($row)
                                                                         <tr class="row__field">
                                                                             @foreach ($headers as $header)
                                                                                 @php

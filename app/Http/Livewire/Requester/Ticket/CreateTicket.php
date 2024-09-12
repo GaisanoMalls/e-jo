@@ -251,9 +251,15 @@ class CreateTicket extends Component
 
     public function getFilteredRowFields()
     {
-        $headers = array_unique(array_column(array_merge(...$this->rowFields), 'name'));
+        $headers = array_unique(
+            array_column(
+                array_merge(...$this->rowFields),
+                'name'
+            )
+        );
 
         $filteredFields = [];
+
         foreach ($headers as $header) {
             $filteredFields[$header] = array_map(function ($fields) use ($header) {
                 return array_filter($fields, function ($field) use ($header) {
