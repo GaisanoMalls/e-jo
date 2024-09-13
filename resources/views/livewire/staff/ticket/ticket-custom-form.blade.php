@@ -6,10 +6,10 @@
 <div class="mb-4">
     @if ($this->isRecommendationRequested())
         @if ($this->isTicketIctRecommendationIsApproved())
-            <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
+            <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
                 style="font-size: 13px; background-color: #dffdef;">
                 <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
-                The recommendation has been approved
+                Approved
             </div>
         @else
             @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
@@ -17,7 +17,7 @@
                     <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
                         style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                         <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
-                        The ticket's recommendation approval is pending
+                        Pending approval
                     </div>
                 @else
                     <div class="mb-4 d-flex flex-wrap gap-2 border-0 flex-row rounded-3 align-items-center justify-content-between p-3"
@@ -40,7 +40,7 @@
                                     </strong>
                                 </div>
                             </span>
-                            is requesting for recommendation approval
+                            is requesting for approval
                         </span>
                         <button class="btn d-flex align-items-center justify-content-center"
                             wire:click="approveIctRecommendation"
@@ -55,16 +55,16 @@
                 @endif
             @elseif (auth()->user()->hasRole(Role::AGENT))
                 @if ($this->isTicketIctRecommendationIsApproved())
-                    <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
+                    <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
                         style="font-size: 13px; background-color: #dffdef;">
                         <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
-                        The recommendation has been approved
+                        Approved
                     </div>
                 @else
                     <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
                         style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                         <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
-                        The ticket's recommendation approval is pending
+                        Pending Approval
                     </div>
                 @endif
             @endif

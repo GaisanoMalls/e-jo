@@ -9,10 +9,10 @@
         $this->isRecommendationRequested() &&
             auth()->user()->hasRole(Role::USER))
         @if ($this->isTicketIctRecommendationIsApproved())
-            <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
+            <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
                 style="font-size: 13px; background-color: #dffdef;">
                 <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
-                The recommendation has been approved
+                Approved
             </div>
         @else
             <div class="mb-4 d-flex flex-wrap gap-2 border-0 flex-row rounded-3 align-items-center justify-content-between p-3"
@@ -35,13 +35,13 @@
                             </strong>
                         </div>
                     </span>
-                    is requesting for recommendation approval
+                    is requesting for approval
                 </span>
             </div>
         @endif
     @endif
-    <div class="row" id="ticket-custom-form">
-        @if (!empty($customFormHeaderFields) || !empty($customFormRowFields))
+    @if (!empty($customFormHeaderFields) || !empty($customFormRowFields))
+        <div class="row" id="ticket-custom-form">
             <div class="col-12">
                 <div class="row my-3 mx-auto ps-1 rounded-3 custom__form" style="border: 1px solid #ced4da;">
                     <div class="d-flex align-items-center justify-content-between flex-row mb-3">
@@ -128,14 +128,14 @@
                     @endif
                 </div>
             </div>
-        @endif
-    </div>
-    <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center gap-2"
-        id="save-custom-form-as-pdf"
-        style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
-        <i class="bi bi-download"></i>
-        Download PDF
-    </button>
+        </div>
+        <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center gap-2"
+            id="save-custom-form-as-pdf"
+            style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
+            <i class="bi bi-download"></i>
+            Download PDF
+        </button>
+    @endif
 </div>
 @push('extra')
     <script src="{{ asset('js/jspdf.debug.js') }}"></script>

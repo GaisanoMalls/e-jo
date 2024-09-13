@@ -89,7 +89,7 @@ class AddFormField extends Component
         $this->editingFieldVariableName = $this->convertToVariable($value);
     }
 
-    public function updatedEdeditingAsHeaderField($value)
+    public function updatedEditingAsHeaderField($value)
     {
         if (!$value) {
             $this->editingIsForTicketNumber = false;
