@@ -280,6 +280,44 @@
                             @if ($editSelectedFieldIsCurrentlyEditing && $editSelectedFieldFormId === $helpTopicForm->id)
                                 <div class="row mt-1 px-3 py-4 rounded-3"
                                     style="background-color: #f3f4f6; margin-left: 2px; margin-right: 2px; border: 0.08rem solid #dddddd;">
+                                    @if ($editSelectedFieldIsHeaderField)
+                                        <div class="row mb-3">
+                                            <div
+                                                class="col-lg-2 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                                <div class="mb-2">
+                                                    <label for="fieldName"
+                                                        class="form-label text-muted form__field__label"
+                                                        style="font-weight: 500;">
+                                                        Assign column
+                                                    </label>
+                                                    <div>
+                                                        <div id="edit-select-field-column-number" wire:ignore></div>
+                                                    </div>
+                                                    @error('editSelectedFieldAssignedColumnNumber')
+                                                        <span class="error__message position-absolute"
+                                                            style="bottom: -13px !important;">
+                                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                                <div class="form-check"
+                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
+                                                    <input wire:model="editSelectedFieldIsForTicketNumber"
+                                                        class="form-check-input" type="checkbox" role="switch"
+                                                        id="forTicketNumber" wire:loading.attr="disabled"
+                                                        style="margin-right: 10px !important;"
+                                                        @disabled(!$editSelectedFieldIsAssociatedWithTicketNumber)>
+                                                    <label class="form-check-label" for="forTicketNumber">
+                                                        Associate with the ticket number
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div
                                         class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                                         <div class="mb-3">
@@ -318,34 +356,32 @@
                                     </div>
                                     <div
                                         class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                        <div class="mb-3">
-                                            <label class="form-label text-muted form__field__label"
-                                                style="font-weight: 500;">Required</label>
-                                            <div class="w-100">
-                                                <div class="form-check mx-0"
-                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                    <input wire:model="editSelectedFieldRequired"
-                                                        class="form-check-input" type="checkbox" role="switch"
-                                                        wire:loading.attr="disabled"
-                                                        style="margin-right: 10px !important;">
-                                                </div>
+                                        <div class="w-100 d-flex align-items-center" style="margin-bottom: 19px;">
+                                            <div class="form-check mx-0"
+                                                style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                <input wire:model="editSelectedFieldRequired" class="form-check-input"
+                                                    id="edit-selected-field-required" type="checkbox" role="switch"
+                                                    wire:loading.attr="disabled"
+                                                    style="margin-right: 10px !important;">
                                             </div>
+                                            <label class="form-label text-muted mb-1 form__field__label"
+                                                for="edit-selected-field-required"
+                                                style="font-weight: 500;">Required</label>
                                         </div>
                                     </div>
                                     <div
                                         class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                        <div class="mb-3">
-                                            <label class="form-label text-muted form__field__label"
-                                                style="font-weight: 500;">Enabled</label>
-                                            <div class="w-100">
-                                                <div class="form-check mx-0"
-                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                    <input wire:model="editSelectedFieldEnabled"
-                                                        class="form-check-input" type="checkbox" role="switch"
-                                                        wire:loading.attr="disabled"
-                                                        style="margin-right: 10px !important;">
-                                                </div>
+                                        <div class="w-100 d-flex align-items-center" style="margin-bottom: 19px;">
+                                            <div class="form-check mx-0"
+                                                style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                <input wire:model="editSelectedFieldEnabled" class="form-check-input"
+                                                    id="edit-selected-field-required" type="checkbox" role="switch"
+                                                    wire:loading.attr="disabled"
+                                                    style="margin-right: 10px !important;">
                                             </div>
+                                            <label class="form-label text-muted mb-1 form__field__label"
+                                                r="edit-selected-field-enabled"
+                                                style="font-weight: 500;">Enabled</label>
                                         </div>
                                     </div>
                                     <div class="mt-2 d-flex align-items-center gap-2">
@@ -388,6 +424,42 @@
             </div>
         </div>
     </div>
+
+    {{-- Confirm delete form field --}}
+    {{-- In progress --}}
+    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="deleteHelpTopicModal"
+        tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal__content">
+                <form wire:submit.prevent="delete">
+                    <div class="modal-body border-0 text-center pt-4 pb-1">
+                        <h6 class="fw-bold mb-4"
+                            style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                            Confirm Delete
+                        </h6>
+                        <p class="mb-1" style="font-weight: 500; font-size: 15px;">
+                            Are you sure you want to delete this help topic?
+                        </p>
+                        <strong>{{ $selectedHelpTopicName }}</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
+                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
+                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit"
+                            class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
+                            wire:click="delete">
+                            <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm"
+                                role="status" aria-hidden="true">
+                            </span>
+                            Yes, delete
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     {{-- Add field to the selected form --}}
     <div wire:ignore.self class="modal fade help__topic__modal" id="addFieldForSelectedForm" tabindex="-1"
@@ -681,18 +753,50 @@
         });
 
         // Edit seleted field
-        window.addEventListener('event-edit-selected-field-type', (event) => {
+        window.addEventListener('event-edit-select-field', (event) => {
             const editSelectedFieldType = document.querySelector('#edit-selected-field-type');
+            const editSelectFieldColumnNumber = document.querySelector('#edit-select-field-column-number');
 
             const editCurrentSelectedFieldType = event.detail.editCurrentSelectedFieldType;
+            const editCurrentSelectedFieldColumnNumber = event.detail.editCurrentSelectedFieldColumnNumber;
+
+            const editHeaderFieldColumnOption = [1, 2, 'None'].map(column => ({
+                label: !isNaN(column) ? `Column ${column}` : column,
+                value: column
+            }));
 
             VirtualSelect.init({
                 ele: editSelectedFieldType,
                 options: addFormFieldFieldTypeOption,
             });
 
+            VirtualSelect.init({
+                ele: editSelectFieldColumnNumber,
+                options: editHeaderFieldColumnOption,
+            });
+
             editSelectedFieldType.reset();
             editSelectedFieldType.setValue(editCurrentSelectedFieldType);
+
+            if (editSelectFieldColumnNumber) {
+                editSelectFieldColumnNumber.reset();
+                editSelectFieldColumnNumber.setValue(editCurrentSelectedFieldColumnNumber == null ? 'None' :
+                    editCurrentSelectedFieldColumnNumber);
+
+                editSelectFieldColumnNumber.addEventListener('change', (event) => {
+                    const columnNumber = event.target.value;
+
+                    if (columnNumber == 'None') {
+                        @this.set('editSelectedFieldAssignedColumnNumber', null);
+                    } else {
+                        @this.set('editSelectedFieldAssignedColumnNumber', columnNumber);
+                    }
+                });
+
+                editSelectFieldColumnNumber.addEventListener('reset', () => {
+                    @this.set('editSelectedFieldAssignedColumnNumber', null);
+                });
+            }
 
             editSelectedFieldType.addEventListener('change', (event) => {
                 @this.set('editSelectedFieldType', event.target.value);

@@ -8,8 +8,10 @@ use App\Enums\FieldTypesEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Field;
+use App\Models\FieldHeaderValue;
 use App\Models\Form;
 use App\Models\HelpTopic;
+use App\Models\Ticket;
 use Exception;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
@@ -37,8 +39,12 @@ class HelpTopicList extends Component
     public ?int $editSelectedFieldId = null;
     public ?string $editSelectedFieldName = null;
     public ?string $editSelectedFieldType = null;
+    public ?string $editSelectedFieldAssignedColumnNumber = null;
     public bool $editSelectedFieldRequired = false;
     public bool $editSelectedFieldEnabled = false;
+    public bool $editSelectedFieldIsHeaderField = false;
+    public bool $editSelectedFieldIsForTicketNumber = false;
+    public bool $editSelectedFieldIsAssociatedWithTicketNumber = false;
     public bool $editSelectedFieldIsCurrentlyEditing = false;
 
     public ?int $editFormId = null;
@@ -123,7 +129,8 @@ class HelpTopicList extends Component
 
     public function updateFormName()
     {
-        Form::where('id', $this->editFormId)->update(['name' => $this->editFormName]);
+        Form::where('id', $this->editFormId)
+            ->update(['name' => $this->editFormName]);
         $this->cancelEditFormName();
         $this->emitSelf('loadHelpTopics');
     }
@@ -144,11 +151,21 @@ class HelpTopicList extends Component
         $this->editSelectedFieldId = $field->id;
         $this->editSelectedFieldName = $field->name;
         $this->editSelectedFieldType = $field->type;
+        $this->editSelectedFieldIsHeaderField = $field->is_header_field;
+        $this->editSelectedFieldAssignedColumnNumber = $field->assigned_column;
+        $this->editSelectedFieldIsForTicketNumber = $field->is_for_ticket_number;
         $this->editSelectedFieldRequired = $field->is_required;
         $this->editSelectedFieldEnabled = $field->is_enabled;
+
+        $this->editSelectedFieldIsAssociatedWithTicketNumber = Field::where([
+            'id' => $this->editSelectedFieldId,
+            'is_for_ticket_number' => true
+        ])->exists();
+
         $this->resetValidation();
 
-        $this->dispatchBrowserEvent('event-edit-selected-field-type', [
+        $this->dispatchBrowserEvent('event-edit-select-field', [
+            'editCurrentSelectedFieldColumnNumber' => $this->editSelectedFieldAssignedColumnNumber,
             'editCurrentSelectedFieldType' => $this->editSelectedFieldType,
         ]);
     }
@@ -195,6 +212,16 @@ class HelpTopicList extends Component
             return;
         }
 
+        if (
+            Field::where([
+                ['id', '!=', $this->editSelectedFieldId],
+                ['is_for_ticket_number', true]
+            ])->exists()
+        ) {
+            noty()->addError('Field associated with ticket number already exists');
+            return;
+        }
+
         Field::where([
             ['id', $this->editSelectedFieldId],
             ['form_id', $this->editSelectedFieldFormId],
@@ -205,7 +232,10 @@ class HelpTopicList extends Component
                 'type' => $this->editSelectedFieldType,
                 'variable_name' => $this->convertToVariable($this->editSelectedFieldName),
                 'is_required' => $this->editSelectedFieldRequired,
-                'is_enabled' => $this->editSelectedFieldEnabled
+                'is_enabled' => $this->editSelectedFieldEnabled,
+                'assigned_column' => (int) ($this->editSelectedFieldAssignedColumnNumber ?? null),
+                'is_header_field' => $this->editSelectedFieldIsHeaderField,
+                'is_for_ticket_number' => $this->editSelectedFieldIsForTicketNumber
             ]);
 
         $this->editSelectedFieldIsCurrentlyEditing = false;
@@ -258,7 +288,13 @@ class HelpTopicList extends Component
             ]
         );
 
-        $this->reset('selectedFormFieldName', 'selectedFormFieldType', 'selectedFormVariableName', 'selectedFormFieldIsRequired', 'selectedFormFieldIsEnabled');
+        $this->reset(
+            'selectedFormFieldName',
+            'selectedFormFieldType',
+            'selectedFormVariableName',
+            'selectedFormFieldIsRequired',
+            'selectedFormFieldIsEnabled'
+        );
         $this->resetValidation();
         $this->dispatchBrowserEvent('selected-form-clear-form-fields');
         $this->emitSelf('loadHelpTopics');
@@ -400,11 +436,15 @@ class HelpTopicList extends Component
         $this->editSelectedFieldName = null;
         $this->editSelectedFieldType = null;
         $this->editSelectedFieldRequired = false;
+        $this->editSelectedFieldEnabled = false;
+        $this->editSelectedFieldAssignedColumnNumber = null;
+        $this->editSelectedFieldIsHeaderField = false;
+        $this->editSelectedFieldIsForTicketNumber = false;
     }
 
-    public function convertToVariable($value)
+    public function convertToVariable($variable)
     {
-        return preg_replace('/[^a-zA-Z0-9_.]+/', '_', strtolower(trim($value)));
+        return preg_replace('/[^a-zA-Z0-9_.]+/', '_', strtolower(trim($variable)));
     }
 
     public function updatedSelectedFormFieldName($value)
