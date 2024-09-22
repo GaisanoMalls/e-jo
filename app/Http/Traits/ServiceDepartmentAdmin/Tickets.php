@@ -125,7 +125,7 @@ trait Tickets
                         ->orWhereHas('clarifications')
                         ->orWhereHas('helpTopic.specialProject');
                 })->where(fn($query) => $query->where('status_id', Status::ON_PROCESS)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
-                ->where(fn($withSpecialProjQuery) => $withSpecialProjQuery->withWhereHas('user.branches', fn($query) =>
+                ->orWhere(fn($withSpecialProjQuery) => $withSpecialProjQuery->withWhereHas('user.branches', fn($query) =>
                     $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
                     ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
                 ->where(fn($nonSpecialProjQuery) => $nonSpecialProjQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
@@ -148,7 +148,7 @@ trait Tickets
     {
         return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::DISAPPROVED]))
             ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
+                ->withWhereHas('user.buDepartments', fn($query) => $query->orWhere('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
             ->orderByDesc('created_at')
             ->get();
     }
