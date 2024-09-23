@@ -20,15 +20,6 @@
                                 <div
                                     class="d-flex gap-4 justify-content-between align-items-center text-start td__content">
                                     <span>{{ $helpTopic->name }}</span>
-                                    {{-- @if ($helpTopic->specialProject?->amount)
-                                        <div class="d-flex align-items-center rounded-4"
-                                            style="background-color: #f1f3ef; padding: 0.1rem 0.4rem;">
-                                            <span style="font-size: 11px; color: #D32839;">₱</span>
-                                            <span style="font-size: 11px; color: #D32839;">
-                                                {{ number_format($helpTopic->specialProject?->amount, 2) }}
-                                            </span>
-                                        </div>
-                                    @endif --}}
                                 </div>
                             </td>
                             <td>
@@ -167,7 +158,7 @@
     {{-- View help topic form --}}
     <div wire:ignore.self class="modal fade help__topic__modal" id="viewFormModal" tabindex="-1"
         aria-labelledby="viewFormModalModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="max-width: 90rem !important;">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 80rem !important;">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0 mb-3">
                     <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">
@@ -261,15 +252,16 @@
                                                         wire:target="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
                                                         class='bx bx-loader bx-spin' style="font-size: 13px;"></i>
                                                 </button>
-                                                <button wire:click="deleteFormField({{ $field->id }})"
+                                                <button wire:click="deleteSelectedFormField({{ $field->id }})"
                                                     type="button"
                                                     class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
-                                                    style="height: 4px; width: 4px;">
+                                                    style="height: 4px; width: 4px;" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteFormFieldModal">
                                                     <i wire:loading.remove
-                                                        wire:target="deleteFormField({{ $field->id }})"
-                                                        class="bi bi-x-lg" style="font-size: 11px;"></i>
-                                                    <i wire:loading="deleteFormField({{ $field->id }})"
-                                                        wire:target="deleteFormField({{ $field->id }})"
+                                                        wire:target="deleteSelectedFormField({{ $field->id }})"
+                                                        class="bi bi-trash text-danger" style="font-size: 11px;"></i>
+                                                    <i wire:loading="deleteSelectedFormField({{ $field->id }})"
+                                                        wire:target="deleteSelectedFormField({{ $field->id }})"
                                                         class="bx bx-loader bx-spin" style="font-size: 13px;"></i>
                                                 </button>
                                             </div>
@@ -309,8 +301,7 @@
                                                     <input wire:model="editSelectedFieldIsForTicketNumber"
                                                         class="form-check-input" type="checkbox" role="switch"
                                                         id="forTicketNumber" wire:loading.attr="disabled"
-                                                        style="margin-right: 10px !important;"
-                                                        @disabled(!$editSelectedFieldIsAssociatedWithTicketNumber)>
+                                                        style="margin-right: 10px !important;">
                                                     <label class="form-check-label" for="forTicketNumber">
                                                         Associate with the ticket number
                                                     </label>
@@ -425,9 +416,8 @@
         </div>
     </div>
 
-    {{-- Confirm delete form field --}}
-    {{-- In progress --}}
-    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="deleteHelpTopicModal"
+    {{-- Confirm delete selected form field --}}
+    <div wire:ignore.self class="modal fade modal__confirm__delete__form__field" id="deleteFormFieldModal"
         tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
@@ -438,18 +428,21 @@
                             Confirm Delete
                         </h6>
                         <p class="mb-1" style="font-weight: 500; font-size: 15px;">
-                            Are you sure you want to delete this help topic?
+                            Are you sure you want to delete this field?
                         </p>
-                        <strong>{{ $selectedHelpTopicName }}</strong>
+                        <strong>{{ $deleteSelectedFormFieldName }}</strong>
                     </div>
                     <hr>
                     <div class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
-                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
-                            data-bs-dismiss="modal">Cancel</button>
+                        <button wire:click="cancelDeleteSelectedFormField" type="button"
+                            class="btn w-50 btn__cancel__delete btn__confirm__modal" data-bs-toggle="modal"
+                            data-bs-target="#viewFormModal">
+                            Cancel
+                        </button>
                         <button type="submit"
                             class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
-                            wire:click="delete">
-                            <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm"
+                            wire:click="deleteFormField">
+                            <span wire:loading wire:target="deleteFormField" class="spinner-border spinner-border-sm"
                                 role="status" aria-hidden="true">
                             </span>
                             Yes, delete
@@ -460,7 +453,6 @@
         </div>
     </div>
 
-
     {{-- Add field to the selected form --}}
     <div wire:ignore.self class="modal fade help__topic__modal" id="addFieldForSelectedForm" tabindex="-1"
         aria-labelledby="addFieldForSelectedFormModalLabel" aria-hidden="true">
@@ -468,9 +460,54 @@
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0 mb-3">
                     <h1 class="modal-title modal__title" id="addNewHelpTopicModalLabel">
-                        Add fields to {{ $selectedFormName }}
+                        Add fields to {{ $selectedFormName }} form
                     </h1>
                 </div>
+                @if (!$this->hasAssociatedTicketFieldExists())
+                    <div class="form-check mb-3 px-3" style="white-space: nowrap; margin-left: 13px;">
+                        <input wire:model="selectedFormFieldAsHeaderField" class="form-check-input" type="checkbox"
+                            role="switch" id="add-form-field-as-heder-check" wire:loading.attr="disabled">
+                        <label class="form-check-label" for="add-form-field-as-heder-check">
+                            As header field
+                        </label>
+                    </div>
+                    @if ($selectedFormFieldAsHeaderField)
+                        <div class="row mb-3">
+                            <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                <div class="mb-2">
+                                    <label for="fieldName" class="form-label text-muted form__field__label"
+                                        style="font-weight: 500;">
+                                        Assign column
+                                    </label>
+                                    <div>
+                                        <div id="add-selected-form-field-select-column-number" wire:ignore></div>
+                                    </div>
+                                    @error('selectedFormFieldColumnNumber')
+                                        <span class="error__message position-absolute" style="bottom: -13px !important;">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            @if (!$this->hasAssociatedTicketField())
+                                <div
+                                    class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                    <div class="form-check"
+                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
+                                        <input wire:model="selectedFormFieldIsForTicketNumber"
+                                            class="form-check-input" type="checkbox" role="switch"
+                                            id="for-ticket-number" wire:loading.attr="disabled"
+                                            style="margin-right: 10px !important;">
+                                        <label class="form-check-label" for="for-ticket-number">
+                                            Associate with the ticket number
+                                        </label>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+                @endif
                 <div class="mx-1">
                     <h6>Add field</h6>
                     @if (session()->has('selected_form_added_fields_error'))
@@ -563,11 +600,14 @@
                     @if (!empty($selectedFormAddedFields))
                         <div class="row my-4 px-3">
                             <div class="table-responsive custom__table">
-                                <table class="table mb-0">
+                                <table class="table mb-0" style="table-layout: fixed;">
                                     <thead>
                                         <tr>
                                             <th class="border-0 table__head__label px-2">Name</th>
                                             <th class="border-0 table__head__label px-2">Type</th>
+                                            <th class="border-0 table__head__label px-2">Assigned Column</th>
+                                            <th class="border-0 table__head__label px-2">Header Field</th>
+                                            <th class="border-0 table__head__label px-2">For Ticket Number</th>
                                             <th class="border-0 table__head__label px-2">Required</th>
                                             <th class="border-0 table__head__label px-2">Enable</th>
                                         </tr>
@@ -611,6 +651,73 @@
                                                             {{ $message }}
                                                         </span>
                                                     @enderror
+                                                </td>
+                                                <td class="position-relative">
+                                                    <div class="d-flex align-items-center text-start px-0 td__content"
+                                                        style="height: 0; min-width: 200px;">
+                                                        @if ($editAddedFieldId === $key)
+                                                            <div style="min-width: 40px;">
+                                                                <div id="edit-added-select-assigned-column"
+                                                                    wire:ignore>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            {{ $field['assigned_column'] ?? '---' }}
+                                                        @endif
+                                                    </div>
+                                                    @error('selectedFormFieldColumnNumber')
+                                                        <span class="error__message position-absolute"
+                                                            style="bottom: -10px !important;">
+                                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center text-start px-0 td__content"
+                                                        style="height: 0;">
+                                                        @if ($editAddedFieldId === $key)
+                                                            <div class="w-100">
+                                                                <div class="form-check mx-0"
+                                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                                    <input wire:model="editAddedFieldIsHeaderField"
+                                                                        class="form-check-input" type="checkbox"
+                                                                        role="switch" wire:loading.attr="disabled"
+                                                                        style="margin-right: 10px !important;">
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            @if ($field['is_header_field'])
+                                                                <i class="bi bi-check-circle-fill"
+                                                                    style="color: #9da85c;"></i>
+                                                            @else
+                                                                <i class="bi bi-x-circle text-muted"></i>
+                                                            @endif
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center text-start px-0 td__content"
+                                                        style="height: 0;">
+                                                        @if ($editAddedFieldId === $key)
+                                                            <div class="w-100">
+                                                                <div class="form-check mx-0"
+                                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                                    <input wire:model="editAddedFieldIsForTicketNumber"
+                                                                        class="form-check-input" type="checkbox"
+                                                                        role="switch" wire:loading.attr="disabled"
+                                                                        style="margin-right: 10px !important;">
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            @if ($field['is_for_ticket_number'])
+                                                                <i class="bi bi-check-circle-fill"
+                                                                    style="color: #9da85c;"></i>
+                                                            @else
+                                                                <i class="bi bi-x-circle text-muted"></i>
+                                                            @endif
+                                                        @endif
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
@@ -729,6 +836,11 @@
             $('#deleteHelpTopicModal').modal('hide');
         });
 
+        window.addEventListener('close-delete-selected-form-field-modal', () => {
+            $('#deleteFormFieldModal').modal('hide');
+            $('#viewFormModal').modal('show');
+        });
+
         window.addEventListener('show-delete-help-topic-modal', () => {
             $('#deleteHelpTopicModal').modal('show');
         });
@@ -751,6 +863,25 @@
         window.addEventListener('selected-form-clear-form-fields', () => {
             addSelectedFormFieldSelectFieldType.reset();
         });
+
+        window.addEventListener('add-selected-form-show-select-column-number', () => {
+            const addSelectedFormFieldSelectColumnNumber = document.querySelector(
+                '#add-selected-form-field-select-column-number')
+
+            const addFormFieldFieldColumnNumberOption = [1, 2].map(column => ({
+                label: `Column ${column}`,
+                value: column
+            }));
+
+            VirtualSelect.init({
+                ele: addSelectedFormFieldSelectColumnNumber,
+                options: addFormFieldFieldColumnNumberOption
+            });
+
+            addSelectedFormFieldSelectColumnNumber.addEventListener('change', (event) => {
+                @this.set('selectedFormFieldColumnNumber', event.target.value);
+            });
+        })
 
         // Edit seleted field
         window.addEventListener('event-edit-select-field', (event) => {
@@ -806,9 +937,9 @@
         // Edit selected form (added fields)
         window.addEventListener('edit-selected-form-added-field-show-select-field', (event) => {
             const editAddedFieldType = event.detail.editAddedFieldType;
+            const editAddedFieldAssignedColumn = event.detail.editAddedFieldAssignedColumn;
 
             const editAddedSelectFieldType = document.querySelector('#edit-added-select-field-type');
-
             if (editAddedSelectFieldType) {
                 VirtualSelect.init({
                     ele: editAddedSelectFieldType,
@@ -824,6 +955,27 @@
                     @this.set('editAddedFieldType', event.target.value);
                 });
             }
+
+            const editAddedSelectAssignedColumn = document.querySelector('#edit-added-select-assigned-column');
+            const editAddedColumnOption = [1, 2].map(column => ({
+                label: `Column ${column}`,
+                value: column
+            }));
+
+            if (editAddedSelectAssignedColumn) {
+                VirtualSelect.init({
+                    ele: editAddedSelectAssignedColumn,
+                    options: editAddedColumnOption,
+                    popupDropboxBreakpoint: '3000px'
+                });
+            }
+
+            editAddedSelectAssignedColumn.reset();
+            editAddedSelectAssignedColumn.setValue(editAddedFieldAssignedColumn);
+
+            editAddedSelectAssignedColumn.addEventListener('change', (event) => {
+                @this.set('editAddedFieldAssignedColumn', event.target.value);
+            });
         });
 
         window.addEventListener('close-selected-form-add-field', () => {

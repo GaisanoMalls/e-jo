@@ -328,6 +328,7 @@ class AddFormField extends Component
                             'is_for_ticket_number' => $field['isForTicketNumber']
                         ]);
                     }
+
                     $this->actionOnSubmit();
 
                 } else {

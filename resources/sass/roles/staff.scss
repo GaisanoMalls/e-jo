@@ -4212,6 +4212,20 @@ input[type="checkbox"] {
         }
     }
 
+    .modal__confirm__delete__form__field {
+        .btn__confirm__modal {
+            @include generic.button-config;
+
+            &.btn__cancel__delete {
+                @include generic.form-button-cancel;
+            }
+
+            &.btn__confirm__delete {
+                @include generic.form-button-submit;
+            }
+        }
+    }
+
     .btn__edit__helptopic__approval__level {
         padding: 0.4rem 0.6rem;
         border: 1px solid #bdbcbd;
