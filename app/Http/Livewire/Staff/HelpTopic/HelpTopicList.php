@@ -231,6 +231,7 @@ class HelpTopicList extends Component
         }
 
         if (
+            $this->editSelectedFieldIsForTicketNumber &&
             Field::where([
                 ['id', '!=', $this->editSelectedFieldId],
                 ['is_for_ticket_number', true]
@@ -251,7 +252,7 @@ class HelpTopicList extends Component
                 'variable_name' => $this->convertToVariable($this->editSelectedFieldName),
                 'is_required' => $this->editSelectedFieldRequired,
                 'is_enabled' => $this->editSelectedFieldEnabled,
-                'assigned_column' => (int) ($this->editSelectedFieldAssignedColumnNumber ?? null),
+                'assigned_column' => $this->editSelectedFieldAssignedColumnNumber ?? null,
                 'is_header_field' => $this->editSelectedFieldIsHeaderField,
                 'is_for_ticket_number' => $this->editSelectedFieldIsForTicketNumber
             ]);
