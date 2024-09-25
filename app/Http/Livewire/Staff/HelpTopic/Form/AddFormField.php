@@ -171,7 +171,7 @@ class AddFormField extends Component
             'isForTicketNumber' => $this->isForTicketNumber
         ]);
 
-        $this->reset(
+        $this->reset([
             'name',
             'type',
             'variableName',
@@ -181,7 +181,8 @@ class AddFormField extends Component
             'asHeaderField',
             'isForTicketNumber',
             'isForTicketNumber'
-        );
+        ]);
+
         $this->resetValidation();
         $this->dispatchBrowserEvent('clear-form-fields');
     }

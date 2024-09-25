@@ -40,13 +40,16 @@ class AuthUser extends Component
         $this->validate();
         sleep(1);
 
+        if (User::where('email', $this->email)->doesntExist()) {
+            $this->addError('email', 'Email not found.');
+        }
+
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password, 'is_active' => true])) {
             session()->regenerate();
             return $this->redirectAuthenticatedWithRole();
         }
 
-        $this->reset('password');
-        $this->addError('password', 'Incorrect password for this email.');
+        $this->addError('password', 'Incorrect password. Please try again');
     }
 
     public function render()

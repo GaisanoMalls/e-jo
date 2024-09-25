@@ -161,7 +161,8 @@
         @endif
     </div>
     <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center gap-2"
-        id="save-custom-form-as-pdf">
+        id="save-custom-form-as-pdf"
+        style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
         <i class="bi bi-download"></i>
         Download PDF
     </button>
