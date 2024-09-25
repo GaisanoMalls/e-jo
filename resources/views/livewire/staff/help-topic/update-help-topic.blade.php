@@ -45,8 +45,9 @@
                                 <!-- Service Department Field -->
                                 <div class="col-md-6">
                                     <div class="mb-2">
-                                        <label for="serviceDepartment" class="form-label form__field__label">Service
-                                            Department</label>
+                                        <label for="serviceDepartment" class="form-label form__field__label">
+                                            Service Department
+                                        </label>
                                         <div>
                                             <div id="select-help-topic-service-department" wire:ignore></div>
                                         </div>
@@ -143,7 +144,8 @@
                                         <tr>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
-                                            <th style="font-size: 0.85rem; padding: 17px 21px;">Numbers of Approvers
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">
+                                                Numbers of Approvers
                                             </th>
                                             <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
                                                 Actions
@@ -153,16 +155,24 @@
                                     <tbody>
                                         @foreach ($configurations as $index => $config)
                                             <tr wire:key="config-{{ $index + 1 }}">
-                                                <td class="td__content" style="font-size: 0.85rem;">{{ $index + 1 }}
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $index + 1 }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     {{ $config['bu_department_name'] }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
-                                                    {{ $config['approvers_count'] }}</td>
+                                                    {{ $config['approvers_count'] }}
+                                                </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     <div
                                                         class="d-flex align-items-center justify-content-center pe-2 gap-1">
+                                                        <button type="button" class="btn btn-sm action__button"
+                                                            wire:click="viewConfigurationApprovers({{ $config['id'] }})"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#viewHelpTopicApprovers">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
                                                         <button type="button" class="btn btn-sm action__button"
                                                             wire:click="editConfiguration({{ $config['id'] }})">
                                                             <i class="bi bi-pencil"></i>
@@ -245,6 +255,20 @@
                                 Cancel
                             </a>
                         </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- View configuration approvers --}}
+    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="viewHelpTopicApprovers"
+        tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal__content">
+                <form wire:submit.prevent="delete">
+                    <div class="modal-body border-0 text-center pt-4 pb-1">
+                        @dump($helpTopicApprovers)
                     </div>
                 </form>
             </div>

@@ -13,7 +13,7 @@ use App\Models\SpecialProject;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -54,6 +54,8 @@ class UpdateHelpTopic extends Component
     public $configurations = [];
     public $selectedBuDepartment;
     public $selectedApproversCount = 0;
+
+    public ?Collection $helpTopicApprovers = null;
 
     protected $listeners = ['reMount' => 'mount'];
 
@@ -244,9 +246,14 @@ class UpdateHelpTopic extends Component
         $this->dispatchBrowserEvent('reset-select-fields');
     }
 
-    public function editConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
+    public function viewConfigurationApprovers(HelpTopicConfiguration $helpTopicConfiguration)
     {
         dump($helpTopicConfiguration->approvers()->with('approver.profile')->get());
+    }
+
+    public function editConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
+    {
+        $this->helpTopicApprovers = $helpTopicConfiguration->approvers()->with('approver.profile')->get();
     }
 
     public function deleteConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
