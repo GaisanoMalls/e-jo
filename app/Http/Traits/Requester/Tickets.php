@@ -27,8 +27,13 @@ trait Tickets
     public function getOnProcessTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::ON_PROCESS)
-                ->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
+            ->where(function ($statusQuery) {
+                $statusQuery->where('status_id', Status::ON_PROCESS)
+                    ->whereIn('approval_status', [
+                        ApprovalStatusEnum::APPROVED,
+                        ApprovalStatusEnum::FOR_APPROVAL
+                    ]);
+            })
             ->where('user_id', auth()->user()->id)
             ->orderByDesc('created_at')
             ->get();
@@ -37,8 +42,13 @@ trait Tickets
     public function getViewedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::VIEWED)
-                ->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
+            ->where(function ($statusQuery) {
+                $statusQuery->where('status_id', Status::VIEWED)
+                    ->whereIn('approval_status', [
+                        ApprovalStatusEnum::APPROVED,
+                        ApprovalStatusEnum::FOR_APPROVAL
+                    ]);
+            })
             ->where('user_id', auth()->user()->id)
             ->orderByDesc('created_at')
             ->get();
@@ -47,11 +57,13 @@ trait Tickets
     public function getApprovedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where([
-                ['status_id', Status::APPROVED],
-                ['approval_status', ApprovalStatusEnum::APPROVED],
-                ['user_id', User::role(Role::USER)->where('id', auth()->user()->id)->value('id')]
-            ]))
+            ->where(function ($statusQuery) {
+                $statusQuery->where([
+                    ['status_id', Status::APPROVED],
+                    ['approval_status', ApprovalStatusEnum::APPROVED],
+                    ['user_id', User::role(Role::USER)->where('id', auth()->user()->id)->value('id')]
+                ]);
+            })
             ->orderByDesc('created_at')
             ->get();
     }
@@ -59,11 +71,14 @@ trait Tickets
     public function getClaimedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where([
-                ['status_id', Status::CLAIMED],
-                ['approval_status', ApprovalStatusEnum::APPROVED]
-            ]))
-            ->whereNotNull('agent_id')->where('user_id', auth()->user()->id)
+            ->where(function ($statusQuery) {
+                $statusQuery->where([
+                    ['status_id', Status::CLAIMED],
+                    ['approval_status', ApprovalStatusEnum::APPROVED]
+                ]);
+            })
+            ->whereNotNull('agent_id')
+            ->where('user_id', auth()->user()->id)
             ->orderByDesc('created_at')
             ->get();
     }
@@ -71,11 +86,13 @@ trait Tickets
     public function getDisapprovedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where([
-                ['status_id', Status::DISAPPROVED],
-                ['approval_status', ApprovalStatusEnum::DISAPPROVED],
-                ['user_id', User::role(Role::USER)->where('id', auth()->user()->id)->value('id')]
-            ]))
+            ->where(column: function ($statusQuery) {
+                $statusQuery->where([
+                    ['status_id', Status::DISAPPROVED],
+                    ['approval_status', ApprovalStatusEnum::DISAPPROVED],
+                    ['user_id', User::role(Role::USER)->where('id', auth()->user()->id)->value('id')]
+                ]);
+            })
             ->orderByDesc('created_at')
             ->get();
     }
@@ -83,11 +100,13 @@ trait Tickets
     public function getClosedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])
-            ->where(fn($statusQuery) => $statusQuery->where([
-                ['status_id', Status::CLOSED],
-                ['approval_status', ApprovalStatusEnum::APPROVED],
-                ['user_id', User::role(Role::USER)->where('id', auth()->user()->id)->value('id')]
-            ]))
+            ->where(function ($statusQuery) {
+                $statusQuery->where([
+                    ['status_id', Status::CLOSED],
+                    ['approval_status', ApprovalStatusEnum::APPROVED],
+                    ['user_id', User::role(Role::USER)->where('id', auth()->user()->id)->value('id')]
+                ]);
+            })
             ->orderByDesc('created_at')
             ->get();
     }
@@ -97,7 +116,8 @@ trait Tickets
         return Reply::where([
             ['ticket_id', $id],
             ['user_id', User::role(Role::USER)->where('id', auth()->user()->id)->value('id')]
-        ])->orderByDesc('created_at')
+        ])
+            ->orderByDesc('created_at')
             ->first();
     }
 
@@ -106,7 +126,8 @@ trait Tickets
         return Clarification::where([
             ['ticket_id', $id],
             ['user_id', User::role(Role::USER)->where('id', auth()->user()->id)->value('id')]
-        ])->orderByDesc('created_at')
+        ])
+            ->orderByDesc('created_at')
             ->first();
     }
 }

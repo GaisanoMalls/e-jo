@@ -6,23 +6,38 @@ use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\Utils;
 use App\Models\Status;
 use App\Models\Ticket;
+use Illuminate\Database\Eloquent\Collection;
 
 trait Tickets
 {
     use Utils;
 
-    public function serviceDeptAdminGetTicketsToAssign()
+    public function serviceDeptAdminGetTicketsToAssign(): array|Collection
     {
         return Ticket::whereHas('teams')
-            ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::APPROVED)->where('approval_status', ApprovalStatusEnum::APPROVED))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
-            ->withWhereHas('ticketCosting', fn($ticketCosting) => $ticketCosting->withWhereHas('prFileAttachments', fn($prFile) =>
-                $prFile->where([
-                    ['is_approved_level_1_approver', true],
-                    ['is_approved_level_2_approver', true],
-                ])))
-            ->withWhereHas('ticketApprovals', fn($ticketApproval) => $ticketApproval->where('is_approved', true))
+            ->where(function ($statusQuery) {
+                $statusQuery->where('status_id', Status::APPROVED)
+                    ->where('approval_status', ApprovalStatusEnum::APPROVED);
+            })
+            ->where(function ($userQuery) {
+                $userQuery->withWhereHas('user.branches', function ($query) {
+                    $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                })
+                    ->withWhereHas('user.buDepartments', function ($query) {
+                        $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
+                    });
+            })
+            ->withWhereHas('ticketCosting', function ($ticketCosting) {
+                $ticketCosting->withWhereHas('prFileAttachments', function ($prFile) {
+                    $prFile->where([
+                        ['is_approved_level_1_approver', true],
+                        ['is_approved_level_2_approver', true],
+                    ]);
+                });
+            })
+            ->withWhereHas('ticketApprovals', function ($ticketApproval) {
+                $ticketApproval->where('is_approved', true);
+            })
             ->orderByDesc('created_at')
             ->get();
     }
@@ -33,11 +48,20 @@ trait Tickets
      * Tickets are exclusively visible within their respective Business Unit (BU). 
      * Special Project - Costing: Include filter for ticket that has amount for special project and is approved.
      */
-    public function serviceDeptAdminGetOpentTickets()
+    public function serviceDeptAdminGetOpentTickets(): array|Collection
     {
-        return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
+        return Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::OPEN)
+                ->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL);
+        })
+            ->where(function ($userQuery) {
+                $userQuery->withWhereHas('user.branches', function ($query) {
+                    $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                })
+                    ->withWhereHas('user.buDepartments', function ($query) {
+                        $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
+                    });
+            })
             ->orderByDesc('created_at')
             ->get();
     }
@@ -47,16 +71,28 @@ trait Tickets
      * Condition: Requester and Service Dept. Admin - Match the Branch and BU Department.
      * Tickets are exclusively visible within their respective Business Unit (BU).
      */
-    public function serviceDeptAdminGetViewedTickets()
+    public function serviceDeptAdminGetViewedTickets(): array|Collection
     {
-        return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::VIEWED)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
+        return Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::VIEWED)
+                ->whereIn('approval_status', [
+                    ApprovalStatusEnum::APPROVED,
+                    ApprovalStatusEnum::FOR_APPROVAL
+                ]);
+        })
+            ->where(function ($userQuery) {
+                $userQuery->withWhereHas('user.branches', function ($query) {
+                    $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                })
+                    ->withWhereHas('user.buDepartments', function ($query) {
+                        $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
+                    });
+            })
             ->orderByDesc('created_at')
             ->get();
     }
 
-    public function serviceDeptAdminGetApprovedTickets()
+    public function serviceDeptAdminGetApprovedTickets(): array|Collection
     {
         return Ticket::where([
             ['status_id', Status::APPROVED],
@@ -67,27 +103,45 @@ trait Tickets
             ->get();
     }
 
-    public function serviceDeptAdminGetDisapprovedTickets()
+    public function serviceDeptAdminGetDisapprovedTickets(): array|Collection
     {
-        return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::DISAPPROVED)->where('approval_status', ApprovalStatusEnum::DISAPPROVED))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
+        return Ticket::where(column: function ($statusQuery) {
+            $statusQuery->where('status_id', Status::DISAPPROVED)
+                ->where('approval_status', ApprovalStatusEnum::DISAPPROVED);
+        })
+            ->where(function ($userQuery) {
+                $userQuery->withWhereHas('user.branches', function ($query) {
+                    $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                })
+                    ->withWhereHas('user.buDepartments', function ($query) {
+                        $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
+                    });
+            })
             ->orderByDesc('created_at')
             ->get();
     }
 
-    public function serviceDeptAdminGetClaimedTickets()
+    public function serviceDeptAdminGetClaimedTickets(): array|Collection
     {
         return Ticket::whereHas('agent')
             ->whereNotNull('agent_id')
-            ->where(fn($byUserQuery) => $byUserQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLAIMED)->where('approval_status', ApprovalStatusEnum::APPROVED))
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray()))
+            ->where(function ($userQuery) {
+                $userQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+                    ->where(function ($statusQuery) {
+                        $statusQuery->where('status_id', Status::CLAIMED)->where('approval_status', ApprovalStatusEnum::APPROVED);
+                    });
+            })
+            ->where(function ($query) {
+                $query->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+                    $approver->where('user_id', auth()->user()->id);
+                });
+            })
             ->orderByDesc('created_at')
             ->get();
     }
 
-    public function serviceDeptAdminGetOnProcessTickets()
+    public function serviceDeptAdminGetOnProcessTickets(): array|Collection
     {
         $ticketIsNotYetApproved = Ticket::with(['clarifications', 'helpTopic.specialProject'])
             ->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL)
@@ -99,56 +153,103 @@ trait Tickets
                 ->where(function ($query) {
                     $query->whereHas('clarifications')
                         ->orWhereHas('helpTopic.specialProject');
-                })->where(fn($query) => $query->where('status_id', Status::ON_PROCESS)
-                    ->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL))
-                ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                    ->withWhereHas('user.buDepartments', fn($query) => $query->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray())))
+                })
+                ->where(column: function ($query) {
+                    $query->where('status_id', Status::ON_PROCESS)
+                        ->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL);
+                })
+                ->where(function ($userQuery) {
+                    $userQuery->withWhereHas('user.branches', function ($query) {
+                        $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                    })
+                        ->withWhereHas('user.buDepartments', function ($query) {
+                            $query->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                        });
+                })
                 ->orderByDesc('created_at')
                 ->get();
         } else {
             // if ($this->isApproved2LevelsOfApproverAndHasSpecialProject()) {
-            //     return Ticket::with(['replies', 'clarifications', 'helpTopic.specialProject'])
-            //         ->where(function ($query) {
-            //             $query->whereHas('replies')
-            //                 ->orWhereHas('clarifications')
-            //                 ->orWhereHas('helpTopic.specialProject');
-            //         })->where(fn ($query) => $query->where('status_id', Status::ON_PROCESS)
-            //             ->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
-            //         ->where(fn ($withSpecialProjQuery) => $withSpecialProjQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-            //             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray()))
-            //         ->orderByDesc('created_at')
-            //         ->get();
+            // return Ticket::with(['replies', 'clarifications', 'helpTopic.specialProject'])
+            //     ->where(function ($query) {
+            //         $query->whereHas('replies')
+            //             ->orWhereHas('clarifications')
+            //             ->orWhereHas('helpTopic.specialProject');
+            //     })
+            //     ->where(function ($query) {
+            //         $query->where('status_id', Status::ON_PROCESS)
+            //             ->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]);
+            //     })
+            //     ->where(function ($withSpecialProjQuery) {
+            //         $withSpecialProjQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+            //             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
+            //     })
+            //     ->orderByDesc('created_at')
+            //     ->get();
             // } else {
             return Ticket::with(['replies', 'clarifications', 'helpTopic.specialProject'])
                 ->where(function ($query) {
                     $query->whereHas('replies')
                         ->orWhereHas('clarifications')
                         ->orWhereHas('helpTopic.specialProject');
-                })->where(fn($query) => $query->where('status_id', Status::ON_PROCESS)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]))
-                ->orWhere(fn($withSpecialProjQuery) => $withSpecialProjQuery->withWhereHas('user.branches', fn($query) =>
-                    $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                    ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
-                ->where(fn($nonSpecialProjQuery) => $nonSpecialProjQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray()))
+                })
+                ->where(function ($query) {
+                    $query->where('status_id', Status::ON_PROCESS)
+                        ->whereIn('approval_status', [
+                            ApprovalStatusEnum::APPROVED,
+                            ApprovalStatusEnum::FOR_APPROVAL
+                        ]);
+                })
+                ->orWhere(function ($withSpecialProjQuery) {
+                    $withSpecialProjQuery->withWhereHas('user.branches', function ($query) {
+                        $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                    })
+                        ->withWhereHas('user.buDepartments', function ($query) {
+                            $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
+                        });
+                })
+                ->where(function ($nonSpecialProjQuery) {
+                    $nonSpecialProjQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                        ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
+                })
                 ->orderByDesc('created_at')
                 ->get();
             // }
         }
     }
 
-    public function serviceDeptAdminGetOverdueTickets()
+    public function serviceDeptAdminGetOverdueTickets(): array|Collection
     {
-        return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OVERDUE)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED]))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray())))
+        return Ticket::where(function ($statusQuery) {
+            $statusQuery->where('status_id', Status::OVERDUE)
+                ->where('approval_status', ApprovalStatusEnum::APPROVED);
+        })
+            ->where(function ($userQuery) {
+                $userQuery->withWhereHas('user.branches', function ($query) {
+                    $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                });
+            })
             ->orderByDesc('created_at')
             ->get();
     }
 
-    public function serviceDeptAdminGetClosedTickets()
+    public function serviceDeptAdminGetClosedTickets(): array|Collection
     {
-        return Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::CLOSED)->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::DISAPPROVED]))
-            ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                ->withWhereHas('user.buDepartments', fn($query) => $query->orWhere('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
+        return Ticket::where(column: function ($statusQuery) {
+            $statusQuery->where('status_id', Status::CLOSED)
+                ->whereIn('approval_status', [
+                    ApprovalStatusEnum::APPROVED,
+                    ApprovalStatusEnum::DISAPPROVED
+                ]);
+        })
+            ->where(function ($userQuery) {
+                $userQuery->withWhereHas('user.branches', function ($query) {
+                    $query->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                })
+                    ->withWhereHas('user.buDepartments', function ($query) {
+                        $query->orWhere('departments.id', auth()->user()->buDepartments->pluck('id')->first());
+                    });
+            })
             ->orderByDesc('created_at')
             ->get();
     }

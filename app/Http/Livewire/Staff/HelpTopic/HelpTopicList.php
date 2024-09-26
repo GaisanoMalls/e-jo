@@ -349,6 +349,7 @@ class HelpTopicList extends Component
                 $this->dispatchBrowserEvent('edit-selected-form-added-field-show-select-field', [
                     'editAddedFieldType' => $this->editAddedFieldType,
                     'editAddedFieldAssignedColumn' => $this->editAddedFieldAssignedColumn,
+                    'editAddedFieldIsHeaderField' => $this->editAddedFieldIsHeaderField
                 ]);
             }
             $this->resetValidation();
@@ -383,12 +384,24 @@ class HelpTopicList extends Component
                     $field['is_for_ticket_number'] = $this->editAddedFieldIsForTicketNumber;
                 }
             }
+
             $this->editSelectedFormAddedFieldAction();
             $this->emitSelf('loadHelpTopics');
             $this->resetValidation();
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
+        }
+    }
+
+    public function updatedEditAddedFieldIsHeaderField($value)
+    {
+        if ($value) {
+            $this->dispatchBrowserEvent('enable-edit-assign-column');
+        } else {
+            $this->editAddedFieldIsForTicketNumber = false;
+            $this->editAddedFieldAssignedColumn = null;
+            $this->dispatchBrowserEvent('disable-edit-assign-column');
         }
     }
 

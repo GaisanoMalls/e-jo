@@ -600,7 +600,7 @@
                     @if (!empty($selectedFormAddedFields))
                         <div class="row my-4 px-3">
                             <div class="table-responsive custom__table">
-                                <table class="table mb-0" style="table-layout: fixed;">
+                                <table class="table mb-0">
                                     <thead>
                                         <tr>
                                             <th class="border-0 table__head__label px-2">Name</th>
@@ -683,7 +683,8 @@
                                                                     <input wire:model="editAddedFieldIsHeaderField"
                                                                         class="form-check-input" type="checkbox"
                                                                         role="switch" wire:loading.attr="disabled"
-                                                                        style="margin-right: 10px !important;">
+                                                                        style="margin-right: 10px !important;"
+                                                                        @disabled($this->hasAssociatedTicketFieldExists())>
                                                                 </div>
                                                             </div>
                                                         @else
@@ -706,7 +707,8 @@
                                                                     <input wire:model="editAddedFieldIsForTicketNumber"
                                                                         class="form-check-input" type="checkbox"
                                                                         role="switch" wire:loading.attr="disabled"
-                                                                        style="margin-right: 10px !important;">
+                                                                        style="margin-right: 10px !important;"
+                                                                        @disabled($this->hasAssociatedTicketFieldExists() || !$editAddedFieldIsHeaderField)>
                                                                 </div>
                                                             </div>
                                                         @else
@@ -938,8 +940,9 @@
         window.addEventListener('edit-selected-form-added-field-show-select-field', (event) => {
             const editAddedFieldType = event.detail.editAddedFieldType;
             const editAddedFieldAssignedColumn = event.detail.editAddedFieldAssignedColumn;
-
+            const editAddedFieldIsHeaderField = event.detail.editAddedFieldIsHeaderField;
             const editAddedSelectFieldType = document.querySelector('#edit-added-select-field-type');
+
             if (editAddedSelectFieldType) {
                 VirtualSelect.init({
                     ele: editAddedSelectFieldType,
@@ -968,15 +971,30 @@
                     options: editAddedColumnOption,
                     popupDropboxBreakpoint: '3000px'
                 });
+
+                if (!editAddedFieldIsHeaderField) {
+                    editAddedSelectAssignedColumn.disable();
+                } else {
+                    editAddedSelectAssignedColumn.enable();
+                }
+
+                editAddedSelectAssignedColumn.reset();
+                editAddedSelectAssignedColumn.setValue(editAddedFieldAssignedColumn);
+
+                editAddedSelectAssignedColumn.addEventListener('change', (event) => {
+                    @this.set('editAddedFieldAssignedColumn', parseInt(event.target.value));
+                });
+
+                window.addEventListener('enable-edit-assign-column', () => {
+                    editAddedSelectAssignedColumn.enable();
+                });
+
+                window.addEventListener('disable-edit-assign-column', () => {
+                    editAddedSelectAssignedColumn.disable();
+                });
             }
-
-            editAddedSelectAssignedColumn.reset();
-            editAddedSelectAssignedColumn.setValue(editAddedFieldAssignedColumn);
-
-            editAddedSelectAssignedColumn.addEventListener('change', (event) => {
-                @this.set('editAddedFieldAssignedColumn', event.target.value);
-            });
         });
+
 
         window.addEventListener('close-selected-form-add-field', () => {
             $('#viewFormModal').modal('show');
