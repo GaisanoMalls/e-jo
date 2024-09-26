@@ -55,12 +55,14 @@ class UpdateHelpTopic extends Component
     public $selectedBuDepartment;
     public $selectedApproversCount = 0;
 
-    public ?Collection $helpTopicApprovers = null;
+    public ?Collection $helpTopicConfigApprovers = null;
 
     protected $listeners = ['reMount' => 'mount'];
 
     public function mount()
     {
+        $this->helpTopicConfigApprovers = new Collection();
+
         $this->name = preg_replace('/ - [^-]+$/', '', $this->helpTopic->name);
         $this->sla = $this->helpTopic->service_level_agreement_id;
         $this->serviceDepartment = $this->helpTopic->service_department_id;
@@ -248,12 +250,12 @@ class UpdateHelpTopic extends Component
 
     public function viewConfigurationApprovers(HelpTopicConfiguration $helpTopicConfiguration)
     {
-        dump($helpTopicConfiguration->approvers()->with('approver.profile')->get());
+        $this->helpTopicConfigApprovers = $helpTopicConfiguration->approvers()->with('approver.profile')->get();
     }
 
     public function editConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
     {
-        $this->helpTopicApprovers = $helpTopicConfiguration->approvers()->with('approver.profile')->get();
+        $helpTopicConfiguration->approvers()->with('approver.profile')->get();
     }
 
     public function deleteConfiguration(HelpTopicConfiguration $helpTopicConfiguration)

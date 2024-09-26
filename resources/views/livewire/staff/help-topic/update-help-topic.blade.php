@@ -262,13 +262,41 @@
     </div>
 
     {{-- View configuration approvers --}}
-    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="viewHelpTopicApprovers"
+    <div wire:ignore.self class="modal fade modal__view__helptopic__config__approvers" id="viewHelpTopicApprovers"
         tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <form wire:submit.prevent="delete">
-                    <div class="modal-body border-0 text-center pt-4 pb-1">
-                        @dump($helpTopicApprovers)
+                    <div class="modal-body border-0 py-4 d-flex flex-column gap-1" style="font-size: 0.8rem;">
+                        <h6>Approvers</h6>
+                        @if ($helpTopicConfigApprovers->isNotEmpty())
+                            @foreach ($helpTopicConfigApprovers as $config)
+                                <div class="d-flex align-items-center gap-2 p-2"
+                                    style="background-color: #f3f4f6; border-radius: 0.563rem;">
+                                    @if ($config->approver->profile->picture)
+                                        <img src="{{ Storage::url($config->approver->profile->picture) }}"
+                                            class="image-fluid approver__picture" alt=""
+                                            style=" height: 35px !important;
+                                                width: 35px !important;
+                                                border-radius: 0.563rem;
+                                                border: 2px solid #d9ddd9; 
+                                                object-fit: cover;">
+                                    @else
+                                        <div class="d-flex align-items-center p-2 justify-content-center text-white"
+                                            style="background-color: #24695C; font-size: 0.75rem; height: 35px; width: 35px; border: 2px solid #d9ddd9; border-radius: 0.563rem;">
+                                            {{ $config->approver->profile->getNameInitial() }}
+                                        </div>
+                                    @endif
+                                    <p class="m-0" style="font-size: 0.9rem;">
+                                        {{ $config->approver->profile->getFullName }}
+                                    </p>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="alert alert-warning py-2 px-3 rounded-3 m-0">
+                                <small style="font-size: 14px;">No assigned approvers.</small>
+                            </div>
+                        @endif
                     </div>
                 </form>
             </div>
