@@ -30,10 +30,10 @@ class ActivityLog extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function causerDetails(): string
+    public function causerDetails(): string|null
     {
         return $this->user_id != auth()->user()->id
-            ? $this->causer->profile->getFullName
+            ? $this->causer?->profile->getFullName
             : 'You';
     }
 

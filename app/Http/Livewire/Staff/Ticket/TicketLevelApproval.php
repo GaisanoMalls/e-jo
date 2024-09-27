@@ -34,7 +34,7 @@ class TicketLevelApproval extends Component
                 ->withWhereHas('configuration', function ($config) {
                     $config->with('approvers')
                         ->where('help_topic_id', $this->ticket->help_topic_id)
-                        ->where('bu_department_id', $this->ticket->user->buDepartments->pluck('id')->first());
+                        ->where('bu_department_id', $this->ticket->user?->buDepartments->pluck('id')->first());
                 });
         })->get();
     }

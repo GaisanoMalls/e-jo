@@ -68,36 +68,38 @@
                         <div class="col-md-8 position-relative">
                             @livewire('staff.ticket.ticket-costing', ['ticket' => $ticket])
                             <div class="card border-0 p-0 card__ticket__details">
-                                <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
-                                    <div class="d-flex align-items-center user__account__media">
-                                        @if ($ticket->user->profile->picture)
-                                            <img src="{{ Storage::url($ticket->user->profile->picture) }}"
-                                                class="image-fluid ticket__details__user__picture" alt="">
-                                        @else
-                                            <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
-                                                style="background-color: #24695C;">
-                                                {{ $ticket->user->profile->getNameInitial() }}
+                                @if ($ticket->user)
+                                    <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
+                                        <div class="d-flex align-items-center user__account__media">
+                                            @if ($ticket->user?->profile->picture)
+                                                <img src="{{ Storage::url($ticket->user?->profile->picture) }}"
+                                                    class="image-fluid ticket__details__user__picture" alt="">
+                                            @else
+                                                <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
+                                                    style="background-color: #24695C;">
+                                                    {{ $ticket->user?->profile->getNameInitial() }}
+                                                </div>
+                                            @endif
+                                            <div class="d-flex flex-column">
+                                                <small class="ticket__details__user__fullname">
+                                                    <span>{{ $ticket->user?->profile->getFullName }}</span>
+                                                </small>
+                                                <small class="ticket__details__user__department">
+                                                    {{ $ticket->user?->getBUDepartments() }} -
+                                                    {{ $ticket->user?->getBranches() }}
+                                                </small>
                                             </div>
-                                        @endif
-                                        <div class="d-flex flex-column">
-                                            <small class="ticket__details__user__fullname">
-                                                <span>{{ $ticket->user->profile->getFullName }}</span>
-                                            </small>
-                                            <small class="ticket__details__user__department">
-                                                {{ $ticket->user->getBUDepartments() }} -
-                                                {{ $ticket->user->getBranches() }}
-                                            </small>
                                         </div>
+                                        <small class="ticket__details__time mt-2">
+                                            {{ $ticket->created_at->diffForHumans(null, true) }} ago
+                                        </small>
                                     </div>
-                                    <small class="ticket__details__time mt-2">
-                                        {{ $ticket->created_at->diffForHumans(null, true) }} ago
-                                    </small>
-                                </div>
+                                @endif
                                 <div class="ticket__details__card__body">
                                     @if ($ticket->helpTopic->form)
                                         @livewire('staff.ticket.ticket-custom-form', ['ticket' => $ticket])
                                     @endif
-                                    <div class="ticket__description">{!! $ticket->description !!}</div>
+                                    <div class="ticket__description mt-3">{!! $ticket->description !!}</div>
                                     @if ($ticket->fileAttachments->count() > 0)
                                         <div class="ticket__attachments d-inline-flex gap-1 mb-3" data-bs-toggle="modal"
                                             data-bs-target="#ticketFilesModalForm">
