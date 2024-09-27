@@ -132,9 +132,10 @@ trait Tickets
                         $statusQuery->where('status_id', Status::CLAIMED)->where('approval_status', ApprovalStatusEnum::APPROVED);
                     });
             })
-            ->where(function ($query) {
-                $query->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                    $approver->where('user_id', auth()->user()->id);
+            ->orWhere(function ($query) {
+                $query->withWhereHas('ticketApprovals.helpTopicApprover.approver', function ($approver) {
+                    $approver->where('user_id', auth()->user()->id)
+                        ->where('is_approved', true);
                 });
             })
             ->orderByDesc('created_at')

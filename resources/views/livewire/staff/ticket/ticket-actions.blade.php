@@ -11,7 +11,7 @@
                 <label class="ticket__actions__label">Ticket Actions</label>
                 <div class="d-flex align-items-center flex-wrap gap-3">
                     @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
-                        @if (!is_null($ticket->agent_id))
+                        @if (!$ticket->agent_id)
                             @if ($this->isTicketIctRecommendationIsApproved() || $this->isRecommendationRequested())
                                 {{-- Disabled --}}
                                 <button class="btn d-flex align-items-center justify-content-center"
@@ -34,9 +34,9 @@
                                 Assign to team/agent
                             </button>
                         @else
-                            <span class="alert border-0 py-2 px-3" role="alert"
+                            <span class="alert border-0 py-2 px-3 text-info" role="alert"
                                 style="font-size: 13px; background-color: #F5F7F9;">
-                                Actions are hidden until it is claimed
+                                Actions are hidden because this ticket has already been claimed
                             </span>
                         @endif
                     @endif

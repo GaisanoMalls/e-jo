@@ -18,11 +18,11 @@ class ViewTicketPolicy
      * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function canViewTicket(User $user, Ticket $ticket): bool
-    {
-        // return TicketApproval::where('ticket_id', $ticket->id)
-        //     ->withWhereHas('helpTopicApprover', function ($approver) use ($user) {
-        //         $approver->where('user_id', $user->id);
-        //     })->exists();
-    }
+    // public function canViewTicket(User $user, Ticket $ticket): bool
+    // {
+    //     return TicketApproval::where('ticket_id', $ticket->id)
+    //         ->withWhereHas('helpTopicApprover', function ($approver) use ($user) {
+    //             $approver->where('user_id', $user->id);
+    //         })->exists();
+    // }
 }

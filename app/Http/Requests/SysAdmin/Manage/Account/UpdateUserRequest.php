@@ -35,7 +35,9 @@ class UpdateUserRequest extends FormRequest
                 'required',
                 'max:80',
                 'email',
-                Rule::unique('users')->ignore($this->user)
+                Rule::unique('users')
+                    ->where('deleted_at', null)
+                    ->ignore($this->user)
             ]
         ];
     }
