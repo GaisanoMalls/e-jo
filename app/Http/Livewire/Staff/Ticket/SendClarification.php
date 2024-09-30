@@ -39,17 +39,28 @@ class SendClarification extends Component
         return (new StoreClarificationRequest())->messages();
     }
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadTicketLogs',
+            'loadBackButtonHeader',
+            'loadClarificationCount',
+            'loadTicketClarifications',
+            'loadTicketStatusTextHeader',
+            'loadSidebarCollapseTicketStatus',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     private function actionOnSubmit()
     {
         $this->replyFiles = null;
         $this->upload++;
+        $this->triggerEvents();
         $this->reset('description');
-        $this->emit('loadTicketLogs');
-        $this->emit('loadBackButtonHeader');
-        $this->emit('loadClarificationCount');
-        $this->emit('loadTicketClarifications');
-        $this->emit('loadTicketStatusTextHeader');
-        $this->emit('loadSidebarCollapseTicketStatus');
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('reload-modal');
     }

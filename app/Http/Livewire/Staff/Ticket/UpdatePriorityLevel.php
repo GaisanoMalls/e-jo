@@ -21,10 +21,21 @@ class UpdatePriorityLevel extends Component
         $this->priority_level = $this->ticket->priority_level_id;
     }
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadPriorityLevel',
+            'loadTicketLogs',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     private function actionOnSubmit()
     {
-        $this->emit('loadPriorityLevel');
-        $this->emit('loadTicketLogs');
+        $this->triggerEvents();
         $this->dispatchBrowserEvent('close-modal');
     }
 

@@ -39,17 +39,28 @@ class SendClarification extends Component
         return (new StoreTicketClarificationRequest())->messages();
     }
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadTicketLogs',
+            'loadTicketDetails',
+            'loadBackButtonHeader',
+            'loadClarificationsCount',
+            'loadTicketClarifications',
+            'loadTicketStatusHeaderText',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     private function actionOnSubmit()
     {
         $this->clarificationFiles = null;
         $this->upload++;
+        $this->triggerEvents();
         $this->reset('description');
-        $this->emit('loadTicketLogs');
-        $this->emit('loadTicketDetails');
-        $this->emit('loadBackButtonHeader');
-        $this->emit('loadClarificationsCount');
-        $this->emit('loadTicketClarifications');
-        $this->emit('loadTicketStatusHeaderText');
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('reload-modal');
     }
@@ -93,8 +104,11 @@ class SendClarification extends Component
 
                 // Get the department admin (approver) when there is no latest staff in the clarifications
                 $initialServiceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->whereHas('branches', fn($branch) => $branch->where('branches.id', auth()->user()->branches->pluck('id')->first()))
-                    ->whereHas('buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))->get();
+                    ->whereHas('branches', fn($branch) =>
+                        $branch->where('branches.id', auth()->user()->branches->pluck('id')->first()))
+                    ->whereHas('buDepartments', fn($query) =>
+                        $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))
+                    ->get();
 
                 $initialServiceDepartmentAdmins->each(function ($initialServiceDepartmentAdmin) use ($latestStaff) {
                     Notification::send(

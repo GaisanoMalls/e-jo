@@ -64,7 +64,12 @@ class CreateRequester extends Component
                 $user->branches()->attach($this->branch);
                 $user->buDepartments()->attach($this->department);
                 $user->givePermissionTo(
-                    Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::USER))->pluck('name')->toArray()
+                    Permission::withWhereHas(
+                        'roles',
+                        fn($role) => $role->where('roles.name', Role::USER)
+                    )
+                        ->pluck('name')
+                        ->toArray()
                 );
 
                 Profile::create([

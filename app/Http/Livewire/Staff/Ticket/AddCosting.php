@@ -36,12 +36,23 @@ class AddCosting extends Component
         return (new StoreTicketCostingRequest())->messages();
     }
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadServiceDeptAdminTicketCosting',
+            'loadCostingButtonHeader',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     private function actionOnSubmit()
     {
         $this->uploadCostingCount++;
+        $this->triggerEvents();
         $this->reset('amount', 'costingFiles');
-        $this->emit('loadServiceDeptAdminTicketCosting');
-        $this->emit('loadCostingButtonHeader');
         $this->dispatchBrowserEvent('close-costing-modal');
     }
 

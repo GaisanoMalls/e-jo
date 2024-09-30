@@ -8,11 +8,8 @@ use App\Models\FieldRowValue;
 use App\Models\IctRecommendation;
 use App\Models\Role;
 use App\Models\Ticket;
-use App\Models\TicketCustomFormField;
-use App\Models\TicketCustomFormFile;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -104,7 +101,10 @@ class TicketCustomForm extends Component
 
     public function render()
     {
-        $this->ictRecommendationServiceDeptAdmin = IctRecommendation::with('requestedByServiceDeptAdmin.profile')->where('ticket_id', $this->ticket->id)->first();
+        $this->ictRecommendationServiceDeptAdmin = IctRecommendation::with('requestedByServiceDeptAdmin.profile')
+            ->where('ticket_id', $this->ticket->id)
+            ->first();
+
         return view('livewire.staff.ticket.ticket-custom-form');
     }
 }

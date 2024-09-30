@@ -10,6 +10,12 @@ class TicketClarificationController extends Controller
     public function __invoke(Ticket $ticket)
     {
         $ticketHasSpecialProject = !is_null($ticket->isSpecialProject());
-        return view('layouts.staff.ticket.ticket_clarifications', compact('ticket', 'ticketHasSpecialProject'));
+        $requester = $ticket->user()->with('profile')->withTrashed()->first();
+
+        return view('layouts.staff.ticket.ticket_clarifications', compact([
+            'ticket',
+            'ticketHasSpecialProject',
+            'requester'
+        ]));
     }
 }

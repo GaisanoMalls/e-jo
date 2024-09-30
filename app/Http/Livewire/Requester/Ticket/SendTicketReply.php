@@ -36,16 +36,27 @@ class SendTicketReply extends Component
         return (new ReplyTicketRequest())->messages();
     }
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadTicketLogs',
+            'loadTicketDetails',
+            'loadDiscussionsCount',
+            'loadTicketDiscussions',
+            'loadTicketStatusHeaderText',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     private function actionOnSubmit()
     {
         $this->replyFiles = null;
         $this->upload++;
+        $this->triggerEvents();
         $this->reset('description');
-        $this->emit('loadTicketLogs');
-        $this->emit('loadTicketDetails');
-        $this->emit('loadDiscussionsCount');
-        $this->emit('loadTicketDiscussions');
-        $this->emit('loadTicketStatusHeaderText');
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('reload-modal');
     }

@@ -8,11 +8,22 @@ class NavlinkNotification extends Component
 {
     protected $listeners = ['requesterLoadNavlinkNotification' => '$refresh'];
 
+    private function triggerEvents()
+    {
+        $events = [
+            'requesterLoadNotificationList',
+            'requesterLoadNotificationCanvas',
+            'requesterLoadUnreadNotificationCount',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     public function requesterShowNotifications()
     {
-        $this->emit('requesterLoadNotificationList');
-        $this->emit('requesterLoadNotificationCanvas');
-        $this->emit('requesterLoadUnreadNotificationCount');
+        $this->triggerEvents();
     }
 
     public function render()

@@ -21,17 +21,28 @@ class ClaimTicket extends Component
 
     protected $listeners = ['loadClaimTicket' => '$refresh'];
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadTicketLogs',
+            'loadClaimTicket',
+            'loadTicketActions',
+            'loadTicketDetails',
+            'loadLevelOfApproval',
+            'loadBackButtonHeader',
+            'loadCostingButtonHeader',
+            'loadTicketStatusTextHeader',
+            'loadSidebarCollapseTicketStatus'
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     private function actionOnSubmit()
     {
-        $this->emit('loadTicketLogs');
-        $this->emit('loadClaimTicket');
-        $this->emit('loadTicketActions');
-        $this->emit('loadTicketDetails');
-        $this->emit('loadLevelOfApproval');
-        $this->emit('loadBackButtonHeader');
-        $this->emit('loadCostingButtonHeader');
-        $this->emit('loadTicketStatusTextHeader');
-        $this->emit('loadSidebarCollapseTicketStatus');
+        $this->triggerEvents();
     }
 
     public function claimTicket()

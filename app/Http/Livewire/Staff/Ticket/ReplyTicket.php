@@ -35,17 +35,28 @@ class ReplyTicket extends Component
         return (new StaffReplyTicketRequest())->messages();
     }
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadTicketLogs',
+            'loadTicketReplies',
+            'loadDiscussionCount',
+            'loadBackButtonHeader',
+            'loadTicketStatusTextHeader',
+            'loadSidebarCollapseTicketStatus',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     private function actionOnSubmit()
     {
         $this->replyFiles = null;
         $this->upload++;
+        $this->triggerEvents();
         $this->reset('description');
-        $this->emit('loadTicketLogs');
-        $this->emit('loadTicketReplies');
-        $this->emit('loadDiscussionCount');
-        $this->emit('loadBackButtonHeader');
-        $this->emit('loadTicketStatusTextHeader');
-        $this->emit('loadSidebarCollapseTicketStatus');
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('reload-modal');
     }

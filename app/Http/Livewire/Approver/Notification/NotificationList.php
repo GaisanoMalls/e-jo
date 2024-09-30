@@ -15,6 +15,19 @@ class NotificationList extends Component
 {
     protected $listeners = ['approverLoadNotificationList' => '$refresh'];
 
+    private function triggerEvents()
+    {
+        $events = [
+            'approverLoadNotificationList',
+            'approverLoadNotificationCanvas',
+            'approverLoadNavlinkNotification',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     public function readNotification($notificationId)
     {
         try {
@@ -31,9 +44,7 @@ class NotificationList extends Component
                     }
                 }
 
-                $this->emit('approverLoadNotificationList');
-                $this->emit('approverLoadNotificationCanvas');
-                $this->emit('approverLoadNavlinkNotification');
+                $this->triggerEvents();
 
                 redirect()->route('approver.ticket.view_ticket_details', $notification->data['ticket']['id']);
             });
@@ -46,8 +57,7 @@ class NotificationList extends Component
     public function deleteNotification($notificationId)
     {
         auth()->user()->notifications->find($notificationId)->delete();
-        $this->emit('approverLoadNotificationCanvas');
-        $this->emit('approverLoadNavlinkNotification');
+        $this->triggerEvents();
     }
 
     public function render()

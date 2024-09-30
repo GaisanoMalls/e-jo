@@ -8,22 +8,30 @@ class NotificationCanvas extends Component
 {
     protected $listeners = ['approverLoadNotificationCanvas' => '$refresh'];
 
+    private function triggerEvents()
+    {
+        $events = [
+            'approverLoadNotificationList',
+            'approverLoadNotificationCanvas',
+            'approverLoadNavlinkNotification',
+            'approverLoadUnreadNotificationCount',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     public function markAllAsRead()
     {
         auth()->user()->unreadNotifications->markAsRead();
-        $this->emit('approverLoadNotificationList');
-        $this->emit('approverLoadNotificationCanvas');
-        $this->emit('approverLoadNavlinkNotification');
-        $this->emit('approverLoadUnreadNotificationCount');
+        $this->triggerEvents();
     }
 
     public function clearNotifications()
     {
         auth()->user()->notifications->each(fn($notification) => $notification->delete());
-        $this->emit('approverLoadNotificationList');
-        $this->emit('approverLoadNotificationCanvas');
-        $this->emit('approverLoadNavlinkNotification');
-        $this->emit('approverLoadUnreadNotificationCount');
+        $this->triggerEvents();
     }
 
     public function render()

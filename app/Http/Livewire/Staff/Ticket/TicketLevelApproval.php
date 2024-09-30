@@ -22,7 +22,9 @@ class TicketLevelApproval extends Component
 
     public function mount()
     {
-        $this->ticketApprovals = TicketApproval::withWhereHas('helpTopicApprover', fn($approver) => $approver->whereIn('level', $this->approvalLevels))
+        $this->ticketApprovals = TicketApproval::withWhereHas('helpTopicApprover', function ($approver) {
+            $approver->whereIn('level', $this->approvalLevels);
+        })
             ->withWhereHas('ticket', fn($ticket) => $ticket->where('id', $this->ticket->id))
             ->get();
     }
@@ -44,7 +46,9 @@ class TicketLevelApproval extends Component
         return TicketApproval::where([
             ['ticket_id', $this->ticket->id],
             ['is_approved', true],
-        ])->withWhereHas('helpTopicApprover', fn($approver) => $approver->where('help_topic_id', $this->ticket->help_topic_id))
+        ])
+            ->withWhereHas('helpTopicApprover', fn($approver) =>
+                $approver->where('help_topic_id', $this->ticket->help_topic_id))
             ->exists();
     }
 
@@ -53,15 +57,28 @@ class TicketLevelApproval extends Component
         return TicketApproval::where([
             ['ticket_id', $this->ticket->id],
             ['is_approved', true],
-        ])->withWhereHas('helpTopicApprover', fn($approver) => $approver->where('level', $level)
-                ->where('help_topic_id', $this->ticket->help_topic_id))
+        ])
+            ->withWhereHas('helpTopicApprover', fn($approver) =>
+                $approver->where('level', $level)
+                    ->where('help_topic_id', $this->ticket->help_topic_id))
             ->exists();
+    }
+
+    private function triggerEvents()
+    {
+        $events = [
+            'loadLevelOfApproval',
+            'loadTicketLogs',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
     }
 
     private function actionOnSubmit()
     {
-        $this->emit('loadLevelOfApproval');
-        $this->emit('loadTicketLogs');
+        $this->triggerEvents();
     }
 
     public function render()

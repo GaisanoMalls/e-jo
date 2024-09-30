@@ -54,12 +54,23 @@ class AssignTicket extends Component
             ->get();
     }
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadTicketDetails',
+            'loadTicketActions',
+            'loadBackButtonHeader',
+            'loadTicketStatusTextHeader'
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     private function actionOnSubmit()
     {
-        $this->emit('loadTicketDetails');
-        $this->emit('loadTicketActions');
-        $this->emit('loadBackButtonHeader');
-        $this->emit('loadTicketStatusTextHeader');
+        $this->triggerEvents();
         $this->dispatchBrowserEvent('close-modal');
     }
 

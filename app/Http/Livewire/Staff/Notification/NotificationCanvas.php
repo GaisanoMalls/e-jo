@@ -8,22 +8,30 @@ class NotificationCanvas extends Component
 {
     protected $listeners = ['staffLoadNotificationCanvas' => '$refresh'];
 
+    private function triggerEvents()
+    {
+        $events = [
+            'staffLoadNotificationList',
+            'staffLoadNotificationCanvas',
+            'staffLoadNavlinkNotification',
+            'staffLoadUnreadNotificationCount',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     public function markAllAsRead()
     {
         auth()->user()->unreadNotifications->markAsRead();
-        $this->emit('staffLoadNotificationList');
-        $this->emit('staffLoadNotificationCanvas');
-        $this->emit('staffLoadNavlinkNotification');
-        $this->emit('staffLoadUnreadNotificationCount');
+        $this->triggerEvents();
     }
 
     public function clearNotifications()
     {
         auth()->user()->notifications->each(fn($notification) => $notification->delete());
-        $this->emit('staffLoadNotificationList');
-        $this->emit('staffLoadNotificationCanvas');
-        $this->emit('staffLoadNavlinkNotification');
-        $this->emit('staffLoadUnreadNotificationCount');
+        $this->triggerEvents();
     }
 
     public function render()

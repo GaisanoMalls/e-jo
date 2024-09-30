@@ -11,19 +11,30 @@ class CloseTicket extends Component
 {
     public Ticket $ticket;
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadTicketTags',
+            'loadTicketLogs',
+            'loadPriorityLevel',
+            'loadTicketActions',
+            'loadBackButtonHeader',
+            'loadReplyButtonHeader',
+            'loadDropdownApprovalButton',
+            'loadTicketStatusTextHeader',
+            'loadTicketStatusButtonHeader',
+            'loadClarificationButtonHeader',
+            'loadSidebarCollapseTicketStatus'
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     private function actionOnSubmit()
     {
-        $this->emit('loadTicketTags');
-        $this->emit('loadTicketLogs');
-        $this->emit('loadPriorityLevel');
-        $this->emit('loadTicketActions');
-        $this->emit('loadBackButtonHeader');
-        $this->emit('loadReplyButtonHeader');
-        $this->emit('loadDropdownApprovalButton');
-        $this->emit('loadTicketStatusTextHeader');
-        $this->emit('loadTicketStatusButtonHeader');
-        $this->emit('loadClarificationButtonHeader');
-        $this->emit('loadSidebarCollapseTicketStatus');
+        $this->triggerEvents();
         $this->dispatchBrowserEvent('close-modal');
     }
 

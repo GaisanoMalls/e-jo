@@ -8,11 +8,22 @@ class NavlinkNotification extends Component
 {
     protected $listeners = ['approverLoadNotificationCanvas' => '$refresh'];
 
+    private function triggerEvents()
+    {
+        $events = [
+            'approverLoadNotificationList',
+            'approverLoadNotificationCanvas',
+            'approverLoadUnreadNotificationCount',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     public function approverShowNotifications()
     {
-        $this->emit('approverLoadNotificationList');
-        $this->emit('approverLoadNotificationCanvas');
-        $this->emit('approverLoadUnreadNotificationCount');
+        $this->triggerEvents();
     }
     public function render()
     {

@@ -18,13 +18,29 @@ class TicketDetails extends Component
 
     protected $listeners = ['loadTicketDetails' => '$refresh'];
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadTicketLogs',
+            'loadTicketDetails',
+            'loadBackButtonHeader',
+            'loadTicketStatusTextHeader',
+            'loadSidebarCollapseTicketStatus',
+            'loadTicketLogs',
+            'loadTicketDetails',
+            'loadBackButtonHeader',
+            'loadTicketStatusTextHeader',
+            'loadSidebarCollapseTicketStatus',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     private function actionOnSubmit()
     {
-        $this->emit('loadTicketLogs');
-        $this->emit('loadTicketDetails');
-        $this->emit('loadBackButtonHeader');
-        $this->emit('loadTicketStatusTextHeader');
-        $this->emit('loadSidebarCollapseTicketStatus');
+        $this->triggerEvents();
     }
 
     public function removeAssignedTeam()

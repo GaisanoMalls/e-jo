@@ -15,6 +15,20 @@ class NotificationList extends Component
 {
     protected $listeners = ['staffLoadNotificationList' => '$refresh'];
 
+    private function triggerEvents()
+    {
+        $events = [
+            'staffLoadNotificationList',
+            'staffLoadUnreadNotificationCount',
+            'staffLoadNotificationCanvas',
+            'staffLoadNavlinkNotification',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     public function readNotification($notificationId)
     {
         try {
@@ -31,9 +45,7 @@ class NotificationList extends Component
                     }
                 }
 
-                $this->emit('staffLoadNotificationList');
-                $this->emit('staffLoadNotificationCanvas');
-                $this->emit('staffLoadNavlinkNotification');
+                $this->triggerEvents();
 
                 return (array_key_exists('for_clarification', $notification->data)) && $notification->data['for_clarification']
                     ? redirect()->route('staff.ticket.ticket_clarifications', $notification->data['ticket']['id'])
@@ -47,10 +59,7 @@ class NotificationList extends Component
     public function deleteNotification($notificationId)
     {
         auth()->user()->notifications->find($notificationId)->delete();
-        $this->emit('staffLoadNotificationList');
-        $this->emit('staffLoadUnreadNotificationCount');
-        $this->emit('staffLoadNotificationCanvas');
-        $this->emit('staffLoadNavlinkNotification');
+        $this->triggerEvents();
     }
 
     public function render()

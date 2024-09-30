@@ -26,7 +26,9 @@ class TicketTag extends Component
 
     public function getTagIds()
     {
-        return Tag::whereHas('tickets', fn($ticket) => $ticket->where('tickets.id', $this->ticket->id))->pluck('id')->toArray();
+        return Tag::whereHas('tickets', fn($ticket) =>
+            $ticket->where('tickets.id', $this->ticket->id))->pluck('id')
+            ->toArray();
     }
 
     public function removeTag($tagId)

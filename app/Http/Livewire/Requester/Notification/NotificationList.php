@@ -9,13 +9,24 @@ class NotificationList extends Component
 {
     protected $listeners = ['requesterLoadNotificationList' => '$refresh'];
 
+    private function triggerEvents()
+    {
+        $events = [
+            'requesterLoadNotificationCanvas',
+            'requesterLoadNavlinkNotification',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     public function readNotification($notificationId)
     {
         $notification = auth()->user()->notifications->find($notificationId);
         (!$notification->read()) ? $notification->markAsRead() : null;
 
-        $this->emit('requesterLoadNotificationCanvas');
-        $this->emit('requesterLoadNavlinkNotification');
+        $this->triggerEvents();
 
         return (array_key_exists('for_clarification', $notification->data)) && $notification->data['for_clarification'] === true
             ? redirect()->route('user.ticket.ticket_clarifications', $notification->data['ticket']['id'])
@@ -25,8 +36,7 @@ class NotificationList extends Component
     public function deleteNotification($notificationId)
     {
         auth()->user()->notifications->find($notificationId)->delete();
-        $this->emit('requesterLoadNotificationCanvas');
-        $this->emit('requesterLoadNavlinkNotification');
+        $this->triggerEvents();
     }
 
     public function render()

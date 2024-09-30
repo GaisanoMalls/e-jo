@@ -15,6 +15,7 @@ use App\Models\Team;
 use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -26,7 +27,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Utils, HasRoles, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, Utils, HasRoles, SoftDeletes, Prunable;
 
     /**
      * The attributes that are mass assignable.
@@ -55,6 +56,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function prunable(): User
+    {
+        return static::where('deleted_at', '<=', now()->subDays(90));
+    }
 
     public function profile(): HasOne
     {

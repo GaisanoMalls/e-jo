@@ -88,11 +88,22 @@ class RequestApproval extends Component
         }
     }
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadTicketActions',
+            'refreshCustomForm',
+            'loadTicketLogs',
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     private function actionOnSubmit()
     {
-        $this->emit('loadTicketActions');
-        $this->emit('refreshCustomForm');
-        $this->emit('loadTicketLogs');
+        $this->triggerEvents();
         $this->reset('recommendationApprover');
         $this->dispatchBrowserEvent('close-request-recommendation-approval-modal');
     }

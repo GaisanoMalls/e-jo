@@ -68,25 +68,32 @@
                         <div class="col-md-8 position-relative">
                             @livewire('staff.ticket.ticket-costing', ['ticket' => $ticket])
                             <div class="card border-0 p-0 card__ticket__details">
-                                @if ($ticket->user)
+                                @if ($requester)
                                     <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                                         <div class="d-flex align-items-center user__account__media">
-                                            @if ($ticket->user?->profile->picture)
-                                                <img src="{{ Storage::url($ticket->user?->profile->picture) }}"
+                                            @if ($requester->profile->picture)
+                                                <img src="{{ Storage::url($requester->profile->picture) }}"
                                                     class="image-fluid ticket__details__user__picture" alt="">
                                             @else
                                                 <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
                                                     style="background-color: #24695C;">
-                                                    {{ $ticket->user?->profile->getNameInitial() }}
+                                                    {{ $requester->profile->getNameInitial() }}
                                                 </div>
                                             @endif
                                             <div class="d-flex flex-column">
                                                 <small class="ticket__details__user__fullname">
-                                                    <span>{{ $ticket->user?->profile->getFullName }}</span>
+                                                    <span>{{ $requester->profile->getFullName }}</span>
+                                                    @if ($requester->trashed())
+                                                        <i class="bi bi-exclamation-circle-fill text-danger ms-1"
+                                                            style="font-size: 0.7rem;" data-tooltip="Archived"
+                                                            data-tooltip-position="right" data-tooltip-font-size="0.7rem"
+                                                            data-tooltip-max-width="200px"
+                                                            data-tooltip-additional-classes="rounded-3"></i>
+                                                    @endif
                                                 </small>
                                                 <small class="ticket__details__user__department">
-                                                    {{ $ticket->user?->getBUDepartments() }} -
-                                                    {{ $ticket->user?->getBranches() }}
+                                                    {{ $requester->getBUDepartments() }} -
+                                                    {{ $requester->getBranches() }}
                                                 </small>
                                             </div>
                                         </div>

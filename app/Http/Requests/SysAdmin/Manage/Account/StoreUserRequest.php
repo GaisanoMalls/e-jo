@@ -25,19 +25,18 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => [
-                'required',
-                'max:80',
-                'email',
-                Rule::unique('users')
-                    ->where('deleted_at', null)
-            ],
             'department' => ['required'],
             'branch' => ['required'],
             'first_name' => ['required', 'min:2', 'max:100'],
             'middle_name' => ['nullable', 'min:2', 'max:100'],
             'last_name' => ['required', 'min:2', 'max:100'],
-            'suffix' => ['nullable', 'min:1', 'max:4']
+            'suffix' => ['nullable', 'min:1', 'max:4'],
+            'email' => [
+                'required',
+                'max:80',
+                'email',
+                Rule::unique('users')->where('deleted_at', null)
+            ]
         ];
     }
 }

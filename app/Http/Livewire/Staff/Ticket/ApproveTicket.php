@@ -24,25 +24,36 @@ class ApproveTicket extends Component
 {
     public Ticket $ticket;
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadDropdownApprovalButton',
+            'loadTicketStatusTextHeader',
+            'loadTicketStatusButtonHeader',
+            'loadSlaTimer',
+            'loadTicketTags',
+            'loadTicketLogs',
+            'loadTicketDetails',
+            'loadTicketActions',
+            'loadLevelOfApproval',
+            'loadBackButtonHeader',
+            'loadReplyButtonHeader',
+            'loadDisapprovalReason',
+            'loadClarificationButtonHeader',
+            'loadSidebarCollapseTicketStatus'
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
     /**
      * Perform livewire events upon form submission.
      */
     private function actionOnSubmit()
     {
-        $this->emit('loadDropdownApprovalButton');
-        $this->emit('loadTicketStatusTextHeader');
-        $this->emit('loadTicketStatusButtonHeader');
-        $this->emit('loadSlaTimer');
-        $this->emit('loadTicketTags');
-        $this->emit('loadTicketLogs');
-        $this->emit('loadTicketDetails');
-        $this->emit('loadTicketActions');
-        $this->emit('loadLevelOfApproval');
-        $this->emit('loadBackButtonHeader');
-        $this->emit('loadReplyButtonHeader');
-        $this->emit('loadDisapprovalReason');
-        $this->emit('loadClarificationButtonHeader');
-        $this->emit('loadSidebarCollapseTicketStatus');
+        $this->triggerEvents();
         $this->dispatchBrowserEvent('close-modal');
     }
 

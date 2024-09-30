@@ -9,7 +9,6 @@ use App\Http\Traits\Utils;
 use App\Models\Reply;
 use App\Models\Ticket;
 use App\Models\User;
-use Illuminate\Support\Facades\Gate;
 
 class TicketController extends Controller
 {
@@ -93,6 +92,7 @@ class TicketController extends Controller
             ->get();
 
         $latestReply = Reply::where('ticket_id', $ticket->id)->where('user_id', '!=', auth()->user()->id)->orderByDesc('created_at')->first();
+        $requester = $ticket->user()->with('profile')->withTrashed()->first();
 
         return view('layouts.staff.ticket.view_ticket', compact([
             'ticket',
@@ -102,6 +102,7 @@ class TicketController extends Controller
             'priorityLevels',
             'teams',
             'approvers',
+            'requester'
         ]));
     }
 }

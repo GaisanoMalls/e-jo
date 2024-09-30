@@ -319,7 +319,11 @@ class CreateTicket extends Component
 
     public function updatedServiceDepartment($value)
     {
-        $this->helpTopics = HelpTopic::with(['team', 'sla'])->whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $value))->get();
+        $this->helpTopics = HelpTopic::with(['team', 'sla'])
+            ->whereHas('serviceDepartment', fn($query) =>
+                $query->where('service_department_id', $value))
+            ->get();
+
         $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);
     }
 
@@ -330,8 +334,16 @@ class CreateTicket extends Component
         $this->filledForms = [];
         $this->isHeaderFieldSet = false;
 
-        $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $value))->pluck('id')->first();
-        $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) => $helpTopic->where('help_topics.id', $value))->pluck('id')->first();
+        $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) =>
+            $helpTopic->where('help_topics.id', $value))
+            ->pluck('id')
+            ->first();
+
+        $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) =>
+            $helpTopic->where('help_topics.id', $value))
+            ->pluck('id')
+            ->first();
+
         $helpTopicForm = Form::with('fields')->where('help_topic_id', $value)->first(); // Get the help topic form
 
         if ($helpTopicForm) {

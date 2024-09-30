@@ -11,18 +11,32 @@ class NotificationCanvas extends Component
     public function markAllAsRead()
     {
         auth()->user()->unreadNotifications->markAsRead();
-        $this->emit('requesterLoadNotificationList');
-        $this->emit('requesterLoadNavlinkNotification');
-        $this->emit('requesterLoadUnreadNotificationCount');
+
+        $events = [
+            'requesterLoadNotificationList',
+            'requesterLoadNavlinkNotification',
+            'requesterLoadUnreadNotificationCount'
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
     }
 
     public function clearNotifications()
     {
         auth()->user()->notifications->each(fn($notification) => $notification->delete());
-        $this->emit('requesterLoadNotificationList');
-        $this->emit('requesterLoadNotificationCanvas');
-        $this->emit('requesterLoadNavlinkNotification');
-        $this->emit('requesterLoadUnreadNotificationCount');
+
+        $events = [
+            'requesterLoadNotificationList',
+            'requesterLoadNotificationCanvas',
+            'requesterLoadNavlinkNotification',
+            'requesterLoadUnreadNotificationCount'
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
     }
 
     public function render()
