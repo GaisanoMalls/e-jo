@@ -123,8 +123,6 @@
             if (serviceDepartmentId) {
                 window.addEventListener('selected-service-department', (event) => {
                     const teams = event.detail.teams;
-                    console.log(teams);
-
                     const teamOption = [];
 
                     if (teams.length > 0) {

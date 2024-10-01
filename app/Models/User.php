@@ -97,6 +97,11 @@ class User extends Authenticatable
         return $this->hasMany(HelpTopicApprover::class);
     }
 
+    public function ictRecommendationApprovals(): HasMany
+    {
+        return $this->hasMany(IctRecommendationApprover::class, 'approver_id');
+    }
+
     public function serviceDepartments(): BelongsToMany
     {
         return $this->belongsToMany(ServiceDepartment::class, 'user_service_department', 'user_id', 'service_department_id');

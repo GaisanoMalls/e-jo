@@ -23,17 +23,27 @@ class RequestApproval extends Component
 {
     public Ticket $ticket;
     public Collection $recommendationApprovers;
+    public array $levelOfApproval = [1, 2, 3, 4, 5];
+    public ?int $level = null;
+    public array $level1Approvers = [];
+    public array $level2Approvers = [];
+    public array $level3Approvers = [];
+    public array $level4Approvers = [];
+    public array $level5Approvers = [];
     public ?int $recommendationApprover = null;
 
     public function mount()
     {
-        $this->recommendationApprovers = User::with(['profile', 'roles', 'buDepartments'])->role(Role::SERVICE_DEPARTMENT_ADMIN)->get();
+        $this->recommendationApprovers = User::with(['profile', 'roles', 'buDepartments'])
+            ->role(Role::SERVICE_DEPARTMENT_ADMIN)
+            ->get();
     }
 
     public function rules()
     {
         return [
-            'recommendationApprover' => 'required'
+            'recommendationApprover' => 'required',
+            'levelOfApproval' => ['required']
         ];
     }
 
@@ -42,6 +52,16 @@ class RequestApproval extends Component
         return [
             'recommendationApprover.required' => 'Approver field is required.'
         ];
+    }
+
+    public function updatedLevel($value)
+    {
+        if ($value) {
+            $this->dispatchBrowserEvent('load-recommendation-approvers', [
+                'level' => $value,
+                'recommendationApprovers' => $this->recommendationApprovers
+            ]);
+        }
     }
 
     public function sendRequestRecommendationApproval()
@@ -63,7 +83,7 @@ class RequestApproval extends Component
 
                     IctRecommendation::create([
                         'ticket_id' => $this->ticket->id,
-                        'approver_id' => $serviceDeptAdmin->id,
+                        // 'approver_id' => $serviceDeptAdmin->id,
                         'requested_by_sda_id' => $requesterServiceDeptAdmin->id,
                         'is_requesting_ict_approval' => true
                     ]);

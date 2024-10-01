@@ -13,9 +13,22 @@
                 <div class="modal__body">
                     <form wire:submit.prevent="sendRequestRecommendationApproval">
                         <div class="my-2">
+                            <label class="ticket__actions__label mb-2">Level of approval</label>
+                            <div>
+                                <div id="recommendation-select-level-of-approval" wire:ignore></div>
+                            </div>
+                            @error('levelOfApproval')
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+                        <div wire:ignore id="recommendation-level-approver-container"></div>
+                        <div class="my-2">
                             <label class="ticket__actions__label mb-2">Select approver</label>
                             <div>
-                                <div id="select-recommendation-approver" wire:ignore></div>
+                                <div id="recommendation-select-recommendation-approver" wire:ignore></div>
                             </div>
                             @error('recommendationApprover')
                                 <span class="error__message">
@@ -43,12 +56,18 @@
 
 @push('livewire-select')
     <script>
-        const selectRecommendationApprover = document.querySelector('#select-recommendation-approver');
+        const selectRecommendationApprover = document.querySelector('#recommendation-select-recommendation-approver');
+        const selecteRecommendationLevelOfApproval = document.querySelector('#recommendation-select-level-of-approval');
 
         const recommendationApproversOption = @json($recommendationApprovers).map(approver => ({
             label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
             value: approver.id,
             description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
+        }));
+
+        const recommendationLevelOfApprovalOption = @json($levelOfApproval).map(level => ({
+            label: `Level ${level}`,
+            value: level,
         }));
 
         VirtualSelect.init({
@@ -59,14 +78,82 @@
             hasOptionDescription: true,
         });
 
+        VirtualSelect.init({
+            ele: selecteRecommendationLevelOfApproval,
+            options: recommendationLevelOfApprovalOption,
+            search: true,
+        });
+
         selectRecommendationApprover.addEventListener('change', (event) => {
             @this.set('recommendationApprover', parseInt(event.target.value));
         });
 
+
         window.addEventListener('close-request-recommendation-approval-modal', () => {
-            console.log("Resetted");
             $('#requestForApprovalModal').modal('hide');
             selectRecommendationApprover.reset();
+        });
+
+        const dyanamicLevelApproverSelectContainer = document.querySelector('#recommendation-level-approver-container');
+        selecteRecommendationLevelOfApproval.addEventListener('change', (event) => {
+            @this.set('level', parseInt(event.target.value));
+
+            window.addEventListener('load-recommendation-approvers', (event) => {
+                const recommendationApprovers = event.detail.recommendationApprovers;
+                const level = event.detail.level;
+                const approvers = {};
+                let selectedApprovers = [];
+
+                dyanamicLevelApproverSelectContainer.innerHTML = '';
+                selectedApprovers = [];
+
+                for (let level = 1; level <= selecteRecommendationLevelOfApproval.value; level++) {
+                    const approverFieldWrapper = document.createElement('div');
+                    approverFieldWrapper.className = 'col-md-12';
+                    approverFieldWrapper.innerHTML = `
+                        <div class="mb-2">
+                            <label for="department" class="form-label form__field__label">Level ${level} Approver</label>
+                            <div>
+                                <div id="select-recommendation-approval-level-${level}" wire:ignore></div>
+                            </div>
+                        </div>`;
+
+                    dyanamicLevelApproverSelectContainer.appendChild(approverFieldWrapper);
+
+                    approvers[`level${level}`] = document.querySelector(
+                        `#select-recommendation-approval-level-${level}`);
+
+                    const recommendationApproverOption = recommendationApprovers.map((approver) => ({
+                        label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
+                        value: approver.id,
+                        description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
+                    }));
+
+                    VirtualSelect.init({
+                        ele: approvers[`level${level}`],
+                        options: recommendationApproverOption,
+                        search: true,
+                        multiple: true,
+                        showValueAsTags: true,
+                        markSearchResults: true,
+                        hasOptionDescription: true
+                    });
+
+                    if (approvers[`level${level}`]) {
+                        approvers[`level${level}`].addEventListener('change', () => {
+                            selectedApprovers[level - 1] = approvers[`level${level}`].value;
+                            @this.set(`level${level}Approvers`, approvers[`level${level}`].value);
+                        });
+                    }
+                }
+            });
+        });
+
+        selecteRecommendationLevelOfApproval.addEventListener('reset', () => {
+            for (let i = 1; i <= 5; i++) {
+                @this.set(`level${i}Approvers`, []);
+            }
+            dyanamicLevelApproverSelectContainer.innerHTML = '';
         });
     </script>
 @endpush

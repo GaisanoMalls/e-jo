@@ -85,6 +85,7 @@ class ApproveTicket extends Component
                                 $approver->where('help_topic_id', $this->ticket->help_topic_id)
                                 ;
                             })->first();
+
                         $ticketApproval->update(['is_approved' => true]);
 
                         // Delete the ticket notification of the currently logged in service department admin.

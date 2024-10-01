@@ -6,7 +6,6 @@ use App\Models\IctRecommendation;
 use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class TicketActions extends Component
@@ -57,7 +56,8 @@ class TicketActions extends Component
 
     public function render()
     {
-        $this->ictRecommendationApprover = IctRecommendation::with('approver.profile')->where('ticket_id', $this->ticket->id)->first();
+        $this->ictRecommendationApprover = IctRecommendation::where('ticket_id', $this->ticket->id)->first();
+
         return view('livewire.staff.ticket.ticket-actions');
     }
 }

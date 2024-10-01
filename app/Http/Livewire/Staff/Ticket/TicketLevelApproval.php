@@ -54,6 +54,7 @@ class TicketLevelApproval extends Component
 
     public function islevelApproved(int $level)
     {
+        (array) $sample = [];
         return TicketApproval::where([
             ['ticket_id', $this->ticket->id],
             ['is_approved', true],

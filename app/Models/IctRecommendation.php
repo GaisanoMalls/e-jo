@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class IctRecommendation extends Model
 {
@@ -12,20 +13,15 @@ class IctRecommendation extends Model
 
     protected $fillable = [
         'ticket_id',
-        'approver_id',
-        'requested_by_sda_id',
+        'requested_by_sda_id', // service department admin
         'is_requesting_ict_approval',
+        'reason',
         'is_approved'
     ];
 
     public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class);
-    }
-
-    public function approver(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'approver_id')->role(Role::SERVICE_DEPARTMENT_ADMIN);
     }
 
     public function requestedByServiceDeptAdmin(): BelongsTo
@@ -36,5 +32,10 @@ class IctRecommendation extends Model
     public function currentTeam(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'current_team_id');
+    }
+
+    public function approvalLevels(): HasMany
+    {
+        return $this->hasMany(IctRecommendationApprovalLevel::class, 'ict_recommendation_id');
     }
 }

@@ -505,6 +505,7 @@
                             <div id="select-help-topic-approval-level-${i}" wire:ignore></div>
                         </div>
                     </div>`;
+
                 dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
                 initializeApproverSelect(i);
             }

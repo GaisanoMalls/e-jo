@@ -14,7 +14,7 @@
                         @if (!$ticket->agent_id)
                             @if ($this->isTicketIctRecommendationIsApproved() || $this->isRecommendationRequested())
                                 {{-- Disabled --}}
-                                <button class="btn d-flex align-items-center justify-content-center"
+                                `` <button class="btn d-flex align-items-center justify-content-center"
                                     style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; border: 1px solid rgb(223, 228, 233); color: #3e3d3d; font-weight: 500; background-color: #f3f4f6;"
                                     disabled>
                                     Request for approval

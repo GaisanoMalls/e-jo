@@ -9,7 +9,7 @@ class Recommendations extends Component
 {
     public function render()
     {
-        $recommendations = IctRecommendation::with(['ticket', 'approver', 'requestedByServiceDeptAdmin.profile'])->get();
+        $recommendations = IctRecommendation::with(['ticket', 'requestedByServiceDeptAdmin.profile'])->get();
         return view('livewire.staff.ticket.recommendations', compact('recommendations'));
     }
 }
