@@ -11,13 +11,15 @@ class IctRecommendationApprover extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ict_recommendation_approval_level_id',
+        'approval_level_id',
         'approver_id'
     ];
 
+    public $timestamps = false;
+
     public function approvalLevel(): BelongsTo
     {
-        return $this->belongsTo(IctRecommendationApprovalLevel::class);
+        return $this->belongsTo(IctRecommendationApprovalLevel::class, 'approval_level_id');
     }
 
     public function approver(): BelongsTo

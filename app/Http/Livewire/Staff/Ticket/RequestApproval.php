@@ -6,6 +6,7 @@ use App\Http\Traits\AppErrorLog;
 use App\Mail\Staff\RecommendationRequestMail;
 use App\Models\ActivityLog;
 use App\Models\IctRecommendation;
+use App\Models\IctRecommendationApprovalLevel;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -30,7 +31,7 @@ class RequestApproval extends Component
     public array $level3Approvers = [];
     public array $level4Approvers = [];
     public array $level5Approvers = [];
-    public ?int $recommendationApprover = null;
+    public ?string $reason = null;
 
     public function mount()
     {
@@ -42,15 +43,15 @@ class RequestApproval extends Component
     public function rules()
     {
         return [
-            'recommendationApprover' => 'required',
-            'levelOfApproval' => ['required']
+            'level' => ['required'],
+            'reason' => ['required'],
         ];
     }
 
     public function messages()
     {
         return [
-            'recommendationApprover.required' => 'Approver field is required.'
+            'reason.required' => 'Please state the reason'
         ];
     }
 
@@ -70,7 +71,11 @@ class RequestApproval extends Component
 
         try {
             DB::transaction(function () {
-                $serviceDeptAdmin = User::findOrFail($this->recommendationApprover)
+                $recommendationApproverIds = array_unique(
+                    array_merge(...array_values($this->getApprovers()))
+                );
+
+                $recommendationApprovers = User::whereIn('id', $recommendationApproverIds)
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
                     ->first();
 
@@ -78,25 +83,32 @@ class RequestApproval extends Component
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
                     ->first();
 
-                if ($serviceDeptAdmin && $requesterServiceDeptAdmin) {
-                    $this->ticket->update(['status_id', Status::OPEN]);
+                if ($recommendationApprovers && $requesterServiceDeptAdmin) {
+                    $this->ticket->update(['status_id' => Status::OPEN]);
 
-                    IctRecommendation::create([
+                    $ictRecommentaion = IctRecommendation::create([
                         'ticket_id' => $this->ticket->id,
-                        // 'approver_id' => $serviceDeptAdmin->id,
                         'requested_by_sda_id' => $requesterServiceDeptAdmin->id,
-                        'is_requesting_ict_approval' => true
+                        'is_requesting_ict_approval' => true,
+                        'reason' => $this->reason
                     ]);
 
+                    $recommendationApprovalLevel = $ictRecommentaion->approvalLevels()->create(['level' => $this->level]);
+                    foreach ($recommendationApproverIds as $approverId) {
+                        $recommendationApprovalLevel->approvers()->create(['approver_id' => $approverId]);
+                    }
+
                     // Mail::to($serviceDeptAdmin)->send(new RecommendationRequestMail(ticket: $this->ticket, recipient: $serviceDeptAdmin, agentRequester: $agentRequester));
-                    Notification::send(
-                        $serviceDeptAdmin,
-                        new AppNotification(
-                            ticket: $this->ticket,
-                            title: "Request for recommendation approval ({$this->ticket->ticket_number}})",
-                            message: "You have a new recommendation approval"
-                        )
-                    );
+                    $recommendationApprovers->each(function ($recommendationApprover) {
+                        Notification::send(
+                            $recommendationApprover,
+                            new AppNotification(
+                                ticket: $this->ticket,
+                                title: "Request for recommendation approval ({$this->ticket->ticket_number}})",
+                                message: "You have a new recommendation approval"
+                            )
+                        );
+                    });
 
                     ActivityLog::make(ticket_id: $this->ticket->id, description: 'requested for approval');
                     $this->actionOnSubmit();
@@ -106,6 +118,19 @@ class RequestApproval extends Component
             AppErrorLog::getError($e->getMessage());
             Log::error('Error while sending recommendation request.', [$e->getLine()]);
         }
+    }
+
+    private function getApprovers()
+    {
+        return array_filter([
+            'level1Approvers' => array_map('intval', $this->level1Approvers),
+            'level2Approvers' => array_map('intval', $this->level2Approvers),
+            'level3Approvers' => array_map('intval', $this->level3Approvers),
+            'level4Approvers' => array_map('intval', $this->level4Approvers),
+            'level5Approvers' => array_map('intval', $this->level5Approvers),
+        ], function ($approvers) {
+            return !empty($approvers);
+        });
     }
 
     private function triggerEvents()
@@ -123,8 +148,16 @@ class RequestApproval extends Component
 
     private function actionOnSubmit()
     {
+        $this->reset([
+            'level',
+            'reason',
+            'level1Approvers',
+            'level2Approvers',
+            'level3Approvers',
+            'level4Approvers',
+            'level5Approvers',
+        ]);
         $this->triggerEvents();
-        $this->reset('recommendationApprover');
         $this->dispatchBrowserEvent('close-request-recommendation-approval-modal');
     }
 

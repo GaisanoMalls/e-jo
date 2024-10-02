@@ -23,6 +23,6 @@ class IctRecommendationApprovalLevel extends Model
 
     public function approvers()
     {
-        return $this->hasMany(IctRecommendationApprover::class, 'ict_recommendation_approval_level_id');
+        return $this->hasMany(IctRecommendationApprover::class, 'approval_level_id');
     }
 }

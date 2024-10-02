@@ -94,10 +94,8 @@ trait Tickets
 
     public function serviceDeptAdminGetApprovedTickets(): array|Collection
     {
-        return Ticket::where([
-            ['status_id', Status::APPROVED],
-            ['approval_status', ApprovalStatusEnum::APPROVED],
-        ])
+        return Ticket::where('approval_status', ApprovalStatusEnum::APPROVED)
+            ->whereIn('status_id', [Status::APPROVED, Status::OPEN])
             ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
             ->orderByDesc('created_at')
             ->get();

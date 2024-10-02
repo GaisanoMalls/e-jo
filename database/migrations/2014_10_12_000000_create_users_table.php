@@ -24,6 +24,7 @@ return new class extends Migration {
             $table->boolean('is_highest_approver')->default(false);
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

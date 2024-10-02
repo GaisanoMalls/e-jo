@@ -16,9 +16,9 @@ return new class extends Migration {
     {
         Schema::create('ict_recommendation_approvers', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(IctRecommendationApprovalLevel::class, 'ict_recommendation_approval_level_id');
+            $table->foreignIdFor(IctRecommendationApprovalLevel::class, 'approval_level_id')
+                ->constrained('ict_recommendation_approval_levels')->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'approver_id')->constrained('users')->cascadeOnDelete();
-            $table->timestamps();
         });
     }
 

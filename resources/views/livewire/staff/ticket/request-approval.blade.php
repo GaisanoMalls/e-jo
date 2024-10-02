@@ -17,7 +17,7 @@
                             <div>
                                 <div id="recommendation-select-level-of-approval" wire:ignore></div>
                             </div>
-                            @error('levelOfApproval')
+                            @error('level')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}
@@ -26,11 +26,11 @@
                         </div>
                         <div wire:ignore id="recommendation-level-approver-container"></div>
                         <div class="my-2">
-                            <label class="ticket__actions__label mb-2">Select approver</label>
-                            <div>
-                                <div id="recommendation-select-recommendation-approver" wire:ignore></div>
+                            <label class="ticket__actions__label mb-2">Reason</label>
+                            <div wire:ignore>
+                                <textarea wire:model="reason" class="form-control form__field" placeholder="Please state the reason"></textarea>
                             </div>
-                            @error('recommendationApprover')
+                            @error('reason')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}
@@ -38,7 +38,7 @@
                             @enderror
                         </div>
                         <button type="submit"
-                            class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
+                            class="btn mt-3 d-flex align-items-center justify-content-center gap-2 text-capitalize modal__footer__button modal__btnsubmit__bottom">
                             <span wire:loading wire:target="sendRequestRecommendationApproval"
                                 class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                             </span>
@@ -56,27 +56,11 @@
 
 @push('livewire-select')
     <script>
-        const selectRecommendationApprover = document.querySelector('#recommendation-select-recommendation-approver');
         const selecteRecommendationLevelOfApproval = document.querySelector('#recommendation-select-level-of-approval');
-
-        const recommendationApproversOption = @json($recommendationApprovers).map(approver => ({
-            label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
-            value: approver.id,
-            description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
-        }));
-
         const recommendationLevelOfApprovalOption = @json($levelOfApproval).map(level => ({
             label: `Level ${level}`,
             value: level,
         }));
-
-        VirtualSelect.init({
-            ele: selectRecommendationApprover,
-            options: recommendationApproversOption,
-            search: true,
-            markSearchResults: true,
-            hasOptionDescription: true,
-        });
 
         VirtualSelect.init({
             ele: selecteRecommendationLevelOfApproval,
@@ -84,14 +68,8 @@
             search: true,
         });
 
-        selectRecommendationApprover.addEventListener('change', (event) => {
-            @this.set('recommendationApprover', parseInt(event.target.value));
-        });
-
-
         window.addEventListener('close-request-recommendation-approval-modal', () => {
             $('#requestForApprovalModal').modal('hide');
-            selectRecommendationApprover.reset();
         });
 
         const dyanamicLevelApproverSelectContainer = document.querySelector('#recommendation-level-approver-container');
