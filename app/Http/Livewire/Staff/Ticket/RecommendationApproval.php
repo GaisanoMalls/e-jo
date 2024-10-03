@@ -3,9 +3,10 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\AppErrorLog;
-use App\Models\IctRecommendation;
-use App\Models\IctRecommendationApprover;
+use App\Models\Recommendation;
+use App\Models\RecommendationApprover;
 use App\Models\Role;
+use App\Models\Ticket;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -14,11 +15,15 @@ use Livewire\Component;
 
 class RecommendationApproval extends Component
 {
+    public ?Ticket $ticket;
+
+    protected $listeners = ['loadRecommendationApproval' > '$refresh'];
+
     public function approveIctRecommendation()
     {
         try {
             DB::transaction(function () {
-                IctRecommendation::where('ticket_id', $this->ticket->id)->update(['is_approved' => true]);
+                Recommendation::where('ticket_id', $this->ticket->id)->update(['is_approved' => true]);
                 $this->emit('refreshCustomForm');
             });
         } catch (Exception $e) {
@@ -29,7 +34,7 @@ class RecommendationApproval extends Component
 
     public function isTicketIctRecommendationIsApproved()
     {
-        return IctRecommendation::where([
+        return Recommendation::where([
             ['ticket_id', $this->ticket->id],
             ['is_approved', true]
         ])->exists();
@@ -37,7 +42,7 @@ class RecommendationApproval extends Component
 
     public function isRecommendationRequested()
     {
-        return IctRecommendation::where([
+        return Recommendation::where([
             ['ticket_id', $this->ticket->id],
             ['is_requesting_ict_approval', true],
         ])->exists();
@@ -45,7 +50,7 @@ class RecommendationApproval extends Component
 
     private function recommendationApprover()
     {
-        return IctRecommendationApprover::with('approver.profile')
+        return RecommendationApprover::with('approver.profile')
             ->withWhereHas('approvalLevel.ictRecommendation', function ($recommendation) {
                 $recommendation->where('ticket_id', $this->ticket->id);
             })->get();

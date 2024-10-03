@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire\Staff\Notification;
 
+use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -39,7 +41,11 @@ class NotificationList extends Component
                 if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
 
-                    if ($ticket->status_id !== Status::VIEWED && ($ticket->status_id !== Status::APPROVED || $ticket->status_id !== Status::ON_PROCESS)) {
+                    if (
+                        $ticket->approval_status !== ApprovalStatusEnum::APPROVED
+                        && $ticket->status_id !== Status::VIEWED
+                        && ($ticket->status_id !== Status::APPROVED || $ticket->status_id !== Status::ON_PROCESS)
+                    ) {
                         $ticket->update(['status_id' => Status::VIEWED]);
                         ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');
                     }
@@ -47,7 +53,7 @@ class NotificationList extends Component
 
                 $this->triggerEvents();
 
-                return (array_key_exists('for_clarification', $notification->data)) && $notification->data['for_clarification']
+                return (array_key_exists('forClarification', $notification->data)) && $notification->data['forClarification']
                     ? redirect()->route('staff.ticket.ticket_clarifications', $notification->data['ticket']['id'])
                     : redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
             });
@@ -62,8 +68,27 @@ class NotificationList extends Component
         $this->triggerEvents();
     }
 
+    public function syncReadNotifications()
+    {
+        $currentServiceDeptAdmin = auth()->user()->role(Role::SERVICE_DEPARTMENT_ADMIN)->first();
+        $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
+            ->whereNot('id', auth()->user()->id)
+            ->withWhereHas('buDepartments', function ($department) use ($currentServiceDeptAdmin) {
+                $department->whereIn('departments.id', $currentServiceDeptAdmin->buDepartments->pluck('id')->toArray());
+            })
+            ->withWhereHas('branches', function ($branch) use ($currentServiceDeptAdmin) {
+                $branch->where('branches.id', $currentServiceDeptAdmin->branches->pluck('id')->first());
+            })->get();
+
+        return $serviceDepartmentAdmins;
+        // $notifications = auth()->user()->notifications->each(function ($notification) {
+
+        // });
+    }
+
     public function render()
     {
+        // dump($this->syncReadNotifications());
         $notifications = auth()->user()->notifications->filter(
             fn($notification) => Ticket::where('id', data_get($notification->data, 'ticket.id'))->exists()
         );

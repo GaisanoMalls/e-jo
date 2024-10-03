@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class IctRecommendation extends Model
+class Recommendation extends Model
 {
     use HasFactory;
 
@@ -36,6 +36,6 @@ class IctRecommendation extends Model
 
     public function approvalLevels(): HasMany
     {
-        return $this->hasMany(IctRecommendationApprovalLevel::class, 'ict_recommendation_id');
+        return $this->hasMany(RecommendationApprovalLevel::class, 'recommendation_id');
     }
 }

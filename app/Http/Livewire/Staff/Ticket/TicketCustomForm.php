@@ -2,23 +2,16 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
-use App\Http\Traits\AppErrorLog;
 use App\Models\FieldHeaderValue;
 use App\Models\FieldRowValue;
-use App\Models\IctRecommendation;
-use App\Models\IctRecommendationApprover;
-use App\Models\Role;
+use App\Models\Recommendation;
 use App\Models\Ticket;
-use App\Models\User;
-use Exception;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class TicketCustomForm extends Component
 {
     public Ticket $ticket;
-    public ?IctRecommendation $ictRecommendationServiceDeptAdmin = null;
+    public ?Recommendation $recommendationServiceDeptAdmin = null;
     public array $customFormHeaderFields = [];
     public array $customFormRowFields = [];
 
@@ -57,7 +50,7 @@ class TicketCustomForm extends Component
 
     public function render()
     {
-        $this->ictRecommendationServiceDeptAdmin = IctRecommendation::with('requestedByServiceDeptAdmin.profile')
+        $this->recommendationServiceDeptAdmin = Recommendation::with('requestedByServiceDeptAdmin.profile')
             ->where('ticket_id', $this->ticket->id)
             ->first();
 

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class IctRecommendationApprover extends Model
+class RecommendationApprover extends Model
 {
     use HasFactory;
 
@@ -19,7 +19,7 @@ class IctRecommendationApprover extends Model
 
     public function approvalLevel(): BelongsTo
     {
-        return $this->belongsTo(IctRecommendationApprovalLevel::class, 'approval_level_id');
+        return $this->belongsTo(RecommendationApprovalLevel::class, 'approval_level_id');
     }
 
     public function approver(): BelongsTo

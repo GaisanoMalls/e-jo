@@ -103,10 +103,12 @@
                                     </div>
                                 @endif
                                 <div class="ticket__details__card__body">
+                                    @livewire('staff.ticket.recommendation-approval', ['ticket' => $ticket])
                                     @if ($ticket->helpTopic->form)
                                         @livewire('staff.ticket.ticket-custom-form', ['ticket' => $ticket])
+                                    @else
+                                        <div class="ticket__description mt-3">{!! $ticket->description !!}</div>
                                     @endif
-                                    <div class="ticket__description mt-3">{!! $ticket->description !!}</div>
                                     @if ($ticket->fileAttachments->count() > 0)
                                         <div class="ticket__attachments d-inline-flex gap-1 mb-3" data-bs-toggle="modal"
                                             data-bs-target="#ticketFilesModalForm">
@@ -151,9 +153,7 @@
                             <div class="container__ticket__details__right">
                                 @livewire('staff.ticket.ticket-details', ['ticket' => $ticket])
                                 @livewire('staff.ticket.ticket-level-approval', ['ticket' => $ticket])
-                                @if ($ticket->approval_status === ApprovalStatusEnum::APPROVED)
-                                    @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
-                                @endif
+                                @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
                                 @livewire('staff.ticket.ticket-tag', ['ticket' => $ticket])
                                 @livewire('ticket-activity-logs', ['ticket' => $ticket])
                             </div>

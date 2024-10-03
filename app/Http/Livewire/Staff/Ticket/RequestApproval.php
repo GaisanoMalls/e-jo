@@ -5,8 +5,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Http\Traits\AppErrorLog;
 use App\Mail\Staff\RecommendationRequestMail;
 use App\Models\ActivityLog;
-use App\Models\IctRecommendation;
-use App\Models\IctRecommendationApprovalLevel;
+use App\Models\Recommendation;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -79,14 +78,14 @@ class RequestApproval extends Component
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
                     ->first();
 
-                $requesterServiceDeptAdmin = auth()->user()
+                $requesterServiceDeptAdmin = User::where('id', auth()->user()->id)
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
                     ->first();
 
                 if ($recommendationApprovers && $requesterServiceDeptAdmin) {
                     $this->ticket->update(['status_id' => Status::OPEN]);
 
-                    $ictRecommentaion = IctRecommendation::create([
+                    $ictRecommentaion = Recommendation::create([
                         'ticket_id' => $this->ticket->id,
                         'requested_by_sda_id' => $requesterServiceDeptAdmin->id,
                         'is_requesting_ict_approval' => true,
@@ -139,6 +138,7 @@ class RequestApproval extends Component
             'loadTicketActions',
             'refreshCustomForm',
             'loadTicketLogs',
+            'loadRecommendationApproval'
         ];
 
         foreach ($events as $event) {

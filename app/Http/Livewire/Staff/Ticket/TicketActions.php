@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
-use App\Models\IctRecommendation;
+use App\Models\Recommendation;
 use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
@@ -11,7 +11,7 @@ use Livewire\Component;
 class TicketActions extends Component
 {
     public Ticket $ticket;
-    public ?IctRecommendation $ictRecommendationApprover = null;
+    public ?Recommendation $recommendationApprover = null;
 
     protected $listeners = ['loadTicketActions' => '$refresh'];
 
@@ -40,7 +40,7 @@ class TicketActions extends Component
 
     public function isTicketIctRecommendationIsApproved()
     {
-        return IctRecommendation::where([
+        return Recommendation::where([
             ['ticket_id', $this->ticket->id],
             ['is_approved', true]
         ])->exists();
@@ -48,7 +48,7 @@ class TicketActions extends Component
 
     public function isRecommendationRequested()
     {
-        return IctRecommendation::where([
+        return Recommendation::where([
             ['ticket_id', $this->ticket->id],
             ['is_requesting_ict_approval', true],
         ])->exists();
@@ -56,7 +56,7 @@ class TicketActions extends Component
 
     public function render()
     {
-        $this->ictRecommendationApprover = IctRecommendation::where('ticket_id', $this->ticket->id)->first();
+        $this->recommendationApprover = Recommendation::where('ticket_id', $this->ticket->id)->first();
 
         return view('livewire.staff.ticket.ticket-actions');
     }

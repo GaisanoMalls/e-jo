@@ -47,7 +47,7 @@ class AppNotification extends Notification implements ShouldQueue
             'ticket' => $this->ticket,
             'title' => $this->title,
             'message' => $this->message,
-            'for_clarification' => $this->forClarification
+            'forClarification' => $this->forClarification,
         ];
     }
 }

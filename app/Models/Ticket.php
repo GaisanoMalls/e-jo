@@ -140,9 +140,9 @@ class Ticket extends Model
         return $this->hasMany(TicketApproval::class);
     }
 
-    public function ictRecommendations(): HasMany
+    public function recommendations(): HasMany
     {
-        return $this->hasMany(IctRecommendation::class);
+        return $this->hasMany(Recommendation::class);
     }
 
     public function tags(): BelongsToMany

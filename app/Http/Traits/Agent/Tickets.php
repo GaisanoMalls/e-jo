@@ -10,10 +10,11 @@ trait Tickets
 {
     public function agentGetOpenTickets()
     {
-        $openTicketsQuery = Ticket::where(function ($statusQuery) {
-            $statusQuery->where('status_id', Status::APPROVED)
-                ->where('approval_status', ApprovalStatusEnum::APPROVED);
-        })
+        $openTicketsQuery = Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
+            ->where(function ($statusQuery) {
+                $statusQuery->where('status_id', Status::APPROVED)
+                    ->where('approval_status', ApprovalStatusEnum::APPROVED);
+            })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('branch_id', auth()->user()->branches->pluck('id')->first())
                     ->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first());
@@ -36,10 +37,11 @@ trait Tickets
 
     public function agentGetClaimedTickets()
     {
-        $claimedTicketsQuery = Ticket::where(function ($statusQuery) {
-            $statusQuery->where('status_id', Status::CLAIMED)
-                ->where('approval_status', ApprovalStatusEnum::APPROVED);
-        })
+        $claimedTicketsQuery = Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
+            ->where(function ($statusQuery) {
+                $statusQuery->where('status_id', Status::CLAIMED)
+                    ->where('approval_status', ApprovalStatusEnum::APPROVED);
+            })
             ->where(column: function ($byUserQuery) {
                 $byUserQuery->whereNotNull('agent_id')
                     ->where('agent_id', auth()->user()->id)
@@ -63,13 +65,14 @@ trait Tickets
 
     public function agentGetOnProcessTickets()
     {
-        $onProcessTicketsQuery = Ticket::where(column: function ($statusQuery) {
-            $statusQuery->where('status_id', Status::ON_PROCESS)
-                ->whereIn('approval_status', [
-                    ApprovalStatusEnum::FOR_APPROVAL,
-                    ApprovalStatusEnum::APPROVED
-                ]);
-        })
+        $onProcessTicketsQuery = Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
+            ->where(column: function ($statusQuery) {
+                $statusQuery->where('status_id', Status::ON_PROCESS)
+                    ->whereIn('approval_status', [
+                        ApprovalStatusEnum::FOR_APPROVAL,
+                        ApprovalStatusEnum::APPROVED
+                    ]);
+            })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('agent_id', auth()->user()->id)
                     ->where('branch_id', auth()->user()->branches->pluck('id')->first())
@@ -92,10 +95,11 @@ trait Tickets
 
     public function agentGetOverdueTickets()
     {
-        return Ticket::where(column: function ($statusQuery) {
-            $statusQuery->where('status_id', Status::OVERDUE)
-                ->where('approval_status', ApprovalStatusEnum::APPROVED);
-        })
+        return Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
+            ->where(column: function ($statusQuery) {
+                $statusQuery->where('status_id', Status::OVERDUE)
+                    ->where('approval_status', ApprovalStatusEnum::APPROVED);
+            })
             ->where(column: function ($byUserQuery) {
                 $byUserQuery->where('agent_id', auth()->user()->id)
                     ->where('branch_id', auth()->user()->branches->pluck('id')->first())
@@ -110,10 +114,11 @@ trait Tickets
 
     public function agentGetClosedTickets()
     {
-        $closedTicketsQuery = Ticket::where(function ($statusQuery) {
-            $statusQuery->where('status_id', Status::CLOSED)
-                ->where('approval_status', ApprovalStatusEnum::APPROVED);
-        })
+        $closedTicketsQuery = Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
+            ->where(function ($statusQuery) {
+                $statusQuery->where('status_id', Status::CLOSED)
+                    ->where('approval_status', ApprovalStatusEnum::APPROVED);
+            })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('agent_id', auth()->user()->id)
                     ->where('branch_id', auth()->user()->branches->pluck('id')->first())

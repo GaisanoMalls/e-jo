@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
-use App\Models\IctRecommendation;
+use App\Models\Recommendation;
 use Livewire\Component;
 
 class Recommendations extends Component
 {
     public function render()
     {
-        $recommendations = IctRecommendation::with(['ticket', 'requestedByServiceDeptAdmin.profile'])->get();
+        $recommendations = Recommendation::with(['ticket', 'requestedByServiceDeptAdmin.profile'])->get();
         return view('livewire.staff.ticket.recommendations', compact('recommendations'));
     }
 }

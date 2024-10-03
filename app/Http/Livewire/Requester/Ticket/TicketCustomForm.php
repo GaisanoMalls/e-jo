@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Requester\Ticket;
 
 use App\Models\FieldHeaderValue;
 use App\Models\FieldRowValue;
-use App\Models\IctRecommendation;
+use App\Models\Recommendation;
 use App\Models\Ticket;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -14,7 +14,7 @@ class TicketCustomForm extends Component
     use WithFileUploads;
 
     public Ticket $ticket;
-    public ?IctRecommendation $ictRecommendationServiceDeptAdmin = null;
+    public ?Recommendation $recommendationServiceDeptAdmin = null;
     public array $customFormHeaderFields = [];
     public array $customFormRowFields = [];
 
@@ -22,7 +22,7 @@ class TicketCustomForm extends Component
 
     public function mount()
     {
-        $this->ictRecommendationServiceDeptAdmin = IctRecommendation::where('ticket_id', $this->ticket->id)->first();
+        $this->recommendationServiceDeptAdmin = Recommendation::where('ticket_id', $this->ticket->id)->first();
 
         $this->customFormHeaderFields = FieldHeaderValue::with('field')
             ->where('ticket_id', $this->ticket->id)
@@ -60,9 +60,9 @@ class TicketCustomForm extends Component
         return ['headers' => $headers, 'fields' => $fields];
     }
 
-    public function isTicketIctRecommendationIsApproved()
+    public function isTicketRecommendationIsApproved()
     {
-        return IctRecommendation::where([
+        return Recommendation::where([
             ['ticket_id', $this->ticket->id],
             ['is_approved', true]
         ])->exists();
@@ -70,7 +70,7 @@ class TicketCustomForm extends Component
 
     public function isRecommendationRequested()
     {
-        return IctRecommendation::where([
+        return Recommendation::where([
             ['ticket_id', $this->ticket->id],
             ['is_requesting_ict_approval', true],
         ])->exists();

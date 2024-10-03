@@ -87,7 +87,11 @@ class ReplyTicket extends Component
                     });
                 }
 
-                ActivityLog::make(ticket_id: $this->ticket->id, description: "replied to {$this->ticket->user->profile->getFullName}");
+                $requester = $this->ticket->user()->with('profile')->withTrashed()->first();
+                ActivityLog::make(
+                    ticket_id: $this->ticket->id,
+                    description: "replied to {$requester->profile->getFullName}"
+                );
             });
 
             $this->actionOnSubmit();

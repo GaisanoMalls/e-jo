@@ -99,7 +99,7 @@ class User extends Authenticatable
 
     public function ictRecommendationApprovals(): HasMany
     {
-        return $this->hasMany(IctRecommendationApprover::class, 'approver_id');
+        return $this->hasMany(RecommendationApprover::class, 'approver_id');
     }
 
     public function serviceDepartments(): BelongsToMany

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\IctRecommendation;
+use App\Models\Recommendation;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,9 +13,9 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('ict_recommendation_approval_levels', function (Blueprint $table) {
+        Schema::create('recommendation_approval_levels', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(IctRecommendation::class, 'ict_recommendation_id')->constrained('ict_recommendations')->cascadeOnDelete();
+            $table->foreignIdFor(Recommendation::class, 'recommendation_id')->constrained('recommendations')->cascadeOnDelete();
             $table->integer('level');
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('ict_recommendation_approval_levels');
+        Schema::dropIfExists('recommendation_approval_levels');
     }
 };

@@ -28,7 +28,7 @@ class NotificationList extends Component
 
         $this->triggerEvents();
 
-        return (array_key_exists('for_clarification', $notification->data)) && $notification->data['for_clarification'] === true
+        return (array_key_exists('forClarification', $notification->data)) && $notification->data['forClarification'] === true
             ? redirect()->route('user.ticket.ticket_clarifications', $notification->data['ticket']['id'])
             : redirect()->route('user.ticket.view_ticket', $notification->data['ticket']['id']);
     }

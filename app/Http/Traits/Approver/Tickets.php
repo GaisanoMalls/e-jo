@@ -16,6 +16,7 @@ trait Tickets
     public function getForApprovalTickets()
     {
         return Ticket::has('helpTopic.specialProject')
+            ->withWhereHas('user', fn($user) => $user->withTrashed())
             ->where('approval_status', ApprovalStatusEnum::APPROVED)
             ->whereNotIn('status_id', [
                 Status::VIEWED,
@@ -23,8 +24,10 @@ trait Tickets
                 Status::APPROVED,
                 Status::ON_PROCESS
             ])
-            ->withWhereHas('user.buDepartments', function ($department) {
-                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+            ->withWhereHas('user', function ($user) {
+                $user->withWhereHas('buBranches', function ($department) {
+                    $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                });
             })
             ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', User::where('id', auth()->user()->id)->role(Role::APPROVER)->first('id'));
@@ -36,6 +39,7 @@ trait Tickets
     public function getOpenTickets()
     {
         return Ticket::has('helpTopic.specialProject')
+            ->withWhereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
                 $statusQuery->where('status_id', Status::OPEN)
                     ->whereIn('approval_status', [
@@ -43,6 +47,9 @@ trait Tickets
                         ApprovalStatusEnum::FOR_APPROVAL
                     ]);
             })
+            // ->withWhereHas('user', function ($user) {
+            //     $user->withTrashed 
+            // })
             ->withWhereHas('user.buDepartments', function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
@@ -56,6 +63,7 @@ trait Tickets
     public function getDisapprovedTickets()
     {
         return Ticket::has('helpTopic.specialProject')
+            ->withWhereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
                 $statusQuery->where('status_id', Status::CLOSED)
                     ->where('approval_status', ApprovalStatusEnum::DISAPPROVED);
@@ -73,6 +81,7 @@ trait Tickets
     public function getViewedTickets()
     {
         return Ticket::has('helpTopic.specialProject')
+            ->withWhereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
                 $statusQuery->where('status_id', Status::VIEWED)
                     ->whereIn('approval_status', [
@@ -93,6 +102,7 @@ trait Tickets
     public function getApprovedTickets()
     {
         return Ticket::has('helpTopic.specialProject')
+            ->withWhereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
                 $statusQuery->where('status_id', Status::APPROVED)
                     ->where('approval_status', ApprovalStatusEnum::APPROVED);
@@ -110,6 +120,7 @@ trait Tickets
     public function getOnProcessTickets()
     {
         return Ticket::has('helpTopic.specialProject')
+            ->withWhereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
                 $statusQuery->where('status_id', Status::ON_PROCESS)
                     ->whereIn('approval_status', [

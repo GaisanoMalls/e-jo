@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class IctRecommendationApprovalLevel extends Model
+class RecommendationApprovalLevel extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'ict_recommendation_id',
+        'recommendation_id',
         'level',
     ];
 
@@ -18,11 +18,11 @@ class IctRecommendationApprovalLevel extends Model
 
     public function ictRecommendation()
     {
-        return $this->belongsTo(IctRecommendation::class);
+        return $this->belongsTo(Recommendation::class);
     }
 
     public function approvers()
     {
-        return $this->hasMany(IctRecommendationApprover::class, 'approval_level_id');
+        return $this->hasMany(RecommendationApprover::class, 'approval_level_id');
     }
 }

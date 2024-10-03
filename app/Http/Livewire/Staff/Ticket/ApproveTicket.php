@@ -88,11 +88,6 @@ class ApproveTicket extends Component
 
                         $ticketApproval->update(['is_approved' => true]);
 
-                        // Delete the ticket notification of the currently logged in service department admin.
-                        auth()->user()->notifications->each(
-                            fn($notification) => $notification->data['ticket']['id'] === $this->ticket->id ? $notification->delete() : null
-                        );
-
                         // Get the service department administrator to which the ticket is intended.
                         $serviceDepartmentAdmins = User::with('profile')
                             ->withWhereHas('branches', function ($branch) {

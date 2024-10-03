@@ -8,7 +8,7 @@
     @if (
         $this->isRecommendationRequested() &&
             auth()->user()->hasRole(Role::USER))
-        @if ($this->isTicketIctRecommendationIsApproved())
+        @if ($this->isTicketRecommendationIsApproved())
             <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
                 style="font-size: 13px; background-color: #dffdef;">
                 <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
@@ -20,18 +20,18 @@
                 <span class="border-0 d-flex align-items-center" style="font-size: 0.9rem;">
                     <span class="me-2">
                         <div class="d-flex align-items-center">
-                            @if ($ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin?->profile->picture)
-                                <img src="{{ Storage::url($ictRecommendationServiceDeptAdmin?->requestedByServiceDeptAdmin->profile->picture) }}"
+                            @if ($recommendationServiceDeptAdmin->requestedByServiceDeptAdmin?->profile->picture)
+                                <img src="{{ Storage::url($recommendationServiceDeptAdmin?->requestedByServiceDeptAdmin->profile->picture) }}"
                                     class="image-fluid rounded-circle"
                                     style="height: 26px !important; width: 26px !important;">
                             @else
                                 <div class="d-flex align-items-center p-2 me-1 justify-content-center text-white rounded-circle"
                                     style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
-                                    {{ $ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin?->profile->getNameInitial() }}
+                                    {{ $recommendationServiceDeptAdmin->requestedByServiceDeptAdmin?->profile->getNameInitial() }}
                                 </div>
                             @endif
                             <strong class="text-muted">
-                                {{ $ictRecommendationServiceDeptAdmin->requestedByServiceDeptAdmin?->profile->getFullName }}
+                                {{ $recommendationServiceDeptAdmin->requestedByServiceDeptAdmin?->profile->getFullName }}
                             </strong>
                         </div>
                     </span>
