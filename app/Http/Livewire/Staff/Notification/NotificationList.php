@@ -54,7 +54,6 @@ class NotificationList extends Component
                         && (
                             $ticket->status_id !== Status::VIEWED
                             || $ticket->status_id !== Status::APPROVED
-                            || $ticket->status_id !== Status::ON_PROCESS
                         )
                     ) {
                         $ticket->update(['status_id' => Status::VIEWED]);

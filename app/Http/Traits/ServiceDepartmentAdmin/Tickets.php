@@ -167,7 +167,7 @@ trait Tickets
                     $query->where('status_id', Status::ON_PROCESS)
                         ->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL);
                 })
-                ->where(function ($userQuery) {
+                ->orWhere(function ($userQuery) {
                     $userQuery->withWhereHas('user', function ($user) {
                         $user->withWhereHas('branches', function ($branch) {
                             $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
