@@ -6,7 +6,7 @@
                 <div class="d-flex flex-column gap-1">
                     <div class="d-flex align-items-center gap-2">
                         <h6 class="offcanvas-title fw-bold" id="offcanvasRightLabel">Notifications</h6>
-                        @if (auth()->user()->unreadNotifications->count() > 0)
+                        @if (auth()->user()->unreadNotifications->count() !== 0)
                             @livewire('approver.notification.unread-notification-count')
                         @endif
                     </div>

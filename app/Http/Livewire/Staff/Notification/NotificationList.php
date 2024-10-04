@@ -49,11 +49,11 @@ class NotificationList extends Component
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
 
                     if (
-                        !$notification->read()
-                        && $ticket->approval_status !== ApprovalStatusEnum::APPROVED
+                        ($ticket->approval_status == ApprovalStatusEnum::APPROVED || $ticket->approval_status == ApprovalStatusEnum::FOR_APPROVAL)
                         && (
-                            $ticket->status_id !== Status::VIEWED
-                            || $ticket->status_id !== Status::APPROVED
+                            $ticket->status_id != Status::VIEWED
+                            && $ticket->status_id != Status::APPROVED
+                            && $ticket->status_id != Status::ON_PROCESS
                         )
                     ) {
                         $ticket->update(['status_id' => Status::VIEWED]);

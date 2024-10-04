@@ -14,6 +14,7 @@ class NavlinkNotification extends Component
             'staffLoadNotificationList',
             'staffLoadNotificationCanvas',
             'staffLoadUnreadNotificationCount',
+            'loadSidebarCollapseTicketStatus'
         ];
 
         foreach ($events as $event) {

@@ -1,3 +1,7 @@
+@php
+    use App\Models\Role;
+@endphp
+
 <div>
     @if ($this->isRecommendationRequested())
         @if ($this->isTicketRecommendationIsApproved())
@@ -17,26 +21,28 @@
                 @else
                     <div class="mb-4 d-flex flex-wrap gap-2 border-0 flex-row rounded-3 align-items-center justify-content-between p-3"
                         style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;">
-                        <span class="border-0 d-flex align-items-center" style="font-size: 0.9rem;">
-                            <span class="me-2">
-                                <div class="d-flex align-items-center">
-                                    @if ($ictRecommendationServiceDeptAdmin?->requestedByServiceDeptAdmin->profile->picture)
-                                        <img src="{{ Storage::url($ictRecommendationServiceDeptAdmin?->requestedByServiceDeptAdmin->profile->picture) }}"
-                                            class="image-fluid rounded-circle"
-                                            style="height: 26px !important; width: 26px !important;">
-                                    @else
-                                        <div class="d-flex align-items-center p-2 me-1 justify-content-center text-white rounded-circle"
-                                            style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
-                                            {{ $ictRecommendationServiceDeptAdmin?->requestedByServiceDeptAdmin->profile->getNameInitial() }}
-                                        </div>
-                                    @endif
-                                    <strong class="text-muted">
-                                        {{ $ictRecommendationServiceDeptAdmin?->requestedByServiceDeptAdmin->profile->getFullName }}
-                                    </strong>
-                                </div>
+                        @foreach ($recommendationApprovers as $recommendation)
+                            <span class="border-0 d-flex align-items-center" style="font-size: 0.9rem;">
+                                <span class="me-2">
+                                    <div class="d-flex align-items-center">
+                                        @if ($recommendation->approver->profile->picture)
+                                            <img src="{{ Storage::url($recommendation->approver->profile->picture) }}"
+                                                class="image-fluid rounded-circle"
+                                                style="height: 26px !important; width: 26px !important;">
+                                        @else
+                                            <div class="d-flex align-items-center p-2 me-1 justify-content-center text-white rounded-circle"
+                                                style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
+                                                {{ $recommendation->approver->profile->getNameInitial() }}
+                                            </div>
+                                        @endif
+                                        <strong class="text-muted">
+                                            {{ $recommendation->approver->profile->getFullName }}
+                                        </strong>
+                                    </div>
+                                </span>
+                                is requesting for approval
                             </span>
-                            is requesting for approval
-                        </span>
+                        @endforeach
                         <button class="btn d-flex align-items-center justify-content-center"
                             wire:click="approveRecommendation"
                             style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #FFF; font-weight: 500; background-color: #D32839;">

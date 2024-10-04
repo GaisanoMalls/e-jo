@@ -116,7 +116,7 @@ class SendClarification extends Component
                         new AppNotification(
                             ticket: $this->ticket,
                             title: "Clarification for ticket {$this->ticket->ticket_number}",
-                            message: "Ticket clarification sent by {$this->ticket->user->profile->getFullName}",
+                            message: "Ticket clarification from {$this->ticket->user->profile->getFullName}",
                             forClarification: true
                         )
                     );

@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -16,6 +17,8 @@ use Livewire\Component;
 class RecommendationApproval extends Component
 {
     public ?Ticket $ticket;
+    public Collection $recommendationApprovers;
+
 
     protected $listeners = ['loadRecommendationApproval' > '$refresh'];
 
@@ -48,12 +51,9 @@ class RecommendationApproval extends Component
         ])->exists();
     }
 
-    private function recommendationApprover()
+    public function recommendationApprovers()
     {
-        return RecommendationApprover::with('approver.profile')
-            ->withWhereHas('approvalLevel.ictRecommendation', function ($recommendation) {
-                $recommendation->where('ticket_id', $this->ticket->id);
-            })->get();
+        return;
     }
 
     /**
@@ -74,6 +74,11 @@ class RecommendationApproval extends Component
 
     public function render()
     {
+        $this->recommendationApprovers = RecommendationApprover::with('approver.profile')
+            ->withWhereHas('approvalLevel.recommendation', function ($recommendation) {
+                $recommendation->where('ticket_id', $this->ticket->id);
+            })->get();
+
         return view('livewire.staff.ticket.recommendation-approval');
     }
 }

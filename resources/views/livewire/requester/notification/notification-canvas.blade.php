@@ -6,11 +6,14 @@
                 <div class="d-flex flex-column gap-1">
                     <div class="d-flex align-items-center gap-2">
                         <h6 class="offcanvas-title fw-bold" id="offcanvasRightLabel">Notifications</h6>
-                        @livewire('requester.notification.unread-notification-count')
+                        @if (auth()->user()->unreadNotifications->count() !== 0)
+                            @livewire('requester.notification.unread-notification-count')
+                        @endif
                     </div>
                     <div class="d-flex align-items-center gap-1 text-small">
-                        <button type="submit" class="btn btn-sm p-0 d-flex align-items-center gap-2"
-                            wire:click="{{ $hasUnreadNotifications ? 'markAllAsRead' : '' }}">
+                        <button type="submit" class="btn btn-sm p-0 d-flex align-items-center gap-2 border-0"
+                            wire:click="{{ $hasUnreadNotifications ? 'markAllAsRead' : '' }}"
+                            @disabled(!$hasUnreadNotifications)>
                             <div wire:target="markAllAsRead" wire:loading
                                 class="spinner-border spinner-border-sm loading__spinner" role="status">
                                 <span class="sr-only">Loading...</span>

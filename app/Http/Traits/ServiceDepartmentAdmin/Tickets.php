@@ -53,7 +53,7 @@ trait Tickets
         return Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
                 $statusQuery->where('status_id', Status::OPEN)
-                    ->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL);
+                    ->whereIn('approval_status', [ApprovalStatusEnum::FOR_APPROVAL, ApprovalStatusEnum::APPROVED]);
             })
             ->where(function ($userQuery) {
                 $userQuery->withWhereHas('user', function ($user) {
@@ -61,6 +61,15 @@ trait Tickets
                         $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
                     })->withWhereHas('buDepartments', function ($department) {
                         $department->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
+                    });
+                });
+            })
+            ->orWhere(function ($ticket) {
+                $ticket->withWhereHas('recommendations', function ($recommendation) {
+                    $recommendation->withWhereHas('approvalLevels', function ($approvalLevel) {
+                        $approvalLevel->withWhereHas('approvers', function ($approver) {
+                            $approver->orWhere('approver_id', auth()->user()->id);
+                        });
                     });
                 });
             })

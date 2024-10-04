@@ -37,13 +37,19 @@
                                 </span>
                             @enderror
                         </div>
-                        <button type="submit"
-                            class="btn mt-3 d-flex align-items-center justify-content-center gap-2 text-capitalize modal__footer__button modal__btnsubmit__bottom">
+                        <button type="submit" class="btn mt-3 d-flex align-items-center justify-content-center gap-2"
+                            style="padding: 0.6rem 1rem;
+                                border-radius: 0.563rem;
+                                font-size: 0.875rem;
+                                background-color: #d32839;
+                                color: white;
+                                font-weight: 500;
+                                box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
                             <span wire:loading wire:target="sendRequestRecommendationApproval"
                                 class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                             </span>
                             <span wire:loading.remove wire:target="sendRequestRecommendationApproval">
-                                Send Request
+                                Submit
                             </span>
                             <span wire:loading wire:target="sendRequestRecommendationApproval">Sending Request...</span>
                         </button>

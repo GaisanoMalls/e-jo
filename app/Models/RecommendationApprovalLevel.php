@@ -16,7 +16,7 @@ class RecommendationApprovalLevel extends Model
 
     public $timestamps = false;
 
-    public function ictRecommendation()
+    public function recommendation()
     {
         return $this->belongsTo(Recommendation::class);
     }
