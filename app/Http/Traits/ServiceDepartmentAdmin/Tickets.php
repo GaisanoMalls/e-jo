@@ -204,6 +204,13 @@ trait Tickets
                         ->orWhereHas('clarifications')
                         ->orWhereHas('helpTopic.specialProject');
                 })
+                ->where(function ($query) {
+                    $query->where('status_id', Status::ON_PROCESS)
+                        ->whereIn('approval_status', [
+                            ApprovalStatusEnum::APPROVED,
+                            ApprovalStatusEnum::FOR_APPROVAL
+                        ]);
+                })
                 ->orWhere(function ($withSpecialProjQuery) {
                     $withSpecialProjQuery->withWhereHas('user', function ($user) {
                         $user->withWhereHas('branches', function ($branch) {
@@ -213,14 +220,6 @@ trait Tickets
                         });
                     });
                 })
-                ->where(function ($query) {
-                    $query->where('status_id', Status::ON_PROCESS)
-                        ->whereIn('approval_status', [
-                            ApprovalStatusEnum::APPROVED,
-                            ApprovalStatusEnum::FOR_APPROVAL
-                        ]);
-                })
-
                 ->where(function ($nonSpecialProjQuery) {
                     $nonSpecialProjQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                         ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());

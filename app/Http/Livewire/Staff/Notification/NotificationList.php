@@ -15,7 +15,14 @@ use Livewire\Component;
 
 class NotificationList extends Component
 {
+    // public bool $notifReadByCoSDA = false;
+
     protected $listeners = ['staffLoadNotificationList' => '$refresh'];
+
+    // public function boot()
+    // {
+    //     $this->syncReadNotifications();
+    // }
 
     private function triggerEvents()
     {
@@ -42,7 +49,8 @@ class NotificationList extends Component
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
 
                     if (
-                        $ticket->approval_status !== ApprovalStatusEnum::APPROVED
+                        !$notification->read()
+                        && $ticket->approval_status !== ApprovalStatusEnum::APPROVED
                         && $ticket->status_id !== Status::VIEWED
                         && ($ticket->status_id !== Status::APPROVED || $ticket->status_id !== Status::ON_PROCESS)
                     ) {
@@ -68,27 +76,31 @@ class NotificationList extends Component
         $this->triggerEvents();
     }
 
-    public function syncReadNotifications()
-    {
-        $currentServiceDeptAdmin = auth()->user()->role(Role::SERVICE_DEPARTMENT_ADMIN)->first();
-        $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-            ->whereNot('id', auth()->user()->id)
-            ->withWhereHas('buDepartments', function ($department) use ($currentServiceDeptAdmin) {
-                $department->whereIn('departments.id', $currentServiceDeptAdmin->buDepartments->pluck('id')->toArray());
-            })
-            ->withWhereHas('branches', function ($branch) use ($currentServiceDeptAdmin) {
-                $branch->where('branches.id', $currentServiceDeptAdmin->branches->pluck('id')->first());
-            })->get();
+    // public function syncReadNotifications()
+    // {
+    //     $currentServiceDeptAdmin = auth()->user();
+    //     $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
+    //         ->whereNot('id', auth()->user()->id)
+    //         ->withWhereHas('buDepartments', function ($department) use ($currentServiceDeptAdmin) {
+    //             $department->whereIn('departments.id', $currentServiceDeptAdmin->buDepartments->pluck('id')->toArray());
+    //         })
+    //         ->withWhereHas('branches', function ($branch) use ($currentServiceDeptAdmin) {
+    //             $branch->where('branches.id', $currentServiceDeptAdmin->branches->pluck('id')->first());
+    //         })->get();
 
-        return $serviceDepartmentAdmins;
-        // $notifications = auth()->user()->notifications->each(function ($notification) {
-
-        // });
-    }
+    //     foreach ($serviceDepartmentAdmins as $serviceDepartmentAdmin) {
+    //         foreach ($serviceDepartmentAdmin->notifications as $coSDANotification) {
+    //             foreach ($currentServiceDeptAdmin->notifications as $currSDANotification) {
+    //                 if ($coSDANotification->data['ticket']['id'] == $currSDANotification->data['ticket']['id']) {
+    //                     $this->notifReadByCoSDA = true;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     public function render()
     {
-        // dump($this->syncReadNotifications());
         $notifications = auth()->user()->notifications->filter(
             fn($notification) => Ticket::where('id', data_get($notification->data, 'ticket.id'))->exists()
         );
