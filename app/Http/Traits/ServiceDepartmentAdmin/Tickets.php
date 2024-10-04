@@ -131,18 +131,18 @@ trait Tickets
         return Ticket::whereHas('agent')
             ->whereNotNull('agent_id')
             ->withWhereHas('user', fn($user) => $user->withTrashed())
-            ->where(function ($userQuery) {
-                $userQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
-                    ->where(function ($statusQuery) {
-                        $statusQuery->where('status_id', Status::CLAIMED)->where('approval_status', ApprovalStatusEnum::APPROVED);
-                    });
-            })
             ->where(function ($query) {
                 $query->withWhereHas('ticketApprovals.helpTopicApprover.approver', function ($approver) {
                     $approver->where('user_id', auth()->user()->id)
                         ->where('is_approved', true);
                 });
+            })
+            ->orWhere(function ($userQuery) {
+                $userQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+                    ->where(function ($statusQuery) {
+                        $statusQuery->where('status_id', Status::CLAIMED)->where('approval_status', ApprovalStatusEnum::APPROVED);
+                    });
             })
             ->orderByDesc('created_at')
             ->get();

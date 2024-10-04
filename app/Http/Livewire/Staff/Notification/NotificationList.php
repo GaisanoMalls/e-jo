@@ -51,8 +51,11 @@ class NotificationList extends Component
                     if (
                         !$notification->read()
                         && $ticket->approval_status !== ApprovalStatusEnum::APPROVED
-                        && $ticket->status_id !== Status::VIEWED
-                        && ($ticket->status_id !== Status::APPROVED || $ticket->status_id !== Status::ON_PROCESS)
+                        && (
+                            $ticket->status_id !== Status::VIEWED
+                            || $ticket->status_id !== Status::APPROVED
+                            || $ticket->status_id !== Status::ON_PROCESS
+                        )
                     ) {
                         $ticket->update(['status_id' => Status::VIEWED]);
                         ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');
