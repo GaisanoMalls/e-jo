@@ -19,7 +19,7 @@ class RecommendationApproval extends Component
 
     protected $listeners = ['loadRecommendationApproval' > '$refresh'];
 
-    public function approveIctRecommendation()
+    public function approveRecommendation()
     {
         try {
             DB::transaction(function () {
@@ -32,7 +32,7 @@ class RecommendationApproval extends Component
         }
     }
 
-    public function isTicketIctRecommendationIsApproved()
+    public function isTicketRecommendationIsApproved()
     {
         return Recommendation::where([
             ['ticket_id', $this->ticket->id],

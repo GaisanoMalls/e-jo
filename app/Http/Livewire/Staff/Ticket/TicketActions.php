@@ -38,7 +38,7 @@ class TicketActions extends Component
             ->exists();
     }
 
-    public function isTicketIctRecommendationIsApproved()
+    public function isTicketRecommendationIsApproved()
     {
         return Recommendation::where([
             ['ticket_id', $this->ticket->id],

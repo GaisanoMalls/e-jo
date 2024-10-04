@@ -1,6 +1,6 @@
 <div>
     @if ($this->isRecommendationRequested())
-        @if ($this->isTicketIctRecommendationIsApproved())
+        @if ($this->isTicketRecommendationIsApproved())
             <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
                 style="font-size: 13px; background-color: #dffdef;">
                 <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
@@ -38,18 +38,18 @@
                             is requesting for approval
                         </span>
                         <button class="btn d-flex align-items-center justify-content-center"
-                            wire:click="approveIctRecommendation"
+                            wire:click="approveRecommendation"
                             style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #FFF; font-weight: 500; background-color: #D32839;">
-                            <span wire:loading wire:target="approveIctRecommendation"
+                            <span wire:loading wire:target="approveRecommendation"
                                 class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                             </span>
-                            <span wire:loading.remove wire:target="approveIctRecommendation">Approve</span>
-                            <span wire:loading wire:target="approveIctRecommendation">Processing...</span>
+                            <span wire:loading.remove wire:target="approveRecommendation">Approve</span>
+                            <span wire:loading wire:target="approveRecommendation">Processing...</span>
                         </button>
                     </div>
                 @endif
             @elseif (auth()->user()->hasRole(Role::AGENT))
-                @if ($this->isTicketIctRecommendationIsApproved())
+                @if ($this->isTicketRecommendationIsApproved())
                     <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
                         style="font-size: 13px; background-color: #dffdef;">
                         <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
