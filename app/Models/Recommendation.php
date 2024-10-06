@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Traits\Utils;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Recommendation extends Model
 {
-    use HasFactory;
+    use HasFactory, Utils;
 
     protected $fillable = [
         'ticket_id',
@@ -37,5 +38,10 @@ class Recommendation extends Model
     public function approvalLevels(): HasMany
     {
         return $this->hasMany(RecommendationApprovalLevel::class, 'recommendation_id');
+    }
+
+    public function dateCreated(): string
+    {
+        return $this->createdAt($this->created_at);
     }
 }

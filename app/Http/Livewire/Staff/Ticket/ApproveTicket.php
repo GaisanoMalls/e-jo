@@ -100,7 +100,7 @@ class ApproveTicket extends Component
                             ->get();
 
                         $serviceDepartmentAdmins->each(function ($serviceDeptAdmin) {
-                            Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
+                            // Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
                             Notification::send(
                                 $serviceDeptAdmin,
                                 new AppNotification(
@@ -123,7 +123,7 @@ class ApproveTicket extends Component
 
                         // Notify the agents through app and email.
                         $agents->each(function ($agent) {
-                            Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
+                            // Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
                             Notification::send(
                                 $agent,
                                 new AppNotification(

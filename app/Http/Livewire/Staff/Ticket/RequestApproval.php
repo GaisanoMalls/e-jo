@@ -85,14 +85,14 @@ class RequestApproval extends Component
                 if ($recommendationApprovers && $requesterServiceDeptAdmin) {
                     $this->ticket->update(['status_id' => Status::OPEN]);
 
-                    $ictRecommentaion = Recommendation::create([
+                    $ictRecommendation = Recommendation::create([
                         'ticket_id' => $this->ticket->id,
                         'requested_by_sda_id' => $requesterServiceDeptAdmin->id,
                         'is_requesting_ict_approval' => true,
                         'reason' => $this->reason
                     ]);
 
-                    $recommendationApprovalLevel = $ictRecommentaion->approvalLevels()->create(['level' => $this->level]);
+                    $recommendationApprovalLevel = $ictRecommendation->approvalLevels()->create(['level' => $this->level]);
                     foreach ($recommendationApproverIds as $approverId) {
                         $recommendationApprovalLevel->approvers()->create(['approver_id' => $approverId]);
                     }
@@ -138,7 +138,8 @@ class RequestApproval extends Component
             'loadTicketActions',
             'refreshCustomForm',
             'loadTicketLogs',
-            'loadRecommendationApproval'
+            'loadRecommendationApproval',
+            'loadTicketStatusTextHeader'
         ];
 
         foreach ($events as $event) {

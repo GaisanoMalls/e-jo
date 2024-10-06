@@ -17,8 +17,8 @@ use Livewire\Component;
 class RecommendationApproval extends Component
 {
     public ?Ticket $ticket;
+    public ?Recommendation $recommendation = null;
     public Collection $recommendationApprovers;
-
 
     protected $listeners = ['loadRecommendationApproval' > '$refresh'];
 
@@ -51,11 +51,6 @@ class RecommendationApproval extends Component
         ])->exists();
     }
 
-    public function recommendationApprovers()
-    {
-        return;
-    }
-
     /**
      * Verify whether the business unit of the ticket requester matches the business unit of the Service Department Admin.
      */
@@ -72,12 +67,28 @@ class RecommendationApproval extends Component
             ->exists();
     }
 
-    public function render()
+    private function getRecommendationRequester()
     {
-        $this->recommendationApprovers = RecommendationApprover::with('approver.profile')
+        return Recommendation::with('requestedByServiceDeptAdmin.profile')
+            ->where([
+                ['ticket_id', $this->ticket->id],
+                ['is_requesting_ict_approval', true],
+                ['requested_by_sda_id', '!=', null]
+            ])->first();
+    }
+
+    private function getRecommendationApprovers()
+    {
+        return RecommendationApprover::with('approver.profile')
             ->withWhereHas('approvalLevel.recommendation', function ($recommendation) {
                 $recommendation->where('ticket_id', $this->ticket->id);
             })->get();
+    }
+
+    public function render()
+    {
+        $this->recommendation = $this->getRecommendationRequester();
+        $this->recommendationApprovers = $this->getRecommendationApprovers();
 
         return view('livewire.staff.ticket.recommendation-approval');
     }
