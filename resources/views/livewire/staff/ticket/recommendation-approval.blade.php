@@ -45,7 +45,7 @@
                                 </span>
                                 <small style="font-weight: 500; color: #4a5568; font-size: 0.75rem;">
                                     {{ $recommendation->dateCreated() }}
-                                    ({{ $recommendation->created_at->format('D') }} @
+                                    ({{ $recommendation->created_at->format('D') }},
                                     {{ $recommendation->created_at->format('g:i A') }})
                                 </small>
                             </div>

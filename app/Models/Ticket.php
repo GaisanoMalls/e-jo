@@ -105,6 +105,11 @@ class Ticket extends Model
         return $this->hasOne(Feedback::class);
     }
 
+    public function recommendation(): HasOne
+    {
+        return $this->hasOne(Recommendation::class);
+    }
+
     public function fileAttachments(): HasMany
     {
         return $this->hasMany(TicketFile::class);
@@ -138,11 +143,6 @@ class Ticket extends Model
     public function ticketApprovals()
     {
         return $this->hasMany(TicketApproval::class);
-    }
-
-    public function recommendations(): HasMany
-    {
-        return $this->hasMany(Recommendation::class);
     }
 
     public function tags(): BelongsToMany

@@ -77,13 +77,24 @@ class Open extends Component
         return $this->openTickets;
     }
 
-    public function seenTicket($id)
+    private function isRequestersServiceDepartmentAdmin(Ticket $ticket)
     {
-        $ticket = Ticket::findOrFail($id);
+        return $ticket->withWhereHas('user', function ($requester) {
+            $requester->withWhereHas('buDepartments', function ($department) {
+                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+            });
+        })->exists();
+    }
 
-        if ($ticket->status_id !== Status::VIEWED) {
+    public function seenTicket(Ticket $ticket)
+    {
+        if (
+            $ticket->status_id != Status::VIEWED
+            && $this->isRequestersServiceDepartmentAdmin($ticket)
+            || !$ticket->whereDoesntHave('recommendation')
+        ) {
             $ticket->update(['status_id' => Status::VIEWED]);
-            ActivityLog::make(ticket_id: $id, description: 'seen the ticket');
+            ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');
 
             auth()->user()->notifications->each(function ($notification) use ($ticket) {
                 if ($notification->data['ticket']['id'] == $ticket->id) {
@@ -92,7 +103,7 @@ class Open extends Component
             });
         }
 
-        return redirect()->route('staff.ticket.view_ticket', $id);
+        return redirect()->route('staff.ticket.view_ticket', $ticket->id);
     }
 
     public function render()
