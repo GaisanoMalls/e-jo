@@ -21,10 +21,10 @@ class UpdateApprover extends Component
     public array $bu_departments = [];
     public array $branches = [];
     public string $first_name;
-    public ?string $middle_name;
+    public ?string $middle_name = null;
     public string $last_name;
     public string $email;
-    public ?string $suffix;
+    public ?string $suffix = null;
     public array $permissions = [];
     public array $currentPermissions = [];
 
@@ -84,50 +84,50 @@ class UpdateApprover extends Component
                 $this->approver->buDepartments()->sync($this->bu_departments);
                 $this->approver->syncPermissions($this->permissions);
 
-                if ($this->asCostingApprover2) {
-                    if (!$this->hasCostingApprover2()) {
-                        if (SpecialProjectAmountApproval::whereNull('fpm_coo_approver')->exists()) {
-                            SpecialProjectAmountApproval::whereNull('fpm_coo_approver')
-                                ->update([
-                                    'fpm_coo_approver' => [
-                                        'approver_id' => $this->approver->id,
-                                        'is_approved' => false,
-                                        'date_approved' => null
-                                    ]
-                                ]);
-                        } elseif (SpecialProjectAmountApproval::whereNull('service_department_admin_approver')->exists()) {
-                            SpecialProjectAmountApproval::whereNull('service_department_admin_approver')
-                                ->update([
-                                    'fpm_coo_approver' => [
-                                        'approver_id' => $this->approver->id,
-                                        'is_approved' => false,
-                                        'date_approved' => null
-                                    ]
-                                ]);
-                        } else {
-                            // If neither field is null, create a new record
-                            SpecialProjectAmountApproval::create([
-                                'fpm_coo_approver' => [
-                                    'approver_id' => $this->approver->id,
-                                    'is_approved' => false,
-                                    'date_approved' => null
-                                ]
-                            ]);
-                        }
-                    } else {
-                        noty()->warning('Costing approver 2 already assigned');
-                    }
-                } else {
-                    if (SpecialProjectAmountApproval::whereJsonContains('fpm_coo_approver->approver_id', $this->approver->id)->exists()) {
-                        if ($this->hasCostingApprover1()) {
-                            SpecialProjectAmountApproval::whereNotNull('service_department_admin_approver')
-                                ->update(['fpm_coo_approver' => null]);
-                        }
-                        if ($this->hasCostingApprover2() && !$this->hasCostingApprover1()) {
-                            SpecialProjectAmountApproval::query()->delete();
-                        }
-                    }
-                }
+                // if ($this->asCostingApprover2) {
+                //     if (!$this->hasCostingApprover2()) {
+                //         if (SpecialProjectAmountApproval::whereNull('fpm_coo_approver')->exists()) {
+                //             SpecialProjectAmountApproval::whereNull('fpm_coo_approver')
+                //                 ->update([
+                //                     'fpm_coo_approver' => [
+                //                         'approver_id' => $this->approver->id,
+                //                         'is_approved' => false,
+                //                         'date_approved' => null
+                //                     ]
+                //                 ]);
+                //         } elseif (SpecialProjectAmountApproval::whereNull('service_department_admin_approver')->exists()) {
+                //             SpecialProjectAmountApproval::whereNull('service_department_admin_approver')
+                //                 ->update([
+                //                     'fpm_coo_approver' => [
+                //                         'approver_id' => $this->approver->id,
+                //                         'is_approved' => false,
+                //                         'date_approved' => null
+                //                     ]
+                //                 ]);
+                //         } else {
+                //             // If neither field is null, create a new record
+                //             SpecialProjectAmountApproval::create([
+                //                 'fpm_coo_approver' => [
+                //                     'approver_id' => $this->approver->id,
+                //                     'is_approved' => false,
+                //                     'date_approved' => null
+                //                 ]
+                //             ]);
+                //         }
+                //     } else {
+                //         noty()->warning('Costing approver 2 already assigned');
+                //     }
+                // } else {
+                //     if (SpecialProjectAmountApproval::whereJsonContains('fpm_coo_approver->approver_id', $this->approver->id)->exists()) {
+                //         if ($this->hasCostingApprover1()) {
+                //             SpecialProjectAmountApproval::whereNotNull('service_department_admin_approver')
+                //                 ->update(['fpm_coo_approver' => null]);
+                //         }
+                //         if ($this->hasCostingApprover2() && !$this->hasCostingApprover1()) {
+                //             SpecialProjectAmountApproval::query()->delete();
+                //         }
+                //     }
+                // }
 
                 noty()->addSuccess("You have successfully updated the account for {$this->approver->profile->getFullName}.");
             });

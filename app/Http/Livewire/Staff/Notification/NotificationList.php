@@ -38,6 +38,15 @@ class NotificationList extends Component
         }
     }
 
+    private function isRequestersServiceDepartmentAdmin(Ticket $ticket)
+    {
+        return $ticket->withWhereHas('user', function ($requester) {
+            $requester->withWhereHas('buDepartments', function ($department) {
+                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+            });
+        })->exists();
+    }
+
     public function readNotification($notificationId)
     {
         try {
@@ -49,12 +58,10 @@ class NotificationList extends Component
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
 
                     if (
-                        ($ticket->approval_status == ApprovalStatusEnum::APPROVED || $ticket->approval_status == ApprovalStatusEnum::FOR_APPROVAL)
-                        && (
-                            $ticket->status_id != Status::VIEWED
-                            && $ticket->status_id != Status::APPROVED
-                            && $ticket->status_id != Status::ON_PROCESS
-                        )
+                        $ticket->status_id != Status::VIEWED
+                        && $ticket->approval_status != ApprovalStatusEnum::APPROVED
+                        && $this->isRequestersServiceDepartmentAdmin($ticket)
+                        || !$ticket->whereDoesntHave('recommendation')
                     ) {
                         $ticket->update(['status_id' => Status::VIEWED]);
                         ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');

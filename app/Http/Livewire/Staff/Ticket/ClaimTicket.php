@@ -80,7 +80,30 @@ class ClaimTicket extends Component
                 $agent = User::find(auth()->user()->id)
                     ->with('profile')
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
+                    ->withWhereHas('teams', function ($team) {
+                        $team->whereIn('teams.id', $this->ticket->teams->pluck('id')->toArray());
+                    })
+                    ->withWhereHas('serviceDepartments', function ($serviceDepartment) {
+                        $serviceDepartment->where('service_departments.id', $this->ticket->service_department_id);
+                    })
                     ->first();
+
+                $coAgents = User::whereNot('id', $agent->id)
+                    ->withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
+                    ->withWhereHas('teams', function ($team) use ($agent) {
+                        $team->whereIn('teams.id', $agent->teams->pluck('id')->toArray());
+                    })
+                    ->withWhereHas('serviceDepartments', function ($serviceDepartment) use ($agent) {
+                        $serviceDepartment->where('service_departments.id', $agent->serviceDepartments->pluck('id')->first());
+                    })->get();
+
+                $coAgents->each(function ($coAgent) {
+                    $coAgent->notifications->each(function ($notification) {
+                        if ($notification->data['ticket']['id'] == $this->ticket->id) {
+                            $notification->delete();
+                        }
+                    });
+                });
 
                 Notification::send(
                     $this->ticket->user,

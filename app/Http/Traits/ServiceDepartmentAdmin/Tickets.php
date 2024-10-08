@@ -55,13 +55,11 @@ trait Tickets
                 $statusQuery->where('status_id', Status::OPEN)
                     ->whereIn('approval_status', [ApprovalStatusEnum::FOR_APPROVAL, ApprovalStatusEnum::APPROVED]);
             })
-            ->where(function ($userQuery) {
-                $userQuery->withWhereHas('user', function ($user) {
-                    $user->withWhereHas('branches', function ($branch) {
-                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
-                    })->withWhereHas('buDepartments', function ($department) {
-                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
-                    });
+            ->withWhereHas('user', function ($user) {
+                $user->withWhereHas('branches', function ($branch) {
+                    $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                })->withWhereHas('buDepartments', function ($department) {
+                    $department->orWhereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                 });
             })
             // ->where(function ($ticket) {
@@ -106,7 +104,7 @@ trait Tickets
         return Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
                 $statusQuery->where('approval_status', ApprovalStatusEnum::APPROVED)
-                    ->whereIn('status_id', [Status::APPROVED, Status::OPEN]);
+                    ->whereIn('status_id', [Status::APPROVED]);
             })
             ->where(function ($ticket) {
                 $ticket->withWhereHas('branch', function ($branch) {
@@ -175,9 +173,18 @@ trait Tickets
                         ApprovalStatusEnum::FOR_APPROVAL
                     ]);
             })
-            ->where(function ($nonSpecialProjQuery) {
-                $nonSpecialProjQuery->withWhereHas('branch', function ($branch) {
-                    $branch->where('branches.id', auth()->user()->branches->pluck('id')->toArray());
+            ->where(function ($ticket) {
+                $ticket->withWhereHas('user', function ($user) {
+                    $user->withWhereHas('branches', function ($branch) {
+                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                    })->withWhereHas('buDepartments', function ($department) {
+                        $department->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
+                    });
+                });
+            })
+            ->where(function ($ticket) {
+                $ticket->withWhereHas('branch', function ($branch) {
+                    $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
                 })->withWhereHas('serviceDepartment', function ($serviceDepartment) {
                     $serviceDepartment->whereIn('service_departments.id', auth()->user()->serviceDepartments->pluck('id')->toArray());
                 });

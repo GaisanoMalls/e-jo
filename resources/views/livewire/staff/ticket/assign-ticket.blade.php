@@ -88,7 +88,7 @@
 
         if (@json($isSpecialProject)) {
             VirtualSelect.init({
-                ele: '#select-team',
+                ele: teamSelect,
                 options: teamOption,
                 search: true,
                 multiple: true, // Select multiple teams if ticket has special project
@@ -97,7 +97,7 @@
             });
         } else {
             VirtualSelect.init({
-                ele: '#select-team',
+                ele: teamSelect,
                 options: teamOption,
                 search: true,
                 markSearchResults: true,
@@ -118,9 +118,9 @@
 
         serviceDepartmentSelect.addEventListener('change', (event) => {
             const serviceDepartmentId = parseInt(event.target.value);
-            @this.set('selectedServiceDepartment', serviceDepartmentId);
 
             if (serviceDepartmentId) {
+                @this.set('selectedServiceDepartment', serviceDepartmentId);
                 window.addEventListener('selected-service-department', (event) => {
                     const teams = event.detail.teams;
                     const teamOption = [];
@@ -165,9 +165,9 @@
 
         teamSelect.addEventListener('change', (event) => {
             const teamId = event.target.value;
-            @this.set('selectedTeams', teamId);
 
             if (teamId) {
+                // @this.set('selectedTeams', teamId);
                 agentSelect.enable();
                 window.addEventListener('get-agents-from-team', (event) => {
                     const agents = event.detail.agents;

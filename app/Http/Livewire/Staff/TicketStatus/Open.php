@@ -90,6 +90,7 @@ class Open extends Component
     {
         if (
             $ticket->status_id != Status::VIEWED
+            && $ticket->approval_status != ApprovalStatusEnum::APPROVED
             && $this->isRequestersServiceDepartmentAdmin($ticket)
             || !$ticket->whereDoesntHave('recommendation')
         ) {

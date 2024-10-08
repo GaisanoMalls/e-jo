@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="{{ asset('css/select/custom-virtual-select.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roles/staff.css') }}">
     <link rel="stylesheet" href="{{ asset('css/navigate-indicator.css') }}">
-    <title>{{ $title }}</title>
     @livewireStyles
+    <title>{{ $title }}</title>
 </head>
 
 <body>

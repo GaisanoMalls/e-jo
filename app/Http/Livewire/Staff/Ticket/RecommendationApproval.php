@@ -10,7 +10,6 @@ use App\Models\Ticket;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -22,13 +21,12 @@ class RecommendationApproval extends Component
 
     protected $listeners = ['loadRecommendationApproval' > '$refresh'];
 
-    public function approveRecommendation()
+    public function approveTicketRecommendation()
     {
         try {
-            DB::transaction(function () {
-                Recommendation::where('ticket_id', $this->ticket->id)->update(['is_approved' => true]);
-                $this->emit('refreshCustomForm');
-            });
+            $this->recommendation->where('ticket_id', $this->ticket->id)
+                ->update(['is_approved', true]);
+            $this->emit('refreshCustomForm');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
             Log::error('Error while sending recommendation request.', [$e->getLine()]);
