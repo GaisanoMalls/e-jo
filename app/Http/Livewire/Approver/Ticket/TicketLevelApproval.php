@@ -138,7 +138,7 @@ class TicketLevelApproval extends Component
                         $this->ticket->user,
                         new AppNotification(
                             ticket: $this->ticket,
-                            title: "Level of approvals (Ticket #{$this->ticket->ticket_number})",
+                            title: "Ticket #{$this->ticket->ticket_number} (Level of Approval)",
                             message: "{$level2Approver->profile->getFullName} approved the level 2 approval. Approvals for levels 1 and 2 have been completed."
                         )
                     );
@@ -156,7 +156,7 @@ class TicketLevelApproval extends Component
                             $agent,
                             new AppNotification(
                                 ticket: $this->ticket,
-                                title: "New Ticket {$this->ticket->ticket_number}",
+                                title: "Ticket #{$this->ticket->ticket_number} (New)",
                                 message: "You have a new ticket",
                             )
                         );

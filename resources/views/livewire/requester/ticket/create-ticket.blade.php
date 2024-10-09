@@ -7,377 +7,36 @@
         aria-labelledby="createtTicketModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-lg">
             <div class="modal-content modal__content">
-                <form wire:submit.prevent="sendTicket">
-                    <h1 class="modal-title modal__title fs-5 px-3">Create New Ticket</h1>
-                    <div class="modal-body modal__body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-check mt-2 mb-4">
-                                    <input class="form-check-input" type="checkbox" id="check-other-branch">
-                                    <label class="form-check-label labelCheckOtherBranch" for="check-other-branch">
-                                        This ticket is intended to other branch
-                                    </label>
-                                    <br>
-                                    <p class="mb-0 mt-1" style="font-size: 13px; line-height: 15px;">
-                                        Check if your wish to send this ticket to other branch. Otherwise, leave
-                                        unchecked to send this ticket to your currently assigned branch -
-                                        <span class="fw-bold text-muted">
-                                            <i class="fa-solid fa-location-dot"></i>
-                                            {{ auth()->user()->getBranches() }}
-                                        </span>.
-                                    </p>
-                                </div>
+                <h1 class="modal-title modal__title fs-5 px-3">Create New Ticket</h1>
+                <div class="modal-body modal__body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-check mt-2 mb-4">
+                                <input class="form-check-input" type="checkbox" id="check-other-branch">
+                                <label class="form-check-label labelCheckOtherBranch" for="check-other-branch">
+                                    This ticket is intended to other branch
+                                </label>
+                                <br>
+                                <p class="mb-0 mt-1" style="font-size: 13px; line-height: 15px;">
+                                    Check if your wish to send this ticket to other branch. Otherwise, leave
+                                    unchecked to send this ticket to your currently assigned branch -
+                                    <span class="fw-bold text-muted">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        {{ auth()->user()->getBranches() }}
+                                    </span>.
+                                </p>
                             </div>
-                            <div class="col-12" id="branch-select-container" wire:ignore.self>
-                                <div class="col-lg-6 col-md-12">
-                                    <div wire:ignore.self class="mb-3">
-                                        <label class="form-label input__field__label">
-                                            To which branch will this ticket be sent?
-                                        </label>
-                                        <div>
-                                            <div id="user-create-ticket-branches-dropdown" wire:ignore></div>
-                                        </div>
-                                        @error('branch')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label input__field__label">Service Department</label>
-                                    <div>
-                                        <div id="user-create-ticket-service-department-dropdown" wire:ignore></div>
-                                    </div>
-                                    @error('serviceDepartment')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
+                        </div>
+                        <div class="col-12" id="branch-select-container" wire:ignore.self>
+                            <div class="col-lg-6 col-md-12">
+                                <div wire:ignore.self class="mb-3">
                                     <label class="form-label input__field__label">
-                                        Help Topic
-                                        @if ($helpTopics)
-                                            <span class="fw-normal" style="font-size: 13px;">
-                                                ({{ $helpTopics->count() }})
-                                            </span>
-                                        @endif
+                                        To which branch will this ticket be sent?
                                     </label>
                                     <div>
-                                        <div id="user-create-ticket-help-topic-dropdown" wire:ignore></div>
+                                        <div id="user-create-ticket-branches-dropdown" wire:ignore></div>
                                     </div>
-                                    @error('helpTopic')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="ticketSubject" class="form-label input__field__label">
-                                    Subject
-                                </label>
-                                <input type="text" wire:model="subject" class="form-control input__field"
-                                    placeholder="Tell us about your concern">
-                                @error('subject')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="mb-3" id="ticket-description-container" wire:ignore>
-                                <label class="form-label input__field__label">
-                                    Message
-                                    <span class="text-sm text-muted">
-                                        <small>(Tell us more about your concern)</small>
-                                    </span>
-                                </label>
-                                <div wire:ignore>
-                                    <textarea wire:model="description" id="createTicketDescription"></textarea>
-                                </div>
-                                @error('description')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                @enderror
-                            </div>
-
-                            {{-- Help topic form --}}
-                            @if ($helpTopicForm)
-                                <div class="col-12 mb-3">
-                                    <div class="row mx-0 p-3 rounded-3"
-                                        style="background-color: #f4f5f8; border: 0.08rem solid #dddddd;">
-                                        @if (!empty($formFields))
-                                            <h6 class="fw-bold mb-0 mb-2 form__name">
-                                                {{ $helpTopicForm->name }}
-                                            </h6>
-                                            @foreach ($formFields as $fieldKey => $formField)
-                                                @if (!$formField['is_for_ticket_number'])
-                                                    <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
-                                                        <label class="form-label input__field__label"
-                                                            style="white-space: nowrap">
-                                                            {{ $formField['label'] }}
-                                                        </label>
-                                                        {{-- Text field --}}
-                                                        @if ($formField['type'] === FieldType::TEXT->value)
-                                                            <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                                type="text" id="field-{{ $fieldKey }}"
-                                                                class="form-control input__field"
-                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                        @endif
-
-                                                        {{-- Number field --}}
-                                                        @if ($formField['type'] === FieldType::NUMBER->value)
-                                                            <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                                type="number" id="field-{{ $fieldKey }}"
-                                                                class="form-control input__field"
-                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                        @endif
-
-                                                        {{-- Date field --}}
-                                                        @if ($formField['type'] === FieldType::DATE->value)
-                                                            <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                                type="date" id="field-{{ $fieldKey }}"
-                                                                class="form-control input__field"
-                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                        @endif
-
-                                                        {{-- Time field --}}
-                                                        @if ($formField['type'] === FieldType::TIME->value)
-                                                            <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                                type="time" id="field-{{ $fieldKey }}"
-                                                                class="form-control input__field"
-                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                        @endif
-
-                                                        {{-- Amount field --}}
-                                                        @if ($formField['type'] === FieldType::AMOUNT->value)
-                                                            <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                                type="number" id="field-{{ $fieldKey }}"
-                                                                class="form-control input__field"
-                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                        @endif
-                                                    </div>
-                                                @endif
-                                            @endforeach
-                                            <div class="col-12">
-                                                <div class="d-flex align-items-center">
-                                                    <button wire:click="addFieldValues" type="button"
-                                                        class="btn d-flex align-items-center justify-content-center rounded-3 gap-2"
-                                                        style="height: 35px;
-                                                            background-color: #3B4053;
-                                                            color: white;
-                                                            font-size: 0.75rem;">
-                                                        <span wire:loading wire:target="addFieldValues"
-                                                            class="spinner-border spinner-border-sm" role="status"
-                                                            aria-hidden="true">
-                                                        </span>
-                                                        Add fields
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                @if (!empty($headerFields) || !empty($rowFields))
-                                    <div class="col-12">
-                                        <div class="row my-3 mx-auto ps-1 rounded-3 custom__form">
-                                            <div
-                                                class="d-flex align-items-center justify-content-between flex-row mb-3">
-                                                <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name">
-                                                    {{ $helpTopicForm->name }}
-                                                </h6>
-                                                <img src="{{ asset('images/gmall-davao-pr-form.png') }}"
-                                                    class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System">
-                                            </div>
-                                            @if (!empty($headerFields))
-                                                <div class="row mx-auto my-3">
-                                                    @foreach ($headerFields as $fields)
-                                                        @foreach ($fields as $key => $headerField)
-                                                            @if ($headerField['assigned_column'] == 1)
-                                                                <div
-                                                                    class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
-                                                                    <div class="d-flex align-items-center gap-2">
-                                                                        <label
-                                                                            class="form-label mb-0 fw-bold input__field__label"
-                                                                            style="white-space: nowrap">
-                                                                            {{ $headerField['label'] }}:
-                                                                        </label>
-                                                                        <label class="w-100 header__field">
-                                                                            @if ($headerField['type'] == 'date')
-                                                                                {{ date('F j, Y', strtotime($headerField['value'])) }}
-                                                                            @else
-                                                                                {{ $headerField['value'] }}
-                                                                            @endif
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                            @if ($headerField['assigned_column'] == 2)
-                                                                <div
-                                                                    class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
-                                                                    <div class="d-flex align-items-center gap-2">
-                                                                        <label
-                                                                            class="form-label mb-0 fw-bold input__field__label"
-                                                                            style="white-space: nowrap">
-                                                                            {{ $headerField['label'] }}:
-                                                                        </label>
-                                                                        <label class="w-100 header__field">
-                                                                            @if ($headerField['type'] == 'date')
-                                                                                {{ date('F j, Y', strtotime($headerField['value'])) }}
-                                                                            @else
-                                                                                {{ $headerField['value'] }}
-                                                                            @endif
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
-                                                    @endforeach
-                                                </div>
-                                            @endif
-                                            @if (!empty($rowFields))
-                                                <div
-                                                    class="w-100 msx-auto d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap">
-                                                    @php
-                                                        $filteredRowField = $this->getFilteredRowFields();
-                                                        $headers = $filteredRowField['headers'];
-                                                        $fields = $filteredRowField['fields'];
-                                                    @endphp
-                                                    @if (!empty($headers) && !empty($fields))
-                                                        <div class="w-100">
-                                                            <table class="table table-bordered">
-                                                                <thead>
-                                                                    <tr>
-                                                                        @foreach ($headers as $header)
-                                                                            <th class="fw-bold input__field__label">
-                                                                                {{ Str::title($header) }}
-                                                                            </th>
-                                                                        @endforeach
-                                                                        <th
-                                                                            class="text-center fw-bold input__field__label">
-                                                                            Action
-                                                                        </th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @foreach ($rowFields as $key => $row)
-                                                                        <tr class="row__field">
-                                                                            @foreach ($headers as $header)
-                                                                                @php
-                                                                                    $field = collect($row)->firstWhere(
-                                                                                        'name',
-                                                                                        $header,
-                                                                                    );
-                                                                                @endphp
-                                                                                <td class="field__value">
-                                                                                    @if ($field['type'] == 'date')
-                                                                                        {{ date('F j, Y', strtotime($field['value'])) }}
-                                                                                    @else
-                                                                                        {{ $field['value'] ?? '' }}
-                                                                                    @endif
-                                                                                </td>
-                                                                            @endforeach
-                                                                            <td>
-                                                                                <button
-                                                                                    wire:click="removeField({{ $key }})"
-                                                                                    type="button"
-                                                                                    class="btn p-0 m-auto d-flex align-items-center justify-content-center gap-1"
-                                                                                    style="font-size: 0.8rem; color: red;">
-                                                                                    <i class="bi bi-trash"></i>
-                                                                                    Remove
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    @endforeach
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endif
-                            @endif
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <label for="ticketSubject" class="form-label input__field__label">
-                                        Priority Level
-                                    </label>
-                                    <div class="d-flex">
-                                        @foreach ($priorityLevels as $priority)
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio"
-                                                    wire:model="priorityLevel" id="rbtn{{ $priority->name }}"
-                                                    value="{{ $priority->id }}">
-                                                <label class="form-check-label radio__button__label"
-                                                    for="rbtn{{ $priority->name }}">
-                                                    {{ $priority->name }}
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                    @error('priorityLevel')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                    @enderror
-                                </div>
-                                <div wire:ignore class="col-md-4 mt-auto" id="ticket-file-attachment-container">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <label for="ticketSubject" class="form-label input__field__label">
-                                            Attachment
-                                        </label>
-                                    </div>
-                                    <div x-data="{ isUploading: false, progress: 1 }"
-                                        x-on:livewire-upload-start="isUploading = true; progress = 1"
-                                        x-on:livewire-upload-finish="isUploading = false"
-                                        x-on:livewire-upload-error="isUploading = false"
-                                        x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                        <input class="form-control form-control-sm border-0 ticket__file"
-                                            type="file" accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv"
-                                            wire:model="fileAttachments" multiple id="upload-{{ $upload }}"
-                                            onchange="validateFile()">
-                                        <div x-transition.duration.500ms x-show="isUploading"
-                                            class="progress progress-sm mt-1" style="height: 10px;">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                                role="progressbar" aria-label="Animated striped example"
-                                                aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
-                                                x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between"
-                                            x-transition.duration.500ms>
-                                            <span x-show="isUploading" x-text="progress + '%'"
-                                                style="font-size: 12px;">
-                                            </span>
-                                            <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
-                                                <i x-show="isUploading" class='bx bx-loader-circle bx-spin'
-                                                    style="font-size: 14px;"></i>
-                                                <span x-show="isUploading">Uploading...</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <span class="error__message" id="exclude-exe-file-message"></span>
-                                    @error('fileAttachments.*')
+                                    @error('branch')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}
@@ -386,20 +45,355 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label input__field__label">Service Department</label>
+                                <div>
+                                    <div id="user-create-ticket-service-department-dropdown" wire:ignore></div>
+                                </div>
+                                @error('serviceDepartment')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label input__field__label">
+                                    Help Topic
+                                    @if ($helpTopics)
+                                        <span class="fw-normal" style="font-size: 13px;">
+                                            ({{ $helpTopics->count() }})
+                                        </span>
+                                    @endif
+                                </label>
+                                <div>
+                                    <div id="user-create-ticket-help-topic-dropdown" wire:ignore></div>
+                                </div>
+                                @error('helpTopic')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ticketSubject" class="form-label input__field__label">
+                                Subject
+                            </label>
+                            <input type="text" wire:model="subject" class="form-control input__field"
+                                placeholder="Tell us about your concern">
+                            @error('subject')
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="mb-3" id="ticket-description-container" wire:ignore>
+                            <label class="form-label input__field__label">
+                                Message
+                                <span class="text-sm text-muted">
+                                    <small>(Tell us more about your concern)</small>
+                                </span>
+                            </label>
+                            <div wire:ignore>
+                                <textarea wire:model="description" id="createTicketDescription"></textarea>
+                            </div>
+                            @error('description')
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+
+                        {{-- Help topic form --}}
+                        @if ($helpTopicForm)
+                            <div class="col-12 mb-3">
+                                <div class="row mx-0 p-3 rounded-3"
+                                    style="background-color: #f4f5f8; border: 0.08rem solid #dddddd;">
+                                    @if (!empty($formFields))
+                                        <h6 class="fw-bold mb-0 mb-2 form__name">
+                                            {{ $helpTopicForm->name }}
+                                        </h6>
+                                        @foreach ($formFields as $fieldKey => $formField)
+                                            @if (!$formField['is_for_ticket_number'])
+                                                <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
+                                                    <label class="form-label input__field__label"
+                                                        style="white-space: nowrap">
+                                                        {{ $formField['label'] }}
+                                                    </label>
+                                                    {{-- Text field --}}
+                                                    @if ($formField['type'] === FieldType::TEXT->value)
+                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
+                                                            type="text" id="field-{{ $fieldKey }}"
+                                                            class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                    @endif
+
+                                                    {{-- Number field --}}
+                                                    @if ($formField['type'] === FieldType::NUMBER->value)
+                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
+                                                            type="number" id="field-{{ $fieldKey }}"
+                                                            class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                    @endif
+
+                                                    {{-- Date field --}}
+                                                    @if ($formField['type'] === FieldType::DATE->value)
+                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
+                                                            type="date" id="field-{{ $fieldKey }}"
+                                                            class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                    @endif
+
+                                                    {{-- Time field --}}
+                                                    @if ($formField['type'] === FieldType::TIME->value)
+                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
+                                                            type="time" id="field-{{ $fieldKey }}"
+                                                            class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                    @endif
+
+                                                    {{-- Amount field --}}
+                                                    @if ($formField['type'] === FieldType::AMOUNT->value)
+                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
+                                                            type="number" id="field-{{ $fieldKey }}"
+                                                            class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center">
+                                                <button wire:click="addFieldValues" type="button"
+                                                    class="btn d-flex align-items-center justify-content-center rounded-3 gap-2"
+                                                    style="height: 35px;
+                                                            background-color: #3B4053;
+                                                            color: white;
+                                                            font-size: 0.75rem;">
+                                                    <span wire:loading wire:target="addFieldValues"
+                                                        class="spinner-border spinner-border-sm" role="status"
+                                                        aria-hidden="true">
+                                                    </span>
+                                                    Add fields
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            @if (!empty($headerFields) || !empty($rowFields))
+                                <div class="col-12">
+                                    <div class="row my-3 mx-auto ps-1 rounded-3 custom__form">
+                                        <div class="d-flex align-items-center justify-content-between flex-row mb-3">
+                                            <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name">
+                                                {{ $helpTopicForm->name }}
+                                            </h6>
+                                            <img src="{{ asset('images/gmall-davao-pr-form.png') }}"
+                                                class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System">
+                                        </div>
+                                        @if (!empty($headerFields))
+                                            <div class="row mx-auto my-3">
+                                                @foreach ($headerFields as $fields)
+                                                    @foreach ($fields as $key => $headerField)
+                                                        @if ($headerField['assigned_column'] == 1)
+                                                            <div
+                                                                class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <label
+                                                                        class="form-label mb-0 fw-bold input__field__label"
+                                                                        style="white-space: nowrap">
+                                                                        {{ $headerField['label'] }}:
+                                                                    </label>
+                                                                    <label class="w-100 header__field">
+                                                                        @if ($headerField['type'] == 'date')
+                                                                            {{ date('F j, Y', strtotime($headerField['value'])) }}
+                                                                        @else
+                                                                            {{ $headerField['value'] }}
+                                                                        @endif
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        @if ($headerField['assigned_column'] == 2)
+                                                            <div
+                                                                class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <label
+                                                                        class="form-label mb-0 fw-bold input__field__label"
+                                                                        style="white-space: nowrap">
+                                                                        {{ $headerField['label'] }}:
+                                                                    </label>
+                                                                    <label class="w-100 header__field">
+                                                                        @if ($headerField['type'] == 'date')
+                                                                            {{ date('F j, Y', strtotime($headerField['value'])) }}
+                                                                        @else
+                                                                            {{ $headerField['value'] }}
+                                                                        @endif
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        @if (!empty($rowFields))
+                                            <div
+                                                class="w-100 msx-auto d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap">
+                                                @php
+                                                    $filteredRowField = $this->getFilteredRowFields();
+                                                    $headers = $filteredRowField['headers'];
+                                                    $fields = $filteredRowField['fields'];
+                                                @endphp
+                                                @if (!empty($headers) && !empty($fields))
+                                                    <div class="w-100">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    @foreach ($headers as $header)
+                                                                        <th class="fw-bold input__field__label">
+                                                                            {{ Str::title($header) }}
+                                                                        </th>
+                                                                    @endforeach
+                                                                    <th
+                                                                        class="text-center fw-bold input__field__label">
+                                                                        Action
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($rowFields as $key => $row)
+                                                                    <tr class="row__field">
+                                                                        @foreach ($headers as $header)
+                                                                            @php
+                                                                                $field = collect($row)->firstWhere(
+                                                                                    'name',
+                                                                                    $header,
+                                                                                );
+                                                                            @endphp
+                                                                            <td class="field__value">
+                                                                                @if ($field['type'] == 'date')
+                                                                                    {{ date('F j, Y', strtotime($field['value'])) }}
+                                                                                @else
+                                                                                    {{ $field['value'] ?? '' }}
+                                                                                @endif
+                                                                            </td>
+                                                                        @endforeach
+                                                                        <td>
+                                                                            <button
+                                                                                wire:click="removeField({{ $key }})"
+                                                                                type="button"
+                                                                                class="btn p-0 m-auto d-flex align-items-center justify-content-center gap-1"
+                                                                                style="font-size: 0.8rem; color: red;">
+                                                                                <i class="bi bi-trash"></i>
+                                                                                Remove
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+                        @endif
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label for="ticketSubject" class="form-label input__field__label">
+                                    Priority Level
+                                </label>
+                                <div class="d-flex">
+                                    @foreach ($priorityLevels as $priority)
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" wire:model="priorityLevel"
+                                                id="rbtn{{ $priority->name }}" value="{{ $priority->id }}">
+                                            <label class="form-check-label radio__button__label"
+                                                for="rbtn{{ $priority->name }}">
+                                                {{ $priority->name }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @error('priorityLevel')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                            <div wire:ignore class="col-md-4 mt-auto" id="ticket-file-attachment-container">
+                                <div class="d-flex align-items-center gap-3">
+                                    <label for="ticketSubject" class="form-label input__field__label">
+                                        Attachment
+                                    </label>
+                                </div>
+                                <div x-data="{ isUploading: false, progress: 1 }"
+                                    x-on:livewire-upload-start="isUploading = true; progress = 1"
+                                    x-on:livewire-upload-finish="isUploading = false"
+                                    x-on:livewire-upload-error="isUploading = false"
+                                    x-on:livewire-upload-progress="progress = $event.detail.progress">
+                                    <input class="form-control form-control-sm border-0 ticket__file" type="file"
+                                        accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv" wire:model="fileAttachments"
+                                        multiple id="upload-{{ $upload }}" onchange="validateFile()">
+                                    <div x-transition.duration.500ms x-show="isUploading"
+                                        class="progress progress-sm mt-1" style="height: 10px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar" aria-label="Animated striped example"
+                                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                                            x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between"
+                                        x-transition.duration.500ms>
+                                        <span x-show="isUploading" x-text="progress + '%'" style="font-size: 12px;">
+                                        </span>
+                                        <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
+                                            <i x-show="isUploading" class='bx bx-loader-circle bx-spin'
+                                                style="font-size: 14px;"></i>
+                                            <span x-show="isUploading">Uploading...</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <span class="error__message" id="exclude-exe-file-message"></span>
+                                @error('fileAttachments.*')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
-                    <div class="d-flex align-items-center gap-2 p-3">
-                        <button type="button" class="btn ticket__modal__button btn__close__ticket__modal"
-                            data-bs-dismiss="modal" wire:click="cancel">Cancel</button>
-                        <button type="submit"
-                            class="btn d-flex align-items-center justify-content-center gap-2 ticket__modal__button">
-                            <span wire:loading wire:target="sendTicket" class="spinner-border spinner-border-sm"
-                                role="status" aria-hidden="true">
-                            </span>
-                            <span wire:loading.remove wire:target="sendTicket">Send Ticket</span>
-                            <span wire:loading wire:target="sendTicket">Sending...</span>
-                        </button>
-                    </div>
-                </form>
+                </div>
+                <div class="d-flex align-items-center gap-2 p-3">
+                    <button type="button" class="btn ticket__modal__button btn__close__ticket__modal"
+                        data-bs-dismiss="modal" wire:click="cancel">Cancel</button>
+                    <button wire:click="sendTicket" type="button"
+                        class="btn d-flex align-items-center justify-content-center gap-2 ticket__modal__button">
+                        <span wire:loading wire:target="sendTicket" class="spinner-border spinner-border-sm"
+                            role="status" aria-hidden="true">
+                        </span>
+                        <span wire:loading.remove wire:target="sendTicket">Send Ticket</span>
+                        <span wire:loading wire:target="sendTicket">Sending...</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

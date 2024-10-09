@@ -54,27 +54,11 @@ class ClaimTicket extends Component
                     return;
                 }
 
-                // if (!is_null($this->ticket->isSpecialProject())) {
-                //     $agent = User::find(auth()->user()->id)
-                //         ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', $this->ticket->teams->pluck('id')->toArray()))
-                //         ->withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
-                //         ->first();
-
-                //     // Pratially disabled
-                //     // if (is_null($agent)) {
-                //     //     if ($this->ticket->teams()->count() === 0) {
-                //     //         noty()->addWarning("Unable to claim this ticket. Please wait for the service dept admin to assign this ticket directly to you or to your team.");
-                //     //     } else {
-                //     //         noty()->addWarning("Unable to claim this ticket since you're not part of these teams: {$this->ticket->getTeams()}");
-                //     //     }
-                //     //     return;
-                //     // }
-                // }
-
                 $this->ticket->update([
                     'agent_id' => auth()->user()->id,
                     'status_id' => Status::CLAIMED,
                 ]);
+
                 $this->ticket->teams()->attach($this->ticket->agent->teams->pluck('id')->toArray());
 
                 $agent = User::find(auth()->user()->id)
@@ -85,8 +69,7 @@ class ClaimTicket extends Component
                     })
                     ->withWhereHas('serviceDepartments', function ($serviceDepartment) {
                         $serviceDepartment->where('service_departments.id', $this->ticket->service_department_id);
-                    })
-                    ->first();
+                    })->first();
 
                 $coAgents = User::whereNot('id', $agent->id)
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
@@ -109,10 +92,11 @@ class ClaimTicket extends Component
                     $this->ticket->user,
                     new AppNotification(
                         ticket: $this->ticket,
-                        title: "Ticket {$this->ticket->ticket_number} - Claimed",
+                        title: "Ticket #{$this->ticket->ticket_number} (Claimed)",
                         message: "{$agent->profile->getFullName} has claimed your ticket."
                     )
                 );
+
                 ActivityLog::make(ticket_id: $this->ticket->id, description: 'claimed the ticket');
 
                 $this->actionOnSubmit();

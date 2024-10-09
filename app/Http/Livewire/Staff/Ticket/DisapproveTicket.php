@@ -56,7 +56,7 @@ class DisapproveTicket extends Component
                     $this->ticket->user,
                     new AppNotification(
                         ticket: $this->ticket,
-                        title: "Disapproved Ticket {$this->ticket->ticket_number}",
+                        title: "Ticket #{$this->ticket->ticket_number} (Disapproved)",
                         message: "{$serviceDepartmentAdmin->profile->getFullName} disapproved your ticket"
                     )
                 );

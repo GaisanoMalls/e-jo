@@ -91,11 +91,11 @@ class SendClarification extends Component
                     });
                 }
 
-                // * GET THE REQUESTER
+                // GET THE REQUESTER
                 $requester = $clarification->whereHas('user', fn($user) => $user->where('id', '!=', auth()->user()->id))
                     ->where('ticket_id', $this->ticket->id)->latest('created_at')->first();
 
-                // * CONSTRUCT A LOG DESCRIPTION
+                // CONSTRUCT A LOG DESCRIPTION
                 $logDescription = ($this->ticket->clarifications()->where('user_id', '!=', auth()->user()->id)->count() === 0)
                     ? 'sent a clarification'
                     : 'replied a clarification to ' . $requester->user->profile->getFullName;
@@ -107,7 +107,7 @@ class SendClarification extends Component
                     $this->ticket->user,
                     new AppNotification(
                         ticket: $this->ticket,
-                        title: "Clarification for ticket {$this->ticket->ticket_number}",
+                        title: "Ticket #{$this->ticket->ticket_number} (Clarification)",
                         message: "Ticket clarification form {$serviceDepartmentAdmin->profile->getFullName} ",
                         forClarification: true
                     )

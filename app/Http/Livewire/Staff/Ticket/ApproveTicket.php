@@ -105,7 +105,7 @@ class ApproveTicket extends Component
                                 $serviceDeptAdmin,
                                 new AppNotification(
                                     ticket: $this->ticket,
-                                    title: "Approved Ticket {$this->ticket->ticket_number}",
+                                    title: "Ticket #{$this->ticket->ticket_number} (Approved)",
                                     message: "You have a new ticket. "
                                 )
                             );
@@ -128,7 +128,7 @@ class ApproveTicket extends Component
                                 $agent,
                                 new AppNotification(
                                     ticket: $this->ticket,
-                                    title: "Approved Ticket {$this->ticket->ticket_number}",
+                                    title: "Ticket #{$this->ticket->ticket_number} (Approved)",
                                     message: "You have a new ticket. "
                                 )
                             );
@@ -139,7 +139,7 @@ class ApproveTicket extends Component
                             $this->ticket->user,
                             new AppNotification(
                                 ticket: $this->ticket,
-                                title: "Approved Ticket {$this->ticket->ticket_number}",
+                                title: "Ticket #{$this->ticket->ticket_number} (Approved)",
                                 message: "{$serviceDepartmentAdmin->profile->getFullName} approved the level 1 approval"
                             )
                         );

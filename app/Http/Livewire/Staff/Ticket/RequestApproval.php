@@ -103,14 +103,14 @@ class RequestApproval extends Component
                             $recommendationApprover,
                             new AppNotification(
                                 ticket: $this->ticket,
-                                title: "Request for recommendation approval ({$this->ticket->ticket_number}})",
+                                title: "Ticket #{$this->ticket->ticket_number}} (Recommendation)",
                                 message: "You have a new recommendation approval"
                             )
                         );
                     });
 
                     ActivityLog::make(ticket_id: $this->ticket->id, description: 'requested for approval');
-                    $this->actionOnSubmit();
+                    return redirect()->route('staff.ticket.view_ticket', $this->ticket->id);
                 }
             });
         } catch (Exception $e) {
@@ -130,36 +130,6 @@ class RequestApproval extends Component
         ], function ($approvers) {
             return !empty($approvers);
         });
-    }
-
-    private function triggerEvents()
-    {
-        $events = [
-            'loadTicketActions',
-            'refreshCustomForm',
-            'loadTicketLogs',
-            'loadRecommendationApproval',
-            'loadTicketStatusTextHeader'
-        ];
-
-        foreach ($events as $event) {
-            $this->emit($event);
-        }
-    }
-
-    private function actionOnSubmit()
-    {
-        $this->reset([
-            'level',
-            'reason',
-            'level1Approvers',
-            'level2Approvers',
-            'level3Approvers',
-            'level4Approvers',
-            'level5Approvers',
-        ]);
-        $this->triggerEvents();
-        $this->dispatchBrowserEvent('close-request-recommendation-approval-modal');
     }
 
     public function render()

@@ -164,7 +164,7 @@ class CreateTicket extends Component
                         $approver,
                         new AppNotification(
                             ticket: $ticket,
-                            title: "New Ticket {$ticket->ticket_number}",
+                            title: "Ticket #{$ticket->ticket_number} (New)",
                             message: "{$ticket->user->profile->getFullName} created a ticket"
                         )
                     );

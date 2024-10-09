@@ -15,14 +15,11 @@ use Livewire\Component;
 
 class NotificationList extends Component
 {
-    // public bool $notifReadByCoSDA = false;
+    private ?Ticket $ticket = null;
+    private ?string $notificationID = null;
+    public array $disabledNotifications = [];
 
     protected $listeners = ['staffLoadNotificationList' => '$refresh'];
-
-    // public function boot()
-    // {
-    //     $this->syncReadNotifications();
-    // }
 
     private function triggerEvents()
     {
@@ -84,29 +81,6 @@ class NotificationList extends Component
         auth()->user()->notifications->find($notificationId)->delete();
         $this->triggerEvents();
     }
-
-    // public function syncReadNotifications()
-    // {
-    //     $currentServiceDeptAdmin = auth()->user();
-    //     $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-    //         ->whereNot('id', auth()->user()->id)
-    //         ->withWhereHas('buDepartments', function ($department) use ($currentServiceDeptAdmin) {
-    //             $department->whereIn('departments.id', $currentServiceDeptAdmin->buDepartments->pluck('id')->toArray());
-    //         })
-    //         ->withWhereHas('branches', function ($branch) use ($currentServiceDeptAdmin) {
-    //             $branch->where('branches.id', $currentServiceDeptAdmin->branches->pluck('id')->first());
-    //         })->get();
-
-    //     foreach ($serviceDepartmentAdmins as $serviceDepartmentAdmin) {
-    //         foreach ($serviceDepartmentAdmin->notifications as $coSDANotification) {
-    //             foreach ($currentServiceDeptAdmin->notifications as $currSDANotification) {
-    //                 if ($coSDANotification->data['ticket']['id'] == $currSDANotification->data['ticket']['id']) {
-    //                     $this->notifReadByCoSDA = true;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 
     public function render()
     {

@@ -167,7 +167,7 @@
             const teamId = event.target.value;
 
             if (teamId) {
-                // @this.set('selectedTeams', teamId);
+                @this.set('selectedTeams', teamId);
                 agentSelect.enable();
                 window.addEventListener('get-agents-from-team', (event) => {
                     const agents = event.detail.agents;

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
+use App\Models\ActivityLog;
 use App\Models\Department;
 use App\Models\Role;
 use App\Models\ServiceDepartment;
@@ -57,6 +58,7 @@ class AssignTicket extends Component
     private function triggerEvents()
     {
         $events = [
+            'loadTicketLogs',
             'loadTicketDetails',
             'loadTicketActions',
             'loadBackButtonHeader',
@@ -81,6 +83,7 @@ class AssignTicket extends Component
             ->withWhereHas('branches', fn($branch) => $branch->where('branches.id', $this->ticket->branch->id))
             ->withWhereHas('teams', fn($team) => $team->whereIn('teams.id', $this->selectedTeams))
             ->get();
+
         $this->dispatchBrowserEvent('get-agents-from-team', ['agents' => $this->agents]);
     }
 
@@ -122,11 +125,12 @@ class AssignTicket extends Component
                         $this->ticket->agent,
                         new AppNotification(
                             ticket: $this->ticket,
-                            title: "Assigned Ticket {$this->ticket->ticket_number}",
+                            title: "Ticket #{$this->ticket->ticket_number} (Assigned)",
                             message: "{$serviceDepartmentAdmin->profile->getFullName} assign this ticket to you."
                         )
                     );
                     // Mail::to($this->ticket->agent)->send(new AssignedAgentMail($this->ticket, $this->ticket->agent));
+                    ActivityLog::make(ticket_id: $this->ticket->id, description: 'assigned the ticket');
                 }
             });
 
