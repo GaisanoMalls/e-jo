@@ -68,11 +68,21 @@ class UpdateHelpTopic extends Component
         $this->serviceDepartment = $this->helpTopic->service_department_id;
         $this->team = $this->helpTopic->team_id;
         $this->amount = $this->helpTopic->specialProject ? (float) $this->helpTopic->specialProject->amount : null;
-        $this->costingApprovers = is_array($this->helpTopic->costing?->costing_approvers) ? $this->helpTopic->costing->costing_approvers : json_decode($this->helpTopic->costing?->costing_approvers, true);
-        $this->finalCostingApprovers = is_array($this->helpTopic->costing?->final_costing_approvers) ? $this->helpTopic->costing->final_costing_approvers : json_decode($this->helpTopic->costing?->final_costing_approvers, true);
-        $this->teams = Team::whereHas('serviceDepartment', fn($query) => $query->where('service_department_id', $this->helpTopic->service_department_id))->get(['id', 'name']);
         $this->isSpecialProject = $this->helpTopic->specialProject ? true : false;
         $this->buDepartments = $this->queryBUDepartments();
+
+        $this->costingApprovers = is_array($this->helpTopic->costing?->costing_approvers)
+            ? $this->helpTopic->costing->costing_approvers
+            : json_decode($this->helpTopic->costing?->costing_approvers, true);
+
+        $this->finalCostingApprovers = is_array($this->helpTopic->costing?->final_costing_approvers)
+            ? $this->helpTopic->costing->final_costing_approvers
+            : json_decode($this->helpTopic->costing?->final_costing_approvers, true);
+
+        $this->teams = Team::whereHas('serviceDepartment', function ($query) {
+            $query->where('service_department_id', $this->helpTopic->service_department_id);
+        })->get(['id', 'name']);
+
         $this->fetchCostingApprovers();
         $this->loadConfigurations();
     }
@@ -154,7 +164,10 @@ class UpdateHelpTopic extends Component
 
     public function updatedServiceDepartment()
     {
-        $this->teams = Team::whereHas('serviceDepartment', fn($team) => $team->where('service_department_id', $this->serviceDepartment))->get(['id', 'name']);
+        $this->teams = Team::whereHas('serviceDepartment', function ($team) {
+            $team->where('service_department_id', $this->serviceDepartment);
+        })->get(['id', 'name']);
+
         $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
     }
 
