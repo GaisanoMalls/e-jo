@@ -178,7 +178,9 @@
                                                             <i class="bi bi-pencil"></i>
                                                         </button>
                                                         <button type="button" class="btn btn-sm action__button mt-0"
-                                                            wire:click="deleteConfiguration({{ $config['id'] }})">
+                                                            wire:click="confirmDeleteConfiguration({{ $config['id'] }})"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#confirmDeleteConfiguration">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </div>
@@ -279,7 +281,7 @@
                                             style=" height: 35px !important;
                                                 width: 35px !important;
                                                 border-radius: 0.563rem;
-                                                border: 2px solid #d9ddd9; 
+                                                border: 2px solid #d9ddd9;
                                                 object-fit: cover;">
                                     @else
                                         <div class="d-flex align-items-center p-2 justify-content-center text-white"
@@ -297,6 +299,57 @@
                                 <small style="font-size: 14px;">No assigned approvers.</small>
                             </div>
                         @endif
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Delete help topic configuration --}}
+    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="confirmDeleteConfiguration"
+        tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal__content">
+                <form wire:submit.prevent="delete">
+                    <div class="modal-body border-0 text-center pt-4 pb-1">
+                        <h6 class="fw-bold mb-4"
+                            style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                            Confirm Delete
+                        </h6>
+                        <p class="mb-1" style="font-weight: 500; font-size: 15px;">
+                            Delete help topic configuration?
+                        </p>
+                        <strong>{{ $deleteSelectedConfigBuDeptName }}</strong>
+                    </div>
+                    <hr>
+                    <div wire:click="cancelDeleteConfiguration"
+                        class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
+                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
+                            data-bs-dismiss="modal"
+                            style="padding: 0.6rem 1rem;
+                                border-radius: 0.563rem;
+                                font-size: 0.875rem;
+                                border: 1px solid #e7e9eb;
+                                background-color: transparent;
+                                color: #d32839;
+                                font-weight: 500;">
+                            Cancel
+                        </button>
+                        <button type="button"
+                            class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
+                            wire:click="deleteConfiguration"
+                            style="padding: 0.6rem 1rem;
+                                border-radius: 0.563rem;
+                                font-size: 0.875rem;
+                                background-color: #d32839;
+                                color: white;
+                                font-weight: 500;
+                                box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
+                            <span wire:loading wire:target="deleteConfiguration"
+                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                            </span>
+                            Yes, delete
+                        </button>
                     </div>
                 </form>
             </div>
@@ -613,6 +666,11 @@
                 specialProjectAmountContainer.style.display = 'none';
                 teamSelect.disable();
             }
+        });
+
+        //
+        window.addEventListener('close-confirm-delete-config-modal', () => {
+            $('#confirmDeleteConfiguration').modal('hide');
         });
     </script>
 @endpush

@@ -57,7 +57,11 @@ class UpdateHelpTopic extends Component
 
     public ?Collection $helpTopicConfigApprovers = null;
 
-    protected $listeners = ['reMount' => 'mount'];
+    // Delete selected helptopic configuration
+    public ?int $deleteSelectedConfigId = null;
+    public ?string $deleteSelectedConfigBuDeptName = null;
+
+    protected $listeners = ['remount' => 'mount'];
 
     public function mount()
     {
@@ -168,7 +172,9 @@ class UpdateHelpTopic extends Component
             $team->where('service_department_id', $this->serviceDepartment);
         })->get(['id', 'name']);
 
-        $this->dispatchBrowserEvent('get-teams-from-selected-service-department', ['teams' => $this->teams]);
+        $this->dispatchBrowserEvent('get-teams-from-selected-service-department', [
+            'teams' => $this->teams
+        ]);
     }
 
     public function fetchCostingApprovers()
@@ -220,7 +226,10 @@ class UpdateHelpTopic extends Component
             ->orderByDesc('created_at')
             ->get();
 
-        $this->dispatchBrowserEvent('load-approvers2', ['approvers' => $filteredApprovers, 'level' => $level]);
+        $this->dispatchBrowserEvent('load-approvers2', [
+            'approvers' => $filteredApprovers,
+            'level' => $level
+        ]);
     }
 
     public function saveConfiguration()
@@ -271,10 +280,28 @@ class UpdateHelpTopic extends Component
         $helpTopicConfiguration->approvers()->with('approver.profile')->get();
     }
 
-    public function deleteConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
+    public function cancelDeleteConfiguration()
+    {
+        $this->reset(['deleteSelectedConfigId', 'deleteSelectedConfigBuDeptName']);
+        $this->dispatchBrowserEvent('close-confirm-delete-config-modal');
+        $this->emitSelf('remount');
+    }
+
+    public function confirmDeleteConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
+    {
+        $this->deleteSelectedConfigId = $helpTopicConfiguration->id;
+        $this->deleteSelectedConfigBuDeptName = $helpTopicConfiguration->buDepartment->name;
+    }
+
+    public function deleteConfiguration()
     {
         try {
-            $helpTopicConfiguration->delete();
+            $configuration = HelpTopicConfiguration::findOrFail($this->deleteSelectedConfigId);
+            $configuration->delete();
+
+            $this->reset(['deleteSelectedConfigId', 'deleteSelectedConfigBuDeptName']);
+            $this->dispatchBrowserEvent('close-confirm-delete-config-modal');
+            $this->emitSelf('remount');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
