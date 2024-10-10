@@ -82,8 +82,7 @@ class ApproveTicket extends Component
 
                         $ticketApproval = TicketApproval::where('ticket_id', $this->ticket->id)
                             ->withWhereHas('helpTopicApprover', function ($approver) {
-                                $approver->where('help_topic_id', $this->ticket->help_topic_id)
-                                ;
+                                $approver->where('help_topic_id', $this->ticket->help_topic_id);
                             })->first();
 
                         $ticketApproval->update(['is_approved' => true]);

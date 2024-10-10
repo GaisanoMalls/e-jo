@@ -2,8 +2,8 @@
     use App\Models\Role;
 @endphp
 
-<div>
-    @if ($recommendation && $this->isRecommendationRequested())
+@if ($recommendation && $this->isRecommendationRequested())
+    <div>
         @if ($this->isTicketRecommendationIsApproved())
             <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
                 style="font-size: 13px; background-color: #dffdef;">
@@ -85,5 +85,5 @@
                 @endif
             @endif
         @endif
-    @endif
-</div>
+    </div>
+@endif

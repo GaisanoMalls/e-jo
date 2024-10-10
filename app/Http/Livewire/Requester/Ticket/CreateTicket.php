@@ -50,8 +50,18 @@ class CreateTicket extends Component
     public ?int $priorityLevel = null;
     public ?int $serviceDepartment = null;
     public ?int $helpTopic = null;
-    public $fileAttachments = [];
-    public array $allowedExtensions = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'];
+    public array $fileAttachments = [];
+    public array $allowedExtensions = [
+        'jpeg',
+        'jpg',
+        'png',
+        'pdf',
+        'doc',
+        'docx',
+        'xlsx',
+        'xls',
+        'csv'
+    ];
 
     // Help topic form
     public ?Form $helpTopicForm = null;
@@ -322,6 +332,7 @@ class CreateTicket extends Component
         $this->helpTopics = HelpTopic::with(['team', 'sla'])
             ->whereHas('serviceDepartment', fn($query) =>
                 $query->where('service_department_id', $value))
+            ->whereHas('configurations')
             ->get();
 
         $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);

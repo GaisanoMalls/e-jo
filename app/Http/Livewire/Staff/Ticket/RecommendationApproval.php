@@ -19,7 +19,7 @@ class RecommendationApproval extends Component
     public ?Recommendation $recommendation = null;
     public Collection $recommendationApprovers;
 
-    protected $listeners = ['loadRecommendationApproval' > '$refresh'];
+    protected $listeners = ['loadRecommendationApproval' => '$refresh'];
 
     public function approveTicketRecommendation()
     {
