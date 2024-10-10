@@ -8,257 +8,251 @@
                         Last updated: {{ $helpTopic->dateUpdated() }}
                     </small>
                 </div>
-                <form wire:submit.prevent="updateHelpTopic">
-                    <input type="hidden" value="{{ $helpTopic->id }}" id="helpTopicID">
-                    <div class="row gap-4 help__topic__details__container">
-                        <div class="col-12">
-                            <div class="row">
-                                <div wire:ignore.self class="col-md-6" id="help-topic-name-container">
-                                    <div class="mb-2">
-                                        <label for="helpTopicName" class="form-label form__field__label">Name</label>
-                                        <input type="text" wire:model.defer="name" class="form-control form__field"
-                                            id="helpTopicName" placeholder="Enter help topic name">
-                                        @error('name')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <!-- SLA Field -->
-                                <div class="col-md-6">
-                                    <div class="mb-2">
-                                        <label for="sla" class="form-label form__field__label">Service Level
-                                            Agreement (SLA)</label>
-                                        <div>
-                                            <div id="select-help-topic-sla" wire:ignore></div>
-                                        </div>
-                                        @error('sla')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <!-- Service Department Field -->
-                                <div class="col-md-6">
-                                    <div class="mb-2">
-                                        <label for="serviceDepartment" class="form-label form__field__label">
-                                            Service Department
-                                        </label>
-                                        <div>
-                                            <div id="select-help-topic-service-department" wire:ignore></div>
-                                        </div>
-                                        @error('serviceDepartment')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <!-- Team Field -->
-                                <div class="col-md-6" id="teamSelectContainer" wire:ignore>
-                                    <div class="mb-2">
-                                        <label for="team" class="form-label form__field__label">Team <span
-                                                class="fw-normal" style="font-size: 13px;"
-                                                id="countTeams"></span></label>
-                                        <div>
-                                            <div id="select-help-topic-team" placeholder="Select (optional)"
-                                                wire:ignore></div>
-                                        </div>
-                                        @if (session()->has('team_error'))
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ session('team_error') }}
-                                            </span>
-                                        @endif
-                                        @error('team')
-                                            <span class="error__message">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <h6 class="mb-0 fw-bold">Configurations</h6>
-                        </div>
-                        <div class="row mb-3">
-                            <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
-                                style="font-size: 0.89rem; color: #9da85c;">
-                                <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
-                                Approval
-                            </h6>
-                            <div class="col-md-6">
-                                <div class="mb-2">
-                                    <label for="department" class="form-label form__field__label">BU Department</label>
-                                    <div>
-                                        <div id="select-help-topic-bu-department" wire:ignore></div>
-                                    </div>
-                                    @error('bu_department')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-2">
-                                    <label for="department" class="form-label form__field__label">Level of
-                                        Approval</label>
-                                    <div>
-                                        <div id="select-help-topic-approval-level" wire:ignore></div>
-                                    </div>
-                                    @error('bu_department')
-                                        <span class="error__message">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div wire:ignore class="row" id="dynamic-approval-container"></div>
-                            <div class="my-2"
-                                style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
-                                <button wire:click="saveConfiguration"
-                                    class="btn d-flex align-items-center justify-content-center rounded-3"
-                                    style="height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
-                                    Add approval
-                                </button>
-                                <button type="button"
-                                    class="btn d-flex align-items-center justify-content-center rounded-3"
-                                    style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
-                                    Cancel
-                                </button>
-                            </div>
-                            @if (!empty($configurations))
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
-                                            <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
-                                            <th style="font-size: 0.85rem; padding: 17px 21px;">
-                                                Numbers of Approvers
-                                            </th>
-                                            <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
-                                                Actions
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($configurations as $index => $config)
-                                            <tr wire:key="config-{{ $index + 1 }}">
-                                                <td class="td__content" style="font-size: 0.85rem;">
-                                                    {{ $index + 1 }}
-                                                </td>
-                                                <td class="td__content" style="font-size: 0.85rem;">
-                                                    {{ $config['bu_department_name'] }}
-                                                </td>
-                                                <td class="td__content" style="font-size: 0.85rem;">
-                                                    {{ $config['approvers_count'] }}
-                                                </td>
-                                                <td class="td__content" style="font-size: 0.85rem;">
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-center pe-2 gap-1">
-                                                        <button type="button" class="btn btn-sm action__button"
-                                                            wire:click="viewConfigurationApprovers({{ $config['id'] }})"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#viewHelpTopicApprovers">
-                                                            <i class="bi bi-eye"></i>
-                                                        </button>
-                                                        <button type="button" class="btn btn-sm action__button"
-                                                            wire:click="editConfiguration({{ $config['id'] }})">
-                                                            <i class="bi bi-pencil"></i>
-                                                        </button>
-                                                        <button type="button" class="btn btn-sm action__button mt-0"
-                                                            wire:click="confirmDeleteConfiguration({{ $config['id'] }})"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#confirmDeleteConfiguration">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Costing Configuration -->
-                    @if ($isSpecialProject)
-                        <div class="row">
-                            <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
-                                style="font-size: 0.89rem; color: #196837;">
-                                <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
-                                Costing
-                            </h6>
-                            <div class="row mb-2">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="mb-3">
-                                                <label for="costingApprover"
-                                                    class="form-label form__field__label">Costing
-                                                    Approver</label>
-                                                <div>
-                                                    <div id="select-help-topic-costing-approver" wire:ignore></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="mb-3">
-                                                <label for="amount" class="form-label form__field__label">Enter
-                                                    Maximum
-                                                    Total Cost</label>
-                                                <div class="d-flex position-relative amount__field__container">
-                                                    <span class="currency text-muted position-absolute mt-2">₱</span>
-                                                    <input type="text" wire:model="amount"
-                                                        class="form-control form__field amount__field" id="amount"
-                                                        placeholder="Enter Total Cost">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4" id="costing-approver-container">
-                                            <div class="mb-3">
-                                                <label class="form-label form__field__label">Final Cost
-                                                    Approver</label>
-                                                <div>
-                                                    <div id="select-help-topic-final-costing-approver" wire:ignore>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
+                <input type="hidden" value="{{ $helpTopic->id }}" id="helpTopicID">
+                <div class="row gap-4 help__topic__details__container">
                     <div class="col-12">
-                        <div class="d-flex align-items-center gap-2">
-                            <button type="submit"
-                                class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
-                                style="background-color: #d32839; color: white;" wire:click="updateHelpTopic">
-                                <span wire:loading wire:target="updateHelpTopic"
-                                    class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
-                                </span>
-                                Update
-                            </button>
-                            <a href="{{ route('staff.manage.help_topic.index') }}" type="button"
-                                class="btn m-0 btn__modal__footer btn__cancel">
-                                Cancel
-                            </a>
+                        <div class="row">
+                            <div wire:ignore.self class="col-md-6" id="help-topic-name-container">
+                                <div class="mb-2">
+                                    <label for="helpTopicName" class="form-label form__field__label">Name</label>
+                                    <input type="text" wire:model.defer="name" class="form-control form__field"
+                                        id="helpTopicName" placeholder="Enter help topic name">
+                                    @error('name')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <!-- SLA Field -->
+                            <div class="col-md-6">
+                                <div class="mb-2">
+                                    <label for="sla" class="form-label form__field__label">Service Level
+                                        Agreement (SLA)</label>
+                                    <div>
+                                        <div id="select-help-topic-sla" wire:ignore></div>
+                                    </div>
+                                    @error('sla')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <!-- Service Department Field -->
+                            <div class="col-md-6">
+                                <div class="mb-2">
+                                    <label for="serviceDepartment" class="form-label form__field__label">
+                                        Service Department
+                                    </label>
+                                    <div>
+                                        <div id="select-help-topic-service-department" wire:ignore></div>
+                                    </div>
+                                    @error('serviceDepartment')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <!-- Team Field -->
+                            <div class="col-md-6" id="teamSelectContainer" wire:ignore>
+                                <div class="mb-2">
+                                    <label for="team" class="form-label form__field__label">Team <span
+                                            class="fw-normal" style="font-size: 13px;" id="countTeams"></span></label>
+                                    <div>
+                                        <div id="select-help-topic-team" placeholder="Select (optional)" wire:ignore>
+                                        </div>
+                                    </div>
+                                    @if (session()->has('team_error'))
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ session('team_error') }}
+                                        </span>
+                                    @endif
+                                    @error('team')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </form>
+                    <hr>
+                    <div class="row">
+                        <h6 class="mb-0 fw-bold">Configurations</h6>
+                    </div>
+                    <div class="row mb-3">
+                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
+                            style="font-size: 0.89rem; color: #9da85c;">
+                            <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
+                            Approval
+                        </h6>
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <label for="department" class="form-label form__field__label">BU Department</label>
+                                <div>
+                                    <div id="select-help-topic-bu-department" wire:ignore></div>
+                                </div>
+                                @error('bu_department')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <label for="department" class="form-label form__field__label">Level of
+                                    Approval</label>
+                                <div>
+                                    <div id="select-help-topic-approval-level" wire:ignore></div>
+                                </div>
+                                @error('bu_department')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div wire:ignore class="row" id="dynamic-approval-container"></div>
+                        <div class="my-2"
+                            style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
+                            <button wire:click="saveConfiguration"
+                                class="btn d-flex align-items-center justify-content-center rounded-3"
+                                style="height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
+                                Add approval
+                            </button>
+                            <button type="button"
+                                class="btn d-flex align-items-center justify-content-center rounded-3"
+                                style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
+                                Cancel
+                            </button>
+                        </div>
+                        @if (!empty($configurations))
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
+                                        <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
+                                        <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
+                                        <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($configurations as $index => $config)
+                                        <tr wire:key="config-{{ $index + 1 }}">
+                                            <td class="td__content" style="font-size: 0.85rem;">
+                                                {{ $index + 1 }}
+                                            </td>
+                                            <td class="td__content" style="font-size: 0.85rem;">
+                                                {{ $config['bu_department_name'] }}
+                                            </td>
+                                            <td class="td__content" style="font-size: 0.85rem;">
+                                                {{ $config['approvers_count'] }}
+                                            </td>
+                                            <td class="td__content" style="font-size: 0.85rem;">
+                                                <div
+                                                    class="d-flex align-items-center justify-content-center pe-2 gap-1">
+                                                    <button type="button" class="btn btn-sm action__button"
+                                                        wire:click="viewConfigurationApprovers({{ $index }})"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#viewHelpTopicApprovers">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm action__button"
+                                                        wire:click="editConfiguration({{ $index }})">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm action__button mt-0"
+                                                        wire:click="confirmDeleteConfiguration({{ $index }})"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#confirmDeleteConfiguration">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Costing Configuration -->
+                @if ($isSpecialProject)
+                    <div class="row">
+                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
+                            style="font-size: 0.89rem; color: #196837;">
+                            <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
+                            Costing
+                        </h6>
+                        <div class="row mb-2">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="costingApprover" class="form-label form__field__label">Costing
+                                                Approver</label>
+                                            <div>
+                                                <div id="select-help-topic-costing-approver" wire:ignore></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="amount" class="form-label form__field__label">Enter
+                                                Maximum
+                                                Total Cost</label>
+                                            <div class="d-flex position-relative amount__field__container">
+                                                <span class="currency text-muted position-absolute mt-2">₱</span>
+                                                <input type="text" wire:model="amount"
+                                                    class="form-control form__field amount__field" id="amount"
+                                                    placeholder="Enter Total Cost">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" id="costing-approver-container">
+                                        <div class="mb-3">
+                                            <label class="form-label form__field__label">Final Cost
+                                                Approver</label>
+                                            <div>
+                                                <div id="select-help-topic-final-costing-approver" wire:ignore>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                <div class="col-12">
+                    <div class="d-flex align-items-center gap-2">
+                        <button wire:click="updateHelpTopic" type="button"
+                            class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
+                            style="background-color: #d32839; color: white;" wire:click="updateHelpTopic">
+                            <span wire:loading wire:target="updateHelpTopic" class="spinner-border spinner-border-sm"
+                                role="status" aria-hidden="true">
+                            </span>
+                            Update
+                        </button>
+                        <a href="{{ route('staff.manage.help_topic.index') }}" type="button"
+                            class="btn m-0 btn__modal__footer btn__cancel">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -608,8 +602,9 @@
                     selectedValue: @json($costingApprovers)
                 });
 
-                document.querySelector('#select-help-topic-costing-approver').addEventListener('change', (
-                    event) => {
+                const editHelpTopicSelectCostingApprover = document.querySelector(
+                    '#select-help-topic-costing-approver');
+                editHelpTopicSelectCostingApprover.addEventListener('change', (event) => {
                     const selectedCostingApprovers = event.target.value;
                     @this.set('costingApprovers', selectedCostingApprovers);
                 });
@@ -666,6 +661,11 @@
                 specialProjectAmountContainer.style.display = 'none';
                 teamSelect.disable();
             }
+
+            window.addEventListener('get-helptopic-co-approvers', (event) => {
+                console.log(event.detail.helpTopicApprovers);
+
+            })
         });
 
         //

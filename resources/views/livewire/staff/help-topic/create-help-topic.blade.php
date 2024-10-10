@@ -158,7 +158,7 @@
                                     <tr>
                                         <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
                                         <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
-                                        <th style="font-size: 0.85rem; padding: 17px 21px;">Numbers of Approvers</th>
+                                        <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
                                         <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">Actions
                                         </th>
                                     </tr>

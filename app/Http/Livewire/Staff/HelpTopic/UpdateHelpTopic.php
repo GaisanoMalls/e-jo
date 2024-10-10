@@ -235,11 +235,11 @@ class UpdateHelpTopic extends Component
     public function saveConfiguration()
     {
         $approvers = [
-            'level1' => $this->level1Approvers,
-            'level2' => $this->level2Approvers,
-            'level3' => $this->level3Approvers,
-            'level4' => $this->level4Approvers,
-            'level5' => $this->level5Approvers,
+            'level1' => array_map('intval', $this->level1Approvers),
+            'level2' => array_map('intval', $this->level2Approvers),
+            'level3' => array_map('intval', $this->level3Approvers),
+            'level4' => array_map('intval', $this->level4Approvers),
+            'level5' => array_map('intval', $this->level5Approvers),
         ];
 
         $approversCount = array_sum(array_map('count', $approvers));
@@ -277,7 +277,15 @@ class UpdateHelpTopic extends Component
 
     public function editConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
     {
-        $helpTopicConfiguration->approvers()->with('approver.profile')->get();
+        $currentConfigApprovers = $helpTopicConfiguration->approvers()->with('approver.profile')->pluck('user_id')->toArray();
+        $helpTopicApprovers = HelpTopicApprover::with('approver.profile')
+            ->whereNotIn('id', $currentConfigApprovers)
+            ->where('help_topic_configuration_id', $helpTopicConfiguration->id)
+            ->get();
+
+        $this->dispatchBrowserEvent('get-helptopic-co-approvers', [
+            'helpTopicApprovers' => $helpTopicApprovers
+        ]);
     }
 
     public function cancelDeleteConfiguration()
