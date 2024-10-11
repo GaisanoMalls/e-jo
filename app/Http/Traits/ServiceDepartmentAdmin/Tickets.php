@@ -6,7 +6,7 @@ use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\Utils;
 use App\Models\Status;
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 trait Tickets
 {

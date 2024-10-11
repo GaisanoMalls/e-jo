@@ -99,7 +99,7 @@
                                 <div>
                                     <div id="select-help-topic-bu-department" wire:ignore></div>
                                 </div>
-                                @error('bu_department')
+                                @error('selectedBuDepartment')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -114,7 +114,7 @@
                                 <div>
                                     <div id="select-help-topic-approval-level" wire:ignore></div>
                                 </div>
-                                @error('bu_department')
+                                @error('selectedApprovalLevel')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -136,55 +136,111 @@
                                 Cancel
                             </button>
                         </div>
-                        @if (!empty($configurations))
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
-                                        <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
-                                        <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
-                                        <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($configurations as $index => $config)
-                                        <tr wire:key="config-{{ $index + 1 }}">
-                                            <td class="td__content" style="font-size: 0.85rem;">
-                                                {{ $index + 1 }}
-                                            </td>
-                                            <td class="td__content" style="font-size: 0.85rem;">
-                                                {{ $config['bu_department_name'] }}
-                                            </td>
-                                            <td class="td__content" style="font-size: 0.85rem;">
-                                                {{ $config['approvers_count'] }}
-                                            </td>
-                                            <td class="td__content" style="font-size: 0.85rem;">
-                                                <div
-                                                    class="d-flex align-items-center justify-content-center pe-2 gap-1">
-                                                    <button type="button" class="btn btn-sm action__button"
-                                                        wire:click="viewConfigurationApprovers({{ $index }})"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#viewHelpTopicApprovers">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm action__button"
-                                                        wire:click="editConfiguration({{ $index }})">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm action__button mt-0"
-                                                        wire:click="confirmDeleteConfiguration({{ $index }})"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#confirmDeleteConfiguration">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
+                        @if (!empty($addedConfigurations))
+                            <div class="d-flex flex-column mt-3">
+                                <h6 class="mb-0" style="font-size: 0.88rem;">Added Configuration</h6>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
+                                            <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
+                                                Actions
+                                            </th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($addedConfigurations as $index => $addedConfig)
+                                            <tr wire:key="config-{{ $index + 1 }}">
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $index + 1 }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $addedConfig['bu_department_name'] }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $addedConfig['approvers_count'] }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-center pe-2 gap-1">
+                                                        <button type="button" class="btn btn-sm action__button"
+                                                            wire:click="viewConfigurationApprovers({{ $index }})"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#viewHelpTopicApprovers">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm action__button"
+                                                            wire:click="editConfiguration({{ $index }})">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm action__button mt-0"
+                                                            wire:click="confirmDeleteConfiguration({{ $index }})"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#confirmDeleteConfiguration">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                        @if ($currentConfigurations->isNotEmpty())
+                            <div class="d-flex flex-column mt-3">
+                                <h6 class="mb-0" style="font-size: 0.88rem;">Current Configuration</h6>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
+                                            <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
+                                                Actions
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($currentConfigurations as $index => $currentConfig)
+                                            <tr wire:key="config-{{ $index + 1 }}">
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $index + 1 }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $currentConfig['bu_department_name'] }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $currentConfig['approvers_count'] }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-center pe-2 gap-1">
+                                                        <button type="button" class="btn btn-sm action__button"
+                                                            wire:click="viewConfigurationApprovers({{ $index }})"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#viewHelpTopicApprovers">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm action__button"
+                                                            wire:click="editConfiguration({{ $index }})">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm action__button mt-0"
+                                                            wire:click="confirmDeleteConfiguration({{ $index }})"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#confirmDeleteConfiguration">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -203,7 +259,8 @@
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="costingApprover" class="form-label form__field__label">Costing
-                                                Approver</label>
+                                                Approver
+                                            </label>
                                             <div>
                                                 <div id="select-help-topic-costing-approver" wire:ignore></div>
                                             </div>
@@ -212,8 +269,8 @@
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="amount" class="form-label form__field__label">Enter
-                                                Maximum
-                                                Total Cost</label>
+                                                Maximum Total Cost
+                                            </label>
                                             <div class="d-flex position-relative amount__field__container">
                                                 <span class="currency text-muted position-absolute mt-2">₱</span>
                                                 <input type="text" wire:model="amount"
@@ -224,8 +281,9 @@
                                     </div>
                                     <div class="col-md-4" id="costing-approver-container">
                                         <div class="mb-3">
-                                            <label class="form-label form__field__label">Final Cost
-                                                Approver</label>
+                                            <label class="form-label form__field__label">
+                                                Final Cost Approver
+                                            </label>
                                             <div>
                                                 <div id="select-help-topic-final-costing-approver" wire:ignore>
                                                 </div>
@@ -502,15 +560,15 @@
                 options: approvalLevelOption,
                 search: true,
                 markSearchResults: true,
-                selectedValue: '{{ $approvalLevelSelected }}'
+                selectedValue: '{{ $selectedApprovalLevel }}'
             });
 
             buDepartmentSelect.addEventListener('change', (event) => {
-                @this.set('selectedBuDepartment', event.target.value);
+                @this.set('selectedBuDepartment', parseInt(event.target.value));
             });
 
             approvalLevelSelect.addEventListener('change', (event) => {
-                @this.set('approvalLevelSelected', event.target.value);
+                @this.set('selectedApprovalLevel', event.target.value);
             });
 
             const dynamicApprovalLevelContainer = document.querySelector('#dynamic-approval-container');

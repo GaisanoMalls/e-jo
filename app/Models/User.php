@@ -13,7 +13,7 @@ use App\Models\Role;
 use App\Models\ServiceDepartment;
 use App\Models\Team;
 use App\Models\Ticket;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;

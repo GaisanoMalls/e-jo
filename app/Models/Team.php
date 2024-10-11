@@ -46,9 +46,9 @@ class Team extends Model
         return $this->hasMany(Subteam::class);
     }
 
-    public function ictRecommendations(): HasMany
+    public function recommendations(): HasMany
     {
-        return $this->hasMany(IctRecommendation::class);
+        return $this->hasMany(Recommendation::class);
     }
 
     public function branches(): BelongsToMany

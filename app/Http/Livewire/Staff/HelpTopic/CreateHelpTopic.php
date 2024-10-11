@@ -41,12 +41,17 @@ class CreateHelpTopic extends Component
 
     //Approval Configurations
     public array $approvalLevels = [1, 2, 3, 4, 5];
+    /**
+     * Level 1 to 5 approvers
+     * @var array<int>
+     */
     public array $level1Approvers = [];
     public array $level2Approvers = [];
     public array $level3Approvers = [];
     public array $level4Approvers = [];
     public array $level5Approvers = [];
     public array $selectedApprovers = [];
+
     public bool $approvalLevelSelected = false;
     public ?int $levelOfApproval = null;
 
@@ -183,6 +188,18 @@ class CreateHelpTopic extends Component
 
     public function saveConfiguration()
     {
+        if (!$this->approvalLevelSelected) {
+            $this->addError('approvalLevelSelected', 'Level of approval field is required.');
+        } else {
+            $this->resetValidation('approvalLevelSelected');
+        }
+
+        if (!$this->selectedBuDepartment) {
+            $this->addError('selectedBuDepartment', 'BU department field is required.');
+        } else {
+            $this->resetValidation('selectedBuDepartment');
+        }
+
         $approvers = [
             'level1' => array_map('intval', $this->level1Approvers),
             'level2' => array_map('intval', $this->level2Approvers),
@@ -197,21 +214,17 @@ class CreateHelpTopic extends Component
             }
         }
 
-        if (!$this->approvalLevelSelected) {
-            $this->addError('approvalLevelSelected', 'Level of approval field is required.');
-        }
-
-        if (!$this->selectedBuDepartment) {
-            $this->addError('selectedBuDepartment', 'BU department field is required.');
-        }
-
         $approversCount = array_sum(array_map('count', $approvers));
 
         if ($this->approvalLevelSelected && $this->selectedBuDepartment) {
             // Check if BU department and level of approval is selected
             if ($this->selectedBuDepartment && $this->approvalLevelSelected) {
                 // Get the selected BU Department name
-                $buDepartmentName = collect($this->queryBUDepartments())->firstWhere('id', $this->selectedBuDepartment)['name'];
+                $buDepartmentName = collect($this->queryBUDepartments())
+                    ->where('id', $this->selectedBuDepartment)
+                    ->pluck('name')
+                    ->first();
+
                 // Add to the configurations array
                 $this->configurations[] = [
                     'bu_department_id' => $this->selectedBuDepartment,
@@ -323,6 +336,20 @@ class CreateHelpTopic extends Component
 
     public function saveEditConfiguration()
     {
+        if (!$this->editLevelOfApproval) {
+            $this->addError('editLevelOfApproval', 'Level of approval field is required.');
+            return;
+        } else {
+            $this->resetValidation('editLevelOfApproval');
+        }
+
+        if (!$this->editSelectedBuDepartment) {
+            $this->addError('editSelectedBuDepartment', 'BU department field is required.');
+            return;
+        } else {
+            $this->resetValidation('editSelectedBuDepartment');
+        }
+
         $this->configurations = []; // Reset the configuration first
 
         $approvers = [
@@ -340,14 +367,6 @@ class CreateHelpTopic extends Component
         }
 
         $approversCount = array_sum(array_map('count', $approvers));
-
-        if (!$this->editLevelOfApproval) {
-            $this->addError('editLevelOfApproval', 'Level of approval field is required.');
-        }
-
-        if (!$this->editSelectedBuDepartment) {
-            $this->addError('editSelectedBuDepartment', 'BU department field is required.');
-        }
 
         if ($this->editLevelOfApproval && $this->editSelectedBuDepartment) {
             // Get the selected BU Department name

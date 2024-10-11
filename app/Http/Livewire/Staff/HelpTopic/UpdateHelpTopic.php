@@ -13,7 +13,7 @@ use App\Models\SpecialProject;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -24,38 +24,41 @@ class UpdateHelpTopic extends Component
     use BasicModelQueries;
 
     public HelpTopic $helpTopic;
-    public bool $isSpecialProject = false;
     public Collection $teams;
     public string $name;
     public int $sla;
     public int $serviceDepartment;
     public int $team;
     public ?float $amount = null;
+    public bool $isSpecialProject = false;
 
     // Costing Configuration
     public $costingApprovers = [];
     public $finalCostingApprovers = [];
     public $costingApproversList = [];
     public $finalCostingApproversList = [];
-    public $showCostingApproverSelect = false;
+    public bool $showCostingApproverSelect = false;
 
     // Approval Configurations
-    public $approvalLevels = [1, 2, 3, 4, 5];
-    public $levelApprovers = null;
-    public $level1Approvers = [];
-    public $level2Approvers = [];
-    public $level3Approvers = [];
-    public $level4Approvers = [];
-    public $level5Approvers = [];
-    public $approvalLevelSelected = false;
+    public array $approvalLevels = [1, 2, 3, 4, 5];
+    /**
+     * Level 1 to 5 approvers
+     * @var array<int>
+     */
+    public array $level1Approvers = [];
+    public array $level2Approvers = [];
+    public array $level3Approvers = [];
+    public array $level4Approvers = [];
+    public array $level5Approvers = [];
 
-    public $buDepartment;
-    public $buDepartments;
-    public $configurations = [];
-    public $selectedBuDepartment;
-    public $selectedApproversCount = 0;
+    public bool $selectedApprovalLevel = false;
 
+    public Collection $buDepartments;
+    public int $selectedApproversCount = 0;
+    public ?int $selectedBuDepartment = null;
     public ?Collection $helpTopicConfigApprovers = null;
+    public ?Collection $currentConfigurations = null;
+    public array $addedConfigurations = [];
 
     // Delete selected helptopic configuration
     public ?int $deleteSelectedConfigId = null;
@@ -66,6 +69,7 @@ class UpdateHelpTopic extends Component
     public function mount()
     {
         $this->helpTopicConfigApprovers = new Collection();
+        $this->currentConfigurations = new Collection();
 
         $this->name = preg_replace('/ - [^-]+$/', '', $this->helpTopic->name);
         $this->sla = $this->helpTopic->service_level_agreement_id;
@@ -73,7 +77,10 @@ class UpdateHelpTopic extends Component
         $this->team = $this->helpTopic->team_id;
         $this->amount = $this->helpTopic->specialProject ? (float) $this->helpTopic->specialProject->amount : null;
         $this->isSpecialProject = $this->helpTopic->specialProject ? true : false;
-        $this->buDepartments = $this->queryBUDepartments();
+        $this->fetchCostingApprovers();
+        $this->loadCurrentConfigurations();
+
+        $this->buDepartments = $this->queryBUDepartments()->except($this->helpTopic->configurations->pluck('bu_department_id')->toArray());
 
         $this->costingApprovers = is_array($this->helpTopic->costing?->costing_approvers)
             ? $this->helpTopic->costing->costing_approvers
@@ -86,9 +93,6 @@ class UpdateHelpTopic extends Component
         $this->teams = Team::whereHas('serviceDepartment', function ($query) {
             $query->where('service_department_id', $this->helpTopic->service_department_id);
         })->get(['id', 'name']);
-
-        $this->fetchCostingApprovers();
-        $this->loadConfigurations();
     }
 
     public function rules()
@@ -136,10 +140,7 @@ class UpdateHelpTopic extends Component
                     ]
                 );
 
-                // Delete existing configurations and re-create them
-                $this->helpTopic->configurations()->delete();
-
-                foreach ($this->configurations as $config) {
+                foreach ($this->addedConfigurations as $config) {
                     $helpTopicConfiguration = HelpTopicConfiguration::create([
                         'help_topic_id' => $this->helpTopic->id,
                         'bu_department_id' => $config['bu_department_id'],
@@ -194,10 +195,10 @@ class UpdateHelpTopic extends Component
         $this->finalCostingApproversList = $this->costingApproversList;
     }
 
-    public function loadConfigurations()
+    public function loadCurrentConfigurations()
     {
         $config = $this->helpTopic->configurations()->with('buDepartment')->get();
-        $this->configurations = $config->map(function ($config) {
+        return $this->currentConfigurations = $config->map(function ($config) {
             return [
                 'id' => $config->id,
                 'bu_department_id' => $config->bu_department_id,
@@ -207,7 +208,7 @@ class UpdateHelpTopic extends Component
                     return $approvers->pluck('user_id');
                 })->toArray(),
             ];
-        })->toArray();
+        });
     }
 
     public function getFilteredApprovers2($level)
@@ -234,6 +235,20 @@ class UpdateHelpTopic extends Component
 
     public function saveConfiguration()
     {
+        if (!$this->selectedBuDepartment) {
+            $this->addError('selectedBuDepartment', 'BU department field is required.');
+            return;
+        } else {
+            $this->resetValidation('selectedBuDepartment');
+        }
+
+        if (!$this->selectedApprovalLevel) {
+            $this->addError('selectedApprovalLevel', 'Level of approval field is required.');
+            return;
+        } else {
+            $this->resetValidation('selectedApprovalLevel');
+        }
+
         $approvers = [
             'level1' => array_map('intval', $this->level1Approvers),
             'level2' => array_map('intval', $this->level2Approvers),
@@ -245,10 +260,13 @@ class UpdateHelpTopic extends Component
         $approversCount = array_sum(array_map('count', $approvers));
 
         // Get the selected BU Department name
-        $buDepartmentName = collect($this->buDepartments)->firstWhere('id', $this->selectedBuDepartment)['name'];
+        $buDepartmentName = collect($this->buDepartments)
+            ->where('id', $this->selectedBuDepartment)
+            ->pluck('name')
+            ->first();
 
         // Add to the configurations array
-        $this->configurations[] = [
+        $this->addedConfigurations[] = [
             'bu_department_id' => $this->selectedBuDepartment,
             'bu_department_name' => $buDepartmentName,
             'approvers_count' => $approversCount,
@@ -261,7 +279,7 @@ class UpdateHelpTopic extends Component
     private function resetApprovalConfigFields()
     {
         $this->selectedBuDepartment = null;
-        $this->approvalLevelSelected = false;
+        $this->selectedApprovalLevel = false;
         $this->level1Approvers = [];
         $this->level2Approvers = [];
         $this->level3Approvers = [];

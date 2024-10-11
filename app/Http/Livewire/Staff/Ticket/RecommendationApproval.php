@@ -9,7 +9,7 @@ use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
