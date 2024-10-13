@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\HelpTopic;
 
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
+use App\Models\Department;
 use App\Models\HelpTopic;
 use App\Models\HelpTopicApprover;
 use App\Models\HelpTopicConfiguration;
@@ -51,14 +52,17 @@ class UpdateHelpTopic extends Component
     public array $level4Approvers = [];
     public array $level5Approvers = [];
 
-    public bool $selectedApprovalLevel = false;
+    public ?int $levelOfApproval = null;
 
     public Collection $buDepartments;
     public int $selectedApproversCount = 0;
     public ?int $selectedBuDepartment = null;
-    public ?Collection $helpTopicConfigApprovers = null;
     public ?Collection $currentConfigurations = null;
     public array $addedConfigurations = [];
+
+    // Edit help topic configuration
+    public ?Department $currentConfigBuDepartment;
+    public ?Collection $currentConfigApprovers = null;
 
     // Delete selected helptopic configuration
     public ?int $deleteSelectedConfigId = null;
@@ -68,7 +72,7 @@ class UpdateHelpTopic extends Component
 
     public function mount()
     {
-        $this->helpTopicConfigApprovers = new Collection();
+        $this->currentConfigApprovers = new Collection();
         $this->currentConfigurations = new Collection();
 
         $this->name = preg_replace('/ - [^-]+$/', '', $this->helpTopic->name);
@@ -127,24 +131,25 @@ class UpdateHelpTopic extends Component
                         ['help_topic_id' => $this->helpTopic->id],
                         ['amount' => $this->amount]
                     );
+
+                    HelpTopicCosting::updateOrCreate(
+                        ['help_topic_id' => $this->helpTopic->id],
+                        [
+                            'costing_approvers' => $this->costingApprovers,
+                            'amount' => $this->amount,
+                            'final_costing_approvers' => $this->finalCostingApprovers,
+                        ]
+                    );
                 } else {
                     SpecialProject::where('help_topic_id', $this->helpTopic->id)->delete();
                 }
-
-                HelpTopicCosting::updateOrCreate(
-                    ['help_topic_id' => $this->helpTopic->id],
-                    [
-                        'costing_approvers' => $this->costingApprovers,
-                        'amount' => $this->amount,
-                        'final_costing_approvers' => $this->finalCostingApprovers,
-                    ]
-                );
 
                 foreach ($this->addedConfigurations as $config) {
                     $helpTopicConfiguration = HelpTopicConfiguration::create([
                         'help_topic_id' => $this->helpTopic->id,
                         'bu_department_id' => $config['bu_department_id'],
                         'approvers_count' => $config['approvers_count'],
+                        'level_of_approval' => $config['level_of_approval']
                     ]);
 
                     foreach ($config['approvers'] as $level => $approversList) {
@@ -162,6 +167,8 @@ class UpdateHelpTopic extends Component
             });
 
             noty()->addSuccess('Help topic successfully updated.');
+            $this->emit('remount');
+            $this->addedConfigurations = [];
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
@@ -242,11 +249,11 @@ class UpdateHelpTopic extends Component
             $this->resetValidation('selectedBuDepartment');
         }
 
-        if (!$this->selectedApprovalLevel) {
-            $this->addError('selectedApprovalLevel', 'Level of approval field is required.');
+        if (!$this->levelOfApproval) {
+            $this->addError('levelOfApproval', 'Level of approval field is required.');
             return;
         } else {
-            $this->resetValidation('selectedApprovalLevel');
+            $this->resetValidation('levelOfApproval');
         }
 
         $approvers = [
@@ -271,6 +278,7 @@ class UpdateHelpTopic extends Component
             'bu_department_name' => $buDepartmentName,
             'approvers_count' => $approversCount,
             'approvers' => $approvers,
+            'level_of_approval' => $this->levelOfApproval
         ];
 
         $this->resetApprovalConfigFields();
@@ -279,7 +287,7 @@ class UpdateHelpTopic extends Component
     private function resetApprovalConfigFields()
     {
         $this->selectedBuDepartment = null;
-        $this->selectedApprovalLevel = false;
+        $this->levelOfApproval = null;
         $this->level1Approvers = [];
         $this->level2Approvers = [];
         $this->level3Approvers = [];
@@ -288,9 +296,18 @@ class UpdateHelpTopic extends Component
         $this->dispatchBrowserEvent('reset-select-fields');
     }
 
-    public function viewConfigurationApprovers(HelpTopicConfiguration $helpTopicConfiguration)
+    public function editCurrentConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
     {
-        $this->helpTopicConfigApprovers = $helpTopicConfiguration->approvers()->with('approver.profile')->get();
+        $this->currentConfigBuDepartment = $helpTopicConfiguration->buDepartment;
+        $this->currentConfigApprovers = $helpTopicConfiguration->approvers()
+            ->with('approver.profile')
+            ->withWhereHas('approver.buDepartments', function ($department) {
+                $department->where('departments.id', $this->currentConfigBuDepartment->id);
+            })
+            ->get();
+        $this->dispatchBrowserEvent('load-current-configuration', [
+            // Todo
+        ]);
     }
 
     public function editConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
@@ -313,7 +330,7 @@ class UpdateHelpTopic extends Component
         $this->emitSelf('remount');
     }
 
-    public function confirmDeleteConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
+    public function confirmDeleteCurrentConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
     {
         $this->deleteSelectedConfigId = $helpTopicConfiguration->id;
         $this->deleteSelectedConfigBuDeptName = $helpTopicConfiguration->buDepartment->name;
@@ -327,7 +344,7 @@ class UpdateHelpTopic extends Component
 
             $this->reset(['deleteSelectedConfigId', 'deleteSelectedConfigBuDeptName']);
             $this->dispatchBrowserEvent('close-confirm-delete-config-modal');
-            $this->emitSelf('remount');
+            $this->emit('remount');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }

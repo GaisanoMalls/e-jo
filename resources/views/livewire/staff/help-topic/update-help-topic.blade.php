@@ -110,11 +110,12 @@
                         <div class="col-md-6">
                             <div class="mb-2">
                                 <label for="department" class="form-label form__field__label">Level of
-                                    Approval</label>
+                                    Approval
+                                </label>
                                 <div>
                                     <div id="select-help-topic-approval-level" wire:ignore></div>
                                 </div>
-                                @error('selectedApprovalLevel')
+                                @error('levelOfApproval')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -168,7 +169,7 @@
                                                         <button type="button" class="btn btn-sm action__button"
                                                             wire:click="viewConfigurationApprovers({{ $index }})"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#viewHelpTopicApprovers">
+                                                            data-bs-target="#viewConfigurationApprovers">
                                                             <i class="bi bi-eye"></i>
                                                         </button>
                                                         <button type="button" class="btn btn-sm action__button"
@@ -178,7 +179,7 @@
                                                         <button type="button" class="btn btn-sm action__button mt-0"
                                                             wire:click="confirmDeleteConfiguration({{ $index }})"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#confirmDeleteConfiguration">
+                                                            data-bs-target="#confirmDeleteCurrentConfiguration">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </div>
@@ -205,7 +206,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($currentConfigurations as $index => $currentConfig)
-                                            <tr wire:key="config-{{ $index + 1 }}">
+                                            <tr wire:key="config-{{ $currentConfig['id'] }}">
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     {{ $index + 1 }}
                                                 </td>
@@ -219,19 +220,15 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-center pe-2 gap-1">
                                                         <button type="button" class="btn btn-sm action__button"
-                                                            wire:click="viewConfigurationApprovers({{ $index }})"
+                                                            wire:click="editCurrentConfiguration({{ $currentConfig['id'] }})"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#viewHelpTopicApprovers">
-                                                            <i class="bi bi-eye"></i>
-                                                        </button>
-                                                        <button type="button" class="btn btn-sm action__button"
-                                                            wire:click="editConfiguration({{ $index }})">
+                                                            data-bs-target="#editCurrentConfigurationModal">
                                                             <i class="bi bi-pencil"></i>
                                                         </button>
                                                         <button type="button" class="btn btn-sm action__button mt-0"
-                                                            wire:click="confirmDeleteConfiguration({{ $index }})"
+                                                            wire:click="confirmDeleteCurrentConfiguration({{ $currentConfig['id'] }})"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#confirmDeleteConfiguration">
+                                                            data-bs-target="#confirmDeleteCurrentConfigurationModal">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </div>
@@ -316,15 +313,15 @@
     </div>
 
     {{-- View configuration approvers --}}
-    <div wire:ignore.self class="modal fade modal__view__helptopic__config__approvers" id="viewHelpTopicApprovers"
-        tabindex="-1" aria-hidden="true">
+    <div wire:ignore.self class="modal fade modal__view__helptopic__config__approvers"
+        id="editCurrentConfigurationModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <form wire:submit.prevent="delete">
                     <div class="modal-body border-0 py-4 d-flex flex-column gap-1" style="font-size: 0.8rem;">
                         <h6>Approvers</h6>
-                        @if ($helpTopicConfigApprovers->isNotEmpty())
-                            @foreach ($helpTopicConfigApprovers as $config)
+                        @if ($currentConfigApprovers->isNotEmpty())
+                            @foreach ($currentConfigApprovers as $config)
                                 <div class="d-flex align-items-center gap-2 p-2"
                                     style="background-color: #f3f4f6; border-radius: 0.563rem;">
                                     @if ($config->approver->profile->picture)
@@ -358,8 +355,8 @@
     </div>
 
     {{-- Delete help topic configuration --}}
-    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="confirmDeleteConfiguration"
-        tabindex="-1" aria-hidden="true">
+    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic"
+        id="confirmDeleteCurrentConfigurationModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <form wire:submit.prevent="delete">
@@ -560,7 +557,7 @@
                 options: approvalLevelOption,
                 search: true,
                 markSearchResults: true,
-                selectedValue: '{{ $selectedApprovalLevel }}'
+                selectedValue: '{{ $levelOfApproval }}'
             });
 
             buDepartmentSelect.addEventListener('change', (event) => {
@@ -568,7 +565,7 @@
             });
 
             approvalLevelSelect.addEventListener('change', (event) => {
-                @this.set('selectedApprovalLevel', event.target.value);
+                @this.set('levelOfApproval', parseInt(event.target.value));
             });
 
             const dynamicApprovalLevelContainer = document.querySelector('#dynamic-approval-container');
@@ -728,7 +725,7 @@
 
         //
         window.addEventListener('close-confirm-delete-config-modal', () => {
-            $('#confirmDeleteConfiguration').modal('hide');
+            $('#confirmDeleteCurrentConfigurationModal').modal('hide');
         });
     </script>
 @endpush
