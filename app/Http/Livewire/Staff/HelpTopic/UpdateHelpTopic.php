@@ -61,8 +61,10 @@ class UpdateHelpTopic extends Component
     public array $addedConfigurations = [];
 
     // Edit help topic configuration
-    public ?Department $currentConfigBuDepartment;
-    public ?Collection $currentConfigApprovers = null;
+    public ?Department $currentConfigBuDepartment = null;
+    public ?HelpTopicConfiguration $currentHelpTopicConfiguration = null;
+    public array $currentConfigApproverIds = [];
+    public array $selectedApprovers = [];
 
     // Delete selected helptopic configuration
     public ?int $deleteSelectedConfigId = null;
@@ -72,7 +74,6 @@ class UpdateHelpTopic extends Component
 
     public function mount()
     {
-        $this->currentConfigApprovers = new Collection();
         $this->currentConfigurations = new Collection();
 
         $this->name = preg_replace('/ - [^-]+$/', '', $this->helpTopic->name);
@@ -211,6 +212,7 @@ class UpdateHelpTopic extends Component
                 'bu_department_id' => $config->bu_department_id,
                 'bu_department_name' => $config->buDepartment->name,
                 'approvers_count' => $config->approvers_count,
+                'level_of_approval' => $config->level_of_approval,
                 'approvers' => $config->approvers->groupBy('level')->map(function ($approvers) {
                     return $approvers->pluck('user_id');
                 })->toArray(),
@@ -298,36 +300,62 @@ class UpdateHelpTopic extends Component
 
     public function editCurrentConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
     {
+        $this->currentHelpTopicConfiguration = $helpTopicConfiguration;
         $this->currentConfigBuDepartment = $helpTopicConfiguration->buDepartment;
-        $this->currentConfigApprovers = $helpTopicConfiguration->approvers()
-            ->with('approver.profile')
-            ->withWhereHas('approver.buDepartments', function ($department) {
+
+        $this->currentConfigApproverIds = User::with('profile')
+            ->withWhereHas('helpTopicApprovals', function ($approval) use ($helpTopicConfiguration) {
+                $approval->where('help_topic_configuration_id', $helpTopicConfiguration->id);
+            })
+            ->withWhereHas('buDepartments', function ($department) {
                 $department->where('departments.id', $this->currentConfigBuDepartment->id);
             })
-            ->get();
+            ->pluck('id')
+            ->toArray();
+
+        $buDepartmentApprovers = User::with('profile')
+            ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
+            ->withWhereHas('buDepartments', function ($department) {
+                $department->where('departments.id', $this->currentConfigBuDepartment->id);
+            })->get();
+
         $this->dispatchBrowserEvent('load-current-configuration', [
-            // Todo
+            'currentConfigApproverIds' => $this->currentConfigApproverIds,
+            'buDepartmentApprovers' => $buDepartmentApprovers
         ]);
     }
 
-    public function editConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
+    public function updateCurrentConfiguration()
     {
-        $currentConfigApprovers = $helpTopicConfiguration->approvers()->with('approver.profile')->pluck('user_id')->toArray();
-        $helpTopicApprovers = HelpTopicApprover::with('approver.profile')
-            ->whereNotIn('id', $currentConfigApprovers)
-            ->where('help_topic_configuration_id', $helpTopicConfiguration->id)
-            ->get();
+        try {
+            if (!is_null($this->currentHelpTopicConfiguration) && !empty($this->selectedApprovers)) {
+                foreach ($this->selectedApprovers as $approver) {
+                    $this->currentHelpTopicConfiguration->approvers()->update([
 
-        $this->dispatchBrowserEvent('get-helptopic-co-approvers', [
-            'helpTopicApprovers' => $helpTopicApprovers
-        ]);
+                    ]);
+                }
+            }
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+        }
     }
 
-    public function cancelDeleteConfiguration()
+    // public function editConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
+    // {
+    //     $configApprovers = $helpTopicConfiguration->approvers()->with('approver.profile')->pluck('user_id')->toArray();
+    //     $helpTopicApprovers = HelpTopicApprover::with('approver.profile')
+    //         ->whereNotIn('id', $configApprovers)
+    //         ->where('help_topic_configuration_id', $helpTopicConfiguration->id)
+    //         ->get();
+
+    //     $this->dispatchBrowserEvent('get-helptopic-co-approvers', [
+    //         'helpTopicApprovers' => $helpTopicApprovers
+    //     ]);
+    // }
+
+    public function deleteAddedConfig(int $index)
     {
-        $this->reset(['deleteSelectedConfigId', 'deleteSelectedConfigBuDeptName']);
-        $this->dispatchBrowserEvent('close-confirm-delete-config-modal');
-        $this->emitSelf('remount');
+        array_splice($this->addedConfigurations, $index, 1);
     }
 
     public function confirmDeleteCurrentConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
@@ -348,6 +376,13 @@ class UpdateHelpTopic extends Component
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
+    }
+
+    public function cancelDeleteConfiguration()
+    {
+        $this->reset(['deleteSelectedConfigId', 'deleteSelectedConfigBuDeptName']);
+        $this->dispatchBrowserEvent('close-confirm-delete-config-modal');
+        $this->emitSelf('remount');
     }
 
     public function render()

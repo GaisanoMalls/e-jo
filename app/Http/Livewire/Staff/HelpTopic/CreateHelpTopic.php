@@ -41,6 +41,7 @@ class CreateHelpTopic extends Component
 
     //Approval Configurations
     public array $approvalLevels = [1, 2, 3, 4, 5];
+    public ?int $selectedConfigurationIndex = null;
     /**
      * Level 1 to 5 approvers
      * @var array<int>
@@ -259,16 +260,19 @@ class CreateHelpTopic extends Component
 
     public function editConfiguration(int $index)
     {
+        $this->selectedConfigurationIndex = $index;
         foreach ($this->configurations as $configIndex => $config) {
             if ($configIndex == $index) {
-                $buDepartment = Department::findOrFail($config['bu_department_id'], 'id');
-                $this->editSelectedBuDepartment = $buDepartment->id;
-                $levelOfApproval = $config['level_of_approval'];
+                $buDepartment = Department::find($config['bu_department_id'], 'id');
+                if ($buDepartment) {
+                    $this->editSelectedBuDepartment = $buDepartment->id;
+                    $levelOfApproval = $config['level_of_approval'];
 
-                $this->dispatchBrowserEvent('edit-help-topic-configuration', [
-                    'editBuDepartment' => $this->editSelectedBuDepartment,
-                    'levelOfApproval' => $levelOfApproval
-                ]);
+                    $this->dispatchBrowserEvent('edit-help-topic-configuration', [
+                        'editBuDepartment' => $this->editSelectedBuDepartment,
+                        'levelOfApproval' => $levelOfApproval
+                    ]);
+                }
             }
         }
     }
@@ -371,13 +375,15 @@ class CreateHelpTopic extends Component
         if ($this->editLevelOfApproval && $this->editSelectedBuDepartment) {
             // Get the selected BU Department name
             $buDepartmentName = collect($this->queryBUDepartments())->firstWhere('id', $this->editSelectedBuDepartment)['name'];
-            // Add to the configurations array
 
-            $this->configurations['bu_department_id'] = $this->editSelectedBuDepartment;
-            $this->configurations['bu_department_name'] = $buDepartmentName;
-            $this->configurations['approvers_count'] = $approversCount;
-            $this->configurations['level_of_approval'] = $this->editLevelOfApproval;
-            $this->configurations['approvers'] = $approvers;
+            // Add to the configurations array
+            if (isset($this->configurations[$this->selectedConfigurationIndex])) {
+                $this->configurations['bu_department_id'] = $this->editSelectedBuDepartment;
+                $this->configurations['bu_department_name'] = $buDepartmentName;
+                $this->configurations['approvers_count'] = $approversCount;
+                $this->configurations['level_of_approval'] = $this->editLevelOfApproval;
+                $this->configurations['approvers'] = $approvers;
+            }
 
             $this->resetValidation();
             $this->resetEditApprovalConfigFields();

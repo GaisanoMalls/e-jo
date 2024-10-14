@@ -166,20 +166,8 @@
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     <div
                                                         class="d-flex align-items-center justify-content-center pe-2 gap-1">
-                                                        <button type="button" class="btn btn-sm action__button"
-                                                            wire:click="viewConfigurationApprovers({{ $index }})"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#viewConfigurationApprovers">
-                                                            <i class="bi bi-eye"></i>
-                                                        </button>
-                                                        <button type="button" class="btn btn-sm action__button"
-                                                            wire:click="editConfiguration({{ $index }})">
-                                                            <i class="bi bi-pencil"></i>
-                                                        </button>
                                                         <button type="button" class="btn btn-sm action__button mt-0"
-                                                            wire:click="confirmDeleteConfiguration({{ $index }})"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#confirmDeleteCurrentConfiguration">
+                                                            wire:click="deleteAddedConfig({{ $index }})">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </div>
@@ -198,6 +186,7 @@
                                         <tr>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">Level of Approvals</th>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
                                             <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
                                                 Actions
@@ -212,6 +201,9 @@
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     {{ $currentConfig['bu_department_name'] }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $currentConfig['level_of_approval'] }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     {{ $currentConfig['approvers_count'] }}
@@ -310,56 +302,56 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    {{-- View configuration approvers --}}
-    <div wire:ignore.self class="modal fade modal__view__helptopic__config__approvers"
-        id="editCurrentConfigurationModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modal__content">
-                <form wire:submit.prevent="delete">
-                    <div class="modal-body border-0 py-4 d-flex flex-column gap-1" style="font-size: 0.8rem;">
-                        <h6>Approvers</h6>
-                        @if ($currentConfigApprovers->isNotEmpty())
-                            @foreach ($currentConfigApprovers as $config)
-                                <div class="d-flex align-items-center gap-2 p-2"
-                                    style="background-color: #f3f4f6; border-radius: 0.563rem;">
-                                    @if ($config->approver->profile->picture)
-                                        <img src="{{ Storage::url($config->approver->profile->picture) }}"
-                                            class="image-fluid approver__picture" alt=""
-                                            style=" height: 35px !important;
-                                                width: 35px !important;
-                                                border-radius: 0.563rem;
-                                                border: 2px solid #d9ddd9;
-                                                object-fit: cover;">
-                                    @else
-                                        <div class="d-flex align-items-center p-2 justify-content-center text-white"
-                                            style="background-color: #24695C; font-size: 0.75rem; height: 35px; width: 35px; border: 2px solid #d9ddd9; border-radius: 0.563rem;">
-                                            {{ $config->approver->profile->getNameInitial() }}
-                                        </div>
-                                    @endif
-                                    <p class="m-0" style="font-size: 0.9rem;">
-                                        {{ $config->approver->profile->getFullName }}
-                                    </p>
-                                </div>
-                            @endforeach
-                        @else
-                            <div class="alert alert-warning py-2 px-3 rounded-3 m-0">
-                                <small style="font-size: 14px;">No assigned approvers.</small>
+        {{-- View configuration approvers --}}
+        <div wire:ignore.self class="modal fade edit__help__topic__config__modal" id="editCurrentConfigurationModal"
+            tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content modal__content">
+                    <div class="modal-body border-0 p-4 d-flex flex-column gap-1">
+                        <h6>Configuration</h6>
+                        <div class="mb-2">
+                            <label for="approvers" class="form-label form__field__label">
+                                BU Department
+                            </label>
+                            <input class="form-control form__field" type="text"
+                                value="{{ $currentConfigBuDepartment?->name }}" readonly>
+                        </div>
+                        <div class="mb-2">
+                            <label for="approvers" class="form-label form__field__label">Assigned Approvers</label>
+                            <div>
+                                <div id="select-edit-config-approvers" wire:ignore></div>
                             </div>
-                        @endif
+                            @error('selectedBuDepartment')
+                                <span class="error__message">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="modal-footer modal__footer p-0 justify-content-start border-0 gap-2 mt-2">
+                            <button wire:click="" type="button"
+                                class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
+                                style="background-color: #d32839; color: white;">
+                                <span wire:loading="" wire:target="" class="spinner-border spinner-border-sm"
+                                    role="status" aria-hidden="true">
+                                </span>
+                                Update
+                            </button>
+                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" wire:click=""
+                                data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    {{-- Delete help topic configuration --}}
-    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic"
-        id="confirmDeleteCurrentConfigurationModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modal__content">
-                <form wire:submit.prevent="delete">
+        {{-- Delete help topic configuration --}}
+        <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic"
+            id="confirmDeleteCurrentConfigurationModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content modal__content">
                     <div class="modal-body border-0 text-center pt-4 pb-1">
                         <h6 class="fw-bold mb-4"
                             style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
@@ -376,31 +368,31 @@
                         <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
                             data-bs-dismiss="modal"
                             style="padding: 0.6rem 1rem;
-                                border-radius: 0.563rem;
-                                font-size: 0.875rem;
-                                border: 1px solid #e7e9eb;
-                                background-color: transparent;
-                                color: #d32839;
-                                font-weight: 500;">
+                                    border-radius: 0.563rem;
+                                    font-size: 0.875rem;
+                                    border: 1px solid #e7e9eb;
+                                    background-color: transparent;
+                                    color: #d32839;
+                                    font-weight: 500;">
                             Cancel
                         </button>
                         <button type="button"
                             class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
                             wire:click="deleteConfiguration"
                             style="padding: 0.6rem 1rem;
-                                border-radius: 0.563rem;
-                                font-size: 0.875rem;
-                                background-color: #d32839;
-                                color: white;
-                                font-weight: 500;
-                                box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
+                                    border-radius: 0.563rem;
+                                    font-size: 0.875rem;
+                                    background-color: #d32839;
+                                    color: white;
+                                    font-weight: 500;
+                                    box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
                             <span wire:loading wire:target="deleteConfiguration"
                                 class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                             </span>
                             Yes, delete
                         </button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -526,7 +518,6 @@
                     }
                 });
             }
-
 
             // Approval Configurations
             const buDepartmentSelect = document.querySelector('#select-help-topic-bu-department');
@@ -723,6 +714,35 @@
             })
         });
 
+        // Edit config approvers
+        window.addEventListener('load-current-configuration', (event) => {
+            const editConfigApproverSelect = document.querySelector('#select-edit-config-approvers');
+            const currentConfigApproverIds = event.detail.currentConfigApproverIds;
+            const buDepartmentApprovers = event.detail.buDepartmentApprovers;
+            console.log(currentConfigApproverIds, buDepartmentApprovers);
+
+            const buDepartmentApproversOption = buDepartmentApprovers.map(approver => ({
+                label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
+                value: approver.id,
+            }));
+
+            VirtualSelect.init({
+                ele: editConfigApproverSelect,
+                search: true,
+                multiple: true,
+                showValueAsTags: true,
+                markSearchResults: true,
+            });
+
+            if (currentConfigApproverIds.length > 0) {
+                editConfigApproverSelect.setOptions(buDepartmentApproversOption)
+                editConfigApproverSelect.setValue(currentConfigApproverIds)
+            }
+
+            editConfigApproverSelect.addEventListener('change', (event) => {
+                @this.set('selectedApprovers', event.target.value);
+            })
+        });
         //
         window.addEventListener('close-confirm-delete-config-modal', () => {
             $('#confirmDeleteCurrentConfigurationModal').modal('hide');
