@@ -5,7 +5,7 @@
 
 <div class="mb-4">
     <div class="row" id="ticket-custom-form">
-        @if (!empty($customFormHeaderFields) && !empty($customFormRowFields))
+        @if (!empty($customFormHeaderFields) || !empty($customFormRowFields))
             <div class="col-12">
                 <div class="row my-3 mx-auto ps-1 rounded-3 custom__form" style="border: 1px solid #ced4da;">
                     <div class="d-flex align-items-center justify-content-between flex-row mb-3">

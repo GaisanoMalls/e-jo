@@ -74,10 +74,6 @@
             search: true,
         });
 
-        window.addEventListener('close-request-recommendation-approval-modal', () => {
-            $('#requestForApprovalModal').modal('hide');
-        });
-
         const dyanamicLevelApproverSelectContainer = document.querySelector('#recommendation-level-approver-container');
         selecteRecommendationLevelOfApproval.addEventListener('change', (event) => {
             @this.set('level', parseInt(event.target.value));

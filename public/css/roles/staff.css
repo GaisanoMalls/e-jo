@@ -11020,13 +11020,6 @@ input[type=checkbox]:checked + .form-check-label {
   font-weight: 500;
   box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
 }
-.help__topics__section .edit__help__topic__config__modal .btn__send {
-  padding: 0.6rem 1rem;
-  border-radius: 0.563rem;
-  background-color: #d32839;
-  color: white;
-  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
-}
 
 .sla__section .table__header {
   padding: 20px 30px !important;

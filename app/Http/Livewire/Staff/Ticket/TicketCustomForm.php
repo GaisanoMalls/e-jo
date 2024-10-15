@@ -15,7 +15,7 @@ class TicketCustomForm extends Component
     public array $customFormHeaderFields = [];
     public array $customFormRowFields = [];
 
-    protected $listeners = ['refreshCustomForm' => '$refresh'];
+    protected $listeners = ['loadCustomForm' => '$refresh'];
 
     public function mount()
     {

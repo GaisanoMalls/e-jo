@@ -26,7 +26,7 @@ class RecommendationApproval extends Component
         try {
             $this->recommendation->where('ticket_id', $this->ticket->id)
                 ->update(['is_approved', true]);
-            $this->emit('refreshCustomForm');
+            $this->emit('loadCustomForm');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
             Log::error('Error while sending recommendation request.', [$e->getLine()]);
