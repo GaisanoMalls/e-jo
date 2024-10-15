@@ -3,9 +3,9 @@
     use App\Enums\FieldTypesEnum as FieldType;
 @endphp
 
-<div class="mb-4">
-    <div class="row" id="ticket-custom-form">
-        @if (!empty($customFormHeaderFields) || !empty($customFormRowFields))
+@if (!empty($customFormHeaderFields) || !empty($customFormRowFields))
+    <div class="mb-4">
+        <div class="row" id="ticket-custom-form">
             <div class="col-12">
                 <div class="row my-3 mx-auto ps-1 rounded-3 custom__form" style="border: 1px solid #ced4da;">
                     <div class="d-flex align-items-center justify-content-between flex-row mb-3">
@@ -92,15 +92,15 @@
                     @endif
                 </div>
             </div>
-        @endif
+        </div>
+        <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center gap-2"
+            id="save-custom-form-as-pdf"
+            style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
+            <i class="bi bi-download"></i>
+            Download PDF
+        </button>
     </div>
-    <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center gap-2"
-        id="save-custom-form-as-pdf"
-        style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
-        <i class="bi bi-download"></i>
-        Download PDF
-    </button>
-</div>
+@endif
 
 @push('extra')
     <script src="{{ asset('js/jspdf.debug.js') }}"></script>

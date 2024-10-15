@@ -58,15 +58,17 @@
                         </div>
                     @endif
                     @if (!$this->isRequesterServiceDeptAdmin())
-                        <button type="button" class="btn d-flex align-items-center justify-content-center"
-                            wire:click="approveTicketRecommendation"
-                            style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #FFF; font-weight: 500; background-color: #D32839; width: 5rem;">
-                            <span wire:loading wire:target="approveTicketRecommendation"
-                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
-                            </span>
-                            <span wire:loading.remove wire:target="approveTicketRecommendation">Approve</span>
-                            <span wire:loading wire:target="approveTicketRecommendation">Requesting...</span>
-                        </button>
+                        <div class="d-block">
+                            <button type="button" class="btn d-flex align-items-center justify-content-center w-auto"
+                                wire:click="approveTicketRecommendation"
+                                style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #FFF; font-weight: 500; background-color: #D32839;">
+                                <span wire:loading wire:target="approveTicketRecommendation"
+                                    class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                </span>
+                                <span wire:loading.remove wire:target="approveTicketRecommendation">Approve</span>
+                                <span wire:loading wire:target="approveTicketRecommendation">Requesting...</span>
+                            </button>
+                        </div>
                     @endif
                 </div>
             @elseif (auth()->user()->hasRole(Role::AGENT))
