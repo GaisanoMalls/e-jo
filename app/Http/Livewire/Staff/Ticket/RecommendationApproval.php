@@ -25,7 +25,7 @@ class RecommendationApproval extends Component
     {
         try {
             $this->recommendation->where('ticket_id', $this->ticket->id)
-                ->update(['is_approved', true]);
+                ->update(['is_approved' => true]);
             $this->emit('loadCustomForm');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
