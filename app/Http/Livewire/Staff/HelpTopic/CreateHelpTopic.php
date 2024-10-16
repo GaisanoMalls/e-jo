@@ -354,8 +354,6 @@ class CreateHelpTopic extends Component
             $this->resetValidation('editSelectedBuDepartment');
         }
 
-        $this->configurations = []; // Reset the configuration first
-
         $approvers = [
             'level1' => array_map('intval', $this->editLevel1Approvers),
             'level2' => array_map('intval', $this->editLevel2Approvers),
@@ -365,7 +363,7 @@ class CreateHelpTopic extends Component
         ];
 
         foreach ($this->configurations as $config) {
-            if ($config['bu_department_id'] == $this->editSelectedBuDepartment) {
+            if ($config['bu_department_id'] != $this->editSelectedBuDepartment) {
                 return $this->addError('editSelectedBuDepartment', 'BU department already exists');
             }
         }

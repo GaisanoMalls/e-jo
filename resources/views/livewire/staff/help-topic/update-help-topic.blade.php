@@ -329,10 +329,11 @@
                             @enderror
                         </div>
                         <div class="modal-footer modal__footer p-0 justify-content-start border-0 gap-2 mt-2">
-                            <button wire:click="" type="button"
+                            <button wire:click="updateCurrentConfiguration" type="button"
                                 class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
                                 style="background-color: #d32839; color: white;">
-                                <span wire:loading="" wire:target="" class="spinner-border spinner-border-sm"
+                                <span wire:loading="updateCurrentConfiguration"
+                                    wire:target="updateCurrentConfiguration" class="spinner-border spinner-border-sm"
                                     role="status" aria-hidden="true">
                                 </span>
                                 Update
@@ -746,6 +747,10 @@
         //
         window.addEventListener('close-confirm-delete-config-modal', () => {
             $('#confirmDeleteCurrentConfigurationModal').modal('hide');
+        });
+
+        window.addEventListener('close-update-current-config-modal', () => {
+            $('#editCurrentConfigurationModal').modal('hide');
         });
     </script>
 @endpush

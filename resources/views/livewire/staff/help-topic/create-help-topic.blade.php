@@ -264,7 +264,7 @@
             </div>
         </div>
         {{-- Edit Configuration --}}
-        <div wire:ignore.self class="modal fade help__topic__modal" id="editConfigurationModal" tabindex="-1"
+        <div wire:ignore class="modal fade help__topic__modal" id="editConfigurationModal" tabindex="-1"
             aria-labelledby="editConfigurationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content modal__content">

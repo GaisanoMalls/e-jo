@@ -167,9 +167,9 @@ class UpdateHelpTopic extends Component
                 }
             });
 
-            noty()->addSuccess('Help topic successfully updated.');
             $this->emit('remount');
             $this->addedConfigurations = [];
+            noty()->addSuccess('Help topic successfully updated.');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
@@ -211,7 +211,7 @@ class UpdateHelpTopic extends Component
                 'id' => $config->id,
                 'bu_department_id' => $config->bu_department_id,
                 'bu_department_name' => $config->buDepartment->name,
-                'approvers_count' => $config->approvers_count,
+                'approvers_count' => $config->approvers()->count(),
                 'level_of_approval' => $config->level_of_approval,
                 'approvers' => $config->approvers->groupBy('level')->map(function ($approvers) {
                     return $approvers->pluck('user_id');
@@ -329,11 +329,18 @@ class UpdateHelpTopic extends Component
     {
         try {
             if (!is_null($this->currentHelpTopicConfiguration) && !empty($this->selectedApprovers)) {
-                foreach ($this->selectedApprovers as $approver) {
-                    $this->currentHelpTopicConfiguration->approvers()->update([
+                $this->currentHelpTopicConfiguration->approvers()->delete();
 
+                foreach ($this->selectedApprovers as $approver) {
+                    $this->currentHelpTopicConfiguration->approvers()->create([
+                        'help_topic_id' => $this->helpTopic->id,
+                        'user_id' => (int) $approver,
+                        'level' => 1
                     ]);
                 }
+
+                $this->emitSelf('remount');
+                $this->dispatchBrowserEvent('close-update-current-config-modal');
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
