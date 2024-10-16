@@ -97,7 +97,7 @@ class User extends Authenticatable
         return $this->hasMany(HelpTopicApprover::class);
     }
 
-    public function ictRecommendationApprovals(): HasMany
+    public function recommendationApprovals(): HasMany
     {
         return $this->hasMany(RecommendationApprover::class, 'approver_id');
     }

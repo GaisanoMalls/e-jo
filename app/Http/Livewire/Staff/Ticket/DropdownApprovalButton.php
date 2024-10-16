@@ -17,7 +17,7 @@ class DropdownApprovalButton extends Component
         $this->isApproverIsInConfiguration = $this->isApproverIsInConfiguration();
     }
 
-    public function isApproverIsInConfiguration()
+    private function isApproverIsInConfiguration()
     {
         return $this->ticket->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
             $approver->where('user_id', auth()->user()->id);

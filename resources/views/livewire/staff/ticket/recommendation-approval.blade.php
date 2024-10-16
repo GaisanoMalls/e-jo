@@ -57,7 +57,7 @@
                             </span>
                         </div>
                     @endif
-                    @if (!$this->isRequesterServiceDeptAdmin())
+                    @if (!$this->isRequesterServiceDeptAdmin() && $isAllowedToApproveRecommendation)
                         <div class="d-block">
                             <button type="button" class="btn d-flex align-items-center justify-content-center w-auto"
                                 wire:click="approveTicketRecommendation"

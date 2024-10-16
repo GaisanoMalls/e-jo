@@ -18,8 +18,22 @@ class RecommendationApproval extends Component
     public ?Ticket $ticket;
     public ?Recommendation $recommendation = null;
     public Collection $recommendationApprovers;
+    public bool $isAllowedToApproveRecommendation = false;
 
     protected $listeners = ['loadRecommendationApproval' => '$refresh'];
+
+    public function mount()
+    {
+        $this->isAllowedToApproveRecommendation = $this->isAllowedToApproveRecommendation();
+    }
+
+    private function isAllowedToApproveRecommendation()
+    {
+        return Recommendation::where('ticket_id', $this->ticket->id)
+            ->withWhereHas('approvalLevels.approvers', function ($approver) {
+                $approver->where('approver_id', auth()->user()->id);
+            })->exists();
+    }
 
     public function approveTicketRecommendation()
     {
