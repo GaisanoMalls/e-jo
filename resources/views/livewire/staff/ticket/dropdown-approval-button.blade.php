@@ -22,7 +22,7 @@
             @else
                 <button type="button"
                     class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center dropdown-toggle"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+                    data-bs-toggle="dropdown" aria-expanded="false" @disabled(!$isApproverIsInConfiguration)>
                     <i class="fa-regular fa-handshake"></i>
                 </button>
             @endif
@@ -32,12 +32,13 @@
             @elseif ($ticket->approval_status === ApprovalStatusEnum::DISAPPROVED)
                 <small class="ticket__details__topbuttons__label">Disapproved</small>
             @else
-                <small class="ticket__details__topbuttons__label">Approval</small>
+                <small class="ticket__details__topbuttons__label" @style(['color: rgb(153, 153, 153)' => !$isApproverIsInConfiguration])>Approval</small>
             @endif
 
             @if (
                 $ticket->approval_status !== ApprovalStatusEnum::APPROVED &&
-                    $ticket->approval_status !== ApprovalStatusEnum::DISAPPROVED)
+                    $ticket->approval_status !== ApprovalStatusEnum::DISAPPROVED &&
+                    $isApproverIsInConfiguration)
                 <ul class="dropdown-menu dropdown-menu-end approval__dropdown__menu slideIn animate">
                     <li>
                         <button type="button"
