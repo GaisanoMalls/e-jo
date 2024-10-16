@@ -25,7 +25,7 @@ trait Tickets
                 Status::ON_PROCESS
             ])
             ->withWhereHas('user', function ($user) {
-                $user->withWhereHas('buBranches', function ($department) {
+                $user->withWhereHas('buDepartments', function ($department) {
                     $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                 });
             })

@@ -195,30 +195,30 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($currentConfigurations as $index => $currentConfig)
-                                            <tr wire:key="config-{{ $currentConfig['id'] }}">
+                                            <tr wire:key="config-{{ $currentConfig->id }}">
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     {{ $index + 1 }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
-                                                    {{ $currentConfig['bu_department_name'] }}
+                                                    {{ $currentConfig->buDepartment->name }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
-                                                    {{ $currentConfig['level_of_approval'] }}
+                                                    {{ $currentConfig->level_of_approval }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
-                                                    {{ $currentConfig['approvers_count'] }}
+                                                    {{ $currentConfig->approvers()->count() }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     <div
                                                         class="d-flex align-items-center justify-content-center pe-2 gap-1">
                                                         <button type="button" class="btn btn-sm action__button"
-                                                            wire:click="editCurrentConfiguration({{ $currentConfig['id'] }})"
+                                                            wire:click="editCurrentConfiguration({{ $currentConfig->id }})"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#editCurrentConfigurationModal">
                                                             <i class="bi bi-pencil"></i>
                                                         </button>
                                                         <button type="button" class="btn btn-sm action__button mt-0"
-                                                            wire:click="confirmDeleteCurrentConfiguration({{ $currentConfig['id'] }})"
+                                                            wire:click="confirmDeleteCurrentConfiguration({{ $currentConfig->id }})"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#confirmDeleteCurrentConfigurationModal">
                                                             <i class="bi bi-trash"></i>
@@ -302,7 +302,7 @@
                 </div>
             </div>
         </div>
-        {{-- View configuration approvers --}}
+        {{-- Edit configuration approvers --}}
         <div wire:ignore.self class="modal fade edit__help__topic__config__modal" id="editCurrentConfigurationModal"
             tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

@@ -149,7 +149,6 @@ class UpdateHelpTopic extends Component
                     $helpTopicConfiguration = HelpTopicConfiguration::create([
                         'help_topic_id' => $this->helpTopic->id,
                         'bu_department_id' => $config['bu_department_id'],
-                        'approvers_count' => $config['approvers_count'],
                         'level_of_approval' => $config['level_of_approval']
                     ]);
 
@@ -205,19 +204,7 @@ class UpdateHelpTopic extends Component
 
     public function loadCurrentConfigurations()
     {
-        $config = $this->helpTopic->configurations()->with('buDepartment')->get();
-        return $this->currentConfigurations = $config->map(function ($config) {
-            return [
-                'id' => $config->id,
-                'bu_department_id' => $config->bu_department_id,
-                'bu_department_name' => $config->buDepartment->name,
-                'approvers_count' => $config->approvers()->count(),
-                'level_of_approval' => $config->level_of_approval,
-                'approvers' => $config->approvers->groupBy('level')->map(function ($approvers) {
-                    return $approvers->pluck('user_id');
-                })->toArray(),
-            ];
-        });
+        return $this->currentConfigurations = $this->helpTopic->configurations()->with('buDepartment')->get();
     }
 
     public function getFilteredApprovers2($level)

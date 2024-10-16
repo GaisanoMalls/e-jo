@@ -35,7 +35,7 @@ class RequestApproval extends Component
     public function mount()
     {
         $this->recommendationApprovers = User::with(['profile', 'roles', 'buDepartments'])
-            ->role(Role::SERVICE_DEPARTMENT_ADMIN)
+            ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->get();
     }
 

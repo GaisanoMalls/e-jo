@@ -128,7 +128,6 @@ class CreateHelpTopic extends Component
                         $helpTopicConfiguration = HelpTopicConfiguration::create([
                             'help_topic_id' => $helpTopic->id,
                             'bu_department_id' => $config['bu_department_id'],
-                            'approvers_count' => $config['approvers_count'],
                             'level_of_approval' => $config['level_of_approval']
                         ]);
 
