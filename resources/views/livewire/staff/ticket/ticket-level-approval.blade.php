@@ -9,11 +9,11 @@
             <label class="ticket__actions__label">Level of Approval</label>
             @foreach ($approvalLevels as $level)
                 {{-- To check if the particular level has already been displayed --}}
-                @php $levelDisplayed = false; @endphp
+                @php $levelIsDisplayed = false; @endphp
                 @foreach ($ticketApprovals as $ticketApproval)
                     {{-- Check the equality of the help topic approver's level and the level of approvals, and display the approval level if it hasn't been shown yet. --}}
-                    @if ($ticketApproval->helpTopicApprover->level === $level && !$levelDisplayed)
-                        @php $levelDisplayed = true; @endphp
+                    @if ($ticketApproval->helpTopicApprover->level === $level && !$levelIsDisplayed)
+                        @php $levelIsDisplayed = true; @endphp
                         <div class="d-flex flex-column level__approval__container">
                             <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
                                 <small class="level__number__label">

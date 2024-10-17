@@ -103,8 +103,8 @@ class RequestApproval extends Component
                             $recommendationApprover,
                             new AppNotification(
                                 ticket: $this->ticket,
-                                title: "Ticket #{$this->ticket->ticket_number}} (Recommendation)",
-                                message: "You have a new recommendation approval"
+                                title: "Ticket #{$this->ticket->ticket_number} (Approval Request)",
+                                message: "You have a new ticket approval"
                             )
                         );
                     });
@@ -115,7 +115,7 @@ class RequestApproval extends Component
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
-            Log::error('Error while sending recommendation request.', [$e->getLine()]);
+            Log::error('Error while sending approval request.', [$e->getLine()]);
         }
     }
 

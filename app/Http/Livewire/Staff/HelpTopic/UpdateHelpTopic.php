@@ -290,19 +290,17 @@ class UpdateHelpTopic extends Component
         $this->currentHelpTopicConfiguration = $helpTopicConfiguration;
         $this->currentConfigBuDepartment = $helpTopicConfiguration->buDepartment;
 
-        $this->currentConfigApprover = HelpTopicApprover::where([
+        $this->currentConfigApproverIds = HelpTopicApprover::where([
             ['help_topic_configuration_id', $helpTopicConfiguration->id],
             ['help_topic_id', $helpTopicConfiguration->helpTopic->id]
-        ]);
-
-        $this->currentConfigApproverIds = User::with('profile')
-            ->withWhereHas('helpTopicApprovals', function ($approval) use ($helpTopicConfiguration) {
-                $approval->where('help_topic_configuration_id', $helpTopicConfiguration->id);
+        ])
+            ->withWhereHas('approver', function ($approver) {
+                $approver->with('profile')
+                    ->withWhereHas('buDepartments', function ($department) {
+                        $department->where('departments.id', $this->currentConfigBuDepartment->id);
+                    });
             })
-            ->withWhereHas('buDepartments', function ($department) {
-                $department->where('departments.id', $this->currentConfigBuDepartment->id);
-            })
-            ->pluck('id')
+            ->pluck('user_id')
             ->toArray();
 
         $buDepartmentApprovers = User::with('profile')
