@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HelpTopicApprover extends Model
 {
@@ -30,5 +31,10 @@ class HelpTopicApprover extends Model
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function ticketApprovals(): HasMany
+    {
+        return $this->hasMany(TicketApproval::class);
     }
 }

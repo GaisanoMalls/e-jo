@@ -22,11 +22,10 @@ class TicketLevelApproval extends Component
 
     public function mount()
     {
-        $this->ticketApprovals = TicketApproval::withWhereHas('helpTopicApprover', function ($approver) {
-            $approver->whereIn('level', $this->approvalLevels);
-        })
-            ->withWhereHas('ticket', fn($ticket) => $ticket->where('id', $this->ticket->id))
-            ->get();
+        $this->ticketApprovals = TicketApproval::where('ticket_id', $this->ticket->id)
+            ->withWhereHas('helpTopicApprover', function ($approver) {
+                $approver->whereIn('level', $this->approvalLevels);
+            })->get();
     }
 
     public function fetchedApprovers(int $level)

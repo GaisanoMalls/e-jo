@@ -17,11 +17,6 @@ class HelpTopicConfiguration extends Model
         'level_of_approval'
     ];
 
-    public function approvers(): HasMany
-    {
-        return $this->hasMany(HelpTopicApprover::class, 'help_topic_configuration_id');
-    }
-
     public function helpTopic(): BelongsTo
     {
         return $this->belongsTo(HelpTopic::class);
@@ -30,5 +25,10 @@ class HelpTopicConfiguration extends Model
     public function buDepartment(): BelongsTo
     {
         return $this->belongsTo(Department::class, 'bu_department_id');
+    }
+
+    public function approvers(): HasMany
+    {
+        return $this->hasMany(HelpTopicApprover::class, 'help_topic_configuration_id');
     }
 }
