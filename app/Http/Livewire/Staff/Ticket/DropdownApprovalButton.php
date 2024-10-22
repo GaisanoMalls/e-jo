@@ -17,7 +17,7 @@ class DropdownApprovalButton extends Component
     public function mount()
     {
         $this->isApproverIsInConfiguration = $this->isApproverIsInConfiguration();
-        $this->canApproveToAssignedLevel();
+        dump($this->canApproveToAssignedLevel());
     }
 
     private function isApproverIsInConfiguration()
@@ -29,19 +29,40 @@ class DropdownApprovalButton extends Component
 
     private function canApproveToAssignedLevel()
     {
-        $approvalLevels = [1, 2, 3, 4, 5];
-        $ticketApprovals = TicketApproval::where('ticket_id', $this->ticket->id)
-            ->withWhereHas('helpTopicApprover', function ($approver) use ($approvalLevels) {
-                $approver->whereIn('level', $approvalLevels);
-            })->get();
+        // Get the highest approved level from helpTopicApprover
+        $highestApprovedLevel = TicketApproval::where([
+            ['ticket_id', $this->ticket->id],
+            ['is_approved', true]
+        ])
+            ->withWhereHas('helpTopicApprover', function ($approver) {
+                $approver->where('user_id', auth()->user()->id);
+            })
+            ->get()
+            ->pluck('helpTopicApprover.level')
+            ->max();
 
-        dump($ticketApprovals);
-        // foreach ($this->approvalLevels as $level) {
-        //     foreach ($ticketApprovals as $ticketApproval) {
+        // If no levels have been approved yet, set highestApprovedLevel to 0
+        if ($highestApprovedLevel === null) {
+            $highestApprovedLevel = 0;
+        }
 
-        //     }
-        // }
-        // dump(HelpTopicApprover::with('ticketApprovals')->get());
+        // Fetch all unapproved ticket approvals for the current ticket
+        $ticketApprovals = TicketApproval::where([
+            ['ticket_id', $this->ticket->id],
+            ['is_approved', false]
+        ])->with('helpTopicApprover')->get();
+
+        // Check if the unapproved levels are sequentially following the highest approved level
+        foreach ($ticketApprovals as $ticketApproval) {
+            $currentLevel = $ticketApproval->helpTopicApprover->level;
+
+            // Allow approval if the current level is the next in sequence
+            if ($currentLevel === ($highestApprovedLevel + 1)) {
+                return true; // Can approve the current level
+            }
+        }
+
+        return false; // No eligible levels to approve
     }
 
     public function render()
