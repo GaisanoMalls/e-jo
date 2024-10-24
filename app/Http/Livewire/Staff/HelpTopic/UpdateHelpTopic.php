@@ -63,7 +63,6 @@ class UpdateHelpTopic extends Component
     // Edit help topic configuration
     public ?Department $currentConfigBuDepartment = null;
     public ?HelpTopicConfiguration $currentHelpTopicConfiguration = null;
-    public array $currentConfigApproverIds = [];
     public array $selectedApprovers = [];
 
     // Delete selected helptopic configuration
@@ -290,7 +289,7 @@ class UpdateHelpTopic extends Component
         $this->currentHelpTopicConfiguration = $helpTopicConfiguration;
         $this->currentConfigBuDepartment = $helpTopicConfiguration->buDepartment;
 
-        $this->currentConfigApproverIds = HelpTopicApprover::where([
+        $helpTopicApproverQuery = HelpTopicApprover::where([
             ['help_topic_configuration_id', $helpTopicConfiguration->id],
             ['help_topic_id', $helpTopicConfiguration->helpTopic->id]
         ])
@@ -299,9 +298,10 @@ class UpdateHelpTopic extends Component
                     ->withWhereHas('buDepartments', function ($department) {
                         $department->where('departments.id', $this->currentConfigBuDepartment->id);
                     });
-            })
-            ->pluck('user_id')
-            ->toArray();
+            });
+
+        $currentConfigApproverIds = $helpTopicApproverQuery->pluck('user_id')->toArray();
+        $currentConfigLevelOfApproval = $helpTopicApproverQuery->with('configuration')->first()->configuration->level_of_approval;
 
         $buDepartmentApprovers = User::with('profile')
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
@@ -310,8 +310,9 @@ class UpdateHelpTopic extends Component
             })->get();
 
         $this->dispatchBrowserEvent('load-current-configuration', [
-            'currentConfigApproverIds' => $this->currentConfigApproverIds,
-            'buDepartmentApprovers' => $buDepartmentApprovers
+            'currentConfigApproverIds' => $currentConfigApproverIds,
+            'buDepartmentApprovers' => $buDepartmentApprovers,
+            'currentConfigLevelOfApproval' => $currentConfigLevelOfApproval
         ]);
     }
 
