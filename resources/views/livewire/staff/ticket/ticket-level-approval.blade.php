@@ -3,7 +3,7 @@
     use App\Models\Status;
 @endphp
 
-<div wire:poll.7s>
+<div>
     <div class="card border-0 p-0 card__ticket__details">
         <div class="d-flex flex-column gap-3 ticket__details__card__body__right">
             <label class="ticket__actions__label">Level of Approval</label>
@@ -53,7 +53,7 @@
                                                     <span class="text-muted">(You)</span>
                                                 @endif
                                             </small>
-                                            @if ($ticketApproval->helpTopicApprover->user_id === $approver->id && $this->isApprovalApproved())
+                                            @if ($ticketApproval->helpTopicApprover->user_id === $approver->id || $this->isApprovalApproved())
                                                 <i class="bi bi-check2 ms-2"></i>
                                             @endif
                                         </div>

@@ -708,17 +708,14 @@
                 specialProjectAmountContainer.style.display = 'none';
                 teamSelect.disable();
             }
-
-            // window.addEventListener('get-helptopic-co-approvers', (event) => {
-            //     console.log(event.detail.helpTopicApprovers);
-            // })
         });
 
         // Edit config approvers
         window.addEventListener('load-current-configuration', (event) => {
             const editConfigApproverSelect = document.querySelector('#select-edit-config-approvers');
-            const currentConfigApproverIds = event.detail.currentConfigApproverIds;
             const buDepartmentApprovers = event.detail.buDepartmentApprovers;
+            const currentConfigApproverIds = event.detail.currentConfigApproverIds;
+            const currentConfigLevelOfApproval = event.detail.currentConfigLevelOfApproval;
 
             const buDepartmentApproversOption = buDepartmentApprovers.map(approver => ({
                 label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,

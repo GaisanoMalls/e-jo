@@ -71,6 +71,19 @@ class ApproveTicket extends Component
             if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) && $this->isCurrentLevelApprover()) {
                 DB::transaction(function () {
                     if ($this->ticket->status_id != Status::APPROVED && $this->ticket->approval_status != ApprovalStatusEnum::APPROVED) {
+                        // if ($this->ticketHasMoreThanOneApprover($this->ticket)) {
+                        //     $ticketApproval = TicketApproval::where('ticket_id', $this->ticket->id)
+                        //         ->withWhereHas('helpTopicApprover', function ($approver) {
+                        //             $approver->where([
+                        //                 ['help_topic_id', $this->ticket->helpTopic->id],
+                        //                 ['user_id', auth()->user()->id],
+                        //             ])->whereIn('level', [1, 2, 3, 4, 5]);
+                        //         })->first();
+
+                        //     if ($ticketApproval) {
+                        //         $ticketApproval->update(['is_approved' => true]);
+                        //     }
+                        // } else {
                         $this->ticket->update([
                             'status_id' => Status::APPROVED,
                             'approval_status' => ApprovalStatusEnum::APPROVED,
@@ -145,6 +158,7 @@ class ApproveTicket extends Component
                                 message: "{$serviceDepartmentAdmin->profile->getFullName} approved the level 1 approval"
                             )
                         );
+                        // }
 
                         $this->actionOnSubmit();
                         ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
