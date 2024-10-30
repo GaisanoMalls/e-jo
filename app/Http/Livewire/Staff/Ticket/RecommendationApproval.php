@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\AppErrorLog;
+use App\Models\ActivityLog;
 use App\Models\Recommendation;
 use App\Models\RecommendationApprover;
 use App\Models\Role;
@@ -40,7 +41,12 @@ class RecommendationApproval extends Component
         try {
             $this->recommendation->where('ticket_id', $this->ticket->id)
                 ->update(['is_approved' => true]);
-            $this->emit('loadCustomForm');
+
+            ActivityLog::make($this->ticket->id, 'approved the ticket');
+            $events = ['loadCustomForm', 'loadTicketLogs'];
+            foreach ($events as $event) {
+                $this->emit($event);
+            }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
             Log::error('Error while sending recommendation request.', [$e->getLine()]);

@@ -39,7 +39,7 @@ class ActivityLog extends Model
 
     public static function make(int $ticket_id, string $description): void
     {
-        self::create([
+        static::create([
             'ticket_id' => $ticket_id,
             'user_id' => auth()->user()->id,
             'description' => $description,

@@ -76,13 +76,13 @@ class RequestApproval extends Component
 
                 $recommendationApprovers = User::whereIn('id', $recommendationApproverIds)
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
-                    ->first();
+                    ->get();
 
                 $requesterServiceDeptAdmin = User::where('id', auth()->user()->id)
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
                     ->first();
 
-                if ($recommendationApprovers && $requesterServiceDeptAdmin) {
+                if ($recommendationApprovers->isNotEmpty() && $requesterServiceDeptAdmin) {
                     $this->ticket->update(['status_id' => Status::OPEN]);
 
                     $ictRecommendation = Recommendation::create([

@@ -67,9 +67,7 @@ class CreateRequester extends Component
                     Permission::withWhereHas(
                         'roles',
                         fn($role) => $role->where('roles.name', Role::USER)
-                    )
-                        ->pluck('name')
-                        ->toArray()
+                    )->pluck('name')->toArray()
                 );
 
                 Profile::create([
