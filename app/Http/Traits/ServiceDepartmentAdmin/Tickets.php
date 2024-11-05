@@ -45,7 +45,7 @@ trait Tickets
     /**
      * Filter the newly created tickets.
      * Condition: Requester and Service Dept. Admin - Match the Branch and BU Department.
-     * Tickets are exclusively visible within their respective Business Unit (BU). 
+     * Tickets are exclusively visible within their respective Business Unit (BU).
      * Special Project - Costing: Include filter for ticket that has amount for special project and is approved.
      */
     public function serviceDeptAdminGetOpentTickets(): array|Collection
@@ -146,11 +146,13 @@ trait Tickets
                         ->where('is_approved', true);
                 });
             })
-            ->orWhere(function ($userQuery) {
+            ->where(function ($userQuery) {
                 $userQuery->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+                    // ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+    
                     ->where(function ($statusQuery) {
-                        $statusQuery->where('status_id', Status::CLAIMED)->where('approval_status', ApprovalStatusEnum::APPROVED);
+                        $statusQuery->where('status_id', Status::CLAIMED)
+                            ->where('approval_status', ApprovalStatusEnum::APPROVED);
                     });
             })
             ->orderByDesc('created_at')
@@ -165,13 +167,6 @@ trait Tickets
                 $query->whereHas('replies')
                     ->orWhereHas('clarifications')
                     ->orWhereHas('helpTopic.specialProject');
-            })
-            ->where(function ($query) {
-                $query->where('status_id', Status::ON_PROCESS)
-                    ->whereIn('approval_status', [
-                        ApprovalStatusEnum::APPROVED,
-                        ApprovalStatusEnum::FOR_APPROVAL
-                    ]);
             })
             ->where(function ($ticket) {
                 $ticket->withWhereHas('user', function ($user) {
@@ -188,6 +183,13 @@ trait Tickets
                 })->withWhereHas('serviceDepartment', function ($serviceDepartment) {
                     $serviceDepartment->whereIn('service_departments.id', auth()->user()->serviceDepartments->pluck('id')->toArray());
                 });
+            })
+            ->orWhere(function ($query) {
+                $query->where('status_id', Status::ON_PROCESS)
+                    ->whereIn('approval_status', [
+                        ApprovalStatusEnum::APPROVED,
+                        ApprovalStatusEnum::FOR_APPROVAL
+                    ]);
             })
             ->orderByDesc('created_at')
             ->get();
