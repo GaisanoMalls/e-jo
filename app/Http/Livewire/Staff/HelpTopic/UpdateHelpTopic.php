@@ -290,7 +290,7 @@ class UpdateHelpTopic extends Component
         $this->currentHelpTopicConfiguration = $helpTopicConfiguration;
         $this->currentConfigBuDepartment = $helpTopicConfiguration->buDepartment;
 
-        $helpTopicApproverQuery = HelpTopicApprover::where([
+        $helpTopicApprovers = HelpTopicApprover::where([
             ['help_topic_configuration_id', $helpTopicConfiguration->id],
             ['help_topic_id', $helpTopicConfiguration->helpTopic->id]
         ])
@@ -301,8 +301,8 @@ class UpdateHelpTopic extends Component
                     });
             });
 
-        $currentConfigApproverIds = $helpTopicApproverQuery->pluck('user_id')->toArray();
-        $currentConfigLevelOfApproval = $helpTopicApproverQuery->with('configuration')->first()->configuration->level_of_approval;
+        $currentConfigApproverIds = $helpTopicApprovers->pluck('user_id')->toArray();
+        $currentConfigLevelOfApproval = $helpTopicApprovers->with('configuration')->first()->configuration->level_of_approval;
 
         $buDepartmentApprovers = User::with('profile')
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
@@ -313,7 +313,9 @@ class UpdateHelpTopic extends Component
         $this->dispatchBrowserEvent('load-current-configuration', [
             'currentConfigApproverIds' => $currentConfigApproverIds,
             'buDepartmentApprovers' => $buDepartmentApprovers,
-            'currentConfigLevelOfApproval' => $currentConfigLevelOfApproval
+            'helpTopicApprovers' => $helpTopicApprovers->get(),
+            'currentConfigLevelOfApproval' => $currentConfigLevelOfApproval,
+            'currentConfigurations' => $this->helpTopic->configurations()->with(['buDepartment', 'approvers'])->get()
         ]);
     }
 

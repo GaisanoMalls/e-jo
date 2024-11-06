@@ -713,9 +713,11 @@
         // Edit config approvers
         window.addEventListener('load-current-configuration', (event) => {
             const editConfigApproverSelect = document.querySelector('#select-edit-config-approvers');
-            const buDepartmentApprovers = event.detail.buDepartmentApprovers;
             const currentConfigApproverIds = event.detail.currentConfigApproverIds;
+            const buDepartmentApprovers = event.detail.buDepartmentApprovers;
+            const helpTopicApprovers = event.detail.helpTopicApprovers;
             const currentConfigLevelOfApproval = event.detail.currentConfigLevelOfApproval;
+            const currentConfigurations = event.detail.currentConfigurations;
 
             const buDepartmentApproversOption = buDepartmentApprovers.map(approver => ({
                 label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
