@@ -70,6 +70,7 @@ class UpdateHelpTopic extends Component
     public ?string $deleteSelectedConfigBuDeptName = null;
 
     protected $listeners = ['remount' => 'mount'];
+    // Sample
 
     public function mount()
     {

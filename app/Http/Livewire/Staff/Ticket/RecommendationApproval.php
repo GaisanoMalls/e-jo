@@ -42,11 +42,12 @@ class RecommendationApproval extends Component
             $this->recommendation->where('ticket_id', $this->ticket->id)
                 ->update(['is_approved' => true]);
 
-            ActivityLog::make($this->ticket->id, 'approved the ticket');
             $events = ['loadCustomForm', 'loadTicketLogs'];
             foreach ($events as $event) {
                 $this->emit($event);
             }
+
+            ActivityLog::make($this->ticket->id, 'approved the ticket');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
             Log::error('Error while sending recommendation request.', [$e->getLine()]);
