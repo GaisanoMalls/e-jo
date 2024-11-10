@@ -142,7 +142,7 @@ trait Tickets
             ->withWhereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($query) {
                 $query->withWhereHas('ticketApprovals.helpTopicApprover.approver', function ($approver) {
-                    $approver->where('user_id', auth()->user()->id)
+                    $approver->orWhere('user_id', auth()->user()->id)
                         ->where('is_approved', true);
                 });
             })

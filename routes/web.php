@@ -96,78 +96,81 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
         });
 
         // Manage (Admin Role)
-        Route::prefix('manage')->name('manage.')->group(function () {
-            // Agents
-            Route::view('/agent', 'layouts.staff.system_admin.manage.agents.agent_list')->name('agents');
-            // User Accounts
-            Route::prefix('user-accounts')->name('user_account.')->group(function () {
-                Route::controller(AccountsController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/approvers', 'approvers')->name('approvers');
-                    Route::get('/service-department-admins', 'serviceDepartmentAdmins')->name('service_department_admins');
-                    Route::get('/agents', 'agents')->name('agents');
-                    Route::get('/requesters', 'users')->name('users');
-                });
-                // Approver Routes
-                Route::prefix('approver')->name('approver.')->group(function () {
-                    Route::controller(AccountApproverController::class)->group(function () {
-                        Route::get('/{approver}/view-details', 'viewDetails')->name('view_details');
-                        Route::get('/{approver}/edit-details', 'editDetails')->name('edit_details');
+        Route::middleware(['auth', Role::systemAdminOnly()])->group(function () {
+            Route::prefix('manage')->name('manage.')->group(function () {
+                // Agents
+                Route::view('/agent', 'layouts.staff.system_admin.manage.agents.agent_list')->name('agents');
+                // User Accounts
+                Route::prefix('user-accounts')->name('user_account.')->group(function () {
+                    Route::controller(AccountsController::class)->group(function () {
+                        Route::get('/', 'index')->name('index');
+                        Route::get('/approvers', 'approvers')->name('approvers');
+                        Route::get('/service-department-admins', 'serviceDepartmentAdmins')->name('service_department_admins');
+                        Route::get('/agents', 'agents')->name('agents');
+                        Route::get('/requesters', 'users')->name('users');
+                    });
+                    // Approver Routes
+                    Route::prefix('approver')->name('approver.')->group(function () {
+                        Route::controller(AccountApproverController::class)->group(function () {
+                            Route::get('/{approver}/view-details', 'viewDetails')->name('view_details');
+                            Route::get('/{approver}/edit-details', 'editDetails')->name('edit_details');
+                        });
+                    });
+                    // Department Admin Routes
+                    Route::prefix('service-department-admin')->name('service_department_admin.')->group(function () {
+                        Route::controller(AccountServiceDeptAdminController::class)->group(function () {
+                            Route::get('/{serviceDeptAdmin}/view-details', 'viewDetails')->name('view_details');
+                            Route::get('/{serviceDeptAdmin}/edit-details', 'editDetails')->name('edit_details');
+                        });
+                    });
+                    // Agent Routes
+                    Route::prefix('agent')->name('agent.')->group(function () {
+                        Route::controller(AccountAgentController::class)->group(function () {
+                            Route::get('/{agent}/view-details', 'viewDetails')->name('view_details');
+                            Route::get('/{agent}/edit-details', 'editDetails')->name('edit_details');
+                        });
+                    });
+                    // User/Requester Routes
+                    Route::prefix('user')->name('user.')->group(function () {
+                        Route::controller(AccountUserController::class)->group(function () {
+                            Route::get('/{user}/view-details', 'viewDetails')->name('view_details');
+                            Route::get('/{user}/edit-details', 'editDetails')->name('edit_details');
+                        });
                     });
                 });
-                // Department Admin Routes
-                Route::prefix('service-department-admin')->name('service_department_admin.')->group(function () {
-                    Route::controller(AccountServiceDeptAdminController::class)->group(function () {
-                        Route::get('/{serviceDeptAdmin}/view-details', 'viewDetails')->name('view_details');
-                        Route::get('/{serviceDeptAdmin}/edit-details', 'editDetails')->name('edit_details');
+                Route::prefix('roles-and-permissions')->name('roles_and_permissions.')->group(function () {
+                    Route::get('/', RolesAndPermissionsController::class)->name('index');
+                });
+                Route::prefix('service-level-agreements')->name('service_level_agreements.')->group(function () {
+                    Route::get('/', SLAController::class)->name('index');
+                });
+                Route::prefix('branch')->name('branch.')->group(function () {
+                    Route::get('/', BranchController::class)->name('index');
+                });
+                Route::prefix('bu-department')->name('bu_department.')->group(function () {
+                    Route::get('/', BUDepartmentController::class)->name('index');
+                });
+                Route::prefix('service-department')->name('service_department.')->group(function () {
+                    Route::get('/', ServiceDepartmentController::class)->name('index');
+                });
+                Route::prefix('team')->name('team.')->group(function () {
+                    Route::get('/', TeamController::class)->name('index');
+                });
+                Route::prefix('help-topics')->name('help_topic.')->group(function () {
+                    Route::controller(HelpTopicsController::class)->group(function () {
+                        Route::get('/', 'index')->name('index');
+                        Route::get('/{helpTopic}/edit-details', 'editDetails')->name('edit_details');
+                        Route::get('/create-help-topic', 'create')->name('create_help_topic');
                     });
                 });
-                // Agent Routes
-                Route::prefix('agent')->name('agent.')->group(function () {
-                    Route::controller(AccountAgentController::class)->group(function () {
-                        Route::get('/{agent}/view-details', 'viewDetails')->name('view_details');
-                        Route::get('/{agent}/edit-details', 'editDetails')->name('edit_details');
-                    });
+                Route::prefix('tag')->name('tag.')->group(function () {
+                    Route::get('/', TagController::class)->name('index');
                 });
-                // User/Requester Routes
-                Route::prefix('user')->name('user.')->group(function () {
-                    Route::controller(AccountUserController::class)->group(function () {
-                        Route::get('/{user}/view-details', 'viewDetails')->name('view_details');
-                        Route::get('/{user}/edit-details', 'editDetails')->name('edit_details');
-                    });
+                Route::prefix('ticket-statuses')->name('ticket_statuses.')->group(function () {
+                    Route::get('/', TicketStatusController::class)->name('index');
                 });
             });
-            Route::prefix('roles-and-permissions')->name('roles_and_permissions.')->group(function () {
-                Route::get('/', RolesAndPermissionsController::class)->name('index');
-            });
-            Route::prefix('service-level-agreements')->name('service_level_agreements.')->group(function () {
-                Route::get('/', SLAController::class)->name('index');
-            });
-            Route::prefix('branch')->name('branch.')->group(function () {
-                Route::get('/', BranchController::class)->name('index');
-            });
-            Route::prefix('bu-department')->name('bu_department.')->group(function () {
-                Route::get('/', BUDepartmentController::class)->name('index');
-            });
-            Route::prefix('service-department')->name('service_department.')->group(function () {
-                Route::get('/', ServiceDepartmentController::class)->name('index');
-            });
-            Route::prefix('team')->name('team.')->group(function () {
-                Route::get('/', TeamController::class)->name('index');
-            });
-            Route::prefix('help-topics')->name('help_topic.')->group(function () {
-                Route::controller(HelpTopicsController::class)->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/{helpTopic}/edit-details', 'editDetails')->name('edit_details');
-                    Route::get('/create-help-topic', 'create')->name('create_help_topic');
-                });
-            });
-            Route::prefix('tag')->name('tag.')->group(function () {
-                Route::get('/', TagController::class)->name('index');
-            });
-            Route::prefix('ticket-statuses')->name('ticket_statuses.')->group(function () {
-                Route::get('/', TicketStatusController::class)->name('index');
-            });
+
         });
         // Directory Routes
         Route::prefix('directory')->name('directory.')->group(function () {

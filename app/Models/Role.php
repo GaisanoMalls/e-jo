@@ -24,6 +24,16 @@ class Role extends Model
         return 'role:' . self::SYSTEM_ADMIN . "|" . self::SERVICE_DEPARTMENT_ADMIN . "|" . self::AGENT;
     }
 
+    public static function systemAdminOnly(): string
+    {
+        return 'role:' . self::SYSTEM_ADMIN;
+    }
+
+    public static function serviceDepartmentAdminOnly(): string
+    {
+        return 'role:' . self::SERVICE_DEPARTMENT_ADMIN;
+    }
+
     public static function approversOnly(): string
     {
         return 'role:' . self::APPROVER;
