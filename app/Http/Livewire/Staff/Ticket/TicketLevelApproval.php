@@ -28,16 +28,19 @@ class TicketLevelApproval extends Component
             })->get();
     }
 
-    public function fetchedApprovers(int $level)
+    public function fetchApprovers(int $level)
     {
-        return User::with('profile')->withWhereHas('helpTopicApprovals', function ($query) use ($level) {
-            $query->where('level', $level)
-                ->withWhereHas('configuration', function ($config) {
-                    $config->with('approvers')
-                        ->where('help_topic_id', $this->ticket->help_topic_id)
-                        ->where('bu_department_id', $this->ticket->user?->buDepartments->pluck('id')->first());
-                });
-        })->get();
+        return User::with('profile')
+            ->withWhereHas('helpTopicApprovals', function ($query) use ($level) {
+                $query->where('level', $level)
+                    ->withWhereHas('configuration', function ($config) {
+                        $config->with('approvers')
+                            ->where([
+                                ['help_topic_id', $this->ticket->help_topic_id],
+                                ['bu_department_id', $this->ticket->user?->buDepartments->pluck('id')->first()],
+                            ]);
+                    });
+            })->get();
     }
 
     public function isApprovalApproved()
@@ -47,8 +50,7 @@ class TicketLevelApproval extends Component
             ['is_approved', true],
         ])
             ->withWhereHas('helpTopicApprover', fn($approver)
-                =>
-                $approver->where('help_topic_id', $this->ticket->help_topic_id))
+                => $approver->where('help_topic_id', $this->ticket->help_topic_id))
             ->exists();
     }
 
@@ -59,8 +61,10 @@ class TicketLevelApproval extends Component
             ['is_approved', true],
         ])
             ->withWhereHas('helpTopicApprover', fn($approver) =>
-                $approver->where('level', $level)
-                    ->where('help_topic_id', $this->ticket->help_topic_id))
+                $approver->where([
+                    ['level', $level],
+                    ['help_topic_id', $this->ticket->help_topic_id],
+                ]))
             ->exists();
     }
 

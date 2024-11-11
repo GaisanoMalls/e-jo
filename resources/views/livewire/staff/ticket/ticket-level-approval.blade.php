@@ -28,7 +28,7 @@
                                     @endif
                                 @endif
                             </div>
-                            @foreach ($this->fetchedApprovers($level) as $approver)
+                            @foreach ($this->fetchApprovers($level) as $approver)
                                 <div class="d-flex flex-column">
                                     <div
                                         class="d-flex align-items-center justify-content-between position-relative ps-3 level__approver__container">

@@ -331,6 +331,7 @@ class AddFormField extends Component
                     }
 
                     $this->actionOnSubmit();
+                    noty()->addSuccess('Form created successfully');
 
                 } else {
                     $this->addError('helpTopic', 'There is already an existing form for this help topic');
