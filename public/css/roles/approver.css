@@ -7635,6 +7635,48 @@ nav .nav__user__picture {
   color: #24695c;
 }
 
+.approval__dropdown__menu {
+  outline: none;
+  border: none;
+  padding: 8px;
+  border-radius: 0.563rem;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+  margin-top: 13px !important;
+}
+.approval__dropdown__menu .dropdown__select__button {
+  border: 0;
+  font-size: 0.813rem;
+  padding: 8px 13px;
+  border-radius: 0.563rem;
+}
+.approval__dropdown__menu .dropdown__select__button.button__approve:hover {
+  background-color: #9DA85C;
+  color: #FFFFFF;
+}
+.approval__dropdown__menu .dropdown__select__button.button__disapprove {
+  color: #d32839;
+}
+.approval__dropdown__menu .dropdown__select__button.button__disapprove:hover {
+  background-color: #E4EEED;
+}
+
+.ticket__detatails__btn__close {
+  height: 33px;
+  width: 33px;
+  border-radius: 3.125rem;
+  background-color: #e9ecef;
+  border: 1px solid #dee2e6;
+}
+.ticket__detatails__btn__close:hover {
+  background-color: #e5e4e5;
+}
+.ticket__detatails__btn__close i {
+  font-size: 0.75rem;
+}
+.ticket__detatails__btn__close.closed:hover {
+  cursor: not-allowed !important;
+}
+
 .approver__section {
   margin-top: 30px;
   margin-bottom: 50px;

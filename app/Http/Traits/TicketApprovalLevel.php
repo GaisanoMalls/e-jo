@@ -2,8 +2,11 @@
 
 namespace App\Http\Traits;
 
+use App\Enums\ApprovalStatusEnum;
+use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
+use Illuminate\Support\Carbon;
 
 trait TicketApprovalLevel
 {
@@ -26,102 +29,164 @@ trait TicketApprovalLevel
         })->get()->count() > 1;
     }
 
-    protected function canApproveLevel1(Ticket $ticket)
+    // Function to check if all required approvals are granted
+    private function updateTicketStatus(Ticket $ticket)
     {
-        return TicketApproval::where([
-            ['ticket_id', $ticket->id],
-            ['is_approved', false]
-        ])->withWhereHas('helpTopicApprover', function ($approver) {
-            $approver->whereIn('level', $this->levelsOfApproval)
-                ->where([
-                    ['level', 1],
-                    ['user_id', auth()->user()->id]
-                ]);
-        })->exists()
-            && (!$this->level1IsApproved($ticket)
-                && !$this->level2IsApproved($ticket)
-                && !$this->level3IsApproved($ticket)
-                && !$this->level4IsApproved($ticket)
-                && !$this->level5IsApproved($ticket));
+        $approvalLevels = [1, 2, 3, 4, 5];  // Define the levels of approval you're checking for
+
+        // Initialize counts
+        $approvedCount = 0;
+        $approvalCount = 0;
+
+        // Loop through each approval level
+        foreach ($approvalLevels as $level) {
+            // Count how many approvals are required at each level
+            $requiredApprovals = TicketApproval::where('ticket_id', $ticket->id)
+                ->withWhereHas('helpTopicApprover', function ($approver) use ($level, $ticket) {
+                    $approver->where([
+                        ['help_topic_id', $ticket->helpTopic->id],
+                        ['level', $level]
+                    ]);
+                })->count();
+
+            // Count how many approvals are already approved at each level
+            $approvedApprovals = TicketApproval::where('ticket_id', $ticket->id)
+                ->withWhereHas('helpTopicApprover', function ($approver) use ($level, $ticket) {
+                    $approver->where([
+                        ['help_topic_id', $ticket->helpTopic->id],
+                        ['level', $level]
+                    ]);
+                })
+                ->where('is_approved', true)  // Assuming the status is 'approved'
+                ->count();
+
+            // Accumulate the counts
+            $approvalCount += $requiredApprovals;
+            $approvedCount += $approvedApprovals;
+
+            // Handle approval for individual user at this level
+            $ticketApproval = TicketApproval::where('ticket_id', $ticket->id)
+                ->withWhereHas('helpTopicApprover', function ($approver) use ($level, $ticket) {
+                    $approver->where([
+                        ['help_topic_id', $ticket->helpTopic->id],
+                        ['level', $level],
+                        ['user_id', auth()->user()->id],
+                    ]);
+                })->first();
+
+            dd($ticketApproval);
+            // If the ticket approval exists, mark it as approved
+            if ($ticketApproval && !$ticketApproval->is_approved) {
+                $ticketApproval->update(['is_approved' => true]);
+            }
+        }
+
+        // After the loop, check if the approval conditions are met
+        if ($approvedCount === $approvalCount) {
+            $ticket->update([
+                'status_id' => Status::APPROVED,
+                'approval_status' => ApprovalStatusEnum::APPROVED,
+                'svcdept_date_approved' => Carbon::now(),
+            ]);
+        }
     }
 
-    protected function canApproveLevel2(Ticket $ticket)
+    private function approveLevel1(Ticket $ticket)
     {
-        return TicketApproval::where([
-            ['ticket_id', $ticket->id],
-            ['is_approved', false]
-        ])->withWhereHas('helpTopicApprover', function ($approver) {
-            $approver->whereIn('level', $this->levelsOfApproval)
-                ->where([
-                    ['level', 2],
-                    ['user_id', auth()->user()->id]
-                ]);
-        })->exists()
-            && ($this->level1IsApproved($ticket)
-                && !$this->level2IsApproved($ticket)
-                && !$this->level3IsApproved($ticket)
-                && !$this->level4IsApproved($ticket)
-                && !$this->level5IsApproved($ticket));
+        $ticketApproval = TicketApproval::where('ticket_id', $ticket->id)
+            ->withWhereHas('helpTopicApprover', function ($approver, $ticket) {
+                $approver->where([
+                    ['help_topic_id', $ticket->helpTopic->id],
+                    ['user_id', auth()->user()->id],
+                ])->where('level', 1);
+            })->first();
+
+        if ($ticketApproval) {
+            $ticketApproval->is_approved = true;  // Mark the approval as 'approved'
+            $ticketApproval->save();
+
+            // After approving, check if the ticket should be marked as approved
+            $this->updateTicketStatus($ticket);
+        }
     }
 
-    protected function canApproveLevel3(Ticket $ticket)
+    private function approveLevel2(Ticket $ticket)
     {
-        return TicketApproval::where([
-            ['ticket_id', $ticket->id],
-            ['is_approved', false]
-        ])->withWhereHas('helpTopicApprover', function ($approver) {
-            $approver->whereIn('level', $this->levelsOfApproval)
-                ->where([
-                    ['level', 3],
-                    ['user_id', auth()->user()->id]
-                ]);
-        })->exists()
-            && ($this->level1IsApproved($ticket)
-                && $this->level2IsApproved($ticket)
-                && !$this->level3IsApproved($ticket)
-                && !$this->level4IsApproved($ticket)
-                && !$this->level5IsApproved($ticket));
+        $ticketApproval = TicketApproval::where('ticket_id', $ticket->id)
+            ->withWhereHas('helpTopicApprover', function ($approver, $ticket) {
+                $approver->where([
+                    ['help_topic_id', $ticket->helpTopic->id],
+                    ['user_id', auth()->user()->id],
+                ])->where('level', 2);
+            })->first();
+
+        if ($ticketApproval) {
+            $ticketApproval->is_approved = true;  // Mark the approval as 'approved'
+            $ticketApproval->save();
+
+            // After approving, check if the ticket should be marked as approved
+            $this->updateTicketStatus($ticket);
+        }
     }
 
-    protected function canApproveLevel4(Ticket $ticket)
+    private function approveLevel3(Ticket $ticket)
     {
-        return TicketApproval::where([
-            ['ticket_id', $ticket->id],
-            ['is_approved', false]
-        ])->withWhereHas('helpTopicApprover', function ($approver) {
-            $approver->whereIn('level', $this->levelsOfApproval)
-                ->where([
-                    ['level', 4],
-                    ['user_id', auth()->user()->id]
-                ]);
-        })->exists()
-            && ($this->level1IsApproved($ticket)
-                && $this->level2IsApproved($ticket)
-                && $this->level3IsApproved($ticket)
-                && !$this->level4IsApproved($ticket)
-                && !$this->level5IsApproved($ticket));
+        $ticketApproval = TicketApproval::where('ticket_id', $ticket->id)
+            ->withWhereHas('helpTopicApprover', function ($approver, $ticket) {
+                $approver->where([
+                    ['help_topic_id', $ticket->helpTopic->id],
+                    ['user_id', auth()->user()->id],
+                ])->where('level', 3);
+            })->first();
+
+        if ($ticketApproval) {
+            $ticketApproval->is_approved = true;  // Mark the approval as 'approved'
+            $ticketApproval->save();
+
+            // After approving, check if the ticket should be marked as approved
+            $this->updateTicketStatus($ticket);
+        }
     }
 
-    protected function canApproveLevel5(Ticket $ticket)
+    private function approveLevel4(Ticket $ticket)
     {
-        return TicketApproval::where([
-            ['ticket_id', $ticket->id],
-            ['is_approved', false]
-        ])->withWhereHas('helpTopicApprover', function ($approver) {
-            $approver->whereIn('level', $this->levelsOfApproval)
-                ->where([
-                    ['level', 5],
-                    ['user_id', auth()->user()->id]
-                ]);
-        })->exists()
-            && ($this->level1IsApproved($ticket)
-                && $this->level2IsApproved($ticket)
-                && $this->level3IsApproved($ticket)
-                && $this->level4IsApproved($ticket)
-                && !$this->level5IsApproved($ticket));
+        $ticketApproval = TicketApproval::where('ticket_id', $ticket->id)
+            ->withWhereHas('helpTopicApprover', function ($approver, $ticket) {
+                $approver->where([
+                    ['help_topic_id', $ticket->helpTopic->id],
+                    ['user_id', auth()->user()->id],
+                ])->where('level', 4);
+            })->first();
+
+        if ($ticketApproval) {
+            $ticketApproval->is_approved = true;  // Mark the approval as 'approved'
+            $ticketApproval->save();
+
+            // After approving, check if the ticket should be marked as approved
+            $this->updateTicketStatus($ticket);
+        }
     }
 
-    protected function isApprovedForLevel(Ticket $ticket, int $level)
+    private function approvalLevel5(Ticket $ticket)
+    {
+        $ticketApproval = TicketApproval::where('ticket_id', $ticket->id)
+            ->withWhereHas('helpTopicApprover', function ($approver, $ticket) {
+                $approver->where([
+                    ['help_topic_id', $ticket->helpTopic->id],
+                    ['user_id', auth()->user()->id],
+                ])->where('level', 5);
+            })->first();
+
+        if ($ticketApproval) {
+            $ticketApproval->is_approved = true;  // Mark the approval as 'approved'
+            $ticketApproval->save();
+
+            // After approving, check if the ticket should be marked as approved
+            $this->updateTicketStatus($ticket);
+        }
+    }
+
+    private function isApprovedForLevel(Ticket $ticket, int $level)
     {
         return TicketApproval::where([
             ['ticket_id', $ticket->id],
@@ -132,27 +197,27 @@ trait TicketApprovalLevel
         })->exists();
     }
 
-    protected function level1IsApproved(Ticket $ticket)
+    private function level1IsApproved(Ticket $ticket)
     {
         return $this->isApprovedForLevel($ticket, 1);
     }
 
-    protected function level2IsApproved(Ticket $ticket)
+    private function level2IsApproved(Ticket $ticket)
     {
         return $this->isApprovedForLevel($ticket, 2);
     }
 
-    protected function level3IsApproved(Ticket $ticket)
+    private function level3IsApproved(Ticket $ticket)
     {
         return $this->isApprovedForLevel($ticket, 3);
     }
 
-    protected function level4IsApproved(Ticket $ticket)
+    private function level4IsApproved(Ticket $ticket)
     {
         return $this->isApprovedForLevel($ticket, 4);
     }
 
-    protected function level5IsApproved(Ticket $ticket)
+    private function level5IsApproved(Ticket $ticket)
     {
         return $this->isApprovedForLevel($ticket, 5);
     }

@@ -526,6 +526,60 @@ nav {
     }
 }
 
+.approval__dropdown__menu {
+    outline: none;
+    border: none;
+    padding: 8px;
+    border-radius: $border-radius-9;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+    margin-top: 13px !important;
+
+    .dropdown__select__button {
+        border: 0;
+        font-size: $fs-13;
+        padding: 8px 13px;
+        border-radius: $border-radius-9;
+
+        &.button__approve {
+            &:hover {
+                background-color: #9DA85C;
+                color: #FFFFFF;
+            }
+
+        }
+
+        &.button__disapprove {
+            color: $color-1;
+
+            &:hover {
+                background-color: #E4EEED;
+            }
+        }
+    }
+}
+
+.ticket__detatails__btn__close {
+    height: 33px;
+    width: 33px;
+    border-radius: $border-radius-50-percent;
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+
+    &:hover {
+        background-color: #e5e4e5;
+    }
+
+    i {
+        font-size: $fs-12;
+    }
+
+    &.closed {
+        &:hover {
+            cursor: not-allowed !important;
+        }
+    }
+}
+
 .approver__section {
     margin-top: 30px;
     margin-bottom: 50px;

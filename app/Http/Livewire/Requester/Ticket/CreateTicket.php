@@ -50,7 +50,7 @@ class CreateTicket extends Component
     public ?int $priorityLevel = null;
     public ?int $serviceDepartment = null;
     public ?int $helpTopic = null;
-    public array $fileAttachments = [];
+    public array|string $fileAttachments = [];
     public array $allowedExtensions = [
         'jpeg',
         'jpg',

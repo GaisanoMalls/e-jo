@@ -7,7 +7,7 @@
         <div class="d-flex flex-column gap-3 ticket__details__card__body__right">
             <label class="ticket__actions__label">Level of Approval</label>
             @foreach ($approvalLevels as $level)
-                {{-- o check if the particular level has already been displayed --}}
+                {{-- To check if the particular level has already been displayed --}}
                 @php $levelDisplayed = false; @endphp
                 @foreach ($ticketApprovals as $ticketApproval)
                     {{-- Check the equality of the help topic approver's level and the level of approvals, and display the approval level if it hasn't been shown yet. --}}

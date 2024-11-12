@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Livewire\Staff\Ticket;
+namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\TicketApprovalLevel;
-use App\Mail\Staff\ApprovedTicketMail;
 use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\Status;
@@ -13,11 +12,9 @@ use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\User;
 use App\Notifications\AppNotification;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
@@ -27,39 +24,6 @@ class ApproveTicket extends Component
 
     public Ticket $ticket;
 
-    private function triggerEvents()
-    {
-        $events = [
-            'loadDropdownApprovalButton',
-            'loadTicketStatusTextHeader',
-            'loadTicketStatusButtonHeader',
-            'loadSlaTimer',
-            'loadTicketTags',
-            'loadTicketLogs',
-            'loadTicketDetails',
-            'loadTicketActions',
-            'loadLevelOfApproval',
-            'loadBackButtonHeader',
-            'loadReplyButtonHeader',
-            'loadDisapprovalReason',
-            'loadClarificationButtonHeader',
-            'loadSidebarCollapseTicketStatus'
-        ];
-
-        foreach ($events as $event) {
-            $this->emit($event);
-        }
-    }
-
-    /**
-     * Perform livewire events upon form submission.
-     */
-    private function actionOnSubmit()
-    {
-        $this->triggerEvents();
-        $this->dispatchBrowserEvent('close-modal');
-    }
-
     public function isCurrentLevelApprover()
     {
         return $this->ticket->helpTopic->withWhereHas('approvers', fn($approver) => $approver->where('user_id', auth()->user()->id))->get();
@@ -68,7 +32,7 @@ class ApproveTicket extends Component
     public function approveTicket()
     {
         try {
-            if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) && $this->isCurrentLevelApprover()) {
+            if (Auth::user()->hasRole(Role::APPROVER) && $this->isCurrentLevelApprover()) {
                 DB::transaction(function () {
                     if ($this->ticket->status_id != Status::APPROVED && $this->ticket->approval_status != ApprovalStatusEnum::APPROVED) {
                         $this->updateTicketStatus($this->ticket);
@@ -78,13 +42,6 @@ class ApproveTicket extends Component
                             ->role(Role::SERVICE_DEPARTMENT_ADMIN)
                             ->where('id', auth()->user()->id)
                             ->first();
-
-                        $ticketApproval = TicketApproval::where('ticket_id', $this->ticket->id)
-                            ->withWhereHas('helpTopicApprover', function ($approver) {
-                                $approver->where('help_topic_id', $this->ticket->help_topic_id);
-                            })->first();
-
-                        $ticketApproval->update(['is_approved' => true]);
 
                         // Get the service department administrator to which the ticket is intended.
                         $serviceDepartmentAdmins = User::with('profile')
@@ -138,12 +95,12 @@ class ApproveTicket extends Component
                             new AppNotification(
                                 ticket: $this->ticket,
                                 title: "Ticket #{$this->ticket->ticket_number} (Approved)",
-                                message: "{$serviceDepartmentAdmin->profile->getFullName} approved the level 1 approval"
+                                message: "{$serviceDepartmentAdmin?->profile->getFullName} approved the level 1 approval"
                             )
                         );
                         // }
 
-                        $this->actionOnSubmit();
+                        // $this->actionOnSubmit();
                         ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
 
                     } else {
@@ -160,6 +117,6 @@ class ApproveTicket extends Component
 
     public function render()
     {
-        return view('livewire.staff.ticket.approve-ticket');
+        return view('livewire.approver.ticket.approve-ticket');
     }
 }

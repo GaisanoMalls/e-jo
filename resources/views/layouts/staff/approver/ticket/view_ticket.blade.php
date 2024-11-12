@@ -28,6 +28,7 @@
                             <small class="ticket__details__datetime">{{ $ticket->dateCreated() }},
                                 {{ $ticket->created_at->format('D') }} @ {{ $ticket->created_at->format('g:i A') }}</small>
                         </div>
+                        @livewire('approver.ticket.dropdown-approval-button', ['ticket' => $ticket])
                     </div>
                 </div>
                 <div class="row">
@@ -101,6 +102,7 @@
             </div>
         </div>
     </div>
+    @livewire('approver.ticket.approve-ticket', ['ticket' => $ticket])
     @livewire('approver.ticket.send-clarification', ['ticket' => $ticket])
     @include('layouts.staff.approver.ticket.includes.modal.preview_ticket_files_modal')
 @endsection
