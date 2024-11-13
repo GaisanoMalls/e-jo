@@ -79,13 +79,6 @@ class ApproveTicket extends Component
                             ->where('id', auth()->user()->id)
                             ->first();
 
-                        $ticketApproval = TicketApproval::where('ticket_id', $this->ticket->id)
-                            ->withWhereHas('helpTopicApprover', function ($approver) {
-                                $approver->where('help_topic_id', $this->ticket->help_topic_id);
-                            })->first();
-
-                        $ticketApproval->update(['is_approved' => true]);
-
                         // Get the service department administrator to which the ticket is intended.
                         $serviceDepartmentAdmins = User::with('profile')
                             ->withWhereHas('branches', function ($branch) {

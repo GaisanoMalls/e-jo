@@ -65,19 +65,25 @@ trait TicketApprovalLevel
             $approvedCount += $approvedApprovals;
 
             // Handle approval for individual user at this level
-            $ticketApproval = TicketApproval::where('ticket_id', $ticket->id)
+            $ticketApprovals = TicketApproval::where('ticket_id', $ticket->id)
                 ->withWhereHas('helpTopicApprover', function ($approver) use ($level, $ticket) {
                     $approver->where([
                         ['help_topic_id', $ticket->helpTopic->id],
-                        ['level', $level],
-                        ['user_id', auth()->user()->id],
+                        ['level', $level]
                     ]);
-                })->first();
+                })->get();
 
-            dd($ticketApproval);
-            // If the ticket approval exists, mark it as approved
-            if ($ticketApproval && !$ticketApproval->is_approved) {
-                $ticketApproval->update(['is_approved' => true]);
+            if ($ticketApprovals->isNotEmpty()) {
+                foreach ($ticketApprovals as $ticketApproval) {
+                    if ($ticketApproval) {
+                        if ($ticketApproval->helpTopicApprover->user_id === auth()->user()->id) {
+                            // If the ticket approval exists, mark it as approved
+                            if (!$ticketApproval->is_approved) {
+                                $ticketApproval->update(['is_approved' => true]);
+                            }
+                        }
+                    }
+                }
             }
         }
 

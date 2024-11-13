@@ -53,9 +53,9 @@
                                                     <span class="text-muted">(You)</span>
                                                 @endif
                                             </small>
-                                            @if ($ticketApproval->helpTopicApprover->user_id === $approver->id && $this->isApprovalApproved())
+                                            {{-- @if ($ticketApproval->is_approved && $ticketApproval->helpTopicApprover->user_id == $approver->id)
                                                 <i class="bi bi-check2 ms-2"></i>
-                                            @endif
+                                            @endif --}}
                                         </div>
                                     </div>
                                 </div>

@@ -24,7 +24,8 @@ class TicketLevelApproval extends Component
     {
         $this->ticketApprovals = TicketApproval::where('ticket_id', $this->ticket->id)
             ->withWhereHas('helpTopicApprover', function ($approver) {
-                $approver->whereIn('level', $this->approvalLevels);
+                $approver->where('help_topic_id', $this->ticket->helpTopic->id)
+                    ->whereIn('level', $this->approvalLevels);
             })->get();
     }
 
@@ -35,10 +36,8 @@ class TicketLevelApproval extends Component
                 $query->where('level', $level)
                     ->withWhereHas('configuration', function ($config) {
                         $config->with('approvers')
-                            ->where([
-                                ['help_topic_id', $this->ticket->help_topic_id],
-                                ['bu_department_id', $this->ticket->user?->buDepartments->pluck('id')->first()],
-                            ]);
+                            ->where('help_topic_id', $this->ticket->help_topic_id)
+                            ->whereIn('bu_department_id', $this->ticket->user?->buDepartments->pluck('id')->toArray());
                     });
             })->get();
     }
