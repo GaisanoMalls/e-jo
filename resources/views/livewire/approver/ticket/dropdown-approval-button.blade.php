@@ -7,21 +7,21 @@
         <div class="d-flex flex-column">
             @if ($ticket->approval_status === ApprovalStatusEnum::APPROVED)
                 <button type="button"
-                    class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
+                    class="btn btn btn-sm border-0 m-auto rounded-circle ticket__detatails__btn__close d-flex align-items-center justify-content-center"
                     data-bs-toggle="dropdown" aria-expanded="false"
                     style="background-color: #FF8B8B !important; color: white !important">
                     <i class="bi bi-check-lg"></i>
                 </button>
             @elseif ($ticket->approval_status === ApprovalStatusEnum::DISAPPROVED)
                 <button type="button"
-                    class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
+                    class="btn btn btn-sm border-0 m-auto rounded-circle ticket__detatails__btn__close d-flex align-items-center justify-content-center"
                     data-bs-toggle="dropdown" aria-expanded="false"
                     style="background-color: #FF8B8B !important; color: white !important">
                     <i class="bi bi-x-lg"></i>
                 </button>
             @else
                 <button type="button"
-                    class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
+                    class="btn btn btn-sm border-0 m-auto rounded-circle ticket__detatails__btn__close d-flex align-items-center justify-content-center"
                     data-bs-toggle="dropdown" aria-expanded="false" @disabled(!$isApproverIsInConfiguration)>
                     <i class="fa-regular fa-handshake"></i>
                 </button>

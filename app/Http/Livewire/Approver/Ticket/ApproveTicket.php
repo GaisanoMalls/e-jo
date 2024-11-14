@@ -24,9 +24,32 @@ class ApproveTicket extends Component
 
     public Ticket $ticket;
 
+    private function triggerEvents()
+    {
+        $events = [
+            'loadTicketLogs',
+            'loadTicketDetails',
+            'loadLevelOfApproval',
+            'loadTicketStatusHeaderText'
+        ];
+
+        foreach ($events as $event) {
+            $this->emit($event);
+        }
+    }
+
+    /**
+     * Perform livewire events upon form submission.
+     */
+    private function actionOnSubmit()
+    {
+        $this->triggerEvents();
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
     public function isCurrentLevelApprover()
     {
-        return $this->ticket->helpTopic->withWhereHas('approvers', fn($approver) => $approver->where('user_id', auth()->user()->id))->get();
+        return $this->ticket->helpTopic->approvers()->where('user_id', auth()->user()->id)->exists();
     }
 
     public function approveTicket()
@@ -98,9 +121,8 @@ class ApproveTicket extends Component
                                 message: "{$serviceDepartmentAdmin?->profile->getFullName} approved the level 1 approval"
                             )
                         );
-                        // }
 
-                        // $this->actionOnSubmit();
+                        $this->actionOnSubmit();
                         ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
 
                     } else {
