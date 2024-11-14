@@ -47,33 +47,24 @@ trait TicketApprovalLevel
                 })
                 ->get();
 
-            // If there are approvals for this level, count them
             if ($ticketApprovals->isNotEmpty()) {
-                // Count required approvals for this level
                 $requiredApprovals = $ticketApprovals->count();
-
-                // Count how many approvals are already marked as approved
                 $approvedApprovals = $ticketApprovals->where('is_approved', true)->count();
 
-                // Accumulate the counts for this level
                 $approvalCount += $requiredApprovals;
                 $approvedCount += $approvedApprovals;
 
-                // Handle approval for individual user at this level
                 foreach ($ticketApprovals as $ticketApproval) {
-                    // If the ticket approval exists and the current user is the approver
-                    if ($ticketApproval->helpTopicApprover->user_id === auth()->user()->id) {
-                        // If the ticket approval is not yet approved, approve it
-                        if (!$ticketApproval->is_approved) {
-                            $ticketApproval->update(['is_approved' => true]);
+                    if ($ticketApproval && $ticketApproval->helpTopicApprover) {
+                        if ($ticketApproval->helpTopicApprover->user_id === auth()->user()->id) {
+                            if (!$ticketApproval->is_approved) {
+                                $ticketApproval->update(['is_approved' => true]);
 
-                            // After this approver approves, mark all other approvers at the same level as approved
-                            foreach ($ticketApprovals as $otherTicketApproval) {
-                                // If another approver hasn't approved yet, mark them as approved too
-                                if (!$otherTicketApproval->is_approved) {
-                                    $otherTicketApproval->update(['is_approved' => true]);
-                                    $approvedCount++;  // Increment approved count when marking as approved
-                                    $approvalCount += $requiredApprovals;
+                                foreach ($ticketApprovals as $otherTicketApproval) {
+                                    if (!$otherTicketApproval->is_approved) {
+                                        $otherTicketApproval->update(['is_approved' => true]);
+                                        $approvedCount++;
+                                    }
                                 }
                             }
                         }
@@ -81,9 +72,7 @@ trait TicketApprovalLevel
                 }
             }
 
-            // After the loop, check if all approvals are completed
             if ($approvedCount === $approvalCount) {
-                // Update ticket status to approved
                 $ticket->update([
                     'status_id' => Status::APPROVED,
                     'approval_status' => ApprovalStatusEnum::APPROVED,
