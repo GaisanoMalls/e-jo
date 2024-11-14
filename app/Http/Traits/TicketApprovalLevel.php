@@ -33,9 +33,7 @@ trait TicketApprovalLevel
     private function updateTicketStatus(Ticket $ticket)
     {
         $approvalLevels = [1, 2, 3, 4, 5];
-
-        $approvedCount = 0;
-        $approvalCount = 0;
+        $allLevelsApproved = true;
 
         foreach ($approvalLevels as $level) {
             $ticketApprovals = TicketApproval::where('ticket_id', $ticket->id)
@@ -48,12 +46,6 @@ trait TicketApprovalLevel
                 ->get();
 
             if ($ticketApprovals->isNotEmpty()) {
-                $requiredApprovals = $ticketApprovals->count();
-                $approvedApprovals = $ticketApprovals->where('is_approved', true)->count();
-
-                $approvalCount += $requiredApprovals;
-                $approvedCount += $approvedApprovals;
-
                 foreach ($ticketApprovals as $ticketApproval) {
                     if ($ticketApproval && $ticketApproval->helpTopicApprover) {
                         if ($ticketApproval->helpTopicApprover->user_id === auth()->user()->id) {
@@ -63,22 +55,31 @@ trait TicketApprovalLevel
                                 foreach ($ticketApprovals as $otherTicketApproval) {
                                     if (!$otherTicketApproval->is_approved) {
                                         $otherTicketApproval->update(['is_approved' => true]);
-                                        $approvedCount++;
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            if ($approvedCount === $approvalCount) {
-                $ticket->update([
-                    'status_id' => Status::APPROVED,
-                    'approval_status' => ApprovalStatusEnum::APPROVED,
-                    'svcdept_date_approved' => Carbon::now(),
-                ]);
+                // Check if all approvals for the current level are complete
+                if (
+                    !$ticketApprovals->every(function ($approval) {
+                        return $approval->is_approved;
+                    })
+                ) {
+                    $allLevelsApproved = false;
+                }
             }
+        }
+
+        // Update ticket status if all levels are approved
+        if ($allLevelsApproved) {
+            $ticket->update([
+                'status_id' => Status::APPROVED,
+                'approval_status' => ApprovalStatusEnum::APPROVED,
+                'svcdept_date_approved' => Carbon::now(),
+            ]);
         }
     }
 
