@@ -38,15 +38,16 @@ class NotificationList extends Component
                 if (auth()->user()->hasRole(Role::APPROVER)) {
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
 
-                    if ($ticket->status_id != Status::VIEWED) {
-                        $ticket->update(['status_id' => Status::VIEWED]);
-                        ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');
-                    }
+                    // if ($ticket->status_id != Status::VIEWED) {
+                    //     $ticket->update(['status_id' => Status::VIEWED]);
+                    //     ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');
+                    // }
+
+                    $this->triggerEvents();
+                    ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');
+                    redirect()->route('approver.ticket.view_ticket_details', $notification->data['ticket']['id']);
                 }
 
-                $this->triggerEvents();
-
-                redirect()->route('approver.ticket.view_ticket_details', $notification->data['ticket']['id']);
             });
 
         } catch (Exception $e) {

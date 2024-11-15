@@ -27,6 +27,7 @@ use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\DB;
@@ -191,7 +192,7 @@ class CreateTicket extends Component
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
-            \Log::error('Error on line: ', [$e->getLine()]);
+            Log::error('Error on line: ', [$e->getLine()]);
         }
     }
 

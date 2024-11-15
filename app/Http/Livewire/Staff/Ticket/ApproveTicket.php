@@ -71,74 +71,35 @@ class ApproveTicket extends Component
             if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) && $this->isCurrentLevelApprover()) {
                 DB::transaction(function () {
                     if ($this->ticket->status_id != Status::APPROVED && $this->ticket->approval_status != ApprovalStatusEnum::APPROVED) {
-                        $this->updateTicketStatus($this->ticket);
+                        $approvedLevel = $this->approveLevelOfApproval($this->ticket);
 
-                        // Retrieve the service department administrator responsible for approving the ticket. For notification use only
-                        $serviceDepartmentAdmin = User::with('profile')
-                            ->role(Role::SERVICE_DEPARTMENT_ADMIN)
-                            ->where('id', auth()->user()->id)
-                            ->first();
+                        if ($approvedLevel) {
+                            $agents = User::with('profile')
+                                ->withWhereHas('teams', function ($team) {
+                                    $team->whereIn('teams.id', $this->ticket->teams->pluck('id')->toArray());
+                                })
+                                ->withWhereHas('serviceDepartments', function ($serviceDepartment) {
+                                    $serviceDepartment->where('service_departments.id', $this->ticket->service_department_id);
+                                })
+                                ->role(Role::AGENT)
+                                ->get();
 
-                        // Get the service department administrator to which the ticket is intended.
-                        $serviceDepartmentAdmins = User::with('profile')
-                            ->withWhereHas('branches', function ($branch) {
-                                $branch->where('branches.id', $this->ticket->branch_id);
-                            })
-                            ->withWhereHas('serviceDepartments', function ($serviceDepartment) {
-                                $serviceDepartment->where('service_departments.id', $this->ticket->service_department_id);
-                            })
-                            ->role(Role::SERVICE_DEPARTMENT_ADMIN)
-                            ->get();
+                            // Notify the agents through app and email.
+                            $agents->each(function ($agent) {
+                                // Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
+                                Notification::send(
+                                    $agent,
+                                    new AppNotification(
+                                        ticket: $this->ticket,
+                                        title: "Ticket #{$this->ticket->ticket_number} (Approved)",
+                                        message: "You have a new ticket. "
+                                    )
+                                );
+                            });
 
-                        $serviceDepartmentAdmins->each(function ($serviceDeptAdmin) {
-                            // Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
-                            Notification::send(
-                                $serviceDeptAdmin,
-                                new AppNotification(
-                                    ticket: $this->ticket,
-                                    title: "Ticket #{$this->ticket->ticket_number} (Approved)",
-                                    message: "You have a new ticket. "
-                                )
-                            );
-                        });
-
-                        $agents = User::with('profile')
-                            ->withWhereHas('teams', function ($team) {
-                                $team->whereIn('teams.id', $this->ticket->teams->pluck('id')->toArray());
-                            })
-                            ->withWhereHas('serviceDepartments', function ($serviceDepartment) {
-                                $serviceDepartment->where('service_departments.id', $this->ticket->service_department_id);
-                            })
-                            ->role(Role::AGENT)
-                            ->get();
-
-                        // Notify the agents through app and email.
-                        $agents->each(function ($agent) {
-                            // Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
-                            Notification::send(
-                                $agent,
-                                new AppNotification(
-                                    ticket: $this->ticket,
-                                    title: "Ticket #{$this->ticket->ticket_number} (Approved)",
-                                    message: "You have a new ticket. "
-                                )
-                            );
-                        });
-
-                        // Notify the ticket sender/requester.
-                        Notification::send(
-                            $this->ticket->user,
-                            new AppNotification(
-                                ticket: $this->ticket,
-                                title: "Ticket #{$this->ticket->ticket_number} (Approved)",
-                                message: "{$serviceDepartmentAdmin->profile->getFullName} approved the level 1 approval"
-                            )
-                        );
-                        // }
-
-                        $this->actionOnSubmit();
-                        ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
-
+                            $this->actionOnSubmit();
+                            ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
+                        }
                     } else {
                         noty()->addInfo('Ticket has already been approved by other service dept. admin');
                     }
