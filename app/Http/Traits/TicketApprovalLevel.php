@@ -21,20 +21,18 @@ trait TicketApprovalLevel
     protected function isApproverIsInConfiguration(Ticket $ticket)
     {
         return TicketApproval::where('ticket_id', $ticket->id)
-            ->whereHas('helpTopicApprover', function ($approver) {
+            ->withWhereHas('helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
-            })
-            ->exists();
+            })->exists();
     }
 
     private static function sendNotificationToNextApprover(Ticket $ticket, User $approver)
     {
-        $notification = new AppNotification(
+        Notification::send($approver, new AppNotification(
             ticket: $ticket,
             title: "Ticket #{$ticket->ticket_number} (New)",
             message: "You have a new ticket for approval",
-        );
-        Notification::send($approver, $notification);
+        ));
     }
 
     private static function notifyAndEmailTicketServiceDepartmentAdmins(Ticket $ticket)

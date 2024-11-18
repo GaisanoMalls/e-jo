@@ -207,7 +207,7 @@ class UpdateHelpTopic extends Component
         return $this->currentConfigurations = $this->helpTopic->configurations()->with('buDepartment')->get();
     }
 
-    public function getFilteredApprovers2($level)
+    public function getFilteredApprovers($level)
     {
         $selectedApprovers = array_merge(
             (array) $this->level1Approvers,
@@ -223,7 +223,7 @@ class UpdateHelpTopic extends Component
             ->orderByDesc('created_at')
             ->get();
 
-        $this->dispatchBrowserEvent('load-approvers2', [
+        $this->dispatchBrowserEvent('load-approvers', [
             'approvers' => $filteredApprovers,
             'level' => $level
         ]);
@@ -302,7 +302,11 @@ class UpdateHelpTopic extends Component
             });
 
         $currentConfigApproverIds = $helpTopicApprovers->pluck('user_id')->toArray();
-        $currentConfigLevelOfApproval = $helpTopicApprovers->with('configuration')->first()->configuration->level_of_approval;
+        $currentConfigLevelOfApproval = $helpTopicApprovers->with('configuration')->first();
+
+        if ($currentConfigLevelOfApproval) {
+            $currentConfigLevelOfApproval = $currentConfigLevelOfApproval->configuration->level_of_approval;
+        }
 
         $buDepartmentApprovers = User::with('profile')
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
