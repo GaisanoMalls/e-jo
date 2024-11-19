@@ -64,13 +64,17 @@ class UpdateHelpTopic extends Component
     public ?Department $currentConfigBuDepartment = null;
     public ?HelpTopicConfiguration $currentHelpTopicConfiguration = null;
     public array $selectedApprovers = [];
+    public array $editCurrentLevel1Approvers = [];
+    public array $editCurrentLevel2Approvers = [];
+    public array $editCurrentLevel3Approvers = [];
+    public array $editCurrentLevel4Approvers = [];
+    public array $editCurrentLevel5Approvers = [];
 
     // Delete selected helptopic configuration
     public ?int $deleteSelectedConfigId = null;
     public ?string $deleteSelectedConfigBuDeptName = null;
 
     protected $listeners = ['remount' => 'mount'];
-    // Sample
 
     public function mount()
     {
@@ -227,6 +231,11 @@ class UpdateHelpTopic extends Component
             'approvers' => $filteredApprovers,
             'level' => $level
         ]);
+    }
+
+    public function editGetFilteredApprovers($level)
+    {
+        dump("Cro");
     }
 
     public function saveConfiguration()

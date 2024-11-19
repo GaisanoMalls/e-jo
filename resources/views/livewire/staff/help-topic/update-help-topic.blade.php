@@ -760,16 +760,14 @@
                 }));
             });
 
-            editApprovers[`level${level}`].addEventListener('virtual-select:option-click', () => {
-                @this.call('editGetFilteredApprovers', level);
-            });
+            // editApprovers[`level${level}`].addEventListener('virtual-select:option-click', () => {
+            //     @this.call('editGetFilteredApprovers', level);
+            // });
         }
 
         editCurrentConfigLevelOfApprovalSelect.addEventListener('change', () => {
             editConfigApproverSelectContainer.innerHTML = '';
             editSelectedApprovers = [];
-            console.log("log");
-
 
             for (let level = 1; level <= editConfigApproverSelect.value; level++) {
                 const editApproverFieldWrapper = document.createElement('div');
@@ -781,6 +779,7 @@
                          <div id="edit-select-help-topic-approval-level-${level}" wire:ignore></div>
                      </div>
                  </div>`;
+
                 editConfigApproverSelectContainer.appendChild(editApproverFieldWrapper);
                 editInitializeApproverSelect(level);
                 @this.call('editGetFilteredApprovers', level);
@@ -795,6 +794,9 @@
             const currentConfigLevelOfApproval = event.detail.currentConfigLevelOfApproval;
             const currentConfigurations = event.detail.currentConfigurations;
 
+            const currentApproverSelect = editApprovers[`level${currentConfigLevelOfApproval}`];
+
+            // if (currentApproverSelect) {
             const buDepartmentApproversOption = buDepartmentApprovers.map(approver => ({
                 label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
                 value: approver.id,
@@ -802,14 +804,7 @@
 
             editCurrentConfigLevelOfApprovalSelect.reset();
             editCurrentConfigLevelOfApprovalSelect.setValue(currentConfigLevelOfApproval);
-
-            VirtualSelect.init({
-                ele: editConfigApproverSelect,
-                search: true,
-                multiple: true,
-                showValueAsTags: true,
-                markSearchResults: true,
-            });
+            // }
         });
 
         //
