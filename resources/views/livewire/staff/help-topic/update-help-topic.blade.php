@@ -329,13 +329,6 @@
                             @enderror
                         </div>
                         <div wire:ignore class="row" id="edit-current-help-topic-approval-container"></div>
-                        <div class="mb-2">
-                            <label for="approvers" class="form-label form__field__label">Assigned Approvers</label>
-                            <div>
-                                <div id="select-edit-current-config-approvers" wire:ignore></div>
-                            </div>
-                        </div>
-
                         <div class="modal-footer modal__footer p-0 justify-content-start border-0 gap-2 mt-2">
                             <button wire:click="updateCurrentConfiguration" type="button"
                                 class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
@@ -614,6 +607,7 @@
                             <div id="select-help-topic-approval-level-${i}" wire:ignore></div>
                         </div>
                     </div>`;
+
                     dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
                     initializeApproverSelect(i);
                     @this.call('getFilteredApprovers', i); // Fetch approvers for each level
@@ -738,11 +732,11 @@
         let editSelectedApprovers = [];
 
         const editInitializeApproverSelect = (level) => {
-            editApprovers[`level${level}`] = document.querySelector(
+            editApprovers[`editLevel${level}`] = document.querySelector(
                 `#edit-select-help-topic-approval-level-${level}`);
 
             VirtualSelect.init({
-                ele: editApprovers[`level${level}`],
+                ele: editApprovers[`editLevel${level}`],
                 search: true,
                 multiple: true,
                 showValueAsTags: true,
@@ -750,9 +744,9 @@
                 hasOptionDescription: true
             });
 
-            editApprovers[`level${level}`].addEventListener('change', () => {
-                editSelectedApprovers[level - 1] = editApprovers[`level${level}`].value;
-                @this.set(`editCurentLevel${level}Approvers`, editApprovers[`level${level}`].value);
+            editApprovers[`editLevel${level}`].addEventListener('change', () => {
+                editSelectedApprovers[level - 1] = editApprovers[`editLevel${level}`].value;
+                @this.set(`editCurentLevel${level}Approvers`, editApprovers[`editLevel${level}`].value);
                 window.dispatchEvent(new CustomEvent('edit-approver-level-changed', {
                     detail: {
                         level
@@ -760,7 +754,7 @@
                 }));
             });
 
-            // editApprovers[`level${level}`].addEventListener('virtual-select:option-click', () => {
+            // editApprovers[`editLevel${level}`].addEventListener('virtual-select:option-click', () => {
             //     @this.call('editGetFilteredApprovers', level);
             // });
         }
@@ -769,8 +763,10 @@
             editConfigApproverSelectContainer.innerHTML = '';
             editSelectedApprovers = [];
 
-            for (let level = 1; level <= editConfigApproverSelect.value; level++) {
+            for (let level = 1; level <= editCurrentConfigLevelOfApprovalSelect.value; level++) {
                 const editApproverFieldWrapper = document.createElement('div');
+                console.log(editApproverFieldWrapper);
+
                 editApproverFieldWrapper.className = 'col-md-6';
                 editApproverFieldWrapper.innerHTML = `
                  <div class="mb-2">
@@ -784,7 +780,6 @@
                 editInitializeApproverSelect(level);
                 @this.call('editGetFilteredApprovers', level);
             }
-            window.dispatchEvent(new CustomEvent('edit-approval-level-selected'));
         })
 
         window.addEventListener('load-current-configuration', (event) => {
@@ -794,9 +789,11 @@
             const currentConfigLevelOfApproval = event.detail.currentConfigLevelOfApproval;
             const currentConfigurations = event.detail.currentConfigurations;
 
-            const currentApproverSelect = editApprovers[`level${currentConfigLevelOfApproval}`];
+            const currentApproverSelect = editApprovers[`editLevel${currentConfigLevelOfApproval}`];
 
             // if (currentApproverSelect) {
+            //     console.log(currentApproverSelect);
+
             const buDepartmentApproversOption = buDepartmentApprovers.map(approver => ({
                 label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
                 value: approver.id,

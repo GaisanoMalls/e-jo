@@ -235,7 +235,7 @@ class UpdateHelpTopic extends Component
 
     public function editGetFilteredApprovers($level)
     {
-        dump("Cro");
+        // dump("Cro");
     }
 
     public function saveConfiguration()

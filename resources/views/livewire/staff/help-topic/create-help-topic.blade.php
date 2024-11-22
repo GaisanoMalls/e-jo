@@ -678,10 +678,10 @@
                             <div id="edit-select-help-topic-approval-level-${i}" wire:ignore></div>
                         </div>
                     </div>`;
+
                 editHelpTopicApprovalConfigContainer.appendChild(approverFieldWrapper);
                 editInitializeApproverSelect(i);
             }
-            window.dispatchEvent(new CustomEvent('edit-approval-level-selected'));
         });
 
         window.addEventListener('edit-load-approvers', (event) => {
@@ -697,6 +697,7 @@
                     value: approver.id,
                     description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
                 }));
+
                 editApproverSelect.setOptions(approverOptions);
 
                 if (Array.isArray(levelApprovers)) {
