@@ -651,12 +651,6 @@
             editApprovers[`level${level}`].addEventListener('change', () => {
                 editSelectedApprovers[level - 1] = editApprovers[`level${level}`].value;
                 @this.set(`editLevel${level}Approvers`, editApprovers[`level${level}`].value);
-
-                window.dispatchEvent(new CustomEvent('edit-approver-level-changed', {
-                    detail: {
-                        level
-                    }
-                }));
             });
 
             editApprovers[`level${level}`].addEventListener('virtual-select:option-click', () => {

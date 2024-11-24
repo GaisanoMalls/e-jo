@@ -299,19 +299,17 @@ class UpdateHelpTopic extends Component
         $this->currentHelpTopicConfiguration = $helpTopicConfiguration;
         $this->currentConfigBuDepartment = $helpTopicConfiguration->buDepartment;
 
-        $helpTopicApprovers = HelpTopicApprover::where([
-            ['help_topic_configuration_id', $helpTopicConfiguration->id],
-            ['help_topic_id', $helpTopicConfiguration->helpTopic->id]
-        ])
+        $currentConfigLevelOfApproval = HelpTopicApprover::with('configuration')
+            ->where([
+                ['help_topic_configuration_id', $helpTopicConfiguration->id],
+                ['help_topic_id', $helpTopicConfiguration->helpTopic->id]
+            ])
             ->withWhereHas('approver', function ($approver) {
                 $approver->with('profile')
                     ->withWhereHas('buDepartments', function ($department) {
                         $department->where('departments.id', $this->currentConfigBuDepartment->id);
                     });
-            });
-
-        $currentConfigApproverIds = $helpTopicApprovers->pluck('user_id')->toArray();
-        $currentConfigLevelOfApproval = $helpTopicApprovers->with('configuration')->first();
+            })->first();
 
         if ($currentConfigLevelOfApproval) {
             $currentConfigLevelOfApproval = $currentConfigLevelOfApproval->configuration->level_of_approval;
@@ -324,11 +322,11 @@ class UpdateHelpTopic extends Component
             })->get();
 
         $this->dispatchBrowserEvent('load-current-configuration', [
-            'currentConfigApproverIds' => $currentConfigApproverIds,
             'buDepartmentApprovers' => $buDepartmentApprovers,
-            'helpTopicApprovers' => $helpTopicApprovers->get(),
             'currentConfigLevelOfApproval' => $currentConfigLevelOfApproval,
-            'currentConfigurations' => $this->helpTopic->configurations()->with(['buDepartment', 'approvers'])->get()
+            'currentConfigurations' => $this->helpTopic->configurations()->with('approvers')
+                ->withWhereHas('buDepartment', fn($department) => $department->where('name', $helpTopicConfiguration->buDepartment->name))
+                ->get()
         ]);
     }
 
