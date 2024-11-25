@@ -320,9 +320,10 @@ class CreateHelpTopic extends Component
         $this->getFilteredApprovers(5);
     }
 
-    // Edit configuration\
+    // Edit configuration
     public function updatedEditLevelOfApproval($value)
     {
+        dump($value);
         $this->editLevelOfApproval = $value;
         $this->getEditFilteredApprovers(1);
     }
