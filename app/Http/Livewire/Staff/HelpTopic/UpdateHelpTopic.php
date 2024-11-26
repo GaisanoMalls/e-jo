@@ -63,6 +63,7 @@ class UpdateHelpTopic extends Component
     // Edit help topic configuration
     public ?Department $currentConfigBuDepartment = null;
     public ?HelpTopicConfiguration $currentHelpTopicConfiguration = null;
+    public ?int $editLevelOfApproval = null;
     public array $selectedApprovers = [];
     public array $editCurrentLevel1Approvers = [];
     public array $editCurrentLevel2Approvers = [];
@@ -233,11 +234,6 @@ class UpdateHelpTopic extends Component
         ]);
     }
 
-    public function editGetFilteredApprovers($level)
-    {
-        // dump("Cro");
-    }
-
     public function saveConfiguration()
     {
         if (!$this->selectedBuDepartment) {
@@ -328,6 +324,16 @@ class UpdateHelpTopic extends Component
                 ->withWhereHas('buDepartment', fn($department) => $department->where('name', $helpTopicConfiguration->buDepartment->name))
                 ->get()
         ]);
+    }
+
+    public function editGetFilteredApprovers($level)
+    {
+        // dump("Cro");
+    }
+
+    public function updatedEditLevelOfApproval($value)
+    {
+
     }
 
     public function updateCurrentConfiguration()

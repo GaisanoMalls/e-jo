@@ -323,7 +323,6 @@ class CreateHelpTopic extends Component
     // Edit configuration
     public function updatedEditLevelOfApproval($value)
     {
-        dump($value);
         $this->editLevelOfApproval = $value;
         $this->getEditFilteredApprovers(1);
     }
