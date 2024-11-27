@@ -433,6 +433,8 @@ class CreateHelpTopic extends Component
             (array) $this->editLevel5Approvers
         );
 
+        // dump($this->editSelectedApprovers);
+
         $filteredApprovers = User::with(['profile', 'roles', 'buDepartments'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->whereNotIn('id', $this->editSelectedApprovers)
@@ -447,6 +449,8 @@ class CreateHelpTopic extends Component
             });
             return $item;
         }, $this->configurations);
+
+        dump($levelApprovers);
 
         $this->dispatchBrowserEvent('edit-load-approvers', [
             'approvers' => $filteredApprovers,
