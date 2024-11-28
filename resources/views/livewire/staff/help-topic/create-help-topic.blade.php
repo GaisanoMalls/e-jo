@@ -284,7 +284,7 @@
                                     <div>
                                         <div id="select-edit-config-bu-department" wire:ignore></div>
                                     </div>
-                                    @error('editSelectedBuDepartment')
+                                    @error('editBuDepartment')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}
@@ -614,7 +614,7 @@
 
         window.addEventListener('edit-help-topic-configuration', (event) => {
             const buDeptId = event.detail.editBuDepartment;
-            const levelOfApproval = event.detail.levelOfApproval;
+            const levelOfApproval = event.detail.editLevelOfApproval;
 
             selectEditBuDepartment.reset();
             selectEditConfigLevelOfApproval.reset();
@@ -624,11 +624,11 @@
         });
 
         selectEditBuDepartment.addEventListener('change', (event) => {
-            @this.set('editSelectedBuDepartment', parseInt(event.target.value));
+            @this.set('editBuDepartment', parseInt(event.target.value));
         });
 
         const editHelpTopicApprovalConfigContainer = document.querySelector('#edit-help-topic-approval-config-container');
-        let editSelectedApprovers = []
+        let editSelectedApprovers = [];
         let editApprovers = {};
 
         selectEditConfigLevelOfApproval.addEventListener('change', () => {
@@ -675,7 +675,6 @@
 
         window.addEventListener('edit-load-approvers', (event) => {
             const levelApprovers = event.detail.currentEditLevelApprovers
-            console.log(levelApprovers);
 
             const level = event.detail.level;
             const editApproverSelect = editApprovers[`level${level}`];
