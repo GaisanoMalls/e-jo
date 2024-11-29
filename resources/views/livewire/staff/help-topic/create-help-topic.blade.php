@@ -470,12 +470,6 @@
             approvers[`level${level}`].addEventListener('change', () => {
                 selectedApprovers[level - 1] = approvers[`level${level}`].value;
                 @this.set(`level${level}Approvers`, approvers[`level${level}`].value);
-
-                window.dispatchEvent(new CustomEvent('approver-level-changed', {
-                    detail: {
-                        level
-                    }
-                }));
             });
 
             approvers[`level${level}`].addEventListener('virtual-select:option-click', () => {
@@ -508,15 +502,15 @@
                 dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
                 initializeApproverSelect(i);
             }
-            window.dispatchEvent(new CustomEvent('approval-level-selected'));
         });
 
         window.addEventListener('load-approvers', (event) => {
             const level = event.detail.level;
+            const levelApprovers = event.detail.approvers;
             const approverSelect = approvers[`level${level}`];
 
-            if (approverSelect) {
-                const approverOptions = event.detail.approvers.filter(approver => {
+            if (approverSelect && levelApprovers.length > 0) {
+                const approverOptions = levelApprovers.filter(approver => {
                     return !selectedApprovers.flat().includes(approver.id);
                 }).map(approver => ({
                     label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
