@@ -43,8 +43,8 @@
                     <small class="ticket__details__info">
                         <i class="fa-solid fa-gears me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->serviceDepartment?->name }}
-                        @if ($ticket->helpTopic->serviceDepartmentChild)
-                            <span>/ {{ $ticket->helpTopic->serviceDepartmentChild->name }}</span>
+                        @if ($ticket->helpTopic?->serviceDepartmentChild)
+                            <span>/ {{ $ticket->helpTopic?->serviceDepartmentChild->name }}</span>
                         @endif
                     </small>
                 </div>

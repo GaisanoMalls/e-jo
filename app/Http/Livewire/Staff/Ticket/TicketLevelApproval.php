@@ -24,7 +24,7 @@ class TicketLevelApproval extends Component
     {
         $this->ticketApprovals = TicketApproval::where('ticket_id', $this->ticket->id)
             ->withWhereHas('helpTopicApprover', function ($approver) {
-                $approver->where('help_topic_id', $this->ticket->helpTopic->id)
+                $approver->where('help_topic_id', $this->ticket->helpTopic?->id)
                     ->whereIn('level', $this->approvalLevels);
             })->get();
     }

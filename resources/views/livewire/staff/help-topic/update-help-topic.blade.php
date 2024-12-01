@@ -459,7 +459,9 @@
                 const serviceDepartmentId = parseInt(event.target.value);
                 if (serviceDepartmentId) {
                     @this.set('serviceDepartment', serviceDepartmentId);
+
                     if (teamSelect) teamSelect.enable();
+
                     window.addEventListener('get-teams-from-selected-service-department', (event) => {
                         const teams = event.detail.teams;
                         const teamOption = [];
@@ -581,14 +583,9 @@
                 approvers[`level${level}`].addEventListener('change', () => {
                     selectedApprovers[level - 1] = approvers[`level${level}`].value;
                     @this.set(`level${level}Approvers`, approvers[`level${level}`].value);
-                    window.dispatchEvent(new CustomEvent('approver-level-changed', {
-                        detail: {
-                            level
-                        }
-                    }));
                 });
 
-                approvers[`level${level}`].addEventListener('virtual-select:option-click', () => {
+                approvers[`level${level}`].addEventListener('change', () => {
                     @this.call('getFilteredApprovers', level);
                 });
             };

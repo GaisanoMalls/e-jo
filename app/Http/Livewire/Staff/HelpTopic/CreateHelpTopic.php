@@ -264,11 +264,13 @@ class CreateHelpTopic extends Component
         foreach ($this->configurations as $configIndex => $config) {
             if ($configIndex == $index) {
                 $buDepartment = Department::find($config['bu_department_id'], 'id');
+
                 if ($buDepartment) {
                     $this->editBuDepartment = $buDepartment->id;
                     $this->editLevelOfApproval = $config['level_of_approval'];
 
                     $this->dispatchBrowserEvent('edit-help-topic-configuration', [
+                        'editConfig' => $config,
                         'editBuDepartment' => $this->editBuDepartment,
                         'editLevelOfApproval' => $this->editLevelOfApproval
                     ]);
@@ -398,31 +400,7 @@ class CreateHelpTopic extends Component
         $this->editLevel5Approvers = [];
         $this->dispatchBrowserEvent('edit-reset-select-fields');
     }
-    // End edit configuration
 
-    public function updatedBuDepartment($value)
-    {
-        $this->getFilteredApprovers($value);
-    }
-
-    public function getFilteredApprovers($level)
-    {
-        $this->selectedApprovers = array_merge(
-            (array) $this->level1Approvers,
-            (array) $this->level2Approvers,
-            (array) $this->level3Approvers,
-            (array) $this->level4Approvers,
-            (array) $this->level5Approvers
-        );
-
-        $filteredApprovers = User::with(['profile', 'roles', 'buDepartments'])
-            ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
-            ->whereNotIn('id', $this->selectedApprovers)
-            ->orderByDesc('created_at')
-            ->get();
-
-        $this->dispatchBrowserEvent('load-approvers', ['approvers' => $filteredApprovers, 'level' => $level]);
-    }
 
     public function getEditFilteredApprovers($level)
     {
@@ -451,6 +429,26 @@ class CreateHelpTopic extends Component
             'level' => $level,
             'currentEditLevelApprovers' => $currentEditLevelApprovers,
         ]);
+    }
+    // End edit configuration
+
+    public function getFilteredApprovers($level)
+    {
+        $this->selectedApprovers = array_merge(
+            (array) $this->level1Approvers,
+            (array) $this->level2Approvers,
+            (array) $this->level3Approvers,
+            (array) $this->level4Approvers,
+            (array) $this->level5Approvers
+        );
+
+        $filteredApprovers = User::with(['profile', 'roles', 'buDepartments'])
+            ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
+            ->whereNotIn('id', $this->selectedApprovers)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $this->dispatchBrowserEvent('load-approvers', ['approvers' => $filteredApprovers, 'level' => $level]);
     }
 
     public function fetchCostingApprovers()

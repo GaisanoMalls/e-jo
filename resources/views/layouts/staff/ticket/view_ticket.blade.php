@@ -104,7 +104,7 @@
                                 @endif
                                 <div class="ticket__details__card__body">
                                     @livewire('staff.ticket.recommendation-approval', ['ticket' => $ticket])
-                                    @if ($ticket->helpTopic->form)
+                                    @if ($ticket->helpTopic?->form)
                                         @livewire('staff.ticket.ticket-custom-form', ['ticket' => $ticket])
                                     @else
                                         <div class="ticket__description mt-3">{!! $ticket->description !!}</div>

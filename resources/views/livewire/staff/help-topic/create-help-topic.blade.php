@@ -669,7 +669,6 @@
 
         window.addEventListener('edit-load-approvers', (event) => {
             const levelApprovers = event.detail.currentEditLevelApprovers
-
             const level = event.detail.level;
             const editApproverSelect = editApprovers[`level${level}`];
 
