@@ -141,9 +141,11 @@ trait Tickets
             ->whereNotNull('agent_id')
             ->withWhereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($query) {
-                $query->withWhereHas('ticketApprovals.helpTopicApprover.approver', function ($approver) {
-                    $approver->orWhere('user_id', auth()->user()->id)
-                        ->where('is_approved', true);
+                $query->withWhereHas('ticketApprovals', function ($approver) {
+                    $approver->where('is_approved', true)
+                        ->withWhereHas('helpTopicApprover', function ($approver) {
+                            $approver->orWwhere('user_id', auth()->user()->id);
+                        });
                 });
             })
             ->where(function ($userQuery) {

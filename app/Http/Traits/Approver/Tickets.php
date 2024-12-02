@@ -30,7 +30,7 @@ trait Tickets
                 });
             })
             ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->where('user_id', User::where('id', auth()->user()->id)->role(Role::APPROVER)->first('id'));
+                $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -48,13 +48,13 @@ trait Tickets
                     ]);
             })
             // ->withWhereHas('user', function ($user) {
-            //     $user->withTrashed 
+            //     $user->withTrashed
             // })
             ->withWhereHas('user.buDepartments', function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
             ->withWhereHas('ticketApprovals.helpTopicApprover', callback: function ($approver) {
-                $approver->where('user_id', User::where('id', auth()->user()->id)->role(Role::APPROVER)->first('id'));
+                $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -72,7 +72,7 @@ trait Tickets
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
             ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->where('user_id', User::where('id', auth()->user()->id)->role(Role::APPROVER)->first('id'));
+                $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -80,20 +80,15 @@ trait Tickets
 
     public function getViewedTickets()
     {
-        return Ticket::has('helpTopic.specialProject')
-            ->withWhereHas('user', fn($user) => $user->withTrashed())
-            ->where(function ($statusQuery) {
-                $statusQuery->where('status_id', Status::VIEWED)
-                    ->whereIn('approval_status', [
-                        ApprovalStatusEnum::APPROVED,
-                        ApprovalStatusEnum::FOR_APPROVAL
-                    ]);
-            })
+        return Ticket::where('status_id', Status::VIEWED)
             ->withWhereHas('user.buDepartments', callback: function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
-            ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->where('user_id', User::where('id', auth()->user()->id)->role(Role::APPROVER)->first('id'));
+            ->withWhereHas('ticketApprovals', function ($approval) {
+                $approval->where('is_approved', false)
+                    ->withWhereHas('helpTopicApprover', function ($approver) {
+                        $approver->where('user_id', auth()->user()->id);
+                    });
             })
             ->orderByDesc('created_at')
             ->get();
@@ -111,7 +106,7 @@ trait Tickets
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
             ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->where('user_id', User::where('id', auth()->user()->id)->role(Role::APPROVER)->first('id'));
+                $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -132,7 +127,7 @@ trait Tickets
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
             ->withWhereHas('ticketApprovals.helpTopicApprover', callback: function ($approver) {
-                $approver->where('user_id', User::where('id', auth()->user()->id)->role(Role::APPROVER)->first('id'));
+                $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();

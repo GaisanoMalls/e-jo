@@ -342,6 +342,13 @@ class CreateHelpTopic extends Component
 
     public function saveEditConfiguration()
     {
+        if (!$this->editBuDepartment) {
+            $this->addError('editBuDepartment', 'BU department field is required.');
+            return;
+        } else {
+            $this->resetValidation('editBuDepartment');
+        }
+
         if (!$this->editLevelOfApproval) {
             $this->addError('editLevelOfApproval', 'Level of approval field is required.');
             return;
@@ -349,11 +356,10 @@ class CreateHelpTopic extends Component
             $this->resetValidation('editLevelOfApproval');
         }
 
-        if (!$this->editBuDepartment) {
-            $this->addError('editBuDepartment', 'BU department field is required.');
-            return;
-        } else {
-            $this->resetValidation('editBuDepartment');
+        foreach ($this->configurations as $config) {
+            if ($config['bu_department_id'] != $this->editBuDepartment) {
+                return $this->addError('editBuDepartment', 'BU department already exists');
+            }
         }
 
         $approvers = [
@@ -363,13 +369,6 @@ class CreateHelpTopic extends Component
             'level4' => array_map('intval', $this->editLevel4Approvers),
             'level5' => array_map('intval', $this->editLevel5Approvers),
         ];
-
-        dump($this->configurations);
-        foreach ($this->configurations as $config) {
-            if ($config['bu_department_id'] != $this->editBuDepartment) {
-                return $this->addError('editBuDepartment', 'BU department already exists');
-            }
-        }
 
         $approversCount = array_sum(array_map('count', $approvers));
 

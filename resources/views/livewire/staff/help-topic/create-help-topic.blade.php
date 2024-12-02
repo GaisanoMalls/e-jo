@@ -282,7 +282,7 @@
                                         BU Department
                                     </label>
                                     <div>
-                                        <div id="select-edit-config-bu-department" wire:ignore></div>
+                                        <div id="select-edit-config-bu-department" wire:ignore.self></div>
                                     </div>
                                     @error('editBuDepartment')
                                         <span class="error__message">
@@ -621,6 +621,10 @@
             @this.set('editBuDepartment', parseInt(event.target.value));
         });
 
+        selectEditBuDepartment.addEventListener('reset', () => {
+            @this.set('editBuDepartment', null);
+        });
+
         const editHelpTopicApprovalConfigContainer = document.querySelector('#edit-help-topic-approval-config-container');
         let editSelectedApprovers = [];
         let editApprovers = {};
@@ -666,6 +670,10 @@
                 });
             }
         });
+
+        selectEditConfigLevelOfApproval.addEventListener('reset', () => {
+            @this.set('editLevelOfApproval', null);
+        })
 
         window.addEventListener('edit-load-approvers', (event) => {
             const levelApprovers = Object.values(event.detail.currentEditLevelApprovers);
