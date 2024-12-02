@@ -421,7 +421,7 @@ class CreateHelpTopic extends Component
         }, $this->configurations);
 
         $currentEditLevelApprovers = array_filter($levelApprovers, function ($arr) {
-            return !empty($arr['approvers']);
+            return $arr['bu_department_id'] == $this->editBuDepartment && !empty($arr['approvers']);
         });
 
         $this->dispatchBrowserEvent('edit-load-approvers', [

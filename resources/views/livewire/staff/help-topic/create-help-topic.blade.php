@@ -668,7 +668,7 @@
         });
 
         window.addEventListener('edit-load-approvers', (event) => {
-            const levelApprovers = event.detail.currentEditLevelApprovers
+            const levelApprovers = Object.values(event.detail.currentEditLevelApprovers);
             const level = event.detail.level;
             const editApproverSelect = editApprovers[`level${level}`];
 
@@ -685,20 +685,21 @@
 
                 if (Array.isArray(levelApprovers)) {
                     const approverKey = `level${level}`;
+                    const assignedApprover = levelApprovers.find(lvl => lvl.approvers && lvl.approvers[
+                        approverKey]);
 
-                    levelApprovers.forEach(lvl => {
-                        const approverValue = lvl.approvers[approverKey];
-                        if (approverValue !== undefined) {
-                            editApproverSelect.setValue(approverValue);
-                        } else {
-                            console.warn(`Approver for ${approverKey} not found in`, lvl);
-                        }
-                    });
+                    if (assignedApprover) {
+                        const approverValue = assignedApprover.approvers[approverKey];
+                        editApproverSelect.setValue(approverValue);
+                    } else {
+                        console.error(`Assigned approver not found for level ${level}`);
+                    }
                 } else {
                     console.error('levelApprovers is not an array:', levelApprovers);
                 }
             }
         });
+
 
         window.addEventListener('edit-reset-select-fields', () => {
             selectEditBuDepartment.reset();
