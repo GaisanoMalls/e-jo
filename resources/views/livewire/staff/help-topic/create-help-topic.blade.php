@@ -592,7 +592,7 @@
             teamSelect.disable();
         });
 
-        // Edit Configucation
+        // Edit Configuration
         const selectEditBuDepartment = document.querySelector('#select-edit-config-bu-department');
         const selectEditConfigLevelOfApproval = document.querySelector('#select-edit-config-level-of-approval');
 
@@ -699,7 +699,6 @@
                 }
             }
         });
-
 
         window.addEventListener('edit-reset-select-fields', () => {
             selectEditBuDepartment.reset();

@@ -364,6 +364,7 @@ class CreateHelpTopic extends Component
             'level5' => array_map('intval', $this->editLevel5Approvers),
         ];
 
+        dump($this->configurations);
         foreach ($this->configurations as $config) {
             if ($config['bu_department_id'] != $this->editBuDepartment) {
                 return $this->addError('editBuDepartment', 'BU department already exists');
