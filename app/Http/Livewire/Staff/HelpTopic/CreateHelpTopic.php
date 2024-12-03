@@ -54,7 +54,7 @@ class CreateHelpTopic extends Component
     public array $level5Approvers = [];
     public array $selectedApprovers = [];
 
-    public bool $approvalLevelSelected = false;
+    public bool $selectedApprovalLevel = false;
     public ?int $levelOfApproval = null;
 
     public ?array $configurations = [];
@@ -86,7 +86,7 @@ class CreateHelpTopic extends Component
             'serviceDepartment' => ['required'],
             'team' => ['required'],
             'selectedBuDepartment' => [empty($this->configurations) ? 'required' : 'nullable'],
-            'approvalLevelSelected' => [empty($this->configurations) ? 'accepted' : 'nullable'],
+            'selectedApprovalLevel' => [empty($this->configurations) ? 'accepted' : 'nullable'],
             'teams' => '',
         ];
     }
@@ -95,7 +95,7 @@ class CreateHelpTopic extends Component
     {
         return [
             'selectedBuDepartment.required' => 'BU department field is required',
-            'approvalLevelSelected.accepted' => 'Level of approval field is required'
+            'selectedApprovalLevel.accepted' => 'Level of approval field is required'
         ];
     }
 
@@ -196,11 +196,11 @@ class CreateHelpTopic extends Component
             $this->resetValidation('selectedBuDepartment');
         }
 
-        if (!$this->approvalLevelSelected) {
-            $this->addError('approvalLevelSelected', 'Level of approval field is required.');
+        if (!$this->selectedApprovalLevel) {
+            $this->addError('selectedApprovalLevel', 'Level of approval field is required.');
             return;
         } else {
-            $this->resetValidation('approvalLevelSelected');
+            $this->resetValidation('selectedApprovalLevel');
         }
 
         if (!empty($this->selectedLevels)) {
@@ -230,9 +230,9 @@ class CreateHelpTopic extends Component
 
         $approversCount = array_sum(array_map('count', $approvers));
 
-        if ($this->approvalLevelSelected && $this->selectedBuDepartment) {
+        if ($this->selectedApprovalLevel && $this->selectedBuDepartment) {
             // Check if BU department and level of approval is selected
-            if ($this->selectedBuDepartment && $this->approvalLevelSelected) {
+            if ($this->selectedBuDepartment && $this->selectedApprovalLevel) {
                 // Get the selected BU Department name
                 $buDepartmentName = collect($this->queryBUDepartments())
                     ->where('id', $this->selectedBuDepartment)
@@ -257,7 +257,7 @@ class CreateHelpTopic extends Component
     private function resetApprovalConfigFields()
     {
         $this->selectedBuDepartment = null;
-        $this->approvalLevelSelected = false;
+        $this->selectedApprovalLevel = false;
         $this->level1Approvers = [];
         $this->level2Approvers = [];
         $this->level3Approvers = [];
@@ -312,7 +312,7 @@ class CreateHelpTopic extends Component
         $this->resetApprovalConfigFields();
     }
 
-    public function updatedApprovalLevelSelected()
+    public function updatedselectedApprovalLevel()
     {
         $this->getFilteredApprovers(1);
     }

@@ -130,7 +130,7 @@
                                 <div>
                                     <div id="select-help-topic-approval-level" wire:ignore></div>
                                 </div>
-                                @error('approvalLevelSelected')
+                                @error('selectedApprovalLevel')
                                     <span class="error__message">
                                         <i class="fa-solid fa-triangle-exclamation"></i>
                                         {{ $message }}
@@ -482,11 +482,11 @@
         };
 
         approvalLevelSelect.addEventListener('reset', () => {
-            @this.set('approvalLevelSelected', false);
+            @this.set('selectedApprovalLevel', false);
         });
 
         approvalLevelSelect.addEventListener('change', () => {
-            @this.set('approvalLevelSelected', true);
+            @this.set('selectedApprovalLevel', true);
             @this.set('levelOfApproval', parseInt(event.target.value));
 
             dynamicApprovalLevelContainer.innerHTML = '';
