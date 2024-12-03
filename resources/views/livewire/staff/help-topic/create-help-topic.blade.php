@@ -104,10 +104,10 @@
                             <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
                             Approval
                         </h6>
-                        @if (session()->has('approval_config_error'))
-                            <span class="error__message">
+                        @if (session()->has('level_approver_message'))
+                            <span class="text-danger mb-3" style="font-size: 0.9rem;">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ session('approval_config_error') }}
+                                {{ session('level_approver_message') }}
                             </span>
                         @endif
                         <div class="col-md-6">
@@ -159,19 +159,23 @@
                                         <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
                                         <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
                                         <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
-                                        <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">Actions
+                                        <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
+                                            Actions
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($configurations as $index => $config)
                                         <tr>
-                                            <td class="td__content" style="font-size: 0.85rem;">{{ (int) $index + 1 }}
+                                            <td class="td__content" style="font-size: 0.85rem;">
+                                                {{ (int) $index + 1 }}
                                             </td>
                                             <td class="td__content" style="font-size: 0.85rem;">
-                                                {{ $config['bu_department_name'] }}</td>
+                                                {{ $config['bu_department_name'] }}
+                                            </td>
                                             <td class="td__content" style="font-size: 0.85rem;">
-                                                {{ $config['approvers_count'] }}</td>
+                                                {{ $config['approvers_count'] }}
+                                            </td>
                                             <td>
                                                 <div
                                                     class="d-flex align-items-center justify-content-center pe-2 gap-1">
@@ -487,6 +491,7 @@
 
             dynamicApprovalLevelContainer.innerHTML = '';
             selectedApprovers = [];
+            const selectedLevels = [];
 
             for (let i = 1; i <= approvalLevelSelect.value; i++) {
                 const approverFieldWrapper = document.createElement('div');
@@ -501,6 +506,9 @@
 
                 dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
                 initializeApproverSelect(i);
+
+                selectedLevels.push(i);
+                @this.set('selectedLevels', selectedLevels);
             }
         });
 

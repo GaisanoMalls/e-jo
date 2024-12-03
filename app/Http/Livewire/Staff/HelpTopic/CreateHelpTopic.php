@@ -41,6 +41,7 @@ class CreateHelpTopic extends Component
 
     //Approval Configurations
     public array $approvalLevels = [1, 2, 3, 4, 5];
+    public array $selectedLevels = [];
     public ?int $selectedConfigurationIndex = null;
     /**
      * Level 1 to 5 approvers
@@ -188,16 +189,34 @@ class CreateHelpTopic extends Component
 
     public function saveConfiguration()
     {
+        if (!$this->selectedBuDepartment) {
+            $this->addError('selectedBuDepartment', 'BU department field is required.');
+            return;
+        } else {
+            $this->resetValidation('selectedBuDepartment');
+        }
+
         if (!$this->approvalLevelSelected) {
             $this->addError('approvalLevelSelected', 'Level of approval field is required.');
+            return;
         } else {
             $this->resetValidation('approvalLevelSelected');
         }
 
-        if (!$this->selectedBuDepartment) {
-            $this->addError('selectedBuDepartment', 'BU department field is required.');
-        } else {
-            $this->resetValidation('selectedBuDepartment');
+        if (!empty($this->selectedLevels)) {
+            foreach ($this->selectedLevels as $level) {
+                if (empty($this->{"level{$level}Approvers"})) {
+                    session()->flash('level_approver_message', "Level $level approver field is required.");
+                    return;
+                }
+            }
+        }
+
+        foreach ($this->configurations as $config) {
+            if ($config['bu_department_id'] == $this->selectedBuDepartment) {
+                $this->addError('selectedBuDepartment', 'BU department already exists');
+                return;
+            }
         }
 
         $approvers = [
@@ -208,11 +227,6 @@ class CreateHelpTopic extends Component
             'level5' => array_map('intval', $this->level5Approvers),
         ];
 
-        foreach ($this->configurations as $config) {
-            if ($config['bu_department_id'] == $this->selectedBuDepartment) {
-                $this->addError('selectedBuDepartment', 'BU department already exists');
-            }
-        }
 
         $approversCount = array_sum(array_map('count', $approvers));
 

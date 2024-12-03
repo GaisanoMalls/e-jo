@@ -144,7 +144,7 @@ trait Tickets
                 $query->withWhereHas('ticketApprovals', function ($approver) {
                     $approver->where('is_approved', true)
                         ->withWhereHas('helpTopicApprover', function ($approver) {
-                            $approver->orWwhere('user_id', auth()->user()->id);
+                            $approver->orWhere('user_id', auth()->user()->id);
                         });
                 });
             })

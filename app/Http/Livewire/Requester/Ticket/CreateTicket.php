@@ -155,32 +155,32 @@ class CreateTicket extends Component
                         $ticket->fileAttachments()->create(['file_attachment' => $fileAttachment]);
                     }
                 }
+                
+                // $approvers = User::withWhereHas('helpTopicApprovals', function ($query) use ($ticket) {
+                //     $query->withWhereHas('configuration', function ($config) use ($ticket) {
+                //         $config->with('approvers')
+                //             ->where('bu_department_id', $ticket->user->buDepartments->pluck('id')->first());
+                //     });
+                // })->get();
 
-                $approvers = User::withWhereHas('helpTopicApprovals', function ($query) use ($ticket) {
-                    $query->withWhereHas('configuration', function ($config) use ($ticket) {
-                        $config->with('approvers')
-                            ->where('bu_department_id', $ticket->user->buDepartments->pluck('id')->first());
-                    });
-                })->get();
+                // $approvers->each(function ($approver) use ($ticket) {
+                //     $approver->helpTopicApprovals->each(function ($helpTopicApproval) use ($ticket, $approver) {
+                //         TicketApproval::create([
+                //             'ticket_id' => $ticket->id,
+                //             'help_topic_approver_id' => $helpTopicApproval->id,
+                //         ]);
+                //     });
 
-                $approvers->each(function ($approver) use ($ticket) {
-                    $approver->helpTopicApprovals->each(function ($helpTopicApproval) use ($ticket, $approver) {
-                        TicketApproval::create([
-                            'ticket_id' => $ticket->id,
-                            'help_topic_approver_id' => $helpTopicApproval->id,
-                        ]);
-                    });
-
-                    Notification::send(
-                        $approver,
-                        new AppNotification(
-                            ticket: $ticket,
-                            title: "Ticket #{$ticket->ticket_number} (New)",
-                            message: "{$ticket->user->profile->getFullName} created a ticket"
-                        )
-                    );
-                    // Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
-                });
+                //     Notification::send(
+                //         $approver,
+                //         new AppNotification(
+                //             ticket: $ticket,
+                //             title: "Ticket #{$ticket->ticket_number} (New)",
+                //             message: "{$ticket->user->profile->getFullName} created a ticket"
+                //         )
+                //     );
+                //     // Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
+                // });
 
                 if ($this->isHelpTopicHasForm) {
                     $this->saveFieldValues($ticket);
