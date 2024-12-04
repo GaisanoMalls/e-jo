@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class HelpTopic extends Model
 {
-    use HasFactory, SoftDeletes, Utils;
+    use HasFactory, Utils;
 
     protected $fillable = [
         'service_department_id',
