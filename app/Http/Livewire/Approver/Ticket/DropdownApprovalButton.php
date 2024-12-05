@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Http\Traits\TicketApprovalLevel;
 use App\Models\Ticket;
+use App\Models\TicketApproval;
 use Livewire\Component;
 
 class DropdownApprovalButton extends Component
@@ -17,6 +18,10 @@ class DropdownApprovalButton extends Component
 
     public function mount()
     {
+        // dd(TicketApproval::where('ticket_id', $this->ticket->id)
+        //     ->withWhereHas('helpTopicApprover', function ($approver) {
+        //         $approver->where('user_id', auth()->user()->id);
+        //     })->get(), auth()->user()->id);
         $this->isApproverIsInConfiguration = $this->isApproverIsInConfiguration($this->ticket);
     }
 

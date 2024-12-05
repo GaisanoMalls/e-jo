@@ -62,8 +62,6 @@ class ApproveTicket extends Component
                         $approvedLevel = $this->approveLevelOfApproval($this->ticket);
 
                         if ($approvedLevel) {
-                            
-
                             $agents = User::with('profile')
                                 ->withWhereHas('teams', function ($team) {
                                     $team->whereIn('teams.id', $this->ticket->teams->pluck('id')->toArray());
