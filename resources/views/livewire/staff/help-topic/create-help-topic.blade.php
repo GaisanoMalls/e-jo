@@ -168,7 +168,7 @@
                                     @foreach ($configurations as $index => $config)
                                         <tr>
                                             <td class="td__content" style="font-size: 0.85rem;">
-                                                {{ (int) $index + 1 }}
+                                                {{ $index + 1 }}
                                             </td>
                                             <td class="td__content" style="font-size: 0.85rem;">
                                                 {{ $config['bu_department_name'] }}
@@ -268,7 +268,7 @@
             </div>
         </div>
         {{-- Edit Configuration --}}
-        <div wire:ignore class="modal fade help__topic__modal" id="editConfigurationModal" tabindex="-1"
+        <div wire:ignore.self class="modal fade help__topic__modal" id="editConfigurationModal" tabindex="-1"
             aria-labelledby="editConfigurationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content modal__content">
@@ -281,12 +281,18 @@
                     <form wire:submit.prevent="saveEditConfiguration">
                         <div class="modal-body modal__body">
                             <div class="row mb-2">
+                                @if (session()->has('edit_level_approver_message'))
+                                    <span class="text-danger mb-3" style="font-size: 0.9rem;">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ session('edit_level_approver_message') }}
+                                    </span>
+                                @endif
                                 <div class="col-md-6 mb-2">
                                     <label class="form-label form__field__label">
                                         BU Department
                                     </label>
                                     <div>
-                                        <div id="select-edit-config-bu-department" wire:ignore.self></div>
+                                        <div id="select-edit-config-bu-department" wire:ignore></div>
                                     </div>
                                     @error('editBuDepartment')
                                         <span class="error__message">
@@ -518,9 +524,7 @@
             const approverSelect = approvers[`level${level}`];
 
             if (approverSelect && levelApprovers.length > 0) {
-                const approverOptions = levelApprovers.filter(approver => {
-                    return !selectedApprovers.flat().includes(approver.id);
-                }).map(approver => ({
+                const approverOptions = levelApprovers.map(approver => ({
                     label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
                     value: approver.id,
                     description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
@@ -573,7 +577,6 @@
 
             selectHelpTopicFinalCosting.addEventListener('change', (event) => {
                 const selectedFinalCostingApprovers = event.target.value;
-                console.log('Selected Final Costing Approvers:', selectedFinalCostingApprovers);
                 @this.set('finalCostingApprovers', selectedFinalCostingApprovers);
             });
         });
@@ -642,6 +645,7 @@
 
             editHelpTopicApprovalConfigContainer.innerHTML = '';
             editSelectedApprovers = [];
+            const editSelectedLevels = [];
 
             for (let level = 1; level <= selectEditConfigLevelOfApproval.value; level++) {
                 const approverFieldWrapper = document.createElement('div');
@@ -676,6 +680,9 @@
                 editApprovers[`level${level}`].addEventListener('virtual-select:option-click', () => {
                     @this.call('getFilteredApprovers', level);
                 });
+
+                editSelectedLevels.push(level);
+                @this.set('editSelectedLevels', editSelectedLevels);
             }
         });
 
@@ -685,13 +692,12 @@
 
         window.addEventListener('edit-load-approvers', (event) => {
             const levelApprovers = Object.values(event.detail.currentEditLevelApprovers);
+            const approvers = event.detail.approvers;
             const level = event.detail.level;
             const editApproverSelect = editApprovers[`level${level}`];
 
             if (editApproverSelect) {
-                const approverOptions = event.detail.approvers.filter(approver => {
-                    return !selectedApprovers.flat().includes(approver.id);
-                }).map(approver => ({
+                const approverOptions = approvers.map(approver => ({
                     label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
                     value: approver.id,
                     description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
@@ -701,17 +707,13 @@
 
                 if (Array.isArray(levelApprovers)) {
                     const approverKey = `level${level}`;
-                    const assignedApprover = levelApprovers.find(lvl => lvl.approvers && lvl.approvers[
-                        approverKey]);
+                    const assignedApprover = levelApprovers
+                        .find(lvl => lvl.approvers && lvl.approvers[approverKey]);
 
                     if (assignedApprover) {
                         const approverValue = assignedApprover.approvers[approverKey];
                         editApproverSelect.setValue(approverValue);
-                    } else {
-                        console.error(`Assigned approver not found for level ${level}`);
                     }
-                } else {
-                    console.error('levelApprovers is not an array:', levelApprovers);
                 }
             }
         });
