@@ -567,61 +567,61 @@
             const approvers = {};
             let selectedApprovers = [];
 
-            const initializeApproverSelect = (level) => {
-                approvers[`level${level}`] = document.querySelector(
-                    `#select-help-topic-approval-level-${level}`);
+            approvalLevelSelect.addEventListener('change', (event) => {
+                @this.set('selectedApprovalLevel', true);
+                @this.set('levelOfApproval', parseInt(event.target.value));
 
-                VirtualSelect.init({
-                    ele: approvers[`level${level}`],
-                    search: true,
-                    multiple: true,
-                    showValueAsTags: true,
-                    markSearchResults: true,
-                    hasOptionDescription: true
-                });
-
-                approvers[`level${level}`].addEventListener('change', () => {
-                    selectedApprovers[level - 1] = approvers[`level${level}`].value;
-                    @this.set(`level${level}Approvers`, approvers[`level${level}`].value);
-                });
-
-                approvers[`level${level}`].addEventListener('change', () => {
-                    @this.call('getFilteredApprovers', level);
-                });
-            };
-
-            approvalLevelSelect.addEventListener('change', () => {
                 dynamicApprovalLevelContainer.innerHTML = '';
                 selectedApprovers = [];
 
-                for (let i = 1; i <= approvalLevelSelect.value; i++) {
+                for (let level = 1; level <= approvalLevelSelect.value; level++) {
                     const approverFieldWrapper = document.createElement('div');
                     approverFieldWrapper.className = 'col-md-6';
                     approverFieldWrapper.innerHTML = `
                     <div class="mb-2">
-                        <label for="department" class="form-label form__field__label">Level ${i} Approver</label>
+                        <label for="department" class="form-label form__field__label">Level ${level} Approver</label>
                         <div>
-                            <div id="select-help-topic-approval-level-${i}" wire:ignore></div>
+                            <div id="select-help-topic-approval-level-${level}" wire:ignore></div>
                         </div>
                     </div>`;
 
                     dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
-                    initializeApproverSelect(i);
-                    @this.call('getFilteredApprovers', i); // Fetch approvers for each level
+
+                    approvers[`level${level}`] = document.querySelector(
+                        `#select-help-topic-approval-level-${level}`);
+
+                    VirtualSelect.init({
+                        ele: approvers[`level${level}`],
+                        search: true,
+                        multiple: true,
+                        showValueAsTags: true,
+                        markSearchResults: true,
+                        hasOptionDescription: true
+                    });
+
+                    approvers[`level${level}`].addEventListener('change', () => {
+                        selectedApprovers[level - 1] = approvers[`level${level}`].value;
+                        @this.set(`level${level}Approvers`, approvers[`level${level}`].value);
+                    });
+
+                    approvers[`level${level}`].addEventListener('virtual-select:option-click', () => {
+                        @this.call('getFilteredApprovers', level);
+                    });
                 }
-                window.dispatchEvent(new CustomEvent('approval-level-selected'));
             });
 
             window.addEventListener('load-approvers', (event) => {
                 const level = event.detail.level;
+                const levelApprovers = event.detail.approvers;
                 const approverSelect = approvers[`level${level}`];
 
-                if (approverSelect) {
-                    const approverOptions = event.detail.approvers.map(approver => ({
+                if (approverSelect && levelApprovers.length > 0) {
+                    const approverOptions = levelApprovers.map(approver => ({
                         label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
                         value: approver.id,
                         description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
                     }));
+
                     approverSelect.setOptions(approverOptions);
                 }
             });
@@ -715,12 +715,11 @@
             value: approvalLevel
         }));
 
-        const editConfigApproverSelect = document.querySelector('#select-edit-current-config-approvers');
-        const editCurrentConfigLevelOfApprovalSelect = document.querySelector(
+        const selectEditCurrentConfigLevelOfApprovalSelect = document.querySelector(
             '#select-edit-current-config-level-of-approval');
 
         VirtualSelect.init({
-            ele: editCurrentConfigLevelOfApprovalSelect,
+            ele: selectEditCurrentConfigLevelOfApprovalSelect,
             options: approvalLevelOption,
         });
 
@@ -728,7 +727,7 @@
         const editApprovers = {};
         let editSelectedApprovers = [];
 
-        window.addEventListener('load-current-configuration', (event) => {
+        window.addEventListener('edit-load-current-configuration', (event) => {
             const buDepartmentApprovers = event.detail.buDepartmentApprovers;
             const currentConfigLevelOfApproval = event.detail.currentConfigLevelOfApproval;
             const currentConfigurations = event.detail.currentConfigurations;
@@ -738,14 +737,17 @@
                 value: approver.id,
             }));
 
-            editCurrentConfigLevelOfApprovalSelect.reset();
-            editCurrentConfigLevelOfApprovalSelect.setValue(currentConfigLevelOfApproval);
+            selectEditCurrentConfigLevelOfApprovalSelect.reset();
+            selectEditCurrentConfigLevelOfApprovalSelect.setValue(currentConfigLevelOfApproval);
 
-            editCurrentConfigLevelOfApprovalSelect.addEventListener('change', () => {
+            selectEditCurrentConfigLevelOfApprovalSelect.addEventListener('change', (e) => {
+                @this.set('editLevelOfApproval', e.target.value);
+
                 editConfigApproverSelectContainer.innerHTML = '';
                 editSelectedApprovers = [];
+                const editSelectedLevels = [];
 
-                for (let level = 1; level <= editCurrentConfigLevelOfApprovalSelect.value; level++) {
+                for (let level = 1; level <= e.target.value; level++) {
                     const editApproverFieldWrapper = document.createElement('div');
 
                     editApproverFieldWrapper.className = 'col-md-6';
@@ -772,19 +774,6 @@
                         hasOptionDescription: true
                     });
 
-                    const approversForLevel = [];
-                    currentConfigurations.forEach((config) => {
-                        config.approvers.forEach((approver) => {
-                            if (approver.level === level) {
-                                approversForLevel.push(approver.id);
-                            }
-                        })
-                    });
-
-                    if (editApprovers[`editLevel${level}`]) {
-                        editApprovers[`editLevel${level}`].setValue(approversForLevel);
-                    }
-
                     editApprovers[`editLevel${level}`].addEventListener('change', () => {
                         editSelectedApprovers[level - 1] = editApprovers[`editLevel${level}`].value;
                         @this.set(
@@ -792,10 +781,44 @@
                             editApprovers[`editLevel${level}`].value
                         );
                     });
-                    @this.call('editGetFilteredApprovers', level);
+
+                    editApprovers[`editLevel${level}`].addEventListener('virtual-select:option-click',
+                        () => {
+                            @this.call('getFilteredApprovers', level);
+                        });
+
+                    editSelectedLevels.push(level);
+                    @this.set('editSelectedLevels', editSelectedLevels);
                 }
             });
         });
+
+        window.addEventListener('edit-load-current-approvers', (event) => {
+            const level = event.detail.level;
+            const buDepartmentApprovers = event.detail.buDepartmentApprovers;
+            const currentConfigurations = Object.values(event.detail.currentConfigurations[0].approvers);
+            const editApproverSelect = editApprovers[`editLevel${level}`];
+
+            if (editApproverSelect) {
+                const approverOptions = currentConfigurations.map(approver => ({
+                    label: `${approver.approver.profile.first_name} ${approver.approver.profile.middle_name ? approver.approver.profile.middle_name[0] + '.' : ''} ${approver.approver.profile.last_name}`,
+                    value: approver.approver.id,
+                    description: `${approver.approver.roles.map(role => role.name).join(', ')} (${approver.approver.bu_departments.map(department => department.name).join(', ')})`
+                }));
+
+                editApproverSelect.setOptions(approverOptions);
+
+                const approverKey = `level${level}`;
+                const assignedApprover = currentConfigurations
+                    .find(approver => console.log(approver));
+
+                if (assignedApprover) {
+                    const approverValue = assignedApprover.approvers.approver[approverKey];
+                    editApproverSelect.setValue(approverValue);
+                }
+            }
+        });
+
 
         //
         window.addEventListener('close-confirm-delete-config-modal', () => {

@@ -51,7 +51,8 @@ class UpdateHelpTopic extends Component
     public array $level3Approvers = [];
     public array $level4Approvers = [];
     public array $level5Approvers = [];
-
+    public array $selectedApprovers = [];
+    public bool $selectedApprovalLevel = false;
     public ?int $levelOfApproval = null;
 
     public Collection $buDepartments;
@@ -64,12 +65,13 @@ class UpdateHelpTopic extends Component
     public ?Department $currentConfigBuDepartment = null;
     public ?HelpTopicConfiguration $currentHelpTopicConfiguration = null;
     public ?int $editLevelOfApproval = null;
-    public array $selectedApprovers = [];
+    public array $editSelectedApprovers = [];
     public array $editCurrentLevel1Approvers = [];
     public array $editCurrentLevel2Approvers = [];
     public array $editCurrentLevel3Approvers = [];
     public array $editCurrentLevel4Approvers = [];
     public array $editCurrentLevel5Approvers = [];
+    public array $editSelectedLevels = [];
 
     // Delete selected helptopic configuration
     public ?int $deleteSelectedConfigId = null;
@@ -214,7 +216,7 @@ class UpdateHelpTopic extends Component
 
     public function getFilteredApprovers($level)
     {
-        $selectedApprovers = array_merge(
+        $this->selectedApprovers = array_merge(
             (array) $this->level1Approvers,
             (array) $this->level2Approvers,
             (array) $this->level3Approvers,
@@ -224,7 +226,7 @@ class UpdateHelpTopic extends Component
 
         $filteredApprovers = User::with(['profile', 'roles', 'buDepartments'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
-            ->whereNotIn('id', $selectedApprovers)
+            ->whereNotIn('id', $this->selectedApprovers)
             ->orderByDesc('created_at')
             ->get();
 
@@ -232,6 +234,31 @@ class UpdateHelpTopic extends Component
             'approvers' => $filteredApprovers,
             'level' => $level
         ]);
+    }
+
+    public function updatedSelectedApprovalLevel()
+    {
+        $this->getFilteredApprovers(1);
+    }
+
+    public function updatedLevel1Approvers()
+    {
+        $this->getFilteredApprovers(2);
+    }
+
+    public function updatedLevel2Approvers()
+    {
+        $this->getFilteredApprovers(3);
+    }
+
+    public function updatedLevel3Approvers()
+    {
+        $this->getFilteredApprovers(4);
+    }
+
+    public function updatedLevel4Approvers()
+    {
+        $this->getFilteredApprovers(5);
     }
 
     public function saveConfiguration()
@@ -317,7 +344,7 @@ class UpdateHelpTopic extends Component
                 $department->where('departments.id', $this->currentConfigBuDepartment->id);
             })->get();
 
-        $this->dispatchBrowserEvent('load-current-configuration', [
+        $this->dispatchBrowserEvent('edit-load-current-configuration', [
             'buDepartmentApprovers' => $buDepartmentApprovers,
             'currentConfigLevelOfApproval' => $currentConfigLevelOfApproval,
             'currentConfigurations' => $this->helpTopic->configurations()->with('approvers')
@@ -326,14 +353,50 @@ class UpdateHelpTopic extends Component
         ]);
     }
 
-    public function editGetFilteredApprovers($level)
+    private function editGetFilteredApprovers($level)
     {
-        // dump("Cro");
+        $buDepartmentApprovers = User::with(['profile', 'roles'])
+            ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
+            ->withWhereHas('buDepartments', fn($buDepartment) => $buDepartment->whereIn('departments.id', [$this->currentConfigBuDepartment->id]))
+            ->whereNotIn('id', $this->editSelectedApprovers)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $currentConfigurations = $this->helpTopic->configurations()->with(['approvers.approver.profile', 'approvers.approver.roles', 'approvers.approver.buDepartments'])
+            ->withWhereHas('buDepartment', fn($department) => $department->where('name', $this->currentHelpTopicConfiguration->buDepartment->name))
+            ->get();
+
+        $this->dispatchBrowserEvent('edit-load-current-approvers', [
+            'level' => $level,
+            'buDepartmentApprovers' => $buDepartmentApprovers,
+            'currentConfigurations' => $currentConfigurations
+        ]);
     }
 
     public function updatedEditLevelOfApproval($value)
     {
+        $this->editLevelOfApproval = $value;
+        $this->editGetFilteredApprovers(1);
+    }
 
+    public function updatedEditCurrentLevel1Approvers()
+    {
+        $this->editGetFilteredApprovers(2);
+    }
+
+    public function updatedEditCurrentLevel2Approvers()
+    {
+        $this->editGetFilteredApprovers(3);
+    }
+
+    public function updatedEditCurrentLevel3Approvers()
+    {
+        $this->editGetFilteredApprovers(4);
+    }
+
+    public function updatedEditCurrentLevel4Approvers()
+    {
+        $this->editGetFilteredApprovers(5);
     }
 
     public function updateCurrentConfiguration()
@@ -357,19 +420,6 @@ class UpdateHelpTopic extends Component
             AppErrorLog::getError($e->getMessage());
         }
     }
-
-    // public function editConfiguration(HelpTopicConfiguration $helpTopicConfiguration)
-    // {
-    //     $configApprovers = $helpTopicConfiguration->approvers()->with('approver.profile')->pluck('user_id')->toArray();
-    //     $helpTopicApprovers = HelpTopicApprover::with('approver.profile')
-    //         ->whereNotIn('id', $configApprovers)
-    //         ->where('help_topic_configuration_id', $helpTopicConfiguration->id)
-    //         ->get();
-
-    //     $this->dispatchBrowserEvent('get-helptopic-co-approvers', [
-    //         'helpTopicApprovers' => $helpTopicApprovers
-    //     ]);
-    // }
 
     public function deleteAddedConfig(int $index)
     {

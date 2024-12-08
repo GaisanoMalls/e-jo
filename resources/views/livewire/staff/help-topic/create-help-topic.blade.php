@@ -465,33 +465,11 @@
         const approvers = {};
         let selectedApprovers = [];
 
-        const initializeApproverSelect = (level) => {
-            approvers[`level${level}`] = document.querySelector(`#select-help-topic-approval-level-${level}`);
-
-            VirtualSelect.init({
-                ele: approvers[`level${level}`],
-                search: true,
-                multiple: true,
-                showValueAsTags: true,
-                markSearchResults: true,
-                hasOptionDescription: true
-            });
-
-            approvers[`level${level}`].addEventListener('change', () => {
-                selectedApprovers[level - 1] = approvers[`level${level}`].value;
-                @this.set(`level${level}Approvers`, approvers[`level${level}`].value);
-            });
-
-            approvers[`level${level}`].addEventListener('virtual-select:option-click', () => {
-                @this.call('getFilteredApprovers', level);
-            });
-        };
-
         approvalLevelSelect.addEventListener('reset', () => {
             @this.set('selectedApprovalLevel', false);
         });
 
-        approvalLevelSelect.addEventListener('change', () => {
+        approvalLevelSelect.addEventListener('change', (event) => {
             @this.set('selectedApprovalLevel', true);
             @this.set('levelOfApproval', parseInt(event.target.value));
 
@@ -499,21 +477,39 @@
             selectedApprovers = [];
             const selectedLevels = [];
 
-            for (let i = 1; i <= approvalLevelSelect.value; i++) {
+            for (let level = 1; level <= approvalLevelSelect.value; level++) {
                 const approverFieldWrapper = document.createElement('div');
                 approverFieldWrapper.className = 'col-md-6';
                 approverFieldWrapper.innerHTML = `
                     <div class="mb-2">
-                        <label for="department" class="form-label form__field__label">Level ${i} Approver</label>
+                        <label for="department" class="form-label form__field__label">Level ${level} Approver</label>
                         <div>
-                            <div id="select-help-topic-approval-level-${i}" wire:ignore></div>
+                            <div id="select-help-topic-approval-level-${level}" wire:ignore></div>
                         </div>
                     </div>`;
 
                 dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
-                initializeApproverSelect(i);
 
-                selectedLevels.push(i);
+                approvers[`level${level}`] = document.querySelector(`#select-help-topic-approval-level-${level}`);
+                VirtualSelect.init({
+                    ele: approvers[`level${level}`],
+                    search: true,
+                    multiple: true,
+                    showValueAsTags: true,
+                    markSearchResults: true,
+                    hasOptionDescription: true
+                });
+
+                approvers[`level${level}`].addEventListener('change', () => {
+                    selectedApprovers[level - 1] = approvers[`level${level}`].value;
+                    @this.set(`level${level}Approvers`, approvers[`level${level}`].value);
+                });
+
+                approvers[`level${level}`].addEventListener('virtual-select:option-click', () => {
+                    @this.call('getFilteredApprovers', level);
+                });
+
+                selectedLevels.push(level);
                 @this.set('selectedLevels', selectedLevels);
             }
         });
@@ -640,14 +636,14 @@
         let editSelectedApprovers = [];
         let editApprovers = {};
 
-        selectEditConfigLevelOfApproval.addEventListener('change', () => {
+        selectEditConfigLevelOfApproval.addEventListener('change', (event) => {
             @this.set('editLevelOfApproval', parseInt(event.target.value));
 
             editHelpTopicApprovalConfigContainer.innerHTML = '';
             editSelectedApprovers = [];
             const editSelectedLevels = [];
 
-            for (let level = 1; level <= selectEditConfigLevelOfApproval.value; level++) {
+            for (let level = 1; level <= event.target.value; level++) {
                 const approverFieldWrapper = document.createElement('div');
                 approverFieldWrapper.className = 'col-md-6';
                 approverFieldWrapper.innerHTML = `
@@ -691,12 +687,12 @@
         })
 
         window.addEventListener('edit-load-approvers', (event) => {
-            const levelApprovers = Object.values(event.detail.currentEditLevelApprovers);
-            const approvers = event.detail.approvers;
             const level = event.detail.level;
+            const approvers = event.detail.approvers;
+            const levelApprovers = Object.values(event.detail.currentEditLevelApprovers);
             const editApproverSelect = editApprovers[`level${level}`];
 
-            if (editApproverSelect) {
+            if (editApproverSelect && approvers.length > 0) {
                 const approverOptions = approvers.map(approver => ({
                     label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
                     value: approver.id,
