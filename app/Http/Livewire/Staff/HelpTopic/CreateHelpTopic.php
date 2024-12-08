@@ -220,38 +220,37 @@ class CreateHelpTopic extends Component
             }
         }
 
-        $approvers = [
-            'level1' => array_map('intval', $this->level1Approvers),
-            'level2' => array_map('intval', $this->level2Approvers),
-            'level3' => array_map('intval', $this->level3Approvers),
-            'level4' => array_map('intval', $this->level4Approvers),
-            'level5' => array_map('intval', $this->level5Approvers),
-        ];
 
-
-        $approversCount = array_sum(array_map('count', $approvers));
 
         if ($this->selectedApprovalLevel && $this->selectedBuDepartment) {
             // Check if BU department and level of approval is selected
-            if ($this->selectedBuDepartment && $this->selectedApprovalLevel) {
-                // Get the selected BU Department name
-                $buDepartmentName = collect($this->queryBUDepartments())
-                    ->where('id', $this->selectedBuDepartment)
-                    ->pluck('name')
-                    ->first();
+            $approvers = [
+                'level1' => array_map('intval', $this->level1Approvers),
+                'level2' => array_map('intval', $this->level2Approvers),
+                'level3' => array_map('intval', $this->level3Approvers),
+                'level4' => array_map('intval', $this->level4Approvers),
+                'level5' => array_map('intval', $this->level5Approvers),
+            ];
 
-                // Add to the configurations array
-                $this->configurations[] = [
-                    'bu_department_id' => $this->selectedBuDepartment,
-                    'bu_department_name' => $buDepartmentName,
-                    'approvers_count' => $approversCount,
-                    'level_of_approval' => $this->levelOfApproval,
-                    'approvers' => $approvers,
-                ];
+            $approversCount = array_sum(array_map('count', $approvers));
 
-                $this->resetValidation();
-                $this->resetApprovalConfigFields();
-            }
+            // Get the selected BU Department name
+            $buDepartmentName = collect($this->queryBUDepartments())
+                ->where('id', $this->selectedBuDepartment)
+                ->pluck('name')
+                ->first();
+
+            // Add to the configurations array
+            $this->configurations[] = [
+                'bu_department_id' => $this->selectedBuDepartment,
+                'bu_department_name' => $buDepartmentName,
+                'approvers_count' => $approversCount,
+                'level_of_approval' => $this->levelOfApproval,
+                'approvers' => $approvers,
+            ];
+
+            $this->resetValidation();
+            $this->resetApprovalConfigFields();
         }
     }
 
@@ -380,29 +379,22 @@ class CreateHelpTopic extends Component
             }
         }
 
-        $approvers = [
-            'level1' => array_map('intval', $this->editLevel1Approvers),
-            'level2' => array_map('intval', $this->editLevel2Approvers),
-            'level3' => array_map('intval', $this->editLevel3Approvers),
-            'level4' => array_map('intval', $this->editLevel4Approvers),
-            'level5' => array_map('intval', $this->editLevel5Approvers),
-        ];
-
-        for ($selectedLevel = 1; $selectedLevel <= count($this->editSelectedLevels); $selectedLevel++) {
-            foreach ($approvers as $level => $approver) {
-                if ((int) substr($level, -1) == $selectedLevel) {
-                    $newApprovers = $approvers[$level];
-                    unset($approvers[$level]);
-                    $approvers = array_merge($approvers, [$newApprovers]);
-                }
-            }
-        }
-
-        $approversCount = array_sum(array_map('count', $approvers));
-        dump($approversCount);
         if ($this->editLevelOfApproval && $this->editBuDepartment) {
+            $approvers = [
+                'level1' => array_map('intval', $this->editLevel1Approvers),
+                'level2' => array_map('intval', $this->editLevel2Approvers),
+                'level3' => array_map('intval', $this->editLevel3Approvers),
+                'level4' => array_map('intval', $this->editLevel4Approvers),
+                'level5' => array_map('intval', $this->editLevel5Approvers),
+            ];
+
+            $selectedApprovers = array_filter($approvers, function ($key) {
+                return in_array(substr($key, -1), $this->editSelectedLevels);
+            }, ARRAY_FILTER_USE_KEY);
+
             // Get the selected BU Department name
             $buDepartmentName = collect($this->queryBUDepartments())->firstWhere('id', $this->editBuDepartment)['name'];
+            $approversCount = array_sum(array_map('count', $selectedApprovers));
 
             // Add to the configurations array
             if (isset($this->configurations[$this->selectedConfigurationIndex])) {
@@ -410,7 +402,7 @@ class CreateHelpTopic extends Component
                 $this->configurations[$this->selectedConfigurationIndex]['bu_department_name'] = $buDepartmentName;
                 $this->configurations[$this->selectedConfigurationIndex]['approvers_count'] = $approversCount;
                 $this->configurations[$this->selectedConfigurationIndex]['level_of_approval'] = $this->editLevelOfApproval;
-                $this->configurations[$this->selectedConfigurationIndex]['approvers'] = $approvers;
+                $this->configurations[$this->selectedConfigurationIndex]['approvers'] = $selectedApprovers;
             }
 
             $this->resetValidation();
