@@ -338,7 +338,7 @@ class UpdateHelpTopic extends Component
             $currentConfigLevelOfApproval = $currentConfigLevelOfApproval->configuration->level_of_approval;
         }
 
-        $buDepartmentApprovers = User::with('profile')
+        $buDepartmentApprovers = User::with(['profile', 'roles'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->withWhereHas('buDepartments', function ($department) {
                 $department->where('departments.id', $this->currentConfigBuDepartment->id);
@@ -346,30 +346,44 @@ class UpdateHelpTopic extends Component
 
         $this->dispatchBrowserEvent('edit-load-current-configuration', [
             'buDepartmentApprovers' => $buDepartmentApprovers,
-            'currentConfigLevelOfApproval' => $currentConfigLevelOfApproval,
-            'currentConfigurations' => $this->helpTopic->configurations()->with('approvers')
-                ->withWhereHas('buDepartment', fn($department) => $department->where('name', $helpTopicConfiguration->buDepartment->name))
-                ->get()
+            'currentConfigLevelOfApproval' => $currentConfigLevelOfApproval
         ]);
     }
 
     private function editGetFilteredApprovers($level)
     {
-        $buDepartmentApprovers = User::with(['profile', 'roles'])
+        $filteredApprovers = User::with(['profile', 'roles'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->withWhereHas('buDepartments', fn($buDepartment) => $buDepartment->whereIn('departments.id', [$this->currentConfigBuDepartment->id]))
             ->whereNotIn('id', $this->editSelectedApprovers)
             ->orderByDesc('created_at')
             ->get();
 
-        $currentConfigurations = $this->helpTopic->configurations()->with(['approvers.approver.profile', 'approvers.approver.roles', 'approvers.approver.buDepartments'])
-            ->withWhereHas('buDepartment', fn($department) => $department->where('name', $this->currentHelpTopicConfiguration->buDepartment->name))
-            ->get();
+        $currentConfigurations = HelpTopicConfiguration::with(['approvers.approver.profile'])
+            ->where('help_topic_id', $this->helpTopic->id)
+            ->first()
+            ->toArray();
+
+        $levelApprovers = $currentConfigurations;
+        $approvers = [];
+        foreach ($levelApprovers['approvers'] as $approver) {
+            $level = 'level' . $approver['level'];
+            if (!isset($approvers[$level])) {
+                $approvers[$level] = [];
+            }
+            $approvers[$level][] = $approver['approver']['id'];
+        }
+        $levelApprovers['approvers'] = $approvers;
+
+        $currentEditLevelApprovers = [$levelApprovers];
+        $currentEditLevelApprovers = array_filter($currentEditLevelApprovers, function ($arr) {
+            return $arr['bu_department_id'] == $this->currentConfigBuDepartment->id && !empty($arr['approvers']);
+        });
 
         $this->dispatchBrowserEvent('edit-load-current-approvers', [
-            'level' => $level,
-            'buDepartmentApprovers' => $buDepartmentApprovers,
-            'currentConfigurations' => $currentConfigurations
+            'level' => (int) substr($level, -1),
+            'approvers' => $filteredApprovers,
+            'currentEditLevelApprovers' => $currentEditLevelApprovers
         ]);
     }
 

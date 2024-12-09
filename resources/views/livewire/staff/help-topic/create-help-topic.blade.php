@@ -637,13 +637,14 @@
         let editApprovers = {};
 
         selectEditConfigLevelOfApproval.addEventListener('change', (event) => {
-            @this.set('editLevelOfApproval', parseInt(event.target.value));
+            const editLevelOfApprovalValue = parseInt(event.target.value)
+            @this.set('editLevelOfApproval', editLevelOfApprovalValue);
 
             editHelpTopicApprovalConfigContainer.innerHTML = '';
             editSelectedApprovers = [];
             const editSelectedLevels = [];
 
-            for (let level = 1; level <= event.target.value; level++) {
+            for (let level = 1; level <= editLevelOfApprovalValue; level++) {
                 const approverFieldWrapper = document.createElement('div');
                 approverFieldWrapper.className = 'col-md-6';
                 approverFieldWrapper.innerHTML = `

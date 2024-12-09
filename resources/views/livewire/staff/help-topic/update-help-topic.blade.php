@@ -730,24 +730,25 @@
         window.addEventListener('edit-load-current-configuration', (event) => {
             const buDepartmentApprovers = event.detail.buDepartmentApprovers;
             const currentConfigLevelOfApproval = event.detail.currentConfigLevelOfApproval;
-            const currentConfigurations = event.detail.currentConfigurations;
 
             const buDepartmentApproversOption = buDepartmentApprovers.map(approver => ({
                 label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
                 value: approver.id,
+                description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
             }));
 
             selectEditCurrentConfigLevelOfApprovalSelect.reset();
             selectEditCurrentConfigLevelOfApprovalSelect.setValue(currentConfigLevelOfApproval);
 
             selectEditCurrentConfigLevelOfApprovalSelect.addEventListener('change', (e) => {
-                @this.set('editLevelOfApproval', e.target.value);
+                const editLevelOfApprovalValue = e.target.value;
+                @this.set('editLevelOfApproval', editLevelOfApprovalValue);
 
                 editConfigApproverSelectContainer.innerHTML = '';
                 editSelectedApprovers = [];
                 const editSelectedLevels = [];
 
-                for (let level = 1; level <= e.target.value; level++) {
+                for (let level = 1; level <= editLevelOfApprovalValue; level++) {
                     const editApproverFieldWrapper = document.createElement('div');
 
                     editApproverFieldWrapper.className = 'col-md-6';
@@ -776,6 +777,7 @@
 
                     editApprovers[`editLevel${level}`].addEventListener('change', () => {
                         editSelectedApprovers[level - 1] = editApprovers[`editLevel${level}`].value;
+
                         @this.set(
                             `editCurrentLevel${level}Approvers`,
                             editApprovers[`editLevel${level}`].value
@@ -795,27 +797,30 @@
 
         window.addEventListener('edit-load-current-approvers', (event) => {
             const level = event.detail.level;
-            const buDepartmentApprovers = event.detail.buDepartmentApprovers;
-            const currentConfigurations = Object.values(event.detail.currentConfigurations[0].approvers);
+            const approvers = event.detail.approvers;
+            const currentEditLevelApprovers = Object.values(event.detail.currentEditLevelApprovers);
             const editApproverSelect = editApprovers[`editLevel${level}`];
 
-            if (editApproverSelect) {
-                const approverOptions = currentConfigurations.map(approver => ({
-                    label: `${approver.approver.profile.first_name} ${approver.approver.profile.middle_name ? approver.approver.profile.middle_name[0] + '.' : ''} ${approver.approver.profile.last_name}`,
-                    value: approver.approver.id,
-                    description: `${approver.approver.roles.map(role => role.name).join(', ')} (${approver.approver.bu_departments.map(department => department.name).join(', ')})`
+            if (editApproverSelect && approvers.length > 0) {
+                const approverOptions = approvers.map(approver => ({
+                    label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
+                    value: approver.id,
+                    description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
                 }));
 
-                editApproverSelect.setOptions(approverOptions);
+                // editApproverSelect.setOptions(approverOptions);
 
-                const approverKey = `level${level}`;
-                const assignedApprover = currentConfigurations
-                    .find(approver => console.log(approver));
+                // if (Array.isArray(currentEditLevelApprovers)) {
+                //     const approverKey = `editLevel${level}`;
 
-                if (assignedApprover) {
-                    const approverValue = assignedApprover.approvers.approver[approverKey];
-                    editApproverSelect.setValue(approverValue);
-                }
+                //     const assignedApprover = currentEditLevelApprovers
+                //         .find(lvl => lvl.approvers && lvl.approvers[approverKey]);
+
+                //     if (assignedApprover) {
+                //         const approverValue = assignedApprover.approvers[approverKey];
+                //         editApproverSelect.setValue(approverValue);
+                //     }
+                // }
             }
         });
 
