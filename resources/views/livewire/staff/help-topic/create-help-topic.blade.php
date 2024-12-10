@@ -633,7 +633,6 @@
         });
 
         const editHelpTopicApprovalConfigContainer = document.querySelector('#edit-help-topic-approval-config-container');
-        let editSelectedApprovers = [];
         let editApprovers = {};
 
         selectEditConfigLevelOfApproval.addEventListener('change', (event) => {
@@ -641,7 +640,6 @@
             @this.set('editLevelOfApproval', editLevelOfApprovalValue);
 
             editHelpTopicApprovalConfigContainer.innerHTML = '';
-            editSelectedApprovers = [];
             const editSelectedLevels = [];
 
             for (let level = 1; level <= editLevelOfApprovalValue; level++) {
@@ -670,7 +668,6 @@
                 });
 
                 editApprovers[`level${level}`].addEventListener('change', () => {
-                    editSelectedApprovers[level - 1] = editApprovers[`level${level}`].value;
                     @this.set(`editLevel${level}Approvers`, editApprovers[`level${level}`].value);
                 });
 

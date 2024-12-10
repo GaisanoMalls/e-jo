@@ -65,12 +65,11 @@ class UpdateHelpTopic extends Component
     public ?Department $currentConfigBuDepartment = null;
     public ?HelpTopicConfiguration $currentHelpTopicConfiguration = null;
     public ?int $editLevelOfApproval = null;
-    public array $editSelectedApprovers = [];
-    public array $editCurrentLevel1Approvers = [];
-    public array $editCurrentLevel2Approvers = [];
-    public array $editCurrentLevel3Approvers = [];
-    public array $editCurrentLevel4Approvers = [];
-    public array $editCurrentLevel5Approvers = [];
+    public array $editLevel1Approvers = [];
+    public array $editLevel2Approvers = [];
+    public array $editLevel3Approvers = [];
+    public array $editLevel4Approvers = [];
+    public array $editLevel5Approvers = [];
     public array $editSelectedLevels = [];
 
     // Delete selected helptopic configuration
@@ -355,7 +354,6 @@ class UpdateHelpTopic extends Component
         $filteredApprovers = User::with(['profile', 'roles'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->withWhereHas('buDepartments', fn($buDepartment) => $buDepartment->whereIn('departments.id', [$this->currentConfigBuDepartment->id]))
-            ->whereNotIn('id', $this->editSelectedApprovers)
             ->orderByDesc('created_at')
             ->get();
 
@@ -393,22 +391,22 @@ class UpdateHelpTopic extends Component
         $this->editGetFilteredApprovers(1);
     }
 
-    public function updatedEditCurrentLevel1Approvers()
+    public function updatedEditLevel1Approvers()
     {
         $this->editGetFilteredApprovers(2);
     }
 
-    public function updatedEditCurrentLevel2Approvers()
+    public function updatedEditLevel2Approvers()
     {
         $this->editGetFilteredApprovers(3);
     }
 
-    public function updatedEditCurrentLevel3Approvers()
+    public function updatedEditLevel3Approvers()
     {
         $this->editGetFilteredApprovers(4);
     }
 
-    public function updatedEditCurrentLevel4Approvers()
+    public function updatedEditLevel4Approvers()
     {
         $this->editGetFilteredApprovers(5);
     }
@@ -416,20 +414,36 @@ class UpdateHelpTopic extends Component
     public function updateCurrentConfiguration()
     {
         try {
-            if (!is_null($this->currentHelpTopicConfiguration) && !empty($this->selectedApprovers)) {
-                $this->currentHelpTopicConfiguration->approvers()->delete();
+            DB::transaction(function () {
+                if ($this->currentHelpTopicConfiguration != null) {
+                    if (!$this->editLevelOfApproval) {
+                        $this->addError('editLevelOfApproval', 'Level of approval field is required');
+                        return;
+                    } else {
+                        $this->resetValidation('editLevelOfApproval');
+                    }
 
-                foreach ($this->selectedApprovers as $approver) {
+                    if (!empty($this->editSelectedLevels)) {
+                        foreach ($this->editSelectedLevels as $level) {
+                            if (empty($this->{"editLevel{$level}Approvers"})) {
+                                session()->flash('edit_level_approver_message', "Level $level approver field is required.");
+                                return;
+                            }
+                        }
+                    }
+
+                    $this->currentHelpTopicConfiguration->approvers()->delete();
+
                     $this->currentHelpTopicConfiguration->approvers()->create([
                         'help_topic_id' => $this->helpTopic->id,
-                        'user_id' => (int) $approver,
+                        'user_id' => (int) 1,
                         'level' => 1
                     ]);
-                }
 
-                $this->emitSelf('remount');
-                $this->dispatchBrowserEvent('close-update-current-config-modal');
-            }
+                    $this->emitSelf('remount');
+                    $this->dispatchBrowserEvent('close-update-current-config-modal');
+                }
+            });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }

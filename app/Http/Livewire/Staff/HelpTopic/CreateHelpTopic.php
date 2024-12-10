@@ -71,7 +71,6 @@ class CreateHelpTopic extends Component
     public array $editLevel3Approvers = [];
     public array $editLevel4Approvers = [];
     public array $editLevel5Approvers = [];
-    public array $editSelectedApprovers = [];
 
     public function mount()
     {
@@ -374,59 +373,64 @@ class CreateHelpTopic extends Component
 
     public function saveEditConfiguration()
     {
-        if (!$this->editBuDepartment) {
-            $this->addError('editBuDepartment', 'BU department field is required.');
-            return;
-        } else {
-            $this->resetValidation('editBuDepartment');
-        }
-
-        if (!$this->editLevelOfApproval) {
-            $this->addError('editLevelOfApproval', 'Level of approval field is required.');
-            return;
-        } else {
-            $this->resetValidation('editLevelOfApproval');
-        }
-
-        if (!empty($this->editSelectedLevels)) {
-            foreach ($this->editSelectedLevels as $level) {
-                if (empty($this->{"editLevel{$level}Approvers"})) {
-                    session()->flash('edit_level_approver_message', "Level $level approver field is required.");
-                    return;
+        try {
+            DB::transaction(function () {
+                if (!$this->editBuDepartment) {
+                    $this->addError('editBuDepartment', 'BU department field is required.');
+                    return false;
+                } else {
+                    $this->resetValidation('editBuDepartment');
                 }
-            }
+
+                if (!$this->editLevelOfApproval) {
+                    $this->addError('editLevelOfApproval', 'Level of approval field is required.');
+                    return false;
+                } else {
+                    $this->resetValidation('editLevelOfApproval');
+                }
+
+                if (!empty($this->editSelectedLevels)) {
+                    foreach ($this->editSelectedLevels as $level) {
+                        if (empty($this->{"editLevel{$level}Approvers"})) {
+                            session()->flash('edit_level_approver_message', "Level $level approver field is required.");
+                            return false;
+                        }
+                    }
+                }
+
+                if ($this->editLevelOfApproval && $this->editBuDepartment) {
+                    $approvers = [
+                        'level1' => array_map('intval', $this->editLevel1Approvers),
+                        'level2' => array_map('intval', $this->editLevel2Approvers),
+                        'level3' => array_map('intval', $this->editLevel3Approvers),
+                        'level4' => array_map('intval', $this->editLevel4Approvers),
+                        'level5' => array_map('intval', $this->editLevel5Approvers),
+                    ];
+
+                    $selectedApprovers = array_filter($approvers, function ($key) {
+                        return in_array(substr($key, -1), $this->editSelectedLevels);
+                    }, ARRAY_FILTER_USE_KEY);
+
+                    // Get the selected BU Department name
+                    $buDepartmentName = collect($this->queryBUDepartments())->firstWhere('id', $this->editBuDepartment)['name'];
+                    $approversCount = array_sum(array_map('count', $selectedApprovers));
+
+                    // Add to the configurations array
+                    if (isset($this->configurations[$this->selectedConfigurationIndex])) {
+                        $this->configurations[$this->selectedConfigurationIndex]['bu_department_id'] = $this->editBuDepartment;
+                        $this->configurations[$this->selectedConfigurationIndex]['bu_department_name'] = $buDepartmentName;
+                        $this->configurations[$this->selectedConfigurationIndex]['approvers_count'] = $approversCount;
+                        $this->configurations[$this->selectedConfigurationIndex]['level_of_approval'] = $this->editLevelOfApproval;
+                        $this->configurations[$this->selectedConfigurationIndex]['approvers'] = $selectedApprovers;
+                    }
+
+                    $this->resetValidation();
+                    $this->resetEditApprovalConfigFields();
+                }
+            });
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
         }
-
-        if ($this->editLevelOfApproval && $this->editBuDepartment) {
-            $approvers = [
-                'level1' => array_map('intval', $this->editLevel1Approvers),
-                'level2' => array_map('intval', $this->editLevel2Approvers),
-                'level3' => array_map('intval', $this->editLevel3Approvers),
-                'level4' => array_map('intval', $this->editLevel4Approvers),
-                'level5' => array_map('intval', $this->editLevel5Approvers),
-            ];
-
-            $selectedApprovers = array_filter($approvers, function ($key) {
-                return in_array(substr($key, -1), $this->editSelectedLevels);
-            }, ARRAY_FILTER_USE_KEY);
-
-            // Get the selected BU Department name
-            $buDepartmentName = collect($this->queryBUDepartments())->firstWhere('id', $this->editBuDepartment)['name'];
-            $approversCount = array_sum(array_map('count', $selectedApprovers));
-
-            // Add to the configurations array
-            if (isset($this->configurations[$this->selectedConfigurationIndex])) {
-                $this->configurations[$this->selectedConfigurationIndex]['bu_department_id'] = $this->editBuDepartment;
-                $this->configurations[$this->selectedConfigurationIndex]['bu_department_name'] = $buDepartmentName;
-                $this->configurations[$this->selectedConfigurationIndex]['approvers_count'] = $approversCount;
-                $this->configurations[$this->selectedConfigurationIndex]['level_of_approval'] = $this->editLevelOfApproval;
-                $this->configurations[$this->selectedConfigurationIndex]['approvers'] = $selectedApprovers;
-            }
-
-            $this->resetValidation();
-            $this->resetEditApprovalConfigFields();
-        }
-
     }
 
     private function resetEditApprovalConfigFields()
@@ -445,7 +449,6 @@ class CreateHelpTopic extends Component
         $filteredApprovers = User::with(['profile', 'roles'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->withWhereHas('buDepartments', fn($buDepartment) => $buDepartment->whereIn('departments.id', [$this->editBuDepartment]))
-            ->whereNotIn('id', $this->editSelectedApprovers)
             ->orderByDesc('created_at')
             ->get();
 

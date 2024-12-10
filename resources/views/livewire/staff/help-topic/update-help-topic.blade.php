@@ -309,6 +309,12 @@
                 <div class="modal-content modal__content">
                     <div class="modal-body border-0 p-4 d-flex flex-column gap-1">
                         <h6>Configuration</h6>
+                        @if (session()->has('edit_level_approver_message'))
+                            <span class="text-danger mb-1" style="font-size: 0.9rem;">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ session('edit_level_approver_message') }}
+                            </span>
+                        @endif
                         <div class="mb-2">
                             <label for="approvers" class="form-label form__field__label">
                                 BU Department
@@ -321,7 +327,7 @@
                             <div>
                                 <div id="select-edit-current-config-level-of-approval" wire:ignore></div>
                             </div>
-                            @error('selectedBuDepartment')
+                            @error('editLevelOfApproval')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}
@@ -725,7 +731,6 @@
 
         const editConfigApproverSelectContainer = document.querySelector('#edit-current-help-topic-approval-container');
         const editApprovers = {};
-        let editSelectedApprovers = [];
 
         window.addEventListener('edit-load-current-configuration', (event) => {
             const buDepartmentApprovers = event.detail.buDepartmentApprovers;
@@ -741,11 +746,10 @@
             selectEditCurrentConfigLevelOfApprovalSelect.setValue(currentConfigLevelOfApproval);
 
             selectEditCurrentConfigLevelOfApprovalSelect.addEventListener('change', (e) => {
-                const editLevelOfApprovalValue = e.target.value;
+                const editLevelOfApprovalValue = parseInt(e.target.value);
                 @this.set('editLevelOfApproval', editLevelOfApprovalValue);
 
                 editConfigApproverSelectContainer.innerHTML = '';
-                editSelectedApprovers = [];
                 const editSelectedLevels = [];
 
                 for (let level = 1; level <= editLevelOfApprovalValue; level++) {
@@ -776,10 +780,8 @@
                     });
 
                     editApprovers[`editLevel${level}`].addEventListener('change', () => {
-                        editSelectedApprovers[level - 1] = editApprovers[`editLevel${level}`].value;
-
                         @this.set(
-                            `editCurrentLevel${level}Approvers`,
+                            `editLevel${level}Approvers`,
                             editApprovers[`editLevel${level}`].value
                         );
                     });
