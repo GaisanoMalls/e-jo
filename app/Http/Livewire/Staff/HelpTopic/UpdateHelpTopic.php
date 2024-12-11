@@ -432,15 +432,30 @@ class UpdateHelpTopic extends Component
                         }
                     }
 
-                    $this->currentHelpTopicConfiguration->approvers()->delete();
+                    if ($this->editLevelOfApproval) {
+                        $approvers = [
+                            'level1' => array_map('intval', $this->editLevel1Approvers),
+                            'level2' => array_map('intval', $this->editLevel2Approvers),
+                            'level3' => array_map('intval', $this->editLevel3Approvers),
+                            'level4' => array_map('intval', $this->editLevel4Approvers),
+                            'level5' => array_map('intval', $this->editLevel5Approvers),
+                        ];
 
-                    $this->currentHelpTopicConfiguration->approvers()->create([
-                        'help_topic_id' => $this->helpTopic->id,
-                        'user_id' => (int) 1,
-                        'level' => 1
-                    ]);
+                        $selectedApprovers = array_filter($approvers, function ($key) {
+                            return in_array(substr($key, -1), $this->editSelectedLevels);
+                        }, ARRAY_FILTER_USE_KEY);
+                        dump($selectedApprovers);
+                    }
 
-                    $this->emitSelf('remount');
+                    // $this->currentHelpTopicConfiguration->approvers()->delete();
+
+                    // $this->currentHelpTopicConfiguration->approvers()->create([
+                    //     'help_topic_id' => $this->helpTopic->id,
+                    //     'user_id' => (int) 1,
+                    //     'level' => 1
+                    // ]);
+
+                    $this->emit('remount');
                     $this->dispatchBrowserEvent('close-update-current-config-modal');
                 }
             });
@@ -463,12 +478,9 @@ class UpdateHelpTopic extends Component
     public function deleteConfiguration()
     {
         try {
-            $configuration = HelpTopicConfiguration::findOrFail($this->deleteSelectedConfigId);
-            $configuration->delete();
-
+            HelpTopicConfiguration::findOrFail($this->deleteSelectedConfigId)->delete();
             $this->reset(['deleteSelectedConfigId', 'deleteSelectedConfigBuDeptName']);
             $this->dispatchBrowserEvent('close-confirm-delete-config-modal');
-            $this->emit('remount');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
