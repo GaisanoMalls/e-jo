@@ -444,16 +444,21 @@ class UpdateHelpTopic extends Component
                         $selectedApprovers = array_filter($approvers, function ($key) {
                             return in_array(substr($key, -1), $this->editSelectedLevels);
                         }, ARRAY_FILTER_USE_KEY);
-                        dump($selectedApprovers);
                     }
 
-                    // $this->currentHelpTopicConfiguration->approvers()->delete();
+                    // Delete existing configuration
+                    $this->currentHelpTopicConfiguration->approvers()->delete();
 
-                    // $this->currentHelpTopicConfiguration->approvers()->create([
-                    //     'help_topic_id' => $this->helpTopic->id,
-                    //     'user_id' => (int) 1,
-                    //     'level' => 1
-                    // ]);
+                    // Create a new configuration
+                    foreach ($selectedApprovers as $level => $approverIds) {
+                        foreach ($approverIds as $approverId) {
+                            $this->currentHelpTopicConfiguration->approvers()->create([
+                                'help_topic_id' => $this->helpTopic->id,
+                                'user_id' => $approverId,
+                                'level' => substr($level, -1), // extract the level number from the key
+                            ]);
+                        }
+                    }
 
                     $this->emit('remount');
                     $this->dispatchBrowserEvent('close-update-current-config-modal');
