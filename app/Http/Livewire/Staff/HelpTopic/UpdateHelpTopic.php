@@ -371,6 +371,7 @@ class UpdateHelpTopic extends Component
             }
             $approvers[$level][] = $approver['approver']['id'];
         }
+
         $levelApprovers['approvers'] = $approvers;
 
         $currentEditLevelApprovers = [$levelApprovers];
@@ -379,7 +380,7 @@ class UpdateHelpTopic extends Component
         });
 
         $this->dispatchBrowserEvent('edit-load-current-approvers', [
-            'level' => (int) substr($level, -1),
+            'level' => $level,
             'approvers' => $filteredApprovers,
             'currentEditLevelApprovers' => $currentEditLevelApprovers
         ]);

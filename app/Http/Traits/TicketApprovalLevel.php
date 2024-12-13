@@ -218,7 +218,7 @@ trait TicketApprovalLevel
                         ->withWhereHas('helpTopicApprover', function ($query) use ($currentLevel, $ticket) {
                             $query->where([
                                 ['help_topic_id', $ticket->helpTopic->id],
-                                ['level', $currentLevel + 1],
+                                ['level', $currentLevel + 1]
                             ]);
                         })->get();
 

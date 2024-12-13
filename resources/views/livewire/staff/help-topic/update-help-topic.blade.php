@@ -730,7 +730,7 @@
         });
 
         const editConfigApproverSelectContainer = document.querySelector('#edit-current-help-topic-approval-container');
-        const editApprovers = {};
+        let editApprovers = {};
 
         window.addEventListener('edit-load-current-configuration', (event) => {
             const buDepartmentApprovers = event.detail.buDepartmentApprovers;
@@ -801,7 +801,8 @@
             const level = event.detail.level;
             const approvers = event.detail.approvers;
             const currentEditLevelApprovers = Object.values(event.detail.currentEditLevelApprovers);
-            const editApproverSelect = editApprovers[`editLevel${level}`];
+            const editApproverSelect = editApprovers['editLevel1'];
+            console.log(editApproverSelect);
 
             if (editApproverSelect && approvers.length > 0) {
                 const approverOptions = approvers.map(approver => ({
@@ -813,8 +814,8 @@
                 // editApproverSelect.setOptions(approverOptions);
 
                 // if (Array.isArray(currentEditLevelApprovers)) {
-                //     const approverKey = `editLevel${level}`;
 
+                //     const approverKey = `editLevel${level}`;
                 //     const assignedApprover = currentEditLevelApprovers
                 //         .find(lvl => lvl.approvers && lvl.approvers[approverKey]);
 
