@@ -70,6 +70,7 @@ class UpdateHelpTopic extends Component
     public array $editLevel3Approvers = [];
     public array $editLevel4Approvers = [];
     public array $editLevel5Approvers = [];
+    public array $editSelectedApprovers = [];
     public array $editSelectedLevels = [];
 
     // Delete selected helptopic configuration
@@ -351,34 +352,53 @@ class UpdateHelpTopic extends Component
 
     private function editGetFilteredApprovers($level)
     {
+        $this->editSelectedApprovers = array_merge(
+            (array) $this->editLevel1Approvers,
+            (array) $this->editLevel2Approvers,
+            (array) $this->editLevel3Approvers,
+            (array) $this->editLevel4Approvers,
+            (array) $this->editLevel5Approvers
+        );
+
         $filteredApprovers = User::with(['profile', 'roles'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->withWhereHas('buDepartments', fn($buDepartment) => $buDepartment->whereIn('departments.id', [$this->currentConfigBuDepartment->id]))
+            ->whereNotIn('id', $this->editSelectedApprovers)
             ->orderByDesc('created_at')
             ->get();
 
         $currentConfigurations = HelpTopicConfiguration::with(['approvers.approver.profile'])
-            ->where('help_topic_id', $this->helpTopic->id)
+            ->where([
+                ['id', $this->currentHelpTopicConfiguration->id],
+                ['help_topic_id', $this->helpTopic->id]
+            ])
             ->first()
             ->toArray();
 
-        $levelApprovers = $currentConfigurations;
+        $levelApprovers = $currentConfigurations['approvers']; // Assuming the 'approvers' field holds the levels data
         $approvers = [];
-        foreach ($levelApprovers['approvers'] as $approver) {
-            $level = 'level' . $approver['level'];
-            if (!isset($approvers[$level])) {
-                $approvers[$level] = [];
+
+        foreach ($levelApprovers as $approver) {
+            $approvalLevel = 'level' . $approver['level'];
+
+            // Ensure the level exists before adding approvers
+            if (!isset($approvers[$approvalLevel])) {
+                $approvers[$approvalLevel] = [];
             }
-            $approvers[$level][] = $approver['approver']['id'];
+
+            // Append the approver ID to the respective level's list
+            $approvers[$approvalLevel][] = $approver['approver']['id'];
         }
 
-        $levelApprovers['approvers'] = $approvers;
+        // Replace the approvers with the new structure that maps levels to approver IDs
+        $currentConfigurations['approvers'] = $approvers;
 
-        $currentEditLevelApprovers = [$levelApprovers];
-        $currentEditLevelApprovers = array_filter($currentEditLevelApprovers, function ($arr) {
+        // Filter configurations based on bu_department_id and approvers being non-empty
+        $currentEditLevelApprovers = array_filter([$currentConfigurations], function ($arr) {
             return $arr['bu_department_id'] == $this->currentConfigBuDepartment->id && !empty($arr['approvers']);
         });
 
+        // Dispatch event to the frontend with the appropriate data
         $this->dispatchBrowserEvent('edit-load-current-approvers', [
             'level' => $level,
             'approvers' => $filteredApprovers,
@@ -447,6 +467,10 @@ class UpdateHelpTopic extends Component
                         }, ARRAY_FILTER_USE_KEY);
                     }
 
+                    $this->currentHelpTopicConfiguration->update([
+                        'level_of_approval' => $this->editLevelOfApproval
+                    ]);
+
                     // Delete existing configuration
                     $this->currentHelpTopicConfiguration->approvers()->delete();
 
@@ -455,8 +479,8 @@ class UpdateHelpTopic extends Component
                         foreach ($approverIds as $approverId) {
                             $this->currentHelpTopicConfiguration->approvers()->create([
                                 'help_topic_id' => $this->helpTopic->id,
-                                'user_id' => $approverId,
                                 'level' => substr($level, -1), // extract the level number from the key
+                                'user_id' => $approverId,
                             ]);
                         }
                     }

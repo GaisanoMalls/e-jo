@@ -302,9 +302,10 @@
                 </div>
             </div>
         </div>
+
         {{-- Edit configuration approvers --}}
         <div wire:ignore.self class="modal fade edit__help__topic__config__modal" id="editCurrentConfigurationModal"
-            tabindex="-1" aria-hidden="true">
+            tabindex="-1" aria-hidden="false">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content modal__content">
                     <div class="modal-body border-0 p-4 d-flex flex-column gap-1">
@@ -405,6 +406,7 @@
         </div>
     </div>
 </div>
+
 @push('livewire-select')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -755,7 +757,7 @@
                 for (let level = 1; level <= editLevelOfApprovalValue; level++) {
                     const editApproverFieldWrapper = document.createElement('div');
 
-                    editApproverFieldWrapper.className = 'col-md-6';
+                    editApproverFieldWrapper.className = 'col-12';
                     editApproverFieldWrapper.innerHTML = `
                     <div class="mb-2">
                         <label for="department" class="form-label form__field__label">Level ${level} Approvers</label>
@@ -788,7 +790,7 @@
 
                     editApprovers[`editLevel${level}`].addEventListener('virtual-select:option-click',
                         () => {
-                            @this.call('getFilteredApprovers', level);
+                            @this.call('editGetFilteredApprovers', level);
                         });
 
                     editSelectedLevels.push(level);
@@ -800,9 +802,8 @@
         window.addEventListener('edit-load-current-approvers', (event) => {
             const level = event.detail.level;
             const approvers = event.detail.approvers;
-            const currentEditLevelApprovers = Object.values(event.detail.currentEditLevelApprovers);
-            const editApproverSelect = editApprovers['editLevel1'];
-            console.log(editApproverSelect);
+            const currentEditLevelApprovers = event.detail.currentEditLevelApprovers;
+            const editApproverSelect = editApprovers[`editLevel${level}`];
 
             if (editApproverSelect && approvers.length > 0) {
                 const approverOptions = approvers.map(approver => ({
@@ -811,22 +812,20 @@
                     description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
                 }));
 
-                // editApproverSelect.setOptions(approverOptions);
+                editApproverSelect.setOptions(approverOptions);
 
-                // if (Array.isArray(currentEditLevelApprovers)) {
+                if (Array.isArray(currentEditLevelApprovers)) {
+                    const approverKey = `level${level}`;
+                    const assignedApprover = currentEditLevelApprovers
+                        .find(lvl => lvl.approvers && lvl.approvers[approverKey]);
 
-                //     const approverKey = `editLevel${level}`;
-                //     const assignedApprover = currentEditLevelApprovers
-                //         .find(lvl => lvl.approvers && lvl.approvers[approverKey]);
-
-                //     if (assignedApprover) {
-                //         const approverValue = assignedApprover.approvers[approverKey];
-                //         editApproverSelect.setValue(approverValue);
-                //     }
-                // }
+                    if (assignedApprover) {
+                        const approverValue = assignedApprover.approvers[approverKey];
+                        editApproverSelect.setValue(approverValue);
+                    }
+                }
             }
         });
-
 
         //
         window.addEventListener('close-confirm-delete-config-modal', () => {
