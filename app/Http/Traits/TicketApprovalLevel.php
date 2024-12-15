@@ -183,7 +183,7 @@ trait TicketApprovalLevel
 
     private function approveLevelOfApproval(Ticket $ticket)
     {
-        $approvalLevels = [1, 2, 3, 4, 5];
+        $approvalLevels = $ticket->helpTopic->approvers()->distinct('level')->pluck('level')->toArray();
         $allLevelsApproved = true;
         $currentLevel = 1; // keep track of the current level
 
@@ -197,18 +197,21 @@ trait TicketApprovalLevel
                         ]);
                     })->get();
 
-                foreach ($ticketApprovals as $ticketApproval) {
-                    if ($ticketApproval->helpTopicApprover->user_id === auth()->user()->id) {
-                        if (!$ticketApproval->is_approved) {
-                            $ticketApproval->update(['is_approved' => true]);
-                            foreach ($ticketApprovals as $otherTicketApproval) {
-                                if (!$otherTicketApproval->is_approved) {
-                                    $otherTicketApproval->update(['is_approved' => true]);
-                                }
-                            }
-                        }
-                    }
+                // Check if the current user is an approver for the current level
+                $currentUserApproval = $ticketApprovals->first(function ($approval) {
+                    return $approval->helpTopicApprover->user_id === auth()->user()->id;
+                });
+
+                if ($currentUserApproval && !$currentUserApproval->is_approved) {
+                    $currentUserApproval->update(['is_approved' => true]);
                 }
+
+                // Update the is_approved field to true for all approvers in the same level
+                $ticketApprovals->each(function ($approval) {
+                    if (!$approval->is_approved) {
+                        $approval->update(['is_approved' => true]);
+                    }
+                });
 
                 // Check if all approvals for the current level are complete
                 if (!$ticketApprovals->every(fn($approval) => $approval->is_approved)) {
@@ -226,14 +229,31 @@ trait TicketApprovalLevel
                         foreach ($nextLevelApprovals as $nextLevelApproval) {
                             $approver = $nextLevelApproval->helpTopicApprover->approver;
                             if ($approver->id !== auth()->user()->id) {
-                                static::sendNotificationToNextApprover($this->ticket, $approver);
+                                static::sendNotificationToNextApprover($ticket, $approver);
                             } else {
-                                static::notifyAndEmailServiceDepartmentAdminAndRequester($this->ticket);
+                                // If current user is the next approver, send a notification
+                                static::notifyAndEmailServiceDepartmentAdminAndRequester($ticket);
                                 break;
                             }
                         }
                     }
                 }
+
+                // If this is not the last level, check if all approvers in the next level are approved
+                if ($level != end($approvalLevels)) {
+                    $nextLevelApprovals = TicketApproval::where('ticket_id', $ticket->id)
+                        ->withWhereHas('helpTopicApprover', function ($query) use ($currentLevel, $ticket) {
+                            $query->where([
+                                ['help_topic_id', $ticket->helpTopic->id],
+                                ['level', $currentLevel + 1]
+                            ]);
+                        })->get();
+
+                    if (!$nextLevelApprovals->every(fn($approval) => $approval->is_approved)) {
+                        $allLevelsApproved = false;
+                    }
+                }
+
                 $currentLevel++;
             }
 
