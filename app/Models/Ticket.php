@@ -105,9 +105,9 @@ class Ticket extends Model
         return $this->hasOne(Feedback::class);
     }
 
-    public function recommendation(): HasOne
+    public function recommendation(): HasMany
     {
-        return $this->hasOne(Recommendation::class);
+        return $this->hasMany(Recommendation::class);
     }
 
     public function fileAttachments(): HasMany

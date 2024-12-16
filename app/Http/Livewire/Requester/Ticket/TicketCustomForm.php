@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Requester\Ticket;
 
+use App\Enums\RecommendationApprovalStatusEnum;
 use App\Models\FieldHeaderValue;
 use App\Models\FieldRowValue;
 use App\Models\Recommendation;
@@ -64,7 +65,7 @@ class TicketCustomForm extends Component
     {
         return Recommendation::where([
             ['ticket_id', $this->ticket->id],
-            ['is_approved', true]
+            ['approval_status', RecommendationApprovalStatusEnum::APPROVED]
         ])->exists();
     }
 

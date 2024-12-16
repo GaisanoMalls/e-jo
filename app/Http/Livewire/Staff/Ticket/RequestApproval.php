@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Enums\RecommendationApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Mail\Staff\RecommendationRequestMail;
 use App\Models\ActivityLog;
@@ -89,7 +90,8 @@ class RequestApproval extends Component
                         'ticket_id' => $this->ticket->id,
                         'requested_by_sda_id' => $requesterServiceDeptAdmin->id,
                         'is_requesting_ict_approval' => true,
-                        'reason' => $this->reason
+                        'reason' => $this->reason,
+                        'approval_status' => RecommendationApprovalStatusEnum::PENDING
                     ]);
 
                     $recommendationApprovalLevel = $ictRecommendation->approvalLevels()->create(['level' => $this->level]);

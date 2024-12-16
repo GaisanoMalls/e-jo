@@ -50,7 +50,7 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center text-start gap-3 td__content">
-                                        {{ $recommendation->is_approved ? 'Yes' : 'No' }}
+                                        {{ $recommendation->approval_status }}
                                     </div>
                                 </td>
                             </tr>

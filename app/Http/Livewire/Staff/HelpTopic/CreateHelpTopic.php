@@ -436,11 +436,10 @@ class CreateHelpTopic extends Component
     private function resetEditApprovalConfigFields()
     {
         $this->editBuDepartment = null;
-        $this->editLevel1Approvers = [];
-        $this->editLevel2Approvers = [];
-        $this->editLevel3Approvers = [];
-        $this->editLevel4Approvers = [];
-        $this->editLevel5Approvers = [];
+        $levels = [1, 2, 3, 4, 5];
+        foreach ($levels as $level) {
+            $this->{"editLevel{$level}Approvers"} = [];
+        }
         $this->dispatchBrowserEvent('edit-reset-select-fields');
     }
 

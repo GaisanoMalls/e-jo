@@ -832,7 +832,9 @@
             $('#confirmDeleteCurrentConfigurationModal').modal('hide');
         });
 
-        window.addEventListener('close-update-current-config-modal', () => {
+        window.addEventListener('edit-reset-select-fields', () => {
+            selectEditCurrentConfigLevelOfApprovalSelect.reset();
+            editConfigApproverSelectContainer.innerHTML = '';
             $('#editCurrentConfigurationModal').modal('hide');
         });
     </script>

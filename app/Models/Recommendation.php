@@ -17,7 +17,7 @@ class Recommendation extends Model
         'requested_by_sda_id', // service department admin
         'is_requesting_ict_approval',
         'reason',
-        'is_approved'
+        'approval_status'
     ];
 
     public function ticket(): BelongsTo

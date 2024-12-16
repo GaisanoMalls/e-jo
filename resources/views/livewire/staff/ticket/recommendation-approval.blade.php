@@ -1,5 +1,6 @@
 @php
     use App\Models\Role;
+    use App\Enums\RecommendationApprovalStatusEnum;
 @endphp
 
 @if ($recommendation && $this->isRecommendationRequested())
@@ -15,7 +16,9 @@
                 <div class="mb-4 d-flex flex-wrap gap-2 border-0 flex-column rounded-3 p-3"
                     style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-1">
-                        @if ($this->isRequesterServiceDeptAdmin())
+                        @if (
+                            $this->isRequesterServiceDeptAdmin() &&
+                                $recommendation->approval_status == RecommendationApprovalStatusEnum::PENDING)
                             <div class="alert d-inline-block mb-0 gap-1 border-0 py-2 px-3" role="alert"
                                 style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                                 <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
@@ -52,21 +55,30 @@
                     @if ($recommendation->reason)
                         <div class="d-flex flex-column gap-1">
                             <span class="fw-semibold" style="font-size: 0.85rem;">Reason:</span>
-                            <span class="p-2 rounded-2" style="font-size: 0.85rem; background-color: #f3f4f6;">
+                            <span style="font-size: 0.85rem;">
                                 {!! nl2br($recommendation->reason) !!}
                             </span>
                         </div>
                     @endif
                     @if (!$this->isRequesterServiceDeptAdmin() && $isAllowedToApproveRecommendation)
-                        <div class="d-block">
+                        <div class="d-flex gap-2 mt-2">
                             <button type="button" class="btn d-flex align-items-center justify-content-center w-auto"
-                                wire:click="approveTicketRecommendation"
+                                wire:click="approveTicketRecommendation" wire:loading.attr="disabled"
                                 style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #FFF; font-weight: 500; background-color: #D32839;">
                                 <span wire:loading wire:target="approveTicketRecommendation"
                                     class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                                 </span>
                                 <span wire:loading.remove wire:target="approveTicketRecommendation">Approve</span>
-                                <span wire:loading wire:target="approveTicketRecommendation">Requesting...</span>
+                                <span wire:loading wire:target="approveTicketRecommendation">Processing...</span>
+                            </button>
+                            <button type="button" class="btn d-flex align-items-center justify-content-center w-auto"
+                                wire:click="disapproveTicketRecommendation" wire:loading.attr="disabled"
+                                style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #3e3d3d; font-weight: 500; background-color: #f3f4f6;">
+                                <span wire:loading wire:target="disapproveTicketRecommendation"
+                                    class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                </span>
+                                <span wire:loading.remove wire:target="disapproveTicketRecommendation">Disapprove</span>
+                                <span wire:loading wire:target="disapproveTicketRecommendation">Processing...</span>
                             </button>
                         </div>
                     @endif
@@ -78,11 +90,21 @@
                         <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
                         Approved
                     </div>
-                @else
+                @endif
+
+                @if ($this->isTicketRecommendationIsPending())
                     <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
                         style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                         <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
                         Pending Approval
+                    </div>
+                @endif
+
+                @if ($this->isTicketRecommendationIsDisapproved())
+                    <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
+                        style="font-size: 13px; background-color: #cff4fc; color: #055160;">
+                        <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
+                        Disapproved
                     </div>
                 @endif
             @endif

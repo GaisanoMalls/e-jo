@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Enums\RecommendationApprovalStatusEnum;
 use App\Models\Recommendation;
 use App\Models\Role;
 use App\Models\Ticket;
@@ -42,7 +43,7 @@ class TicketActions extends Component
     {
         return Recommendation::where([
             ['ticket_id', $this->ticket->id],
-            ['is_approved', true]
+            ['approval_status', RecommendationApprovalStatusEnum::APPROVED]
         ])->exists();
     }
 

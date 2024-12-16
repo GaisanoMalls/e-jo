@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Enums\RecommendationApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Models\ActivityLog;
 use App\Models\Recommendation;
@@ -40,7 +41,9 @@ class RecommendationApproval extends Component
     {
         try {
             $this->recommendation->where('ticket_id', $this->ticket->id)
-                ->update(['is_approved' => true]);
+                ->update([
+                    'approval_status' => RecommendationApprovalStatusEnum::APPROVED
+                ]);
 
             $events = ['loadCustomForm', 'loadTicketLogs'];
             foreach ($events as $event) {
@@ -48,17 +51,56 @@ class RecommendationApproval extends Component
             }
 
             ActivityLog::make($this->ticket->id, 'approved the ticket');
+
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
-            Log::error('Error while sending recommendation request.', [$e->getLine()]);
+            Log::error('Error encountered during approval.', [$e->getMessage()]);
         }
+    }
+
+    public function disapproveTicketRecommendation()
+    {
+        try {
+            $this->recommendation->where('ticket_id', $this->ticket->id)
+                ->update([
+                    'approval_status' => RecommendationApprovalStatusEnum::DISAPPROVED
+                ]);
+
+            $events = ['loadCustomForm', 'loadTicketLogs'];
+            foreach ($events as $event) {
+                $this->emit($event);
+            }
+
+            ActivityLog::make($this->ticket->id, 'disapproved the ticket');
+
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+            Log::error('Error encountered during disapproval.', [$e->getMessage()]);
+        }
+    }
+
+    public function isTicketRecommendationIsPending()
+    {
+        return Recommendation::where([
+            ['ticket_id', $this->ticket->id],
+            ['approval_status', RecommendationApprovalStatusEnum::PENDING]
+        ])->exists();
     }
 
     public function isTicketRecommendationIsApproved()
     {
         return Recommendation::where([
             ['ticket_id', $this->ticket->id],
-            ['is_approved', true]
+            ['approval_status', RecommendationApprovalStatusEnum::APPROVED]
+        ])->exists();
+    }
+
+
+    public function isTicketRecommendationIsDisapproved()
+    {
+        return Recommendation::where([
+            ['ticket_id', $this->ticket->id],
+            ['approval_status', RecommendationApprovalStatusEnum::DISAPPROVED]
         ])->exists();
     }
 

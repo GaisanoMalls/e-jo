@@ -103,167 +103,74 @@ trait TicketApprovalLevel
         static::notifyAndEmailRequester($ticket);
     }
 
-    // private function approveLevelOfApproval(Ticket $ticket)
-    // {
-    //     $approvalLevels = $ticket->helpTopic->approvers()->distinct('level')->pluck('level')->toArray();
-    //     $currentLevel = $ticket->helpTopic->approvers()->where('user_id', auth()->user()->id)->first()->level;
-
-    //     try {
-    //         $ticketApprovals = TicketApproval::where('ticket_id', $ticket->id)
-    //             ->withWhereHas('helpTopicApprover', function ($query) use ($currentLevel, $ticket) {
-    //                 $query->where([
-    //                     ['help_topic_id', $ticket->helpTopic->id],
-    //                     ['level', $currentLevel]
-    //                 ]);
-    //             })->get();
-
-    //         // Check if the current user is an approver for the current level
-    //         $currentUserApproval = $ticketApprovals->first(function ($approval) {
-    //             return $approval->helpTopicApprover->user_id === auth()->user()->id;
-    //         });
-
-    //         if ($currentUserApproval) {
-    //             // Update the current user's approval to true
-    //             $currentUserApproval->update(['is_approved' => true]);
-    //         }
-
-    //         // Check if any of the approvers for the current level have approved
-    //         if ($ticketApprovals->contains(fn($approval) => $approval->is_approved)) {
-    //             // Update the is_approved field to true for all approvers in the same level
-    //             $ticketApprovals->each(function ($approval) {
-    //                 $approval->update(['is_approved' => true]);
-    //             });
-    //         }
-
-    //         // Check if the current level is the last level
-    //         if ($currentLevel == end($approvalLevels)) {
-    //             $ticket->update([
-    //                 'status_id' => Status::APPROVED,
-    //                 'approval_status' => ApprovalStatusEnum::APPROVED,
-    //                 'svcdept_date_approved' => Carbon::now(),
-    //             ]);
-
-    //             // Update the is_approved field to true for all approvers in the last level
-    //             $lastLevelApprovals = TicketApproval::where('ticket_id', $ticket->id)
-    //                 ->withWhereHas('helpTopicApprover', function ($query) use ($currentLevel, $ticket) {
-    //                     $query->where([
-    //                         ['help_topic_id', $ticket->helpTopic->id],
-    //                         ['level', $currentLevel]
-    //                     ]);
-    //                 })->get();
-
-    //             $lastLevelApprovals->each(function ($approval) {
-    //                 $approval->update(['is_approved' => true]);
-    //             });
-    //         } else {
-    //             // Proceed to the next approval level (if any)
-    //             $nextLevelApprovals = $ticket->helpTopic->approvers()->where('level', $currentLevel + 1)->get();
-
-    //             if ($nextLevelApprovals->isNotEmpty()) {
-    //                 foreach ($nextLevelApprovals as $nextLevelApproval) {
-    //                     $approver = $nextLevelApproval->approver;
-    //                     if ($approver->id !== auth()->user()->id) {
-    //                         static::sendNotificationToNextApprover($this->ticket, $approver);
-    //                     } else {
-    //                         // If current user is the next approver, send a notification
-    //                         static::notifyAndEmailServiceDepartmentAdminAndRequester($this->ticket);
-    //                         break;
-    //                     }
-    //                 }
-    //             }
-    //         }
-
-    //         return true;
-
-    //     } catch (Exception $e) {
-    //         AppErrorLog::getError($e->getMessage());
-    //         return false;
-    //     }
-    // }
-
     private function approveLevelOfApproval(Ticket $ticket)
     {
         $approvalLevels = $ticket->helpTopic->approvers()->distinct('level')->pluck('level')->toArray();
-        $allLevelsApproved = true;
-        $currentLevel = 1; // keep track of the current level
+        $currentLevel = $ticket->helpTopic->approvers()->where('user_id', auth()->user()->id)->first()->level;
 
         try {
-            foreach ($approvalLevels as $level) {
-                $ticketApprovals = TicketApproval::where('ticket_id', $ticket->id)
-                    ->withWhereHas('helpTopicApprover', function ($query) use ($level, $ticket) {
-                        $query->where([
-                            ['help_topic_id', $ticket->helpTopic->id],
-                            ['level', $level]
-                        ]);
-                    })->get();
+            $ticketApprovals = TicketApproval::where('ticket_id', $ticket->id)
+                ->withWhereHas('helpTopicApprover', function ($query) use ($currentLevel, $ticket) {
+                    $query->where([
+                        ['help_topic_id', $ticket->helpTopic->id],
+                        ['level', $currentLevel]
+                    ]);
+                })->get();
 
-                // Check if the current user is an approver for the current level
-                $currentUserApproval = $ticketApprovals->first(function ($approval) {
-                    return $approval->helpTopicApprover->user_id === auth()->user()->id;
-                });
+            // Check if the current user is an approver for the current level
+            $currentUserApproval = $ticketApprovals->first(function ($approval) {
+                return $approval->helpTopicApprover->user_id === auth()->user()->id;
+            });
 
-                if ($currentUserApproval && !$currentUserApproval->is_approved) {
-                    $currentUserApproval->update(['is_approved' => true]);
-                }
-
-                // Update the is_approved field to true for all approvers in the same level
-                $ticketApprovals->each(function ($approval) {
-                    if (!$approval->is_approved) {
-                        $approval->update(['is_approved' => true]);
-                    }
-                });
-
-                // Check if all approvals for the current level are complete
-                if (!$ticketApprovals->every(fn($approval) => $approval->is_approved)) {
-                    $allLevelsApproved = false;
-                } else {
-                    $nextLevelApprovals = TicketApproval::where('ticket_id', $ticket->id)
-                        ->withWhereHas('helpTopicApprover', function ($query) use ($currentLevel, $ticket) {
-                            $query->where([
-                                ['help_topic_id', $ticket->helpTopic->id],
-                                ['level', $currentLevel + 1]
-                            ]);
-                        })->get();
-
-                    if ($nextLevelApprovals->isNotEmpty()) {
-                        foreach ($nextLevelApprovals as $nextLevelApproval) {
-                            $approver = $nextLevelApproval->helpTopicApprover->approver;
-                            if ($approver->id !== auth()->user()->id) {
-                                static::sendNotificationToNextApprover($ticket, $approver);
-                            } else {
-                                // If current user is the next approver, send a notification
-                                static::notifyAndEmailServiceDepartmentAdminAndRequester($ticket);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                // If this is not the last level, check if all approvers in the next level are approved
-                if ($level != end($approvalLevels)) {
-                    $nextLevelApprovals = TicketApproval::where('ticket_id', $ticket->id)
-                        ->withWhereHas('helpTopicApprover', function ($query) use ($currentLevel, $ticket) {
-                            $query->where([
-                                ['help_topic_id', $ticket->helpTopic->id],
-                                ['level', $currentLevel + 1]
-                            ]);
-                        })->get();
-
-                    if (!$nextLevelApprovals->every(fn($approval) => $approval->is_approved)) {
-                        $allLevelsApproved = false;
-                    }
-                }
-
-                $currentLevel++;
+            if ($currentUserApproval) {
+                // Update the current user's approval to true
+                $currentUserApproval->update(['is_approved' => true]);
             }
 
-            // Update ticket status if all levels are approved
-            if ($allLevelsApproved) {
+            // Check if any of the approvers for the current level have approved
+            if ($ticketApprovals->contains(fn($approval) => $approval->is_approved)) {
+                // Update the is_approved field to true for all approvers in the same level
+                $ticketApprovals->each(function ($approval) {
+                    $approval->update(['is_approved' => true]);
+                });
+            }
+
+            // Check if the current level is the last level
+            if ($currentLevel == end($approvalLevels)) {
                 $ticket->update([
                     'status_id' => Status::APPROVED,
                     'approval_status' => ApprovalStatusEnum::APPROVED,
                     'svcdept_date_approved' => Carbon::now(),
                 ]);
+
+                // Update the is_approved field to true for all approvers in the last level
+                $lastLevelApprovals = TicketApproval::where('ticket_id', $ticket->id)
+                    ->withWhereHas('helpTopicApprover', function ($query) use ($currentLevel, $ticket) {
+                        $query->where([
+                            ['help_topic_id', $ticket->helpTopic->id],
+                            ['level', $currentLevel]
+                        ]);
+                    })->get();
+
+                $lastLevelApprovals->each(function ($approval) {
+                    $approval->update(['is_approved' => true]);
+                });
+            } else {
+                // Proceed to the next approval level (if any)
+                $nextLevelApprovals = $ticket->helpTopic->approvers()->where('level', $currentLevel + 1)->get();
+
+                if ($nextLevelApprovals->isNotEmpty()) {
+                    foreach ($nextLevelApprovals as $nextLevelApproval) {
+                        $approver = $nextLevelApproval->approver;
+                        if ($approver->id !== auth()->user()->id) {
+                            static::sendNotificationToNextApprover($this->ticket, $approver);
+                        } else {
+                            // If current user is the next approver, send a notification
+                            static::notifyAndEmailServiceDepartmentAdminAndRequester($this->ticket);
+                            break;
+                        }
+                    }
+                }
             }
 
             return true;
@@ -273,6 +180,99 @@ trait TicketApprovalLevel
             return false;
         }
     }
+
+    // private function approveLevelOfApproval(Ticket $ticket)
+    // {
+    //     $approvalLevels = $ticket->helpTopic->approvers()->distinct('level')->pluck('level')->toArray();
+    //     $allLevelsApproved = true;
+    //     $currentLevel = 1; // keep track of the current level
+
+    //     try {
+    //         foreach ($approvalLevels as $level) {
+    //             $ticketApprovals = TicketApproval::where('ticket_id', $ticket->id)
+    //                 ->withWhereHas('helpTopicApprover', function ($query) use ($level, $ticket) {
+    //                     $query->where([
+    //                         ['help_topic_id', $ticket->helpTopic->id],
+    //                         ['level', $level]
+    //                     ]);
+    //                 })->get();
+
+    //             // Check if the current user is an approver for the current level
+    //             $currentUserApproval = $ticketApprovals->first(function ($approval) {
+    //                 return $approval->helpTopicApprover->user_id === auth()->user()->id;
+    //             });
+
+    //             if ($currentUserApproval && !$currentUserApproval->is_approved) {
+    //                 $currentUserApproval->update(['is_approved' => true]);
+    //             }
+
+    //             // Update the is_approved field to true for all approvers in the same level
+    //             $ticketApprovals->each(function ($approval) {
+    //                 if (!$approval->is_approved) {
+    //                     $approval->update(['is_approved' => true]);
+    //                 }
+    //             });
+
+    //             // Check if all approvals for the current level are complete
+    //             if (!$ticketApprovals->every(fn($approval) => $approval->is_approved)) {
+    //                 $allLevelsApproved = false;
+    //             } else {
+    //                 $nextLevelApprovals = TicketApproval::where('ticket_id', $ticket->id)
+    //                     ->withWhereHas('helpTopicApprover', function ($query) use ($currentLevel, $ticket) {
+    //                         $query->where([
+    //                             ['help_topic_id', $ticket->helpTopic->id],
+    //                             ['level', $currentLevel + 1]
+    //                         ]);
+    //                     })->get();
+
+    //                 if ($nextLevelApprovals->isNotEmpty()) {
+    //                     foreach ($nextLevelApprovals as $nextLevelApproval) {
+    //                         $approver = $nextLevelApproval->helpTopicApprover->approver;
+    //                         if ($approver->id !== auth()->user()->id) {
+    //                             static::sendNotificationToNextApprover($ticket, $approver);
+    //                         } else {
+    //                             // If current user is the next approver, send a notification
+    //                             static::notifyAndEmailServiceDepartmentAdminAndRequester($ticket);
+    //                             break;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+
+    //             // If this is not the last level, check if all approvers in the next level are approved
+    //             if ($level != end($approvalLevels)) {
+    //                 $nextLevelApprovals = TicketApproval::where('ticket_id', $ticket->id)
+    //                     ->withWhereHas('helpTopicApprover', function ($query) use ($currentLevel, $ticket) {
+    //                         $query->where([
+    //                             ['help_topic_id', $ticket->helpTopic->id],
+    //                             ['level', $currentLevel + 1]
+    //                         ]);
+    //                     })->get();
+
+    //                 if (!$nextLevelApprovals->every(fn($approval) => $approval->is_approved)) {
+    //                     $allLevelsApproved = false;
+    //                 }
+    //             }
+
+    //             $currentLevel++;
+    //         }
+
+    //         // Update ticket status if all levels are approved
+    //         if ($allLevelsApproved) {
+    //             $ticket->update([
+    //                 'status_id' => Status::APPROVED,
+    //                 'approval_status' => ApprovalStatusEnum::APPROVED,
+    //                 'svcdept_date_approved' => Carbon::now(),
+    //             ]);
+    //         }
+
+    //         return true;
+
+    //     } catch (Exception $e) {
+    //         AppErrorLog::getError($e->getMessage());
+    //         return false;
+    //     }
+    // }
 
     private function isApprovedForLevel(Ticket $ticket, int $level)
     {

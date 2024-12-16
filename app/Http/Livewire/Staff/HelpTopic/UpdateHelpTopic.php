@@ -486,12 +486,22 @@ class UpdateHelpTopic extends Component
                     }
 
                     $this->emit('remount');
-                    $this->dispatchBrowserEvent('close-update-current-config-modal');
+                    $this->resetEditApprovalConfigFields();
                 }
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }
+    }
+
+    private function resetEditApprovalConfigFields()
+    {
+        $this->editLevelOfApproval = null;
+        $levels = [1, 2, 3, 4, 5];
+        foreach ($levels as $level) {
+            $this->{"editLevel{$level}Approvers"} = [];
+        }
+        $this->dispatchBrowserEvent('edit-reset-select-fields');
     }
 
     public function deleteAddedConfig(int $index)
