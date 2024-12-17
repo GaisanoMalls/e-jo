@@ -74,11 +74,11 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                                    <button data-tooltip="Edit" data-tooltip-position="top"
+                                    <button data-tooltip="View" data-tooltip-position="top"
                                         data-tooltip-font-size="11px"
                                         onclick="window.location.href='{{ route('staff.manage.help_topic.edit_details', $helpTopic->id) }}'"
                                         type="button" class="btn action__button">
-                                        <i class="bi bi-pencil"></i>
+                                        <i class="bi bi-eye"></i>
                                     </button>
                                     <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
                                         data-bs-target="#deleteHelpTopicModal"
