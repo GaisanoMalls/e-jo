@@ -17,6 +17,7 @@ class Recommendation extends Model
         'requested_by_sda_id', // service department admin
         'is_requesting_ict_approval',
         'reason',
+        'disapproved_reason',
         'approval_status'
     ];
 

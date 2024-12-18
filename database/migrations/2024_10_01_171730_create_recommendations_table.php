@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->boolean('is_requesting_ict_approval')->default(false);
             $table->string('approval_status');
             $table->mediumText('reason');
+            $table->mediumText('disapproved_reason')->nullable();
             $table->timestamps();
         });
     }
