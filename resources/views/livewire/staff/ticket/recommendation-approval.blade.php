@@ -134,7 +134,7 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div class="ms-2 me-auto" style="font-size: 13px;">
                                             <div class="fw-bold">{{ $recommendation->approval_status }}</div>
-                                            {{ $recommendation->reason }}
+                                            {{ $recommendation->disapproved_reason }}
                                         </div>
                                         <span style="font-size: 11px;">
                                             @if ($recommendation->created_at == $recommendation->updated_at)
@@ -151,54 +151,61 @@
                 </div>
             </div>
         @endif
-    </div>
 
-    {{-- Reason for disapproval modal --}}
-    <div wire:ignore.self class="modal fade ticket__actions__modal" id="disapproveTicketRecommendationModal"
-        tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered custom__modal">
-            <div class="modal-content d-flex flex-column custom__modal__content">
-                <div class="modal__header d-flex justify-content-between align-items-center">
-                    <h6 class="modal__title">Disapprove ticket request</h6>
-                    <button class="btn d-flex align-items-center justify-content-center modal__close__button"
-                        data-bs-dismiss="modal" id="btnCloseModal">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div class="modal__body">
-                    <form wire:submit.prevent="disapproveTicketRecommendation">
-                        <div class="my-2">
-                            <label class="ticket__actions__label mb-2">Reason</label>
-                            <div wire:ignore>
-                                <textarea wire:model="reason" class="form-control form__field" placeholder="Please state the reason"></textarea>
-                            </div>
-                            @error('disapproved_reason')
-                                <span class="error__message">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div>
-                        <button wire:loading.attr="disabled" wire:target="disapproveTicketRecommendation"
-                            type="submit" class="btn mt-3 d-flex align-items-center justify-content-center gap-2"
-                            style="padding: 0.6rem 1rem;
-                                border-radius: 0.563rem;
-                                font-size: 0.875rem;
-                                background-color: #d32839;
-                                color: white;
-                                font-weight: 500;
-                                box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
-                            <span wire:loading wire:target="disapproveTicketRecommendation"
-                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
-                            </span>
-                            <span wire:loading.remove wire:target="disapproveTicketRecommendation">
-                                Disapprove
-                            </span>
-                            <span wire:loading wire:target="disapproveTicketRecommendation">Processing...</span>
+        {{-- Reason for disapproval modal --}}
+        <div wire:ignore.self class="modal fade ticket__actions__modal" id="disapproveTicketRecommendationModal"
+            tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered custom__modal">
+                <div class="modal-content d-flex flex-column custom__modal__content">
+                    <div class="modal__header d-flex justify-content-between align-items-center">
+                        <h6 class="modal__title">Disapprove ticket request</h6>
+                        <button class="btn d-flex align-items-center justify-content-center modal__close__button"
+                            data-bs-dismiss="modal" id="btnCloseModal">
+                            <i class="fa-solid fa-xmark"></i>
                         </button>
-                    </form>
+                    </div>
+                    <div class="modal__body">
+                        <form wire:submit.prevent="disapproveTicketRecommendation">
+                            <div class="my-2">
+                                <label class="ticket__actions__label mb-2">Reason</label>
+                                <div wire:ignore>
+                                    <textarea wire:model="disapprovedReason" class="form-control form__field" placeholder="Please state the reason"></textarea>
+                                </div>
+                                @error('disapprovedReason')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                            <button wire:loading.attr="disabled" wire:target="disapproveTicketRecommendation"
+                                type="submit" class="btn mt-3 d-flex align-items-center justify-content-center gap-2"
+                                style="padding: 0.6rem 1rem;
+                                    border-radius: 0.563rem;
+                                    font-size: 0.875rem;
+                                    background-color: #d32839;
+                                    color: white;
+                                    font-weight: 500;
+                                    box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
+                                <span wire:loading wire:target="disapproveTicketRecommendation"
+                                    class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                </span>
+                                <span wire:loading.remove wire:target="disapproveTicketRecommendation">
+                                    Disapprove
+                                </span>
+                                <span wire:loading wire:target="disapproveTicketRecommendation">Processing...</span>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 @endif
+
+@push('livewire-modal')
+    <script>
+        window.addEventListener('close-ticket-recommendation-disapproval-modal', () => {
+                    $('#disapproveTicketRecommendationModal').modal('hide');
+    </script>
+@endpush

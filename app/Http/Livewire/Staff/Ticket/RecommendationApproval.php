@@ -20,6 +20,7 @@ use Livewire\Component;
 class RecommendationApproval extends Component
 {
     public ?Ticket $ticket;
+    public ?string $disapprovedReason = null;
     public ?Collection $recommendations = null;
     public ?Collection $approvalHistory;
     public ?Recommendation $newRecommendation = null;
@@ -86,7 +87,13 @@ class RecommendationApproval extends Component
             ])->first();
 
             if ($recommendation->exists()) {
+                if ($this->disapprovedReason == null) {
+                    $this->addError('disapprovedReason', 'Please enter a reason.');
+                    return;
+                }
+
                 $recommendation->update([
+                    'disapproved_reason' => $this->disapprovedReason,
                     'approval_status' => RecommendationApprovalStatusEnum::DISAPPROVED
                 ]);
 
@@ -103,6 +110,10 @@ class RecommendationApproval extends Component
                         message: "Approval request has been disapproved."
                     )
                 );
+
+                $this->dispatchBrowserEvent('close-ticket-recommendation-disapproval-modal');
+                $this->reset('disapprovedReason');
+
                 ActivityLog::make($this->ticket->id, 'disapproved the ticket');
             } else {
                 noty()->addError('Ticket recommendation is not found.');
