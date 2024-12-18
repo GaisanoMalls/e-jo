@@ -165,7 +165,6 @@ class CreateTicket extends Component
                         });
                     })->get();
 
-                dd($approvers);
                 $approvers->each(function ($approver) use ($ticket) {
                     $approver->helpTopicApprovals->each(function ($helpTopicApproval) use ($ticket) {
                         TicketApproval::create([

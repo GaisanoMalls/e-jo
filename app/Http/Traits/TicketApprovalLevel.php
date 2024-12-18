@@ -167,7 +167,7 @@ trait TicketApprovalLevel
                         } else {
                             // If current user is the next approver, send a notification
                             static::notifyAndEmailServiceDepartmentAdminAndRequester($this->ticket);
-                            break;
+                            // break;
                         }
                     }
                 }

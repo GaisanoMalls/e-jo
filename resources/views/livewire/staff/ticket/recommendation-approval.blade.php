@@ -3,22 +3,16 @@
     use App\Enums\RecommendationApprovalStatusEnum;
 @endphp
 
-@if ($recommendation && $this->isRecommendationRequested())
+@if ($recommendations->isNotEmpty() && $this->isRecommendationRequested())
     <div>
-        @if ($this->isTicketRecommendationIsApproved())
-            <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
-                style="font-size: 13px; background-color: #dffdef;">
-                <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
-                Approved
-            </div>
-        @else
-            @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+        @if ($newRecommendation)
+            @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) && $newRecommendation)
                 <div class="mb-4 d-flex flex-wrap gap-2 border-0 flex-column rounded-3 p-3"
                     style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-1">
                         @if (
                             $this->isRequesterServiceDeptAdmin() &&
-                                $recommendation->approval_status == RecommendationApprovalStatusEnum::PENDING)
+                                $newRecommendation->approval_status === RecommendationApprovalStatusEnum::PENDING->value)
                             <div class="alert d-inline-block mb-0 gap-1 border-0 py-2 px-3" role="alert"
                                 style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                                 <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
@@ -28,18 +22,18 @@
                             <span class="border-0 d-flex align-items-center" style="font-size: 0.9rem;">
                                 <span class="me-2">
                                     <div class="d-flex align-items-center">
-                                        @if ($recommendation->requestedByServiceDeptAdmin->profile->picture)
-                                            <img src="{{ Storage::url($recommendation->requestedByServiceDeptAdmin->profile->picture) }}"
+                                        @if ($newRecommendation->requestedByServiceDeptAdmin->profile->picture)
+                                            <img src="{{ Storage::url($newRecommendation->requestedByServiceDeptAdmin->profile->picture) }}"
                                                 class="image-fluid rounded-circle"
                                                 style="height: 26px !important; width: 26px !important;">
                                         @else
                                             <div class="d-flex align-items-center p-2 me-1 justify-content-center text-white rounded-circle"
                                                 style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
-                                                {{ $recommendation->requestedByServiceDeptAdmin->profile->getNameInitial() }}
+                                                {{ $newRecommendation->requestedByServiceDeptAdmin->profile->getNameInitial() }}
                                             </div>
                                         @endif
                                         <strong class="text-muted">
-                                            {{ $recommendation->requestedByServiceDeptAdmin->profile->getFullName }}
+                                            {{ $newRecommendation->requestedByServiceDeptAdmin->profile->getFullName }}
                                         </strong>
                                     </div>
                                 </span>
@@ -47,20 +41,20 @@
                             </span>
                         @endif
                         <small style="font-weight: 500; color: #4a5568; font-size: 0.75rem;">
-                            {{ $recommendation->dateCreated() }}
-                            ({{ $recommendation->created_at->format('D') }},
-                            {{ $recommendation->created_at->format('g:i A') }})
+                            {{ $newRecommendation->dateCreated() }}
+                            ({{ $newRecommendation->created_at->format('D') }},
+                            {{ $newRecommendation->created_at->format('g:i A') }})
                         </small>
                     </div>
-                    @if ($recommendation->reason)
+                    @if ($newRecommendation->reason)
                         <div class="d-flex flex-column gap-1">
                             <span class="fw-semibold" style="font-size: 0.85rem;">Reason:</span>
                             <span style="font-size: 0.85rem;">
-                                {!! nl2br($recommendation->reason) !!}
+                                {!! nl2br($newRecommendation->reason) !!}
                             </span>
                         </div>
                     @endif
-                    @if (!$this->isRequesterServiceDeptAdmin() && $isAllowedToApproveRecommendation)
+                    @if (!$this->isRequesterServiceDeptAdmin() && $isAllowedToApproveRecommendation && $newRecommendation)
                         <div class="d-flex gap-2 mt-2">
                             <button type="button" class="btn d-flex align-items-center justify-content-center w-auto"
                                 wire:click="approveTicketRecommendation" wire:loading.attr="disabled"
@@ -84,7 +78,7 @@
                     @endif
                 </div>
             @elseif (auth()->user()->hasRole(Role::AGENT))
-                @if ($this->isTicketRecommendationIsApproved())
+                @if ($currentRecommendation->approval_status === RecommendationApprovalStatusEnum::APPROVED->value)
                     <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
                         style="font-size: 13px; background-color: #dffdef;">
                         <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
@@ -92,7 +86,7 @@
                     </div>
                 @endif
 
-                @if ($this->isTicketRecommendationIsPending())
+                @if ($currentRecommendation->approval_status === RecommendationApprovalStatusEnum::PENDING->value)
                     <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
                         style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                         <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
@@ -100,7 +94,7 @@
                     </div>
                 @endif
 
-                @if ($this->isTicketRecommendationIsDisapproved())
+                @if ($$currentRecommendation->approval_status === RecommendationApprovalStatusEnum::DISAPPROVED->value)
                     <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
                         style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                         <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
@@ -108,6 +102,58 @@
                     </div>
                 @endif
             @endif
+        @else
+            @if ($currentRecommendation->approval_status === RecommendationApprovalStatusEnum::APPROVED->value)
+                <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
+                    style="font-size: 13px; background-color: #dffdef;">
+                    <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
+                    Approved
+                </div>
+            @endif
+
+            @if ($currentRecommendation->approval_status === RecommendationApprovalStatusEnum::DISAPPROVED->value)
+                <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
+                    style="font-size: 13px; background-color: #cff4fc; color: #055160;">
+                    <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
+                    Disapproved
+                </div>
+            @endif
+        @endif
+
+        @if ($approvalHistory->isNotEmpty())
+            <div class="accordion mb-4" id="approvalHistoryAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
+                            style="box-shadow: none; font-size: 13px;">
+                            Approval history
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                        data-bs-parent="#approvalHistoryAccordion">
+                        <div class="accordion-body">
+                            <ol class="list-group">
+                                @foreach ($approvalHistory as $recommendation)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="ms-2 me-auto" style="font-size: 13px;">
+                                            <div class="fw-bold">{{ $recommendation->approval_status }}</div>
+                                            {{ $recommendation->reason }}
+                                        </div>
+                                        <span style="font-size: 11px;">
+                                            @if ($recommendation->created_at == $recommendation->updated_at)
+                                                New
+                                            @else
+                                                {{ $recommendation->dateUpdated() }}
+                                            @endif
+                                        </span>
+                                    </li>
+                                @endforeach
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endif
     </div>
 @endif

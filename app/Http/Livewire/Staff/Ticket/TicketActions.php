@@ -47,14 +47,6 @@ class TicketActions extends Component
         ])->exists();
     }
 
-    public function isRecommendationRequested()
-    {
-        return Recommendation::where([
-            ['ticket_id', $this->ticket->id],
-            ['is_requesting_ict_approval', true],
-        ])->exists();
-    }
-
     public function render()
     {
         $this->recommendationApprover = Recommendation::where('ticket_id', $this->ticket->id)->first();

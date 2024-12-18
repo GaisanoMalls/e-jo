@@ -58,7 +58,7 @@ class NotificationList extends Component
                         $ticket->status_id != Status::VIEWED
                         && $ticket->approval_status != ApprovalStatusEnum::APPROVED
                         && $this->isRequestersServiceDepartmentAdmin($ticket)
-                        || !$ticket->whereDoesntHave('recommendation')
+                        || !$ticket->whereDoesntHave('recommendations')
                     ) {
                         $ticket->update(['status_id' => Status::VIEWED]);
                         ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');

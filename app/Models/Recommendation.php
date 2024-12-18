@@ -44,4 +44,9 @@ class Recommendation extends Model
     {
         return $this->createdAt($this->created_at);
     }
+
+    public function dateUpdated(): string
+    {
+        return $this->updatedAt($this->created_at, $this->updated_at);
+    }
 }
