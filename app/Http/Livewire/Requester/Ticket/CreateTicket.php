@@ -157,7 +157,7 @@ class CreateTicket extends Component
                     }
                 }
 
-                $approvers = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
+                $approvers = User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
                     ->withWhereHas('helpTopicApprovals', function ($query) use ($ticket) {
                         $query->withWhereHas('configuration', function ($config) use ($ticket) {
                             $config->with('approvers')
@@ -172,16 +172,17 @@ class CreateTicket extends Component
                             'help_topic_approver_id' => $helpTopicApproval->id,
                         ]);
                     });
-
-                    Notification::send(
-                        $approver,
-                        new AppNotification(
-                            ticket: $ticket,
-                            title: "Ticket #{$ticket->ticket_number} (New)",
-                            message: "{$ticket->user->profile->getFullName} created a ticket"
-                        )
-                    );
-                    // Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
+                    if ($approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+                        Notification::send(
+                            $approver,
+                            new AppNotification(
+                                ticket: $ticket,
+                                title: "Ticket #{$ticket->ticket_number} (New)",
+                                message: "{$ticket->user->profile->getFullName} created a ticket"
+                            )
+                        );
+                        // Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
+                    }
                 });
 
                 if ($this->isHelpTopicHasForm) {
