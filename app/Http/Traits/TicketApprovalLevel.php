@@ -105,12 +105,11 @@ trait TicketApprovalLevel
 
     private function approveLevelOfApproval(Ticket $ticket)
     {
-        $approvalLevels = [1, 2, 3, 4, 5];
-        $allLevelsApproved = true;
+        $isAllLevelApproved = true;
         $currentLevel = 1; // keep track of the current level
 
         try {
-            foreach ($approvalLevels as $level) {
+            foreach ($this->levelsOfApproval as $level) {
                 $ticketApprovals = TicketApproval::where('ticket_id', $ticket->id)
                     ->withWhereHas('helpTopicApprover', function ($query) use ($level, $ticket) {
                         $query->where([
@@ -134,7 +133,7 @@ trait TicketApprovalLevel
 
                 // Check if all approvals for the current level are complete
                 if (!$ticketApprovals->every(fn($approval) => $approval->is_approved)) {
-                    $allLevelsApproved = false;
+                    $isAllLevelApproved = false;
                 } else {
                     $nextLevelApprovals = TicketApproval::where('ticket_id', $ticket->id)
                         ->withWhereHas('helpTopicApprover', function ($query) use ($currentLevel, $ticket) {
@@ -160,7 +159,7 @@ trait TicketApprovalLevel
             }
 
             // Update ticket status if all levels are approved
-            if ($allLevelsApproved) {
+            if ($isAllLevelApproved) {
                 $ticket->update([
                     'status_id' => Status::APPROVED,
                     'approval_status' => ApprovalStatusEnum::APPROVED,
