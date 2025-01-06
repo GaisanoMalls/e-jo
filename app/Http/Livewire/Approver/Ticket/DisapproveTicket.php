@@ -1,26 +1,24 @@
 <?php
 
-namespace App\Http\Livewire\Staff\Ticket;
+namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Requests\Approver\StoreDisapproveTicketRequest;
-use App\Http\Traits\AppErrorLog;
 use App\Models\ActivityLog;
-use App\Models\Reason;
+use App\Notifications\AppNotification;
+use Illuminate\Support\Facades\Notification;
+use App\Http\Traits\AppErrorLog;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
-use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
 class DisapproveTicket extends Component
 {
     public Ticket $ticket;
-
     public ?string $disapproveReason = null;
 
     public function rules()
@@ -28,15 +26,13 @@ class DisapproveTicket extends Component
         return (new StoreDisapproveTicketRequest())->rules();
     }
 
-    private function actionOnSubmit()
+    public function actionOnSubmit()
     {
-        return redirect()->route('staff.ticket.view_ticket', $this->ticket->id);
+        return redirect()->route('approver.ticket.view_ticket_details', $this->ticket->id);
     }
 
-    public function disapproveTicket(): void
+    public function disapproveTicket()
     {
-        $this->validate();
-
         try {
             DB::transaction(function () {
                 $reason = $this->ticket->reason()->create([
@@ -48,10 +44,9 @@ class DisapproveTicket extends Component
                     'approval_status' => ApprovalStatusEnum::DISAPPROVED,
                 ]);
 
-                // Retrieve the service department administrator responsible for approving the ticket. For notification use only
-                $serviceDepartmentAdmin = User::with('profile')
+                $approver = User::with('profile')
                     ->where('id', auth()->user()->id)
-                    ->role(Role::SERVICE_DEPARTMENT_ADMIN)
+                    ->role(Role::APPROVER)
                     ->firstOrFail();
 
                 Notification::send(
@@ -59,7 +54,7 @@ class DisapproveTicket extends Component
                     new AppNotification(
                         ticket: $this->ticket,
                         title: "Ticket #{$this->ticket->ticket_number} (Disapproved)",
-                        message: "{$serviceDepartmentAdmin->profile->getFullName} disapproved your ticket"
+                        message: "{$approver->profile->getFullName} disapproved your ticket"
                     )
                 );
 
@@ -74,6 +69,6 @@ class DisapproveTicket extends Component
 
     public function render()
     {
-        return view('livewire.staff.ticket.disapprove-ticket');
+        return view('livewire.approver.ticket.disapprove-ticket');
     }
 }

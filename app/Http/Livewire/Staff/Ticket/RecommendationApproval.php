@@ -51,9 +51,7 @@ class RecommendationApproval extends Component
             ])->first();
 
             if ($recommendation->exists()) {
-                $recommendation->update([
-                    'approval_status' => RecommendationApprovalStatusEnum::APPROVED
-                ]);
+                $recommendation->update(['approval_status' => RecommendationApprovalStatusEnum::APPROVED]);
 
                 $events = ['loadCustomForm', 'loadRecommendationApproval', 'loadTicketLogs'];
                 foreach ($events as $event) {

@@ -58,14 +58,6 @@
 @push('livewire-modal')
     <script>
         window.addEventListener('close-modal', () => {
-            $('#disapproveTicketModal').modal('hide');
-        });
-    </script>
-@endpush
-
-@push('livewire-modal')
-    <script>
-        window.addEventListener('close-modal', () => {
             $('#confirmTicketDisapproveModal').modal('hide');
         });
 

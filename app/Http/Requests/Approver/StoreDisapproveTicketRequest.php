@@ -25,7 +25,7 @@ class StoreDisapproveTicketRequest extends FormRequest
     public function rules()
     {
         return [
-            'reasonDescription' => ['required']
+            'disapproveReason' => ['required']
         ];
     }
 }

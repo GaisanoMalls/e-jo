@@ -7,7 +7,6 @@ use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Reply;
-use App\Models\ReplyFile;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;

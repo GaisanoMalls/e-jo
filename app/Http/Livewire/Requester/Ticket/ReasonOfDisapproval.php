@@ -13,7 +13,7 @@ class ReasonOfDisapproval extends Component
 
     public function mount()
     {
-        $this->reason = $this->ticket->reasons()->where('ticket_id', $this->ticket->id)->first();
+        $this->reason = $this->ticket->reason;
     }
 
     public function render()

@@ -13,7 +13,7 @@ class LoadDisapprovalReason extends Component
 
     public function render()
     {
-        $reason = $this->ticket->reasons()->where('ticket_id', $this->ticket->id)->first();
+        $reason = $this->ticket->reason;
         return view('livewire.staff.ticket.load-disapproval-reason', [
             'reason' => $reason
         ]);
