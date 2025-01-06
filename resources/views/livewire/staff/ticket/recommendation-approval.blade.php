@@ -134,7 +134,22 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div class="ms-2 me-auto" style="font-size: 13px;">
                                             <div class="fw-bold">{{ $recommendation->approval_status }}</div>
-                                            {{ $recommendation->disapproved_reason }}
+                                            <div class="d-flex flex-column">
+                                                <span>
+                                                    <span style="text-decoration: underline !important;">
+                                                        Request:
+                                                    </span>
+                                                    {!! nl2br($recommendation->reason) !!}
+                                                </span>
+                                                @if ($recommendation->disapproved_reason != null)
+                                                    <span>
+                                                        <span style="text-decoration: underline !important;">
+                                                            Reason of disapproval:
+                                                        </span>
+                                                        {!! nl2br($recommendation->disapproved_reason) !!}
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </div>
                                         <span style="font-size: 11px;">
                                             @if ($recommendation->created_at == $recommendation->updated_at)
