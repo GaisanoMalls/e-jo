@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Enums\RecommendationApprovalStatusEnum;
 use App\Models\RecommendationApprovalLevel;
 use App\Models\RecommendationApprover;
 use App\Models\Ticket;
@@ -41,6 +42,27 @@ trait RecommendationApproval
                 ->withWhereHas('recommendation', function ($recommendation) use ($ticket) {
                     $recommendation->where('ticket_id', $ticket->id);
                 })->get();
+
+            foreach ($recommendationApprovals as $recommendationApproval) {
+                foreach ($recommendationApproval->approvers as $approver) {
+                    if ($approver->user_id === auth()->user()->id) {
+                        if ($recommendationApproval->recommendation->approval_status !== RecommendationApprovalStatusEnum::APPROVED) {
+                            $recommendationApproval->recommendation->update(['approval_status' => RecommendationApprovalStatusEnum::APPROVED]);
+                            foreach ($recommendationApprovals as $otherRecommendationApproval) {
+                                if (!$otherRecommendationApproval->recommendation->approval_status !== RecommendationApprovalStatusEnum::APPROVED) {
+                                    $otherRecommendationApproval->recommendation->update(['approval_status' => RecommendationApprovalStatusEnum::APPROVED]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!$recommendationApprovals->every(fn($recommendationApproval) => $recommendationApproval->recommendation->approval_status === RecommendationApprovalStatusEnum::APPROVED)) {
+                $isAllLevelApproved = false;
+            } else {
+                $nextLevelApprovals = RecommendationApprovalLevel::with('approvers') 
+            }
         }
     }
 }

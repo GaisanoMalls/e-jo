@@ -11,7 +11,6 @@ use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 trait TicketApprovalLevel
