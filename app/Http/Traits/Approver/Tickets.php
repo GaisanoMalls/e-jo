@@ -48,8 +48,8 @@ trait Tickets
             ->withWhereHas('user.buDepartments', function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
-            ->withWhereHas('ticketApprovals.helpTopicApprover', callback: function ($approver) {
-                $approver->where('user_id', auth()->user()->id);
+            ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+                $approver->whereNot('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();

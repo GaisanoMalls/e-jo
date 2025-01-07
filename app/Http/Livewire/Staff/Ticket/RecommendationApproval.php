@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Enums\RecommendationApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
+use \App\Http\Traits\RecommendationApproval as RecommendationApprovalTrait;
 use App\Models\ActivityLog;
 use App\Models\Recommendation;
 use App\Models\RecommendationApprover;
@@ -19,6 +20,8 @@ use Livewire\Component;
 
 class RecommendationApproval extends Component
 {
+    use RecommendationApprovalTrait;
+
     public ?Ticket $ticket;
     public ?string $disapprovedReason = null;
     public ?Collection $recommendations = null;
@@ -51,21 +54,22 @@ class RecommendationApproval extends Component
             ])->first();
 
             if ($recommendation->exists()) {
-                $recommendation->update(['approval_status' => RecommendationApprovalStatusEnum::APPROVED]);
+                $this->approveRecommendationApproval($this->ticket);
+                // $recommendation->update(['approval_status' => RecommendationApprovalStatusEnum::APPROVED]);
 
                 $events = ['loadCustomForm', 'loadRecommendationApproval', 'loadTicketLogs'];
                 foreach ($events as $event) {
                     $this->emit($event);
                 }
 
-                Notification::send(
-                    $recommendation->requestedByServiceDeptAdmin,
-                    new AppNotification(
-                        ticket: $this->ticket,
-                        title: "Ticket #{$this->ticket->ticket_number} (Approved request)",
-                        message: "Approval request has been approved."
-                    )
-                );
+                // Notification::send(
+                //     $recommendation->requestedByServiceDeptAdmin,
+                //     new AppNotification(
+                //         ticket: $this->ticket,
+                //         title: "Ticket #{$this->ticket->ticket_number} (Approved request)",
+                //         message: "Approval request has been approved."
+                //     )
+                // );
                 ActivityLog::make($this->ticket->id, 'approved the ticket');
             } else {
                 noty()->addError('Ticket recommendation is not found.');

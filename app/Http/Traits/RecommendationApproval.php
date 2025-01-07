@@ -114,7 +114,7 @@ trait RecommendationApproval
 
             foreach ($recommendationApprovals as $recommendationApproval) {
                 foreach ($recommendationApproval->approvers as $approver) {
-                    if ($approver->user_id === auth()->user()->id) {
+                    if ($approver->approver_id === auth()->user()->id) {
                         if ($recommendationApproval->recommendation->approval_status !== RecommendationApprovalStatusEnum::APPROVED) {
                             $recommendationApproval->recommendation->update(['approval_status' => RecommendationApprovalStatusEnum::APPROVED]);
                             foreach ($recommendationApprovals as $otherRecommendationApproval) {

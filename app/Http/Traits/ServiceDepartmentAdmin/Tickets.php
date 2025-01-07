@@ -62,6 +62,9 @@ trait Tickets
                     $department->orWhereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                 });
             })
+            ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+                $approver->where('user_id', auth()->user()->id);
+            })
             // ->where(function ($ticket) {
             //     $ticket->withWhereHas('recommendation', function ($recommendation) {
             //         $recommendation->withWhereHas('approvalLevels', function ($approvalLevel) {
@@ -192,6 +195,9 @@ trait Tickets
                         ApprovalStatusEnum::APPROVED,
                         ApprovalStatusEnum::FOR_APPROVAL
                     ]);
+            })
+            ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+                $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();

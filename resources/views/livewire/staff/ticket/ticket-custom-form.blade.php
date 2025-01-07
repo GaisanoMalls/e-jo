@@ -127,7 +127,7 @@
                         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
                         heightLeft -= pageHeight;
                     }
-                    pdf.save('{{ $ticket->helpTopic->form->name }}' + ".pdf");
+                    pdf.save('{{ $ticket->helpTopic->form->name }}.pdf');
                 }
             });
         });

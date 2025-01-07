@@ -56,7 +56,8 @@
                     @endif
                     @if (!$this->isRequesterServiceDeptAdmin() && $isAllowedToApproveRecommendation && $newRecommendation)
                         <div class="d-flex gap-2 mt-2">
-                            <button type="button" class="btn d-flex align-items-center justify-content-center w-auto"
+                            <button type="button"
+                                class="btn d-flex gap-2 align-items-center justify-content-center w-auto"
                                 wire:click="approveTicketRecommendation" wire:loading.attr="disabled"
                                 style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #FFF; font-weight: 500; background-color: #D32839;">
                                 <span wire:loading wire:target="approveTicketRecommendation"
