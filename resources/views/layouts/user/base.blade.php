@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="{{ asset('css/roles/user.css') }}">
     <link rel="stylesheet" href="{{ asset('css/navigate-indicator.css') }}">
     <link rel="stylesheet" href="{{ asset('css/lightbox.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
     <title>{{ $title ?? 'Dashboard' }}</title>
     @livewireStyles
 </head>

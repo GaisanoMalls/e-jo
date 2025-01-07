@@ -138,31 +138,33 @@
     @endif
 </div>
 @push('extra')
-    <script src="{{ asset('js/jspdf.debug.js') }}"></script>
-    <script src="{{ asset('js/html2canvas.min.js') }}"></script>
-    <script src="{{ asset('js/html2pdf.min.js') }}"></script>
     <script>
-        const options = {
-            margin: 0.5,
-            filename: 'invoice.pdf',
-            image: {
-                type: 'jpeg',
-                quality: 500
-            },
-            html2canvas: {
-                scale: 1
-            },
-            jsPDF: {
-                unit: 'in',
-                format: 'letter',
-                orientation: 'portrait'
-            }
-        }
+        document.getElementById('save-custom-form-as-pdf').addEventListener('click', function() {
+            var content = document.getElementById('ticket-custom-form');
+            html2canvas(content, {
+                scale: 2,
+                onrendered: function(canvas) {
+                    var imgData = canvas.toDataURL('image/png');
+                    var pdf = new jsPDF('p', 'mm', 'a4');
+                    var imgWidth = 210;
+                    var pageHeight = 295;
+                    var imgHeight = canvas.height * imgWidth / canvas.width;
+                    var heightLeft = imgHeight;
 
-        $('#save-custom-form-as-pdf').click(function(e) {
-            e.preventDefault();
-            const element = document.getElementById('ticket-custom-form');
-            html2pdf().from(element).set(options).save();
+                    var position = 0;
+
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+
+                    while (heightLeft >= 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+                    pdf.save('{{ $ticket->helpTopic->form->name }}' + ".pdf");
+                }
+            });
         });
     </script>
 @endpush

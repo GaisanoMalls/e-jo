@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{{ asset('css/select/custom-virtual-select.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roles/staff.css') }}">
     <link rel="stylesheet" href="{{ asset('css/navigate-indicator.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
     @livewireStyles
     <title>{{ $title }}</title>
 </head>
