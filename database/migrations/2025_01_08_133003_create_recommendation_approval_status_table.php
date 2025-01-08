@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\RecommendationApprovalStatusEnum;
 use App\Models\Recommendation;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,10 +14,11 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('recommendation_approval_levels', function (Blueprint $table) {
+        Schema::create('recommendation_approval_status', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Recommendation::class, 'recommendation_id')->constrained('recommendations')->cascadeOnDelete();
-            $table->integer('level');
+            $table->enum('approval_status', RecommendationApprovalStatusEnum::toArray())->default(RecommendationApprovalStatusEnum::PENDING->value);
+            $table->longText('disapproved_reason')->nullable();
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('recommendation_approval_levels');
+        Schema::dropIfExists('recommendation_approval_status');
     }
 };

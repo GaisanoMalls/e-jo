@@ -97,7 +97,12 @@ class User extends Authenticatable
         return $this->hasMany(HelpTopicApprover::class);
     }
 
-    public function recommendationApprovals(): HasMany
+    public function requestedRecommendations(): HasMany
+    {
+        return $this->hasMany(Recommendation::class, 'requested_by_sda_id');
+    }
+
+    public function recommendationApprovers(): HasMany
     {
         return $this->hasMany(RecommendationApprover::class, 'approver_id');
     }

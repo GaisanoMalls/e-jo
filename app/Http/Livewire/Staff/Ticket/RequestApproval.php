@@ -7,6 +7,8 @@ use App\Http\Traits\AppErrorLog;
 use App\Mail\Staff\RecommendationRequestMail;
 use App\Models\ActivityLog;
 use App\Models\Recommendation;
+use App\Models\RecommendationApprovalStatus;
+use App\Models\RecommendationApprover;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -24,8 +26,8 @@ class RequestApproval extends Component
 {
     public Ticket $ticket;
     public Collection $recommendationApprovers;
-    public array $levelOfApproval = [1, 2, 3, 4, 5];
-    public ?int $level = null;
+    public array $levels = [1, 2, 3, 4, 5];
+    public ?int $levelOfApproval = null;
     public array $level1Approvers = [];
     public array $level2Approvers = [];
     public array $level3Approvers = [];
@@ -43,7 +45,7 @@ class RequestApproval extends Component
     public function rules()
     {
         return [
-            'level' => ['required'],
+            'levelOfApproval' => ['required'],
             'reason' => ['required'],
         ];
     }
@@ -55,7 +57,7 @@ class RequestApproval extends Component
         ];
     }
 
-    public function updatedLevel($value)
+    public function updatedLevelOfApproval($value)
     {
         if ($value) {
             $this->dispatchBrowserEvent('load-recommendation-approvers', [
@@ -72,7 +74,7 @@ class RequestApproval extends Component
         try {
             DB::transaction(function () {
                 $recommendationApproverIds = array_unique(
-                    array_merge(...array_values($this->getApprovers()))
+                    array_merge(...array_values($this->recommendationLevelApprovers()))
                 );
 
                 $recommendationApprovers = User::whereIn('id', $recommendationApproverIds)
@@ -83,20 +85,27 @@ class RequestApproval extends Component
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
                     ->first();
 
-                if ($recommendationApprovers->isNotEmpty() && $requesterServiceDeptAdmin) {
+                if ($recommendationApprovers->isNotEmpty() && $requesterServiceDeptAdmin->exists()) {
                     $this->ticket->update(['status_id' => Status::OPEN]);
 
-                    $ictRecommendation = Recommendation::create([
+                    $recommendation = Recommendation::create([
                         'ticket_id' => $this->ticket->id,
                         'requested_by_sda_id' => $requesterServiceDeptAdmin->id,
-                        'is_requesting_ict_approval' => true,
+                        'is_requesting_for_approval' => true,
                         'reason' => $this->reason,
-                        'approval_status' => RecommendationApprovalStatusEnum::PENDING
+                        'level_of_approval' => $this->levelOfApproval
                     ]);
 
-                    $recommendationApprovalLevel = $ictRecommendation->approvalLevels()->create(['level' => $this->level]);
-                    foreach ($recommendationApproverIds as $approverId) {
-                        $recommendationApprovalLevel->approvers()->create(['approver_id' => $approverId]);
+                    RecommendationApprovalStatus::create(['recommendation_id' => $recommendation->id]);
+
+                    foreach ($this->recommendationLevelApprovers() as $level => $approvers) {
+                        foreach ($approvers as $approver) {
+                            RecommendationApprover::create([
+                                'recommendation_id' => $recommendation->id,
+                                'approver_id' => $approver,
+                                'level' => $level
+                            ]);
+                        }
                     }
 
                     // Mail::to($serviceDeptAdmin)->send(new RecommendationRequestMail(ticket: $this->ticket, recipient: $serviceDeptAdmin, agentRequester: $agentRequester));
@@ -121,14 +130,14 @@ class RequestApproval extends Component
         }
     }
 
-    private function getApprovers()
+    private function recommendationLevelApprovers()
     {
         return array_filter([
-            'level1Approvers' => array_map('intval', $this->level1Approvers),
-            'level2Approvers' => array_map('intval', $this->level2Approvers),
-            'level3Approvers' => array_map('intval', $this->level3Approvers),
-            'level4Approvers' => array_map('intval', $this->level4Approvers),
-            'level5Approvers' => array_map('intval', $this->level5Approvers),
+            1 => array_map('intval', $this->level1Approvers),
+            2 => array_map('intval', $this->level2Approvers),
+            3 => array_map('intval', $this->level3Approvers),
+            4 => array_map('intval', $this->level4Approvers),
+            5 => array_map('intval', $this->level5Approvers),
         ], function ($approvers) {
             return !empty($approvers);
         });

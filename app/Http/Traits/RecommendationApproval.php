@@ -2,8 +2,6 @@
 
 namespace App\Http\Traits;
 
-use App\Enums\RecommendationApprovalStatusEnum;
-use App\Models\RecommendationApprovalLevel;
 use App\Models\RecommendationApprover;
 use App\Models\Role;
 use App\Models\Ticket;
@@ -106,51 +104,7 @@ trait RecommendationApproval
         $currentLevel = 1; // keep track of the current level
 
         foreach ($this->levelsOfApproval as $level) {
-            $recommendationApprovals = RecommendationApprovalLevel::with('approvers')
-                ->where('level', $level)
-                ->withWhereHas('recommendation', function ($recommendation) use ($ticket) {
-                    $recommendation->where('ticket_id', $ticket->id);
-                })->get();
 
-            foreach ($recommendationApprovals as $recommendationApproval) {
-                foreach ($recommendationApproval->approvers as $approver) {
-                    if ($approver->approver_id === auth()->user()->id) {
-                        if ($recommendationApproval->recommendation->approval_status !== RecommendationApprovalStatusEnum::APPROVED) {
-                            $recommendationApproval->recommendation->update(['approval_status' => RecommendationApprovalStatusEnum::APPROVED]);
-                            foreach ($recommendationApprovals as $otherRecommendationApproval) {
-                                if (!$otherRecommendationApproval->recommendation->approval_status !== RecommendationApprovalStatusEnum::APPROVED) {
-                                    $otherRecommendationApproval->recommendation->update(['approval_status' => RecommendationApprovalStatusEnum::APPROVED]);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Check if all approvals for the current level are complete
-            if (!$recommendationApprovals->every(fn($approval) => $approval->recommendation->approval_status === RecommendationApprovalStatusEnum::APPROVED)) {
-                $isAllLevelApproved = false;
-            } else {
-                $nextLevelApprovals = RecommendationApprovalLevel::with('approvers')
-                    ->where('level', $currentLevel + 1)
-                    ->withWhereHas('recommendation', function ($recommendation) use ($ticket) {
-                        $recommendation->where('ticket_id', $ticket->id);
-                    })->get();
-
-                if ($nextLevelApprovals->isNotEmpty()) {
-                    foreach ($nextLevelApprovals as $nextLevelApproval) {
-                        $approver = $nextLevelApproval->approvers->first();
-                        if ($approver->approver_id !== auth()->user()->id) {
-                            static::sendNotificationToNextApprover($this->ticket, $approver);
-                        } else {
-                            static::notifyAndEmailServiceDepartmentAdminAndRequester($this->ticket);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            $currentLevel++;
         }
     }
 }

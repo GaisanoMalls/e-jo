@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Recommendation extends Model
 {
@@ -15,10 +16,8 @@ class Recommendation extends Model
     protected $fillable = [
         'ticket_id',
         'requested_by_sda_id', // service department admin
-        'is_requesting_ict_approval',
         'reason',
-        'disapproved_reason',
-        'approval_status'
+        'level_of_approval',
     ];
 
     public function ticket(): BelongsTo
@@ -31,14 +30,14 @@ class Recommendation extends Model
         return $this->belongsTo(User::class, 'requested_by_sda_id')->role(Role::SERVICE_DEPARTMENT_ADMIN);
     }
 
-    public function currentTeam(): BelongsTo
+    public function approvalStatus(): HasOne
     {
-        return $this->belongsTo(Team::class, 'current_team_id');
+        return $this->hasOne(RecommendationApprovalStatus::class, 'recommendation_id');
     }
 
-    public function approvalLevels(): HasMany
+    public function approvers(): HasMany
     {
-        return $this->hasMany(RecommendationApprovalLevel::class, 'recommendation_id');
+        return $this->hasMany(RecommendationApprover::class, 'approver_id');
     }
 
     public function dateCreated(): string

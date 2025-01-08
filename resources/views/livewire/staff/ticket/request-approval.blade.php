@@ -17,7 +17,7 @@
                             <div>
                                 <div id="recommendation-select-level-of-approval" wire:ignore></div>
                             </div>
-                            @error('level')
+                            @error('levelOfApproval')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}
@@ -63,7 +63,7 @@
 @push('livewire-select')
     <script>
         const selecteRecommendationLevelOfApproval = document.querySelector('#recommendation-select-level-of-approval');
-        const recommendationLevelOfApprovalOption = @json($levelOfApproval).map(level => ({
+        const recommendationLevelOfApprovalOption = @json($levels).map(level => ({
             label: `Level ${level}`,
             value: level,
         }));
@@ -76,7 +76,7 @@
 
         const dyanamicLevelApproverSelectContainer = document.querySelector('#recommendation-level-approver-container');
         selecteRecommendationLevelOfApproval.addEventListener('change', (event) => {
-            @this.set('level', parseInt(event.target.value));
+            @this.set('levelOfApproval', parseInt(event.target.value));
 
             window.addEventListener('load-recommendation-approvers', (event) => {
                 const recommendationApprovers = event.detail.recommendationApprovers;

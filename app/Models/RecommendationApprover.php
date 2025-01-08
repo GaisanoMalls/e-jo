@@ -11,15 +11,17 @@ class RecommendationApprover extends Model
     use HasFactory;
 
     protected $fillable = [
-        'approval_level_id',
-        'approver_id'
+        'recommendation_id',
+        'approver_id',
+        'level',
+        'is_approved'
     ];
 
     public $timestamps = false;
 
-    public function approvalLevel(): BelongsTo
+    public function recommendation(): BelongsTo
     {
-        return $this->belongsTo(RecommendationApprovalLevel::class, 'approval_level_id');
+        return $this->belongsTo(Recommendation::class);
     }
 
     public function approver(): BelongsTo

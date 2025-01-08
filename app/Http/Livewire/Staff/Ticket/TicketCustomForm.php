@@ -11,7 +11,6 @@ use Livewire\Component;
 class TicketCustomForm extends Component
 {
     public Ticket $ticket;
-    public ?Recommendation $recommendationServiceDeptAdmin = null;
     public array $customFormHeaderFields = [];
     public array $customFormRowFields = [];
 
@@ -50,10 +49,6 @@ class TicketCustomForm extends Component
 
     public function render()
     {
-        $this->recommendationServiceDeptAdmin = Recommendation::with('requestedByServiceDeptAdmin.profile')
-            ->where('ticket_id', $this->ticket->id)
-            ->first();
-
         return view('livewire.staff.ticket.ticket-custom-form');
     }
 }

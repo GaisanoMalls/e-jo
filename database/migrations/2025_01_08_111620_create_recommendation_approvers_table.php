@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\RecommendationApprovalLevel;
+use App\Models\Recommendation;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,9 +16,10 @@ return new class extends Migration {
     {
         Schema::create('recommendation_approvers', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(RecommendationApprovalLevel::class, 'approval_level_id')
-                ->constrained('recommendation_approval_levels')->cascadeOnDelete();
+            $table->foreignIdFor(Recommendation::class, 'recommendation_id')->constrained('recommendations')->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'approver_id')->constrained('users')->cascadeOnDelete();
+            $table->integer('level');
+            $table->boolean('is_approved')->default(false);
         });
     }
 

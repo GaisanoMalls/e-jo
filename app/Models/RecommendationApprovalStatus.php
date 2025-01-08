@@ -4,25 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class RecommendationApprovalLevel extends Model
+class RecommendationApprovalStatus extends Model
 {
     use HasFactory;
 
+    protected $table = 'recommendation_approval_status';
     protected $fillable = [
         'recommendation_id',
-        'level',
+        'approval_status',
+        'disapproved_reason',
     ];
-
     public $timestamps = false;
 
-    public function recommendation()
+    public function recommendation(): BelongsTo
     {
         return $this->belongsTo(Recommendation::class);
-    }
-
-    public function approvers()
-    {
-        return $this->hasMany(RecommendationApprover::class, 'approval_level_id');
     }
 }

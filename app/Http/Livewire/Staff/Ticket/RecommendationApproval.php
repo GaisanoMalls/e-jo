@@ -7,7 +7,6 @@ use App\Http\Traits\AppErrorLog;
 use \App\Http\Traits\RecommendationApproval as RecommendationApprovalTrait;
 use App\Models\ActivityLog;
 use App\Models\Recommendation;
-use App\Models\RecommendationApprover;
 use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
@@ -40,21 +39,20 @@ class RecommendationApproval extends Component
     private function isAllowedToApproveRecommendation()
     {
         return Recommendation::where('ticket_id', $this->ticket->id)
-            ->withWhereHas('approvalLevels.approvers', function ($approver) {
-                $approver->where('approver_id', auth()->user()->id);
+            ->withWhereHas('approvers', function ($approver) {
+                $approver->where('recommendation_approvers.approver_id', auth()->user()->id);
             })->exists();
     }
 
     public function approveTicketRecommendation()
     {
         try {
-            $recommendation = Recommendation::where([
-                ['ticket_id', $this->ticket->id],
-                ['approval_status', RecommendationApprovalStatusEnum::PENDING]
-            ])->first();
+            $recommendation = Recommendation::where('ticket_id', $this->ticket->id)
+                ->withWhereHas('approvalStatus', fn($status) => $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING))
+                ->first();
 
             if ($recommendation->exists()) {
-                $this->approveRecommendationApproval($this->ticket);
+                // $this->approveRecommendationApproval($this->ticket);
                 // $recommendation->update(['approval_status' => RecommendationApprovalStatusEnum::APPROVED]);
 
                 $events = ['loadCustomForm', 'loadRecommendationApproval', 'loadTicketLogs'];
@@ -83,10 +81,9 @@ class RecommendationApproval extends Component
     public function disapproveTicketRecommendation()
     {
         try {
-            $recommendation = Recommendation::where([
-                ['ticket_id', $this->ticket->id],
-                ['approval_status', RecommendationApprovalStatusEnum::PENDING]
-            ])->first();
+            $recommendation = Recommendation::where('ticket_id', $this->ticket->id)
+                ->withWhereHas('approvalStatus', fn($status) => $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING))
+                ->first();
 
             if ($recommendation->exists()) {
                 if ($this->disapprovedReason == null) {
@@ -94,11 +91,12 @@ class RecommendationApproval extends Component
                     return;
                 }
 
-                $recommendation->update([
+                $recommendation->approvalStatus()->update([
+                    'approval_status' => RecommendationApprovalStatusEnum::DISAPPROVED,
                     'disapproved_reason' => $this->disapprovedReason,
-                    'approval_status' => RecommendationApprovalStatusEnum::DISAPPROVED
                 ]);
 
+                // 'approval_status' => RecommendationApprovalStatusEnum::DISAPPROVED
                 $events = ['loadCustomForm', 'loadRecommendationApproval', 'loadTicketLogs'];
                 foreach ($events as $event) {
                     $this->emit($event);
@@ -128,10 +126,9 @@ class RecommendationApproval extends Component
 
     public function isRecommendationRequested()
     {
-        return Recommendation::where([
-            ['ticket_id', $this->ticket->id],
-            ['is_requesting_ict_approval', true],
-        ])->exists();
+        return Recommendation::where('ticket_id', $this->ticket->id)
+            ->whereNotNull('requested_by_sda_id')
+            ->exists();
     }
 
     /**
@@ -153,11 +150,9 @@ class RecommendationApproval extends Component
     private function getRecommendations()
     {
         return Recommendation::with('requestedByServiceDeptAdmin.profile')
-            ->where([
-                ['ticket_id', $this->ticket->id],
-                ['is_requesting_ict_approval', true],
-                ['requested_by_sda_id', '!=', null]
-            ])->get();
+            ->where('ticket_id', $this->ticket->id)
+            ->whereNotNull('requested_by_sda_id')
+            ->get();
     }
 
     public function render()
@@ -165,10 +160,9 @@ class RecommendationApproval extends Component
         $this->recommendations = $this->getRecommendations();
         $this->approvalHistory = Recommendation::where('ticket_id', $this->ticket->id)->orderByDesc('created_at')->get();
         $this->currentRecommendation = Recommendation::where('ticket_id', $this->ticket->id)->latest('created_at')->first();
-        $this->newRecommendation = Recommendation::where([
-            ['ticket_id', $this->ticket->id],
-            ['approval_status', RecommendationApprovalStatusEnum::PENDING]
-        ])->latest('created_at')
+        $this->newRecommendation = Recommendation::where('ticket_id', $this->ticket->id)
+            ->withWhereHas('approvalStatus', fn($status) => $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING))
+            ->latest('created_at')
             ->first();
 
         return view('livewire.staff.ticket.recommendation-approval');

@@ -18,10 +18,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'requested_by_sda_id')->constrained('users')->cascadeOnDelete();
-            $table->boolean('is_requesting_ict_approval')->default(false);
-            $table->string('approval_status');
             $table->mediumText('reason');
-            $table->mediumText('disapproved_reason')->nullable();
+            $table->integer('level_of_approval');
             $table->timestamps();
         });
     }

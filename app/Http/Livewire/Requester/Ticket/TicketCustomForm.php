@@ -73,7 +73,7 @@ class TicketCustomForm extends Component
     {
         return Recommendation::where([
             ['ticket_id', $this->ticket->id],
-            ['is_requesting_ict_approval', true],
+            ['is_requesting_for_approval', true],
         ])->exists();
     }
 
