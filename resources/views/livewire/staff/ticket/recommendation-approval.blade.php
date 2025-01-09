@@ -12,7 +12,7 @@
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-1">
                         @if (
                             $this->isRequesterServiceDeptAdmin() &&
-                                $newRecommendation->approval_status === RecommendationApprovalStatusEnum::PENDING->value)
+                                $newRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::PENDING->value)
                             <div class="alert d-inline-block mb-0 gap-1 border-0 py-2 px-3" role="alert"
                                 style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                                 <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
@@ -54,7 +54,7 @@
                             </span>
                         </div>
                     @endif
-                    @if (!$this->isRequesterServiceDeptAdmin() && $isAllowedToApproveRecommendation && $newRecommendation)
+                    @if (!$this->isRequesterServiceDeptAdmin() && $this->isApproverInRecommendationApprovers($ticket) && $newRecommendation)
                         <div class="d-flex gap-2 mt-2">
                             <button type="button"
                                 class="btn d-flex gap-2 align-items-center justify-content-center w-auto"
@@ -75,7 +75,7 @@
                     @endif
                 </div>
             @elseif (auth()->user()->hasRole(Role::AGENT))
-                @if ($currentRecommendation->approval_status === RecommendationApprovalStatusEnum::APPROVED->value)
+                @if ($currentRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::APPROVED->value)
                     <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
                         style="font-size: 13px; background-color: #dffdef;">
                         <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
@@ -83,7 +83,7 @@
                     </div>
                 @endif
 
-                @if ($currentRecommendation->approval_status === RecommendationApprovalStatusEnum::PENDING->value)
+                @if ($currentRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::PENDING->value)
                     <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
                         style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                         <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
@@ -91,7 +91,7 @@
                     </div>
                 @endif
 
-                @if ($$currentRecommendation->approval_status === RecommendationApprovalStatusEnum::DISAPPROVED->value)
+                @if ($$currentRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::DISAPPROVED->value)
                     <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
                         style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                         <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
@@ -100,7 +100,7 @@
                 @endif
             @endif
         @else
-            @if ($currentRecommendation->approval_status === RecommendationApprovalStatusEnum::APPROVED->value)
+            @if ($currentRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::APPROVED->value)
                 <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
                     style="font-size: 13px; background-color: #dffdef;">
                     <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
@@ -108,7 +108,7 @@
                 </div>
             @endif
 
-            @if ($currentRecommendation->approval_status === RecommendationApprovalStatusEnum::DISAPPROVED->value)
+            @if ($currentRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::DISAPPROVED->value)
                 <div class="alert d-inline-block mb-4 gap-1 border-0 py-2 px-3" role="alert"
                     style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                     <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
@@ -134,7 +134,8 @@
                                 @foreach ($approvalHistory as $recommendation)
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div class="ms-2 me-auto" style="font-size: 13px;">
-                                            <div class="fw-bold">{{ $recommendation->approval_status }}</div>
+                                            <div class="fw-bold">{{ $recommendation->approvalStatus->approval_status }}
+                                            </div>
                                             <div class="d-flex flex-column">
                                                 <span>
                                                     <span style="text-decoration: underline !important;">

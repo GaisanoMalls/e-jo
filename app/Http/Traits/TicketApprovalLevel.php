@@ -146,9 +146,9 @@ trait TicketApprovalLevel
                         foreach ($nextLevelApprovals as $nextLevelApproval) {
                             $approver = $nextLevelApproval->helpTopicApprover->approver;
                             if ($approver->id !== auth()->user()->id) {
-                                static::sendNotificationToNextApprover($this->ticket, $approver);
+                                static::sendNotificationToNextApprover($ticket, $approver);
                             } else {
-                                static::notifyAndEmailServiceDepartmentAdminAndRequester($this->ticket);
+                                static::notifyAndEmailServiceDepartmentAdminAndRequester($ticket);
                                 break;
                             }
                         }
@@ -167,7 +167,6 @@ trait TicketApprovalLevel
             }
 
             return true;
-
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
             return false;
