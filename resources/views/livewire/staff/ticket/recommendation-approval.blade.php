@@ -73,11 +73,38 @@
                             </button>
                         </div>
                     @endif
+                    <hr>
+                    <div class="d-flex flex-column flex-wrap gap-2">
+                        <small class="fw-semibold">Approvers</small>
+                        <div class="d-flex flex-wrap gap-3">
+                            @foreach ($approvalLevels as $level)
+                                @php $approvers = $this->fetchApprovers($level); @endphp
+                                @if ($approvers->isNotEmpty())
+                                    <div class="d-flex flex-column gap-1">
+                                        <div class="d-flex align-items-center gap-1">
+                                            <i class="bi bi-circle" style="font-size: 0.75rem;"></i>
+                                            {{-- <i class="bi bi-check-circle-fill" style="font-size: 0.75rem;"></i> --}}
+                                            <small class="fw-semibold" style="font-size: 0.75rem;">
+                                                Level {{ $level }}
+                                            </small>
+                                        </div>
+                                        <div class="d-flex gap-1">
+                                            @foreach ($approvers as $approver)
+                                                <small class="border border-2 rounded-5 px-2"
+                                                    style="font-size: 0.70rem;">{{ $approver->profile->getFullName }}</small>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
             @elseif (auth()->user()->hasRole(Role::AGENT))
                 @if ($currentRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::APPROVED->value)
-                    <div class="alert d-inline-block gap-1 border-0 py-2 px-3" role="alert"
-                        style="font-size: 13px; background-color: #dffdef;">
+                    <div class="alert
+                                            d-inline-block gap-1 border-0 py-2 px-3"
+                        role="alert" style="font-size: 13px; background-color: #dffdef;">
                         <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
                         Approved
                     </div>
@@ -134,7 +161,8 @@
                                 @foreach ($approvalHistory as $recommendation)
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div class="ms-2 me-auto" style="font-size: 13px;">
-                                            <div class="fw-bold">{{ $recommendation->approvalStatus->approval_status }}
+                                            <div class="fw-bold">
+                                                {{ $recommendation->approvalStatus->approval_status }}
                                             </div>
                                             <div class="d-flex flex-column">
                                                 <span>
@@ -223,6 +251,7 @@
 @push('livewire-modal')
     <script>
         window.addEventListener('close-ticket-recommendation-disapproval-modal', () => {
-                    $('#disapproveTicketRecommendationModal').modal('hide');
+            $('#disapproveTicketRecommendationModal').modal('hide');
+        });
     </script>
 @endpush

@@ -29,8 +29,29 @@ class RecommendationApproval extends Component
     public ?Recommendation $newRecommendation = null;
     public ?Recommendation $currentRecommendation = null;
     public bool $isAllowedToApproveRecommendation = false;
+    public array $approvalLevels = [1, 2, 3, 4, 5];
 
     protected $listeners = ['loadRecommendationApproval' => '$refresh'];
+
+    public function fetchApprovers(int $level)
+    {
+        return User::with('profile')
+            ->withWhereHas('recommendationApprovers', function ($query) use ($level) {
+                $query->where('level', $level)
+                    ->withWhereHas('recommendation', function ($recommendation) {
+                        $recommendation->with('approvers')
+                            ->where('ticket_id', $this->ticket->id);
+                    });
+            })->get();
+    }
+
+    public function isApprovalApproved()
+    {
+        return RecommendationApprover::where('is_approved', true)
+            ->withWhereHas('recommendation', function ($recommendation) {
+                $recommendation->where('ticket_id', $this->ticket->id);
+            })->exists();
+    }
 
     public function isApproverInRecommendationApprovers(Ticket $ticket)
     {
