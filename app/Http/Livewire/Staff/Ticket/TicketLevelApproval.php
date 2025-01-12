@@ -47,10 +47,11 @@ class TicketLevelApproval extends Component
         return TicketApproval::where([
             ['ticket_id', $this->ticket->id],
             ['is_approved', true],
-        ])
-            ->withWhereHas('helpTopicApprover', fn($approver)
-                => $approver->where('help_topic_id', $this->ticket->help_topic_id))
-            ->exists();
+        ])->withWhereHas(
+                'helpTopicApprover',
+                fn($approver)
+                => $approver->where('help_topic_id', $this->ticket->help_topic_id)
+            )->exists();
     }
 
     public function islevelApproved(int $level)

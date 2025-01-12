@@ -9,7 +9,7 @@
     <div class="row mx-0">
         <div class="card ticket__card" id="userTicketCard">
             <div class="ticket__details__section">
-                <div class="mb-3 d-flex flex-column details__card__top">
+                <div class="d-flex flex-column details__card__top mb-3">
                     @livewire('approver.ticket.load-back-button-header', ['ticket' => $ticket])
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div class="d-flex align-items-center gap-3">
@@ -19,10 +19,10 @@
                         <div class="d-flex align-items-center gap-2"
                             style="color: {{ $ticket->priorityLevel->color }} !important;">
                             <i class="bi bi-flag-fill"></i>
-                            <p class="mb-0 ticket__details__priority">{{ $ticket->priorityLevel->name }}</p>
+                            <p class="ticket__details__priority mb-0">{{ $ticket->priorityLevel->name }}</p>
                         </div>
                     </div>
-                    <div class="d-flex flex-wrap align-items-center justify-content-between ticket__details__header">
+                    <div class="d-flex align-items-center justify-content-between ticket__details__header flex-wrap">
                         <div class="mb-2">
                             <h6 class="ticket__details__title mb-0">{{ $ticket->subject }}</h6>
                             <small class="ticket__details__datetime">
@@ -38,14 +38,14 @@
                         @if ($isCostingAmountNeedCOOApproval)
                             @livewire('approver.ticket.ticket-costing', ['ticket' => $ticket])
                         @endif
-                        <div class="card border-0 p-0 card__ticket__details">
-                            <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
+                        <div class="card card__ticket__details border-0 p-0">
+                            <div class="ticket__details__card__header d-flex justify-content-between flex-wrap">
                                 <div class="d-flex align-items-center user__account__media">
                                     @if ($ticket->user->profile->picture)
                                         <img src="{{ Storage::url($ticket->user->profile->picture) }}"
                                             class="image-fluid ticket__details__user__picture" alt="">
                                     @else
-                                        <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
+                                        <div class="user__name__initial d-flex align-items-center justify-content-center me-2 p-2 text-white"
                                             style="background-color: #24695C;">
                                             {{ $ticket->user->profile->getNameInitial() }}</div>
                                     @endif
@@ -64,9 +64,10 @@
                                 </small>
                             </div>
                             <div class="ticket__details__card__body">
+                                @livewire('approver.ticket.recommendation-approval', ['ticket' => $ticket])
                                 <div class="ticket__description">{!! $ticket->description !!}</div>
                                 @if ($ticket->fileAttachments->isNotEmpty())
-                                    <div class="ticket__attachments d-inline-flex gap-1 mb-3" data-bs-toggle="modal"
+                                    <div class="ticket__attachments d-inline-flex mb-3 gap-1" data-bs-toggle="modal"
                                         data-bs-target="#requesterTicketFilesModalForm">
                                         <i class="fa-solid fa-file-zipper"></i>
                                         <small class="attachment__count">{{ $ticket->fileAttachments->count() }}</small>
@@ -83,7 +84,7 @@
                             {{-- Replies/Comments --}}
                             @livewire('approver.ticket-clarifications', ['ticket' => $ticket])
                         @else
-                            <div class="row align-items-center bg-light p-2 py-3 rounded-3 mx-1 mt-2 mb-4">
+                            <div class="row align-items-center bg-light rounded-3 mx-1 mb-4 mt-2 p-2 py-3">
                                 <div class="col-md-12">
                                     <p class="mb-0" style="font-size: 13px; line-height: 19px;">
                                         Discussion with agent is disabled.

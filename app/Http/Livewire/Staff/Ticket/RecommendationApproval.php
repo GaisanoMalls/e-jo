@@ -25,7 +25,7 @@ class RecommendationApproval extends Component
     public ?Ticket $ticket;
     public ?string $disapprovedReason = null;
     public ?Collection $recommendations = null;
-    public ?Collection $approvalHistory;
+    public ?Collection $approvalHistory = null;
     public ?Recommendation $newRecommendation = null;
     public ?Recommendation $currentRecommendation = null;
     public bool $isAllowedToApproveRecommendation = false;
@@ -47,10 +47,23 @@ class RecommendationApproval extends Component
 
     public function isApprovalApproved()
     {
-        return RecommendationApprover::where('is_approved', true)
+        return RecommendationApprover::where([
+            ['approver_id', auth()->user()->id],
+            ['is_approved', true]
+        ])
             ->withWhereHas('recommendation', function ($recommendation) {
                 $recommendation->where('ticket_id', $this->ticket->id);
             })->exists();
+    }
+
+    public function isLevelApproved(int $level)
+    {
+        return RecommendationApprover::where([
+            ['is_approved', true],
+            ['level', $level]
+        ])->withWhereHas('recommendation', function ($recommendation) {
+            $recommendation->where('ticket_id', $this->ticket->id);
+        })->exists();
     }
 
     public function isApproverInRecommendationApprovers(Ticket $ticket)
