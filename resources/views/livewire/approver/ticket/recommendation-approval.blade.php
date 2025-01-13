@@ -6,13 +6,11 @@
 @if ($recommendations->isNotEmpty() && $this->isRecommendationRequested())
     <div>
         @if ($newRecommendation)
-            @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) && $newRecommendation)
+            @if (auth()->user()->hasRole(Role::APPROVER) && $newRecommendation)
                 <div class="d-flex flex-column rounded-3 mb-4 flex-wrap gap-2 border-0 p-3"
                     style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-1">
-                        @if (
-                            $this->isRequesterServiceDeptAdmin() &&
-                                $newRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::PENDING->value)
+                        @if ($newRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::PENDING->value)
                             <div class="alert d-inline-block mb-0 gap-1 border-0 px-3 py-2" role="alert"
                                 style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                                 <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
@@ -55,7 +53,7 @@
                         </div>
                     @endif
                     @if (!$this->isApprovalApproved())
-                        @if (!$this->isRequesterServiceDeptAdmin() && $this->isApproverInRecommendationApprovers($ticket) && $newRecommendation)
+                        @if ($this->isApproverInRecommendationApprovers($ticket) && $newRecommendation)
                             <div class="d-flex mt-2 gap-2">
                                 <button type="button"
                                     class="btn d-flex align-items-center justify-content-center w-auto gap-2"

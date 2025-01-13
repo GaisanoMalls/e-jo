@@ -8004,6 +8004,29 @@ nav .nav__user__picture {
   font-weight: 400;
   text-transform: none;
 }
+.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form {
+  border: 1px solid #ced4da;
+}
+.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .form__name {
+  font-size: 1.02rem;
+  text-transform: uppercase;
+}
+.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .form__label {
+  white-space: nowrap;
+}
+.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .pr__form__gmall__logo {
+  height: 50px;
+}
+.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .header__field {
+  font-size: 0.875rem;
+  border-bottom: 0.08rem solid #ced4da !important;
+}
+.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .header__field:focus {
+  border-bottom-color: #d32839 !important;
+}
+.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .row__field .field__value {
+  font-size: 0.875rem;
+}
 .approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__time {
   color: #717171;
   font-size: 0.75rem;

@@ -16,11 +16,11 @@ use App\Models\RecommendationApprover;
 use App\Notifications\AppNotification;
 use Illuminate\Support\Facades\Notification;
 use App\Enums\RecommendationApprovalStatusEnum;
-use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherTrait;
+use App\Http\Traits\RecommendationApproval as RecommendationApprovalTrait;
 
 class RecommendationApproval extends Component
 {
-    use CompiledUrlMatcherTrait;
+    use RecommendationApprovalTrait, AppErrorLog;
 
     public Ticket $ticket;
     public ?string $disapprovedReason = null;
@@ -83,7 +83,6 @@ class RecommendationApproval extends Component
 
             if ($recommendation->exists()) {
                 $this->approveRecommendationApproval($this->ticket);
-                // $recommendation->update(['approval_status' => RecommendationApprovalStatusEnum::APPROVED]);
 
                 $events = ['loadCustomForm', 'loadRecommendationApproval', 'loadTicketLogs'];
                 foreach ($events as $event) {
@@ -158,22 +157,6 @@ class RecommendationApproval extends Component
     {
         return Recommendation::where('ticket_id', $this->ticket->id)
             ->whereNotNull('requested_by_sda_id')
-            ->exists();
-    }
-
-    /**
-     * Verify whether the business unit of the ticket requester matches the business unit of the Service Department Admin.
-     */
-    public function isRequesterServiceDeptAdmin()
-    {
-        return User::where('id', auth()->user()->id)
-            ->withWhereHas('branches', function ($branch) {
-                $branch->whereIn('branches.id', $this->ticket->user->branches->pluck('id')->toArray());
-            })
-            ->withWhereHas('buDepartments', function ($department) {
-                $department->whereIn('departments.id', $this->ticket->user->buDepartments->pluck('id')->toArray());
-            })
-            ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
             ->exists();
     }
 

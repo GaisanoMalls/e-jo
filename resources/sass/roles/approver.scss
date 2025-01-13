@@ -968,6 +968,38 @@ nav {
                             text-transform: none;
                         }
                     }
+
+                    .custom__form {
+                        border: 1px solid #ced4da;
+
+                        .form__name {
+                            font-size: 1.02rem;
+                            text-transform: uppercase;
+                        }
+
+                        .form__label {
+                            white-space: nowrap;
+                        }
+
+                        .pr__form__gmall__logo {
+                            height: 50px;
+                        }
+
+                        .header__field {
+                            font-size: $fs-14;
+                            border-bottom: 0.08rem solid #ced4da !important;
+
+                            &:focus {
+                                border-bottom-color: #d32839 !important;
+                            }
+                        }
+
+                        .row__field {
+                            .field__value {
+                                font-size: $fs-14;
+                            }
+                        }
+                    }
                 }
 
                 .ticket__details__time {
