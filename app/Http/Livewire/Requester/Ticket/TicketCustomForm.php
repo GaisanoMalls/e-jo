@@ -61,10 +61,9 @@ class TicketCustomForm extends Component
 
     public function isTicketRecommendationIsApproved()
     {
-        return Recommendation::where([
-            ['ticket_id', $this->ticket->id],
-            ['approval_status', RecommendationApprovalStatusEnum::APPROVED]
-        ])->exists();
+        return Recommendation::where('ticket_id', $this->ticket->id)
+            ->withWhereHas('approvalStatus', fn($status) => $status->where('approval_status', RecommendationApprovalStatusEnum::APPROVED))
+            ->exists();
     }
 
     public function isRecommendationRequested()

@@ -26,7 +26,7 @@
     @include('layouts.user.account.includes.confirm_logout')
     @livewire('requester.ticket.create-ticket')
     @livewire('requester.notification.notification-canvas')
-    <div class="container mb-5 requester__section">
+    <div class="container-fluid p-lg-4 p-sm-2 requester__section">
         @livewire('offline')
         @if (Route::is('user.tickets.*'))
             @livewire('requester.ticket-tab')

@@ -26,7 +26,7 @@ class RecommendationApproval extends Component
     public ?string $disapprovedReason = null;
     public ?Collection $recommendations = null;
     public ?Collection $approvalHistory = null;
-    public ?Recommendation $newRecommendation = null;
+    public ?Recommendation $latestRecommendation = null;
     public ?Recommendation $currentRecommendation = null;
     public bool $isAllowedToApproveRecommendation = false;
     public array $approvalLevels = [1, 2, 3, 4, 5];
@@ -190,7 +190,7 @@ class RecommendationApproval extends Component
     public function render()
     {
         $this->recommendations = $this->getRecommendations();
-        $this->approvalHistory = Recommendation::with('approvalStatus')
+        $this->approvalHistory = Recommendation::with(['approvalStatus', 'approvers'])
             ->where('ticket_id', $this->ticket->id)
             ->orderByDesc('created_at')
             ->get();
@@ -198,11 +198,10 @@ class RecommendationApproval extends Component
             ->where('ticket_id', $this->ticket->id)
             ->latest('created_at')
             ->first();
-        $this->newRecommendation = Recommendation::where('ticket_id', $this->ticket->id)
+        $this->latestRecommendation = Recommendation::where('ticket_id', $this->ticket->id)
             ->withWhereHas('approvalStatus', fn($status) => $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING))
             ->latest('created_at')
             ->first();
-
         return view('livewire.staff.ticket.recommendation-approval');
     }
 }

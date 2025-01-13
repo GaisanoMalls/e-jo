@@ -147,6 +147,10 @@ $color-1: #d32839;
     box-shadow: 0px 1px 4px 0px rgba(132, 132, 132, 0.25);
 }
 
+body {
+    background-color: $body-color;
+}
+
 .tooltip {
     font-size: $fs-11;
 }
@@ -581,9 +585,6 @@ nav {
 }
 
 .approver__section {
-    margin-top: 30px;
-    margin-bottom: 50px;
-
     .page__header__title {
         font-size: $fs-18;
         font-weight: $fw-600;
@@ -720,7 +721,7 @@ nav {
 
             tbody {
                 tr {
-                    background-color: #F5F7F9;
+                    background-color: #FFFFFF;
                     font-weight: $fw-500;
                     color: #363636;
                     transition: all 0.3s;

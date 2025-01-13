@@ -140,6 +140,8 @@
 @push('extra')
     <script>
         document.getElementById('save-custom-form-as-pdf').addEventListener('click', function() {
+            console.log("clicked");
+
             var content = document.getElementById('ticket-custom-form');
             html2canvas(content, {
                 scale: 2,

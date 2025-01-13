@@ -183,6 +183,53 @@
                                                         {!! nl2br($recommendation->disapproved_reason) !!}
                                                     </span>
                                                 @endif
+                                                <p class="mb-0">
+                                                    <button class="btn btn-sm p-0 border-0" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#showApprovers"
+                                                        aria-expanded="false" aria-controls="showApprovers"
+                                                        style="font-size: 13px; text-decoration: underline !important;">
+                                                        Show approvers
+                                                    </button>
+                                                </p>
+                                                <div style="min-height: 120px;">
+                                                    <div class="collapse" id="showApprovers">
+                                                        <div class="card card-body">
+                                                            <div class="d-flex flex-column flex-wrap gap-2">
+                                                                <small class="fw-semibold">Approvers</small>
+                                                                <div class="d-flex flex-wrap gap-3">
+                                                                    @foreach ($approvalLevels as $level)
+                                                                        @php $approvers = $this->fetchApprovers($level); @endphp
+                                                                        @if ($approvers->isNotEmpty())
+                                                                            <div class="d-flex flex-column gap-1">
+                                                                                <div
+                                                                                    class="d-flex align-items-center gap-1">
+                                                                                    @if ($this->isLevelApproved($level))
+                                                                                        <i class="bi bi-check-circle-fill"
+                                                                                            style="font-size: 0.75rem; color: green;"></i>
+                                                                                    @else
+                                                                                        <i class="bi bi-circle"
+                                                                                            style="font-size: 0.75rem;"></i>
+                                                                                    @endif
+                                                                                    <small class="fw-semibold"
+                                                                                        style="font-size: 0.75rem;">
+                                                                                        Level {{ $level }}
+                                                                                    </small>
+                                                                                </div>
+                                                                                <div class="d-flex gap-1">
+                                                                                    @foreach ($approvers as $approver)
+                                                                                        <small
+                                                                                            class="rounded-5 border border-2 px-2"
+                                                                                            style="font-size: 0.70rem;">{{ $approver->profile->getFullName }}</small>
+                                                                                    @endforeach
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <span style="font-size: 11px;">

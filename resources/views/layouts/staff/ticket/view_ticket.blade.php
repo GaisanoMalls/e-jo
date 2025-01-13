@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-8 position-relative">
+                        <div class="col-lg-8 position-relative">
                             @livewire('staff.ticket.ticket-costing', ['ticket' => $ticket])
                             <div class="card border-0 p-0 card__ticket__details">
                                 @if ($requester)
@@ -149,7 +149,7 @@
                             @show
                             {{-- End Replies/Comments --}}
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-lg-4">
                             <div class="container__ticket__details__right">
                                 @livewire('staff.ticket.ticket-details', ['ticket' => $ticket])
                                 @livewire('staff.ticket.ticket-level-approval', ['ticket' => $ticket])

@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-8 position-relative mb-3">
+                    <div class="col-lg-8 position-relative mb-3">
                         @if ($isCostingAmountNeedCOOApproval)
                             @livewire('approver.ticket.ticket-costing', ['ticket' => $ticket])
                         @endif
@@ -97,7 +97,7 @@
                         @endif
                         {{-- End Replies/Comments --}}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-lg-4">
                         <div class="container__ticket__details__right">
                             @livewire('approver.ticket.ticket-details', ['ticket' => $ticket])
                             @livewire('approver.ticket.ticket-level-approval', ['ticket' => $ticket])

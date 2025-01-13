@@ -7232,6 +7232,10 @@ url(/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?4753c5ba57962b4d7bf8248a6
   letter-spacing: normal;
 }
 
+body {
+  background-color: #f3f4f6;
+}
+
 /* Keyframes */
 @keyframes slideIn {
   0% {
@@ -7466,10 +7470,6 @@ input:not(:focus)::placeholder {
 .custom__modal .custom__modal__content .modal__btnclose__bottom:active {
   outline: none !important;
   border-color: transparent;
-}
-
-body {
-  background-color: #f3f4f6;
 }
 
 .mobile__responsive__nav {
@@ -8460,10 +8460,6 @@ body {
   border-radius: 0.5rem;
 }
 
-.requester__section {
-  margin-top: 30px;
-  margin-bottom: 50px;
-}
 .requester__section .custom__card {
   border: 0;
   margin-bottom: 20px;

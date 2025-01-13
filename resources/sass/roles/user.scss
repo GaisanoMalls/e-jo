@@ -41,6 +41,10 @@ $color-1: #d32839;
     letter-spacing: normal;
 }
 
+body {
+    background-color: $body-color;
+}
+
 /* Keyframes */
 @keyframes slideIn {
     0% {
@@ -336,10 +340,6 @@ input {
             }
         }
     }
-}
-
-body {
-    background-color: $body-color;
 }
 
 .mobile__responsive__nav {
@@ -1566,9 +1566,6 @@ body {
 }
 
 .requester__section {
-    margin-top: 30px;
-    margin-bottom: 50px;
-
     .custom__card {
         border: 0;
         margin-bottom: 20px;

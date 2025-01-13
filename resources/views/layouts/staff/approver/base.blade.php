@@ -29,7 +29,7 @@
     @include('layouts.staff.approver.includes.navbar')
     @livewire('approver.notification.notification-canvas')
     @include('layouts.staff.approver.includes.modal.confirm_logout')
-    <div class="container mb-5 approver__section">
+    <div class="container-fluid p-lg-4 p-sm-2 approver__section">
         @livewire('offline')
         @if (!Utils::costingApprover2Only())
             @if (Route::is('approver.tickets.*'))
@@ -51,6 +51,7 @@
     @stack('livewire-modal')
     @stack('livewire-textarea')
     @stack('modal-with-error')
+    @stack('extra')
 </body>
 
 </html>

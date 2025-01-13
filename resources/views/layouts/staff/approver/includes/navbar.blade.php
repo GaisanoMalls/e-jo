@@ -2,8 +2,8 @@
     use App\Http\Traits\Utils;
 @endphp
 
-<nav class="navbar navbar-expand-lg bg-white py-3 sticky-top">
-    <div class="container gap-3">
+<nav class="navbar navbar-expand-lg bg-white py-3 px-lg-3 px-sm-2 sticky-top">
+    <div class="container-fluid gap-3">
         <a href="{{ Utils::costingApprover2Only() ? route('approver.tickets.costing_approval') : route('approver.dashboard') }}"
             class="navbar-brand d-flex gap-2 align-items-center justify-content-center">
             <img src="{{ asset('images/gmall.png') }}" class="company__logo" alt="GMall Ticketing System">
