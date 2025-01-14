@@ -1,6 +1,6 @@
 <div>
     <div class="row my-5 gap-4">
-        @if ($toRateTickets->isNotEmpty())
+        @if ($toRateTickets)
             @foreach ($toRateTickets as $ticket)
                 <div wire:key="ticket-{{ $ticket->id }}" class="card border-0 feedback__card"
                     wire:key="ticket-feedback-{{ $ticket->id }}">
@@ -226,12 +226,12 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div
-                                        class="mb-3 rounded-3 @error('had_issues_encountered') bg-light py-2 px-3 @enderror">
+                                        class="mb-3 rounded-3 @error('hadIssuesEncountered') bg-light py-2 px-3 @enderror">
                                         <label class="form-label form__field__label">Have you experience any
                                             technical problems while using the ticketing system?</label>
                                         <div class="d-flex flex-column gap-1">
                                             <div class="form-check d-flex gap-2 align-items-center">
-                                                <input wire:model="had_issues_encountered" value="Yes"
+                                                <input wire:model="hadIssuesEncountered" value="1"
                                                     class="form-check-input radio__button" type="radio"
                                                     id="yes">
                                                 <label class="form-check-label check__label" for="yes">
@@ -239,7 +239,7 @@
                                                 </label>
                                             </div>
                                             <div class="form-check d-flex gap-2 align-items-center">
-                                                <input wire:model="had_issues_encountered" value="No"
+                                                <input wire:model="hadIssuesEncountered" value="0"
                                                     class="form-check-input radio__button" type="radio"
                                                     id="no">
                                                 <label class="form-check-label check__label" for="no">
@@ -247,7 +247,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        @error('had_issues_encountered')
+                                        @error('hadIssuesEncountered')
                                             <small class="text-danger feedback__error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}

@@ -13,6 +13,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
@@ -28,7 +29,6 @@ class RecommendationApproval extends Component
     public ?Collection $approvalHistory = null;
     public ?Recommendation $latestRecommendation = null;
     public ?Recommendation $currentRecommendation = null;
-    public bool $isAllowedToApproveRecommendation = false;
     public array $approvalLevels = [1, 2, 3, 4, 5];
 
     protected $listeners = ['loadRecommendationApproval' => '$refresh'];
@@ -131,6 +131,7 @@ class RecommendationApproval extends Component
                 $recommendation->approvalStatus()->update([
                     'approval_status' => RecommendationApprovalStatusEnum::DISAPPROVED,
                     'disapproved_reason' => $this->disapprovedReason,
+                    'date' => Carbon::now()
                 ]);
 
                 // 'approval_status' => RecommendationApprovalStatusEnum::DISAPPROVED
@@ -192,6 +193,17 @@ class RecommendationApproval extends Component
         ])->where('ticket_id', $this->ticket->id)
             ->whereNotNull('requested_by_sda_id')
             ->get();
+    }
+
+    public function disApprovedRecommendationLevel(int $level, Recommendation $recommendation)
+    {
+        return RecommendationApprover::withWhereHas('recommendation.approvalStatus', function ($status) {
+            $status->where('approval_status', RecommendationApprovalStatusEnum::DISAPPROVED);
+        })
+            ->where([
+                ['level', $level],
+                ['is_approved', false]
+            ])->exists();
     }
 
     public function render()

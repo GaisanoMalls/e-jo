@@ -49,7 +49,7 @@ class CloseTicket extends Component
             new AppNotification(
                 ticket: $this->ticket,
                 title: "Ticket #{$this->ticket->ticket_number} (Closed)",
-                message: "{$this->ticket->agent->profile->getFullName} closed the ticket."
+                message: "{$this->ticket->agent?->profile->getFullName} closed the ticket."
             )
         );
         $this->actionOnSubmit();

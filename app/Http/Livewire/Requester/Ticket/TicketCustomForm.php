@@ -13,7 +13,6 @@ use Livewire\WithFileUploads;
 class TicketCustomForm extends Component
 {
     public Ticket $ticket;
-    public ?Recommendation $recommendation = null;
     public array $customFormHeaderFields = [];
     public array $customFormRowFields = [];
 
@@ -21,8 +20,6 @@ class TicketCustomForm extends Component
 
     public function mount()
     {
-        $this->recommendation = Recommendation::where('ticket_id', $this->ticket->id)->first();
-
         $this->customFormHeaderFields = FieldHeaderValue::with('field')
             ->where('ticket_id', $this->ticket->id)
             ->get()
@@ -57,20 +54,6 @@ class TicketCustomForm extends Component
         sort($headers);
 
         return ['headers' => $headers, 'fields' => $fields];
-    }
-
-    public function isTicketRecommendationIsApproved()
-    {
-        return Recommendation::where('ticket_id', $this->ticket->id)
-            ->withWhereHas('approvalStatus', fn($status) => $status->where('approval_status', RecommendationApprovalStatusEnum::APPROVED))
-            ->exists();
-    }
-
-    public function isRecommendationRequested()
-    {
-        return Recommendation::where('ticket_id', $this->ticket->id)
-            ->whereNotNull('requested_by_sda_id')
-            ->exists();
     }
 
     public function render()

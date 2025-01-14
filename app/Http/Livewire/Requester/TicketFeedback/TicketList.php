@@ -2,28 +2,28 @@
 
 namespace App\Http\Livewire\Requester\TicketFeedback;
 
-use App\Enums\TicketRatingEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Models\Feedback;
 use App\Models\Status;
 use App\Models\Ticket;
 use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class TicketList extends Component
 {
     use AppErrorLog;
 
-    public Ticket $ticket;
-    public TicketRatingEnum $rating;
-    public Collection $toRateTickets;
+    public ?Ticket $ticket = null;
+    public ?int $rating = null;
+    public ?Collection $toRateTickets = null;
     public ?string $ticketNumber = null;
     public ?string $fullName = null;
     public ?string $email = null;
     public ?string $feedback = null;
     public ?string $suggestion = null;
-    public bool $had_issues_encountered = false;
+    public ?bool $hadIssuesEncountered = null;
 
     public function mount()
     {
@@ -40,15 +40,15 @@ class TicketList extends Component
     {
         return [
             'rating' => 'required|in:1,2,3,4,5',
-            'had_issues_encountered' => 'required',
+            'hadIssuesEncountered' => 'required',
             'feedback' => 'required',
-            'suggestion' => 'required',
+            'suggestion' => 'nullable',
         ];
     }
 
     public function giveFeedback(Ticket $ticket)
     {
-        $this->ticket = $ticket->id;
+        $this->ticket = $ticket;
         $this->ticketNumber = $ticket->ticket_number;
     }
 
@@ -62,21 +62,21 @@ class TicketList extends Component
         $this->validate();
 
         try {
-            if (!Feedback::where('ticket_id', $this->ticket)->exists()) {
-                Feedback::where('ticket_id', $this->ticket)->create([
-                    'user_id' => auth()->user()->id,
-                    'ticket_id' => $this->ticket,
-                    'rating' => $this->rating,
-                    'had_issues_encountered' => $this->had_issues_encountered,
-                    'description' => $this->feedback,
-                    'suggestion' => $this->suggestion,
-                ]);
 
-                $this->reset();
-                $this->dispatchBrowserEvent('close-feedback-modal');
-            }
+            Feedback::create([
+                'user_id' => auth()->user()->id,
+                'ticket_id' => $this->ticket->id,
+                'rating' => $this->rating,
+                'had_issues_encountered' => $this->hadIssuesEncountered,
+                'description' => $this->feedback,
+                'suggestion' => $this->suggestion,
+            ]);
+
+            $this->reset();
+            $this->dispatchBrowserEvent('close-feedback-modal');
 
         } catch (Exception $e) {
+            Log::error($e->getMessage());
             AppErrorLog::getError($e->getMessage(), false);
         }
     }

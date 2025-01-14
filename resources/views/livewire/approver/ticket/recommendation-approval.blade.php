@@ -134,13 +134,16 @@
                                 @foreach ($approvalHistory as $recommendation)
                                     <li class="list-group-item d-flex justify-content-between">
                                         <div class="me-auto ms-2" style="font-size: 13px;">
-                                            <div class="d-flex gap-2 mb-1">
-                                                <span class="fw-bold">
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <span class="fw-bold" @style([
+                                                    'color: #006102' => $recommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::APPROVED->value,
+                                                    'color: #F7454A' => $recommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::DISAPPROVED->value,
+                                                ])>
                                                     {{ $recommendation->approvalStatus->approval_status }}
                                                 </span>
                                                 @if ($recommendation->approvalStatus->date)
                                                     -
-                                                    <span>
+                                                    <span class="fw-semibold text-muted" style="font-size: 12px;">
                                                         {{ $recommendation->approvalStatus->dateApprovedOrDisapproved() }},
                                                         {{ Carbon::parse($recommendation->approvalStatus->date)->format('D') }}
                                                         @
@@ -161,12 +164,12 @@
                                                     </span>
                                                     {!! nl2br($recommendation->reason) !!}
                                                 </span>
-                                                @if ($recommendation->disapproved_reason != null)
+                                                @if ($this->disapprovedRecommendation($recommendation))
                                                     <span>
                                                         <span style="text-decoration: underline !important;">
                                                             Reason of disapproval:
                                                         </span>
-                                                        {!! nl2br($recommendation->disapproved_reason) !!}
+                                                        {!! nl2br($recommendation->approvalStatus->disapproved_reason) !!}
                                                     </span>
                                                 @endif
                                                 <div>
@@ -198,8 +201,13 @@
                                                                                             <i class="bi bi-check-circle-fill"
                                                                                                 style="font-size: 0.75rem; color: green;"></i>
                                                                                         @else
-                                                                                            <i class="bi bi-circle"
-                                                                                                style="font-size: 0.75rem;"></i>
+                                                                                            @if ($this->disApprovedRecommendationLevel($level, $recommendation))
+                                                                                                <i class="bi bi-x-circle-fill"
+                                                                                                    style="color: red;"></i>
+                                                                                            @else
+                                                                                                <i class="bi bi-circle"
+                                                                                                    style="font-size: 0.75rem;"></i>
+                                                                                            @endif
                                                                                         @endif
                                                                                         <small class="fw-semibold"
                                                                                             style="font-size: 0.75rem;">

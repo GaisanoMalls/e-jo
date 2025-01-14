@@ -59,20 +59,6 @@ class TicketCustomForm extends Component
         return ['headers' => $headers, 'fields' => $fields];
     }
 
-    public function isTicketRecommendationIsApproved()
-    {
-        return Recommendation::where('ticket_id', $this->ticket->id)
-            ->withWhereHas('approvalStatus', fn($status) => $status->where('approval_status', RecommendationApprovalStatusEnum::APPROVED))
-            ->exists();
-    }
-
-    public function isRecommendationRequested()
-    {
-        return Recommendation::where('ticket_id', $this->ticket->id)
-            ->whereNotNull('requested_by_sda_id')
-            ->exists();
-    }
-
     public function render()
     {
         return view('livewire.approver.ticket.ticket-custom-form');

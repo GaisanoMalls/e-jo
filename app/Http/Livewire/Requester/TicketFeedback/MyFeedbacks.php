@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Requester\TicketFeedback;
 
-use App\Enums\TicketRatingEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Models\Feedback;
 use Exception;
@@ -13,17 +12,19 @@ class MyFeedbacks extends Component
 {
     use AppErrorLog;
 
-    public TicketRatingEnum $rating;
-    public Collection $feedbacks;
-    public int $userId;
-    public int $feedbackId;
-    public int $ticket;
-    public string $ticketNumber;
-    public string $fullName;
-    public string $email;
-    public string $feedback;
-    public string $suggestion;
-    public bool $had_issues_encountered = false;
+    public ?int $rating = null;
+    public ?Collection $feedbacks = null;
+    public ?int $userId = null;
+    public ?int $feedbackId = null;
+    public ?int $ticket = null;
+    public ?string $ticketNumber = null;
+    public ?string $fullName = null;
+    public ?string $email = null;
+    public ?string $feedback = null;
+    public ?string $suggestion = null;
+    public ?bool $hadIssuesEncountered = null;
+
+    protected $listeners = ['loadMyFeedbacks' => '$refresh'];
 
     public function mount()
     {
@@ -37,7 +38,7 @@ class MyFeedbacks extends Component
     {
         return [
             'rating' => 'required|in:1,2,3,4,5',
-            'had_issues_encountered' => 'required',
+            'hadIssuesEncountered' => 'required',
             'feedback' => 'required',
         ];
     }
@@ -51,7 +52,7 @@ class MyFeedbacks extends Component
 
         $this->feedbackId = $feedback->id;
         $this->rating = $feedback->rating;
-        $this->had_issues_encountered = $feedback->had_issues_encountered;
+        $this->hadIssuesEncountered = $feedback->had_issues_encountered;
         $this->feedback = $feedback->description;
         $this->suggestion = $feedback->suggestion;
     }
@@ -67,12 +68,13 @@ class MyFeedbacks extends Component
                 ['user_id', auth()->user()->id],
             ])->update([
                         'rating' => $this->rating,
-                        'had_issues_encountered' => $this->had_issues_encountered,
+                        'had_issues_encountered' => $this->hadIssuesEncountered,
                         'description' => $this->feedback,
                         'suggestion' => $this->suggestion,
                     ]);
 
-            $this->resetExcept('userId');
+            $this->emit('loadMyFeedbacks');
+            $this->resetExcept('userId', 'feedbacks');
             $this->dispatchBrowserEvent('close-edit-feedback-modal');
 
         } catch (Exception $e) {
@@ -84,6 +86,7 @@ class MyFeedbacks extends Component
     {
         try {
             $feedback->delete();
+            $this->emit('loadMyFeedbacks');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage(), false);
         }

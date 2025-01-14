@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\Approver\Ticket;
 
+use App\Models\RecommendationApprovalStatus;
 use Exception;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Ticket;
+use Illuminate\Support\Carbon;
 use Livewire\Component;
 use App\Models\ActivityLog;
 use App\Models\Recommendation;
@@ -28,7 +30,6 @@ class RecommendationApproval extends Component
     public ?Collection $approvalHistory = null;
     public ?Recommendation $newRecommendation = null;
     public ?Recommendation $currentRecommendation = null;
-    public bool $isAllowedToApproveRecommendation = false;
     public array $approvalLevels = [1, 2, 3, 4, 5];
 
     protected $listeners = ['loadRecommendationApproval' => '$refresh'];
@@ -133,6 +134,7 @@ class RecommendationApproval extends Component
                 $recommendation->approvalStatus()->update([
                     'approval_status' => RecommendationApprovalStatusEnum::DISAPPROVED,
                     'disapproved_reason' => $this->disapprovedReason,
+                    'date' => Carbon::now()
                 ]);
 
                 // 'approval_status' => RecommendationApprovalStatusEnum::DISAPPROVED
@@ -178,6 +180,28 @@ class RecommendationApproval extends Component
         ])->where('ticket_id', $this->ticket->id)
             ->whereNotNull('requested_by_sda_id')
             ->get();
+    }
+
+    public function disApprovedRecommendationLevel(int $level, Recommendation $recommendation)
+    {
+        return RecommendationApprover::withWhereHas('recommendation.approvalStatus', function ($status) use ($recommendation) {
+            $status->where('approval_status', RecommendationApprovalStatusEnum::DISAPPROVED);
+        })
+            ->where([
+                ['level', $level],
+                ['is_approved', false],
+                ['recommendation_id', $recommendation->id]
+            ])->exists();
+    }
+
+    public function disapprovedRecommendation(Recommendation $recommendation)
+    {
+        return Recommendation::withWhereHas('approvalStatus', function ($status) use ($recommendation) {
+            $status->where([
+                ['recommendation_id', $recommendation->id],
+                ['approval_status', RecommendationApprovalStatusEnum::DISAPPROVED]
+            ])->whereNotNull('disapproved_reason');
+        })->exists();
     }
 
     public function render()
