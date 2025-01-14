@@ -10,6 +10,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Notification;
 
 trait RecommendationApproval
@@ -160,7 +161,8 @@ trait RecommendationApproval
                     $recommendation->where('ticket_id', $ticket->id);
                 })
                     ->update([
-                        'approval_status' => RecommendationApprovalStatusEnum::APPROVED
+                        'approval_status' => RecommendationApprovalStatusEnum::APPROVED,
+                        'date' => Carbon::now()
                     ]);
             }
 

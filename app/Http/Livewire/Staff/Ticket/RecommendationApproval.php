@@ -33,36 +33,43 @@ class RecommendationApproval extends Component
 
     protected $listeners = ['loadRecommendationApproval' => '$refresh'];
 
-    public function fetchApprovers(int $level)
+    public function fetchApprovers(int $level, int $recommendationId)
     {
         return User::with('profile')
-            ->withWhereHas('recommendationApprovers', function ($query) use ($level) {
+            ->withWhereHas('recommendationApprovers', function ($query) use ($level, $recommendationId) {
                 $query->where('level', $level)
-                    ->withWhereHas('recommendation', function ($recommendation) {
+                    ->withWhereHas('recommendation', function ($recommendation) use ($recommendationId) {
                         $recommendation->with('approvers')
-                            ->where('ticket_id', $this->ticket->id);
+                            ->where('ticket_id', $this->ticket->id)
+                            ->withWhereHas('approvalStatus', fn($status) => $status->where('recommendation_id', $recommendationId));
                     });
             })->get();
     }
 
-    public function isApprovalApproved()
+    public function isApprovalApproved(int $recommendationId)
     {
         return RecommendationApprover::where([
             ['approver_id', auth()->user()->id],
             ['is_approved', true]
         ])
-            ->withWhereHas('recommendation', function ($recommendation) {
-                $recommendation->where('ticket_id', $this->ticket->id);
+            ->withWhereHas('recommendation', function ($recommendation) use ($recommendationId) {
+                $recommendation->where([
+                    ['ticket_id', $this->ticket->id],
+                    ['recommendation_id', $recommendationId],
+                ]);
             })->exists();
     }
 
-    public function isLevelApproved(int $level)
+    public function isLevelApproved(int $level, int $recommendationId)
     {
         return RecommendationApprover::where([
             ['is_approved', true],
             ['level', $level]
-        ])->withWhereHas('recommendation', function ($recommendation) {
-            $recommendation->where('ticket_id', $this->ticket->id);
+        ])->withWhereHas('recommendation', function ($recommendation) use ($recommendationId) {
+            $recommendation->where([
+                ['ticket_id', $this->ticket->id],
+                ['recommendation_id', $recommendationId],
+            ]);
         })->exists();
     }
 
@@ -200,8 +207,9 @@ class RecommendationApproval extends Component
             ->first();
         $this->latestRecommendation = Recommendation::where('ticket_id', $this->ticket->id)
             ->withWhereHas('approvalStatus', fn($status) => $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING))
-            ->latest('created_at')
+            ->orderBy('created_at')
             ->first();
+
         return view('livewire.staff.ticket.recommendation-approval');
     }
 }

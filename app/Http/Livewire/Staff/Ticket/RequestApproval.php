@@ -85,7 +85,7 @@ class RequestApproval extends Component
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
                     ->first();
 
-                if ($recommendationApprovers->isNotEmpty() && $requesterServiceDeptAdmin->exists()) {
+                if ($recommendationApprovers->isNotEmpty() || $requesterServiceDeptAdmin->exists()) {
                     $this->ticket->update(['status_id' => Status::OPEN]);
 
                     $recommendation = Recommendation::create([

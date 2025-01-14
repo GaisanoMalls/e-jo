@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->foreignIdFor(Recommendation::class, 'recommendation_id')->constrained('recommendations')->cascadeOnDelete();
             $table->enum('approval_status', RecommendationApprovalStatusEnum::toArray())->default(RecommendationApprovalStatusEnum::PENDING->value);
             $table->longText('disapproved_reason')->nullable();
+            $table->dateTime('date')->nullable();
         });
     }
 

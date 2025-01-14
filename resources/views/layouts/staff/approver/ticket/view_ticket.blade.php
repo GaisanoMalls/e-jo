@@ -65,10 +65,11 @@
                             </div>
                             <div class="ticket__details__card__body">
                                 @livewire('approver.ticket.recommendation-approval', ['ticket' => $ticket])
-                                @if ($ticket->helpTopic->form)
+                                @if ($ticket->helpTopic?->form)
                                     @livewire('approver.ticket.ticket-custom-form', ['ticket' => $ticket])
+                                @else
+                                    <div class="ticket__description">{!! $ticket->description !!}</div>
                                 @endif
-                                <div class="ticket__description">{!! $ticket->description !!}</div>
                                 @if ($ticket->fileAttachments->isNotEmpty())
                                     <div class="ticket__attachments d-inline-flex mb-3 gap-1" data-bs-toggle="modal"
                                         data-bs-target="#requesterTicketFilesModalForm">

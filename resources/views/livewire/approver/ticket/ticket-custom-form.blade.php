@@ -14,30 +14,6 @@
                 <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
                 Approved
             </div>
-        @else
-            <div class="mb-4 d-flex flex-wrap gap-2 border-0 flex-row rounded-3 align-items-center justify-content-between p-3"
-                style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;">
-                <span class="border-0 d-flex align-items-center" style="font-size: 0.9rem;">
-                    <span class="me-2">
-                        <div class="d-flex align-items-center">
-                            @if ($recommendation->requestedByServiceDeptAdmin?->profile->picture)
-                                <img src="{{ Storage::url($recommendation?->requestedByServiceDeptAdmin->profile->picture) }}"
-                                    class="image-fluid rounded-circle"
-                                    style="height: 26px !important; width: 26px !important;">
-                            @else
-                                <div class="d-flex align-items-center p-2 me-1 justify-content-center text-white rounded-circle"
-                                    style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
-                                    {{ $recommendation->requestedByServiceDeptAdmin?->profile->getNameInitial() }}
-                                </div>
-                            @endif
-                            <strong class="text-muted">
-                                {{ $recommendation->requestedByServiceDeptAdmin?->profile->getFullName }}
-                            </strong>
-                        </div>
-                    </span>
-                    is requesting for approval
-                </span>
-            </div>
         @endif
     @endif
     @if (!empty($customFormHeaderFields) || !empty($customFormRowFields))

@@ -1,59 +1,52 @@
 @php
     use App\Models\Role;
+    use Illuminate\Support\Carbon;
     use App\Enums\RecommendationApprovalStatusEnum;
 @endphp
 
 @if ($recommendations->isNotEmpty() && $this->isRecommendationRequested())
     <div>
-        @if ($newRecommendation)
-            @if (auth()->user()->hasRole(Role::APPROVER) && $newRecommendation)
+        @if ($latestRecommendation)
+            @if (auth()->user()->hasRole(Role::APPROVER) && $latestRecommendation)
                 <div class="d-flex flex-column rounded-3 mb-4 flex-wrap gap-2 border-0 p-3"
                     style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-1">
-                        @if ($newRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::PENDING->value)
-                            <div class="alert d-inline-block mb-0 gap-1 border-0 px-3 py-2" role="alert"
-                                style="font-size: 13px; background-color: #cff4fc; color: #055160;">
-                                <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
-                                Pending approval
-                            </div>
-                        @else
-                            <span class="d-flex align-items-center border-0" style="font-size: 0.9rem;">
-                                <span class="me-2">
-                                    <div class="d-flex align-items-center">
-                                        @if ($newRecommendation->requestedByServiceDeptAdmin->profile->picture)
-                                            <img src="{{ Storage::url($newRecommendation->requestedByServiceDeptAdmin->profile->picture) }}"
-                                                class="image-fluid rounded-circle"
-                                                style="height: 26px !important; width: 26px !important;">
-                                        @else
-                                            <div class="d-flex align-items-center justify-content-center rounded-circle me-1 p-2 text-white"
-                                                style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
-                                                {{ $newRecommendation->requestedByServiceDeptAdmin->profile->getNameInitial() }}
-                                            </div>
-                                        @endif
-                                        <strong class="text-muted">
-                                            {{ $newRecommendation->requestedByServiceDeptAdmin->profile->getFullName }}
-                                        </strong>
-                                    </div>
-                                </span>
-                                is requesting for approval
+                        <span class="d-flex align-items-center border-0" style="font-size: 0.9rem;">
+                            <span class="me-2">
+                                <div class="d-flex align-items-center">
+                                    @if ($latestRecommendation->requestedByServiceDeptAdmin->profile->picture)
+                                        <img src="{{ Storage::url($latestRecommendation->requestedByServiceDeptAdmin->profile->picture) }}"
+                                            class="image-fluid rounded-circle"
+                                            style="height: 26px !important; width: 26px !important;">
+                                    @else
+                                        <div class="d-flex align-items-center justify-content-center rounded-circle me-1 p-2 text-white"
+                                            style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
+                                            {{ $latestRecommendation->requestedByServiceDeptAdmin->profile->getNameInitial() }}
+                                        </div>
+                                    @endif
+                                    <strong class="text-muted">
+                                        {{ $latestRecommendation->requestedByServiceDeptAdmin->profile->getFullName }}
+                                    </strong>
+                                </div>
                             </span>
-                        @endif
+                            is requesting for approval
+                        </span>
                         <small style="font-weight: 500; color: #4a5568; font-size: 0.75rem;">
-                            {{ $newRecommendation->dateCreated() }}
-                            ({{ $newRecommendation->created_at->format('D') }},
-                            {{ $newRecommendation->created_at->format('g:i A') }})
+                            {{ $latestRecommendation->dateCreated() }}
+                            ({{ $latestRecommendation->created_at->format('D') }},
+                            {{ $latestRecommendation->created_at->format('g:i A') }})
                         </small>
                     </div>
-                    @if ($newRecommendation->reason)
+                    @if ($latestRecommendation->reason)
                         <div class="d-flex flex-column gap-1">
                             <span class="fw-semibold" style="font-size: 0.85rem;">Reason:</span>
                             <span style="font-size: 0.85rem;">
-                                {!! nl2br($newRecommendation->reason) !!}
+                                {!! nl2br($latestRecommendation->reason) !!}
                             </span>
                         </div>
                     @endif
-                    @if (!$this->isApprovalApproved())
-                        @if ($this->isApproverInRecommendationApprovers($ticket) && $newRecommendation)
+                    @if (!$this->isApprovalApproved($latestRecommendation))
+                        @if ($this->isApproverInRecommendationApprovers($ticket, $latestRecommendation) && $latestRecommendation)
                             <div class="d-flex mt-2 gap-2">
                                 <button type="button"
                                     class="btn d-flex align-items-center justify-content-center w-auto gap-2"
@@ -79,11 +72,11 @@
                         <small class="fw-semibold">Approvers</small>
                         <div class="d-flex flex-wrap gap-3">
                             @foreach ($approvalLevels as $level)
-                                @php $approvers = $this->fetchApprovers($level); @endphp
+                                @php $approvers = $this->fetchApprovers($level, $latestRecommendation); @endphp
                                 @if ($approvers->isNotEmpty())
                                     <div class="d-flex flex-column gap-1">
                                         <div class="d-flex align-items-center gap-1">
-                                            @if ($this->isLevelApproved($level))
+                                            @if ($this->isLevelApproved($level, $latestRecommendation))
                                                 <i class="bi bi-check-circle-fill"
                                                     style="font-size: 0.75rem; color: green;"></i>
                                             @else
@@ -105,30 +98,6 @@
                         </div>
                     </div>
                 </div>
-            @elseif (auth()->user()->hasRole(Role::AGENT))
-                @if ($currentRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::APPROVED->value)
-                    <div class="alert d-inline-block gap-1 border-0 px-3 py-2" role="alert"
-                        style="font-size: 13px; background-color: #dffdef;">
-                        <i class="bi bi-check-circle-fill" style="color: #d32839;"></i>
-                        Approved
-                    </div>
-                @endif
-
-                @if ($currentRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::PENDING->value)
-                    <div class="alert d-inline-block mb-4 gap-1 border-0 px-3 py-2" role="alert"
-                        style="font-size: 13px; background-color: #cff4fc; color: #055160;">
-                        <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
-                        Pending Approval
-                    </div>
-                @endif
-
-                @if ($$currentRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::DISAPPROVED->value)
-                    <div class="alert d-inline-block mb-4 gap-1 border-0 px-3 py-2" role="alert"
-                        style="font-size: 13px; background-color: #cff4fc; color: #055160;">
-                        <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
-                        Disapproved
-                    </div>
-                @endif
             @endif
         @else
             @if ($currentRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::APPROVED->value)
@@ -163,12 +132,29 @@
                         <div class="accordion-body">
                             <ol class="list-group">
                                 @foreach ($approvalHistory as $recommendation)
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <li class="list-group-item d-flex justify-content-between">
                                         <div class="me-auto ms-2" style="font-size: 13px;">
-                                            <div class="fw-bold">
-                                                {{ $recommendation->approvalStatus->approval_status }}
+                                            <div class="d-flex gap-2 mb-1">
+                                                <span class="fw-bold">
+                                                    {{ $recommendation->approvalStatus->approval_status }}
+                                                </span>
+                                                @if ($recommendation->approvalStatus->date)
+                                                    -
+                                                    <span>
+                                                        {{ $recommendation->approvalStatus->dateApprovedOrDisapproved() }},
+                                                        {{ Carbon::parse($recommendation->approvalStatus->date)->format('D') }}
+                                                        @
+                                                        {{ Carbon::parse($recommendation->approvalStatus->date)->format('g:i A') }}
+                                                    </span>
+                                                @endif
                                             </div>
                                             <div class="d-flex flex-column">
+                                                <span>
+                                                    <span style="text-decoration: underline !important;">
+                                                        Requested by:
+                                                    </span>
+                                                    {{ $recommendation->requestedByServiceDeptAdmin->profile->getFullName }}
+                                                </span>
                                                 <span>
                                                     <span style="text-decoration: underline !important;">
                                                         Request:
@@ -183,48 +169,54 @@
                                                         {!! nl2br($recommendation->disapproved_reason) !!}
                                                     </span>
                                                 @endif
-                                                <p class="mb-0">
-                                                    <button class="btn btn-sm p-0 border-0" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#showApprovers"
-                                                        aria-expanded="false" aria-controls="showApprovers"
-                                                        style="font-size: 13px; text-decoration: underline !important;">
-                                                        Show approvers
-                                                    </button>
-                                                </p>
-                                                <div style="min-height: 120px;">
-                                                    <div class="collapse" id="showApprovers">
-                                                        <div class="card card-body">
-                                                            <div class="d-flex flex-column flex-wrap gap-2">
-                                                                <small class="fw-semibold">Approvers</small>
-                                                                <div class="d-flex flex-wrap gap-3">
-                                                                    @foreach ($approvalLevels as $level)
-                                                                        @php $approvers = $this->fetchApprovers($level); @endphp
-                                                                        @if ($approvers->isNotEmpty())
-                                                                            <div class="d-flex flex-column gap-1">
-                                                                                <div
-                                                                                    class="d-flex align-items-center gap-1">
-                                                                                    @if ($this->isLevelApproved($level))
-                                                                                        <i class="bi bi-check-circle-fill"
-                                                                                            style="font-size: 0.75rem; color: green;"></i>
-                                                                                    @else
-                                                                                        <i class="bi bi-circle"
-                                                                                            style="font-size: 0.75rem;"></i>
-                                                                                    @endif
-                                                                                    <small class="fw-semibold"
-                                                                                        style="font-size: 0.75rem;">
-                                                                                        Level {{ $level }}
-                                                                                    </small>
+                                                <div>
+                                                    <p class="mb-0">
+                                                        <button class="btn btn-sm p-0 border-0" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#showApprovers{{ $recommendation->id }}"
+                                                            aria-expanded="false"
+                                                            aria-controls="showApprovers{{ $recommendation->id }}"
+                                                            style="font-size: 13px; text-decoration: underline !important;">
+                                                            Show approvers
+                                                        </button>
+                                                    </p>
+                                                    <div class="position-absolute"
+                                                        style="min-height: 120px; z-index: 2;">
+                                                        <div class="collapse"
+                                                            id="showApprovers{{ $recommendation->id }}">
+                                                            <div class="card card-body">
+                                                                <div class="d-flex flex-column flex-wrap gap-2">
+                                                                    <small class="fw-semibold">Approvers</small>
+                                                                    <div class="d-flex flex-wrap gap-3">
+                                                                        @foreach ($approvalLevels as $level)
+                                                                            @php $approvers = $this->fetchApprovers($level, $recommendation); @endphp
+                                                                            @if ($approvers->isNotEmpty())
+                                                                                <div class="d-flex flex-column gap-1">
+                                                                                    <div
+                                                                                        class="d-flex align-items-center gap-1">
+                                                                                        @if ($this->isLevelApproved($level, $recommendation))
+                                                                                            <i class="bi bi-check-circle-fill"
+                                                                                                style="font-size: 0.75rem; color: green;"></i>
+                                                                                        @else
+                                                                                            <i class="bi bi-circle"
+                                                                                                style="font-size: 0.75rem;"></i>
+                                                                                        @endif
+                                                                                        <small class="fw-semibold"
+                                                                                            style="font-size: 0.75rem;">
+                                                                                            Level {{ $level }}
+                                                                                        </small>
+                                                                                    </div>
+                                                                                    <div class="d-flex gap-1">
+                                                                                        @foreach ($approvers as $approver)
+                                                                                            <small
+                                                                                                class="rounded-5 border border-2 px-2"
+                                                                                                style="font-size: 0.70rem;">{{ $approver->profile->getFullName }}</small>
+                                                                                        @endforeach
+                                                                                    </div>
                                                                                 </div>
-                                                                                <div class="d-flex gap-1">
-                                                                                    @foreach ($approvers as $approver)
-                                                                                        <small
-                                                                                            class="rounded-5 border border-2 px-2"
-                                                                                            style="font-size: 0.70rem;">{{ $approver->profile->getFullName }}</small>
-                                                                                    @endforeach
-                                                                                </div>
-                                                                            </div>
-                                                                        @endif
-                                                                    @endforeach
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
