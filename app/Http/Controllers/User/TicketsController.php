@@ -29,6 +29,11 @@ class TicketsController extends Controller
         return view('layouts.user.ticket.statuses.on_process_tickets');
     }
 
+    public function overdueTickets()
+    {
+        return view('layouts.user.ticket.statuses.overdue_tickets');
+    }
+
     public function approvedTickets()
     {
         return view('layouts.user.ticket.statuses.approved_tickets');

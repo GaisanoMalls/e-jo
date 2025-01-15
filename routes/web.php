@@ -221,6 +221,7 @@ Route::middleware(['auth', Role::requestersOnly()])->group(function () {
                 Route::get('/approved', 'approvedTickets')->name('approved_tickets');
                 Route::get('/claimed', 'claimedTickets')->name('claimed_tickets');
                 Route::get('/disapproved', 'disapprovedTickets')->name('disapproved_tickets');
+                Route::get('/overdue', 'overdueTickets')->name('overdue_tickets');
                 Route::get('/closed', 'closedTickets')->name('closed_tickets');
             });
         });

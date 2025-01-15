@@ -2,7 +2,7 @@
 @import "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap";
 @import "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap";
 @import "../bootstrap-icons.scss";
-@import '../boxicons.scss';
+@import "../boxicons.scss";
 
 /* Keyframes */
 @keyframes slideIn {
@@ -56,7 +56,7 @@ $border-radius-8: 0.5rem;
 $border-radius-50: 3.125rem;
 $border-radius-50-percent: 3.125rem;
 $black-color: black;
-$body-color: #f3f4f6;
+$body-color: #f9fafb;
 $white: #ffffff;
 $link-font-color: #24695c;
 $link-font-hover-color: #123831;
@@ -98,7 +98,7 @@ $color-1: #d32839;
 
 ::selection {
     color: white;
-    background: #D32839;
+    background: #d32839;
 }
 
 @mixin form-input-and-button {
@@ -150,7 +150,6 @@ body {
     @include generic.error-message;
 }
 
-
 // Notification Canvas
 .notification__canvas {
     min-width: 25% !important;
@@ -182,7 +181,7 @@ body {
         width: 30px !important;
         border-radius: 0.625rem;
         box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-        background-color: #F2F2F2;
+        background-color: #f2f2f2;
         border: 2px solid #d9ddd9;
         color: 1a3c40;
         font-size: $fs-11;
@@ -212,7 +211,7 @@ body {
         }
 
         &:hover {
-            background-color: #F2F2F2;
+            background-color: #f2f2f2;
         }
 
         .btn__view__notification {
@@ -228,7 +227,7 @@ body {
             height: 25px;
             width: 25px;
             font-size: $fs-12;
-            background-color: #E9ECEF;
+            background-color: #e9ecef;
         }
     }
 
@@ -257,7 +256,7 @@ body {
         border: none;
 
         &:hover {
-            background-color: #F8F9FA;
+            background-color: #f8f9fa;
         }
     }
 }
@@ -321,10 +320,10 @@ input[type="radio"]:checked {
     box-shadow: none !important;
 
     &:checked {
-        background-color: #D32839;
-        border: 1px solid #D32839;
+        background-color: #d32839;
+        border: 1px solid #d32839;
 
-        &+.form-check-label {
+        & + .form-check-label {
             color: $color-1;
             font-weight: $fw-600;
         }
@@ -497,7 +496,7 @@ input[type="radio"]:checked {
 
 ::placeholder {
     font-size: $fs-14;
-    color: #B5B5B5 !important;
+    color: #b5b5b5 !important;
     font-weight: 300;
 }
 
@@ -644,8 +643,8 @@ input {
     }
 
     &:not(caption) {
-        >* {
-            >* {
+        > * {
+            > * {
                 border-bottom-width: 0px;
             }
         }
@@ -824,7 +823,7 @@ a {
     color: #31316a;
     font-weight: $fw-600;
 
-    >.sidebar__button__icon__container {
+    > .sidebar__button__icon__container {
         background-color: $color-1;
         height: 35px;
         width: 35px;
@@ -860,15 +859,15 @@ a {
 .sidebar__collapse__btnlink__active {
     font-weight: 600;
 
-    &>.d-flex>.sidebar__active__dot {
+    & > .d-flex > .sidebar__active__dot {
         background-color: $color-1 !important;
     }
 
-    &>.d-flex>.sidebar__btn__link__name {
+    & > .d-flex > .sidebar__btn__link__name {
         color: $color-1 !important;
     }
 
-    &>.sidebar__btn__link__badge {
+    & > .sidebar__btn__link__badge {
         font-weight: $fw-600 !important;
         color: $color-1;
     }
@@ -887,7 +886,7 @@ a {
 .sidebar__btn__link__badge {
     font-size: $fs-13;
     color: #24695c;
-    background-color: #F5F7F9;
+    background-color: #f5f7f9;
     padding: 5px 6px;
     min-width: 25px;
     font-weight: $fw-400;
@@ -1008,6 +1007,15 @@ a {
     transition: all 0.4s ease 0s;
 }
 
+.status__card__link {
+    transition: all 0.3s;
+
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.02);
+    }
+}
+
 .dashboard__section {
     .dashboard__card__by__status {
         overflow: hidden;
@@ -1028,13 +1036,14 @@ a {
 
         .progress__bar__container {
             .progress__bar__ticket__count {
-                font-size: $fs-15;
+                font-size: $fs-18;
                 font-weight: $fw-600;
             }
 
             .custom__progress {
-                height: 9px;
+                height: 8px;
                 width: 100%;
+                background-color: $body-color;
 
                 .custom__progress__bar {
                     border-radius: $border-radius-50;
@@ -1388,7 +1397,6 @@ a {
         }
 
         .card__ticket__details__right {
-
             .btn__add__tags,
             .btn__clear__tags {
                 font-size: $fs-12;
@@ -1402,7 +1410,7 @@ a {
             }
 
             .btn__clear__tags {
-                color: #FF0808;
+                color: #ff0808;
             }
         }
     }
@@ -1621,7 +1629,7 @@ a {
 
                 .custom__form__image__action__buttons__container {
                     bottom: 3px;
-                    gap: .27rem !important;
+                    gap: 0.27rem !important;
                     display: none !important;
 
                     .btn__delete__custom__form__file {
@@ -1645,7 +1653,8 @@ a {
                 text-decoration: none !important;
                 color: inherit !important;
                 font-size: $fs-13;
-                box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+                box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
+                    rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
                 padding: 0.6rem 1.3rem;
                 border-radius: $border-radius-8;
                 width: auto;
@@ -1670,7 +1679,8 @@ a {
                     border-radius: $border-radius-8;
                     color: #96a0a8 !important;
                     border-radius: $border-radius-50;
-                    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+                    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
+                        rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
 
                     &:focus {
                         color: #d32839;
@@ -1686,7 +1696,8 @@ a {
                 .dropdown-menu {
                     padding: 3px;
                     border-radius: $border-radius-8;
-                    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+                    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
+                        rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
 
                     .dropdown-item {
                         text-decoration: none !important;
@@ -1725,7 +1736,7 @@ a {
             padding: 1.5rem;
 
             .ticket__actions {
-                >li {
+                > li {
                     list-style-type: square !important;
                     font-size: $fs-15;
                 }
@@ -1739,7 +1750,7 @@ a {
                 font-size: $fs-12;
                 padding: 4px 10px;
                 border-radius: 5px;
-                background-color: #F3F3F3;
+                background-color: #f3f3f3;
 
                 &.not__set {
                     background-color: transparent;
@@ -1763,7 +1774,7 @@ a {
                     left: 0;
                 }
 
-                >span {
+                > span {
                     width: 50%;
                     height: 100%;
                     overflow: hidden;
@@ -1929,10 +1940,10 @@ a {
                 width: 30px;
                 border: 0 !important;
                 font-size: $fs-13;
-                color: #6C757D;
+                color: #6c757d;
 
                 &:hover {
-                    background-color: #F5F7F9;
+                    background-color: #f5f7f9;
                     color: #212529;
                 }
             }
@@ -1946,7 +1957,7 @@ a {
                 font-weight: $fw-500;
                 color: green;
                 padding: 2px 7px;
-                background-color: #F5F7F9;
+                background-color: #f5f7f9;
                 border: 0.01rem solid #d1d3d3;
                 height: 24px;
             }
@@ -1983,7 +1994,7 @@ a {
 
             .btn__approve__costing {
                 font-size: $fs-13;
-                background-color: #D32839;
+                background-color: #d32839;
                 color: white;
                 outline: none;
                 font-weight: $fw-500;
@@ -2011,10 +2022,10 @@ a {
                 border-radius: $border-radius-8;
                 font-size: $fs-11;
                 padding: 0.3rem 0.5rem;
-                background-color: #F5F7F9;
+                background-color: #f5f7f9;
 
                 &:hover {
-                    background-color: #E9ECEF;
+                    background-color: #e9ecef;
                 }
             }
 
@@ -2029,7 +2040,7 @@ a {
             }
 
             .btn__purchase {
-                background-color: #E9ECEF;
+                background-color: #e9ecef;
                 font-size: $fs-12;
                 font-weight: $fw-500;
                 color: #212529;
@@ -2059,7 +2070,7 @@ a {
                     }
 
                     &:focus {
-                        background-color: #E9ECEF !important;
+                        background-color: #e9ecef !important;
                     }
                 }
             }
@@ -2108,7 +2119,7 @@ a {
     }
 
     .sort__button {
-        background-color: #E9ECEF;
+        background-color: #e9ecef;
         font-size: $fs-12;
         color: #212529;
         padding: 8px 12px;
@@ -2143,7 +2154,7 @@ a {
             }
 
             &:focus {
-                background-color: #E9ECEF !important;
+                background-color: #e9ecef !important;
             }
         }
     }
@@ -2171,7 +2182,7 @@ a {
             border: none;
 
             &:hover {
-                background-color: #E9ECEF;
+                background-color: #e9ecef;
             }
         }
 
@@ -2180,7 +2191,7 @@ a {
         }
     }
 
-    &:hover>.qoute__reply__action__container {
+    &:hover > .qoute__reply__action__container {
         display: block !important;
     }
 
@@ -2227,7 +2238,6 @@ a {
         color: #212529;
         font-weight: $fw-500;
 
-
         .causer__details {
             font-weight: $fw-600 !important;
         }
@@ -2243,7 +2253,7 @@ a {
     }
 
     .my__logs {
-        background-color: #E9ECEF;
+        background-color: #e9ecef;
         font-size: $fs-12;
         color: #212529;
 
@@ -2271,23 +2281,23 @@ a {
             }
 
             &:focus {
-                background-color: #E9ECEF !important;
+                background-color: #e9ecef !important;
             }
         }
     }
 }
 
 .btn__claim__ticket {
-    color: #FFFFFF;
-    background-color: #9DA85C;
+    color: #ffffff;
+    background-color: #9da85c;
     padding: 0.4rem 0.9rem;
     font-weight: $fw-500;
     font-size: $fs-12;
     border-radius: $border-radius-8;
 
     &:hover {
-        color: #FFFFFF;
-        background-color: #9DA85C;
+        color: #ffffff;
+        background-color: #9da85c;
     }
 }
 
@@ -2351,17 +2361,16 @@ a {
 
         &.button__approve {
             &:hover {
-                background-color: #9DA85C;
-                color: #FFFFFF;
+                background-color: #9da85c;
+                color: #ffffff;
             }
-
         }
 
         &.button__disapprove {
             color: $color-1;
 
             &:hover {
-                background-color: #E4EEED;
+                background-color: #e4eeed;
             }
         }
     }
@@ -2470,10 +2479,10 @@ input[type="checkbox"] {
     }
 
     &:checked {
-        background-color: #D32839 !important;
-        border: 2px solid #D32839 !important;
+        background-color: #d32839 !important;
+        border: 2px solid #d32839 !important;
 
-        &+.form-check-label {
+        & + .form-check-label {
             color: $color-1;
             font-weight: $fw-600;
         }
@@ -2850,8 +2859,6 @@ input[type="checkbox"] {
         &.btn__send {
             @include generic.form-button-submit;
         }
-
-
     }
 }
 
@@ -2906,8 +2913,8 @@ input[type="checkbox"] {
         }
 
         .table-striped {
-            >tbody {
-                >tr {
+            > tbody {
+                > tr {
                     &:nth-of-type(odd) {
                         background-color: #ffffff !important;
                     }
@@ -2939,7 +2946,7 @@ input[type="checkbox"] {
 
                 &.btn__update__password {
                     @include generic.form-button-submit;
-                    background-color: #1A2E35 !important;
+                    background-color: #1a2e35 !important;
                     padding: 6px 10px !important;
                     width: auto !important;
                     font-size: 12px;
@@ -3062,7 +3069,7 @@ input[type="checkbox"] {
 }
 
 .ticket__tag {
-    background-color: #F5F7F9;
+    background-color: #f5f7f9;
     border-radius: 3.125rem;
     font-size: 0.75rem;
     padding: 3px 3px 3px 12px;
@@ -3076,11 +3083,11 @@ input[type="checkbox"] {
     &:hover {
         background-color: #a0c5af !important;
 
-        &>.tag__link {
+        & > .tag__link {
             color: white !important;
         }
 
-        &>.remove__tag {
+        & > .remove__tag {
             background-color: #39925b;
 
             i {
@@ -3161,7 +3168,7 @@ input[type="checkbox"] {
         color: $color-1 !important;
         font-weight: $fw-600 !important;
 
-        >.announcement__active__tab__line {
+        > .announcement__active__tab__line {
             display: block;
         }
     }
@@ -3360,7 +3367,7 @@ input[type="checkbox"] {
         border-color: #e35558 !important;
     }
 
-    &:focus+.announcement__search__icon {
+    &:focus + .announcement__search__icon {
         color: #e35558 !important;
     }
 }
@@ -3905,8 +3912,6 @@ input[type="checkbox"] {
                 }
             }
         }
-
-
     }
 }
 
@@ -3916,7 +3921,7 @@ input[type="checkbox"] {
     box-shadow: none !important;
     font-size: 0.938rem;
 
-    &:focus+.search__icon {
+    &:focus + .search__icon {
         color: #e35558 !important;
     }
 
@@ -3924,7 +3929,7 @@ input[type="checkbox"] {
         box-shadow: none;
         border-color: $color-1;
 
-        &+.table__search__icon {
+        & + .table__search__icon {
             color: $color-1;
         }
     }
@@ -4183,7 +4188,8 @@ input[type="checkbox"] {
                     border-radius: $border-radius-9;
                     background-color: $color-1;
                     color: white;
-                    box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+                    box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12),
+                        0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
                 }
 
                 &.btn__cancel {
@@ -4261,7 +4267,7 @@ input[type="checkbox"] {
 
     .form__fields__container:hover {
         border-color: #d32839 !important;
-        transition: all .6s;
+        transition: all 0.6s;
 
         .field__container {
             display: flex !important;
@@ -4672,7 +4678,6 @@ input[type="checkbox"] {
             &:hover {
                 color: $white;
             }
-
         }
 
         .directory__icon__active__tab {
@@ -4712,7 +4717,6 @@ input[type="checkbox"] {
             }
         }
     }
-
 }
 
 .pagination {
@@ -4724,15 +4728,14 @@ input[type="checkbox"] {
     }
 
     .page-item {
-
-        &.active>.page-link,
+        &.active > .page-link,
         .page-link.active {
             background-color: #eaedf1 !important;
             color: #3e3d3d;
             border: 0.08rem solid rgb(221, 233, 236) !important;
         }
 
-        &.disabled>.page-link,
+        &.disabled > .page-link,
         .page-link.disabled {
             color: #9ca2ad;
         }
@@ -4767,7 +4770,6 @@ input[type="checkbox"] {
 // End Directory Section
 
 @media (max-width: 400px) {
-
     .btn__add__user__account,
     .btn__view__user__accounts {
         border-radius: $border-radius-50 !important;
@@ -4863,7 +4865,6 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 1120px) {
-
     .ticket__tag__buttons__container {
         gap: 25px !important;
     }

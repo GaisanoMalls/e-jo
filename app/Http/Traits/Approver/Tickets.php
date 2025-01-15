@@ -53,7 +53,7 @@ trait Tickets
     public function getViewedTickets()
     {
         return Ticket::where('status_id', Status::VIEWED)
-            ->withWhereHas('user.buDepartments', callback: function ($department) {
+            ->withWhereHas('user.buDepartments', function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
             ->withWhereHas('ticketApprovals', function ($approval) {
@@ -96,7 +96,7 @@ trait Tickets
             ->withWhereHas('user.buDepartments', function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
-            ->withWhereHas('ticketApprovals.helpTopicApprover', callback: function ($approver) {
+            ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')

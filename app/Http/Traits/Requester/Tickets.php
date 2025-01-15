@@ -39,6 +39,21 @@ trait Tickets
             ->get();
     }
 
+    public function getOverdueTickets()
+    {
+        return Ticket::with(['replies', 'priorityLevel'])
+            ->where(function ($statusQuery) {
+                $statusQuery->where('status_id', Status::OVERDUE)
+                    ->whereIn('approval_status', [
+                        ApprovalStatusEnum::APPROVED,
+                        ApprovalStatusEnum::FOR_APPROVAL
+                    ]);
+            })
+            ->where('user_id', auth()->user()->id)
+            ->orderByDesc('created_at')
+            ->get();
+    }
+
     public function getViewedTickets()
     {
         return Ticket::with(['replies', 'priorityLevel'])

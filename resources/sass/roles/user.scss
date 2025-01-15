@@ -1,7 +1,7 @@
 @use "../generic" as generic;
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap");
 @import "../bootstrap-icons.scss";
-@import '../boxicons.scss';
+@import "../boxicons.scss";
 
 $fw-400: 400;
 $fw-400: 400;
@@ -27,7 +27,7 @@ $box-shadow-global: 0 20px 27px 0 rgb(0 0 0 / 5%);
 $button-box-shadow: 0 0.25rem 0.375rem -0.0625rem rgb(20 20 20 / 12%),
     0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
 $shadows-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-$body-color: #f3f4f6;
+$body-color: #f9fafb;
 $white: #ffffff;
 $color-1: #d32839;
 
@@ -129,7 +129,7 @@ body {
 
 ::selection {
     color: white;
-    background: #D32839;
+    background: #d32839;
 }
 
 a {
@@ -145,7 +145,7 @@ a {
 }
 
 .sort__button {
-    background-color: #E9ECEF;
+    background-color: #e9ecef;
     font-size: $fs-12;
     color: #212529;
     padding: 8px 12px;
@@ -180,7 +180,7 @@ a {
         }
 
         &:focus {
-            background-color: #E9ECEF !important;
+            background-color: #e9ecef !important;
         }
     }
 }
@@ -256,7 +256,7 @@ a {
 
 ::placeholder {
     font-size: $fs-14;
-    color: #B5B5B5 !important;
+    color: #b5b5b5 !important;
     font-weight: 300;
 }
 
@@ -305,12 +305,60 @@ input {
     }
 }
 
-.dashboard__card {
+.status__card__link {
     transition: all 0.3s;
 
     &:hover {
         cursor: pointer;
         transform: scale(1.02);
+    }
+}
+
+.dashboard__card__by__status {
+    overflow: hidden;
+    margin-bottom: 23px;
+    background-color: #fff;
+    padding: 5px 9px;
+    border: none !important;
+
+    p {
+        font-size: $fs-12;
+        color: #717171;
+        font-weight: $fw-400;
+        text-transform: capitalize;
+    }
+
+    .card__label__name {
+        font-size: $fs-18 !important;
+    }
+
+    .progress__bar__container {
+        .progress__bar__ticket__count {
+            font-size: $fs-18;
+            font-weight: $fw-600;
+        }
+
+        .custom__progress {
+            height: 8px;
+            width: 100%;
+            background-color: $body-color;
+
+            .custom__progress__bar {
+                border-radius: $border-radius-50;
+            }
+        }
+    }
+
+    .dashboad__card__icon__container {
+        width: 60px;
+        height: 60px;
+        padding: 3px 5px;
+        border-radius: $border-radius-12;
+        background-color: #fbf8f8;
+
+        i {
+            font-size: 2rem;
+        }
     }
 }
 
@@ -383,7 +431,6 @@ input {
     }
 
     .navbar-nav {
-
         .dropdown-menu,
         .dropdown-item {
             @include rounded-8;
@@ -493,7 +540,7 @@ input {
         }
 
         &:hover {
-            background-color: #F2F2F2;
+            background-color: #f2f2f2;
         }
 
         .btn__view__notification {
@@ -509,7 +556,7 @@ input {
             height: 25px;
             width: 25px;
             font-size: $fs-12;
-            background-color: #E9ECEF;
+            background-color: #e9ecef;
         }
     }
 
@@ -538,10 +585,9 @@ input {
         border: none;
 
         &:hover {
-            background-color: #F8F9FA;
+            background-color: #f8f9fa;
         }
     }
-
 }
 
 .loading__spinner {
@@ -583,11 +629,11 @@ input {
 
             font-weight: $fw-600;
 
-            &>.ticket__count__tab {
+            & > .ticket__count__tab {
                 color: $color-1 !important;
             }
 
-            &>.arrow__down__active__tab {
+            & > .arrow__down__active__tab {
                 display: block;
             }
         }
@@ -595,7 +641,7 @@ input {
         &:hover {
             color: $color-1;
 
-            &>.ticket__count__tab {
+            & > .ticket__count__tab {
                 color: $color-1;
             }
         }
@@ -730,7 +776,7 @@ input {
         border-collapse: separate;
         border-spacing: 0 5px;
 
-        &> :not(caption)>*>* {
+        & > :not(caption) > * > * {
             border-bottom-width: 0 !important;
         }
 
@@ -803,8 +849,8 @@ input {
             .ticket__details__status {
                 font-weight: $fw-600;
                 font-size: $fs-11;
-                color: #FFFFFF;
-                background-color: #1D5C63;
+                color: #ffffff;
+                background-color: #1d5c63;
                 padding: 0.3rem 0.9rem;
                 border-radius: $border-radius-50;
                 text-transform: uppercase;
@@ -904,7 +950,7 @@ input {
             .ticket__details__user__picture__user__sender__name__initial {
                 font-size: 10px;
                 font-weight: $fw-600;
-                color: #FFFFFF;
+                color: #ffffff;
                 margin-top: 2px;
                 letter-spacing: 1px;
             }
@@ -1053,10 +1099,10 @@ input {
                     width: 30px;
                     border: 0 !important;
                     font-size: $fs-13;
-                    color: #6C757D;
+                    color: #6c757d;
 
                     &:hover {
-                        background-color: #F5F7F9;
+                        background-color: #f5f7f9;
                         color: #212529;
                     }
                 }
@@ -1070,7 +1116,7 @@ input {
                     font-weight: $fw-500;
                     color: green;
                     padding: 2px 7px;
-                    background-color: #F5F7F9;
+                    background-color: #f5f7f9;
                     border: 0.01rem solid #d1d3d3;
                     height: 24px;
                 }
@@ -1107,7 +1153,7 @@ input {
 
                 .btn__approve__costing {
                     font-size: $fs-13;
-                    background-color: #D32839;
+                    background-color: #d32839;
                     color: white;
                     outline: none;
                     font-weight: $fw-500;
@@ -1135,10 +1181,10 @@ input {
                     border-radius: $border-radius-8;
                     font-size: $fs-11;
                     padding: 0.3rem 0.5rem;
-                    background-color: #F5F7F9;
+                    background-color: #f5f7f9;
 
                     &:hover {
-                        background-color: #E9ECEF;
+                        background-color: #e9ecef;
                     }
                 }
 
@@ -1163,7 +1209,6 @@ input {
                         font-size: $fs-14;
                         font-weight: $fw-500;
                     }
-
                 }
 
                 .btn__show__add__costing__pr__file__modal {
@@ -1177,14 +1222,14 @@ input {
                     font-size: $fs-12;
                     font-weight: $fw-500;
                     padding: 0.3rem 0.5rem;
-                    background-color: #F5F7F9;
+                    background-color: #f5f7f9;
 
                     i {
                         font-size: $fs-13;
                     }
 
                     &:hover {
-                        background-color: #E9ECEF;
+                        background-color: #e9ecef;
                     }
                 }
             }
@@ -1263,7 +1308,7 @@ input {
             padding: 1.5rem;
 
             .ticket__actions {
-                >li {
+                > li {
                     list-style-type: square !important;
                     font-size: $fs-15;
                 }
@@ -1281,7 +1326,7 @@ input {
                 font-size: $fs-12;
                 padding: 2px 8px;
                 border-radius: 5px;
-                background-color: #F3F3F3;
+                background-color: #f3f3f3;
 
                 &.not__set {
                     background-color: transparent;
@@ -1305,7 +1350,6 @@ input {
                 object-fit: cover;
                 border-radius: 50%;
                 border: 2px solid #d9ddd9;
-
             }
 
             .btn__assigned__agent__details {
@@ -1319,10 +1363,8 @@ input {
                     background-color: #bee6ef;
                 }
             }
-
         }
     }
-
 
     .user__account__media {
         .user__picture {
@@ -1362,7 +1404,6 @@ input {
         color: #212529;
         font-weight: $fw-500;
 
-
         .causer__details {
             font-weight: $fw-600 !important;
         }
@@ -1386,11 +1427,11 @@ input {
     box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12),
         0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
     background-color: #00695b;
-    color: #FFFFFF;
+    color: #ffffff;
 
     &:hover {
         background-color: #00695b;
-        color: #FFFFFF;
+        color: #ffffff;
     }
 
     i {
@@ -1422,7 +1463,6 @@ input {
         width: 30px !important;
         border-radius: $border-radius-9;
         border: 2px solid #d9ddd9;
-
     }
 
     .time__sent {
@@ -1449,16 +1489,16 @@ input {
     font-size: $fs-15;
     border-radius: $border-radius-9;
     background-color: $color-1;
-    color: #FFFFFF;
+    color: #ffffff;
     font-weight: $fw-500;
 
     &:focus {
-        color: #FFFFFF;
+        color: #ffffff;
         background-color: $color-1;
     }
 
     &:hover {
-        color: #FFFFFF;
+        color: #ffffff;
         background-color: $color-1;
     }
 }
@@ -1574,14 +1614,14 @@ input {
 
         .card__content {
             .ticket__count {
-                color: #7C858F;
+                color: #7c858f;
                 font-size: 1.8rem;
                 font-weight: $fw-600;
             }
 
             .card__title {
                 margin-bottom: 0;
-                color: #3D3D3D;
+                color: #3d3d3d;
                 font-size: $fs-15;
                 font-weight: $fw-500;
                 word-wrap: break-word;
@@ -1591,8 +1631,8 @@ input {
                 height: 50px;
                 width: 50px;
                 padding: 13px;
-                background-color: #FBF8F8;
-                border-radius: $border-radius-9
+                background-color: #fbf8f8;
+                border-radius: $border-radius-9;
             }
 
             i {
@@ -1655,14 +1695,14 @@ input {
             #check-other-branch {
                 height: 16px;
                 width: 16px;
-                border: 2px solid #CED4DA;
+                border: 2px solid #ced4da;
                 box-shadow: none !important;
 
                 &:checked {
-                    background-color: #D32839;
-                    border-color: #D32839;
+                    background-color: #d32839;
+                    border-color: #d32839;
 
-                    &+.labelCheckOtherBranch {
+                    & + .labelCheckOtherBranch {
                         color: $color-1;
                         font-weight: $fw-600;
                     }
@@ -1672,11 +1712,11 @@ input {
             .labelCheckOtherBranch {
                 font-size: $fs-15;
                 font-weight: $fw-500;
-
             }
 
             .create__ticket__form__card {
-                box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+                box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
+                    rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
                 border-radius: $border-radius-9;
                 font-size: $fs-14;
                 font-weight: $fw-500;
@@ -1699,7 +1739,8 @@ input {
             .help__topic__form__dropdown__menu {
                 border: 0;
                 padding: 4px;
-                box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+                box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
+                    rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
                 border-radius: $border-radius-8;
 
                 .dropdown-item {
@@ -1755,7 +1796,7 @@ input {
                 background-color: $color-1;
                 border: none;
 
-                &+.labelcheckSendTicketToOtherBranch {
+                & + .labelcheckSendTicketToOtherBranch {
                     color: $color-1;
                 }
             }
@@ -1836,39 +1877,69 @@ input {
 }
 
 @media (max-width: 375px) {
-    .ticket__card .ticket__details__section .details__card__top .ticket__details__status {
+    .ticket__card
+        .ticket__details__section
+        .details__card__top
+        .ticket__details__status {
         font-size: 9px;
     }
 
-    .ticket__card .ticket__details__section .details__card__top .ticket__details__ticketnumber {
+    .ticket__card
+        .ticket__details__section
+        .details__card__top
+        .ticket__details__ticketnumber {
         font-size: $fs-11;
     }
 
-    .ticket__card .ticket__details__section .details__card__top .ticket__details__priority {
+    .ticket__card
+        .ticket__details__section
+        .details__card__top
+        .ticket__details__priority {
         font-size: $fs-11;
     }
 
-    .ticket__card .ticket__details__section .details__card__top .ticket__details__header .ticket__details__title {
+    .ticket__card
+        .ticket__details__section
+        .details__card__top
+        .ticket__details__header
+        .ticket__details__title {
         font-size: $fs-13;
     }
 
-    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__user__fullname {
+    .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__user__fullname {
         font-size: $fs-12;
     }
 
-    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__user__department {
+    .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__user__department {
         font-size: 10px;
     }
 
-    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__time {
+    .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__time {
         font-size: 10px;
     }
 
-    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__description {
+    .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__card__body
+        .ticket__description {
         font-size: $fs-12;
     }
 
-    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__attachments {
+    .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__card__body
+        .ticket__attachments {
         font-size: $fs-11;
     }
 
@@ -1876,23 +1947,41 @@ input {
         font-size: $fs-11;
     }
 
-    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header .reply__ticket__details__user__fullname {
+    .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__card__header
+        .reply__ticket__details__user__fullname {
         font-size: $fs-12;
     }
 
-    .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__reply__content p {
+    .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__card__body
+        .ticket__reply__content
+        p {
         font-size: $fs-11 !important;
     }
 
-    .ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__actions__label {
+    .ticket__card
+        .container__ticket__details__right
+        .ticket__details__card__body__right
+        .ticket__actions__label {
         font-size: $fs-12;
     }
 
-    .ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__details__info__label {
+    .ticket__card
+        .container__ticket__details__right
+        .ticket__details__card__body__right
+        .ticket__details__info__label {
         font-size: $fs-11;
     }
 
-    .ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__details__info {
+    .ticket__card
+        .container__ticket__details__right
+        .ticket__details__card__body__right
+        .ticket__details__info {
         font-size: $fs-11;
     }
 }

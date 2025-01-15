@@ -19,6 +19,7 @@ class TicketTab extends Component
         $approvedTickets = $this->getApprovedTickets();
         $claimedTickets = $this->getClaimedTickets();
         $disapprovedTickets = $this->getDisapprovedTickets();
+        $overdueTickets = $this->getOverdueTickets();
 
         $openTickets = $this->getOpenTickets();
 
@@ -31,6 +32,7 @@ class TicketTab extends Component
                 'approvedTickets',
                 'claimedTickets',
                 'disapprovedTickets',
+                'overdueTickets',
                 'openTickets',
             ])
         );

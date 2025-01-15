@@ -22,13 +22,13 @@ input[type=password]::placeholder {
 
 ::-moz-placeholder {
   font-size: 0.875rem;
-  color: #B5B5B5 !important;
+  color: #b5b5b5 !important;
   font-weight: 300;
 }
 
 ::placeholder {
   font-size: 0.875rem;
-  color: #B5B5B5 !important;
+  color: #b5b5b5 !important;
   font-weight: 300;
 }
 
@@ -64,7 +64,7 @@ input:not(:focus)::placeholder {
 }
 
 .login__card {
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
   display: flex;
   align-items: center;
   justify-content: center;

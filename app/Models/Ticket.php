@@ -105,11 +105,6 @@ class Ticket extends Model
         return $this->hasOne(Feedback::class);
     }
 
-    public function reason(): HasOne
-    {
-        return $this->hasOne(Reason::class);
-    }
-
     public function recommendations(): HasMany
     {
         return $this->hasMany(Recommendation::class);
@@ -123,6 +118,11 @@ class Ticket extends Model
     public function replies(): HasMany
     {
         return $this->hasMany(Reply::class);
+    }
+
+    public function reasons(): HasMany
+    {
+        return $this->hasMany(Reason::class);
     }
 
     public function clarifications(): HasMany
@@ -177,6 +177,6 @@ class Ticket extends Model
 
     public function isSpecialProject(): bool
     {
-        return $this->helpTopic?->specialProject !== null;
+        return !is_null($this->helpTopic?->specialProject);
     }
 }

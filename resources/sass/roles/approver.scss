@@ -2,7 +2,7 @@
 @import "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap";
 @import "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap";
 @import "../bootstrap-icons.scss";
-@import '../boxicons.scss';
+@import "../boxicons.scss";
 
 /* Keyframes */
 @keyframes slideIn {
@@ -56,7 +56,7 @@ $border-radius-8: 0.5rem;
 $border-radius-50: 3.125rem;
 $border-radius-50-percent: 3.125rem;
 $black-color: black;
-$body-color: #f3f4f6;
+$body-color: #f9fafb;
 $white: #ffffff;
 $link-font-color: #24695c;
 $link-font-hover-color: #123831;
@@ -99,7 +99,7 @@ $color-1: #d32839;
 
 ::selection {
     color: white;
-    background: #D32839;
+    background: #d32839;
 }
 
 @mixin border-0 {
@@ -166,12 +166,61 @@ body {
     }
 }
 
-.dashboard__card {
+.status__card__link {
+    text-decoration: none !important;
     transition: all 0.3s;
 
     &:hover {
         cursor: pointer;
         transform: scale(1.02);
+    }
+}
+
+.dashboard__card__by__status {
+    overflow: hidden;
+    margin-bottom: 23px;
+    background-color: #fff;
+    padding: 5px 9px;
+    border: none !important;
+
+    p {
+        font-size: $fs-12;
+        color: #717171;
+        font-weight: $fw-400;
+        text-transform: capitalize;
+    }
+
+    .card__label__name {
+        font-size: $fs-18 !important;
+    }
+
+    .progress__bar__container {
+        .progress__bar__ticket__count {
+            font-size: $fs-18;
+            font-weight: $fw-600;
+        }
+
+        .custom__progress {
+            height: 8px;
+            width: 100%;
+            background-color: $body-color;
+
+            .custom__progress__bar {
+                border-radius: $border-radius-50;
+            }
+        }
+    }
+
+    .dashboad__card__icon__container {
+        width: 60px;
+        height: 60px;
+        padding: 3px 5px;
+        border-radius: $border-radius-12;
+        background-color: #fbf8f8;
+
+        i {
+            font-size: 2rem;
+        }
     }
 }
 
@@ -197,7 +246,7 @@ body {
 
 ::placeholder {
     font-size: $fs-14;
-    color: #B5B5B5 !important;
+    color: #b5b5b5 !important;
     font-weight: 300;
 }
 
@@ -268,7 +317,6 @@ nav {
     }
 
     .navbar-nav {
-
         .dropdown-menu,
         .dropdown-item {
             @include rounded-8;
@@ -430,7 +478,6 @@ nav {
     }
 }
 
-
 .reply__ticket__info {
     padding: 1.2rem;
     background-color: #f7f7f7;
@@ -467,7 +514,6 @@ nav {
         box-shadow: none;
     }
 }
-
 
 .btn__x {
     height: 20px;
@@ -546,17 +592,16 @@ nav {
 
         &.button__approve {
             &:hover {
-                background-color: #9DA85C;
-                color: #FFFFFF;
+                background-color: #9da85c;
+                color: #ffffff;
             }
-
         }
 
         &.button__disapprove {
             color: $color-1;
 
             &:hover {
-                background-color: #E4EEED;
+                background-color: #e4eeed;
             }
         }
     }
@@ -599,14 +644,14 @@ nav {
 
         .card__content {
             .ticket__count {
-                color: #7C858F;
+                color: #7c858f;
                 font-size: 1.8rem;
                 font-weight: $fw-600;
             }
 
             .card__title {
                 margin-bottom: 0;
-                color: #3D3D3D;
+                color: #3d3d3d;
                 font-size: $fs-15;
                 font-weight: $fw-500;
                 word-wrap: break-word;
@@ -616,8 +661,8 @@ nav {
                 height: 50px;
                 width: 50px;
                 padding: 13px;
-                background-color: #FBF8F8;
-                border-radius: $border-radius-9
+                background-color: #fbf8f8;
+                border-radius: $border-radius-9;
             }
 
             i {
@@ -633,7 +678,7 @@ nav {
 
     .ticket__tab__header {
         margin-bottom: 1.8rem;
-        background-color: #FFFFFF;
+        background-color: #ffffff;
         overflow: scroll;
         @include rounded-8;
 
@@ -659,26 +704,26 @@ nav {
                 background-color: $color-1;
                 color: #ffffff;
                 font-weight: $fw-600;
-                box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+                box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 
-                &>.ticket__count__tab {
-                    color: #FFFFFF !important;
+                & > .ticket__count__tab {
+                    color: #ffffff !important;
                 }
 
-                &>.arrow__down__active__tab {
+                & > .arrow__down__active__tab {
                     display: block;
                 }
 
                 &:hover {
-                    color: #FFFFFF;
+                    color: #ffffff;
                 }
             }
 
             &:hover {
-                color: #5F5D5D;
+                color: #5f5d5d;
 
-                &>.ticket__count__tab {
-                    color: #5F5D5D;
+                & > .ticket__count__tab {
+                    color: #5f5d5d;
                 }
             }
 
@@ -701,7 +746,7 @@ nav {
             border-collapse: separate;
             border-spacing: 0 5px;
 
-            &> :not(caption)>*>* {
+            & > :not(caption) > * > * {
                 border-bottom-width: 0 !important;
             }
 
@@ -721,14 +766,14 @@ nav {
 
             tbody {
                 tr {
-                    background-color: #FFFFFF;
+                    background-color: #ffffff;
                     font-weight: $fw-500;
                     color: #363636;
                     transition: all 0.3s;
 
                     &:hover {
                         cursor: pointer;
-                        background-color: #F3F3F3;
+                        background-color: #f3f3f3;
                     }
                 }
 
@@ -783,8 +828,8 @@ nav {
                 .ticket__details__status {
                     font-weight: $fw-600;
                     font-size: $fs-11;
-                    color: #FFFFFF;
-                    background-color: #1D5C63;
+                    color: #ffffff;
+                    background-color: #1d5c63;
                     padding: 0.3rem 0.9rem;
                     border-radius: $border-radius-50;
                     text-transform: uppercase;
@@ -814,12 +859,12 @@ nav {
                     }
 
                     .btn__approve__ticket {
-                        background-color: #9DA85C;
-                        color: #FFFFFF;
+                        background-color: #9da85c;
+                        color: #ffffff;
                     }
 
                     .btn__disapprove__ticket {
-                        background-color: #E4EEED;
+                        background-color: #e4eeed;
                         color: #353535;
                     }
 
@@ -905,7 +950,7 @@ nav {
                 .ticket__details__user__picture__user__sender__name__initial {
                     font-size: 10px;
                     font-weight: $fw-600;
-                    color: #FFFFFF;
+                    color: #ffffff;
                     margin-top: 2px;
                     letter-spacing: 1px;
                 }
@@ -1082,10 +1127,10 @@ nav {
                         width: 30px;
                         border: 0 !important;
                         font-size: $fs-13;
-                        color: #6C757D;
+                        color: #6c757d;
 
                         &:hover {
-                            background-color: #F5F7F9;
+                            background-color: #f5f7f9;
                             color: #212529;
                         }
                     }
@@ -1099,7 +1144,7 @@ nav {
                         font-weight: $fw-500;
                         color: green;
                         padding: 2px 7px;
-                        background-color: #F5F7F9;
+                        background-color: #f5f7f9;
                         border: 0.01rem solid #d1d3d3;
                         height: 24px;
                     }
@@ -1136,7 +1181,7 @@ nav {
 
                     .btn__approve__costing {
                         font-size: $fs-13;
-                        background-color: #D32839;
+                        background-color: #d32839;
                         color: white;
                         outline: none;
                         font-weight: $fw-500;
@@ -1144,7 +1189,7 @@ nav {
 
                     .btn__disapprove__costing {
                         font-size: $fs-13;
-                        background-color: #7BA504;
+                        background-color: #7ba504;
                         color: white;
                         outline: none;
                         font-weight: $fw-500;
@@ -1172,10 +1217,10 @@ nav {
                         border-radius: $border-radius-8;
                         font-size: $fs-11;
                         padding: 0.3rem 0.5rem;
-                        background-color: #F5F7F9;
+                        background-color: #f5f7f9;
 
                         &:hover {
-                            background-color: #E9ECEF;
+                            background-color: #e9ecef;
                         }
                     }
 
@@ -1206,7 +1251,7 @@ nav {
                 padding: 1.5rem;
 
                 .ticket__actions {
-                    >li {
+                    > li {
                         list-style-type: square !important;
                         font-size: $fs-15;
                     }
@@ -1224,7 +1269,7 @@ nav {
                     font-size: $fs-12;
                     padding: 2px 8px;
                     border-radius: 5px;
-                    background-color: #F3F3F3;
+                    background-color: #f3f3f3;
 
                     &.not__set {
                         background-color: transparent;
@@ -1248,7 +1293,6 @@ nav {
                     object-fit: cover;
                     border-radius: 50%;
                     border: 2px solid #d9ddd9;
-
                 }
 
                 .btn__assigned__agent__details {
@@ -1262,10 +1306,8 @@ nav {
                         background-color: #bee6ef;
                     }
                 }
-
             }
         }
-
 
         .user__account__media {
             .user__picture {
@@ -1296,19 +1338,19 @@ nav {
     .count-item {
         font-size: $fs-12;
         font-weight: $fw-500;
-        background-color: #7BA504;
+        background-color: #7ba504;
         padding: 0.27rem 0.67rem;
         border-radius: 20px;
-        color: #FFFFFF;
+        color: #ffffff;
     }
 
     .btn__approve__ticket {
-        background-color: #9DA85C;
-        color: #FFFFFF;
+        background-color: #9da85c;
+        color: #ffffff;
     }
 
     .btn__disapprove__ticket {
-        background-color: #E4EEED;
+        background-color: #e4eeed;
         color: red;
     }
 
@@ -1333,7 +1375,6 @@ nav {
         color: #212529;
         font-weight: $fw-500;
 
-
         .causer__details {
             font-weight: $fw-600 !important;
         }
@@ -1354,16 +1395,16 @@ nav {
     font-size: $fs-15;
     border-radius: $border-radius-9;
     background-color: $color-1;
-    color: #FFFFFF;
+    color: #ffffff;
     font-weight: $fw-500;
 
     &:focus {
-        color: #FFFFFF;
+        color: #ffffff;
         background-color: $color-1;
     }
 
     &:hover {
-        color: #FFFFFF;
+        color: #ffffff;
         background-color: $color-1;
     }
 }
@@ -1376,11 +1417,11 @@ nav {
     box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12),
         0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
     background-color: #00695b;
-    color: #FFFFFF;
+    color: #ffffff;
 
     &:hover {
         background-color: #00695b;
-        color: #FFFFFF;
+        color: #ffffff;
     }
 
     i {
@@ -1465,7 +1506,7 @@ nav {
         width: 30px !important;
         border-radius: 0.625rem;
         box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-        background-color: #F2F2F2;
+        background-color: #f2f2f2;
         border: 2px solid #d9ddd9;
         color: 1a3c40;
         font-size: $fs-11;
@@ -1495,7 +1536,7 @@ nav {
         }
 
         &:hover {
-            background-color: #F2F2F2;
+            background-color: #f2f2f2;
         }
 
         .btn__view__notification {
@@ -1511,7 +1552,7 @@ nav {
             height: 25px;
             width: 25px;
             font-size: $fs-12;
-            background-color: #E9ECEF;
+            background-color: #e9ecef;
         }
     }
 
@@ -1540,7 +1581,7 @@ nav {
         border: none;
 
         &:hover {
-            background-color: #F8F9FA;
+            background-color: #f8f9fa;
         }
     }
 }
@@ -1551,7 +1592,6 @@ nav {
         height: 100% !important;
     }
 }
-
 
 @media (max-width: 767px) {
     .btn__reply__ticket {
@@ -1575,63 +1615,128 @@ nav {
 }
 
 @media (max-width: 375px) {
-    .approver__section .ticket__card .ticket__details__section .details__card__top .ticket__details__status {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .details__card__top
+        .ticket__details__status {
         font-size: 9px;
     }
 
-    .approver__section .ticket__card .ticket__details__section .details__card__top .ticket__details__ticketnumber {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .details__card__top
+        .ticket__details__ticketnumber {
         font-size: $fs-11;
     }
 
-    .approver__section .ticket__card .ticket__details__section .details__card__top .ticket__details__priority {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .details__card__top
+        .ticket__details__priority {
         font-size: $fs-11;
     }
 
-    .approver__section .ticket__card .ticket__details__section .details__card__top .ticket__details__header .ticket__details__title {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .details__card__top
+        .ticket__details__header
+        .ticket__details__title {
         font-size: $fs-13;
     }
 
-    .approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__user__fullname {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__user__fullname {
         font-size: $fs-12;
     }
 
-    .approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__user__department {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__user__department {
         font-size: 10px;
     }
 
-    .approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__time {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__time {
         font-size: 10px;
     }
 
-    .approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__description {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__card__body
+        .ticket__description {
         font-size: $fs-12;
     }
 
-    .approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__attachments {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__card__body
+        .ticket__attachments {
         font-size: $fs-11;
     }
 
-    .approver__section .ticket__card .ticket__details__section .ticket__discussions {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .ticket__discussions {
         font-size: $fs-11;
     }
 
-    .approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__header .reply__ticket__details__user__fullname {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__card__header
+        .reply__ticket__details__user__fullname {
         font-size: $fs-12;
     }
 
-    .approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .ticket__reply__content p {
+    .approver__section
+        .ticket__card
+        .ticket__details__section
+        .card__ticket__details
+        .ticket__details__card__body
+        .ticket__reply__content
+        p {
         font-size: $fs-11 !important;
     }
 
-    .approver__section .ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__actions__label {
+    .approver__section
+        .ticket__card
+        .container__ticket__details__right
+        .ticket__details__card__body__right
+        .ticket__actions__label {
         font-size: $fs-12;
     }
 
-    .approver__section .ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__details__info__label {
+    .approver__section
+        .ticket__card
+        .container__ticket__details__right
+        .ticket__details__card__body__right
+        .ticket__details__info__label {
         font-size: $fs-11;
     }
 
-    .approver__section .ticket__card .container__ticket__details__right .ticket__details__card__body__right .ticket__details__info {
+    .approver__section
+        .ticket__card
+        .container__ticket__details__right
+        .ticket__details__card__body__right
+        .ticket__details__info {
         font-size: $fs-11;
     }
 }

@@ -7269,12 +7269,12 @@ url(/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?4753c5ba57962b4d7bf8248a6
 
 ::-moz-selection {
   color: white;
-  background: #D32839;
+  background: #d32839;
 }
 
 ::selection {
   color: white;
-  background: #D32839;
+  background: #d32839;
 }
 
 .tooltip {
@@ -7293,7 +7293,7 @@ url(/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?4753c5ba57962b4d7bf8248a6
 }
 
 body {
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
 }
 
 .error__message {
@@ -7328,7 +7328,7 @@ body {
   width: 30px !important;
   border-radius: 0.625rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   border: 2px solid #d9ddd9;
   color: 1a3c40;
   font-size: 0.688rem;
@@ -7355,7 +7355,7 @@ body {
   border-left: 2px solid #d32839;
 }
 .notification__canvas .notification__card:hover {
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
 }
 .notification__canvas .notification__card .btn__view__notification {
   font-size: 0.875rem;
@@ -7368,7 +7368,7 @@ body {
   height: 25px;
   width: 25px;
   font-size: 0.75rem;
-  background-color: #E9ECEF;
+  background-color: #e9ecef;
 }
 .notification__canvas .no__notification .notification__bell__container {
   width: 50px;
@@ -7390,7 +7390,7 @@ body {
   border: none;
 }
 .notification__canvas .btn__close__notification__canvas:hover {
-  background-color: #F8F9FA;
+  background-color: #f8f9fa;
 }
 
 .action__button {
@@ -7450,8 +7450,8 @@ input[type=radio]:checked {
   box-shadow: none !important;
 }
 .radio__button:checked {
-  background-color: #D32839;
-  border: 1px solid #D32839;
+  background-color: #d32839;
+  border: 1px solid #d32839;
 }
 .radio__button:checked + .form-check-label {
   color: #d32839;
@@ -7471,7 +7471,7 @@ input[type=radio]:checked {
 .btn__submit:focus {
   background-color: #1f2937 !important;
   color: #ffffff !important;
-  border-color: #f3f4f6 !important;
+  border-color: #f9fafb !important;
 }
 .btn__submit:hover {
   background-color: #1f2937;
@@ -7519,7 +7519,7 @@ input[type=radio]:checked {
   border-color: transparent;
 }
 .btn__cancel:focus {
-  border-color: #f3f4f6 !important;
+  border-color: #f9fafb !important;
 }
 
 .btn__x {
@@ -7542,11 +7542,11 @@ input[type=radio]:checked {
   font-weight: 500 !important;
 }
 .modal__footer__button:focus {
-  border-color: #f3f4f6 !important;
+  border-color: #f9fafb !important;
 }
 
 .page__header__back__button:focus {
-  border-color: #f3f4f6 !important;
+  border-color: #f9fafb !important;
 }
 
 .form__errors {
@@ -7609,13 +7609,13 @@ input[type=radio]:checked {
 
 ::-moz-placeholder {
   font-size: 0.875rem;
-  color: #B5B5B5 !important;
+  color: #b5b5b5 !important;
   font-weight: 300;
 }
 
 ::placeholder {
   font-size: 0.875rem;
-  color: #B5B5B5 !important;
+  color: #b5b5b5 !important;
   font-weight: 300;
 }
 
@@ -7780,7 +7780,7 @@ a:hover {
   position: relative;
 }
 .page__wrapper .page__body__wrapper {
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
 }
 .page__wrapper .page__body__wrapper .page__body {
   min-height: calc(100vh - 76px);
@@ -7860,7 +7860,7 @@ a:hover {
   font-weight: 500;
 }
 .sidebar__buttons:hover {
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
 }
 .sidebar__buttons .transform__down {
   transform: rotate(1.5708rad);
@@ -7890,7 +7890,7 @@ a:hover {
 }
 
 .sidebar__btn__active.active {
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
   color: #31316a;
   font-weight: 600;
 }
@@ -7917,7 +7917,7 @@ a:hover {
   border-radius: 0.563rem;
 }
 .sidebar__collapse__btnlink:hover {
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
 }
 .sidebar__collapse__btnlink .sidebar__btn__link__name {
   font-size: 0.813rem;
@@ -7950,7 +7950,7 @@ a:hover {
 .sidebar__btn__link__badge {
   font-size: 0.813rem;
   color: #24695c;
-  background-color: #F5F7F9;
+  background-color: #f5f7f9;
   padding: 5px 6px;
   min-width: 25px;
   font-weight: 400;
@@ -8027,7 +8027,7 @@ a:hover {
 .sidebar .sidebar__userinitial {
   height: 90px;
   width: 90px;
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
   color: #d32839;
   border: 3px solid #d32839;
   font-size: 1.25rem;
@@ -8048,6 +8048,14 @@ a:hover {
   transition: all 0.4s ease 0s;
 }
 
+.status__card__link {
+  transition: all 0.3s;
+}
+.status__card__link:hover {
+  cursor: pointer;
+  transform: scale(1.02);
+}
+
 .dashboard__section .dashboard__card__by__status {
   overflow: hidden;
   margin-bottom: 23px;
@@ -8064,12 +8072,13 @@ a:hover {
   font-size: 1.125rem !important;
 }
 .dashboard__section .dashboard__card__by__status .progress__bar__container .progress__bar__ticket__count {
-  font-size: 0.938rem;
+  font-size: 1.125rem;
   font-weight: 600;
 }
 .dashboard__section .dashboard__card__by__status .progress__bar__container .custom__progress {
-  height: 9px;
+  height: 8px;
   width: 100%;
+  background-color: #f9fafb;
 }
 .dashboard__section .dashboard__card__by__status .progress__bar__container .custom__progress .custom__progress__bar {
   border-radius: 3.125rem;
@@ -8348,7 +8357,7 @@ a:hover {
   color: #d32839;
 }
 .ticket__section .ticket__details__container .card__ticket__details__right .btn__clear__tags {
-  color: #FF0808;
+  color: #ff0808;
 }
 .ticket__section .card__ticket__details {
   overflow: hidden;
@@ -8631,7 +8640,7 @@ a:hover {
   font-size: 0.75rem;
   padding: 4px 10px;
   border-radius: 5px;
-  background-color: #F3F3F3;
+  background-color: #f3f3f3;
 }
 .ticket__section .card__ticket__details .ticket__details__card__body__right .ticket__details__info.not__set {
   background-color: transparent;
@@ -8783,11 +8792,11 @@ a:hover {
   width: 30px;
   border: 0 !important;
   font-size: 0.813rem;
-  color: #6C757D;
+  color: #6c757d;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .btn__edit__costing:hover,
 .ticket__section .card__ticket__details .ticket__costing__container .btn__update__costing:hover {
-  background-color: #F5F7F9;
+  background-color: #f5f7f9;
   color: #212529;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .costing__header__label {
@@ -8798,7 +8807,7 @@ a:hover {
   font-weight: 500;
   color: green;
   padding: 2px 7px;
-  background-color: #F5F7F9;
+  background-color: #f5f7f9;
   border: 0.01rem solid #d1d3d3;
   height: 24px;
 }
@@ -8829,7 +8838,7 @@ a:hover {
 }
 .ticket__section .card__ticket__details .ticket__costing__container .btn__approve__costing {
   font-size: 0.813rem;
-  background-color: #D32839;
+  background-color: #d32839;
   color: white;
   outline: none;
   font-weight: 500;
@@ -8851,10 +8860,10 @@ a:hover {
   border-radius: 0.5rem;
   font-size: 0.688rem;
   padding: 0.3rem 0.5rem;
-  background-color: #F5F7F9;
+  background-color: #f5f7f9;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .btn__show__add__costing__file__modal:hover {
-  background-color: #E9ECEF;
+  background-color: #e9ecef;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .ticket__actual__cost {
   font-size: 1.2rem !important;
@@ -8863,7 +8872,7 @@ a:hover {
   font-size: 0.938rem;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .btn__purchase {
-  background-color: #E9ECEF;
+  background-color: #e9ecef;
   font-size: 0.75rem;
   font-weight: 500;
   color: #212529;
@@ -8890,7 +8899,7 @@ a:hover {
   color: #777d87 !important;
 }
 .ticket__section .card__ticket__details .ticket__costing__container .purchase__dropdown .dropdown-item:focus {
-  background-color: #E9ECEF !important;
+  background-color: #e9ecef !important;
 }
 .ticket__section .ticket__details__top {
   padding: 1.5rem 1.5rem 1.5rem 2.3rem;
@@ -8908,7 +8917,7 @@ a:hover {
   left: -19px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
   height: 2.3rem;
   width: 2.3rem;
   border: none !important;
@@ -8927,7 +8936,7 @@ a:hover {
   border-color: #d32839;
 }
 .ticket__section .sort__button {
-  background-color: #E9ECEF;
+  background-color: #e9ecef;
   font-size: 0.75rem;
   color: #212529;
   padding: 8px 12px;
@@ -8958,7 +8967,7 @@ a:hover {
   color: #777d87 !important;
 }
 .ticket__section .sort__button__dropdown .dropdown-item:focus {
-  background-color: #E9ECEF !important;
+  background-color: #e9ecef !important;
 }
 
 .reply__container {
@@ -8983,7 +8992,7 @@ a:hover {
   border: none;
 }
 .reply__container .qoute__reply__action__container .btn__reply__qoute__action:hover {
-  background-color: #E9ECEF;
+  background-color: #e9ecef;
 }
 .reply__container .qoute__reply__action__container .btn__qoute__reply {
   font-size: 1.125rem !important;
@@ -9053,7 +9062,7 @@ a:hover {
   border-bottom: 0 !important;
 }
 .log__container .my__logs {
-  background-color: #E9ECEF;
+  background-color: #e9ecef;
   font-size: 0.75rem;
   color: #212529;
 }
@@ -9078,20 +9087,20 @@ a:hover {
   color: #777d87 !important;
 }
 .log__container .my__logs__dropdown .dropdown-item:focus {
-  background-color: #E9ECEF !important;
+  background-color: #e9ecef !important;
 }
 
 .btn__claim__ticket {
-  color: #FFFFFF;
-  background-color: #9DA85C;
+  color: #ffffff;
+  background-color: #9da85c;
   padding: 0.4rem 0.9rem;
   font-weight: 500;
   font-size: 0.75rem;
   border-radius: 0.5rem;
 }
 .btn__claim__ticket:hover {
-  color: #FFFFFF;
-  background-color: #9DA85C;
+  color: #ffffff;
+  background-color: #9da85c;
 }
 
 .modal__confirm__approve__ticket .btn__confirm__modal {
@@ -9159,14 +9168,14 @@ a:hover {
   border-radius: 0.563rem;
 }
 .approval__dropdown__menu .dropdown__select__button.button__approve:hover {
-  background-color: #9DA85C;
-  color: #FFFFFF;
+  background-color: #9da85c;
+  color: #ffffff;
 }
 .approval__dropdown__menu .dropdown__select__button.button__disapprove {
   color: #d32839;
 }
 .approval__dropdown__menu .dropdown__select__button.button__disapprove:hover {
-  background-color: #E4EEED;
+  background-color: #e4eeed;
 }
 
 .custom__button__menu {
@@ -9256,8 +9265,8 @@ input[type=checkbox]:focus {
   border: 2px solid #d99595 !important;
 }
 input[type=checkbox]:checked {
-  background-color: #D32839 !important;
-  border: 2px solid #D32839 !important;
+  background-color: #d32839 !important;
+  border: 2px solid #d32839 !important;
 }
 input[type=checkbox]:checked + .form-check-label {
   color: #d32839;
@@ -9661,7 +9670,7 @@ input[type=checkbox]:checked + .form-check-label {
   color: white;
   font-weight: 500;
   box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
-  background-color: #1A2E35 !important;
+  background-color: #1a2e35 !important;
   padding: 6px 10px !important;
   width: auto !important;
   font-size: 12px;
@@ -9784,7 +9793,7 @@ input[type=checkbox]:checked + .form-check-label {
 }
 
 .ticket__tag {
-  background-color: #F5F7F9;
+  background-color: #f5f7f9;
   border-radius: 3.125rem;
   font-size: 0.75rem;
   padding: 3px 3px 3px 12px;
@@ -9926,10 +9935,10 @@ input[type=checkbox]:checked + .form-check-label {
   font-size: 1.125rem;
   color: rgb(104, 102, 102);
   border-radius: 3.125rem;
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
 }
 .announcement__section .announcement__card .announcement__card__list .announcement__content .btn__menu:hover {
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
 }
 .announcement__section .announcement__card .announcement__card__list .announcement__content .custom__dropdown__menu {
   padding: 5px;
