@@ -13,12 +13,10 @@ class Open extends Component
     use Tickets;
 
     public Collection $openTickets;
-    public Collection $forApprovalTickets;
 
     public function mount()
     {
         $this->openTickets = $this->getOpenTickets();
-        $this->forApprovalTickets = $this->getForApprovalTickets();
     }
 
     public function render()

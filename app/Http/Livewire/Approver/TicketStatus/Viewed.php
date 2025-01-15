@@ -19,22 +19,6 @@ class Viewed extends Component
         $this->viewedTickets = $this->getViewedTickets();
     }
 
-    public function isTicketNeedLevelOfApproval(Ticket $ticket)
-    {
-        return TicketApproval::where([
-            ['ticket_id', $ticket->id],
-            ['is_approved', false],
-        ])->exists();
-    }
-
-    public function isTicketIsAllApproved(Ticket $ticket)
-    {
-        return TicketApproval::where([
-            ['ticket_id', $ticket->id],
-            ['is_approved', true],
-        ])->exists();
-    }
-
     public function render()
     {
         return view('livewire.approver.ticket-status.viewed');

@@ -48,11 +48,6 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware(['auth', Role::staffsOnly()])->group(function () {
     Route::prefix('staff')->name('staff.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
-        Route::prefix('manual-ticket-assign')->name('manual_ticket_assign.')->group(function () {
-            Route::controller(StaffTicketController::class)->group(function () {
-                Route::get('/', 'ticketsToAssign')->name('to_assign');
-            });
-        });
         Route::controller(StaffTicketController::class)->group(function () {
             Route::get('/level-approval', 'ticketLevelApproval')->name('ticket_level_approval');
         });

@@ -13,28 +13,6 @@ trait Tickets
 {
     use BasicModelQueries;
 
-    public function getForApprovalTickets()
-    {
-        return Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
-            ->where('approval_status', ApprovalStatusEnum::APPROVED)
-            ->whereNotIn('status_id', [
-                Status::VIEWED,
-                Status::DISAPPROVED,
-                Status::APPROVED,
-                Status::ON_PROCESS
-            ])
-            ->withWhereHas('user', function ($user) {
-                $user->withWhereHas('buDepartments', function ($department) {
-                    $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
-                });
-            })
-            ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->where('user_id', auth()->user()->id);
-            })
-            ->orderByDesc('created_at')
-            ->get();
-    }
-
     public function getOpenTickets()
     {
         return Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
@@ -59,7 +37,7 @@ trait Tickets
     {
         return Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
-                $statusQuery->where('status_id', Status::CLOSED)
+                $statusQuery->where('status_id', Status::DISAPPROVED)
                     ->where('approval_status', ApprovalStatusEnum::DISAPPROVED);
             })
             ->withWhereHas('user.buDepartments', function ($department) {

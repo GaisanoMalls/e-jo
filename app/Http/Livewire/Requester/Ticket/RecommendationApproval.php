@@ -71,16 +71,26 @@ class RecommendationApproval extends Component
         })->exists();
     }
 
-    public function disApprovedRecommendationLevel(int $level, Recommendation $recommendation)
+    public function isDisApprovedRecommendationLevel(int $level, Recommendation $recommendation)
     {
-        return RecommendationApprover::withWhereHas('recommendation.approvalStatus', function ($status) use ($recommendation) {
+        return RecommendationApprover::withWhereHas('recommendation.approvalStatus', function ($status) {
             $status->where('approval_status', RecommendationApprovalStatusEnum::DISAPPROVED);
         })
             ->where([
+                ['recommendation_id', $recommendation->id],
                 ['level', $level],
-                ['is_approved', false],
-                ['recommendation_id', $recommendation->id]
+                ['is_approved', false]
             ])->exists();
+    }
+
+    public function isDisapprovedRecommendation(Recommendation $recommendation)
+    {
+        return Recommendation::withWhereHas('approvalStatus', function ($status) use ($recommendation) {
+            $status->where([
+                ['recommendation_id', $recommendation->id],
+                ['approval_status', RecommendationApprovalStatusEnum::DISAPPROVED]
+            ])->whereNotNull('disapproved_reason');
+        })->exists();
     }
 
     private function getRecommendations()

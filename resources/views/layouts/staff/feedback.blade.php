@@ -52,8 +52,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($feedbacks as $feedback)
-                                            <tr class="ticket__tr align-item"
-                                                onclick="window.location='{{ route('staff.ticket.view_ticket', $feedback->ticket->id) }}'">
+                                            <tr class="ticket__tr align-item" onclick="window.location='{{ route('staff.ticket.view_ticket', $feedback->ticket->id) }}'">
                                                 <td style="vertical-align: top;">
                                                     <div class="d-flex text-start gap-3 td__content">
                                                         <span>{{ $feedback->ticket->ticket_number }}</span>
@@ -62,32 +61,27 @@
                                                 <td style="vertical-align: top;">
                                                     <div class="d-flex text-start gap-3 td__content">
                                                         <div class="d-flex align-items-center user__account__media">
-                                                            @if ($feedback->ticket->user->profile)
-                                                                <img src="{{ Storage::url($feedback->ticket->user->profile->picture) }}"
-                                                                    class="image-fluid ticket__details__user__picture"
-                                                                    alt="">
+                                                            @if ($feedback->ticket->user?->profile)
+                                                                <img src="{{ Storage::url($feedback->ticket->user?->profile->picture) }}" class="image-fluid ticket__details__user__picture" alt="">
                                                             @else
-                                                                <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
-                                                                    style="background-color: #24695C;">
-                                                                    {{ $feedback->ticket->user->profile->getNameInitial() }}
+                                                                <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white" style="background-color: #24695C;">
+                                                                    {{ $feedback->ticket->user?->profile->getNameInitial() }}
                                                                 </div>
                                                             @endif
                                                             <div class="d-flex flex-column">
-                                                                <small class="fw-semibold ticket__details__user__fullname"
-                                                                    style="font-size: 0.8rem;">
-                                                                    {{ $feedback->ticket->user->profile->getFullName }}
+                                                                <small class="fw-semibold ticket__details__user__fullname" style="font-size: 0.8rem;">
+                                                                    {{ $feedback->ticket->user?->profile->getFullName }}
                                                                 </small>
                                                                 <small class="ticket__details__user__department">
-                                                                    {{ $feedback->ticket->user->getBUDepartments() }} -
-                                                                    {{ $feedback->ticket->user->getBranches() }}
+                                                                    {{ $feedback->ticket->user?->getBUDepartments() }} -
+                                                                    {{ $feedback->ticket->user?->getBranches() }}
                                                                 </small>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="text-start td__content"
-                                                        style="min-width: 18rem !important; max-width: 30rem; width: auto;">
+                                                    <div class="text-start td__content" style="min-width: 18rem !important; max-width: 30rem; width: auto;">
                                                         <div class="d-flex flex-column gap-1">
                                                             <div class="d-flex gap-1 stars__container">
                                                                 @for ($rating = 1; $rating <= 5; $rating++)
@@ -98,8 +92,7 @@
                                                                     @endif
                                                                 @endfor
                                                             </div>
-                                                            <small class="fw-semibold"
-                                                                style="font-size: 0.8rem; color: #1f2937;">
+                                                            <small class="fw-semibold" style="font-size: 0.8rem; color: #1f2937;">
                                                                 @if ($feedback->rating == 1)
                                                                     Terrible
                                                                 @endif
@@ -122,8 +115,7 @@
 
                                                             @if ($feedback->suggestion)
                                                                 <div class="d-flex flex-column mt-2 gap-1">
-                                                                    <span class="fw-normal"
-                                                                        style="font-size: 0.8rem; color: #8a92a1;">Suggestion</span>
+                                                                    <span class="fw-normal" style="font-size: 0.8rem; color: #8a92a1;">Suggestion</span>
                                                                     <small class="text-wrap" style="font-size: 0.84rem;">
                                                                         {{ $feedback->suggestion }}
                                                                     </small>
@@ -131,8 +123,7 @@
                                                             @endif
 
                                                             @if ($feedback->had_issues_encountered == 'Yes')
-                                                                <div class="d-flex align-items-center rounded-2 justify-content-center gap-2"
-                                                                    style="background-color: #e2e2e1; width: 11.3rem; padding: 2px 8px;">
+                                                                <div class="d-flex align-items-center rounded-2 justify-content-center gap-2" style="background-color: #e2e2e1; width: 11.3rem; padding: 2px 8px;">
                                                                     <i class="bi bi-info-circle"></i>
                                                                     <small style="color: #585858;">
                                                                         Had issues encountered
@@ -147,19 +138,14 @@
                                                         @if ($feedback->ticket->agent)
                                                             <div class="d-flex align-items-center user__account__media">
                                                                 @if (!$feedback->ticket->agent->profile)
-                                                                    <img src="{{ Storage::url($feedback->ticket->agent->profile->picture) }}"
-                                                                        class="image-fluid ticket__details__user__picture"
-                                                                        alt="">
+                                                                    <img src="{{ Storage::url($feedback->ticket->agent->profile->picture) }}" class="image-fluid ticket__details__user__picture" alt="">
                                                                 @else
-                                                                    <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
-                                                                        style="background-color: #196837;">
+                                                                    <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white" style="background-color: #196837;">
                                                                         {{ $feedback->ticket->agent->profile->getNameInitial() }}
                                                                     </div>
                                                                 @endif
                                                                 <div class="d-flex flex-column">
-                                                                    <small
-                                                                        class="fw-semibold ticket__details__user__fullname"
-                                                                        style="font-size: 0.8rem;">
+                                                                    <small class="fw-semibold ticket__details__user__fullname" style="font-size: 0.8rem;">
                                                                         {{ $feedback->ticket->agent->profile->getFullName }}
                                                                     </small>
                                                                     <small class="ticket__details__user__department">

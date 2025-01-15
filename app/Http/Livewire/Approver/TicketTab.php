@@ -25,7 +25,6 @@ class TicketTab extends Component
         $this->approvedTickets = $this->getApprovedTickets();
         $this->disapprovedTickets = $this->getDisapprovedTickets();
         $this->onProcessTickets = $this->getOnProcessTickets();
-        $this->forApprovalTickets = $this->getForApprovalTickets();
     }
 
     public function render()

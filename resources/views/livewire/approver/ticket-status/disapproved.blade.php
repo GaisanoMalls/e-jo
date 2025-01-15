@@ -23,16 +23,13 @@
                                 <th class="table__head__label">Subject</th>
                                 <th class="table__head__label">Assigned To</th>
                                 <th class="table__head__label">Priority Level</th>
-                                <th class="table__head__label">Approval Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($disapprovedTickets as $ticket)
-                                <tr
-                                    onclick="window.location.href='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
+                                <tr onclick="window.location.href='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
                                     <td class="custom__table__data">
-                                        <div class="ticket__list__status__line"
-                                            style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
+                                        <div class="ticket__list__status__line" style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
                                         <p class="mb-0">
                                             {{ $ticket->dateCreated() }}
                                             @
@@ -58,13 +55,6 @@
                                     <td class="custom__table__data">
                                         <p class="mb-0" style="color: {{ $ticket->priorityLevel->color }};">
                                             {{ $ticket->priorityLevel->name ?? '' }}</p>
-                                    </td>
-                                    <td class="custom__table__data py-0">
-                                        <small class="rounded-5"
-                                            style="background-color: red; color: #FFFFFF; font-size: 11px; padding: 7px 12px;">
-                                            <i class="fa-solid fa-xmark me-1"></i>
-                                            Disapproved
-                                        </small>
                                     </td>
                                 </tr>
                             @endforeach

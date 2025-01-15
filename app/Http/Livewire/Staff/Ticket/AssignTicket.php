@@ -44,7 +44,7 @@ class AssignTicket extends Component
 
     public function mount()
     {
-        $this->isSpecialProject = !is_null($this->ticket->isSpecialProject());
+        $this->isSpecialProject = $this->ticket->isSpecialProject() !== null;
         $this->currentlyAssignedAgent = $this->ticket->agent_id;
         $this->currentlyAssignedTeams = $this->ticket->teams->pluck('id')->toArray();
         $this->currentlyAssignedServiceDepartment = $this->ticket->serviceDepartment;
@@ -112,7 +112,7 @@ class AssignTicket extends Component
                 $this->ticket->teams()->sync($this->selectedTeams ?: null);
 
                 $this->ticket->refresh();
-                if (!is_null($this->ticket->agent_id)) {
+                if ($this->ticket->agent_id !== null) {
                     $this->ticket->update([
                         'status_id' => Status::CLAIMED,
                         'approval_status' => ApprovalStatusEnum::APPROVED,

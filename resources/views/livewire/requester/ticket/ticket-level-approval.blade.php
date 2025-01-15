@@ -26,29 +26,23 @@
                             </div>
                             @foreach ($this->fetchedApprovers($level) as $approver)
                                 <div class="d-flex flex-column">
-                                    <div
-                                        class="d-flex align-items-center justify-content-between position-relative ps-3 level__approver__container">
+                                    <div class="d-flex align-items-center justify-content-between position-relative ps-3 level__approver__container">
                                         <div class="level__approval__approver__dot position-absolute rounded-circle">
                                         </div>
                                         <div class="d-flex align-items-center" style="padding: 4px 0 4px 0;">
                                             @if ($approver->profile->picture)
-                                                <img src="{{ Storage::url($approver->profile->picture) }}"
-                                                    class="image-fluid level__approval__approver__picture">
+                                                <img src="{{ Storage::url($approver->profile->picture) }}" class="image-fluid level__approval__approver__picture">
                                             @else
-                                                <div class="level__approval__approver__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
-                                                    @style([
-                                                        'background-color: #3b4053' => $approver->hasRole(Role::APPROVER),
-                                                        'background-color: #9DA85C' => $approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN),
-                                                    ])>
+                                                <div class="level__approval__approver__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white" @style([
+                                                    'background-color: #3b4053' => $approver->hasRole(Role::APPROVER),
+                                                    'background-color: #9DA85C' => $approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN),
+                                                ])>
                                                     {{ $approver->profile->getNameInitial() }}
                                                 </div>
                                             @endif
                                             <small class="approver__name">
                                                 {{ $approver->profile->getFullName }}
                                             </small>
-                                            @if ($ticketApproval->helpTopicApprover->user_id === $approver->id && $this->isApprovalApproved())
-                                                <i class="bi bi-check2 ms-2"></i>
-                                            @endif
                                         </div>
                                     </div>
                                 </div>

@@ -182,7 +182,7 @@ class RecommendationApproval extends Component
             ->get();
     }
 
-    public function disApprovedRecommendationLevel(int $level, Recommendation $recommendation)
+    public function isDisApprovedRecommendationLevel(int $level, Recommendation $recommendation)
     {
         return RecommendationApprover::withWhereHas('recommendation.approvalStatus', function ($status) use ($recommendation) {
             $status->where('approval_status', RecommendationApprovalStatusEnum::DISAPPROVED);
@@ -194,7 +194,7 @@ class RecommendationApproval extends Component
             ])->exists();
     }
 
-    public function disapprovedRecommendation(Recommendation $recommendation)
+    public function isDisapprovedRecommendation(Recommendation $recommendation)
     {
         return Recommendation::withWhereHas('approvalStatus', function ($status) use ($recommendation) {
             $status->where([

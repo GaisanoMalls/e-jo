@@ -33,12 +33,10 @@
                             <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                                 <div class="d-flex align-items-center user__account__media">
                                     @if ($ticket->user->profile->picture)
-                                        <img src="{{ Storage::url($ticket->user->profile->picture) }}"
-                                            class="image-fluid ticket__details__user__picture" alt="">
+                                        <img src="{{ Storage::url($ticket->user->profile->picture) }}" class="image-fluid ticket__details__user__picture" alt="">
                                     @else
                                         <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center
-                                    text-white"
-                                            style="background-color: #24695C;">
+                                    text-white" style="background-color: #24695C;">
                                             {{ $ticket->user->profile->getNameInitial() }}</div>
                                     @endif
                                     <div class="d-flex flex-column">
@@ -63,8 +61,7 @@
                                     <div class="ticket__description">{!! $ticket->description !!}</div>
                                 @endif
                                 @if ($ticket->fileAttachments->count() > 0)
-                                    <div class="ticket__attachments d-inline-flex gap-1 mb-3" data-bs-toggle="modal"
-                                        data-bs-target="#requesterTicketFilesModalForm">
+                                    <div class="ticket__attachments d-inline-flex gap-1 mb-3" data-bs-toggle="modal" data-bs-target="#requesterTicketFilesModalForm">
                                         <i class="fa-solid fa-file-zipper"></i>
                                         <small class="attachment__count">{{ $ticket->fileAttachments->count() }}</small>
                                         <small class="attachment__label">
@@ -81,14 +78,10 @@
                             @show
                         </small>
                         <div class="d-flex align-items-center gap-3 threads__clarifications__tab__container">
-                            <a onclick="window.location='{{ route('user.ticket.view_ticket', $ticket->id) }}'"
-                                class="btn btn-sm px-0 rounded-0 {{ Route::is('user.ticket.view_ticket') ? 'active' : '' }}"
-                                type="button">
+                            <a onclick="window.location='{{ route('user.ticket.view_ticket', $ticket->id) }}'" class="btn btn-sm px-0 rounded-0 {{ Route::is('user.ticket.view_ticket') ? 'active' : '' }}" type="button">
                                 Reply Threads
                             </a>
-                            <a onclick="window.location='{{ route('user.ticket.ticket_clarifications', $ticket->id) }}'"
-                                class="btn btn-sm px-0 rounded-0 {{ Route::is('user.ticket.ticket_clarifications') ? 'active' : '' }}"
-                                type="button">
+                            <a onclick="window.location='{{ route('user.ticket.ticket_clarifications', $ticket->id) }}'" class="btn btn-sm px-0 rounded-0 {{ Route::is('user.ticket.ticket_clarifications') ? 'active' : '' }}" type="button">
                                 Clarifications
                             </a>
                         </div>
@@ -102,7 +95,7 @@
                 <div class="col-lg-4">
                     <div class="container__ticket__details__right">
                         @livewire('requester.ticket.ticket-details', ['ticket' => $ticket])
-                        {{-- @livewire('requester.ticket.ticket-level-approval', ['ticket' => $ticket]) --}}
+                        @livewire('requester.ticket.ticket-level-approval', ['ticket' => $ticket])
                         @livewire('requester.ticket.assigned-agent', ['ticket' => $ticket])
                         @livewire('requester.ticket.ticket-logs', ['ticket' => $ticket])
                     </div>

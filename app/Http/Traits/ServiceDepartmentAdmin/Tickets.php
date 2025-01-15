@@ -12,36 +12,6 @@ trait Tickets
 {
     use Utils;
 
-    public function serviceDeptAdminGetTicketsToAssign(): array|Collection
-    {
-        return Ticket::whereHas('teams')
-            ->withWhereHas('user', fn($user) => $user->withTrashed())
-            ->where(function ($statusQuery) {
-                $statusQuery->where('status_id', Status::APPROVED)
-                    ->where('approval_status', ApprovalStatusEnum::APPROVED);
-            })
-            ->where(function ($userQuery) {
-                $userQuery->withWhereHas('user.branches', function ($query) {
-                    $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
-                })->withWhereHas('user.buDepartments', function ($query) {
-                    $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first());
-                });
-            })
-            ->withWhereHas('ticketCosting', function ($ticketCosting) {
-                $ticketCosting->withWhereHas('prFileAttachments', function ($prFile) {
-                    $prFile->where([
-                        ['is_approved_level_1_approver', true],
-                        ['is_approved_level_2_approver', true],
-                    ]);
-                });
-            })
-            ->withWhereHas('ticketApprovals', function ($ticketApproval) {
-                $ticketApproval->where('is_approved', true);
-            })
-            ->orderByDesc('created_at')
-            ->get();
-    }
-
     /**
      * Filter the newly created tickets.
      * Condition: Requester and Service Dept. Admin - Match the Branch and BU Department.

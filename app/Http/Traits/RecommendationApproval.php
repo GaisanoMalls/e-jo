@@ -118,6 +118,30 @@ trait RecommendationApproval
                 foreach ($recommendationApprovers as $ticketApprover) {
                     if ($ticketApprover->approver_id === auth()->user()->id) {
                         if (!$ticketApprover->is_approved) {
+                            // Check if prior levels are approved
+                            $priorLevelsApproved = true;
+                            for ($i = 1; $i < $level; $i++) {
+                                $priorLevelApprovers = RecommendationApprover::withWhereHas('recommendation', function ($recommendation) use ($i, $ticket) {
+                                    $recommendation->where('ticket_id', $ticket->id);
+                                })
+                                    ->where('level', $i)
+                                    ->get();
+
+                                if (
+                                    !$priorLevelApprovers->every(function ($approver) {
+                                        return $approver->is_approved;
+                                    })
+                                ) {
+                                    $priorLevelsApproved = false;
+                                    break;
+                                }
+                            }
+
+                            if (!$priorLevelsApproved) {
+                                noty()->addInfo("Prior levels must be approved before approving this level.");
+                                break;
+                            }
+
                             $ticketApprover->update(['is_approved' => true]);
                             foreach ($recommendationApprovers as $otherApprover) {
                                 if (!$otherApprover->is_approved) {

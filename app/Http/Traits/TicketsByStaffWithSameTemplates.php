@@ -12,13 +12,6 @@ trait TicketsByStaffWithSameTemplates
 {
     use ServiceDepartmentAdminTickets, SysAdminTickets, AgentTickets;
 
-    public function getTicketsToAssign()
-    {
-        return (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
-            ? $this->serviceDeptAdminGetTicketsToAssign()
-            : [];
-    }
-
     public function getOpenTickets()
     {
         return match (true) {

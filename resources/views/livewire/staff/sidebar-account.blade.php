@@ -6,8 +6,7 @@
     <div class="sidebar__user text-center">
         <div class="position-relative d-flex justify-content-center">
             @if (auth()->user()->profile->picture)
-                <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="rounded-circle sidebar__userimage"
-                    alt="">
+                <img src="{{ Storage::url(auth()->user()->profile->picture) }}" class="rounded-circle sidebar__userimage" alt="">
             @else
                 <div class="d-flex align-items-center justify-content-center rounded-circle sidebar__userinitial">
                     {{ auth()->user()->profile->getNameInitial() }}

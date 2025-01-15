@@ -23,7 +23,7 @@ class TicketList extends Component
     public ?string $email = null;
     public ?string $feedback = null;
     public ?string $suggestion = null;
-    public ?bool $hadIssuesEncountered = null;
+    public ?string $hadIssuesEncountered = null;
 
     public function mount()
     {
@@ -39,7 +39,7 @@ class TicketList extends Component
     public function rules()
     {
         return [
-            'rating' => 'required|in:1,2,3,4,5',
+            'rating' => 'required',
             'hadIssuesEncountered' => 'required',
             'feedback' => 'required',
             'suggestion' => 'nullable',
@@ -60,9 +60,9 @@ class TicketList extends Component
     public function submitFeedback()
     {
         $this->validate();
+        // dump($this->rating, $this->hadIssuesEncountered, $this->feedback);
 
         try {
-
             Feedback::create([
                 'user_id' => auth()->user()->id,
                 'ticket_id' => $this->ticket->id,
