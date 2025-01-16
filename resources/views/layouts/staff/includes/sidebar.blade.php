@@ -47,14 +47,14 @@
                         Bookmarks
                     </a>
                 </li>
-                <hr>
+                {{-- <hr> --}}
                 @if (auth()->user()->hasRole(Role::SYSTEM_ADMIN))
                     <li class="mb-1">
                         <a href="{{ route('staff.manage.roles_and_permissions.index') }}" class="btn d-flex btn-block align-items-center w-100 sidebar__buttons {{ Route::is('staff.manage.*') ? 'sidebar__btn__active active' : '' }} gap-3 border-0">
                             <div class="d-flex align-items-center justify-content-center sidebar__button__icon__container">
                                 <i class="bi bi-gear-fill"></i>
                             </div>
-                            Manage
+                            Manage App
                         </a>
                     </li>
                 @endif

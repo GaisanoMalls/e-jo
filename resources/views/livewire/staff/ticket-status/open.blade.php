@@ -3,15 +3,26 @@
 @endphp
 
 <div>
-    <div class="tickets__card__header pb-0 pt-4 px-4">
-        <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between">
+    <div class="tickets__card__header py-5 px-4">
+        <div class="d-flex flex-wrap gap-5 align-items-center justify-content-between">
             <div class="d-flex flex-column me-3">
                 <h6 class="card__title">Open Tickets</h6>
                 <p class="card__description mb-0">
                     Respond the tickets sent by the requester
                 </p>
             </div>
-            <div class="d-flex gap-2 align-items-center justify-content-end">
+            <div class="d-flex gap-3 align-items-center justify-content-end">
+                <div class="d-flex gap-3 align-items-center">
+                    <div class="position-relative">
+                        <label for="helpTopicName" class="form-label position-absolute form__field__label" style="top: -25px;">From</label>
+                        <input type="date" class="form-control form__field">
+                    </div>
+                    <span>-</span>
+                    <div class="position-relative">
+                        <label for="helpTopicName" class="form-label position-absolute form__field__label" style="top: -25px;">To</label>
+                        <input type="date" class="form-control form__field">
+                    </div>
+                </div>
                 <div class="d-flex flex-column flex-wrap gap-1 position-relative">
                     <div class="w-100 d-flex align-items-center position-relative">
                         <input wire:model.debounce.400ms="searchTicket" type="text" class="form-control table__search__field" placeholder="Search ticket">
@@ -73,7 +84,7 @@
             </div>
         </div>
     </div>
-    <div class="tickets__table__card mt-3">
+    <div class="tickets__table__card">
         <div class="table-responsive custom__table">
             @if ($openTickets->isNotEmpty())
                 <table class="table mb-0">

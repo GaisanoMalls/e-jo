@@ -5,7 +5,7 @@
 @endphp
 
 @if ($recommendations->isNotEmpty() && $this->isRecommendationRequested())
-    <div>
+<div>
         @if ($approvalHistory->isNotEmpty())
             <div class="accordion mb-4" id="approvalHistoryAccordion">
                 <div class="accordion-item">

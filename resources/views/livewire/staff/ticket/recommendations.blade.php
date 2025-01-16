@@ -21,11 +21,9 @@
                     </thead>
                     <tbody>
                         @foreach ($recommendations as $recommendation)
-                            <tr class="ticket__tr"
-                                onclick="window.location='{{ route('staff.ticket.view_ticket', $recommendation->ticket->id) }}'">
+                            <tr class="ticket__tr" onclick="window.location='{{ route('staff.ticket.view_ticket', $recommendation->ticket->id) }}'">
                                 <td class="position-relative">
-                                    <div class="ticket__list__status__line"
-                                        style="background-color: {{ $recommendation->ticket->priorityLevel->color }};">
+                                    <div class="ticket__list__status__line" style="background-color: {{ $recommendation->ticket->priorityLevel->color }};">
                                     </div>
                                     <div class="d-flex align-items-center text-start td__content">
                                         <span>
