@@ -8,10 +8,14 @@ use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\User;
+use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -23,7 +27,7 @@ class SendClarification extends Component
     public Ticket $ticket;
     public int $upload = 0;
     public ?string $description = null;
-    public ?array $clarificationFiles = [];
+    public $clarificationFiles = [];
 
     public function rules()
     {
@@ -88,6 +92,25 @@ class SendClarification extends Component
                 $logDescription = $this->ticket->clarifications()->where('user_id', '!=', auth()->user()->id)->count() == 0
                     ? 'sent a clarification'
                     : 'replied a clarification to ' . $requester->user->profile->getFullName;
+
+                $requesterServiceDepartmentAdmins = User::with('profile')
+                    ->whereHas('buDepartments', function ($serviceDepartment) {
+                        $serviceDepartment->whereIn('departments.id', $this->ticket->user->buDepartments->pluck('id')->toArray());
+                    })
+                    ->role(Role::SERVICE_DEPARTMENT_ADMIN)
+                    ->get();
+
+                $requesterServiceDepartmentAdmins->each(function ($serviceDeptAdmin) {
+                    Notification::send(
+                        $serviceDeptAdmin,
+                        new AppNotification(
+                            ticket: $this->ticket,
+                            title: "Ticket #{$this->ticket->ticket_number} (Clarification)",
+                            message: auth()->user()->profile->getFullName . " sent a clarification",
+                            forClarification: true
+                        )
+                    );
+                });
 
                 ActivityLog::make(ticket_id: $this->ticket->id, description: $logDescription);
                 // Mail::to($ticket->user)->send(new FromApproverClarificationMail($ticket, $request->description));

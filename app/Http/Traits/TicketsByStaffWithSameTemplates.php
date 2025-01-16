@@ -18,7 +18,7 @@ trait TicketsByStaffWithSameTemplates
             Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetOpenTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetOpentTickets(),
             Auth::user()->hasRole(Role::AGENT) => $this->agentGetOpenTickets(),
-            default => [],
+            default => collect(),
         };
     }
 
@@ -27,7 +27,7 @@ trait TicketsByStaffWithSameTemplates
         return match (true) {
             Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetApprovedTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetApprovedTickets(),
-            default => [],
+            default => collect(),
         };
     }
 
@@ -36,7 +36,7 @@ trait TicketsByStaffWithSameTemplates
         return match (true) {
             Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetDisapprovedTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetDisapprovedTickets(),
-            default => [],
+            default => collect(),
         };
     }
 
@@ -56,7 +56,7 @@ trait TicketsByStaffWithSameTemplates
             Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetOnProcessTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetOnProcessTickets(),
             Auth::user()->hasRole(Role::AGENT) => $this->agentGetOnProcessTickets(),
-            default => [],
+            default => collect(),
         };
     }
 
@@ -65,7 +65,7 @@ trait TicketsByStaffWithSameTemplates
         return match (true) {
             Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetViewedTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetViewedTickets(),
-            default => [],
+            default => collect(),
         };
     }
 
@@ -75,7 +75,7 @@ trait TicketsByStaffWithSameTemplates
             Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetOverdueTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetOverdueTickets(),
             Auth::user()->hasRole(Role::AGENT) => $this->agentGetOverdueTickets(),
-            default => [],
+            default => collect(),
         };
     }
 
@@ -85,7 +85,7 @@ trait TicketsByStaffWithSameTemplates
             Auth::user()->hasRole(Role::SYSTEM_ADMIN) => $this->sysAdminGetClosedTickets(),
             Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => $this->serviceDeptAdminGetClosedTickets(),
             Auth::user()->hasRole(Role::AGENT) => $this->agentGetClosedTickets(),
-            default => [],
+            default => collect(),
         };
     }
 }

@@ -4,77 +4,26 @@ namespace App\Http\Livewire\Staff\TicketStatus;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\TicketsByStaffWithSameTemplates;
-use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
+use App\Models\PriorityLevel;
 use App\Models\Status;
 use App\Models\Ticket;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Open extends Component
 {
     use TicketsByStaffWithSameTemplates;
 
-    public bool $allOpenTickets = true;
-    public bool $withPr = false;
-    public bool $withoutPr = false;
-    public $openTickets = [];
+    public Collection|array $openTickets = [];
+    public string $searchTicket = "";
+    public ?int $priorityLevelId = null;
+    public ?string $priorityLevelName = null;
+    public Collection $priorityLevels;
 
     public function mount()
     {
-        $this->openTickets = $this->loadOpenTickets();
-    }
-
-    public function filterAllOpenTickets()
-    {
-        $this->withPr = false;
-        $this->withoutPr = false;
-        $this->allOpenTickets = true;
-        $this->loadOpenTickets();
-    }
-
-    public function filterOpenTicketsWithPr()
-    {
-        $this->allOpenTickets = false;
-        $this->withoutPr = false;
-        $this->withPr = true;
-        $this->loadOpenTickets();
-    }
-
-    public function filterOpenTicketsWithoutPr()
-    {
-        $this->allOpenTickets = false;
-        $this->withPr = false;
-        $this->withoutPr = true;
-        $this->loadOpenTickets();
-    }
-
-    public function loadOpenTickets()
-    {
-        if ($this->allOpenTickets) {
-            $this->openTickets = $this->getOpenTickets();
-        }
-
-        if ($this->withPr) {
-            $this->openTickets = Ticket::whereHas('ticketCosting.prFileAttachments')
-                ->where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL))
-                ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                    ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
-                ->orWhere(fn($query) => $query->withWhereHas('specialProjectAmountApproval', fn($spAmountApproval) => $spAmountApproval->where('is_done', true)))
-                ->orderByDesc('created_at')
-                ->get();
-        }
-
-        if ($this->withoutPr) {
-            $this->openTickets = Ticket::where(fn($statusQuery) => $statusQuery->where('status_id', Status::OPEN)->where('approval_status', ApprovalStatusEnum::FOR_APPROVAL))
-                ->where(fn($byUserQuery) => $byUserQuery->withWhereHas('user.branches', fn($query) => $query->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()))
-                    ->withWhereHas('user.buDepartments', fn($query) => $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first())))
-                ->orWhere(fn($query) => $query->withWhereHas('specialProjectAmountApproval', fn($spAmountApproval) => $spAmountApproval->where('is_done', true)))
-                ->withWhereHas('ticketCosting', fn($costing) => $costing->whereDoesntHave('prFileAttachments'))
-                ->orderByDesc('created_at')
-                ->get();
-        }
-
-        return $this->openTickets;
+        $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name']);
     }
 
     private function isRequestersServiceDepartmentAdmin(Ticket $ticket)
@@ -107,8 +56,39 @@ class Open extends Component
         return redirect()->route('staff.ticket.view_ticket', $ticket->id);
     }
 
+    public function clearSearchTicket()
+    {
+        $this->searchTicket = "";
+        $this->priorityLevelId = null;
+        $this->priorityLevelName = null;
+    }
+
+    public function filterPriorityLevel(PriorityLevel $priorityLevel)
+    {
+        $this->priorityLevelId = $priorityLevel->id;
+        $this->priorityLevelName = $priorityLevel->name;
+    }
+
+    public function filterAllPriorityLevels()
+    {
+        $this->priorityLevelId = null;
+        $this->priorityLevelName = null;
+    }
+
     public function render()
     {
-        return view('livewire.staff.ticket-status.open');
+        $this->openTickets = $this->getOpenTickets()->filter(function ($ticket) {
+            $matchSearch = stripos($ticket->ticket_number, $this->searchTicket) !== false
+                || stripos($ticket->subject, $this->searchTicket) !== false
+                || stripos($ticket->branch->name, $this->searchTicket) !== false;
+
+            $matchesPriority = $this->priorityLevelId ? $ticket->priority_level_id == $this->priorityLevelId : true;
+
+            return $matchSearch && $matchesPriority;
+        });
+
+        return view('livewire.staff.ticket-status.open', [
+            'openTickets' => $this->openTickets
+        ]);
     }
 }

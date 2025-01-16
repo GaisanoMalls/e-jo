@@ -53,7 +53,7 @@ class ReplyTicket extends Component
 
     private function actionOnSubmit()
     {
-        $this->replyFiles = null;
+        $this->replyFiles = [];
         $this->upload++;
         $this->triggerEvents();
         $this->reset('description');

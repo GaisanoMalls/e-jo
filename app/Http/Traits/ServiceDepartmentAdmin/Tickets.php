@@ -32,18 +32,6 @@ trait Tickets
                     $department->orWhereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                 });
             })
-            // ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-            //     $approver->where('user_id', auth()->user()->id);
-            // })
-            // ->where(function ($ticket) {
-            //     $ticket->withWhereHas('recommendation', function ($recommendation) {
-            //         $recommendation->withWhereHas('approvalLevels', function ($approvalLevel) {
-            //             $approvalLevel->withWhereHas('approvers', function ($approver) {
-            //                 $approver->orWhere('approver_id', auth()->user()->id);
-            //             });
-            //         });
-            //     });
-            // })
             ->orderByDesc('created_at')
             ->get();
     }
@@ -136,14 +124,21 @@ trait Tickets
 
     public function serviceDeptAdminGetOnProcessTickets(): array|Collection
     {
-        return Ticket::with(['replies', 'clarifications', 'helpTopic.specialProject'])
+        return Ticket::where(function ($query) {
+            $query->where('status_id', Status::ON_PROCESS)
+                ->whereIn('approval_status', [
+                    ApprovalStatusEnum::APPROVED,
+                    ApprovalStatusEnum::FOR_APPROVAL
+                ]);
+        })
+            ->with(['replies', 'clarifications', 'helpTopic.specialProject'])
             ->withWhereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($query) {
                 $query->whereHas('replies')
                     ->orWhereHas('clarifications')
                     ->orWhereHas('helpTopic.specialProject');
             })
-            ->where(function ($ticket) {
+            ->orWhere(function ($ticket) {
                 $ticket->withWhereHas('user', function ($user) {
                     $user->withWhereHas('branches', function ($branch) {
                         $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
@@ -158,13 +153,6 @@ trait Tickets
                 })->withWhereHas('serviceDepartment', function ($serviceDepartment) {
                     $serviceDepartment->whereIn('service_departments.id', auth()->user()->serviceDepartments->pluck('id')->toArray());
                 });
-            })
-            ->orWhere(function ($query) {
-                $query->where('status_id', Status::ON_PROCESS)
-                    ->whereIn('approval_status', [
-                        ApprovalStatusEnum::APPROVED,
-                        ApprovalStatusEnum::FOR_APPROVAL
-                    ]);
             })
             ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
@@ -199,8 +187,8 @@ trait Tickets
                         ApprovalStatusEnum::DISAPPROVED
                     ]);
             })
-            ->where(function ($userQuery) {
-                $userQuery->withWhereHas('user', function ($user) {
+            ->where(function ($ticket) {
+                $ticket->withWhereHas('user', function ($user) {
                     $user->withWhereHas('branches', function ($branch) {
                         $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
                     })->withWhereHas('buDepartments', function ($department) {

@@ -4,52 +4,76 @@
 
 <div>
     <div class="tickets__card__header pb-0 pt-4 px-4">
-        <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between">
             <div class="d-flex flex-column me-3">
                 <h6 class="card__title">Open Tickets</h6>
-                <p class="card__description">
+                <p class="card__description mb-0">
                     Respond the tickets sent by the requester
                 </p>
             </div>
-            <div class="d-flex">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-sm d-flex align-items-center gap-2 rounded-2 sort__button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <div wire:loading wire:target="allOpenTickets, withPr, withoutPr"
-                            class="spinner-border spinner-border-sm loading__spinner" role="status">
-                            <span class="sr-only">Loading...</span>
+            <div class="d-flex gap-2 align-items-center justify-content-end">
+                <div class="d-flex flex-column flex-wrap gap-1 position-relative">
+                    <div class="w-100 d-flex align-items-center position-relative">
+                        <input wire:model.debounce.400ms="searchTicket" type="text" class="form-control table__search__field" placeholder="Search ticket">
+                        <i wire:loading.remove wire:target="searchTicket" class="fa-solid fa-magnifying-glass table__search__icon"></i>
+                        <span wire:loading wire:target="searchTicket" class="spinner-border spinner-border-sm table__search__icon" role="status" aria-hidden="true">
+                        </span>
+                    </div>
+                    @if (!empty($searchTicket))
+                        <div class="w-100 d-flex align-items-center gap-2 mb-1 position-absolute" style="font-size: 0.9rem; bottom: -25px;">
+                            <small class="text-muted ">
+                                {{ $openTickets->count() }} {{ $openTickets->count() > 1 ? 'results' : 'result' }} found
+                            </small>
+                            <small wire:click="clearSearchTicket" class="fw-regular text-danger clear__search">Clear</small>
                         </div>
-                        <i wire:loading.remove wire:target="allOpenTickets, withPr, withoutPr" class="bi bi-filter"></i>
-                        {{ $allOpenTickets ? 'All' : ($withPr ? 'With PR' : ($withoutPr ? 'Without PR' : '')) }}
-                        <small class="text-muted" style="font-size: 12px;">
-                            ({{ $openTickets->count() }})
-                        </small>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end slideIn animate sort__button__dropdown">
-                        <li>
-                            <button wire:click="filterAllOpenTickets" class="dropdown-item d-flex align-item gap-2"
-                                type="button">
-                                All
-                            </button>
-                        </li>
-                        <li>
-                            <button wire:click="filterOpenTicketsWithPr" class="dropdown-item d-flex align-item gap-2"
-                                type="button">
-                                With PR
-                            </button>
-                        </li>
-                        <li>
-                            <button wire:click="filterOpenTicketsWithoutPr"
-                                class="dropdown-item d-flex align-items-center gap-2" type="button">
-                                Without PR
-                            </button>
-                        </li>
-                    </ul>
+                    @endif
+                </div>
+                <div class="d-flex">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm d-flex align-items-center gap-2 rounded-2 sort__button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div wire:loading wire:target="priorityLevelId" class="spinner-border spinner-border-sm loading__spinner" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <i wire:loading.remove wire:target="priorityLevelId" class="bi bi-filter"></i>
+                            @php
+                                $levelName = '';
+                                if ($priorityLevelName === 'Low') {
+                                    $levelName = $priorityLevelName;
+                                } elseif ($priorityLevelName === 'Medium') {
+                                    $levelName = $priorityLevelName;
+                                } elseif ($priorityLevelName === 'High') {
+                                    $levelName = $priorityLevelName;
+                                } elseif ($priorityLevelName === 'Urgent') {
+                                    $levelName = $priorityLevelName;
+                                }
+                            @endphp
+                            <small class="text-muted" style="font-size: 12px;">
+                                {{ $levelName ?: 'Priority level' }}
+                                @if ($levelName)
+                                    ({{ $openTickets->count() }})
+                                @endif
+                            </small>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end slideIn animate sort__button__dropdown">
+                            <li>
+                                <button wire:click="filterAllPriorityLevels" class="dropdown-item d-flex align-item gap-2" type="button">
+                                    All
+                                </button>
+                            </li>
+                            @foreach ($priorityLevels as $priorityLevel)
+                                <li>
+                                    <button wire:click="filterPriorityLevel({{ $priorityLevel->id }})" class="dropdown-item d-flex align-item gap-2" type="button">
+                                        {{ $priorityLevel->name }}
+                                    </button>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="tickets__table__card">
+    <div class="tickets__table__card mt-3">
         <div class="table-responsive custom__table">
             @if ($openTickets->isNotEmpty())
                 <table class="table mb-0">
@@ -81,15 +105,12 @@
                     <tbody>
                         @foreach ($openTickets as $ticket)
                             @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
-                                <tr wire:key="seen-ticket-{{ $ticket->id }}"
-                                    wire:click="seenTicket({{ $ticket->id }})" class="ticket__tr">
+                                <tr wire:key="seen-ticket-{{ $ticket->id }}" wire:click="seenTicket({{ $ticket->id }})" class="ticket__tr">
                                 @else
-                                <tr class="ticket__tr"
-                                    onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'">
+                                <tr class="ticket__tr" onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'">
                             @endif
                             <td class="position-relative">
-                                <div class="ticket__list__status__line"
-                                    style="background-color: {{ $ticket->priorityLevel->color }};">
+                                <div class="ticket__list__status__line" style="background-color: {{ $ticket->priorityLevel->color }};">
                                 </div>
                                 <div class="d-flex align-items-center text-start td__content">
                                     <span>
@@ -101,9 +122,7 @@
                             <td>
                                 <div class="d-flex align-items-center text-start gap-3 td__content p-0">
                                     <span>
-                                        {!! $ticket->isSpecialProject()
-                                            ? '<i class="bi bi-check-circle-fill "style="color: #FF0000;"></i>'
-                                            : '<i class="bi bi-x-circle-fill" style="color: #c2c2cf;"></i>' !!}
+                                        {!! $ticket->isSpecialProject() ? '<i class="bi bi-check-circle-fill "style="color: #FF0000;"></i>' : '<i class="bi bi-x-circle-fill" style="color: #c2c2cf;"></i>' !!}
                                     </span>
                                 </div>
                             </td>
@@ -142,8 +161,7 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center text-start td__content">
-                                    <span
-                                        style="color: {{ $ticket->priorityLevel->color }};">{{ $ticket->priorityLevel->name }}</span>
+                                    <span style="color: {{ $ticket->priorityLevel->color }};">{{ $ticket->priorityLevel->name }}</span>
                                 </div>
                             </td>
                             </tr>

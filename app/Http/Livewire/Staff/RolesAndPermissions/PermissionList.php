@@ -10,9 +10,9 @@ class PermissionList extends Component
 {
     use WithPagination;
 
-    public $searchPermission = '';
-    public $numberList = [5, 10, 20];
-    public $paginatePageNumber = 5;
+    public string $searchPermission = "";
+    public array $numberList = [5, 10, 20];
+    public int $paginatePageNumber = 5;
 
     protected $paginationTheme = 'bootstrap';
 

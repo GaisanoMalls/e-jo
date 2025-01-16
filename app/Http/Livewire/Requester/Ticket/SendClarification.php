@@ -27,7 +27,7 @@ class SendClarification extends Component
     public Ticket $ticket;
     public int $upload = 0;
     public ?string $description = null;
-    public ?array $clarificationFiles = [];
+    public string|array $clarificationFiles = [];
 
     public function rules()
     {
@@ -57,7 +57,7 @@ class SendClarification extends Component
 
     private function actionOnSubmit()
     {
-        $this->clarificationFiles = null;
+        $this->clarificationFiles = [];
         $this->upload++;
         $this->triggerEvents();
         $this->reset('description');

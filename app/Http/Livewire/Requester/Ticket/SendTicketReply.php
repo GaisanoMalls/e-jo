@@ -23,7 +23,7 @@ class SendTicketReply extends Component
     public Ticket $ticket;
     public int $upload = 0;
     public ?string $description = null;
-    public ?array $replyFiles = [];
+    public $replyFiles = [];
 
     public function rules()
     {
@@ -52,7 +52,7 @@ class SendTicketReply extends Component
 
     private function actionOnSubmit()
     {
-        $this->replyFiles = null;
+        $this->replyFiles = [];
         $this->upload++;
         $this->triggerEvents();
         $this->reset('description');

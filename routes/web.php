@@ -60,7 +60,6 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
                 Route::get('/on-process', 'onProcessTickets')->name('on_process_tickets');
                 Route::get('/claimed', 'claimedTickets')->name('claimed_tickets');
                 Route::get('/viewed', 'viewedTickets')->name('viewed_tickets');
-                // Route::get('/reopened', 'reopenedTickets')->name('reopened_tickets');
                 Route::get('/overdue', 'overdueTickets')->name('overdue_tickets');
                 Route::get('/closed', 'closedTickets')->name('closed_tickets');
             });

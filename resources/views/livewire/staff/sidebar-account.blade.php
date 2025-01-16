@@ -43,7 +43,7 @@
                 {{ auth()->user()->getBranches() ?? '' }}
             </p>
         @endif
-        <div class="mt-3 d-flex staff__ticket__count justify-content-center">
+        {{-- <div class="mt-3 d-flex staff__ticket__count justify-content-center">
             @if (auth()->user()->hasRole(Role::AGENT))
                 <li>
                     <span class="counter">{{ auth()->user()->getClaimedTickets() }}</span>
@@ -58,6 +58,6 @@
                 <span class="counter">2</span>
                 <p class="counter__label">Resolved</p>
             </li>
-        </div>
+        </div> --}}
     </div>
 </div>

@@ -57,7 +57,7 @@ trait Utils
      */
     public static function generatedTicketNumber()
     {
-        return self::alphaNum() . "-" . self::currentMonth();
+        return "EJO-" . self::alphaNum() . "-" . self::currentMonth();
     }
 
     /**

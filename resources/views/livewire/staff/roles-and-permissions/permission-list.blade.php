@@ -2,17 +2,13 @@
     <div class="d-flex flex-wrap-reverse align-items-center justify-content-between my-3">
         <div class="d-flex flex-column flex-wrap mx-4 pt-3 gap-1 position-relative">
             <div class="w-100 d-flex align-items-center position-relative">
-                <input wire:model.debounce.400ms="searchPermission" type="text"
-                    class="form-control table__search__field" placeholder="Search permission">
-                <i wire:loading.remove wire:target="searchPermission"
-                    class="fa-solid fa-magnifying-glass table__search__icon"></i>
-                <span wire:loading wire:target="searchPermission"
-                    class="spinner-border spinner-border-sm table__search__icon" role="status" aria-hidden="true">
+                <input wire:model.debounce.400ms="searchPermission" type="text" class="form-control table__search__field" placeholder="Search permission">
+                <i wire:loading.remove wire:target="searchPermission" class="fa-solid fa-magnifying-glass table__search__icon"></i>
+                <span wire:loading wire:target="searchPermission" class="spinner-border spinner-border-sm table__search__icon" role="status" aria-hidden="true">
                 </span>
             </div>
             @if (!empty($searchPermission))
-                <div class="w-100 d-flex align-items-center gap-2 mb-1 position-absolute"
-                    style="font-size: 0.9rem; bottom: -25px;">
+                <div class="w-100 d-flex align-items-center gap-2 mb-1 position-absolute" style="font-size: 0.9rem; bottom: -25px;">
                     <small class="text-muted ">
                         {{ $permissions->count() }} {{ $permissions->count() > 1 ? 'results' : 'result' }} found
                     </small>
@@ -45,8 +41,7 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center text-start justify-content-end td__content">
-                                        <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
-                                            wire:click="deletePermission({{ $permission->id }})">
+                                        <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal" wire:click="deletePermission({{ $permission->id }})">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </div>

@@ -17,24 +17,6 @@
         <div class="ticket__section">
             <div class="col-12">
                 <div class="card d-flex flex-column tickets__card p-0">
-                    <div class="tickets__card__header pb-0 pt-4 px-4">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="d-flex flex-column me-3">
-                                <h6 class="card__title">On Process Tickets</h6>
-                                <p class="card__description">
-                                    Respond the tickets sent by the requester
-                                </p>
-                            </div>
-                            <div class="d-flex">
-                                <button type="button"
-                                    class="btn d-flex align-items-center justify-content-center gap-2 button__header"
-                                    data-bs-toggle="modal" data-bs-target="#filterUserWithRolesModal">
-                                    <i class="fa-solid fa-filter"></i>
-                                    <span class="button__name">Add filter</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                     @livewire('staff.ticket-status.on-process')
                 </div>
             </div>

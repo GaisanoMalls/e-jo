@@ -9,7 +9,7 @@ class Dashboard extends Component
 {
     use RequestserTickets;
 
-    protected $listeners = ['loadDashboard' => 'mount'];
+    protected $listeners = ['loadDashboard' => '$refresh'];
 
     public int $openTickets;
     public int $onProcessTickets;
