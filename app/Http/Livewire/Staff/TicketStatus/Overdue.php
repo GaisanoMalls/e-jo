@@ -11,15 +11,17 @@ class Overdue extends Component
 {
     use TicketsByStaffWithSameTemplates;
 
-    public Collection|array $overdueTickets = [];
+    public Collection $overdueTickets;
+    public Collection $priorityLevels;
     public string $searchTicket = "";
     public ?int $priorityLevelId = null;
     public ?string $priorityLevelName = null;
-    public Collection $priorityLevels;
+    public ?string $startDate = null;
+    public ?string $endDate = null;
 
     public function mount()
     {
-        $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name']);
+        $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name', 'color']);
     }
 
     public function clearSearchTicket()
@@ -39,6 +41,12 @@ class Overdue extends Component
     {
         $this->priorityLevelId = null;
         $this->priorityLevelName = null;
+    }
+
+    public function isEmptyOverdueTickets()
+    {
+        return $this->overdueTickets->isEmpty()
+            && (!$this->searchTicket && !$this->priorityLevelId && !$this->startDate && !$this->endDate);
     }
 
     public function render()

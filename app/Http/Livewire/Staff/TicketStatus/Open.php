@@ -8,6 +8,7 @@ use App\Models\ActivityLog;
 use App\Models\PriorityLevel;
 use App\Models\Status;
 use App\Models\Ticket;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
@@ -15,15 +16,19 @@ class Open extends Component
 {
     use TicketsByStaffWithSameTemplates;
 
-    public Collection|array $openTickets = [];
+    public Collection $openTickets;
+    public Collection $priorityLevels;
     public string $searchTicket = "";
     public ?int $priorityLevelId = null;
     public ?string $priorityLevelName = null;
-    public Collection $priorityLevels;
+    public ?string $specificDate = null;
+    public ?string $startDate = null;
+    public ?string $endDate = null;
+    public bool $useDateRange = false;
 
     public function mount()
     {
-        $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name']);
+        $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name', 'color']);
     }
 
     private function isRequestersServiceDepartmentAdmin(Ticket $ticket)
@@ -63,6 +68,13 @@ class Open extends Component
         $this->priorityLevelName = null;
     }
 
+    public function toggleDateRange()
+    {
+        $this->useDateRange = !$this->useDateRange;
+        $this->startDate = null;
+        $this->endDate = null;
+    }
+
     public function filterPriorityLevel(PriorityLevel $priorityLevel)
     {
         $this->priorityLevelId = $priorityLevel->id;
@@ -75,6 +87,12 @@ class Open extends Component
         $this->priorityLevelName = null;
     }
 
+    public function isEmptyOpenTickets()
+    {
+        return $this->openTickets->isEmpty()
+            && (!$this->searchTicket && !$this->priorityLevelId && !$this->startDate && !$this->endDate && !$this->specificDate);
+    }
+
     public function render()
     {
         $this->openTickets = $this->getOpenTickets()->filter(function ($ticket) {
@@ -83,8 +101,15 @@ class Open extends Component
                 || stripos($ticket->branch->name, $this->searchTicket) !== false;
 
             $matchesPriority = $this->priorityLevelId ? $ticket->priority_level_id == $this->priorityLevelId : true;
+            $matchesDateRange = $this->searchTicketByDate(
+                ticket: $ticket,
+                startDate: $this->startDate,
+                endDate: $this->endDate,
+                specificDate: $this->specificDate,
+                useDateRange: $this->useDateRange
+            );
 
-            return $matchSearch && $matchesPriority;
+            return $matchSearch && $matchesPriority && $matchesDateRange;
         });
 
         return view('livewire.staff.ticket-status.open', [

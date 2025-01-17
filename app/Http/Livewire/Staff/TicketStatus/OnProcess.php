@@ -11,15 +11,17 @@ class OnProcess extends Component
 {
     use TicketsByStaffWithSameTemplates;
 
-    public Collection|array $onProcessTickets = [];
+    public Collection $onProcessTickets;
+    public Collection $priorityLevels;
     public string $searchTicket = "";
     public ?int $priorityLevelId = null;
     public ?string $priorityLevelName = null;
-    public Collection $priorityLevels;
+    public ?string $startDate = null;
+    public ?string $endDate = null;
 
     public function mount()
     {
-        $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name']);
+        $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name', 'color']);
     }
 
     public function clearSearchTicket()
@@ -40,6 +42,13 @@ class OnProcess extends Component
         $this->priorityLevelId = null;
         $this->priorityLevelName = null;
     }
+
+    public function isEmptyOnProcessTickets()
+    {
+        return $this->onProcessTickets->isEmpty()
+            && (!$this->searchTicket && !$this->priorityLevelId && !$this->startDate && !$this->endDate);
+    }
+
     public function render()
     {
         $this->onProcessTickets = $this->getOnProcessTickets()->filter(function ($ticket) {

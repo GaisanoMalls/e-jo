@@ -11,17 +11,18 @@ class Approved extends Component
 {
     use TicketsByStaffWithSameTemplates;
 
-    public Collection|array $approvedTickets = [];
+    public Collection $approvedTickets;
+    public Collection $priorityLevels;
     public string $searchTicket = "";
     public ?int $priorityLevelId = null;
     public ?string $priorityLevelName = null;
-    public Collection $priorityLevels;
+    public ?string $startDate = null;
+    public ?string $endDate = null;
 
     public function mount()
     {
-        $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name']);
+        $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name', 'color']);
     }
-
 
     public function clearSearchTicket()
     {
@@ -42,6 +43,13 @@ class Approved extends Component
         $this->priorityLevelName = null;
     }
 
+
+    public function isEmptyApprovedTickets()
+    {
+        return $this->approvedTickets->isEmpty()
+            && (!$this->searchTicket && !$this->priorityLevelId && !$this->startDate && !$this->endDate);
+    }
+
     public function render()
     {
         $this->approvedTickets = $this->getApprovedTickets()->filter(function ($ticket) {
@@ -50,8 +58,9 @@ class Approved extends Component
                 || stripos($ticket->branch->name, $this->searchTicket) !== false;
 
             $matchesPriority = $this->priorityLevelId ? $ticket->priority_level_id == $this->priorityLevelId : true;
+            $matchesDateRange = $this->searchTicketByDate($ticket, $this->startDate, $this->endDate);
 
-            return $matchSearch && $matchesPriority;
+            return $matchSearch && $matchesPriority && $matchesDateRange;
         });
 
         return view('livewire.staff.ticket-status.approved', [

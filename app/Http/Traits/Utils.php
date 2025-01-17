@@ -215,6 +215,30 @@ trait Utils
         return trim(str_replace($this->getSLADays($ticket), "", $ticket->sla->time_unit));
     }
 
+    public function searchTicketByDate(Ticket $ticket, ?string $startDate = null, ?string $endDate = null, ?string $specificDate = null, bool $useDateRange = false)
+    {
+        $ticketDate = Carbon::parse($ticket->created_at);
+
+        if ($startDate) {
+            $sDate = Carbon::parse($startDate)->startOfDay();
+
+            if ($endDate) {
+                $eDate = Carbon::parse($endDate)->endOfDay();
+                return $ticketDate->between($sDate, $eDate);
+            }
+
+            // If only startDate is provided, check if the ticket date is on the same day
+            return $ticketDate->between($sDate, $sDate->endOfDay());
+        }
+
+        if ($specificDate) {
+            $spfcDate = Carbon::parse($specificDate)->startOfDay();
+            return $ticketDate->isSameDay($spfcDate);
+        }
+
+        return true; // If no start date is provided, consider it a match
+    }
+
     public function isOnlyAgent(?int $agentId)
     {
         return auth()->user()->id === $agentId && auth()->user()->hasRole(Role::AGENT);

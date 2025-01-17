@@ -1,16 +1,16 @@
 <div>
-    <div class="tickets__card__header pb-0 pt-4 px-4">
-        <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between">
+    <div class="tickets__card__header py-5 px-4">
+        <div class="d-flex flex-wrap gap-5 align-items-center justify-content-between">
             <div class="d-flex flex-column me-3">
                 <h6 class="card__title">On Process Tickets</h6>
                 <p class="card__description mb-0">
                     Respond the tickets sent by the requester
                 </p>
             </div>
-            <div class="d-flex gap-2 align-items-center justify-content-end">
+            <div class="d-flex flex-wrap gap-3 align-items-center justify-content-lg-between">
                 <div class="d-flex flex-column flex-wrap gap-1 position-relative">
                     <div class="w-100 d-flex align-items-center position-relative">
-                        <input wire:model.debounce.400ms="searchTicket" type="text" class="form-control table__search__field" placeholder="Search ticket">
+                        <input wire:model.debounce.400ms="searchTicket" type="text" class="form-control table__search__field" placeholder="Search ticket" @disabled($this->isEmptyOnProcessTickets())>
                         <i wire:loading.remove wire:target="searchTicket" class="fa-solid fa-magnifying-glass table__search__icon"></i>
                         <span wire:loading wire:target="searchTicket" class="spinner-border spinner-border-sm table__search__icon" role="status" aria-hidden="true">
                         </span>
@@ -24,9 +24,19 @@
                         </div>
                     @endif
                 </div>
+                <div class="d-flex gap-3 align-items-center w-auto">
+                    <div class="position-relative">
+                        <label for="start-date" class="form-label position-absolute form__field__label" style="top: -25px;">From</label>
+                        <input type="date" wire:model="startDate" class="form-control form__field" id="start-date" @disabled($this->isEmptyOnProcessTickets())>
+                    </div>
+                    <div class="position-relative">
+                        <label for="end-date" class="form-label position-absolute form__field__label" style="top: -25px;">To</label>
+                        <input type="date" wire:model="endDate" class="form-control form__field" id="end-date" @disabled($this->isEmptyOnProcessTickets())>
+                    </div>
+                </div>
                 <div class="d-flex">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm d-flex align-items-center gap-2 rounded-2 sort__button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-sm d-flex align-items-center gap-2 rounded-2 sort__button" data-bs-toggle="dropdown" aria-expanded="false" @disabled($this->isEmptyOnProcessTickets())>
                             <div wire:loading wire:target="priorityLevelId" class="spinner-border spinner-border-sm loading__spinner" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>
@@ -44,10 +54,7 @@
                                 }
                             @endphp
                             <small class="text-muted" style="font-size: 12px;">
-                                {{ $levelName ?: 'Priority level' }}
-                                @if ($levelName)
-                                    ({{ $onProcessTickets->count() }})
-                                @endif
+                                {{ $levelName ?: 'Priority' }}
                             </small>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end slideIn animate sort__button__dropdown">
@@ -58,7 +65,8 @@
                             </li>
                             @foreach ($priorityLevels as $priorityLevel)
                                 <li>
-                                    <button wire:click="filterPriorityLevel({{ $priorityLevel->id }})" class="dropdown-item d-flex align-item gap-2" type="button">
+                                    <button wire:click="filterPriorityLevel({{ $priorityLevel->id }})" class="dropdown-item d-flex align-items-center gap-2" type="button">
+                                        <i class="bi bi-circle-fill" style="color: {{ $priorityLevel->color }} !important; font-size: 10px;"></i>
                                         {{ $priorityLevel->name }}
                                     </button>
                                 </li>
@@ -69,7 +77,7 @@
             </div>
         </div>
     </div>
-    <div class="tickets__table__card mt-3">
+    <div class="tickets__table__card">
         <div class="table-responsive custom__table">
             @if ($onProcessTickets?->isNotEmpty())
                 <table class="table mb-0">
