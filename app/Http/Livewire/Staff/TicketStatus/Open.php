@@ -8,23 +8,33 @@ use App\Models\ActivityLog;
 use App\Models\PriorityLevel;
 use App\Models\Status;
 use App\Models\Ticket;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Open extends Component
 {
-    use TicketsByStaffWithSameTemplates;
+    use TicketsByStaffWithSameTemplates, WithPagination;
 
-    public Collection $openTickets;
+    protected Collection|LengthAwarePaginator $openTickets;
     public Collection $priorityLevels;
     public string $searchTicket = "";
     public ?int $priorityLevelId = null;
     public ?string $priorityLevelName = null;
-    public ?string $specificDate = null;
-    public ?string $startDate = null;
-    public ?string $endDate = null;
+    public ?string $searchDate = null;
+    public ?string $searchMonth = null;
+    public ?string $searchStartDate = null;
+    public ?string $searchEndDate = null;
+    public bool $useDate = false;
+    public bool $useMonth = false;
     public bool $useDateRange = false;
+
+    // Pagination
+    public array $pageNumberOptions = [1, 5, 10, 20, 50];
+    public int $paginatePageNumber = 5;
+    protected $paginationTheme = 'bootstrap';
 
     public function mount()
     {
@@ -68,11 +78,55 @@ class Open extends Component
         $this->priorityLevelName = null;
     }
 
+    public function selectPaginateNumber(int $selectedNumber)
+    {
+        $this->paginatePageNumber = $selectedNumber;
+    }
+
+    public function toggleDate()
+    {
+        $this->useDate = !$this->useDate;
+        $this->resetMonthFilter();
+        $this->resetDateRangeFilter();
+    }
+
+    public function toggleMonth()
+    {
+        $this->useMonth = !$this->useMonth;
+        $this->resetDateFilter();
+        $this->resetDateRangeFilter();
+    }
+
     public function toggleDateRange()
     {
         $this->useDateRange = !$this->useDateRange;
-        $this->startDate = null;
-        $this->endDate = null;
+        $this->resetDateFilter();
+        $this->resetMonthFilter();
+    }
+
+    private function resetDateFilter()
+    {
+        $this->reset([
+            'useDate',
+            'searchDate'
+        ]);
+    }
+
+    private function resetMonthFilter()
+    {
+        $this->reset([
+            'useMonth',
+            'searchMonth'
+        ]);
+    }
+
+    private function resetDateRangeFilter()
+    {
+        $this->reset([
+            'useDateRange',
+            'searchStartDate',
+            'searchEndDate'
+        ]);
     }
 
     public function filterPriorityLevel(PriorityLevel $priorityLevel)
@@ -87,15 +141,21 @@ class Open extends Component
         $this->priorityLevelName = null;
     }
 
-    public function isEmptyOpenTickets()
+    public function isEmptyFilteredTickets()
     {
         return $this->openTickets->isEmpty()
-            && (!$this->searchTicket && !$this->priorityLevelId && !$this->startDate && !$this->endDate && !$this->specificDate);
+            && (
+                !$this->searchTicket
+                && !$this->priorityLevelId
+                && !$this->useDateRange
+                && !$this->useDate
+                && !$this->useMonth
+            );
     }
 
     public function render()
     {
-        $this->openTickets = $this->getOpenTickets()->filter(function ($ticket) {
+        $filteredTickets = $this->getOpenTickets()->filter(function ($ticket) {
             $matchSearch = stripos($ticket->ticket_number, $this->searchTicket) !== false
                 || stripos($ticket->subject, $this->searchTicket) !== false
                 || stripos($ticket->branch->name, $this->searchTicket) !== false;
@@ -103,17 +163,32 @@ class Open extends Component
             $matchesPriority = $this->priorityLevelId ? $ticket->priority_level_id == $this->priorityLevelId : true;
             $matchesDateRange = $this->searchTicketByDate(
                 ticket: $ticket,
-                startDate: $this->startDate,
-                endDate: $this->endDate,
-                specificDate: $this->specificDate,
-                useDateRange: $this->useDateRange
+                searchStartDate: $this->searchStartDate,
+                searchEndDate: $this->searchEndDate,
+                searchDate: $this->searchDate,
+                searchMonth: $this->searchMonth,
+                useDate: $this->useDate,
+                useMonth: $this->useMonth,
+                useDateRange: $this->useDateRange,
             );
 
             return $matchSearch && $matchesPriority && $matchesDateRange;
         });
 
+        $page = request()->get('page', 1);
+        $paginatedTickets = new LengthAwarePaginator(
+            $filteredTickets->forPage($page, $this->paginatePageNumber),
+            $filteredTickets->count(),
+            $this->paginatePageNumber,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $this->openTickets = collect($paginatedTickets->items());
+
         return view('livewire.staff.ticket-status.open', [
-            'openTickets' => $this->openTickets
+            'openTickets' => $this->openTickets,
+            'paginatedTickets' => $paginatedTickets
         ]);
     }
 }

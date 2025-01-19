@@ -11,9 +11,8 @@ class PermissionList extends Component
     use WithPagination;
 
     public string $searchPermission = "";
-    public array $numberList = [5, 10, 20];
+    public array $pageNumberOptions = [5, 10, 20];
     public int $paginatePageNumber = 5;
-
     protected $paginationTheme = 'bootstrap';
 
     protected $listeners = ['loadPermissionList' => '$refresh'];
@@ -40,7 +39,8 @@ class PermissionList extends Component
 
     public function render()
     {
-        $permissions = Permission::where('name', 'like', '%' . $this->searchPermission . '%')->paginate(perPage: $this->paginatePageNumber);
+        $permissions = Permission::where('name', 'like', '%' . $this->searchPermission . '%')
+            ->paginate(perPage: $this->paginatePageNumber);
         return view('livewire.staff.roles-and-permissions.permission-list', [
             'permissions' => $permissions,
         ]);

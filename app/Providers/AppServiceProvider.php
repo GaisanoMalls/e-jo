@@ -7,6 +7,7 @@ use App\Http\Traits\Utils;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -31,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Paginator::useBootstrapFive();
+
         Gate::after(function ($user, $ability) {
             return $user->hasRole(Role::SYSTEM_ADMIN); // note: this returns a boolean
         });

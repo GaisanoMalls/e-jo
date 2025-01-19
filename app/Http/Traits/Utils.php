@@ -215,25 +215,36 @@ trait Utils
         return trim(str_replace($this->getSLADays($ticket), "", $ticket->sla->time_unit));
     }
 
-    public function searchTicketByDate(Ticket $ticket, ?string $startDate = null, ?string $endDate = null, ?string $specificDate = null, bool $useDateRange = false)
-    {
+    public function searchTicketByDate(
+        Ticket $ticket,
+        ?string $searchStartDate = null,
+        ?string $searchEndDate = null,
+        ?string $searchDate = null,
+        ?string $searchMonth = null,
+        bool $useDate = false,
+        bool $useMonth = false,
+        bool $useDateRange = false,
+    ) {
         $ticketDate = Carbon::parse($ticket->created_at);
 
-        if ($startDate) {
-            $sDate = Carbon::parse($startDate)->startOfDay();
+        if ($searchStartDate && $useDateRange) {
+            $sDate = Carbon::parse($searchStartDate)->startOfDay();
+            $eDate = Carbon::parse($searchEndDate)->endOfDay();
 
-            if ($endDate) {
-                $eDate = Carbon::parse($endDate)->endOfDay();
+            if ($searchEndDate) {
                 return $ticketDate->between($sDate, $eDate);
             }
 
-            // If only startDate is provided, check if the ticket date is on the same day
-            return $ticketDate->between($sDate, $sDate->endOfDay());
+            // If only searchStartDate is provided, check if the ticket date is on the same day
+            return $ticketDate->between($sDate, $sDate);
         }
 
-        if ($specificDate) {
-            $spfcDate = Carbon::parse($specificDate)->startOfDay();
-            return $ticketDate->isSameDay($spfcDate);
+        if ($searchDate && $useDate) {
+            return $ticketDate->isSameDay(Carbon::parse($searchDate)->startOfDay());
+        }
+
+        if ($searchMonth && $useMonth) {
+            return $ticketDate->format('Y-m') === Carbon::parse($searchMonth)->format('Y-m');
         }
 
         return true; // If no start date is provided, consider it a match

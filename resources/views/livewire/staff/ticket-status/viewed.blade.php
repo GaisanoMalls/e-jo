@@ -1,42 +1,74 @@
 <div>
-    <div class="tickets__card__header py-5 px-4">
-        <div class="d-flex flex-wrap gap-5 align-items-center justify-content-between">
+    <div class="tickets__card__header px-4 py-5">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-5">
             <div class="d-flex flex-column me-3">
                 <h6 class="card__title">Viewed Tickets</h6>
                 <p class="card__description mb-0">
                     Respond the tickets sent by the requester
                 </p>
             </div>
-            <div class="d-flex flex-wrap gap-3 align-items-center justify-content-lg-between">
-                <div class="d-flex flex-column flex-wrap gap-1 position-relative">
+            <div class="d-flex align-items-center justify-content-lg-between flex-wrap gap-3">
+                @if (!$this->isEmptyFilteredTickets())
+                    @if ($useMonth || $useDateRange)
+                        <button wire:click="toggleDate" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-2" @style(['font-size: 12px;', 'background-color: #f9fafb', 'background-color: #beb34e' => $useDate, 'color: #FFF' => $useDate])>
+                            Date
+                        </button>
+                    @endif
+                    <button wire:click="toggleMonth" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-2" @style(['font-size: 12px;', 'background-color: #f9fafb', 'background-color: #beb34e' => $useMonth, 'color: #FFF' => $useMonth])>
+                        Month
+                    </button>
+                    <button wire:click="toggleDateRange" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-2" @style(['font-size: 12px;', 'background-color: #f9fafb', 'background-color: #beb34e' => $useDateRange, 'color: #FFF' => $useDateRange])>
+                        Date Range
+                    </button>
+                @endif
+                @if ($useDateRange)
+                    <div class="d-flex align-items-center w-auto gap-3">
+                        <div class="position-relative">
+                            <label for="start-date" class="form-label position-absolute form__field__label" style="top: -25px;">From</label>
+                            <input type="date" wire:model="searchStartDate" class="form-control form__field" id="start-date" @disabled($this->isEmptyFilteredTickets())>
+                        </div>
+                        <div class="position-relative">
+                            <label for="end-date" class="form-label position-absolute form__field__label" style="top: -25px;">To</label>
+                            <input type="date" wire:model="searchEndDate" class="form-control form__field" id="end-date" @disabled($this->isEmptyFilteredTickets())>
+                        </div>
+                    </div>
+                @else
+                    <div class="position-relative">
+                        <label for="start-date" class="form-label position-absolute text-muted form__field__label" style="top: -25px;">
+                            @if ($useMonth)
+                                Month
+                            @else
+                                Date
+                            @endif
+                        </label>
+                        @if ($useMonth)
+                            <input type="month" wire:model="searchMonth" class="form-control form__field" id="start-date" @disabled($this->isEmptyFilteredTickets())>
+                        @else
+                            @if (($useDate && !$useMonth) || !$useDateRange)
+                                <input type="date" wire:model="searchDate" class="form-control form__field" id="start-date" @disabled($this->isEmptyFilteredTickets())>
+                            @endif
+                        @endif
+                    </div>
+                @endif
+                <div class="d-flex flex-column position-relative flex-wrap gap-1">
                     <div class="w-100 d-flex align-items-center position-relative">
-                        <input wire:model.debounce.400ms="searchTicket" type="text" class="form-control table__search__field" placeholder="Search ticket" @disabled($this->isEmptyViewedTickets())>
+                        <input wire:model.debounce.400ms="searchTicket" type="text" class="form-control table__search__field" placeholder="Search ticket" @disabled($this->isEmptyFilteredTickets())>
                         <i wire:loading.remove wire:target="searchTicket" class="fa-solid fa-magnifying-glass table__search__icon"></i>
                         <span wire:loading wire:target="searchTicket" class="spinner-border spinner-border-sm table__search__icon" role="status" aria-hidden="true">
                         </span>
                     </div>
                     @if (!empty($searchTicket))
-                        <div class="w-100 d-flex align-items-center gap-2 mb-1 position-absolute" style="font-size: 0.9rem; bottom: -25px;">
-                            <small class="text-muted ">
+                        <div class="w-100 d-flex align-items-center position-absolute mb-1 gap-2" style="font-size: 0.9rem; bottom: -25px;">
+                            <small class="text-muted">
                                 {{ $viewedTickets->count() }} {{ $viewedTickets->count() > 1 ? 'results' : 'result' }} found
                             </small>
                             <small wire:click="clearSearchTicket" class="fw-regular text-danger clear__search">Clear</small>
                         </div>
                     @endif
                 </div>
-                <div class="d-flex gap-3 align-items-center">
-                    <div class="position-relative">
-                        <label for="start-date" class="form-label position-absolute form__field__label" style="top: -25px;">From</label>
-                        <input type="date" wire:model="startDate" class="form-control form__field" id="start-date" @disabled($this->isEmptyViewedTickets())>
-                    </div>
-                    <div class="position-relative">
-                        <label for="end-date" class="form-label position-absolute form__field__label" style="top: -25px;">To</label>
-                        <input type="date" wire:model="endDate" class="form-control form__field" id="end-date" @disabled($this->isEmptyViewedTickets())>
-                    </div>
-                </div>
                 <div class="d-flex">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm d-flex align-items-center gap-2 rounded-2 sort__button" data-bs-toggle="dropdown" aria-expanded="false" @disabled($this->isEmptyViewedTickets())>
+                        <button type="button" class="btn btn-sm d-flex align-items-center rounded-2 sort__button gap-2" data-bs-toggle="dropdown" aria-expanded="false" @disabled($this->isEmptyFilteredTickets())>
                             <div wire:loading wire:target="priorityLevelId" class="spinner-border spinner-border-sm loading__spinner" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>
@@ -53,7 +85,7 @@
                                     $levelName = $priorityLevelName;
                                 }
                             @endphp
-                            <small class="text-muted" style="font-size: 12px;">
+                            <small style="font-size: 12px;">
                                 {{ $levelName ?: 'Priority' }}
                                 @if ($levelName)
                                     ({{ $viewedTickets->count() }})
@@ -83,28 +115,28 @@
     <div class="tickets__table__card">
         <div class="table-responsive custom__table">
             @if ($viewedTickets->isNotEmpty())
-                <table class="table mb-0">
+                <table class="mb-0 table">
                     <thead>
                         <tr>
-                            <th class="border-0 table__head__label" style="padding: 17px 30px">
+                            <th class="table__head__label border-0" style="padding: 17px 30px">
                                 Date Created
                             </th>
-                            <th class="border-0 table__head__label" style="padding: 17px 10px;">
+                            <th class="table__head__label border-0" style="padding: 17px 10px;">
                                 Special Project
                             </th>
-                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                            <th class="table__head__label border-0" style="padding: 17px 30px;">
                                 Ticket Number
                             </th>
-                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                            <th class="table__head__label border-0" style="padding: 17px 30px;">
                                 Created By
                             </th>
-                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                            <th class="table__head__label border-0" style="padding: 17px 30px;">
                                 Subject
                             </th>
-                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                            <th class="table__head__label border-0" style="padding: 17px 30px;">
                                 Assigned To
                             </th>
-                            <th class="border-0 table__head__label" style="padding: 17px 30px;">
+                            <th class="table__head__label border-0" style="padding: 17px 30px;">
                                 Priority
                             </th>
                         </tr>
@@ -115,7 +147,7 @@
                                 <td class="position-relative">
                                     <div class="ticket__list__status__line" style="background-color: {{ $ticket->priorityLevel->color }};">
                                     </div>
-                                    <div class="d-flex align-items-center text-start td__content">
+                                    <div class="d-flex align-items-center td__content text-start">
                                         <span>
                                             {{ $ticket->dateCreated() }} @
                                             {{ $ticket->created_at->format('g:i A') }}
@@ -123,23 +155,23 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center text-start gap-3 td__content p-0">
+                                    <div class="d-flex align-items-center td__content gap-3 p-0 text-start">
                                         <span>
                                             {!! $ticket->isSpecialProject() ? '<i class="bi bi-check-circle-fill "style="color: #FF0000;"></i>' : '<i class="bi bi-x-circle-fill" style="color: #c2c2cf;"></i>' !!}
                                         </span>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center text-start gap-3 td__content">
+                                    <div class="d-flex align-items-center td__content gap-3 text-start">
                                         <span>{{ $ticket->ticket_number }}</span>
-                                        <div class="d-flex align-items-center gap-2 text-muted">
+                                        <div class="d-flex align-items-center text-muted gap-2">
                                             <i class="fa-regular fa-comment-dots"></i>
                                             <small>{{ $ticket->replies->count() }}</small>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center text-start td__content">
+                                    <div class="d-flex align-items-center td__content text-start">
                                         <span>
                                             {{ $ticket->user->getBUDepartments() }} -
                                             {{ $ticket->user->getBranches() }}
@@ -147,12 +179,12 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center text-start td__content">
+                                    <div class="d-flex align-items-center td__content text-start">
                                         <span>{{ Str::limit($ticket->subject, 30) }}</span>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center text-start td__content">
+                                    <div class="d-flex align-items-center td__content text-start">
                                         <span>
                                             @if ($ticket->agent)
                                                 {{ $ticket->agent->profile->getFullName }}
@@ -163,7 +195,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center text-start td__content">
+                                    <div class="d-flex align-items-center td__content text-start">
                                         <span style="color: {{ $ticket->priorityLevel->color }};">{{ $ticket->priorityLevel->name }}</span>
                                     </div>
                                 </td>
@@ -172,7 +204,7 @@
                     </tbody>
                 </table>
             @else
-                <div class="bg-light py-3 px-4 rounded-3" style="margin: 20px 29px;">
+                <div class="bg-light rounded-3 px-4 py-3" style="margin: 20px 29px;">
                     <small style="font-size: 14px;">No records for viewed tickets.</small>
                 </div>
             @endif
