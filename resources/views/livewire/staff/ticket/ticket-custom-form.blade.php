@@ -12,7 +12,8 @@
                         <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name" style="text-transform: uppercase;">
                             {{ $ticket->helpTopic->form->name }}
                         </h6>
-                        <img src="{{ asset('images/gmall-davao-pr-form.png') }}" class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System" height="50px;">
+                        <img src="{{ asset('images/gmall-davao-pr-form.png') }}" class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System"
+                            height="50px;">
                     </div>
                     @if (!empty($customFormHeaderFields))
                         <div class="row mx-auto my-3">
@@ -90,7 +91,8 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center gap-2" id="save-custom-form-as-pdf" style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
+        <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center gap-2" id="save-custom-form-as-pdf"
+            style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
             <i class="bi bi-download"></i>
             Download PDF
         </button>

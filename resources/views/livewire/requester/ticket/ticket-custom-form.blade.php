@@ -1,9 +1,3 @@
-@php
-    use App\Models\Role;
-    use App\Enums\FieldTypesEnum as FieldType;
-    use App\Enums\ApprovalStatusEnum as Status;
-@endphp
-
 <div class="mb-4">
     @if (!empty($customFormHeaderFields) || !empty($customFormRowFields))
         <div class="row" id="ticket-custom-form">
@@ -13,8 +7,8 @@
                         <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name" style="text-transform: uppercase;">
                             {{ $ticket->helpTopic->form->name }}
                         </h6>
-                        <img src="{{ asset('images/gmall-davao-pr-form.png') }}" class="pr__form__gmall__logo mt-3"
-                            alt="GMall Ticketing System" height="50px;">
+                        <img src="{{ asset('images/gmall-davao-pr-form.png') }}" class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System"
+                            height="50px;">
                     </div>
                     @if (!empty($customFormHeaderFields))
                         <div class="row mx-auto my-3">
@@ -22,8 +16,7 @@
                                 @if ($headerField['field']['assigned_column'] == 1)
                                     <div class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
                                         <div class="d-flex align-items-center gap-2">
-                                            <label class="form-label fw-bold mb-0 input__field__label"
-                                                style="white-space: nowrap">
+                                            <label class="form-label fw-bold mb-0 input__field__label" style="white-space: nowrap">
                                                 {{ $headerField['field']['label'] }}:
                                             </label>
                                             <label class="w-100 header__field">
@@ -39,8 +32,7 @@
                                 @if ($headerField['field']['assigned_column'] == 2)
                                     <div class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
                                         <div class="d-flex align-items-center gap-2">
-                                            <label class="form-label mb-0 fw-bold input__field__label"
-                                                style="white-space: nowrap">
+                                            <label class="form-label mb-0 fw-bold input__field__label" style="white-space: nowrap">
                                                 {{ $headerField['field']['label'] }}:
                                             </label>
                                             <label class="w-100 header__field">
@@ -94,8 +86,7 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center gap-2"
-            id="save-custom-form-as-pdf"
+        <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center gap-2" id="save-custom-form-as-pdf"
             style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
             <i class="bi bi-download"></i>
             Download PDF

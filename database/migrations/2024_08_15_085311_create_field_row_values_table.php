@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
             $table->foreignIdFor(Field::class, 'field_id')->constrained('fields')->cascadeOnDelete();
-            $table->string('value');
+            $table->string('value')->nullable();
             $table->smallInteger('row')->nullable();
             $table->timestamps();
         });

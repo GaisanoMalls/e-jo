@@ -35,7 +35,6 @@ class TicketCustomForm extends Component
     {
         $headers = [];
         $fields = [];
-
         foreach ($this->customFormRowFields as $fieldData) {
             $fieldName = $fieldData['field']['name'];
             $rowId = $fieldData['row'];

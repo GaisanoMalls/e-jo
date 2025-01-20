@@ -18,8 +18,14 @@ class TicketCustomForm extends Component
 
     public function mount()
     {
-        $this->customFormHeaderFields = FieldHeaderValue::with('field')->where('ticket_id', $this->ticket->id)->get()->toArray();
-        $this->customFormRowFields = FieldRowValue::with('field')->where('ticket_id', $this->ticket->id)->get()->toArray();
+        $this->customFormHeaderFields = FieldHeaderValue::with('field')
+            ->where('ticket_id', $this->ticket->id)
+            ->get()
+            ->toArray();
+        $this->customFormRowFields = FieldRowValue::with('field')
+            ->where('ticket_id', $this->ticket->id)
+            ->get()
+            ->toArray();
     }
 
     public function getFilteredRowFields()
