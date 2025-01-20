@@ -53,7 +53,7 @@ trait Tickets
             })
             ->where(function ($userQuery) {
                 $userQuery->withWhereHas('user.buDepartments', function ($department) {
-                    $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                    $department->orWhereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                 });
             })
             ->orderByDesc('created_at')
