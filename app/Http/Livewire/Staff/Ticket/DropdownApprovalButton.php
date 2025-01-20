@@ -9,17 +9,9 @@ use Livewire\Component;
 
 class DropdownApprovalButton extends Component
 {
-    use TicketApprovalLevel;
-
     public Ticket $ticket;
-    public bool $isApproverIsInConfiguration = false;
 
     protected $listeners = ['loadDropdownApprovalButton' => '$refresh'];
-
-    public function mount()
-    {
-        $this->isApproverIsInConfiguration = $this->isApproverIsInConfiguration($this->ticket);
-    }
 
     public function render()
     {

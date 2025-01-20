@@ -20,8 +20,9 @@ trait TicketApprovalLevel
     protected function isApproverIsInConfiguration(Ticket $ticket)
     {
         return TicketApproval::where('ticket_id', $ticket->id)
-            ->withWhereHas('helpTopicApprover', function ($approver) {
-                $approver->where('user_id', auth()->user()->id);
+            ->whereHas('helpTopicApprover', function ($approver) use ($ticket) {
+                $approver->where('user_id', auth()->user()->id)
+                    ->where('help_topic_id', $ticket->help_topic_id);
             })->exists();
     }
 
@@ -184,28 +185,8 @@ trait TicketApprovalLevel
         })->exists();
     }
 
-    private function level1IsApproved(Ticket $ticket)
+    private function isLevel1Approved(Ticket $ticket)
     {
         return $this->isApprovedForLevel($ticket, 1);
-    }
-
-    private function level2IsApproved(Ticket $ticket)
-    {
-        return $this->isApprovedForLevel($ticket, 2);
-    }
-
-    private function level3IsApproved(Ticket $ticket)
-    {
-        return $this->isApprovedForLevel($ticket, 3);
-    }
-
-    private function level4IsApproved(Ticket $ticket)
-    {
-        return $this->isApprovedForLevel($ticket, 4);
-    }
-
-    private function level5IsApproved(Ticket $ticket)
-    {
-        return $this->isApprovedForLevel($ticket, 5);
     }
 }
