@@ -24,8 +24,14 @@ class Overdue extends Component
     public bool $useMonth = false;
     public bool $useDateRange = false;
 
+    // Pagination
+    public array $pageNumberOptions = [30, 50, 70, 100];
+    public int $paginatePageNumber;
+    protected $paginationTheme = 'bootstrap';
+
     public function mount()
     {
+        $this->paginatePageNumber = $this->pageNumberOptions[0];
         $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name', 'color']);
     }
 

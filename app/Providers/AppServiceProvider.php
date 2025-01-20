@@ -9,6 +9,7 @@ use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -39,7 +40,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Search for overdue tickets and update their status to 'Overdue.
-        // ronel
         if (Schema::hasTable('tickets')) {
             Ticket::whereNot('status_id', Status::CLOSED)
                 ->where('approval_status', ApprovalStatusEnum::APPROVED)
@@ -52,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
                     }
                 });
         } else {
-            \Log::info('Cannot find table name "tickets" in database ' . '"' . env('DB_DATABASE') . '"');
+            Log::info('Cannot find table name "tickets" in database ' . '"' . env('DB_DATABASE') . '"');
         }
     }
 }

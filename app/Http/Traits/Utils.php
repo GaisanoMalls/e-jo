@@ -240,7 +240,9 @@ trait Utils
         }
 
         if ($searchDate && $useDate) {
-            return $ticketDate->isSameDay(Carbon::parse($searchDate)->startOfDay());
+            $searchDateStart = Carbon::parse($searchDate)->startOfDay();
+            $searchDateEnd = Carbon::parse($searchDate)->endOfDay();
+            return $ticketDate->between($searchDateStart, $searchDateEnd);
         }
 
         if ($searchMonth && $useMonth) {

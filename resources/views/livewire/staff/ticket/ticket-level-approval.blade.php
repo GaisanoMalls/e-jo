@@ -25,8 +25,7 @@
                         </div>
                         @foreach ($approvers as $approver)
                             <div class="d-flex flex-column">
-                                <div
-                                    class="d-flex align-items-center justify-content-between position-relative ps-3 level__approver__container">
+                                <div class="d-flex align-items-center justify-content-between position-relative ps-3 level__approver__container">
                                     <div class="level__approval__approver__dot position-absolute rounded-circle">
                                     </div>
                                     <div class="d-flex align-items-center" style="padding: 4px 0 4px 0;">

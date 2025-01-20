@@ -27,17 +27,18 @@ class Open extends Component
     public ?string $searchMonth = null;
     public ?string $searchStartDate = null;
     public ?string $searchEndDate = null;
-    public bool $useDate = false;
+    public bool $useDate = true;
     public bool $useMonth = false;
     public bool $useDateRange = false;
 
     // Pagination
-    public array $pageNumberOptions = [1, 5, 10, 20, 50];
-    public int $paginatePageNumber = 5;
+    public array $pageNumberOptions = [30, 50, 70, 100];
+    public int $paginatePageNumber;
     protected $paginationTheme = 'bootstrap';
 
     public function mount()
     {
+        $this->paginatePageNumber = $this->pageNumberOptions[0];
         $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name', 'color']);
     }
 
@@ -71,11 +72,14 @@ class Open extends Component
         return redirect()->route('staff.ticket.view_ticket', $ticket->id);
     }
 
-    public function clearSearchTicket()
+    public function hasSearchQuery()
     {
-        $this->searchTicket = "";
-        $this->priorityLevelId = null;
-        $this->priorityLevelName = null;
+        return $this->priorityLevelId
+            || $this->searchTicket
+            || $this->searchDate
+            || $this->searchMonth
+            || $this->searchStartDate
+            || $this->searchEndDate;
     }
 
     public function selectPaginateNumber(int $selectedNumber)
@@ -85,7 +89,7 @@ class Open extends Component
 
     public function toggleDate()
     {
-        $this->useDate = !$this->useDate;
+        $this->useDate = false;
         $this->resetMonthFilter();
         $this->resetDateRangeFilter();
     }
@@ -139,6 +143,18 @@ class Open extends Component
     {
         $this->priorityLevelId = null;
         $this->priorityLevelName = null;
+    }
+
+    public function clearFilters()
+    {
+        $this->reset([
+            'priorityLevelId',
+            'priorityLevelName',
+            'searchTicket'
+        ]);
+        $this->resetDateFilter();
+        $this->resetMonthFilter();
+        $this->resetDateRangeFilter();
     }
 
     public function isEmptyFilteredTickets()
