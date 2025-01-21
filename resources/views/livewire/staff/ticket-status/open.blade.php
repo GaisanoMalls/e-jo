@@ -136,7 +136,7 @@
         </div>
         @if ($this->hasSearchQuery())
             <div class="mt-4 d-flex align-items-center gap-2">
-                <small class="rounded-4 text-white" style="background-color: #134e4a; padding: 5px 10px; font-size: 12px;">
+                <small class="rounded-4 text-white" style="background-color: #FF0000; padding: 3px 10px; font-size: 12px;">
                     {{ $openTickets->count() > 1 ? $openTickets->count() . ' results found' : $openTickets->count() . ' result found' }}
                 </small>
                 <button wire:click="clearFilters" class="btn btn-sm d-flex align-items-center border-0 justify-content-center"
