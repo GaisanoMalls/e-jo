@@ -189,4 +189,29 @@ trait TicketApprovalLevel
     {
         return $this->isApprovedForLevel($ticket, 1);
     }
+
+    public function syncTicketApprovals(Ticket $ticket)
+    {
+        // Delete existing TicketApproval records for the ticket
+        TicketApproval::where('ticket_id', $ticket->id)->delete();
+
+        // Get the current approvers
+        $approvers = User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
+            ->withWhereHas('helpTopicApprovals', function ($query) use ($ticket) {
+                $query->withWhereHas('configuration', function ($config) use ($ticket) {
+                    $config->with('approvers')
+                        ->where('bu_department_id', $ticket->user->buDepartments->pluck('id')->first());
+                });
+            })->get();
+
+        // Create new TicketApproval records
+        $approvers->each(function ($approver) use ($ticket) {
+            $approver->helpTopicApprovals->each(function ($helpTopicApproval) use ($ticket) {
+                TicketApproval::create([
+                    'ticket_id' => $ticket->id,
+                    'help_topic_approver_id' => $helpTopicApproval->id,
+                ]);
+            });
+        });
+    }
 }

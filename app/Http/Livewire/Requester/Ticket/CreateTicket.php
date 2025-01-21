@@ -172,6 +172,7 @@ class CreateTicket extends Component
                             'help_topic_approver_id' => $helpTopicApproval->id,
                         ]);
                     });
+
                     if ($approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
                         Notification::send(
                             $approver,

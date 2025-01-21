@@ -15,8 +15,8 @@
                             <div wire:ignore.self class="col-md-6" id="help-topic-name-container">
                                 <div class="mb-2">
                                     <label for="helpTopicName" class="form-label form__field__label">Name</label>
-                                    <input type="text" wire:model.defer="name" class="form-control form__field"
-                                        id="helpTopicName" placeholder="Enter help topic name">
+                                    <input type="text" wire:model.defer="name" class="form-control form__field" id="helpTopicName"
+                                        placeholder="Enter help topic name">
                                     @error('name')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
@@ -61,8 +61,8 @@
                             <!-- Team Field -->
                             <div class="col-md-6" id="teamSelectContainer" wire:ignore>
                                 <div class="mb-2">
-                                    <label for="team" class="form-label form__field__label">Team <span
-                                            class="fw-normal" style="font-size: 13px;" id="countTeams"></span></label>
+                                    <label for="team" class="form-label form__field__label">Team <span class="fw-normal" style="font-size: 13px;"
+                                            id="countTeams"></span></label>
                                     <div>
                                         <div id="select-help-topic-team" placeholder="Select (optional)" wire:ignore>
                                         </div>
@@ -88,8 +88,7 @@
                         <h6 class="mb-0 fw-bold">Configurations</h6>
                     </div>
                     <div class="row mb-3">
-                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
-                            style="font-size: 0.89rem; color: #9da85c;">
+                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2" style="font-size: 0.89rem; color: #9da85c;">
                             <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
                             Approval
                         </h6>
@@ -124,15 +123,12 @@
                             </div>
                         </div>
                         <div wire:ignore class="row" id="dynamic-approval-container"></div>
-                        <div class="my-2"
-                            style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
-                            <button wire:click="saveConfiguration"
-                                class="btn d-flex align-items-center justify-content-center rounded-3"
+                        <div class="my-2" style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
+                            <button wire:click="saveConfiguration" class="btn d-flex align-items-center justify-content-center rounded-3"
                                 style="height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
                                 Add approval
                             </button>
-                            <button type="button"
-                                class="btn d-flex align-items-center justify-content-center rounded-3"
+                            <button type="button" class="btn d-flex align-items-center justify-content-center rounded-3"
                                 style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
                                 Cancel
                             </button>
@@ -164,8 +160,7 @@
                                                     {{ $addedConfig['approvers_count'] }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-center pe-2 gap-1">
+                                                    <div class="d-flex align-items-center justify-content-center pe-2 gap-1">
                                                         <button type="button" class="btn btn-sm action__button mt-0"
                                                             wire:click="deleteAddedConfig({{ $index }})">
                                                             <i class="bi bi-trash"></i>
@@ -209,18 +204,15 @@
                                                     {{ $currentConfig->approvers()->count() }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-center pe-2 gap-1">
+                                                    <div class="d-flex align-items-center justify-content-center pe-2 gap-1">
                                                         <button type="button" class="btn btn-sm action__button"
-                                                            wire:click="editCurrentConfiguration({{ $currentConfig->id }})"
-                                                            data-bs-toggle="modal"
+                                                            wire:click="editCurrentConfiguration({{ $currentConfig->id }})" data-bs-toggle="modal"
                                                             data-bs-target="#editCurrentConfigurationModal">
                                                             <i class="bi bi-pencil"></i>
                                                         </button>
                                                         <button type="button" class="btn btn-sm action__button mt-0"
                                                             wire:click="confirmDeleteCurrentConfiguration({{ $currentConfig->id }})"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#confirmDeleteCurrentConfigurationModal">
+                                                            data-bs-toggle="modal" data-bs-target="#confirmDeleteCurrentConfigurationModal">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </div>
@@ -237,8 +229,7 @@
                 <!-- Costing Configuration -->
                 @if ($isSpecialProject)
                     <div class="row">
-                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
-                            style="font-size: 0.89rem; color: #196837;">
+                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2" style="font-size: 0.89rem; color: #196837;">
                             <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
                             Costing
                         </h6>
@@ -262,9 +253,8 @@
                                             </label>
                                             <div class="d-flex position-relative amount__field__container">
                                                 <span class="currency text-muted position-absolute mt-2">₱</span>
-                                                <input type="text" wire:model="amount"
-                                                    class="form-control form__field amount__field" id="amount"
-                                                    placeholder="Enter Total Cost">
+                                                <input type="text" wire:model="amount" class="form-control form__field amount__field"
+                                                    id="amount" placeholder="Enter Total Cost">
                                             </div>
                                         </div>
                                     </div>
@@ -289,13 +279,12 @@
                         <button wire:click="updateHelpTopic" type="button"
                             class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
                             style="background-color: #d32839; color: white;" wire:click="updateHelpTopic">
-                            <span wire:loading wire:target="updateHelpTopic" class="spinner-border spinner-border-sm"
-                                role="status" aria-hidden="true">
+                            <span wire:loading wire:target="updateHelpTopic" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true">
                             </span>
                             Update
                         </button>
-                        <a href="{{ route('staff.manage.help_topic.index') }}" type="button"
-                            class="btn m-0 btn__modal__footer btn__cancel">
+                        <a href="{{ route('staff.manage.help_topic.index') }}" type="button" class="btn m-0 btn__modal__footer btn__cancel">
                             Cancel
                         </a>
                     </div>
@@ -304,8 +293,8 @@
         </div>
 
         {{-- Edit configuration approvers --}}
-        <div wire:ignore.self class="modal fade edit__help__topic__config__modal" id="editCurrentConfigurationModal"
-            tabindex="-1" aria-hidden="false">
+        <div wire:ignore.self class="modal fade edit__help__topic__config__modal" id="editCurrentConfigurationModal" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-hidden="false">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content modal__content">
                     <div class="modal-body border-0 p-4 d-flex flex-column gap-1">
@@ -320,8 +309,7 @@
                             <label for="approvers" class="form-label form__field__label">
                                 BU Department
                             </label>
-                            <input class="form-control form__field" type="text"
-                                value="{{ $currentConfigBuDepartment?->name }}" readonly>
+                            <input class="form-control form__field" type="text" value="{{ $currentConfigBuDepartment?->name }}" readonly>
                         </div>
                         <div class="mb-2">
                             <label for="approvers" class="form-label form__field__label">Assigned Approvers</label>
@@ -340,13 +328,12 @@
                             <button wire:click="updateCurrentConfiguration" type="button"
                                 class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
                                 style="background-color: #d32839; color: white;">
-                                <span wire:loading="updateCurrentConfiguration"
-                                    wire:target="updateCurrentConfiguration" class="spinner-border spinner-border-sm"
-                                    role="status" aria-hidden="true">
+                                <span wire:loading="updateCurrentConfiguration" wire:target="updateCurrentConfiguration"
+                                    class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                                 </span>
                                 Update
                             </button>
-                            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" wire:click=""
+                            <button wire:click="cancelEditConfiguration" type="button" class="btn m-0 btn__modal__footer btn__cancel"
                                 data-bs-dismiss="modal">
                                 Cancel
                             </button>
@@ -357,13 +344,12 @@
         </div>
 
         {{-- Delete help topic configuration --}}
-        <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic"
-            id="confirmDeleteCurrentConfigurationModal" tabindex="-1" aria-hidden="true">
+        <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="confirmDeleteCurrentConfigurationModal" tabindex="-1"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content modal__content">
                     <div class="modal-body border-0 text-center pt-4 pb-1">
-                        <h6 class="fw-bold mb-4"
-                            style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                        <h6 class="fw-bold mb-4" style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
                             Confirm Delete
                         </h6>
                         <p class="mb-1" style="font-weight: 500; font-size: 15px;">
@@ -372,10 +358,8 @@
                         <strong>{{ $deleteSelectedConfigBuDeptName }}</strong>
                     </div>
                     <hr>
-                    <div wire:click="cancelDeleteConfiguration"
-                        class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
-                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
-                            data-bs-dismiss="modal"
+                    <div wire:click="cancelDeleteConfiguration" class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
+                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal" data-bs-dismiss="modal"
                             style="padding: 0.6rem 1rem;
                                     border-radius: 0.563rem;
                                     font-size: 0.875rem;
@@ -395,8 +379,8 @@
                                     color: white;
                                     font-weight: 500;
                                     box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
-                            <span wire:loading wire:target="deleteConfiguration"
-                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                            <span wire:loading wire:target="deleteConfiguration" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true">
                             </span>
                             Yes, delete
                         </button>

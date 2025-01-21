@@ -3,31 +3,29 @@
         <div class="col-lg-6 col-md-12">
             <div class="d-flex flex-column flex-wrap mx-4 gap-1 position-relative">
                 <div class="w-100 d-flex align-items-center position-relative">
-                    <input wire:model.debounce.400ms="searchApprover" type="text"
-                        class="form-control table__search__field" placeholder="Search name, branch, business unit (BU)">
-                    <i wire:loading.remove wire:target="searchApprover"
-                        class="fa-solid fa-magnifying-glass table__search__icon"></i>
-                    <span wire:loading wire:target="searchApprover"
-                        class="spinner-border spinner-border-sm table__search__icon" role="status" aria-hidden="true">
+                    <input wire:model.debounce.400ms="searchApprover" type="text" id="search-approver" class="form-control table__search__field"
+                        placeholder="Search name, branch, business unit (BU)">
+                    <label for="search-approver" class="table__search__icon">
+                        <i wire:loading.remove wire:target="searchApprover" class="fa-solid fa-magnifying-glass"></i>
+                    </label>
+                    <span wire:loading wire:target="searchApprover" class="spinner-border spinner-border-sm table__search__icon" role="status"
+                        aria-hidden="true">
                     </span>
                 </div>
                 @if (!empty($searchApprover))
-                    <div class="w-100 d-flex align-items-center gap-2 mb-1 position-absolute"
-                        style="font-size: 0.9rem; bottom: -25px;">
+                    <div class="w-100 d-flex align-items-center gap-2 mb-1 position-absolute" style="font-size: 0.9rem; bottom: -25px;">
                         <small class="text-muted">
                             {{ $approvers->count() }}
                             {{ $approvers->count() > 1 ? 'results' : 'result' }} found
                         </small>
-                        <small wire:click="clearApproverSearch"
-                            class="fw-regular text-danger clear__search">Clear</small>
+                        <small wire:click="clearApproverSearch" class="fw-regular text-danger clear__search">Clear</small>
                     </div>
                 @endif
             </div>
         </div>
     </div>
     @if ($approvers->isNotEmpty())
-        <div
-            class="card account__type__card {{ Route::is('staff.manage.user_account.approvers') ? 'card__rounded__and__no__border' : '' }}">
+        <div class="card account__type__card {{ Route::is('staff.manage.user_account.approvers') ? 'card__rounded__and__no__border' : '' }}">
             <div class="table-responsive custom__table">
                 <table class="table mb-0">
                     <thead>
@@ -57,13 +55,12 @@
                         @foreach ($approvers as $approver)
                             <tr wire:key="approver-{{ $approver->id }}">
                                 <td>
-                                    <a
-                                        href="{{ route('staff.manage.user_account.approver.view_details', $approver->id) }}">
+                                    <a href="{{ route('staff.manage.user_account.approver.view_details', $approver->id) }}">
                                         <div class="media d-flex align-items-center user__account__media">
                                             <div class="flex-shrink-0">
                                                 @if ($approver->profile->picture)
-                                                    <img src="{{ Storage::url($approver->profile->picture) }}"
-                                                        alt="" class="image-fluid user__picture">
+                                                    <img src="{{ Storage::url($approver->profile->picture) }}" alt=""
+                                                        class="image-fluid user__picture">
                                                 @else
                                                     <div class="user__name__initial" style="background-color: #3B4053;">
                                                         {{ $approver->profile->getNameInitial() }}
@@ -116,15 +113,13 @@
                                 </td>
                                 <td style="padding: 17px 30px;">
                                     <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                                        <button data-tooltip="Edit" data-tooltip-position="top"
-                                            data-tooltip-font-size="11px"
+                                        <button data-tooltip="Edit" data-tooltip-position="top" data-tooltip-font-size="11px"
                                             onclick="window.location.href='{{ route('staff.manage.user_account.approver.edit_details', $approver->id) }}'"
                                             type="button" class="btn action__button">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <button data-tooltip="Delete" data-tooltip-position="top"
-                                            data-tooltip-font-size="11px" type="button" class="btn action__button"
-                                            data-bs-toggle="modal" data-bs-target="#confirmDeleteApproverModal"
+                                        <button data-tooltip="Delete" data-tooltip-position="top" data-tooltip-font-size="11px" type="button"
+                                            class="btn action__button" data-bs-toggle="modal" data-bs-target="#confirmDeleteApproverModal"
                                             wire:click="deleteApprover({{ $approver->id }})">
                                             <i class="bi bi-trash"></i>
                                         </button>
@@ -153,8 +148,8 @@
     </div>
 
     {{-- Assign Permission --}}
-    <div wire:ignore.self class="modal fade assign__user__permission__modal" id="assignApproverPermissionModal"
-        tabindex="-1" aria-labelledby="assignApproverPermissionModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade assign__user__permission__modal" id="assignApproverPermissionModal" tabindex="-1"
+        aria-labelledby="assignApproverPermissionModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0">
@@ -169,8 +164,7 @@
                         <div class="row mb-2">
                             <div class="col-12">
                                 <div>
-                                    <div id="select-assign-approver-permission" placeholder="Select permission"
-                                        wire:ignore>
+                                    <div id="select-assign-approver-permission" placeholder="Select permission" wire:ignore>
                                     </div>
                                 </div>
                                 @error('permissions')
@@ -186,8 +180,8 @@
                         <div class="d-flex align-items-center gap-2">
                             <button type="submit"
                                 class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__modal__footer btn__send">
-                                <span wire:loading wire:target="assignApproverPermission"
-                                    class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                <span wire:loading wire:target="assignApproverPermission" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true">
                                 </span>
                                 Assign
                             </button>
@@ -201,14 +195,13 @@
     </div>
 
     {{-- Delete Approver Modal --}}
-    <div wire:ignore.self class="modal fade modal__confirm__delete__user__account" id="confirmDeleteApproverModal"
-        tabindex="-1" aria-labelledby="confirmDeleteApproverModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade modal__confirm__delete__user__account" id="confirmDeleteApproverModal" tabindex="-1"
+        aria-labelledby="confirmDeleteApproverModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <form wire:submit.prevent="delete">
                     <div class="modal-body border-0 text-center pt-4 pb-1">
-                        <h5 class="fw-bold mb-4"
-                            style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                        <h5 class="fw-bold mb-4" style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
                             Confirm Delete
                         </h5>
                         <p class="mb-1" style="font-weight: 500; font-size: 15px;">
@@ -218,12 +211,10 @@
                     </div>
                     <hr>
                     <div class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
-                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
-                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit"
                             class="btn w-50 d-flex align-items-center justify-content-center gap-2 btn__confirm__delete btn__confirm__modal">
-                            <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm"
-                                role="status" aria-hidden="true">
+                            <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                             </span>
                             Yes, delete
                         </button>

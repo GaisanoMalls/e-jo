@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Staff\HelpTopic;
 
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
+use App\Http\Traits\TicketApprovalLevel;
 use App\Models\Department;
 use App\Models\HelpTopic;
 use App\Models\HelpTopicApprover;
@@ -12,6 +13,7 @@ use App\Models\HelpTopicCosting;
 use App\Models\Role;
 use App\Models\SpecialProject;
 use App\Models\Team;
+use App\Models\Ticket;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Collection;
@@ -22,7 +24,7 @@ use Livewire\Component;
 
 class UpdateHelpTopic extends Component
 {
-    use BasicModelQueries;
+    use BasicModelQueries, TicketApprovalLevel;
 
     public HelpTopic $helpTopic;
     public Collection $teams;
@@ -485,8 +487,15 @@ class UpdateHelpTopic extends Component
                         }
                     }
 
+                    // Sync Ticket Approvals for all tickets associated with this help topic
+                    $tickets = Ticket::where('help_topic_id', $this->helpTopic->id)->get();
+                    foreach ($tickets as $ticket) {
+                        $this->syncTicketApprovals($ticket);
+                    }
+
                     $this->emit('remount');
                     $this->resetEditApprovalConfigFields();
+                    redirect()->route('staff.manage.help_topic.edit_details', $this->helpTopic->id);
                 }
             });
         } catch (Exception $e) {
@@ -531,6 +540,11 @@ class UpdateHelpTopic extends Component
         $this->reset(['deleteSelectedConfigId', 'deleteSelectedConfigBuDeptName']);
         $this->dispatchBrowserEvent('close-confirm-delete-config-modal');
         $this->emitSelf('remount');
+    }
+
+    public function cancelEditConfiguration()
+    {
+        redirect()->route('staff.manage.help_topic.edit_details', $this->helpTopic->id);
     }
 
     public function render()
