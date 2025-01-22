@@ -1016,7 +1016,7 @@ input {
                 }
 
                 .custom__form {
-                    border: 1px solid #ced4da;
+                    border: 1px solid #3e3d3d;
 
                     .form__name {
                         font-size: 1.02rem;
@@ -1033,7 +1033,8 @@ input {
 
                     .header__field {
                         font-size: $fs-14;
-                        border-bottom: 0.08rem solid #ced4da !important;
+                        color: #23272e;
+                        border-bottom: 0.08rem solid #3e3d3d !important;
 
                         &:focus {
                             border-bottom-color: #d32839 !important;
@@ -1041,9 +1042,16 @@ input {
                     }
 
                     .row__field {
+                        border-color: #3e3d3d !important;
+
                         .field__value {
+                            color: #23272e;
                             font-size: $fs-14;
                         }
+                    }
+
+                    .custom__form__table {
+                        border-color: #3e3d3d !important;
                     }
                 }
 
@@ -1808,7 +1816,7 @@ input {
         }
 
         .custom__form {
-            border: 1px solid #ced4da;
+            border: 1px solid #3e3d3d;
 
             .form__name {
                 font-size: 1.02rem;
@@ -1825,7 +1833,8 @@ input {
 
             .header__field {
                 font-size: $fs-14;
-                border-bottom: 0.08rem solid #ced4da !important;
+                color: #23272e;
+                border-bottom: 0.08rem solid #3e3d3d !important;
 
                 &:focus {
                     border-bottom-color: #d32839 !important;
@@ -1833,9 +1842,16 @@ input {
             }
 
             .row__field {
+                border-color: #3e3d3d !important;
+
                 .field__value {
+                    color: #23272e;
                     font-size: $fs-14;
                 }
+            }
+
+            .custom__form__table {
+                border-color: #3e3d3d !important;
             }
         }
     }

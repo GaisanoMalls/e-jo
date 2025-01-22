@@ -7,7 +7,7 @@
     <div class="mb-4">
         <div class="row" id="ticket-custom-form">
             <div class="col-12">
-                <div class="row my-3 mx-auto ps-1 rounded-3 custom__form" style="border: 1px solid #ced4da;">
+                <div class="row my-3 mx-auto px-1 rounded-3 custom__form">
                     <div class="d-flex align-items-center justify-content-between flex-row mb-3">
                         <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name" style="text-transform: uppercase;">
                             {{ $ticket->helpTopic->form->name }}
@@ -62,7 +62,7 @@
                             @endphp
                             @if (!empty($headers) && !empty($fields))
                                 <div class="w-100">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered custom__form__table">
                                         <thead>
                                             <tr>
                                                 @foreach ($headers as $header)
@@ -88,6 +88,37 @@
                             @endif
                         </div>
                     @endif
+                    @if ($ticket->customFormFooter)
+                        <div id="signatories" class="row mt-2 mb-4" style="font-size: 0.85rem; display: none;">
+                            <div class="col-4">
+                                <div class="d-flex flex-column gap-1" style="border-bottom">
+                                    <div @style(['font-size: 0.875rem', 'padding-top: 1.3rem' => !$ticket->customFormFooter->requestedBy])>
+                                        {{ $ticket->customFormFooter->requestedBy?->profile->getFullName }}
+                                    </div>
+                                    <div class="w-75" style="height: 1px; background-color: #3e3d3d;"></div>
+                                    <div class="fw-bold input__field__label">Requested by</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="d-flex flex-column gap-1" style="border-bottom">
+                                    <div @style(['font-size: 0.875rem', 'padding-top: 1.3rem' => !$ticket->customFormFooter->notedBy])>
+                                        {{ $ticket->customFormFooter->notedBy?->profile->getFullName ?? '' }}
+                                    </div>
+                                    <div class="w-75" style="height: 1px; background-color: #3e3d3d;"></div>
+                                    <div class="fw-bold input__field__label">Noted by</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="d-flex flex-column gap-1" style="border-bottom">
+                                    <div @style(['font-size: 0.875rem', 'padding-top: 1.3rem' => !$ticket->customFormFooter->approvedBy])>
+                                        {{ $ticket->customFormFooter->approvedBy?->profile->getFullName }}
+                                    </div>
+                                    <div class="w-75" style="height: 1px; background-color: #3e3d3d;"></div>
+                                    <div class="fw-bold input__field__label">Approved by</div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -102,31 +133,35 @@
 @push('extra')
     <script>
         document.getElementById('save-custom-form-as-pdf').addEventListener('click', function() {
-            var content = document.getElementById('ticket-custom-form');
-            html2canvas(content, {
-                scale: 2,
-                onrendered: function(canvas) {
-                    var imgData = canvas.toDataURL('image/png');
-                    var pdf = new jsPDF('p', 'mm', 'a4');
-                    var imgWidth = 210;
-                    var pageHeight = 295;
-                    var imgHeight = canvas.height * imgWidth / canvas.width;
-                    var heightLeft = imgHeight;
+            var content = document.querySelector('#ticket-custom-form');
+            var signatoriesContainer = document.querySelector('#signatories');
+            signatoriesContainer.style.display = 'flex';
 
-                    var position = 0;
+            setTimeout(function() {
+                html2canvas(content, {
+                    onrendered: function(canvas) {
+                        var imgData = canvas.toDataURL('image/png');
+                        var pdf = new jsPDF('p', 'mm', 'a4');
+                        var imgWidth = 210;
+                        var pageHeight = 295;
+                        var imgHeight = canvas.height * imgWidth / canvas.width;
+                        var heightLeft = imgHeight;
 
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
+                        var position = 0;
 
-                    while (heightLeft >= 0) {
-                        position = heightLeft - imgHeight;
-                        pdf.addPage();
                         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
                         heightLeft -= pageHeight;
+
+                        while (heightLeft >= 0) {
+                            position = heightLeft - imgHeight;
+                            pdf.addPage();
+                            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                            heightLeft -= pageHeight;
+                        }
+                        pdf.save('{{ $ticket->helpTopic->form->name }}.pdf');
                     }
-                    pdf.save('{{ $ticket->helpTopic->form->name }}.pdf');
-                }
-            });
+                });
+            }, 500);
         });
     </script>
 @endpush

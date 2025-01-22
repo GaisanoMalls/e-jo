@@ -62,9 +62,11 @@
                     </div>
                 @endif
                 <div class="d-flex align-items-center position-relative">
-                    <input wire:model.debounce.400ms="searchTicket" type="search" class="form-control table__search__field"
+                    <input wire:model.debounce.400ms="searchTicket" type="search" id="search-ticket" class="form-control table__search__field"
                         placeholder="Search ticket" @disabled($this->isEmptyFilteredTickets())>
-                    <i wire:loading.remove wire:target="searchTicket" class="fa-solid fa-magnifying-glass table__search__icon"></i>
+                    <label for="search-ticket" class="table__search__icon">
+                        <i wire:loading.remove wire:target="searchTicket" class="fa-solid fa-magnifying-glass"></i>
+                    </label>
                     <span wire:loading wire:target="searchTicket" class="spinner-border spinner-border-sm table__search__icon" role="status"
                         aria-hidden="true">
                     </span>

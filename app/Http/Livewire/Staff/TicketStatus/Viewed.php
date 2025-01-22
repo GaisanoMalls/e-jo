@@ -7,12 +7,13 @@ use App\Models\PriorityLevel;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Viewed extends Component
 {
-    use TicketsByStaffWithSameTemplates;
+    use TicketsByStaffWithSameTemplates, WithPagination;
 
-    public Collection $viewedTickets;
+    public Collection|LengthAwarePaginator $viewedTickets;
     public Collection $priorityLevels;
     public string $searchTicket = "";
     public ?int $priorityLevelId = null;

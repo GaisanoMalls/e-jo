@@ -5,15 +5,12 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\TicketApprovalLevel;
-use App\Mail\Staff\ApprovedTicketMail;
 use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
-use App\Models\TicketApproval;
 use App\Models\User;
 use App\Notifications\AppNotification;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +31,7 @@ class ApproveTicket extends Component
             'loadTicketStatusTextHeader',
             'loadTicketStatusButtonHeader',
             'loadSlaTimer',
+            'loadCustomForm',
             'loadTicketTags',
             'loadTicketLogs',
             'loadTicketDetails',
@@ -84,6 +82,10 @@ class ApproveTicket extends Component
                                     })
                                     ->role(Role::AGENT)
                                     ->get();
+
+                                $this->ticket->customFormFooter->update([
+                                    'noted_by' => auth()->user()->id,
+                                ]);
 
                                 // Notify the agents through app and email.
                                 $agents->each(function ($agent) {

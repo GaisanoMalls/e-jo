@@ -7,10 +7,11 @@ use App\Models\PriorityLevel;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Approved extends Component
 {
-    use TicketsByStaffWithSameTemplates;
+    use TicketsByStaffWithSameTemplates, WithPagination;
 
     public Collection|LengthAwarePaginator $approvedTickets;
     public Collection $priorityLevels;
@@ -36,11 +37,19 @@ class Approved extends Component
         $this->priorityLevels = PriorityLevel::orderBy('value')->get(['id', 'name', 'color']);
     }
 
-    public function clearSearchTicket()
+    public function hasSearchQuery()
     {
-        $this->searchTicket = "";
-        $this->priorityLevelId = null;
-        $this->priorityLevelName = null;
+        return $this->priorityLevelId
+            || $this->searchTicket
+            || $this->searchDate
+            || $this->searchMonth
+            || $this->searchStartDate
+            || $this->searchEndDate;
+    }
+
+    public function selectPaginateNumber(int $selectedNumber)
+    {
+        $this->paginatePageNumber = $selectedNumber;
     }
 
     public function toggleDate()
@@ -101,6 +110,18 @@ class Approved extends Component
         $this->priorityLevelName = null;
     }
 
+    public function clearFilters()
+    {
+        $this->reset([
+            'priorityLevelId',
+            'priorityLevelName',
+            'searchTicket'
+        ]);
+        $this->resetDateFilter();
+        $this->resetMonthFilter();
+        $this->resetDateRangeFilter();
+    }
+
     public function isEmptyFilteredTickets()
     {
         return $this->approvedTickets->isEmpty()
@@ -134,7 +155,6 @@ class Approved extends Component
 
             return $matchSearch && $matchesPriority && $matchesDateRange;
         });
-
 
         $page = request()->get('page', 1);
         $paginatedTickets = new LengthAwarePaginator(

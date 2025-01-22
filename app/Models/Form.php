@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Form extends Model
 {
@@ -21,6 +22,11 @@ class Form extends Model
     public function helpTopic(): BelongsTo
     {
         return $this->belongsTo(HelpTopic::class);
+    }
+
+    public function footer(): HasOne
+    {
+        return $this->hasOne(TicketCustomFormFooter::class);
     }
 
     public function fields(): HasMany

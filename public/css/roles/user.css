@@ -8014,7 +8014,7 @@ input:not(:focus)::placeholder {
   text-transform: none;
 }
 .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form {
-  border: 1px solid #ced4da;
+  border: 1px solid #3e3d3d;
 }
 .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .form__name {
   font-size: 1.02rem;
@@ -8028,13 +8028,21 @@ input:not(:focus)::placeholder {
 }
 .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .header__field {
   font-size: 0.875rem;
-  border-bottom: 0.08rem solid #ced4da !important;
+  color: #23272e;
+  border-bottom: 0.08rem solid #3e3d3d !important;
 }
 .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .header__field:focus {
   border-bottom-color: #d32839 !important;
 }
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .row__field {
+  border-color: #3e3d3d !important;
+}
 .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .row__field .field__value {
+  color: #23272e;
   font-size: 0.875rem;
+}
+.ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .custom__form .custom__form__table {
+  border-color: #3e3d3d !important;
 }
 .ticket__card .ticket__details__section .card__ticket__details .ticket__details__card__body .input__field__label {
   font-size: 0.875rem;
@@ -8677,7 +8685,7 @@ input:not(:focus)::placeholder {
   color: #4a5568;
 }
 .create__ticket__modal .modal__content .custom__form {
-  border: 1px solid #ced4da;
+  border: 1px solid #3e3d3d;
 }
 .create__ticket__modal .modal__content .custom__form .form__name {
   font-size: 1.02rem;
@@ -8691,13 +8699,21 @@ input:not(:focus)::placeholder {
 }
 .create__ticket__modal .modal__content .custom__form .header__field {
   font-size: 0.875rem;
-  border-bottom: 0.08rem solid #ced4da !important;
+  color: #23272e;
+  border-bottom: 0.08rem solid #3e3d3d !important;
 }
 .create__ticket__modal .modal__content .custom__form .header__field:focus {
   border-bottom-color: #d32839 !important;
 }
+.create__ticket__modal .modal__content .custom__form .row__field {
+  border-color: #3e3d3d !important;
+}
 .create__ticket__modal .modal__content .custom__form .row__field .field__value {
+  color: #23272e;
   font-size: 0.875rem;
+}
+.create__ticket__modal .modal__content .custom__form .custom__form__table {
+  border-color: #3e3d3d !important;
 }
 
 @media (max-width: 767px) {

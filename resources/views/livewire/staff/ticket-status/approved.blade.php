@@ -10,14 +10,17 @@
             <div class="d-flex align-items-center justify-content-lg-between flex-wrap gap-3">
                 @if (!$this->isEmptyFilteredTickets())
                     @if ($useMonth || $useDateRange)
-                        <button wire:click="toggleDate" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-2" @style(['font-size: 12px;', 'background-color: #f9fafb', 'background-color: #beb34e' => $useDate, 'color: #FFF' => $useDate])>
+                        <button wire:click="toggleDate" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-2"
+                            style="font-size: 12px; background-color: #f9fafb">
                             Date
                         </button>
                     @endif
-                    <button wire:click="toggleMonth" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-2" @style(['font-size: 12px;', 'background-color: #f9fafb', 'background-color: #beb34e' => $useMonth, 'color: #FFF' => $useMonth])>
+                    <button wire:click="toggleMonth" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-2"
+                        @style(['font-size: 12px;', 'background-color: #f9fafb', 'background-color: #beb34e' => $useMonth, 'color: #FFF' => $useMonth])>
                         Month
                     </button>
-                    <button wire:click="toggleDateRange" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-2" @style(['font-size: 12px;', 'background-color: #f9fafb', 'background-color: #beb34e' => $useDateRange, 'color: #FFF' => $useDateRange])>
+                    <button wire:click="toggleDateRange" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-2"
+                        @style(['font-size: 12px;', 'background-color: #f9fafb', 'background-color: #beb34e' => $useDateRange, 'color: #FFF' => $useDateRange])>
                         Date Range
                     </button>
                 @endif
@@ -25,11 +28,13 @@
                     <div class="d-flex align-items-center w-auto gap-3">
                         <div class="position-relative">
                             <label for="start-date" class="form-label position-absolute form__field__label" style="top: -25px;">From</label>
-                            <input type="date" wire:model="searchStartDate" class="form-control form__field" id="start-date" @disabled($this->isEmptyFilteredTickets())>
+                            <input type="date" wire:model="searchStartDate" class="form-control form__field" id="start-date"
+                                @disabled($this->isEmptyFilteredTickets())>
                         </div>
                         <div class="position-relative">
                             <label for="end-date" class="form-label position-absolute form__field__label" style="top: -25px;">To</label>
-                            <input type="date" wire:model="searchEndDate" class="form-control form__field" id="end-date" @disabled($this->isEmptyFilteredTickets())>
+                            <input type="date" wire:model="searchEndDate" class="form-control form__field" id="end-date"
+                                @disabled($this->isEmptyFilteredTickets())>
                         </div>
                     </div>
                 @else
@@ -42,33 +47,30 @@
                             @endif
                         </label>
                         @if ($useMonth)
-                            <input type="month" wire:model="searchMonth" class="form-control form__field" id="start-date" @disabled($this->isEmptyFilteredTickets())>
+                            <input type="month" wire:model="searchMonth" class="form-control form__field" id="start-date"
+                                @disabled($this->isEmptyFilteredTickets())>
                         @else
                             @if (($useDate && !$useMonth) || !$useDateRange)
-                                <input type="date" wire:model="searchDate" class="form-control form__field" id="start-date" @disabled($this->isEmptyFilteredTickets())>
+                                <input type="date" wire:model="searchDate" class="form-control form__field" id="start-date"
+                                    @disabled($this->isEmptyFilteredTickets())>
                             @endif
                         @endif
                     </div>
                 @endif
-                <div class="d-flex flex-column position-relative flex-wrap gap-1">
-                    <div class="w-100 d-flex align-items-center position-relative">
-                        <input wire:model.debounce.400ms="searchTicket" type="text" class="form-control table__search__field" placeholder="Search ticket" @disabled($this->isEmptyFilteredTickets())>
-                        <i wire:loading.remove wire:target="searchTicket" class="fa-solid fa-magnifying-glass table__search__icon"></i>
-                        <span wire:loading wire:target="searchTicket" class="spinner-border spinner-border-sm table__search__icon" role="status" aria-hidden="true">
-                        </span>
-                    </div>
-                    @if (!empty($searchTicket))
-                        <div class="w-100 d-flex align-items-center position-absolute mb-1 gap-2" style="font-size: 0.9rem; bottom: -25px;">
-                            <small class="text-muted">
-                                {{ $approvedTickets->count() }} {{ $approvedTickets->count() > 1 ? 'results' : 'result' }} found
-                            </small>
-                            <small wire:click="clearSearchTicket" class="fw-regular text-danger clear__search">Clear</small>
-                        </div>
-                    @endif
+                <div class="d-flex align-items-center position-relative">
+                    <input wire:model.debounce.400ms="searchTicket" type="search" id="search-ticket" class="form-control table__search__field"
+                        placeholder="Search ticket" @disabled($this->isEmptyFilteredTickets())>
+                    <label for="search-ticket" class="table__search__icon">
+                        <i wire:loading.remove wire:target="searchTicket" class="fa-solid fa-magnifying-glass"></i>
+                    </label>
+                    <span wire:loading wire:target="searchTicket" class="spinner-border spinner-border-sm table__search__icon" role="status"
+                        aria-hidden="true">
+                    </span>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex gap-2">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm d-flex align-items-center rounded-2 sort__button gap-2" data-bs-toggle="dropdown" aria-expanded="false" @disabled($this->isEmptyFilteredTickets())>
+                        <button type="button" class="btn btn-sm d-flex align-items-center rounded-2 sort__button gap-2" data-bs-toggle="dropdown"
+                            aria-expanded="false" @disabled($this->isEmptyFilteredTickets())>
                             <div wire:loading wire:target="priorityLevelId" class="spinner-border spinner-border-sm loading__spinner" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>
@@ -97,9 +99,31 @@
                             </li>
                             @foreach ($priorityLevels as $priorityLevel)
                                 <li>
-                                    <button wire:click="filterPriorityLevel({{ $priorityLevel->id }})" class="dropdown-item d-flex align-items-center gap-2" type="button">
+                                    <button wire:click="filterPriorityLevel({{ $priorityLevel->id }})"
+                                        class="dropdown-item d-flex align-items-center gap-2" type="button">
                                         <i class="bi bi-circle-fill" style="color: {{ $priorityLevel->color }} !important; font-size: 10px;"></i>
                                         {{ $priorityLevel->name }}
+                                    </button>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm d-flex align-items-center rounded-2 sort__button gap-2" data-bs-toggle="dropdown"
+                            aria-expanded="false" @disabled($this->isEmptyFilteredTickets())>
+                            <div wire:loading wire:target="paginatePageNumber" class="spinner-border spinner-border-sm loading__spinner"
+                                role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <i wire:loading.remove wire:target="paginatePageNumber" class="bi bi-list-ol"></i>
+                            {{ $paginatePageNumber }} items
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end slideIn animate sort__button__dropdown" style="width: 20px !important;">
+                            @foreach ($pageNumberOptions as $pageNumber)
+                                <li>
+                                    <button wire:click="selectPaginateNumber({{ $pageNumber }})"
+                                        class="dropdown-item d-flex align-items-center gap-2" type="button">
+                                        {{ $pageNumber }} items
                                     </button>
                                 </li>
                             @endforeach
@@ -108,6 +132,17 @@
                 </div>
             </div>
         </div>
+        @if ($this->hasSearchQuery())
+            <div class="mt-4 d-flex align-items-center gap-2">
+                <small class="rounded-4 text-white" style="background-color: #FF0000; padding: 3px 10px; font-size: 12px;">
+                    {{ $approvedTickets->count() > 1 ? $approvedTickets->count() . ' results found' : $approvedTickets->count() . ' result found' }}
+                </small>
+                <button wire:click="clearFilters" class="btn btn-sm d-flex align-items-center border-0 justify-content-center"
+                    style="height: 20px; width: 20px;" data-tooltip="Clear filters" data-tooltip-position="top" data-tooltip-font-size="11px">
+                    <i class="bi bi-x-lg fw-bold"></i>
+                </button>
+            </div>
+        @endif
     </div>
     <div class="tickets__table__card">
         <div class="table-responsive custom__table">
@@ -154,7 +189,9 @@
                                 <td>
                                     <div class="d-flex align-items-center td__content gap-3 p-0 text-start">
                                         <span>
-                                            {!! $ticket->isSpecialProject() ? '<i class="bi bi-check-circle-fill "style="color: #FF0000;"></i>' : '<i class="bi bi-x-circle-fill" style="color: #c2c2cf;"></i>' !!}
+                                            {!! $ticket->isSpecialProject()
+                                                ? '<i class="bi bi-check-circle-fill "style="color: #FF0000;"></i>'
+                                                : '<i class="bi bi-x-circle-fill" style="color: #c2c2cf;"></i>' !!}
                                         </span>
                                     </div>
                                 </td>

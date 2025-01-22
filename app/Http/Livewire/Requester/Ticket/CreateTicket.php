@@ -22,6 +22,7 @@ use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
+use App\Models\TicketCustomFormFooter;
 use App\Models\TicketTeam;
 use App\Models\User;
 use App\Notifications\AppNotification;
@@ -147,6 +148,12 @@ class CreateTicket extends Component
                 TicketTeam::create([
                     'ticket_id' => $ticket->id,
                     'team_id' => $this->team != 'undefined' ? $this->team : null
+                ]);
+
+                TicketCustomFormFooter::create([
+                    'ticket_id' => $ticket->id,
+                    'form_id' => $ticket->helpTopic->form->id,
+                    'requested_by' => $ticket->user->id
                 ]);
 
                 if (!empty($this->fileAttachments)) {

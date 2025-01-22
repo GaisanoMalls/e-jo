@@ -197,27 +197,42 @@ class User extends Authenticatable
     // Filter user types by roles
     public static function systemAdmins(): Collection
     {
-        return self::with(['profile', 'branch'])->role(Role::SYSTEM_ADMIN)->orderByDesc('created_at')->get();
+        return self::role(Role::SYSTEM_ADMIN)
+            ->with(['profile', 'branch'])
+            ->orderByDesc('created_at')
+            ->get();
     }
 
     public static function serviceDepartmentAdmins(): Collection
     {
-        return self::with(['profile'])->role(Role::SERVICE_DEPARTMENT_ADMIN)->orderByDesc('created_at')->get();
+        return self::role(Role::SERVICE_DEPARTMENT_ADMIN)
+            ->with(['profile'])
+            ->orderByDesc('created_at')
+            ->get();
     }
 
     public static function approvers(): Collection
     {
-        return self::with(['profile'])->role(Role::APPROVER)->orderByDesc('created_at')->get();
+        return self::role(Role::APPROVER)
+            ->with(['profile'])
+            ->orderByDesc('created_at')
+            ->get();
     }
 
     public static function agents(): Collection
     {
-        return self::with(['profile'])->role(Role::AGENT)->orderByDesc('created_at')->get();
+        return self::role(Role::AGENT)
+            ->with(['profile'])
+            ->orderByDesc('created_at')
+            ->get();
     }
 
     public static function requesters(): Collection
     {
-        return self::with(['profile'])->role(Role::USER)->orderByDesc('created_at')->get();
+        return self::role(Role::USER)
+            ->with(['profile'])
+            ->orderByDesc('created_at')
+            ->get();
     }
 
     public function dateCreated(): string

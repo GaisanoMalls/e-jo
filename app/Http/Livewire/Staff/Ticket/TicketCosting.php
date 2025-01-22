@@ -10,7 +10,6 @@ use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
 use App\Models\TicketCosting as Costing;
 use App\Models\TicketCostingFile;
-use App\Models\TicketCostingPRFile;
 use App\Models\TicketSpecialProjectStatus;
 use App\Models\User;
 use Carbon\Carbon;
@@ -232,15 +231,6 @@ class TicketCosting extends Component
                 ['ticket_id', $ticket->id],
                 ['costing_and_planning_status', SpecialProjectStatusEnum::DONE]
             ])->exists();
-    }
-
-    public function isPRApproved(Ticket $ticket)
-    {
-        return TicketCostingPRFile::where([
-            ['ticket_costing_id', $ticket->ticketCosting->id],
-            ['is_approved_level_1_approver', true],
-            ['is_approved_level_2_approver', true],
-        ])->exists();
     }
 
     public function setOrder()

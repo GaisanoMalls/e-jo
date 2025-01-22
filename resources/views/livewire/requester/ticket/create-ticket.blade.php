@@ -3,8 +3,8 @@
 @endphp
 
 <div>
-    <div wire:ignore.self class="modal fade create__ticket__modal" id="createTicketModal" tabindex="-1"
-        aria-labelledby="createtTicketModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade create__ticket__modal" id="createTicketModal" tabindex="-1" aria-labelledby="createtTicketModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-lg">
             <div class="modal-content modal__content">
                 <h1 class="modal-title modal__title fs-5 px-3">Create New Ticket</h1>
@@ -84,8 +84,7 @@
                             <label for="ticketSubject" class="form-label input__field__label">
                                 Subject
                             </label>
-                            <input type="text" wire:model="subject" class="form-control input__field"
-                                placeholder="Tell us about your concern">
+                            <input type="text" wire:model="subject" class="form-control input__field" placeholder="Tell us about your concern">
                             @error('subject')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -114,8 +113,7 @@
                         {{-- Help topic form --}}
                         @if ($helpTopicForm)
                             <div class="col-12 mb-3">
-                                <div class="row mx-0 p-3 rounded-3"
-                                    style="background-color: #f4f5f8; border: 0.08rem solid #dddddd;">
+                                <div class="row mx-0 p-3 rounded-3" style="background-color: #f4f5f8; border: 0.08rem solid #dddddd;">
                                     @if (!empty($formFields))
                                         <h6 class="fw-bold mb-0 mb-2 form__name">
                                             {{ $helpTopicForm->name }}
@@ -123,53 +121,42 @@
                                         @foreach ($formFields as $fieldKey => $formField)
                                             @if (!$formField['is_for_ticket_number'])
                                                 <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
-                                                    <label class="form-label input__field__label"
-                                                        style="white-space: nowrap">
+                                                    <label class="form-label input__field__label" style="white-space: nowrap">
                                                         {{ $formField['label'] }}
                                                     </label>
                                                     {{-- Text field --}}
                                                     @if ($formField['type'] === FieldType::TEXT->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                            type="text" id="field-{{ $fieldKey }}"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        <input wire:model="formFields.{{ $fieldKey }}.value" type="text"
+                                                            id="field-{{ $fieldKey }}" class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($formField['label']) }}" @disabled($isHeaderFieldSet && $formField['is_header_field'])>
                                                     @endif
 
                                                     {{-- Number field --}}
                                                     @if ($formField['type'] === FieldType::NUMBER->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                            type="number" id="field-{{ $fieldKey }}"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        <input wire:model="formFields.{{ $fieldKey }}.value" type="number"
+                                                            id="field-{{ $fieldKey }}" class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($formField['label']) }}" @disabled($isHeaderFieldSet && $formField['is_header_field'])>
                                                     @endif
 
                                                     {{-- Date field --}}
                                                     @if ($formField['type'] === FieldType::DATE->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                            type="date" id="field-{{ $fieldKey }}"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        <input wire:model="formFields.{{ $fieldKey }}.value" type="date"
+                                                            id="field-{{ $fieldKey }}" class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($formField['label']) }}" @disabled($isHeaderFieldSet && $formField['is_header_field'])>
                                                     @endif
 
                                                     {{-- Time field --}}
                                                     @if ($formField['type'] === FieldType::TIME->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                            type="time" id="field-{{ $fieldKey }}"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        <input wire:model="formFields.{{ $fieldKey }}.value" type="time"
+                                                            id="field-{{ $fieldKey }}" class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($formField['label']) }}" @disabled($isHeaderFieldSet && $formField['is_header_field'])>
                                                     @endif
 
                                                     {{-- Amount field --}}
                                                     @if ($formField['type'] === FieldType::AMOUNT->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value"
-                                                            type="number" id="field-{{ $fieldKey }}"
-                                                            class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}"
-                                                            @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        <input wire:model="formFields.{{ $fieldKey }}.value" type="number"
+                                                            id="field-{{ $fieldKey }}" class="form-control input__field"
+                                                            placeholder="Enter {{ Str::lower($formField['label']) }}" @disabled($isHeaderFieldSet && $formField['is_header_field'])>
                                                     @endif
                                                 </div>
                                             @endif
@@ -182,9 +169,8 @@
                                                             background-color: #3B4053;
                                                             color: white;
                                                             font-size: 0.75rem;">
-                                                    <span wire:loading wire:target="addFieldValues"
-                                                        class="spinner-border spinner-border-sm" role="status"
-                                                        aria-hidden="true">
+                                                    <span wire:loading wire:target="addFieldValues" class="spinner-border spinner-border-sm"
+                                                        role="status" aria-hidden="true">
                                                     </span>
                                                     Add fields
                                                 </button>
@@ -201,19 +187,17 @@
                                             <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name">
                                                 {{ $helpTopicForm->name }}
                                             </h6>
-                                            <img src="{{ asset('images/gmall-davao-pr-form.png') }}"
-                                                class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System">
+                                            <img src="{{ asset('images/gmall-davao-pr-form.png') }}" class="pr__form__gmall__logo mt-3"
+                                                alt="GMall Ticketing System">
                                         </div>
                                         @if (!empty($headerFields))
                                             <div class="row mx-auto my-3">
                                                 @foreach ($headerFields as $fields)
                                                     @foreach ($fields as $key => $headerField)
                                                         @if ($headerField['assigned_column'] == 1)
-                                                            <div
-                                                                class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
+                                                            <div class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
                                                                 <div class="d-flex align-items-center gap-2">
-                                                                    <label
-                                                                        class="form-label mb-0 fw-bold input__field__label"
+                                                                    <label class="form-label mb-0 fw-bold input__field__label"
                                                                         style="white-space: nowrap">
                                                                         {{ $headerField['label'] }}:
                                                                     </label>
@@ -228,11 +212,9 @@
                                                             </div>
                                                         @endif
                                                         @if ($headerField['assigned_column'] == 2)
-                                                            <div
-                                                                class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
+                                                            <div class="col-lg-6 col-md-12 col-sm-12 ps-0 pe-lg-4 pe-md-0 mb-2">
                                                                 <div class="d-flex align-items-center gap-2">
-                                                                    <label
-                                                                        class="form-label mb-0 fw-bold input__field__label"
+                                                                    <label class="form-label mb-0 fw-bold input__field__label"
                                                                         style="white-space: nowrap">
                                                                         {{ $headerField['label'] }}:
                                                                     </label>
@@ -251,8 +233,7 @@
                                             </div>
                                         @endif
                                         @if (!empty($rowFields))
-                                            <div
-                                                class="w-100 msx-auto d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap">
+                                            <div class="w-100 msx-auto d-flex flex-row flex-xl-nowrap flex-lg-nowrap flex-sm-wrap">
                                                 @php
                                                     $filteredRowField = $this->getFilteredRowFields();
                                                     $headers = $filteredRowField['headers'];
@@ -260,7 +241,7 @@
                                                 @endphp
                                                 @if (!empty($headers) && !empty($fields))
                                                     <div class="w-100">
-                                                        <table class="table table-bordered">
+                                                        <table class="table table-bordered custom__form__table">
                                                             <thead>
                                                                 <tr>
                                                                     @foreach ($headers as $header)
@@ -268,8 +249,7 @@
                                                                             {{ Str::title($header) }}
                                                                         </th>
                                                                     @endforeach
-                                                                    <th
-                                                                        class="text-center fw-bold input__field__label">
+                                                                    <th class="text-center fw-bold input__field__label">
                                                                         Action
                                                                     </th>
                                                                 </tr>
@@ -279,10 +259,7 @@
                                                                     <tr class="row__field">
                                                                         @foreach ($headers as $header)
                                                                             @php
-                                                                                $field = collect($row)->firstWhere(
-                                                                                    'name',
-                                                                                    $header,
-                                                                                );
+                                                                                $field = collect($row)->firstWhere('name', $header);
                                                                             @endphp
                                                                             <td class="field__value">
                                                                                 @if ($field['type'] == 'date')
@@ -293,9 +270,7 @@
                                                                             </td>
                                                                         @endforeach
                                                                         <td>
-                                                                            <button
-                                                                                wire:click="removeField({{ $key }})"
-                                                                                type="button"
+                                                                            <button wire:click="removeField({{ $key }})" type="button"
                                                                                 class="btn p-0 m-auto d-flex align-items-center justify-content-center gap-1"
                                                                                 style="font-size: 0.8rem; color: red;">
                                                                                 <i class="bi bi-trash"></i>
@@ -324,8 +299,7 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" wire:model="priorityLevel"
                                                 id="rbtn{{ $priority->name }}" value="{{ $priority->id }}">
-                                            <label class="form-check-label radio__button__label"
-                                                for="rbtn{{ $priority->name }}">
+                                            <label class="form-check-label radio__button__label" for="rbtn{{ $priority->name }}">
                                                 {{ $priority->name }}
                                             </label>
                                         </div>
@@ -344,29 +318,23 @@
                                         Attachment
                                     </label>
                                 </div>
-                                <div x-data="{ isUploading: false, progress: 1 }"
-                                    x-on:livewire-upload-start="isUploading = true; progress = 1"
-                                    x-on:livewire-upload-finish="isUploading = false"
-                                    x-on:livewire-upload-error="isUploading = false"
+                                <div x-data="{ isUploading: false, progress: 1 }" x-on:livewire-upload-start="isUploading = true; progress = 1"
+                                    x-on:livewire-upload-finish="isUploading = false" x-on:livewire-upload-error="isUploading = false"
                                     x-on:livewire-upload-progress="progress = $event.detail.progress">
                                     <input class="form-control form-control-sm border-0 ticket__file" type="file"
-                                        accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv" wire:model="fileAttachments"
-                                        multiple id="upload-{{ $upload }}" onchange="validateFile()">
-                                    <div x-transition.duration.500ms x-show="isUploading"
-                                        class="progress progress-sm mt-1" style="height: 10px;">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                            role="progressbar" aria-label="Animated striped example"
-                                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                                        accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv" wire:model="fileAttachments" multiple
+                                        id="upload-{{ $upload }}" onchange="validateFile()">
+                                    <div x-transition.duration.500ms x-show="isUploading" class="progress progress-sm mt-1" style="height: 10px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                            aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
                                             x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between"
-                                        x-transition.duration.500ms>
+                                    <div class="d-flex align-items-center justify-content-between" x-transition.duration.500ms>
                                         <span x-show="isUploading" x-text="progress + '%'" style="font-size: 12px;">
                                         </span>
                                         <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
-                                            <i x-show="isUploading" class='bx bx-loader-circle bx-spin'
-                                                style="font-size: 14px;"></i>
+                                            <i x-show="isUploading" class='bx bx-loader-circle bx-spin' style="font-size: 14px;"></i>
                                             <span x-show="isUploading">Uploading...</span>
                                         </span>
                                     </div>
@@ -383,12 +351,11 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-2 p-3">
-                    <button type="button" class="btn ticket__modal__button btn__close__ticket__modal"
-                        data-bs-dismiss="modal" wire:click="cancel">Cancel</button>
+                    <button type="button" class="btn ticket__modal__button btn__close__ticket__modal" data-bs-dismiss="modal"
+                        wire:click="cancel">Cancel</button>
                     <button wire:click="sendTicket" type="button"
                         class="btn d-flex align-items-center justify-content-center gap-2 ticket__modal__button">
-                        <span wire:loading wire:target="sendTicket" class="spinner-border spinner-border-sm"
-                            role="status" aria-hidden="true">
+                        <span wire:loading wire:target="sendTicket" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                         </span>
                         <span wire:loading.remove wire:target="sendTicket">Send Ticket</span>
                         <span wire:loading wire:target="sendTicket">Sending...</span>

@@ -37,9 +37,4 @@ class TicketCustomFormField extends Model
     {
         return $this->belongsTo(Form::class);
     }
-
-    public function ticketCustomFormFiles(): HasMany
-    {
-        return $this->hasMany(TicketCustomFormFile::class);
-    }
 }

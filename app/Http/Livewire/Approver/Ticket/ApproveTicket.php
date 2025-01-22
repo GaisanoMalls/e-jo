@@ -9,7 +9,6 @@ use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
-use App\Models\TicketApproval;
 use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
@@ -31,7 +30,8 @@ class ApproveTicket extends Component
             'loadTicketDetails',
             'loadLevelOfApproval',
             'loadTicketStatusHeaderText',
-            'loadDropdownApprovalButton'
+            'loadDropdownApprovalButton',
+            'remountRequesterCustomForm'
         ];
 
         foreach ($events as $event) {
@@ -71,6 +71,10 @@ class ApproveTicket extends Component
                                 })
                                 ->role(Role::AGENT)
                                 ->get();
+
+                            $this->ticket->customFormFooter->update([
+                                'approved_by' => auth()->user()->id,
+                            ]);
 
                             // Notify the agents through app and email.
                             $agents->each(function ($agent) {

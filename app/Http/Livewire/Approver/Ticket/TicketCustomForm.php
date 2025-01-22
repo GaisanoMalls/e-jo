@@ -54,8 +54,6 @@ class TicketCustomForm extends Component
             $fields[$rowId][$fieldName] = $fieldData['value'];
         }
 
-        sort($headers);
-
         return ['headers' => $headers, 'fields' => $fields];
     }
 

@@ -105,6 +105,11 @@ class Ticket extends Model
         return $this->hasOne(Feedback::class);
     }
 
+    public function customFormFooter(): HasOne
+    {
+        return $this->hasOne(TicketCustomFormFooter::class);
+    }
+
     public function recommendations(): HasMany
     {
         return $this->hasMany(Recommendation::class);

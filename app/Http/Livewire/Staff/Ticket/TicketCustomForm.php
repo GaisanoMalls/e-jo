@@ -2,14 +2,16 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Http\Traits\Utils;
 use App\Models\FieldHeaderValue;
 use App\Models\FieldRowValue;
-use App\Models\Recommendation;
 use App\Models\Ticket;
 use Livewire\Component;
 
 class TicketCustomForm extends Component
 {
+    use Utils;
+
     public Ticket $ticket;
     public array $customFormHeaderFields = [];
     public array $customFormRowFields = [];
@@ -47,8 +49,6 @@ class TicketCustomForm extends Component
 
             $fields[$rowId][$fieldName] = $fieldData['value'];
         }
-
-        sort($headers);
 
         return ['headers' => $headers, 'fields' => $fields];
     }

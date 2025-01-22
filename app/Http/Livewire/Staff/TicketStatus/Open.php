@@ -9,7 +9,6 @@ use App\Models\PriorityLevel;
 use App\Models\Status;
 use App\Models\Ticket;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 use Livewire\WithPagination;
