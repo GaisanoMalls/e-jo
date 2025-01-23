@@ -72,7 +72,7 @@ class ApproveTicket extends Component
                                 ->role(Role::AGENT)
                                 ->get();
 
-                            $this->ticket->customFormFooter->update([
+                            $this->ticket->customFormFooter?->update([
                                 'approved_by' => auth()->user()->id,
                             ]);
 
