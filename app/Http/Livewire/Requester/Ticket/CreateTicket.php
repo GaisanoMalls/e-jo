@@ -150,11 +150,13 @@ class CreateTicket extends Component
                     'team_id' => $this->team != 'undefined' ? $this->team : null
                 ]);
 
-                TicketCustomFormFooter::create([
-                    'ticket_id' => $ticket->id,
-                    'form_id' => $ticket->helpTopic->form->id,
-                    'requested_by' => $ticket->user->id
-                ]);
+                if ($ticket->helpTopic->form) {
+                    TicketCustomFormFooter::create([
+                        'ticket_id' => $ticket->id,
+                        'form_id' => $ticket->helpTopic->form->id,
+                        'requested_by' => $ticket->user->id
+                    ]);
+                }
 
                 if (!empty($this->fileAttachments)) {
                     foreach ($this->fileAttachments as $uploadedFile) {
