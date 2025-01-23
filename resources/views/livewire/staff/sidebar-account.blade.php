@@ -43,21 +43,31 @@
                 {{ auth()->user()->getBranches() ?? '' }}
             </p>
         @endif
-        {{-- <div class="mt-3 d-flex staff__ticket__count justify-content-center">
-            @if (auth()->user()->hasRole(Role::AGENT))
+        <div class="mt-3 d-flex staff__ticket__count align-items-center justify-content-around">
+            <a href="">
                 <li>
-                    <span class="counter">{{ auth()->user()->getClaimedTickets() }}</span>
-                    <p class="counter__label">Claimed</p>
+                    <span class="counter">4</span>
+                    <p class="counter__label">Low</p>
                 </li>
-            @endif
-            <li>
-                <span class="counter">95</span>
-                <p class="counter__label">Answered </p>
-            </li>
-            <li>
-                <span class="counter">2</span>
-                <p class="counter__label">Resolved</p>
-            </li>
-        </div> --}}
+            </a>
+            <a href="">
+                <li>
+                    <span class="counter">2</span>
+                    <p class="counter__label">Medium</p>
+                </li>
+            </a>
+            <a href="">
+                <li>
+                    <span class="counter">95</span>
+                    <p class="counter__label">High</p>
+                </li>
+            </a>
+            <a href="">
+                <li>
+                    <span class="counter">2</span>
+                    <p class="counter__label">Urgent</p>
+                </li>
+            </a>
+        </div>
     </div>
 </div>

@@ -945,21 +945,40 @@ a {
 
         .staff__ticket__count {
             .counter {
-                font-size: $fs-13;
+                font-size: $fs-14;
             }
 
             li {
-                margin: 0 20px 0 20px;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
                 position: relative;
                 list-style: none;
-
+                padding: 5px 9px;
+                border-radius: $border-radius-9;
+                width: 55px;
+                height: 55px;
+                transition: all 0.3s;
+                
                 span {
                     font-weight: 600;
+                }
+                
+                &:hover {
+                    color: black;
+                    background-color: #f0f3f7;
+                    box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+
+                    >.counter__label {
+                        color: #d32839 !important;
+                        font-weight: 500;
+                    }
                 }
             }
 
             .counter__label {
-                font-size: $fs-11;
+                font-size: $fs-12;
                 margin-bottom: 0;
             }
         }
