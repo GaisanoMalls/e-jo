@@ -39,7 +39,8 @@ class DisapproveTicket extends Component
 
         try {
             DB::transaction(function () {
-                $reason = $this->ticket->reason()->create([
+                $reason = Reason::create([
+                    'ticket_id' => $this->ticket->id,
                     'description' => $this->disapproveReason,
                 ]);
 
