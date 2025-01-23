@@ -207,8 +207,8 @@
                                 <td>
                                     <div class="d-flex align-items-center td__content text-start">
                                         <span>
-                                            {{ $ticket->user->getBUDepartments() }} -
-                                            {{ $ticket->user->getBranches() }}
+                                            {{ $ticket->user?->getBUDepartments() }} -
+                                            {{ $ticket->user?->getBranches() }}
                                         </span>
                                     </div>
                                 </td>

@@ -224,12 +224,10 @@ trait Tickets
                     ApprovalStatusEnum::DISAPPROVED
                 ]);
         })
-            ->orWhere(function ($ticket) {
-                $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
-            })
+            ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->orWhere('user_id', auth()->user()->id);
+                $approver->where('user_id', auth()->user()->id);
             })
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
@@ -237,7 +235,7 @@ trait Tickets
                         $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                     })
                     ->whereHas('branches', function ($branch) {
-                        $branch->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
                     });
             })
             ->orderByDesc('created_at')

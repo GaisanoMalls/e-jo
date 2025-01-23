@@ -7999,7 +7999,7 @@ a:hover {
   background: #24695c;
 }
 .sidebar .sidebar__user .staff__ticket__count .counter {
-  font-size: 0.875rem;
+  font-size: 0.813rem;
 }
 .sidebar .sidebar__user .staff__ticket__count li {
   display: flex;
@@ -8027,7 +8027,7 @@ a:hover {
   font-weight: 500;
 }
 .sidebar .sidebar__user .staff__ticket__count .counter__label {
-  font-size: 0.75rem;
+  font-size: 0.688rem;
   margin-bottom: 0;
 }
 .sidebar .sidebar__user p {
