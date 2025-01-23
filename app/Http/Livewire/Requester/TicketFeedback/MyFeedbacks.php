@@ -22,7 +22,7 @@ class MyFeedbacks extends Component
     public ?string $email = null;
     public ?string $feedback = null;
     public ?string $suggestion = null;
-    public ?bool $hadIssuesEncountered = null;
+    public ?string $hadIssuesEncountered = null;
 
     protected $listeners = ['loadMyFeedbacks' => '$refresh'];
 
@@ -66,12 +66,13 @@ class MyFeedbacks extends Component
                 ['id', $this->feedbackId],
                 ['ticket_id', $this->ticket],
                 ['user_id', auth()->user()->id],
-            ])->update([
-                        'rating' => $this->rating,
-                        'had_issues_encountered' => $this->hadIssuesEncountered,
-                        'description' => $this->feedback,
-                        'suggestion' => $this->suggestion,
-                    ]);
+            ])
+                ->update([
+                    'rating' => $this->rating,
+                    'had_issues_encountered' => $this->hadIssuesEncountered,
+                    'description' => $this->feedback,
+                    'suggestion' => $this->suggestion,
+                ]);
 
             $this->emit('loadMyFeedbacks');
             $this->resetExcept('userId', 'feedbacks');
