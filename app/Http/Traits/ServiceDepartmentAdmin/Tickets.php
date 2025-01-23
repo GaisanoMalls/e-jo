@@ -83,19 +83,18 @@ trait Tickets
             $statusQuery->where('approval_status', ApprovalStatusEnum::APPROVED)
                 ->whereIn('status_id', [Status::APPROVED]);
         })
-            ->where(function ($ticket) {
-                $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                    ->orWhereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
-            })
+            ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+            ->orWhereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
             })
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
+                    ->whereHas('buDepartments', function ($department) {
+                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                    })
                     ->whereHas('branches', function ($branch) {
-                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
-                    })->whereHas('buDepartments', function ($department) {
-                        $department->orWhereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                        $branch->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
                     });
             })
             ->orderByDesc('created_at')
