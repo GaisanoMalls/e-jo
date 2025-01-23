@@ -28,16 +28,17 @@ trait Tickets
                 $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                     ->orWhereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
             })
-            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->where('user_id', auth()->user()->id);
-            })
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
+                    ->whereHas('buDepartments', function ($department) {
+                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                    })
                     ->whereHas('branches', function ($branch) {
                         $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
-                    })->whereHas('buDepartments', function ($department) {
-                        $department->orWhereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                     });
+            })
+            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+                $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -61,9 +62,6 @@ trait Tickets
                 $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                     ->orWhereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
             })
-            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->where('user_id', auth()->user()->id);
-            })
             ->withWhereHas('user', function ($user) {
                 $user->withTrashed()
                     ->whereHas('branches', function ($branch) {
@@ -71,6 +69,9 @@ trait Tickets
                     })->whereHas('buDepartments', function ($department) {
                         $department->orWhereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                     });
+            })
+            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+                $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -224,20 +225,21 @@ trait Tickets
                     ApprovalStatusEnum::DISAPPROVED
                 ]);
         })
-            ->where(function ($ticket) {
+            ->orWhere(function ($ticket) {
                 $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                     ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
             })
+            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+                $approver->orWhere('user_id', auth()->user()->id);
+            })
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
+                    ->whereHas('buDepartments', function ($department) {
+                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                    })
                     ->whereHas('branches', function ($branch) {
-                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
-                    })->whereHas('buDepartments', function ($department) {
-                        $department->orWhereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                        $branch->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
                     });
-            })
-            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();

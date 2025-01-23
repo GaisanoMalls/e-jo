@@ -173,6 +173,12 @@ class UpdateHelpTopic extends Component
                         }
                     }
                 }
+
+                // Sync Ticket Approvals for all tickets associated with this help topic
+                $tickets = Ticket::where('help_topic_id', $this->helpTopic->id)->get();
+                foreach ($tickets as $ticket) {
+                    $this->syncTicketApprovals($ticket);
+                }
             });
 
             $this->emit('remount');
