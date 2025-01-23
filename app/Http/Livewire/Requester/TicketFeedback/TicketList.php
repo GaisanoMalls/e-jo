@@ -25,15 +25,12 @@ class TicketList extends Component
     public ?string $suggestion = null;
     public ?string $hadIssuesEncountered = null;
 
+    protected $listeners = ['loadTicketsForFeedback' => '$refresh'];
+
     public function mount()
     {
         $this->email = auth()->user()->email;
         $this->fullName = auth()->user()->profile->getFullName;
-        $this->toRateTickets = Ticket::where('status_id', Status::CLOSED)
-            ->whereDoesntHave('feedback')
-            ->where('user_id', auth()->user()->id)
-            ->orderByDesc('created_at')
-            ->get();
     }
 
     public function rules()
@@ -73,6 +70,7 @@ class TicketList extends Component
             ]);
 
             $this->reset();
+            $this->emit('loadTicketsForFeedback');
             $this->dispatchBrowserEvent('close-feedback-modal');
 
         } catch (Exception $e) {
@@ -83,6 +81,14 @@ class TicketList extends Component
 
     public function render()
     {
-        return view('livewire.requester.ticket-feedback.ticket-list');
+        $this->toRateTickets = Ticket::where('status_id', Status::CLOSED)
+            ->whereDoesntHave('feedback')
+            ->where('user_id', auth()->user()->id)
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('livewire.requester.ticket-feedback.ticket-list', [
+            'toRateTickets' => $this->toRateTickets,
+        ]);
     }
 }
