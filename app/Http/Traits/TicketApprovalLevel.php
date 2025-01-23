@@ -121,6 +121,32 @@ trait TicketApprovalLevel
                 foreach ($ticketApprovals as $ticketApproval) {
                     if ($ticketApproval->helpTopicApprover->user_id === auth()->user()->id) {
                         if (!$ticketApproval->is_approved) {
+                            // Check if prior levels are approved
+                            $priorLevelsApproved = true;
+                            for ($i = 1; $i < $level; $i++) {
+                                $priorLevelApprovals = TicketApproval::where('ticket_id', $ticket->id)
+                                    ->withWhereHas('helpTopicApprover', function ($query) use ($i, $ticket) {
+                                        $query->where([
+                                            ['help_topic_id', $ticket->helpTopic->id],
+                                            ['level', $i]
+                                        ]);
+                                    })->get();
+
+                                if (
+                                    !$priorLevelApprovals->every(function ($approval) {
+                                        return $approval->is_approved;
+                                    })
+                                ) {
+                                    $priorLevelsApproved = false;
+                                    break;
+                                }
+                            }
+
+                            if (!$priorLevelsApproved) {
+                                noty()->addInfo("Prior levels must be approved before approving this level.");
+                                break;
+                            }
+
                             $ticketApproval->update(['is_approved' => true]);
                             foreach ($ticketApprovals as $otherTicketApproval) {
                                 if (!$otherTicketApproval->is_approved) {
@@ -168,6 +194,58 @@ trait TicketApprovalLevel
             }
 
             return true;
+        } catch (Exception $e) {
+            AppErrorLog::getError($e->getMessage());
+            return false;
+        }
+    }
+
+    private function isPriorLevelApproved(Ticket $ticket)
+    {
+        try {
+            foreach ($this->levelsOfApproval as $level) {
+                $ticketApprovals = TicketApproval::where('ticket_id', $ticket->id)
+                    ->withWhereHas('helpTopicApprover', function ($query) use ($level, $ticket) {
+                        $query->where([
+                            ['help_topic_id', $ticket->helpTopic->id],
+                            ['level', $level]
+                        ]);
+                    })->get();
+
+                foreach ($ticketApprovals as $ticketApproval) {
+                    if ($ticketApproval->helpTopicApprover->user_id === auth()->user()->id) {
+                        if (!$ticketApproval->is_approved) {
+                            // Check if prior levels are approved
+                            $priorLevelsApproved = true;
+                            for ($i = 1; $i < $level; $i++) {
+                                $priorLevelApprovals = TicketApproval::where('ticket_id', $ticket->id)
+                                    ->withWhereHas('helpTopicApprover', function ($query) use ($i, $ticket) {
+                                        $query->where([
+                                            ['help_topic_id', $ticket->helpTopic->id],
+                                            ['level', $i]
+                                        ]);
+                                    })->get();
+
+                                if (
+                                    !$priorLevelApprovals->every(function ($approval) {
+                                        return $approval->is_approved;
+                                    })
+                                ) {
+                                    $priorLevelsApproved = false;
+                                    break;
+                                }
+                            }
+
+                            if (!$priorLevelsApproved) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
             return false;

@@ -4,7 +4,9 @@ namespace App\Http\Livewire\Approver\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Requests\Approver\StoreDisapproveTicketRequest;
+use App\Http\Traits\TicketApprovalLevel;
 use App\Models\ActivityLog;
+use App\Models\Reason;
 use App\Notifications\AppNotification;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Traits\AppErrorLog;
@@ -18,6 +20,8 @@ use Livewire\Component;
 
 class DisapproveTicket extends Component
 {
+    use TicketApprovalLevel;
+
     public Ticket $ticket;
     public ?string $disapproveReason = null;
 
@@ -35,32 +39,38 @@ class DisapproveTicket extends Component
     {
         try {
             DB::transaction(function () {
-                $reason = $this->ticket->reason()->create([
-                    'description' => $this->disapproveReason,
-                ]);
+                if ($this->isPriorLevelApproved($this->ticket)) {
+                    $reason = Reason::create([
+                        'ticket_id' => $this->ticket->id,
+                        'description' => $this->disapproveReason,
+                    ]);
 
-                $reason->ticket()->where('id', $this->ticket->id)->update([
-                    'status_id' => Status::DISAPPROVED,
-                    'approval_status' => ApprovalStatusEnum::DISAPPROVED,
-                ]);
+                    $reason->ticket()->where('id', $this->ticket->id)->update([
+                        'status_id' => Status::DISAPPROVED,
+                        'approval_status' => ApprovalStatusEnum::DISAPPROVED,
+                    ]);
 
-                $approver = User::with('profile')
-                    ->where('id', auth()->user()->id)
-                    ->role(Role::APPROVER)
-                    ->firstOrFail();
+                    $approver = User::with('profile')
+                        ->where('id', auth()->user()->id)
+                        ->role(Role::APPROVER)
+                        ->firstOrFail();
 
-                Notification::send(
-                    $this->ticket->user,
-                    new AppNotification(
-                        ticket: $this->ticket,
-                        title: "Ticket #{$this->ticket->ticket_number} (Disapproved)",
-                        message: "{$approver->profile->getFullName} disapproved your ticket"
-                    )
-                );
+                    Notification::send(
+                        $this->ticket->user,
+                        new AppNotification(
+                            ticket: $this->ticket,
+                            title: "Ticket #{$this->ticket->ticket_number} (Disapproved)",
+                            message: "{$approver->profile->getFullName} disapproved your ticket"
+                        )
+                    );
 
-                ActivityLog::make(ticket_id: $this->ticket->id, description: 'disapproved the ticket');
-                $this->actionOnSubmit();
-                noty()->addSuccess('Ticket has been disapproved');
+                    ActivityLog::make(ticket_id: $this->ticket->id, description: 'disapproved the ticket');
+                    $this->actionOnSubmit();
+                    noty()->addSuccess('Ticket has been disapproved');
+                } else {
+                    noty()->addInfo("Prior levels must be approved before approving this level.");
+                    return;
+                }
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

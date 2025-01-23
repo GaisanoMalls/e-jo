@@ -12,17 +12,18 @@ class DropdownApprovalButton extends Component
     use TicketApprovalLevel;
 
     public Ticket $ticket;
-    public bool $isApproverIsInConfiguration = false;
+    public bool $isAllowedToApprove = false;
 
     protected $listeners = ['loadDropdownApprovalButton' => '$refresh'];
 
     public function mount()
     {
-        // dd(TicketApproval::where('ticket_id', $this->ticket->id)
-        //     ->withWhereHas('helpTopicApprover', function ($approver) {
-        //         $approver->where('user_id', auth()->user()->id);
-        //     })->get(), auth()->user()->id);
-        $this->isApproverIsInConfiguration = $this->isApproverIsInConfiguration($this->ticket);
+        $this->isAllowedToApprove = $this->isAllowedToApprove();
+    }
+
+    private function isAllowedToApprove()
+    {
+        return $this->isPriorLevelApproved($this->ticket) && $this->isApproverIsInConfiguration($this->ticket);
     }
 
     public function render()
