@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
+use App\Mail\Staff\AssignedAgentMail;
 use App\Models\ActivityLog;
 use App\Models\Department;
 use App\Models\Role;
@@ -17,6 +18,7 @@ use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 

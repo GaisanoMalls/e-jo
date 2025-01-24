@@ -960,14 +960,14 @@ a {
                 width: 55px;
                 height: 55px;
                 transition: all 0.3s;
-                
+
                 span {
                     font-weight: 600;
                 }
-                
+
                 &:hover {
                     color: black;
-                    background-color: #f0f3f7;
+                    background-color: $body-color;
                     box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
 
                     >.counter__label {
@@ -1595,15 +1595,15 @@ a {
                     font-size: $fs-14;
                     color: #23272e;
                     border-bottom: 0.08rem solid #3e3d3d !important;
-                    
+
                     &:focus {
                         border-bottom-color: #d32839 !important;
                     }
                 }
-                
+
                 .row__field {
                     border-color: #3e3d3d !important;
-                    
+
                     .field__value {
                         color: #23272e;
                         font-size: $fs-14;

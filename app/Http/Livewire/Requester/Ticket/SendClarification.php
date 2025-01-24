@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Requester\Ticket;
 use App\Http\Requests\Requester\StoreTicketClarificationRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
+use App\Mail\Requester\FromRequesterClarificationMail;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
@@ -15,6 +16,7 @@ use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -120,7 +122,12 @@ class SendClarification extends Component
                             forClarification: true
                         )
                     );
-                    Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
+                    Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)
+                        ->send(new FromRequesterClarificationMail(
+                            $this->ticket,
+                            $latestStaff->user ?? $initialServiceDepartmentAdmin,
+                            $this->description
+                        ));
                 });
 
                 ActivityLog::make(ticket_id: $this->ticket->id, description: $logClarificationDescription);

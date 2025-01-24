@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Approver\Ticket;
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
+use App\Mail\Staff\ApprovedTicketMail;
 use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\Status;
@@ -15,6 +16,7 @@ use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 

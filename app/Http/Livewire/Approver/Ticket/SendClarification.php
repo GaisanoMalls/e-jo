@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Approver\Ticket;
 use App\Http\Requests\ServiceDeptAdmin\StoreClarificationRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
+use App\Mail\Staff\FromApproverClarificationMail;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
@@ -15,6 +16,7 @@ use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -112,8 +114,8 @@ class SendClarification extends Component
                     );
                 });
 
+                Mail::to($this->ticket->user)->send(new FromApproverClarificationMail($this->ticket, $this->ticket->user, $this->description));
                 ActivityLog::make(ticket_id: $this->ticket->id, description: $logDescription);
-                Mail::to($ticket->user)->send(new FromApproverClarificationMail($ticket, $request->description));
             });
 
             $this->actionOnSubmit();

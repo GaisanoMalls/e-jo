@@ -3,6 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Enums\RecommendationApprovalStatusEnum;
+use App\Mail\Staff\ApprovedTicketMail;
 use App\Models\RecommendationApprovalStatus;
 use App\Models\RecommendationApprover;
 use App\Models\Role;
@@ -11,6 +12,7 @@ use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 
 trait RecommendationApproval
@@ -84,7 +86,7 @@ trait RecommendationApproval
 
     private static function notifyAndEmailRequester(Ticket $ticket)
     {
-        Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
+        Mail::to($ticket->user)->send(new ApprovedTicketMail($ticket, $ticket->user));
         Notification::send(
             $ticket->user,
             new AppNotification(

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Approver\Ticket;
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\TicketApprovalLevel;
+use App\Mail\Staff\ApprovedTicketMail;
 use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\Status;
@@ -14,6 +15,7 @@ use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
@@ -93,7 +95,7 @@ class ApproveTicket extends Component
                             ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
                         }
                     } else {
-                        noty()->addInfo('Ticket has already been approved by other service dept. admin');
+                        noty()->addInfo('Ticket has already been approved by other Service Department Admin');
                     }
                 });
             } else {

@@ -108,7 +108,10 @@ class RequestApproval extends Component
                         }
                     }
 
-                    Mail::to($serviceDeptAdmin)->send(new RecommendationRequestMail(ticket: $this->ticket, recipient: $serviceDeptAdmin, agentRequester: $agentRequester));
+
+                    Mail::to($requesterServiceDeptAdmin)->send(
+                        new RecommendationRequestMail(ticket: $this->ticket, recipient: $requesterServiceDeptAdmin)
+                    );
                     $recommendationApprovers->each(function ($recommendationApprover) {
                         Notification::send(
                             $recommendationApprover,

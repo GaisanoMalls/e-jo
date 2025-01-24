@@ -26,11 +26,10 @@ class RecommendationRequestMail extends Mailable
      *
      * @return void
      */
-    public function __construct(Ticket $ticket, User $recipient, User $agentRequester)
+    public function __construct(Ticket $ticket, User $recipient)
     {
         $this->ticket = $ticket;
         $this->recipient = $recipient;
-        $this->agentRequester = $agentRequester;
     }
 
     /**
