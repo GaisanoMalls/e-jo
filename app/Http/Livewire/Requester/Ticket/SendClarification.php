@@ -120,7 +120,7 @@ class SendClarification extends Component
                             forClarification: true
                         )
                     );
-                    // Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
+                    Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)->send(new FromRequesterClarificationMail($this->ticket, $latestStaff->user ?? $initialServiceDepartmentAdmin, $this->description));
                 });
 
                 ActivityLog::make(ticket_id: $this->ticket->id, description: $logClarificationDescription);

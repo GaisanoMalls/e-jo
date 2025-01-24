@@ -78,7 +78,7 @@ class ApproveTicket extends Component
 
                             // Notify the agents through app and email.
                             $agents->each(function ($agent) {
-                                // Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
+                                Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
                                 Notification::send(
                                     $agent,
                                     new AppNotification(

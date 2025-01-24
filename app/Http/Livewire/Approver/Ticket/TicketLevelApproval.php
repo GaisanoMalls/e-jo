@@ -95,7 +95,7 @@ class TicketLevelApproval extends Component
 
                     // Notify agents through email and app based notification.
                     $agents->each(function ($agent) {
-                        // Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
+                        Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
                         Notification::send(
                             $agent,
                             new AppNotification(

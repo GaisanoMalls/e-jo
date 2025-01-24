@@ -129,7 +129,7 @@ class AssignTicket extends Component
                             message: "{$serviceDepartmentAdmin->profile->getFullName} assign this ticket to you."
                         )
                     );
-                    // Mail::to($this->ticket->agent)->send(new AssignedAgentMail($this->ticket, $this->ticket->agent));
+                    Mail::to($this->ticket->agent)->send(new AssignedAgentMail($this->ticket, $this->ticket->agent));
                     ActivityLog::make(ticket_id: $this->ticket->id, description: 'assigned the ticket');
                 }
             });

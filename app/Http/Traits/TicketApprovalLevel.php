@@ -49,7 +49,7 @@ trait TicketApprovalLevel
             ->get();
 
         $ticketServiceDepartmentAdmins->each(function ($serviceDeptAdmin) use ($ticket) {
-            // Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
+            Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
             Notification::send(
                 $serviceDeptAdmin,
                 new AppNotification(
@@ -71,7 +71,7 @@ trait TicketApprovalLevel
             ->get();
 
         $requesterServiceDepartmentAdmins->each(function ($serviceDeptAdmin) use ($ticket) {
-            // Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
+            Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
             Notification::send(
                 $serviceDeptAdmin,
                 new AppNotification(
@@ -85,7 +85,7 @@ trait TicketApprovalLevel
 
     private static function notifyAndEmailRequester(Ticket $ticket)
     {
-        // Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
+        Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
         Notification::send(
             $ticket->user,
             new AppNotification(

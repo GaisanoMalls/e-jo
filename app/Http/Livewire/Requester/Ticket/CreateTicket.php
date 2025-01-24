@@ -191,7 +191,7 @@ class CreateTicket extends Component
                                 message: "{$ticket->user->profile->getFullName} created a ticket"
                             )
                         );
-                        // Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
+                        Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
                     }
                 });
 
