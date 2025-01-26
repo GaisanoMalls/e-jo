@@ -45,7 +45,7 @@ trait Tickets
     }
 
     /**
-     * Filter the newly created tickets. 
+     * Filter the newly created tickets.
      * Condition: Requester and Service Dept. Admin - Match the Branch and BU Department.
      * Tickets are exclusively visible within their respective Business Unit (BU).
      */
@@ -83,19 +83,15 @@ trait Tickets
             $statusQuery->where('approval_status', ApprovalStatusEnum::APPROVED)
                 ->whereIn('status_id', [Status::APPROVED]);
         })
-            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
-            ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-            ->withWhereHas('user', function ($user) {
+            // ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+            ->whereHas('user', function ($user) {
                 $user->withTrashed()
+                    ->whereHas('branches', function ($branch) {
+                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                    })
                     ->whereHas('buDepartments', function ($department) {
                         $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
-                    })
-                    ->whereHas('branches', function ($branch) {
-                        $branch->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
                     });
-            })
-            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();
