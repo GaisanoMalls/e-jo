@@ -10,8 +10,10 @@ use App\Models\Reply;
 use App\Models\ReplyFile;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -88,6 +90,14 @@ class ReplyTicket extends Component
                 }
 
                 $requester = $this->ticket->user()->with('profile')->withTrashed()->first();
+                Notification::send(
+                    $requester,
+                    new AppNotification(
+                        ticket: $this->ticket,
+                        title: "Ticket #{$this->ticket->ticket_number} (Replied)",
+                        message: auth()->user()->profile->getFullName . " replied to your message"
+                    )
+                );
                 ActivityLog::make(
                     ticket_id: $this->ticket->id,
                     description: "replied to {$requester->profile->getFullName}"

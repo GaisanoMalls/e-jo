@@ -110,12 +110,11 @@ class SendClarification extends Component
                     new AppNotification(
                         ticket: $this->ticket,
                         title: "Ticket #{$this->ticket->ticket_number} (Clarification)",
-                        message: "Ticket clarification form {$serviceDepartmentAdmin->profile->getFullName} ",
+                        message: "Ticket clarification from {$serviceDepartmentAdmin->profile->getFullName} ",
                         forClarification: true
                     )
                 );
                 Mail::to($this->ticket->user)->send(new FromApproverClarificationMail($this->ticket, $this->ticket->user, $this->description));
-
                 ActivityLog::make(ticket_id: $this->ticket->id, description: $logDescription);
             });
 
