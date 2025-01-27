@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Requester\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
-use App\Enums\FieldTypesEnum;
 use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
