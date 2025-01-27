@@ -100,31 +100,25 @@ class SendTicketReply extends Component
                     ->latest('created_at')->first();
 
                 $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->whereHas('branches', function ($branch) {
-                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
-                    })
-                    ->whereHas('buDepartments', function ($department) {
-                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
-                    })
-                    ->orWhereHas('tickets', function ($ticket) {
-                        $ticket->where('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
-                    })
+                    ->whereHas('branches', fn($branch) =>
+                        $branch->where('branches.id', auth()->user()->branches->pluck('id')->first()))
+                    ->whereHas('buDepartments', fn($query) =>
+                        $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))
                     ->get();
 
                 $serviceDepartmentAdmins->each(function ($serviceDepartmentAdmin) use ($latestStaff) {
                     Notification::send(
-                        $serviceDepartmentAdmin,
+                        $latestStaff->user ?? $serviceDepartmentAdmin,
                         new AppNotification(
                             ticket: $this->ticket,
                             title: "Ticket #{$this->ticket->ticket_number} (Replied)",
                             message: "Ticket reply from {$this->ticket->user->profile->getFullName}",
                         )
                     );
-                    Mail::to($serviceDepartmentAdmin)
+                    Mail::to($latestStaff->user ?? $serviceDepartmentAdmin)
                         ->send(new RequesterReplyMail(
                             $this->ticket,
-                            $serviceDepartmentAdmin,
+                            $latestStaff->user ?? $serviceDepartmentAdmin,
                             $this->description
                         ));
                 });
