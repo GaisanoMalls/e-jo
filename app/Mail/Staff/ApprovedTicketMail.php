@@ -16,14 +16,12 @@ class ApprovedTicketMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public Ticket $ticket;
-    public User $recipient;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket, User $recipient)
+    public function __construct(public Ticket $ticket, public User $recipient)
     {
         $this->ticket = $ticket;
         $this->recipient = $recipient;
@@ -38,8 +36,8 @@ class ApprovedTicketMail extends Mailable implements ShouldQueue
     {
         return new Envelope(
             from: new Address(auth()->user()->email, auth()->user()->profile->getFullName),
-            replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
-            subject: 'You have a new ticket',
+            to: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
+            subject: "New Ticket - {$this->ticket->ticket_number}",
         );
     }
 

@@ -12,7 +12,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class AssignedAgentMail extends Mailable
+class StaffClarificationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -21,10 +21,11 @@ class AssignedAgentMail extends Mailable
      *
      * @return void
      */
-    public function __construct(public Ticket $ticket, public User $recipient)
+    public function __construct(public Ticket $ticket, public User $recipient, public string $message)
     {
         $this->ticket = $ticket;
         $this->recipient = $recipient;
+        $this->message = $message;
     }
 
     /**
@@ -36,8 +37,8 @@ class AssignedAgentMail extends Mailable
     {
         return new Envelope(
             from: new Address(auth()->user()->email, auth()->user()->profile->getFullName),
-            to: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
-            subject: "Ticket assigned to you - {$this->ticket->ticket_number}"
+            replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
+            subject: "Ticket clarification - {$this->ticket->ticket_number}",
         );
     }
 
@@ -49,15 +50,12 @@ class AssignedAgentMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.staff.assigned-agent-mail',
+            markdown: 'mail.staff.approver-clarification-mail',
             with: [
-                'ticketNumber' => "Ticket #{$this->ticket->ticket_number}",
-                'ticketSubject' => $this->ticket->subject,
-                'ticketDescription' => $this->ticket->description,
-                'requesterFullName' => $this->ticket->user->profile->getFullName,
-                'requesterOtherInfo' => "{$this->ticket->user->getBUDepartments()} - {$this->ticket->user->getBranches()}",
-                'approver' => auth()->user()->profile->getFullName,
-                'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/view",
+                'ticketSubject' => "Clarification",
+                'message' => "{$this->message}",
+                'sender' => auth()->user()->profile->getFullName,
+                'url' => "http://10.10.99.81:8000/user/ticket/{$this->ticket->id}/view/clarifications"
             ]
         );
     }

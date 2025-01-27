@@ -16,14 +16,12 @@ class TicketCreatedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public Ticket $ticket;
-    public User $recipient;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket, User $recipient)
+    public function __construct(public Ticket $ticket, public User $recipient)
     {
         $this->ticket = $ticket;
         $this->recipient = $recipient;

@@ -8,42 +8,38 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
 
-class FromRequesterClarificationMail extends Mailable implements ShouldQueue
+class RequesterReplyMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public Ticket $ticket;
-    public User $recipient;
-    public string $clarificationDescription;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket, User $recipient, string $clarificationDescription)
+    public function __construct(public Ticket $ticket, public User $recipient, public string $message)
     {
         $this->ticket = $ticket;
         $this->recipient = $recipient;
-        $this->clarificationDescription = $clarificationDescription;
+        $this->message = $message;
     }
+
 
     /**
      * Get the message envelope.
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope(): Envelope
+    public function envelope()
     {
         return new Envelope(
             from: new Address(auth()->user()->email, auth()->user()->profile->getFullName),
-            replyTo: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
-            subject: "Clarification for ticket {$this->ticket->ticket_number}",
+            to: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
+            subject: "Ticket reply - {$this->ticket->ticket_number}",
         );
     }
 
@@ -52,15 +48,15 @@ class FromRequesterClarificationMail extends Mailable implements ShouldQueue
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content(): Content
+    public function content()
     {
         return new Content(
-            markdown: 'mail.requester.from-requester-clarification-mail',
+            markdown: 'mail.staff.approver-clarification-mail',
             with: [
-                'ticketSubject' => "Requester's Clarification",
-                'message' => "{$this->clarificationDescription}",
+                'ticketSubject' => "Ticket Reply",
+                'message' => "{$this->message}",
                 'sender' => auth()->user()->profile->getFullName,
-                'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/clarifications",
+                'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/view"
             ]
         );
     }
@@ -70,10 +66,8 @@ class FromRequesterClarificationMail extends Mailable implements ShouldQueue
      *
      * @return array
      */
-    public function attachments(): array
+    public function attachments()
     {
-        return [
-            // Attachment::fromStorage($this->ticket->clarifications->fileAttachments)
-        ];
+        return [];
     }
 }

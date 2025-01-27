@@ -17,6 +17,9 @@ class SidebarAccount extends Component
     use ServiceDepartmentAdminTickets, AgentTickets;
 
     public Collection $priorityLevels;
+
+    protected $listeners = ['lodSidebarAccount' => '$refresh'];
+
     public function mount()
     {
         $this->priorityLevels = PriorityLevel::all();

@@ -17,16 +17,12 @@ class RecommendationRequestMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public Ticket $ticket;
-    public User $recipient;
-    public User $agentRequester;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Ticket $ticket, User $recipient)
+    public function __construct(public Ticket $ticket, public User $recipient, public User $recommendationRequester)
     {
         $this->ticket = $ticket;
         $this->recipient = $recipient;
@@ -58,9 +54,9 @@ class RecommendationRequestMail extends Mailable
             with: [
                 'ticketNumber' => "Ticket #{$this->ticket->ticket_number}",
                 'ticketSubject' => $this->ticket->subject,
-                'agentFullName' => $this->agentRequester->profile->getFullName,
-                'agentBUDept' => $this->agentRequester->getBUDepartments(),
-                'agentBranch' => $this->agentRequester->getBranches(),
+                'agentFullName' => $this->recommendationRequester->profile->getFullName,
+                'agentBUDept' => $this->recommendationRequester->getBUDepartments(),
+                'agentBranch' => $this->recommendationRequester->getBranches(),
                 'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/view",
             ]
         );

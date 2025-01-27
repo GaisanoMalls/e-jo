@@ -26,6 +26,7 @@ class UpdatePriorityLevel extends Component
         $events = [
             'loadPriorityLevel',
             'loadTicketLogs',
+            'lodSidebarAccount'
         ];
 
         foreach ($events as $event) {

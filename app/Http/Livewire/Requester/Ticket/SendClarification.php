@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Requester\Ticket;
 use App\Http\Requests\Requester\StoreTicketClarificationRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
-use App\Mail\Requester\FromRequesterClarificationMail;
+use App\Mail\Requester\RequesterClarificationMail;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
 use App\Models\ClarificationFile;
@@ -123,7 +123,7 @@ class SendClarification extends Component
                         )
                     );
                     Mail::to($latestStaff->user ?? $initialServiceDepartmentAdmin)
-                        ->send(new FromRequesterClarificationMail(
+                        ->send(new RequesterClarificationMail(
                             $this->ticket,
                             $latestStaff->user ?? $initialServiceDepartmentAdmin,
                             $this->description
