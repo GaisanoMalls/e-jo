@@ -17,14 +17,21 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $otherPermissions = ['manage app', 'approve special project', 'approve special project costing', 'disapprove special project costing'];
+        $otherPermissions = [
+            'manage app',
+            'approve special project',
+            'approve special project costing',
+            'disapprove special project costing',
+            'request ticket approval'
+        ];
+
         foreach ($otherPermissions as $otherPermission) {
             Permission::firstOrCreate([
                 'name' => $otherPermission,
             ]);
         }
 
-        // Permission for ticket
+        // Ticket Permissions
         $ticketPermissions = [
             'create',
             'view',

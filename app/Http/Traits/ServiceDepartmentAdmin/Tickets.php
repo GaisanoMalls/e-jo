@@ -24,17 +24,17 @@ trait Tickets
             $statusQuery->where('status_id', Status::OPEN)
                 ->whereIn('approval_status', [ApprovalStatusEnum::FOR_APPROVAL, ApprovalStatusEnum::APPROVED]);
         })
-            ->where(function ($ticket) {
-                $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                    ->orWhereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
-            })
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
+                    ->whereHas('branches', function ($branch) {
+                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                    })
                     ->whereHas('buDepartments', function ($department) {
                         $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                     })
-                    ->whereHas('branches', function ($branch) {
-                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                    ->orWhereHas('tickets', function ($ticket) {
+                        $ticket->where('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
                     });
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {

@@ -26,7 +26,8 @@ class DirectPermissionSeeder extends Seeder
                 'forward ticket',
                 'assign ticket',
                 'approve ticket',
-                'approve special project costing'
+                'approve special project costing',
+                'request ticket approval'
             ]);
         });
 

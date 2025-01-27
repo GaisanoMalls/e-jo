@@ -57,7 +57,6 @@ class TicketList extends Component
     public function submitFeedback()
     {
         $this->validate();
-        // dump($this->rating, $this->hadIssuesEncountered, $this->feedback);
 
         try {
             Feedback::create([

@@ -41,31 +41,17 @@
                 {{ auth()->user()->getBranches() ?? '' }}
             </p>
         @endif
-        <div class="mt-3 d-flex staff__ticket__count align-items-center justify-content-around">
-            <a href="">
-                <li>
-                    <span class="counter">4</span>
-                    <p class="counter__label">Low</p>
-                </li>
-            </a>
-            <a href="">
-                <li>
-                    <span class="counter">2</span>
-                    <p class="counter__label">Medium</p>
-                </li>
-            </a>
-            <a href="">
-                <li>
-                    <span class="counter">95</span>
-                    <p class="counter__label">High</p>
-                </li>
-            </a>
-            <a href="">
-                <li>
-                    <span class="counter">2</span>
-                    <p class="counter__label">Urgent</p>
-                </li>
-            </a>
-        </div>
+        @if ($priorityLevels->isNotEmpty())
+            <div class="mt-4 d-flex staff__ticket__count align-items-center justify-content-around">
+                @foreach ($priorityLevels as $priority)
+                    <a href="{{ route('staff.tickets.priority_level_tickets', $priority->slug) }}">
+                        <li>
+                            <span class="counter">{{ $this->countTicketsByPriorityLevel($priority) }}</span>
+                            <p class="counter__label">{{ $priority->name }}</p>
+                        </li>
+                    </a>
+                @endforeach
+            </div>
+        @endif
     </div>
 </div>

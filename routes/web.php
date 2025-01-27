@@ -62,6 +62,9 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
                 Route::get('/viewed', 'viewedTickets')->name('viewed_tickets');
                 Route::get('/overdue', 'overdueTickets')->name('overdue_tickets');
                 Route::get('/closed', 'closedTickets')->name('closed_tickets');
+
+                // Ticket by priority level
+                Route::get('/priority-level/{priorityLevel:slug}', 'queryTicketByPriorityLevel')->name('priority_level_tickets');
             });
         });
         Route::get('/feedbacks', StaffFeedbackContoller::class)->name('feedbacks');
@@ -177,7 +180,6 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
         });
     });
 });
-
 
 // * Approver Routes
 Route::middleware(['auth', Role::approversOnly()])->group(function () {

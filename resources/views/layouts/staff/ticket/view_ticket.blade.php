@@ -1,6 +1,5 @@
 @php
     use App\Models\Role;
-    use App\Enums\ApprovalStatusEnum;
 @endphp
 
 @extends('layouts.staff.base', ['title' => $ticket->subject])
@@ -10,8 +9,7 @@
         <div class="ticket__section" x-data="{ pinned: true }">
             <button :class="pinned ? 'd-none' : ''"
                 class="btn btn-sm p-0 bg-blue d-flex align-items-center rounded-circle text-white shadow justify-content-center position-fixed"
-                style="font-size: 1rem; height: 30px; width: 30px; top: 94px; right: 51px; z-index: 2; background-color: #D32839;"
-                @click="pinned = true">
+                style="font-size: 1rem; height: 30px; width: 30px; top: 94px; right: 51px; z-index: 2; background-color: #D32839;" @click="pinned = true">
                 <i class="bi bi-pin-angle-fill"></i>
             </button>
             <div class="row">
@@ -26,8 +24,7 @@
                             <div class="d-flex align-items-center gap-4">
                                 @livewire('staff.ticket.priority-level', ['ticket' => $ticket])
                                 <button class="btn btn-sm p-0 btn__change__priority__level"
-                                    style="height: 30px; width: 30px; font-size: 1rem; color: #D32839;"
-                                    @click="pinned = false">
+                                    style="height: 30px; width: 30px; font-size: 1rem; color: #D32839;" @click="pinned = false">
                                     <i class="bi bi-pin-angle-fill"></i>
                                 </button>
                             </div>
@@ -41,16 +38,13 @@
                                 </small>
                             </div>
                             <div class="d-flex flex-wrap justify-content-center gap-3 gap-lg-4 gap-xl-4">
-                                @if (
-                                    $ticket->isSpecialProject() &&
-                                        auth()->user()->hasRole(Role::AGENT))
+                                @if ($ticket->isSpecialProject() && auth()->user()->hasRole(Role::AGENT))
                                     @livewire('staff.ticket.load-costing-button-header', ['ticket' => $ticket])
                                 @endif
                                 @if (Route::is('staff.ticket.view_ticket'))
                                     @livewire('staff.ticket.load-reply-button-header', ['ticket' => $ticket])
                                 @endif
-                                @if (Route::is('staff.ticket.ticket_clarifications') &&
-                                        auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+                                @if (Route::is('staff.ticket.ticket_clarifications') && auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                                     @livewire('staff.ticket.load-clarify-ticket-button-header', ['ticket' => $ticket])
                                 @endif
                                 @if (auth()->user()->hasRole(Role::AGENT))
@@ -84,11 +78,9 @@
                                                 <small class="ticket__details__user__fullname">
                                                     <span>{{ $requester->profile->getFullName }}</span>
                                                     @if ($requester->trashed())
-                                                        <i class="bi bi-exclamation-circle-fill text-danger ms-1"
-                                                            style="font-size: 0.7rem;" data-tooltip="Archived"
-                                                            data-tooltip-position="right" data-tooltip-font-size="0.7rem"
-                                                            data-tooltip-max-width="200px"
-                                                            data-tooltip-additional-classes="rounded-3"></i>
+                                                        <i class="bi bi-exclamation-circle-fill text-danger ms-1" style="font-size: 0.7rem;"
+                                                            data-tooltip="Archived" data-tooltip-position="right" data-tooltip-font-size="0.7rem"
+                                                            data-tooltip-max-width="200px" data-tooltip-additional-classes="rounded-3"></i>
                                                     @endif
                                                 </small>
                                                 <small class="ticket__details__user__department">
@@ -113,8 +105,7 @@
                                         <div class="ticket__attachments d-inline-flex gap-1 mb-3" data-bs-toggle="modal"
                                             data-bs-target="#ticketFilesModalForm">
                                             <i class="fa-solid fa-file-zipper"></i>
-                                            <small
-                                                class="attachment__count">{{ $ticket->fileAttachments->count() }}</small>
+                                            <small class="attachment__count">{{ $ticket->fileAttachments->count() }}</small>
                                             <small class="attachment__label">
                                                 {{ $ticket->fileAttachments->count() > 1 ? 'file attachments' : 'file attachement' }}
                                             </small>
@@ -131,8 +122,7 @@
                                 <div class="d-flex align-items-center gap-3 threads__clarifications__tab__container">
                                     @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                                         <a onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'"
-                                            class="btn btn-sm px-0 rounded-0 {{ Route::is('staff.ticket.view_ticket') ? 'active' : '' }}"
-                                            type="button">
+                                            class="btn btn-sm px-0 rounded-0 {{ Route::is('staff.ticket.view_ticket') ? 'active' : '' }}" type="button">
                                             Reply Threads
                                         </a>
                                         <a onclick="window.location='{{ route('staff.ticket.ticket_clarifications', $ticket->id) }}'"
@@ -161,9 +151,7 @@
                     </div>
                 </div>
             </div>
-            @if (
-                $ticket->isSpecialProject() &&
-                    auth()->user()->hasRole(Role::AGENT))
+            @if ($ticket->isSpecialProject() && auth()->user()->hasRole(Role::AGENT))
                 @livewire('staff.ticket.add-costing', ['ticket' => $ticket])
             @endif
             @if (auth()->user()->hasRole([Role::SERVICE_DEPARTMENT_ADMIN, Role::AGENT]))
