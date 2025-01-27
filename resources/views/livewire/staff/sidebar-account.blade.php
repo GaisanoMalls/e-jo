@@ -32,11 +32,9 @@
                 </span>
             </div>
         </div>
-        <a href="">
-            <h6 class="my-3 sidebar__userfullname">
-                {{ auth()->user()->profile->getFullName }}
-            </h6>
-        </a>
+        <h6 class="my-3 sidebar__userfullname">
+            {{ auth()->user()->profile->getFullName }}
+        </h6>
         @if (!auth()->user()->hasRole(Role::SYSTEM_ADMIN))
             <p class="sidebar__userdepartment">
                 {{ auth()->user()->getBuDepartments() . ' -' }}

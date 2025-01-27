@@ -80,17 +80,20 @@ trait Tickets
     public function serviceDeptAdminGetApprovedTickets(): array|Collection
     {
         return Ticket::where(function ($statusQuery) {
-            $statusQuery->where('approval_status', ApprovalStatusEnum::APPROVED)
-                ->whereIn('status_id', [Status::APPROVED]);
+            $statusQuery->where([
+                ['status_id', Status::APPROVED],
+                ['approval_status', ApprovalStatusEnum::APPROVED],
+            ]);
         })
-            // ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+            ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
                     ->whereHas('branches', function ($branch) {
                         $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
                     })
                     ->whereHas('buDepartments', function ($department) {
-                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                        $department->orWhereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                     });
             })
             ->orderByDesc('created_at')
@@ -128,26 +131,18 @@ trait Tickets
             ['status_id', Status::CLAIMED],
             ['approval_status', ApprovalStatusEnum::APPROVED]
         ])
-            ->whereHas('agent')
             ->whereNotNull('agent_id')
-            ->where(function ($ticket) {
-                $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                    ->orWhereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
-            })
-            ->whereHas('ticketApprovals', function ($approver) {
-                $approver->where('is_approved', true)
-                    ->withWhereHas('helpTopicApprover', function ($approver) {
-                        $approver->orWhere('user_id', auth()->user()->id);
-                    });
-            })
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
                     ->whereHas('branches', function ($branch) {
-                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                        $branch->orWhereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
                     })->whereHas('buDepartments', function ($department) {
                         $department->orWhereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                    })->whereHas('tickets', function ($ticket) {
+                        $ticket->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
                     });
             })
+            ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
             ->orderByDesc('created_at')
             ->get();
     }
