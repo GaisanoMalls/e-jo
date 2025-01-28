@@ -12,7 +12,7 @@ class PriorityLevelTicket extends Component
 {
     use WithPagination;
 
-    public Collection|LengthAwarePaginator $viewedTickets;
+    public Collection|LengthAwarePaginator $priorityLevelTickets;
     public Collection $priorityLevels;
     public string $searchTicket = "";
     public ?string $searchDate = null;
@@ -30,6 +30,7 @@ class PriorityLevelTicket extends Component
 
     public function mount()
     {
+        $this->priorityLevelTickets = collect();
         $this->paginatePageNumber = $this->pageNumberOptions[0];
     }
 
@@ -109,13 +110,10 @@ class PriorityLevelTicket extends Component
 
     public function isEmptyFilteredTickets()
     {
-        return $this->viewedTickets->isEmpty()
-            && (
-                !$this->searchTicket
-                && !$this->useDateRange
-                && !$this->useDate
-                && !$this->useMonth
-            );
+        return !$this->searchTicket
+            && !$this->useDateRange
+            && !$this->useDate
+            && !$this->useMonth;
     }
 
     public function render()

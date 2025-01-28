@@ -50,7 +50,7 @@ trait RecommendationApproval
             ->get();
 
         $ticketServiceDepartmentAdmins->each(function ($serviceDeptAdmin) use ($ticket) {
-            Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
+            Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($ticket, $serviceDeptAdmin));
             Notification::send(
                 $serviceDeptAdmin,
                 new AppNotification(
@@ -72,7 +72,7 @@ trait RecommendationApproval
             ->get();
 
         $requesterServiceDepartmentAdmins->each(function ($serviceDeptAdmin) use ($ticket) {
-            Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($this->ticket, $serviceDeptAdmin));
+            Mail::to($serviceDeptAdmin)->send(new ApprovedTicketMail($ticket, $serviceDeptAdmin));
             Notification::send(
                 $serviceDeptAdmin,
                 new AppNotification(
