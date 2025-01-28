@@ -96,7 +96,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="d-flex flex-column gap-1" style="border-bottom">
-                                    <div @style(['font-size: 0.875rem', 'padding-top: 1.3rem' => !$ticket->customFormFooter->notedBy])>
+                                    <div @style(['font-size: 0.875rem', 'color: #006102', 'padding-top: 1.3rem' => !$ticket->customFormFooter->notedBy])>
                                         {{ $ticket->customFormFooter->notedBy?->profile->getFullName ?? '' }}
                                     </div>
                                     <div class="w-75" style="height: 1px; background-color: #3e3d3d;"></div>
@@ -105,7 +105,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="d-flex flex-column gap-1" style="border-bottom">
-                                    <div @style(['font-size: 0.875rem', 'padding-top: 1.3rem' => !$ticket->customFormFooter->approvedBy])>
+                                    <div @style(['font-size: 0.875rem', 'color: #006102', 'padding-top: 1.3rem' => !$ticket->customFormFooter->approvedBy])>
                                         {{ $ticket->customFormFooter->approvedBy?->profile->getFullName }}
                                     </div>
                                     <div class="w-75" style="height: 1px; background-color: #3e3d3d;"></div>

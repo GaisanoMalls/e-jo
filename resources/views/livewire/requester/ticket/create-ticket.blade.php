@@ -118,57 +118,68 @@
                                         <h6 class="fw-bold mb-0 mb-2 form__name">
                                             {{ $helpTopicForm->name }}
                                         </h6>
+                                        @if (session()->has('custom_form_field_message'))
+                                            <small class="d-flex align-items-center gap-2 text-danger mx-2 my-2 px-3 py-2 rounded-3"
+                                                style="background-color: #fff3cd; color: #664d03;">
+                                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                                {{ session('custom_form_field_message') }}
+                                            </small>
+                                        @endif
                                         @foreach ($formFields as $fieldKey => $formField)
-                                            @if (!$formField['is_for_ticket_number'])
-                                                <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
-                                                    <label class="form-label input__field__label" style="white-space: nowrap">
-                                                        {{ $formField['label'] }}
-                                                    </label>
-                                                    {{-- Text field --}}
-                                                    @if ($formField['type'] === FieldType::TEXT->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value" type="text"
-                                                            id="field-{{ $fieldKey }}" class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}" @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                    @endif
+                                            @if ($formField['is_enabled'])
+                                                @if (!$formField['is_for_ticket_number'])
+                                                    <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
+                                                        <label class="form-label input__field__label" style="white-space: nowrap">
+                                                            {{ $formField['label'] }}
+                                                        </label>
+                                                        {{-- Text field --}}
+                                                        @if ($formField['type'] === FieldType::TEXT->value)
+                                                            <input wire:model="formFields.{{ $fieldKey }}.value" type="text"
+                                                                id="field-{{ $fieldKey }}" class="form-control input__field"
+                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        @endif
 
-                                                    {{-- Number field --}}
-                                                    @if ($formField['type'] === FieldType::NUMBER->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value" type="number"
-                                                            id="field-{{ $fieldKey }}" class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}" @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                    @endif
+                                                        {{-- Number field --}}
+                                                        @if ($formField['type'] === FieldType::NUMBER->value)
+                                                            <input wire:model="formFields.{{ $fieldKey }}.value" type="number"
+                                                                id="field-{{ $fieldKey }}" class="form-control input__field"
+                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        @endif
 
-                                                    {{-- Date field --}}
-                                                    @if ($formField['type'] === FieldType::DATE->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value" type="date"
-                                                            id="field-{{ $fieldKey }}" class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}" @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                    @endif
+                                                        {{-- Date field --}}
+                                                        @if ($formField['type'] === FieldType::DATE->value)
+                                                            <input wire:model="formFields.{{ $fieldKey }}.value" type="date"
+                                                                id="field-{{ $fieldKey }}" class="form-control input__field"
+                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        @endif
 
-                                                    {{-- Time field --}}
-                                                    @if ($formField['type'] === FieldType::TIME->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value" type="time"
-                                                            id="field-{{ $fieldKey }}" class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}" @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                    @endif
+                                                        {{-- Time field --}}
+                                                        @if ($formField['type'] === FieldType::TIME->value)
+                                                            <input wire:model="formFields.{{ $fieldKey }}.value" type="time"
+                                                                id="field-{{ $fieldKey }}" class="form-control input__field"
+                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        @endif
 
-                                                    {{-- Amount field --}}
-                                                    @if ($formField['type'] === FieldType::AMOUNT->value)
-                                                        <input wire:model="formFields.{{ $fieldKey }}.value" type="number"
-                                                            id="field-{{ $fieldKey }}" class="form-control input__field"
-                                                            placeholder="Enter {{ Str::lower($formField['label']) }}" @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                    @endif
-                                                </div>
+                                                        {{-- Amount field --}}
+                                                        @if ($formField['type'] === FieldType::AMOUNT->value)
+                                                            <input wire:model="formFields.{{ $fieldKey }}.value" type="number"
+                                                                id="field-{{ $fieldKey }}" class="form-control input__field"
+                                                                placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                             @endif
                                         @endforeach
                                         <div class="col-12">
                                             <div class="d-flex align-items-center">
                                                 <button wire:click="addFieldValues" type="button"
                                                     class="btn d-flex align-items-center justify-content-center rounded-3 gap-2"
-                                                    style="height: 35px;
-                                                            background-color: #3B4053;
-                                                            color: white;
-                                                            font-size: 0.75rem;">
+                                                    style="height: 35px; background-color: #3B4053; color: white; font-size: 0.75rem;">
                                                     <span wire:loading wire:target="addFieldValues" class="spinner-border spinner-border-sm"
                                                         role="status" aria-hidden="true">
                                                     </span>

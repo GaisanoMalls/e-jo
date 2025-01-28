@@ -244,29 +244,40 @@ class CreateTicket extends Component
         }
 
         $formFields = array_map(function ($field) {
-            if (!isset($field['is_header_field']) || !$field['is_header_field']) {
-                $field['row'] = $this->rowCount;
-            }
-
             if ($field['is_header_field'] && $field['is_for_ticket_number']) {
                 $field['value'] = $this->poNumber;
             }
             return $field;
         }, $this->formFields);
 
+        // Validate required fields
+        $validationErrors = [];
+        foreach ($formFields as $field) {
+            if ($field['is_required'] && empty($field['value'])) {
+                $validationErrors[] = "{$field['label']} field is required.";
+            }
+        }
+
+        if (!empty($validationErrors)) {
+            foreach ($validationErrors as $error) {
+                session()->flash('custom_form_field_message', $error);
+            }
+            return;
+        }
+
         $this->filledForms[] = $formFields;
         $this->rowCount++;
 
         if (!$this->isHeaderFieldSet) {
             $this->headerFields = array_map(function ($fields) {
-                return array_filter($fields, fn($field) => $field['is_header_field']);
+                return array_filter($fields, fn($field) => $field['is_header_field'] && $field['is_enabled']);
             }, $this->filledForms);
 
             $this->isHeaderFieldSet = true;
         }
 
         $this->rowFields = array_map(function ($fields) {
-            return array_filter($fields, fn($field) => !$field['is_header_field']);
+            return array_filter($fields, fn($field) => !$field['is_header_field'] && $field['is_enabled']);
         }, $this->filledForms);
 
         $this->resetFormFields();
