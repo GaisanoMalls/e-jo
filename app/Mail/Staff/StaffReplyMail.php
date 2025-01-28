@@ -2,9 +2,12 @@
 
 namespace App\Mail\Staff;
 
+use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -18,9 +21,11 @@ class StaffReplyMail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(public Ticket $ticket, public User $recipient, public string $message)
     {
-        //
+        $this->ticket = $ticket;
+        $this->recipient = $recipient;
+        $this->message = $message;
     }
 
     /**
@@ -31,7 +36,9 @@ class StaffReplyMail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Staff Reply Mail',
+            from: new Address(auth()->user()->email, auth()->user()->profile->getFullName),
+            to: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
+            subject: "Ticket reply - {$this->ticket->ticket_number}",
         );
     }
 
@@ -43,7 +50,13 @@ class StaffReplyMail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'view.name',
+            markdown: 'mail.staff.approver-clarification-mail',
+            with: [
+                'ticketSubject' => "Ticket Reply",
+                'message' => "{$this->message}",
+                'sender' => auth()->user()->profile->getFullName,
+                'url' => "http://10.10.99.81:8000/user/ticket/{$this->ticket->id}/view"
+            ]
         );
     }
 

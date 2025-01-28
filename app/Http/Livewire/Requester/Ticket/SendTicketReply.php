@@ -100,27 +100,38 @@ class SendTicketReply extends Component
                     ->latest('created_at')->first();
 
                 $serviceDepartmentAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->whereHas('branches', fn($branch) =>
-                        $branch->where('branches.id', auth()->user()->branches->pluck('id')->first()))
-                    ->whereHas('buDepartments', fn($query) =>
-                        $query->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))
+                    ->with(['branches', 'buDepartments', 'serviceDepartments'])
                     ->get();
 
                 $serviceDepartmentAdmins->each(function ($serviceDepartmentAdmin) use ($latestStaff) {
-                    Notification::send(
-                        $latestStaff->user ?? $serviceDepartmentAdmin,
-                        new AppNotification(
-                            ticket: $this->ticket,
-                            title: "Ticket #{$this->ticket->ticket_number} (Replied)",
-                            message: "Ticket reply from {$this->ticket->user->profile->getFullName}",
-                        )
-                    );
-                    Mail::to($latestStaff->user ?? $serviceDepartmentAdmin)
-                        ->send(new RequesterReplyMail(
-                            $this->ticket,
-                            $latestStaff->user ?? $serviceDepartmentAdmin,
-                            $this->description
-                        ));
+                    if (
+                        $this->ticket->whereIn('service_department_id', $serviceDepartmentAdmin->serviceDepartments->pluck('id')->toArray())
+                            ->whereIn('branch_id', $serviceDepartmentAdmin->branches->pluck('id')->toArray())
+                            ->orWhereHas('user', function ($user) use ($serviceDepartmentAdmin) {
+                                $user->whereHas('branches', function ($branch) use ($serviceDepartmentAdmin) {
+                                    $branch->whereIn('branches.id', $serviceDepartmentAdmin->branches->pluck('id')->toArray());
+                                })
+                                    ->whereHas('buDepartments', function ($department) use ($serviceDepartmentAdmin) {
+                                        $department->whereIn('departments.id', $serviceDepartmentAdmin->buDepartments->pluck('id')->toArray());
+                                    });
+                            })
+                            ->exists()
+                    ) {
+                        Notification::send(
+                            $serviceDepartmentAdmin,
+                            new AppNotification(
+                                ticket: $this->ticket,
+                                title: "Ticket #{$this->ticket->ticket_number} (Replied)",
+                                message: "Ticket reply from {$this->ticket->user->profile->getFullName}",
+                            )
+                        );
+                        Mail::to($serviceDepartmentAdmin)
+                            ->send(new RequesterReplyMail(
+                                $this->ticket,
+                                $serviceDepartmentAdmin,
+                                $this->description
+                            ));
+                    }
                 });
 
                 ActivityLog::make(ticket_id: $this->ticket->id, description: "replied to {$latestReply->user->profile->getFullName}");

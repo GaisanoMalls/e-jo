@@ -33,7 +33,7 @@ trait Tickets
                         $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                     })
                     ->orWhereHas('tickets', function ($ticket) {
-                        $ticket->where('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                        $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
                     });
             })
@@ -94,7 +94,7 @@ trait Tickets
                         $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                     })
                     ->orWhereHas('tickets', function ($ticket) {
-                        $ticket->where('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                        $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
                     });
             })
@@ -137,7 +137,7 @@ trait Tickets
                         $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                     })
                     ->orWhereHas('tickets', function ($ticket) {
-                        $ticket->where('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                        $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
                     });
             })
@@ -169,7 +169,7 @@ trait Tickets
                         $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                     })
                     ->orWhereHas('tickets', function ($ticket) {
-                        $ticket->where('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                        $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
                     });
             })
@@ -192,7 +192,7 @@ trait Tickets
                         $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                     })
                     ->orWhereHas('tickets', function ($ticket) {
-                        $ticket->where('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                        $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
                     });
             })
@@ -218,7 +218,7 @@ trait Tickets
                         $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
                     })
                     ->orWhereHas('tickets', function ($ticket) {
-                        $ticket->where('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                        $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
                     });
             })

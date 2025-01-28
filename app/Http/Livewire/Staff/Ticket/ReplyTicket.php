@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\Ticket;
 use App\Http\Requests\StaffReplyTicketRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
+use App\Mail\Staff\StaffReplyMail;
 use App\Models\ActivityLog;
 use App\Models\Reply;
 use App\Models\ReplyFile;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Mail;
 
 class ReplyTicket extends Component
 {
@@ -98,6 +100,7 @@ class ReplyTicket extends Component
                         message: auth()->user()->profile->getFullName . " replied to your message"
                     )
                 );
+                Mail::to($requester)->send(new StaffReplyMail($this->ticket, $requester, $this->description));
                 ActivityLog::make(
                     ticket_id: $this->ticket->id,
                     description: "replied to {$requester->profile->getFullName}"
