@@ -55,13 +55,13 @@ class ServiceDeptAdminList extends Component
     private function getInitialQuery()
     {
         return User::whereHas('profile', function ($profile) {
-            $profile->where('first_name', 'like', '%' . $this->searchServiceDeptAdmin . '%')
-                ->orWhere('middle_name', 'like', '%' . $this->searchServiceDeptAdmin . '%')
-                ->orWhere('last_name', 'like', '%' . $this->searchServiceDeptAdmin . '%');
+            $profile->where('first_name', 'like', "%{$this->searchServiceDeptAdmin}%")
+                ->orWhere('middle_name', 'like', "%{$this->searchServiceDeptAdmin}%")
+                ->orWhere('last_name', 'like', "%{$this->searchServiceDeptAdmin}%");
         })
-            ->orWhereHas('serviceDepartments', fn($serviceDept) => $serviceDept->where('name', 'like', '%' . $this->searchServiceDeptAdmin . '%'))
-            ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', '%' . $this->searchServiceDeptAdmin . '%'))
-            ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', '%' . $this->searchServiceDeptAdmin . '%'))
+            ->orWhereHas('serviceDepartments', fn($serviceDept) => $serviceDept->where('name', 'like', "%{$this->searchServiceDeptAdmin}%"))
+            ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', "%{$this->searchServiceDeptAdmin}%"))
+            ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', "%{$this->searchServiceDeptAdmin}%"))
             ->role(Role::SERVICE_DEPARTMENT_ADMIN)
             ->orderByDesc('created_at')
             ->paginate(25);

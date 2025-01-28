@@ -72,12 +72,12 @@ class ApproverList extends Component
     private function getInitialQuery()
     {
         return User::whereHas('profile', function ($profile) {
-            $profile->where('first_name', 'like', '%' . $this->searchApprover . '%')
-                ->orWhere('middle_name', 'like', '%' . $this->searchApprover . '%')
-                ->orWhere('last_name', 'like', '%' . $this->searchApprover . '%');
+            $profile->where('first_name', 'like', "%{$this->searchApprover}%")
+                ->orWhere('middle_name', 'like', "%{$this->searchApprover}%")
+                ->orWhere('last_name', 'like', "%{$this->searchApprover}%");
         })
-            ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', '%' . $this->searchApprover . '%'))
-            ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', '%' . $this->searchApprover . '%'))
+            ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', "%{$this->searchApprover}%"))
+            ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', "%{$this->searchApprover}%"))
             ->role(Role::APPROVER)
             ->orderByDesc('created_at')
             ->paginate(25);

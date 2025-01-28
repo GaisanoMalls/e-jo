@@ -22,12 +22,11 @@
                             <div class="d-flex flex-column me-3">
                                 <h6 class="card__title">Approved Tickets</h6>
                                 <p class="card__description">
-                                    Respond the tickets sent by the requester
+                                    List of approved tickets
                                 </p>
                             </div>
                             <div class="d-flex">
-                                <button type="button"
-                                    class="btn d-flex align-items-center justify-content-center gap-2 button__header"
+                                <button type="button" class="btn d-flex align-items-center justify-content-center gap-2 button__header"
                                     data-bs-toggle="modal" data-bs-target="#filterUserWithRolesModal">
                                     <i class="fa-solid fa-filter"></i>
                                     <span class="button__name">Add filter</span>
@@ -69,9 +68,8 @@
                                                         style="background-color: {{ $ticket->priorityLevel->color }};">
                                                     </div>
                                                     <div class="d-flex align-items-center text-start td__content">
-                                                        <input class="form-check-input mb-2 me-3 ticket__checkbox"
-                                                            type="checkbox" value="{{ $ticket->id }}"
-                                                            id="flexCheckDefault">
+                                                        <input class="form-check-input mb-2 me-3 ticket__checkbox" type="checkbox"
+                                                            value="{{ $ticket->id }}" id="flexCheckDefault">
                                                         <span>
                                                             {{ $ticket->dateCreated() }} @
                                                             {{ $ticket->created_at->format('g:i A') }}
@@ -114,8 +112,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start td__content">
-                                                        <span
-                                                            style="color: {{ $ticket->priorityLevel->color }};">{{ $ticket->priorityLevel->name }}
+                                                        <span style="color: {{ $ticket->priorityLevel->color }};">{{ $ticket->priorityLevel->name }}
                                                         </span>
                                                     </div>
                                                 </td>

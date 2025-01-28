@@ -43,15 +43,15 @@ class AgentList extends Component
     private function getInitialQuery()
     {
         return User::whereHas('profile', function ($profile) {
-            $profile->where('first_name', 'like', '%' . $this->searchAgent . '%')
-                ->orWhere('middle_name', 'like', '%' . $this->searchAgent . '%')
-                ->orWhere('last_name', 'like', '%' . $this->searchAgent . '%');
+            $profile->where('first_name', 'like', "%{$this->searchAgent}%")
+                ->orWhere('middle_name', 'like', "%{$this->searchAgent}%")
+                ->orWhere('last_name', 'like', "%{$this->searchAgent}%");
         })
-            ->orWhereHas('serviceDepartments', fn($serviceDept) => $serviceDept->where('name', 'like', '%' . $this->searchAgent . '%'))
-            ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', '%' . $this->searchAgent . '%'))
-            ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', '%' . $this->searchAgent . '%'))
-            ->orWhereHas('teams', fn($team) => $team->where('name', 'like', '%' . $this->searchAgent . '%'))
-            ->orWhereHas('subteams', fn($subteam) => $subteam->where('name', 'like', '%' . $this->searchAgent . '%'))
+            ->orWhereHas('serviceDepartments', fn($serviceDept) => $serviceDept->where('name', 'like', "%{$this->searchAgent}%"))
+            ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', "%{$this->searchAgent}%"))
+            ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', "%{$this->searchAgent}%"))
+            ->orWhereHas('teams', fn($team) => $team->where('name', 'like', "%{$this->searchAgent}%"))
+            ->orWhereHas('subteams', fn($subteam) => $subteam->where('name', 'like', "%{$this->searchAgent}%"))
             ->role(Role::AGENT)
             ->orderByDesc('created_at')
             ->paginate(25);

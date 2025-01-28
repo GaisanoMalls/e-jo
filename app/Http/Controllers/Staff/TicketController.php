@@ -102,31 +102,6 @@ class TicketController extends Controller
     // Query ticket by priotity level
     public function queryTicketByPriorityLevel(PriorityLevel $priorityLevel)
     {
-        $currentUser = User::find(auth()->user()->id);
-
-        if ($currentUser->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
-            $tickets = Ticket::whereNot('status_id', Status::CLOSED)
-                ->whereHas('user', function ($user) {
-                    $user->withTrashed()
-                        ->whereHas('branches', function ($branch) {
-                            $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
-                        })
-                        ->whereHas('buDepartments', function ($department) {
-                            $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
-                        })
-                        ->orWhereHas('tickets', function ($ticket) {
-                            $ticket->where('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
-                        });
-                })
-                ->orderByDesc('created_at')
-                ->get();
-        } else if ($currentUser->hasRole(Role::SYSTEM_ADMIN)) {
-            $tickets = Ticket::whereNot('status_id', Status::CLOSED)
-                ->where('priority_level_id', $priorityLevel->id)
-                ->get();
-        }
-
-        return view('layouts.staff.ticket.priority_level_tickets', compact(['tickets', 'priorityLevel']));
+        return view('layouts.staff.ticket.priority_level_tickets', compact(['priorityLevel']));
     }
 }

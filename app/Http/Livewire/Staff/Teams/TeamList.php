@@ -240,10 +240,10 @@ class TeamList extends Component
     public function render()
     {
         return view('livewire.staff.teams.team-list', [
-            'teams' => Team::where('name', 'like', '%' . $this->searchTeam . '%')
-                ->orWhereHas('subteams', fn($subteam) => $subteam->where('name', 'like', '%' . $this->searchTeam . '%'))
-                ->orWhereHas('serviceDepartment', fn($serviceDepartment) => $serviceDepartment->where('name', 'like', '%' . $this->searchTeam . '%'))
-                ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', '%' . $this->searchTeam . '%'))
+            'teams' => Team::where('name', 'like', "%{$this->searchTeam}%")
+                ->orWhereHas('subteams', fn($subteam) => $subteam->where('name', 'like', "%{$this->searchTeam}%"))
+                ->orWhereHas('serviceDepartment', fn($serviceDepartment) => $serviceDepartment->where('name', 'like', "%{$this->searchTeam}%"))
+                ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', "%{$this->searchTeam}%"))
                 ->orderByDesc('created_at')
                 ->paginate(15),
             'serviceDepartments' => $this->queryServiceDepartments(),

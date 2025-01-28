@@ -8,7 +8,7 @@
             <div class="d-flex flex-column me-3">
                 <h6 class="card__title">Open Tickets</h6>
                 <p class="card__description mb-0">
-                    Respond the tickets sent by the requester
+                    List of tickets waiting to be viewed and approved
                 </p>
             </div>
             <div class="d-flex align-items-center justify-content-lg-between flex-wrap gap-3">

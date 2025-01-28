@@ -2,7 +2,12 @@
 
 namespace App\Http\Livewire\Staff;
 
+use App\Enums\ApprovalStatusEnum;
 use App\Models\PriorityLevel;
+use App\Models\Role;
+use App\Models\Status;
+use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Livewire\Component;
@@ -12,8 +17,9 @@ class PriorityLevelTicket extends Component
 {
     use WithPagination;
 
-    public Collection|LengthAwarePaginator $priorityLevelTickets;
+    public Collection $priorityLevelTickets;
     public Collection $priorityLevels;
+    public PriorityLevel $priorityLevel;
     public string $searchTicket = "";
     public ?string $searchDate = null;
     public ?string $searchMonth = null;
@@ -110,14 +116,51 @@ class PriorityLevelTicket extends Component
 
     public function isEmptyFilteredTickets()
     {
-        return !$this->searchTicket
-            && !$this->useDateRange
-            && !$this->useDate
-            && !$this->useMonth;
+        return $this->priorityLevelTickets->isEmpty() 
+            && (
+                !$this->searchTicket
+                && !$this->useDateRange
+                && !$this->useDate
+                && !$this->useMonth
+            ) ;
     }
 
     public function render()
-    {
-        return view('livewire.staff.priority-level-ticket');
+    { 
+        $currentUser = User::find(auth()->user()->id);
+
+        if ($currentUser->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+            $this->priorityLevelTickets = Ticket::where(function ($statusQuery) {
+                $statusQuery->whereNotIn('status_id', [Status::OVERDUE, Status::CLOSED, Status::DISAPPROVED])
+                    ->whereIn('approval_status', [ApprovalStatusEnum::FOR_APPROVAL, ApprovalStatusEnum::APPROVED]);
+            })
+                ->where('priority_level_id', $this->priorityLevel->id)
+                ->whereHas('user', function ($user) {
+                    $user->withTrashed()
+                        ->whereHas('branches', function ($branch) {
+                            $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                        })
+                        ->whereHas('buDepartments', function ($department) {
+                            $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                        })
+                        ->orWhereHas('tickets', function ($ticket) {
+                            $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
+                        });
+                })
+                ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+                    $approver->where('user_id', auth()->user()->id);
+                })
+                ->where('ticket_number', 'like', "%{$this->searchTicket}%")
+                ->when($this->useDate, fn($query) => $query->whereDate('created_at', $this->searchDate))
+                ->when($this->useMonth, fn($query) => $query->whereMonth('created_at', $this->searchMonth))
+                ->when($this->useDateRange, fn($query) => $query->whereBetween('created_at', [$this->searchStartDate, $this->searchEndDate]))
+                ->orderByDesc('created_at')
+                ->get();
+        }
+
+        return view('livewire.staff.priority-level-ticket', [
+            'priorityLevelTickets' => $this->priorityLevelTickets,
+        ]);
     }
 }

@@ -43,12 +43,12 @@ class RequesterList extends Component
     private function getInitialQuery()
     {
         return User::whereHas('profile', function ($profile) {
-            $profile->where('first_name', 'like', '%' . $this->searchRequester . '%')
-                ->orWhere('middle_name', 'like', '%' . $this->searchRequester . '%')
-                ->orWhere('last_name', 'like', '%' . $this->searchRequester . '%');
+            $profile->where('first_name', 'like', "%{$this->searchRequester}%")
+                ->orWhere('middle_name', 'like', "%{$this->searchRequester}%")
+                ->orWhere('last_name', 'like', "%{$this->searchRequester}%");
         })
-            ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', '%' . $this->searchRequester . '%'))
-            ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', '%' . $this->searchRequester . '%'))
+            ->orWhereHas('branches', fn($branch) => $branch->where('name', 'like', "%{$this->searchRequester}%"))
+            ->orWhereHas('buDepartments', fn($buDept) => $buDept->where('name', 'like', "%{$this->searchRequester}%"))
             ->role(Role::USER)
             ->orderByDesc('created_at')
             ->paginate(25);

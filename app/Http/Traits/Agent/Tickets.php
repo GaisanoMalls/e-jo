@@ -11,14 +11,12 @@ trait Tickets
     public function agentGetOpenTickets()
     {
         $openTicketsQuery = Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
-            ->where(function ($statusQuery) {
-                $statusQuery->where('status_id', Status::APPROVED)
-                    ->where('approval_status', ApprovalStatusEnum::APPROVED);
-            })
-            ->where(function ($byUserQuery) {
-                $byUserQuery->where('branch_id', auth()->user()->branches->pluck('id')->first())
-                    ->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first());
-            })
+            ->where([
+                ['status_id', Status::OPEN],
+                ['approval_status', ApprovalStatusEnum::APPROVED]
+            ])
+            ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
             ->withWhereHas('teams', callback: function ($team) {
                 $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray());
             });

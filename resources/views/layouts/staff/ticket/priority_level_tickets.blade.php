@@ -17,7 +17,7 @@
         <div class="ticket__section">
             <div class="col-12">
                 <div class="card d-flex flex-column tickets__card p-0">
-                    @livewire('staff.priority-level-ticket')
+                    @livewire('staff.priority-level-ticket', ['priorityLevel' => $priorityLevel])
                 </div>
             </div>
         </div>

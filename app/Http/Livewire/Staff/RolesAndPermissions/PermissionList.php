@@ -39,7 +39,7 @@ class PermissionList extends Component
 
     public function render()
     {
-        $permissions = Permission::where('name', 'like', '%' . $this->searchPermission . '%')
+        $permissions = Permission::where('name', 'like', "%{$this->searchPermission}%")
             ->paginate(perPage: $this->paginatePageNumber);
         return view('livewire.staff.roles-and-permissions.permission-list', [
             'permissions' => $permissions,
