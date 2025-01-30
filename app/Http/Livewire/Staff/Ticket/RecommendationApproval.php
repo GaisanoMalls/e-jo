@@ -90,21 +90,20 @@ class RecommendationApproval extends Component
 
             if ($recommendation->exists()) {
                 $this->approveRecommendationApproval($this->ticket);
-                // $recommendation->update(['approval_status' => RecommendationApprovalStatusEnum::APPROVED]);
 
-                $events = ['loadCustomForm', 'loadRecommendationApproval', 'loadTicketLogs'];
+                $events = ['loadCustomForm', 'loadRecommendationApproval', 'loadSidebarCollapseTicketStatus', 'loadTicketLogs'];
                 foreach ($events as $event) {
                     $this->emit($event);
                 }
 
-                // Notification::send(
-                //     $recommendation->requestedByServiceDeptAdmin,
-                //     new AppNotification(
-                //         ticket: $this->ticket,
-                //         title: "Ticket #{$this->ticket->ticket_number} (Approved request)",
-                //         message: "Approval request has been approved."
-                //     )
-                // );
+                Notification::send(
+                    $recommendation->requestedByServiceDeptAdmin,
+                    new AppNotification(
+                        ticket: $this->ticket,
+                        title: "Ticket #{$this->ticket->ticket_number} (Approved request)",
+                        message: "Approval request has been approved."
+                    )
+                );
                 ActivityLog::make($this->ticket->id, 'approved the ticket');
             } else {
                 noty()->addError('Ticket recommendation is not found.');

@@ -8,7 +8,7 @@
                 </p>
             </div>
             <div class="d-flex align-items-center justify-content-lg-between flex-wrap gap-3">
-                @if ($priorityLevelTickets->isNotEmpty())
+                @if (!$this->isEmptyFilteredTickets())
                     @if ($useMonth || $useDateRange)
                         <button wire:click="toggleDate" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-2"
                             style="font-size: 12px; background-color: #f9fafb">

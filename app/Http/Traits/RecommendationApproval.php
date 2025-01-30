@@ -7,6 +7,7 @@ use App\Mail\Staff\ApprovedTicketMail;
 use App\Models\RecommendationApprovalStatus;
 use App\Models\RecommendationApprover;
 use App\Models\Role;
+use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\AppNotification;
@@ -190,6 +191,7 @@ trait RecommendationApproval
                         'approval_status' => RecommendationApprovalStatusEnum::APPROVED,
                         'date' => Carbon::now()
                     ]);
+                $ticket->update(['status_id' => Status::APPROVED]);
             }
 
             return true;
