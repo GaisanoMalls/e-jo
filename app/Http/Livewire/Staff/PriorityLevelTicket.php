@@ -17,7 +17,7 @@ class PriorityLevelTicket extends Component
 {
     use WithPagination;
 
-    public Collection $priorityLevelTickets;
+    protected Collection|LengthAwarePaginator $priorityLevelTickets;
     public Collection $priorityLevels;
     public PriorityLevel $priorityLevel;
     public string $searchTicket = "";
@@ -116,17 +116,17 @@ class PriorityLevelTicket extends Component
 
     public function isEmptyFilteredTickets()
     {
-        return $this->priorityLevelTickets->isEmpty() 
+        return $this->priorityLevelTickets->isEmpty()
             && (
                 !$this->searchTicket
                 && !$this->useDateRange
                 && !$this->useDate
                 && !$this->useMonth
-            ) ;
+            );
     }
 
     public function render()
-    { 
+    {
         $currentUser = User::find(auth()->user()->id);
 
         if ($currentUser->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
@@ -156,7 +156,41 @@ class PriorityLevelTicket extends Component
                 ->when($this->useMonth, fn($query) => $query->whereMonth('created_at', $this->searchMonth))
                 ->when($this->useDateRange, fn($query) => $query->whereBetween('created_at', [$this->searchStartDate, $this->searchEndDate]))
                 ->orderByDesc('created_at')
-                ->get();
+                ->paginate($this->paginatePageNumber);
+        }
+
+        if ($currentUser->hasRole(Role::AGENT)) {
+            $this->priorityLevelTickets = Ticket::where(function ($statusQuery) {
+                $statusQuery->whereNotIn('status_id', [Status::OVERDUE, Status::CLOSED])
+                    ->whereIn('approval_status', [ApprovalStatusEnum::APPROVED]);
+            })
+                ->where('priority_level_id', $this->priorityLevel->id)
+                ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+                ->whereHas('agent', fn($agent) => $agent->where('id', auth()->user()->id))
+                ->whereHas('ticketApprovals', function ($approval) {
+                    $approval->orWhere('is_approved', true);
+                })
+                ->where('ticket_number', 'like', "%{$this->searchTicket}%")
+                ->when($this->useDate, fn($query) => $query->whereDate('created_at', $this->searchDate))
+                ->when($this->useMonth, fn($query) => $query->whereMonth('created_at', $this->searchMonth))
+                ->when($this->useDateRange, fn($query) => $query->whereBetween('created_at', [$this->searchStartDate, $this->searchEndDate]))
+                ->orderByDesc('created_at')
+                ->paginate($this->paginatePageNumber);
+        }
+
+        if ($currentUser->hasRole(Role::SYSTEM_ADMIN)) {
+            $this->priorityLevelTickets = Ticket::where(function ($statusQuery) {
+                $statusQuery->whereNotIn('status_id', [Status::OVERDUE, Status::CLOSED])
+                    ->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]);
+            })
+                ->where('priority_level_id', $this->priorityLevel->id)
+                ->where('ticket_number', 'like', "%{$this->searchTicket}%")
+                ->when($this->useDate, fn($query) => $query->whereDate('created_at', $this->searchDate))
+                ->when($this->useMonth, fn($query) => $query->whereMonth('created_at', $this->searchMonth))
+                ->when($this->useDateRange, fn($query) => $query->whereBetween('created_at', [$this->searchStartDate, $this->searchEndDate]))
+                ->orderByDesc('created_at')
+                ->paginate($this->paginatePageNumber);
         }
 
         return view('livewire.staff.priority-level-ticket', [

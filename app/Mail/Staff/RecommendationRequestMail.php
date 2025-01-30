@@ -22,7 +22,7 @@ class RecommendationRequestMail extends Mailable
      *
      * @return void
      */
-    public function __construct(public Ticket $ticket, public User $recipient, public User $recommendationRequester)
+    public function __construct(public Ticket $ticket, public User $recipient)
     {
         $this->ticket = $ticket;
         $this->recipient = $recipient;
@@ -54,9 +54,9 @@ class RecommendationRequestMail extends Mailable
             with: [
                 'ticketNumber' => "Ticket #{$this->ticket->ticket_number}",
                 'ticketSubject' => $this->ticket->subject,
-                'agentFullName' => $this->recommendationRequester->profile->getFullName,
-                'agentBUDept' => $this->recommendationRequester->getBUDepartments(),
-                'agentBranch' => $this->recommendationRequester->getBranches(),
+                'agentFullName' => $this->recipient->profile->getFullName,
+                'agentBUDept' => $this->recipient->getBUDepartments(),
+                'agentBranch' => $this->recipient->getBranches(),
                 'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/view",
             ]
         );

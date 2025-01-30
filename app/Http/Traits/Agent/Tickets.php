@@ -43,8 +43,8 @@ trait Tickets
             ->where(column: function ($byUserQuery) {
                 $byUserQuery->whereNotNull('agent_id')
                     ->where('agent_id', auth()->user()->id)
-                    ->where('branch_id', auth()->user()->branches->pluck('id')->first())
-                    ->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first());
+                    ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
             })
             ->withWhereHas('teams', function ($team) {
                 $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray());
@@ -76,8 +76,8 @@ trait Tickets
             })
             ->where(function ($byUserQuery) {
                 $byUserQuery->orWhere('agent_id', auth()->user()->id)
-                    ->orWhere('branch_id', auth()->user()->branches->pluck('id')->first())
-                    ->orWhere('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first());
+                    ->orWhereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                    ->orWhereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
             });
 
         $onProcessTicketsQuery->when($onProcessTicketsQuery->has('ticketApprovals'), function ($query) {
@@ -100,8 +100,8 @@ trait Tickets
             })
             ->where(column: function ($byUserQuery) {
                 $byUserQuery->where('agent_id', auth()->user()->id)
-                    ->where('branch_id', auth()->user()->branches->pluck('id')->first())
-                    ->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first());
+                    ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
             })
             ->withWhereHas('teams', callback: function ($team) {
                 $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray());
@@ -119,8 +119,8 @@ trait Tickets
             })
             ->where(function ($byUserQuery) {
                 $byUserQuery->where('agent_id', auth()->user()->id)
-                    ->where('branch_id', auth()->user()->branches->pluck('id')->first())
-                    ->where('service_department_id', auth()->user()->serviceDepartments->pluck('id')->first());
+                    ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
             })
             ->withWhereHas('teams', function ($team) {
                 $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray());

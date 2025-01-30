@@ -70,8 +70,7 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm d-flex align-items-center rounded-2 sort__button gap-2" data-bs-toggle="dropdown"
                         aria-expanded="false" @disabled($this->isEmptyFilteredTickets())>
-                        <div wire:loading wire:target="paginatePageNumber" class="spinner-border spinner-border-sm loading__spinner"
-                            role="status">
+                        <div wire:loading wire:target="paginatePageNumber" class="spinner-border spinner-border-sm loading__spinner" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
                         <i wire:loading.remove wire:target="paginatePageNumber" class="bi bi-list-ol"></i>
@@ -80,8 +79,8 @@
                     <ul class="dropdown-menu dropdown-menu-end slideIn animate sort__button__dropdown" style="width: 20px !important;">
                         @foreach ($pageNumberOptions as $pageNumber)
                             <li>
-                                <button wire:click="selectPaginateNumber({{ $pageNumber }})"
-                                    class="dropdown-item d-flex align-items-center gap-2" type="button">
+                                <button wire:click="selectPaginateNumber({{ $pageNumber }})" class="dropdown-item d-flex align-items-center gap-2"
+                                    type="button">
                                     {{ $pageNumber }} items
                                 </button>
                             </li>
@@ -200,6 +199,14 @@
                     <small style="font-size: 14px;">No records for approved tickets.</small>
                 </div>
             @endif
+        </div>
+        <div class="d-flex align-items-center justify-content-between mx-4 mt-3 flex-wrap">
+            <small class="text-muted" style="margin-bottom: 20px; font-size: 0.82rem;">
+                Showing {{ $priorityLevelTickets->firstItem() }}
+                to {{ $priorityLevelTickets->lastItem() }}
+                of {{ $priorityLevelTickets->total() }} results
+            </small>
+            {{ $priorityLevelTickets->links() }}
         </div>
     </div>
 </div>

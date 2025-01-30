@@ -244,4 +244,12 @@
             @endif
         </div>
     </div>
+    <div class="d-flex align-items-center justify-content-between mx-4 mt-3 flex-wrap">
+        <small class="text-muted" style="margin-bottom: 20px; font-size: 0.82rem;">
+            Showing {{ $paginatedTickets->firstItem() }}
+            to {{ $paginatedTickets->lastItem() }}
+            of {{ $paginatedTickets->total() }} results
+        </small>
+        {{ $paginatedTickets->links() }}
+    </div>
 </div>
