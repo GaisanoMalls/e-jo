@@ -3,6 +3,7 @@
 namespace App\Http\Traits\ServiceDepartmentAdmin;
 
 use App\Enums\ApprovalStatusEnum;
+use App\Enums\RecommendationApprovalStatusEnum;
 use App\Http\Traits\Utils;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -35,6 +36,13 @@ trait Tickets
                     ->orWhereHas('tickets', function ($ticket) {
                         $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
+                    });
+            })
+            ->orWhereHas('recommendations', function ($recommendation) {
+                $recommendation->whereNotNull('requested_by_sda_id')
+                    ->orWhere('requested_by_sda_id', auth()->user()->id)
+                    ->whereHas('approvalStatus', function ($status) {
+                        $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING);
                     });
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
@@ -104,7 +112,7 @@ trait Tickets
 
     public function serviceDeptAdminGetDisapprovedTickets(): array|Collection
     {
-        return Ticket::where(column: function ($statusQuery) {
+        return Ticket::where(function ($statusQuery) {
             $statusQuery->where('status_id', Status::DISAPPROVED)
                 ->where('approval_status', ApprovalStatusEnum::DISAPPROVED);
         })
