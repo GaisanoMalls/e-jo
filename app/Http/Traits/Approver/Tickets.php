@@ -3,6 +3,7 @@
 namespace App\Http\Traits\Approver;
 
 use App\Enums\ApprovalStatusEnum;
+use App\Enums\RecommendationApprovalStatusEnum;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Role;
 use App\Models\Status;
@@ -23,8 +24,18 @@ trait Tickets
                         ApprovalStatusEnum::FOR_APPROVAL
                     ]);
             })
-            ->whereHas('user.buDepartments', function ($department) {
-                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+            ->where(function ($query) {
+                $query->orWhereHas('recommendations', function ($recommendation) {
+                    $recommendation->whereHas('approvalStatus', function ($status) {
+                        $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING);
+                    })
+                        ->orWhereHas('approvers', function ($approver) {
+                            $approver->where('recommendation_approvers.approver_id', auth()->user()->id);
+                        });
+                })
+                    ->orWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+                        $approver->where('user_id', auth()->user()->id);
+                    });
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
