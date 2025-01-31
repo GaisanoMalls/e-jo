@@ -37,9 +37,6 @@ trait Tickets
                         $approver->where('user_id', auth()->user()->id);
                     });
             })
-            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->where('user_id', auth()->user()->id);
-            })
             ->orderByDesc('created_at')
             ->get();
     }
