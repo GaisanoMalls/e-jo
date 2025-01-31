@@ -35,10 +35,18 @@ trait Tickets
                     })
                     ->orWhereHas('tickets', function ($ticket) {
                         $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
-                            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
+                            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
+                            ->whereHas('recommendations', function ($recommendation) {
+                                $recommendation->whereHas('approvalStatus', function ($status) {
+                                    $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING);
+                                })
+                                    ->whereHas('approvers', function ($approver) {
+                                        $approver->orWhere('recommendation_approvers.approver_id', auth()->user()->id);
+                                    });
+                            });
                     });
             })
-            ->whereHas('recommendations', function ($recommendation) {
+            ->orWhereHas('recommendations', function ($recommendation) {
                 $recommendation->whereHas('approvalStatus', function ($status) {
                     $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING);
                 })

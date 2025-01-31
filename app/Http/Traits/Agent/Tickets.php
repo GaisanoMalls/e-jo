@@ -40,7 +40,7 @@ trait Tickets
                 $statusQuery->where('status_id', Status::CLAIMED)
                     ->where('approval_status', ApprovalStatusEnum::APPROVED);
             })
-            ->where(column: function ($byUserQuery) {
+            ->where(function ($byUserQuery) {
                 $byUserQuery->whereNotNull('agent_id')
                     ->where('agent_id', auth()->user()->id)
                     ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())

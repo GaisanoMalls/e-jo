@@ -13,9 +13,7 @@
             Tickets
         </div>
     </button>
-    <div wire:ignore.self
-        class="collapse {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'show' : '' }}"
-        id="dashboard-collapse">
+    <div wire:ignore.self class="collapse {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'show' : '' }}" id="dashboard-collapse">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small sidebar__collapse__ul">
             <li>
                 <a href="{{ route('staff.tickets.open_tickets') }}"
@@ -147,16 +145,6 @@
                     @endif
                 </a>
             </li>
-            {{-- <li>
-                <a href="" class="position-relative link-dark d-flex align-items-center text-decoration-none
-    rounded justify-content-between sidebar__collapse__btnlink">
-                    <div class="d-flex align-items-center">
-                        <div class="sidebar__active__dot position-absolute rounded-circle"></div>
-                        <span class="sidebar__btn__link__name ">Reviews</span>
-                    </div>
-                    <span class="badge sidebar__btn__link__badge">30</span>
-                </a>
-            </li> --}}
         </ul>
     </div>
 </div>
