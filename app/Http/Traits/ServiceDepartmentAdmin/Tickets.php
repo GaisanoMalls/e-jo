@@ -35,15 +35,7 @@ trait Tickets
                     })
                     ->orWhereHas('tickets', function ($ticket) {
                         $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
-                            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
-                            ->whereHas('recommendations', function ($recommendation) {
-                                $recommendation->whereHas('approvalStatus', function ($status) {
-                                    $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING);
-                                })
-                                    ->whereHas('approvers', function ($approver) {
-                                        $approver->orWhere('recommendation_approvers.approver_id', auth()->user()->id);
-                                    });
-                            });
+                            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
                     });
             })
             ->orWhereHas('recommendations', function ($recommendation) {
@@ -51,7 +43,7 @@ trait Tickets
                     $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING);
                 })
                     ->whereHas('approvers', function ($approver) {
-                        $approver->orWhere('recommendation_approvers.approver_id', auth()->user()->id);
+                        $approver->where('recommendation_approvers.approver_id', auth()->user()->id);
                     });
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
