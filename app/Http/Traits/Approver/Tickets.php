@@ -15,7 +15,7 @@ trait Tickets
 
     public function getOpenTickets()
     {
-        return Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
+        return Ticket::whereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
                 $statusQuery->where('status_id', Status::OPEN)
                     ->whereIn('approval_status', [
@@ -23,11 +23,11 @@ trait Tickets
                         ApprovalStatusEnum::FOR_APPROVAL
                     ]);
             })
-            ->withWhereHas('user.buDepartments', function ($department) {
+            ->whereHas('user.buDepartments', function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
-            ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->whereNot('user_id', auth()->user()->id);
+            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+                $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -35,15 +35,15 @@ trait Tickets
 
     public function getDisapprovedTickets()
     {
-        return Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
+        return Ticket::whereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
                 $statusQuery->where('status_id', Status::DISAPPROVED)
                     ->where('approval_status', ApprovalStatusEnum::DISAPPROVED);
             })
-            ->withWhereHas('user.buDepartments', function ($department) {
+            ->whereHas('user.buDepartments', function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
-            ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
@@ -53,12 +53,12 @@ trait Tickets
     public function getViewedTickets()
     {
         return Ticket::where('status_id', Status::VIEWED)
-            ->withWhereHas('user.buDepartments', function ($department) {
+            ->whereHas('user.buDepartments', function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
-            ->withWhereHas('ticketApprovals', function ($approval) {
+            ->whereHas('ticketApprovals', function ($approval) {
                 $approval->where('is_approved', false)
-                    ->withWhereHas('helpTopicApprover', function ($approver) {
+                    ->whereHas('helpTopicApprover', function ($approver) {
                         $approver->where('user_id', auth()->user()->id);
                     });
             })
@@ -68,15 +68,15 @@ trait Tickets
 
     public function getApprovedTickets()
     {
-        return Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
+        return Ticket::whereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
                 $statusQuery->where('status_id', Status::APPROVED)
                     ->where('approval_status', ApprovalStatusEnum::APPROVED);
             })
-            ->withWhereHas('user.buDepartments', function ($department) {
+            ->whereHas('user.buDepartments', function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
-            ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
@@ -85,7 +85,7 @@ trait Tickets
 
     public function getOnProcessTickets()
     {
-        return Ticket::withWhereHas('user', fn($user) => $user->withTrashed())
+        return Ticket::whereHas('user', fn($user) => $user->withTrashed())
             ->where(function ($statusQuery) {
                 $statusQuery->where('status_id', Status::ON_PROCESS)
                     ->whereIn('approval_status', [
@@ -93,10 +93,10 @@ trait Tickets
                         ApprovalStatusEnum::FOR_APPROVAL
                     ]);
             })
-            ->withWhereHas('user.buDepartments', function ($department) {
+            ->whereHas('user.buDepartments', function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
             })
-            ->withWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
             })
             ->orderByDesc('created_at')
@@ -117,7 +117,7 @@ trait Tickets
             ->value('id');
 
         foreach ($tickets as $ticket) {
-            $costingsForApproval = Ticket::withWhereHas('specialProjectAmountApproval', function ($spAmountApproval) use ($cooApproverId) {
+            $costingsForApproval = Ticket::whereHas('specialProjectAmountApproval', function ($spAmountApproval) use ($cooApproverId) {
                 $spAmountApproval->whereNotNull([
                     'service_department_admin_approver->approver_id',
                     'service_department_admin_approver->date_approved'
@@ -125,7 +125,7 @@ trait Tickets
                     ->whereJsonContains('service_department_admin_approver->is_approved', true)
                     ->whereJsonContains('fpm_coo_approver->approver_id', $cooApproverId);
             })
-                ->withWhereHas('ticketCosting', function ($costing) use ($ticket) {
+                ->whereHas('ticketCosting', function ($costing) use ($ticket) {
                     $costing->where('amount', '>=', (float) $ticket->helpTopic->specialProject->amount);
                 })
                 ->orderByDesc('created_at')
