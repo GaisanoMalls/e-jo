@@ -16,6 +16,7 @@ class TicketTab extends Component
     public Collection $approvedTickets;
     public Collection $disapprovedTickets;
     public Collection $onProcessTickets;
+    public Collection $closedTickets;
     public Collection $forApprovalTickets;
 
     public function mount()
@@ -25,6 +26,7 @@ class TicketTab extends Component
         $this->approvedTickets = $this->getApprovedTickets();
         $this->disapprovedTickets = $this->getDisapprovedTickets();
         $this->onProcessTickets = $this->getOnProcessTickets();
+        $this->closedTickets = $this->getClosedTickets();
     }
 
     public function render()

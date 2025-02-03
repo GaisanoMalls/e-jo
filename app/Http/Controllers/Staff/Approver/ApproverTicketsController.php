@@ -44,10 +44,15 @@ class ApproverTicketsController extends Controller
         return $this->renderTicketView('on_process');
     }
 
+    public function closedTickets()
+    {
+        return $this->renderTicketView('closed');
+    }
+
     public function costingApprovals()
     {
         return ($this->costingApprover2Only())
-            ? view('layouts.staff.approver.ticket.consting_approval', [
+            ? view('layouts.staff.approver.ticket.costing_approval', [
                 'forApprovalCostings' => $this->getForApprovalCostings()
             ])
             : abort(403, 'Unauthorized access');

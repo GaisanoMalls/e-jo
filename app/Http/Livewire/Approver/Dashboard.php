@@ -14,6 +14,7 @@ class Dashboard extends Component
     public int $approvedTickets;
     public int $disapprovedTickets;
     public int $onProcessTickets;
+    public int $closedTickets;
 
 
     public function render()
@@ -23,8 +24,9 @@ class Dashboard extends Component
         $this->approvedTickets = $this->getApprovedTickets()->count();
         $this->disapprovedTickets = $this->getDisapprovedTickets()->count();
         $this->onProcessTickets = $this->getOnProcessTickets()->count();
+        $this->closedTickets = $this->getClosedTickets()->count();
 
-        $totalTickets = $this->openTickets + $this->viewedTickets + $this->approvedTickets + $this->disapprovedTickets + $this->onProcessTickets;
+        $totalTickets = $this->openTickets + $this->viewedTickets + $this->approvedTickets + $this->disapprovedTickets + $this->onProcessTickets + $this->closedTickets;
 
         $ticketStatuses = [
             [
@@ -61,6 +63,13 @@ class Dashboard extends Component
                 'count' => $this->onProcessTickets,
                 'icon' => 'fa-gears',
                 'routeName' => "approver.tickets.on_process"
+            ],
+            [
+                'name' => 'Closed',
+                'color' => '#7384e7',
+                'count' => $this->closedTickets,
+                'icon' => 'fa-envelope-circle-check',
+                'routeName' => "approver.tickets.closed"
             ],
         ];
 
