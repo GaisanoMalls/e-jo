@@ -11,10 +11,8 @@ trait Tickets
     public function agentGetOpenTickets()
     {
         return Ticket::whereHas('user', fn($user) => $user->withTrashed())
-            ->where([
-                ['status_id', Status::APPROVED],
-                ['approval_status', ApprovalStatusEnum::APPROVED]
-            ])
+            ->where('approval_status', ApprovalStatusEnum::APPROVED)
+            ->whereIn('status_id', [Status::APPROVED, Status::OPEN])
             ->where(function ($query) {
                 $query->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                     ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());

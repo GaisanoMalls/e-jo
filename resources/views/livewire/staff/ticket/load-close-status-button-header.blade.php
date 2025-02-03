@@ -3,10 +3,7 @@
     use App\Models\Status;
 @endphp
 
-@if (
-    (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) ||
-        auth()->user()->hasRole(Role::AGENT)) &&
-        $ticket->status_id !== Status::DISAPPROVED)
+@if ((auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) || auth()->user()->hasRole(Role::AGENT)) && $ticket->status_id !== Status::DISAPPROVED)
     <div>
         @if ($ticket->status_id == Status::CLOSED)
             <div class="d-flex flex-column">
@@ -19,8 +16,7 @@
             </div>
         @else
             <div class="d-flex flex-column">
-                <button
-                    class="btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
+                <button class="btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
                     data-bs-toggle="modal" data-bs-target="#closeTicketModal" type="submit">
                     <i class="fa-solid fa-check"></i>
                 </button>
@@ -29,11 +25,3 @@
         @endif
     </div>
 @endif
-
-@push('livewire-modal')
-    <script>
-        window.addEventListener('close-modal', () => {
-            $('#closeTicketModal').modal('hide');
-        });
-    </script>
-@endpush

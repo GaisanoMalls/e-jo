@@ -50,6 +50,7 @@
                                 @if (auth()->user()->hasRole(Role::AGENT))
                                     @livewire('staff.ticket.claim-ticket', ['ticket' => $ticket])
                                 @endif
+                                @livewire('staff.ticket.load-reopen-ticket-button-header', ['ticket' => $ticket])
                                 @livewire('staff.ticket.load-close-status-button-header', ['ticket' => $ticket])
                                 @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
                                     @livewire('staff.ticket.dropdown-approval-button', ['ticket' => $ticket])
@@ -174,6 +175,9 @@
         @endif
         @livewire('staff.ticket.assign-tag', ['ticket' => $ticket])
         @livewire('staff.ticket.close-ticket', ['ticket' => $ticket])
+        @if (auth()->user()->hasRole([Role::SERVICE_DEPARTMENT_ADMIN, Role::AGENT]))
+            @livewire('staff.ticket.reopen-ticket', ['ticket' => $ticket])
+        @endif
         @include('layouts.staff.ticket.modal.preview_ticket_files_modal')
     @endif
 @endsection

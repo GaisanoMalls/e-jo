@@ -7607,7 +7607,7 @@ input:not(:focus)::placeholder {
 }
 
 .notification__canvas {
-  min-width: 25% !important;
+  min-width: 27% !important;
 }
 .notification__canvas .notification__count {
   background-color: #d32839;
