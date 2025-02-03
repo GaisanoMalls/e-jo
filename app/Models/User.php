@@ -106,6 +106,11 @@ class User extends Authenticatable
         return $this->hasMany(RecommendationApprover::class, 'approver_id');
     }
 
+    public function assignedSubtasks(): HasMany
+    {
+        return $this->hasMany(TicketSubtask::class, 'assignee_id');
+    }
+
     public function serviceDepartments(): BelongsToMany
     {
         return $this->belongsToMany(ServiceDepartment::class, 'user_service_department', 'user_id', 'service_department_id');

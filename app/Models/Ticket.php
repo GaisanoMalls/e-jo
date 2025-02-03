@@ -150,6 +150,11 @@ class Ticket extends Model
         return $this->hasMany(TicketApproval::class);
     }
 
+    public function subtasks(): HasMany
+    {
+        return $this->hasMany(TicketSubtask::class);
+    }
+
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'ticket_tag');

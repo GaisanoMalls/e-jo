@@ -13,8 +13,7 @@
                                 <!-- Special Project Checkbox -->
                                 <div class="col-12 mb-3">
                                     <div class="form-check" style="white-space: nowrap;">
-                                        <input wire:model="isSpecialProject"
-                                            class="form-check-input check__special__project" type="checkbox"
+                                        <input wire:model="isSpecialProject" class="form-check-input check__special__project" type="checkbox"
                                             role="switch" id="specialProjectCheck" wire:loading.attr="disabled">
                                         <label class="form-check-label" for="specialProjectCheck">
                                             Check if the help topic is a special project
@@ -25,8 +24,8 @@
                                 <div class="col-md-6" id="help-topic-name-container">
                                     <div class="mb-2">
                                         <label for="helpTopicName" class="form-label form__field__label">Name</label>
-                                        <input type="text" wire:model.defer="name" class="form-control form__field"
-                                            id="helpTopicName" placeholder="Enter help topic name">
+                                        <input type="text" wire:model.defer="name" class="form-control form__field" id="helpTopicName"
+                                            placeholder="Enter help topic name">
                                         @error('name')
                                             <span class="error__message">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -78,8 +77,7 @@
                                             </span>
                                         </label>
                                         <div>
-                                            <div id="select-help-topic-team" placeholder="Select (optional)"
-                                                wire:ignore>
+                                            <div id="select-help-topic-team" placeholder="Select (optional)" wire:ignore>
                                             </div>
                                         </div>
                                         @error('team')
@@ -99,8 +97,7 @@
                         <h6 class="mb-0 fw-bold">Configurations</h6>
                     </div>
                     <div class="row mb-3">
-                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
-                            style="font-size: 0.89rem; color: #9da85c;">
+                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2" style="font-size: 0.89rem; color: #9da85c;">
                             <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
                             Approval
                         </h6>
@@ -139,10 +136,8 @@
                             </div>
                         </div>
                         <div wire:ignore class="row" id="help-topic-approval-container"></div>
-                        <div class="my-2"
-                            style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
-                            <button wire:click="saveConfiguration"
-                                class="btn d-flex align-items-center justify-content-center rounded-3"
+                        <div class="my-2" style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
+                            <button wire:click="saveConfiguration" class="btn d-flex align-items-center justify-content-center rounded-3"
                                 style="height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
                                 Add approval
                             </button>
@@ -177,16 +172,13 @@
                                                 {{ $config['approvers_count'] }}
                                             </td>
                                             <td>
-                                                <div
-                                                    class="d-flex align-items-center justify-content-center pe-2 gap-1">
-                                                    <button wire:click="editConfiguration({{ $index }})"
-                                                        type="button" class="btn action__button"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#editConfigurationModal">
+                                                <div class="d-flex align-items-center justify-content-center pe-2 gap-1">
+                                                    <button wire:click="editConfiguration({{ $index }})" type="button"
+                                                        class="btn action__button" data-bs-toggle="modal" data-bs-target="#editConfigurationModal">
                                                         <i class="bi bi-pencil"></i>
                                                     </button>
-                                                    <button wire:click="removeConfiguration({{ $index }})"
-                                                        type="button" class="btn action__button">
+                                                    <button wire:click="removeConfiguration({{ $index }})" type="button"
+                                                        class="btn action__button">
                                                         <i class="bi bi-trash"></i>
                                                     </button>
                                                 </div>
@@ -202,8 +194,7 @@
                 <!-- Special Project Amount -->
                 @if ($isSpecialProject)
                     <div class="row">
-                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2"
-                            style="font-size: 0.89rem; color: #196837;">
+                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2" style="font-size: 0.89rem; color: #196837;">
                             <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
                             Costing
                         </h6>
@@ -225,9 +216,8 @@
                                                 Total Cost</label>
                                             <div class="d-flex position-relative amount__field__container">
                                                 <span class="currency text-muted position-absolute mt-2">₱</span>
-                                                <input type="text" wire:model="amount"
-                                                    class="form-control form__field amount__field" id="amount"
-                                                    placeholder="Enter Total Cost">
+                                                <input type="text" wire:model="amount" class="form-control form__field amount__field"
+                                                    id="amount" placeholder="Enter Total Cost">
                                             </div>
                                             @error('amount')
                                                 <span class="error__message">
@@ -253,15 +243,13 @@
                     </div>
                 @endif
                 <div style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
-                    <button type="button"
-                        class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
+                    <button type="button" class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
                         style="background-color: #d32839; color: white;" wire:click="saveHelpTopic">
-                        <span wire:loading wire:target="saveHelpTopic" class="spinner-border spinner-border-sm"
-                            role="status" aria-hidden="true"></span>
+                        <span wire:loading wire:target="saveHelpTopic" class="spinner-border spinner-border-sm" role="status"
+                            aria-hidden="true"></span>
                         Add New
                     </button>
-                    <a href="{{ route('staff.manage.help_topic.index') }}" type="button"
-                        class="btn m-0 btn__modal__footer btn__cancel">
+                    <a href="{{ route('staff.manage.help_topic.index') }}" type="button" class="btn m-0 btn__modal__footer btn__cancel">
                         Cancel
                     </a>
                 </div>
@@ -322,8 +310,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <button type="submit"
                                     class="btn m-0 d-flex align-items-center justify-content-center gap-2 btn__modal__footer btn__send">
-                                    <span wire:loading wire:target="saveEditConfiguration"
-                                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                    <span wire:loading wire:target="saveEditConfiguration" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true">
                                     </span>
                                     Update
                                 </button>
@@ -453,7 +441,6 @@
         VirtualSelect.init({
             ele: approvalLevelSelect,
             options: approvalLevelOption,
-            search: true,
             markSearchResults: true,
         });
 
