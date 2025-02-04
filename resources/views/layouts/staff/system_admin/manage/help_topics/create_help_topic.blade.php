@@ -7,7 +7,7 @@
 @section('manage-breadcrumbs')
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Manage</li>
-        <li class="breadcrumb-item">Edit</li>
+        <li class="breadcrumb-item">Create</li>
         <li class="breadcrumb-item active">Help Topic</li>
     </ol>
 @endsection

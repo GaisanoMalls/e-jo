@@ -35,6 +35,11 @@ class Department extends Model
         return $this->hasMany(HelpTopic::class);
     }
 
+    public function helpTopicNonConfigs(): HasMany
+    {
+        return $this->hasMany(HelpTopicNonConfig::class, 'bu_department_id');
+    }
+
     public function branches(): BelongsToMany
     {
         return $this->belongsToMany(Branch::class, 'department_branch')

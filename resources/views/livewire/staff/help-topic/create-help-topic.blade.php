@@ -11,12 +11,19 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <!-- Special Project Checkbox -->
-                                <div class="col-12 mb-3">
+                                <div class="col-12 mb-3 d-flex flex-wrap gap-lg-4 gap-md-3 gap-sm-2">
+                                    <div class="form-check" style="white-space: nowrap;">
+                                        <input wire:model="isIncludeApprovalConfiguration" class="form-check-input check__special__project"
+                                            type="checkbox" role="switch" id="excludeApprovalConfig" wire:loading.attr="disabled">
+                                        <label class="form-check-label" for="excludeApprovalConfig">
+                                            Setup approval configurations
+                                        </label>
+                                    </div>
                                     <div class="form-check" style="white-space: nowrap;">
                                         <input wire:model="isSpecialProject" class="form-check-input check__special__project" type="checkbox"
                                             role="switch" id="specialProjectCheck" wire:loading.attr="disabled">
                                         <label class="form-check-label" for="specialProjectCheck">
-                                            Check if the help topic is a special project
+                                            Help topic is a special project
                                         </label>
                                     </div>
                                 </div>
@@ -88,107 +95,129 @@
                                         @enderror
                                     </div>
                                 </div>
+                                @if (!$isIncludeApprovalConfiguration)
+                                    <div class="col-md-6">
+                                        <div class="mb-2">
+                                            <label for="team" class="form-label form__field__label">
+                                                BU Department
+                                            </label>
+                                            <div>
+                                                <div id="select-help-topic-non-config-bu-department" placeholder="Select" wire:ignore>
+                                                </div>
+                                            </div>
+                                            @error('nonConfigBuDepartment')
+                                                <span class="error__message">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
                     <!-- Form fields -->
-                    <hr>
-                    <div class="row">
-                        <h6 class="mb-0 fw-bold">Configurations</h6>
-                    </div>
-                    <div class="row mb-3">
-                        <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2" style="font-size: 0.89rem; color: #9da85c;">
-                            <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
-                            Approval
-                        </h6>
-                        @if (session()->has('level_approver_message'))
-                            <span class="text-danger mb-3" style="font-size: 0.9rem;">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ session('level_approver_message') }}
-                            </span>
-                        @endif
-                        <div class="col-md-6">
-                            <div class="mb-2">
-                                <label for="department" class="form-label form__field__label">BU Department</label>
-                                <div>
-                                    <div id="select-help-topic-bu-department" wire:ignore></div>
+                    @if ($isIncludeApprovalConfiguration)
+                        <hr>
+                        <div class="row">
+                            <h6 class="mb-0 fw-bold">Configurations</h6>
+                        </div>
+                        <div class="row mb-3">
+                            <h6 class="fw-semibold mb-3 d-flex align-items-center gap-2" style="font-size: 0.89rem; color: #9da85c;">
+                                <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
+                                Approval
+                            </h6>
+                            @if (session()->has('level_approver_message'))
+                                <span class="text-danger mb-3" style="font-size: 0.9rem;">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ session('level_approver_message') }}
+                                </span>
+                            @endif
+                            <div class="col-md-6">
+                                <div class="mb-2">
+                                    <label for="department" class="form-label form__field__label">BU Department</label>
+                                    <div>
+                                        <div id="select-help-topic-bu-department" wire:ignore></div>
+                                    </div>
+                                    @error('selectedBuDepartment')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
                                 </div>
-                                @error('selectedBuDepartment')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                @enderror
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-2">
-                                <label for="department" class="form-label form__field__label">Level of Approval</label>
-                                <div>
-                                    <div id="select-help-topic-approval-level" wire:ignore></div>
+                            <div class="col-md-6">
+                                <div class="mb-2">
+                                    <label for="department" class="form-label form__field__label">Level of Approval</label>
+                                    <div>
+                                        <div id="select-help-topic-approval-level" wire:ignore></div>
+                                    </div>
+                                    @error('selectedApprovalLevel')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
                                 </div>
-                                @error('selectedApprovalLevel')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                @enderror
                             </div>
-                        </div>
-                        <div wire:ignore class="row" id="help-topic-approval-container"></div>
-                        <div class="my-2" style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
-                            <button wire:click="saveConfiguration" class="btn d-flex align-items-center justify-content-center rounded-3"
-                                style="height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
-                                Add approval
-                            </button>
-                            <button wire:click="cancelConfiguration" type="button"
-                                class="btn d-flex align-items-center justify-content-center rounded-3"
-                                style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
-                                Cancel
-                            </button>
-                        </div>
-                        @if (!empty($configurations))
-                            <table class="table mt-3" style="margin-left: 11px; margin-right: 11px;">
-                                <thead>
-                                    <tr>
-                                        <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
-                                        <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
-                                        <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
-                                        <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($configurations as $index => $config)
+                            <div wire:ignore class="row" id="help-topic-approval-container"></div>
+                            <div class="my-2" style="text-align: left; display: flex; justify-content: flex-start; gap: 10px;">
+                                <button wire:click="saveConfiguration" class="btn d-flex align-items-center justify-content-center rounded-3"
+                                    style="height: 30px; background-color: #3B4053; color: white; font-size: 0.75rem;">
+                                    Add approval
+                                </button>
+                                <button wire:click="cancelConfiguration" type="button"
+                                    class="btn d-flex align-items-center justify-content-center rounded-3"
+                                    style="font-size: 0.75rem; height: 30px; color: #3e3d3d; background-color: #f3f4f6;">
+                                    Cancel
+                                </button>
+                            </div>
+                            @if (!empty($configurations))
+                                <table class="table mt-3" style="margin-left: 11px; margin-right: 11px;">
+                                    <thead>
                                         <tr>
-                                            <td class="td__content" style="font-size: 0.85rem;">
-                                                {{ $index + 1 }}
-                                            </td>
-                                            <td class="td__content" style="font-size: 0.85rem;">
-                                                {{ $config['bu_department_name'] }}
-                                            </td>
-                                            <td class="td__content" style="font-size: 0.85rem;">
-                                                {{ $config['approvers_count'] }}
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center justify-content-center pe-2 gap-1">
-                                                    <button wire:click="editConfiguration({{ $index }})" type="button"
-                                                        class="btn action__button" data-bs-toggle="modal" data-bs-target="#editConfigurationModal">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button wire:click="removeConfiguration({{ $index }})" type="button"
-                                                        class="btn action__button">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
+                                            <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
+                                                Actions
+                                            </th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        @endif
-                    </div>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($configurations as $index => $config)
+                                            <tr>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $index + 1 }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $config['bu_department_name'] }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $config['approvers_count'] }}
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center justify-content-center pe-2 gap-1">
+                                                        <button wire:click="editConfiguration({{ $index }})" type="button"
+                                                            class="btn action__button" data-bs-toggle="modal"
+                                                            data-bs-target="#editConfigurationModal">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <button wire:click="removeConfiguration({{ $index }})" type="button"
+                                                            class="btn action__button">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Special Project Amount -->
@@ -332,6 +361,7 @@
         const amountField = document.querySelector('#amount');
         const slaSelect = document.querySelector('#select-help-topic-sla');
         const serviceDepartmentSelect = document.querySelector('#select-help-topic-service-department');
+        const teamSelect = document.querySelector('#select-help-topic-team');
 
         const serviceLevelAgreementOption = @json($serviceLevelAgreements).map(sla => ({
             label: sla.time_unit,
@@ -361,14 +391,33 @@
             markSearchResults: true,
         });
 
-        const teamSelect = document.querySelector('#select-help-topic-team');
         VirtualSelect.init({
             ele: teamSelect,
             search: true,
             markSearchResults: true,
         });
-
         teamSelect.disable();
+
+        window.addEventListener('show-non-config-bu-department', () => {
+            const nonConfigBuDepartmentSelect = document.querySelector('#select-help-topic-non-config-bu-department');
+            const nonConfigBuDepartments = @json($buDepartments);
+            const nonConfigBuDepartmentOption = nonConfigBuDepartments.map(buDepartment => ({
+                label: buDepartment.name,
+                value: buDepartment.id
+            }));
+
+            VirtualSelect.init({
+                ele: nonConfigBuDepartmentSelect,
+                options: nonConfigBuDepartmentOption,
+                search: true,
+                markSearchResults: true,
+            });
+
+            nonConfigBuDepartmentSelect.addEventListener('change', (event) => {
+                const nonConfigBuDepartmentId = event.target.value;
+                @this.set('nonConfigBuDepartment', parseInt(nonConfigBuDepartmentId));
+            })
+        })
 
         serviceDepartmentSelect.addEventListener('change', (event) => {
             const serviceDepartmentId = event.target.value;
@@ -416,113 +465,261 @@
         });
 
         // Approval Configurations
-        const buDepartmentSelect = document.querySelector('#select-help-topic-bu-department');
-        const approvalLevelSelect = document.querySelector('#select-help-topic-approval-level');
 
-        const buDepartments = @json($buDepartments);
-        const buDepartmentOption = buDepartments.map(buDepartment => ({
-            label: buDepartment.name,
-            value: buDepartment.id
-        }));
+        const approvalConfigFunctions = () => {
+            const buDepartmentSelect = document.querySelector('#select-help-topic-bu-department');
+            const approvalLevelSelect = document.querySelector('#select-help-topic-approval-level');
 
-        const approvalLevels = @json($approvalLevels);
-        const approvalLevelOption = approvalLevels.map(approvalLevel => ({
-            label: `${approvalLevel} ${approvalLevel >= 2 ? 'Levels' : 'Level'}`,
-            value: approvalLevel
-        }));
+            const buDepartments = @json($buDepartments);
+            const buDepartmentOption = buDepartments.map(buDepartment => ({
+                label: buDepartment.name,
+                value: buDepartment.id
+            }));
 
-        VirtualSelect.init({
-            ele: buDepartmentSelect,
-            options: buDepartmentOption,
-            search: true,
-            markSearchResults: true,
-        });
+            const approvalLevels = @json($approvalLevels);
+            const approvalLevelOption = approvalLevels.map(approvalLevel => ({
+                label: `${approvalLevel} ${approvalLevel >= 2 ? 'Levels' : 'Level'}`,
+                value: approvalLevel
+            }));
 
-        VirtualSelect.init({
-            ele: approvalLevelSelect,
-            options: approvalLevelOption,
-            markSearchResults: true,
-        });
+            VirtualSelect.init({
+                ele: buDepartmentSelect,
+                options: buDepartmentOption,
+                search: true,
+                markSearchResults: true,
+            });
 
-        buDepartmentSelect.addEventListener('change', (event) => {
-            @this.set('selectedBuDepartment', parseInt(event.target.value));
-        });
+            VirtualSelect.init({
+                ele: approvalLevelSelect,
+                options: approvalLevelOption,
+                markSearchResults: true,
+            });
 
-        const dynamicApprovalLevelContainer = document.querySelector('#help-topic-approval-container');
-        const approvers = {};
-        let selectedApprovers = [];
+            buDepartmentSelect.addEventListener('change', (event) => {
+                @this.set('selectedBuDepartment', parseInt(event.target.value));
+            });
 
-        approvalLevelSelect.addEventListener('reset', () => {
-            @this.set('selectedApprovalLevel', false);
-        });
+            const dynamicApprovalLevelContainer = document.querySelector('#help-topic-approval-container');
+            const approvers = {};
+            let selectedApprovers = [];
 
-        approvalLevelSelect.addEventListener('change', (event) => {
-            @this.set('selectedApprovalLevel', true);
-            @this.set('levelOfApproval', parseInt(event.target.value));
+            approvalLevelSelect.addEventListener('reset', () => {
+                @this.set('selectedApprovalLevel', false);
+            });
 
-            dynamicApprovalLevelContainer.innerHTML = '';
-            selectedApprovers = [];
-            const selectedLevels = [];
+            approvalLevelSelect.addEventListener('change', (event) => {
+                @this.set('selectedApprovalLevel', true);
+                @this.set('levelOfApproval', parseInt(event.target.value));
 
-            for (let level = 1; level <= approvalLevelSelect.value; level++) {
-                const approverFieldWrapper = document.createElement('div');
-                approverFieldWrapper.className = 'col-md-6';
-                approverFieldWrapper.innerHTML = `
+                dynamicApprovalLevelContainer.innerHTML = '';
+                selectedApprovers = [];
+                const selectedLevels = [];
+
+                for (let level = 1; level <= approvalLevelSelect.value; level++) {
+                    const approverFieldWrapper = document.createElement('div');
+                    approverFieldWrapper.className = 'col-md-6';
+                    approverFieldWrapper.innerHTML = `
+                        <div class="mb-2">
+                            <label for="department" class="form-label form__field__label">Level ${level} Approver</label>
+                            <div>
+                                <div id="select-help-topic-approval-level-${level}" wire:ignore></div>
+                            </div>
+                        </div>`;
+
+                    dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
+
+                    approvers[`level${level}`] = document.querySelector(`#select-help-topic-approval-level-${level}`);
+                    VirtualSelect.init({
+                        ele: approvers[`level${level}`],
+                        search: true,
+                        multiple: true,
+                        showValueAsTags: true,
+                        markSearchResults: true,
+                        hasOptionDescription: true
+                    });
+
+                    approvers[`level${level}`].addEventListener('change', () => {
+                        selectedApprovers[level - 1] = approvers[`level${level}`].value;
+                        @this.set(`level${level}Approvers`, approvers[`level${level}`].value);
+                    });
+
+                    approvers[`level${level}`].addEventListener('virtual-select:option-click', () => {
+                        @this.call('getFilteredApprovers', level);
+                    });
+
+                    selectedLevels.push(level);
+                    @this.set('selectedLevels', selectedLevels);
+                }
+            });
+
+            window.addEventListener('load-approvers', (event) => {
+                const level = event.detail.level;
+                const levelApprovers = event.detail.approvers;
+                const approverSelect = approvers[`level${level}`];
+
+                if (approverSelect && levelApprovers.length > 0) {
+                    const approverOptions = levelApprovers.map(approver => ({
+                        label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
+                        value: approver.id,
+                        description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
+                    }));
+
+                    approverSelect.setOptions(approverOptions);
+                }
+            });
+            //reset fields after save config
+            window.addEventListener('reset-select-fields', () => {
+                buDepartmentSelect.reset();
+                approvalLevelSelect.reset();
+                dynamicApprovalLevelContainer.innerHTML = '';
+            });
+
+            window.addEventListener('reset-help-topic-form-fields', () => {
+                const selectElements = [
+                    '#select-help-topic-sla',
+                    '#select-help-topic-service-department',
+                    '#select-help-topic-team',
+                    '#select-help-topic-bu-department',
+                    '#select-help-topic-approval-level',
+                    '#select-help-topic-costing-approver',
+                    '#select-help-topic-final-costing-approver'
+                ];
+
+                selectElements.forEach(selector => {
+                    const selectElement = document.querySelector(selector);
+                    if (selectElement && selectElement.virtualSelect) {
+                        selectElement.virtualSelect.reset();
+                    }
+                });
+
+                document.querySelector('#help-topic-approval-container').innerHTML = '';
+                teamSelect.disable();
+            });
+
+            // Edit Configuration
+            const selectEditBuDepartment = document.querySelector('#select-edit-config-bu-department');
+            const selectEditConfigLevelOfApproval = document.querySelector('#select-edit-config-level-of-approval');
+
+            VirtualSelect.init({
+                ele: selectEditBuDepartment,
+                options: buDepartmentOption,
+            });
+
+            VirtualSelect.init({
+                ele: selectEditConfigLevelOfApproval,
+                options: approvalLevelOption,
+            });
+
+            window.addEventListener('edit-help-topic-configuration', (event) => {
+                const buDeptId = event.detail.editBuDepartment;
+                const levelOfApproval = event.detail.editLevelOfApproval;
+
+                selectEditBuDepartment.reset();
+                selectEditConfigLevelOfApproval.reset();
+
+                selectEditBuDepartment.setValue(buDeptId);
+                selectEditConfigLevelOfApproval.setValue(levelOfApproval);
+            });
+
+            selectEditBuDepartment.addEventListener('change', (event) => {
+                @this.set('editBuDepartment', parseInt(event.target.value));
+            });
+
+            selectEditBuDepartment.addEventListener('reset', () => {
+                @this.set('editBuDepartment', null);
+            });
+
+            const editHelpTopicApprovalConfigContainer = document.querySelector('#edit-help-topic-approval-config-container');
+            let editApprovers = {};
+
+            selectEditConfigLevelOfApproval.addEventListener('change', (event) => {
+                const editLevelOfApprovalValue = parseInt(event.target.value)
+                @this.set('editLevelOfApproval', editLevelOfApprovalValue);
+
+                editHelpTopicApprovalConfigContainer.innerHTML = '';
+                const editSelectedLevels = [];
+
+                for (let level = 1; level <= editLevelOfApprovalValue; level++) {
+                    const approverFieldWrapper = document.createElement('div');
+                    approverFieldWrapper.className = 'col-md-6';
+                    approverFieldWrapper.innerHTML = `
                     <div class="mb-2">
                         <label for="department" class="form-label form__field__label">Level ${level} Approver</label>
                         <div>
-                            <div id="select-help-topic-approval-level-${level}" wire:ignore></div>
+                            <div id="edit-select-help-topic-approval-level-${level}" wire:ignore></div>
                         </div>
                     </div>`;
 
-                dynamicApprovalLevelContainer.appendChild(approverFieldWrapper);
+                    editHelpTopicApprovalConfigContainer.appendChild(approverFieldWrapper);
 
-                approvers[`level${level}`] = document.querySelector(`#select-help-topic-approval-level-${level}`);
-                VirtualSelect.init({
-                    ele: approvers[`level${level}`],
-                    search: true,
-                    multiple: true,
-                    showValueAsTags: true,
-                    markSearchResults: true,
-                    hasOptionDescription: true
-                });
+                    editApprovers[`level${level}`] = document.querySelector(
+                        `#edit-select-help-topic-approval-level-${level}`);
 
-                approvers[`level${level}`].addEventListener('change', () => {
-                    selectedApprovers[level - 1] = approvers[`level${level}`].value;
-                    @this.set(`level${level}Approvers`, approvers[`level${level}`].value);
-                });
+                    VirtualSelect.init({
+                        ele: editApprovers[`level${level}`],
+                        search: true,
+                        multiple: true,
+                        showValueAsTags: true,
+                        markSearchResults: true,
+                        hasOptionDescription: true
+                    });
 
-                approvers[`level${level}`].addEventListener('virtual-select:option-click', () => {
-                    @this.call('getFilteredApprovers', level);
-                });
+                    editApprovers[`level${level}`].addEventListener('change', () => {
+                        @this.set(`editLevel${level}Approvers`, editApprovers[`level${level}`].value);
+                    });
 
-                selectedLevels.push(level);
-                @this.set('selectedLevels', selectedLevels);
-            }
+                    editApprovers[`level${level}`].addEventListener('virtual-select:option-click', () => {
+                        @this.call('getFilteredApprovers', level);
+                    });
+
+                    editSelectedLevels.push(level);
+                    @this.set('editSelectedLevels', editSelectedLevels);
+                }
+            });
+
+            selectEditConfigLevelOfApproval.addEventListener('reset', () => {
+                @this.set('editLevelOfApproval', null);
+            })
+
+            window.addEventListener('edit-load-approvers', (event) => {
+                const level = event.detail.level;
+                const approvers = event.detail.approvers;
+                const levelApprovers = Object.values(event.detail.currentEditLevelApprovers);
+                const editApproverSelect = editApprovers[`level${level}`];
+
+                if (editApproverSelect && approvers.length > 0) {
+                    const approverOptions = approvers.map(approver => ({
+                        label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
+                        value: approver.id,
+                        description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
+                    }));
+
+                    editApproverSelect.setOptions(approverOptions);
+
+                    if (Array.isArray(levelApprovers)) {
+                        const approverKey = `level${level}`;
+                        const assignedApprover = levelApprovers
+                            .find(lvl => lvl.approvers && lvl.approvers[approverKey]);
+
+                        if (assignedApprover) {
+                            const approverValue = assignedApprover.approvers[approverKey];
+                            editApproverSelect.setValue(approverValue);
+                        }
+                    }
+                }
+            });
+        }
+
+        window.addEventListener('load', () => {
+            // Load approval configurations on page load
+            approvalConfigFunctions();
+        })
+
+        window.addEventListener('show-approval-configuration', () => {
+            // Load approval configurations when this livewire event is called.
+            approvalConfigFunctions();
         });
 
-        window.addEventListener('load-approvers', (event) => {
-            const level = event.detail.level;
-            const levelApprovers = event.detail.approvers;
-            const approverSelect = approvers[`level${level}`];
-
-            if (approverSelect && levelApprovers.length > 0) {
-                const approverOptions = levelApprovers.map(approver => ({
-                    label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
-                    value: approver.id,
-                    description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
-                }));
-
-                approverSelect.setOptions(approverOptions);
-            }
-        });
-
-        //reset fields after save config
-        window.addEventListener('reset-select-fields', () => {
-            buDepartmentSelect.reset();
-            approvalLevelSelect.reset();
-            dynamicApprovalLevelContainer.innerHTML = '';
-        });
 
         window.addEventListener('show-costing-section', () => {
             // Costing Approver
@@ -564,140 +761,7 @@
             });
         });
 
-        window.addEventListener('reset-help-topic-form-fields', () => {
-            const selectElements = [
-                '#select-help-topic-sla',
-                '#select-help-topic-service-department',
-                '#select-help-topic-team',
-                '#select-help-topic-bu-department',
-                '#select-help-topic-approval-level',
-                '#select-help-topic-costing-approver',
-                '#select-help-topic-final-costing-approver'
-            ];
 
-            selectElements.forEach(selector => {
-                const selectElement = document.querySelector(selector);
-                if (selectElement && selectElement.virtualSelect) {
-                    selectElement.virtualSelect.reset();
-                }
-            });
-
-            document.querySelector('#help-topic-approval-container').innerHTML = '';
-            teamSelect.disable();
-        });
-
-        // Edit Configuration
-        const selectEditBuDepartment = document.querySelector('#select-edit-config-bu-department');
-        const selectEditConfigLevelOfApproval = document.querySelector('#select-edit-config-level-of-approval');
-
-        VirtualSelect.init({
-            ele: selectEditBuDepartment,
-            options: buDepartmentOption,
-        });
-
-        VirtualSelect.init({
-            ele: selectEditConfigLevelOfApproval,
-            options: approvalLevelOption,
-        });
-
-        window.addEventListener('edit-help-topic-configuration', (event) => {
-            const buDeptId = event.detail.editBuDepartment;
-            const levelOfApproval = event.detail.editLevelOfApproval;
-
-            selectEditBuDepartment.reset();
-            selectEditConfigLevelOfApproval.reset();
-
-            selectEditBuDepartment.setValue(buDeptId);
-            selectEditConfigLevelOfApproval.setValue(levelOfApproval);
-        });
-
-        selectEditBuDepartment.addEventListener('change', (event) => {
-            @this.set('editBuDepartment', parseInt(event.target.value));
-        });
-
-        selectEditBuDepartment.addEventListener('reset', () => {
-            @this.set('editBuDepartment', null);
-        });
-
-        const editHelpTopicApprovalConfigContainer = document.querySelector('#edit-help-topic-approval-config-container');
-        let editApprovers = {};
-
-        selectEditConfigLevelOfApproval.addEventListener('change', (event) => {
-            const editLevelOfApprovalValue = parseInt(event.target.value)
-            @this.set('editLevelOfApproval', editLevelOfApprovalValue);
-
-            editHelpTopicApprovalConfigContainer.innerHTML = '';
-            const editSelectedLevels = [];
-
-            for (let level = 1; level <= editLevelOfApprovalValue; level++) {
-                const approverFieldWrapper = document.createElement('div');
-                approverFieldWrapper.className = 'col-md-6';
-                approverFieldWrapper.innerHTML = `
-                    <div class="mb-2">
-                        <label for="department" class="form-label form__field__label">Level ${level} Approver</label>
-                        <div>
-                            <div id="edit-select-help-topic-approval-level-${level}" wire:ignore></div>
-                        </div>
-                    </div>`;
-
-                editHelpTopicApprovalConfigContainer.appendChild(approverFieldWrapper);
-
-                editApprovers[`level${level}`] = document.querySelector(
-                    `#edit-select-help-topic-approval-level-${level}`);
-
-                VirtualSelect.init({
-                    ele: editApprovers[`level${level}`],
-                    search: true,
-                    multiple: true,
-                    showValueAsTags: true,
-                    markSearchResults: true,
-                    hasOptionDescription: true
-                });
-
-                editApprovers[`level${level}`].addEventListener('change', () => {
-                    @this.set(`editLevel${level}Approvers`, editApprovers[`level${level}`].value);
-                });
-
-                editApprovers[`level${level}`].addEventListener('virtual-select:option-click', () => {
-                    @this.call('getFilteredApprovers', level);
-                });
-
-                editSelectedLevels.push(level);
-                @this.set('editSelectedLevels', editSelectedLevels);
-            }
-        });
-
-        selectEditConfigLevelOfApproval.addEventListener('reset', () => {
-            @this.set('editLevelOfApproval', null);
-        })
-
-        window.addEventListener('edit-load-approvers', (event) => {
-            const level = event.detail.level;
-            const approvers = event.detail.approvers;
-            const levelApprovers = Object.values(event.detail.currentEditLevelApprovers);
-            const editApproverSelect = editApprovers[`level${level}`];
-
-            if (editApproverSelect && approvers.length > 0) {
-                const approverOptions = approvers.map(approver => ({
-                    label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
-                    value: approver.id,
-                    description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
-                }));
-
-                editApproverSelect.setOptions(approverOptions);
-
-                if (Array.isArray(levelApprovers)) {
-                    const approverKey = `level${level}`;
-                    const assignedApprover = levelApprovers
-                        .find(lvl => lvl.approvers && lvl.approvers[approverKey]);
-
-                    if (assignedApprover) {
-                        const approverValue = assignedApprover.approvers[approverKey];
-                        editApproverSelect.setValue(approverValue);
-                    }
-                }
-            }
-        });
 
         window.addEventListener('edit-reset-select-fields', () => {
             selectEditBuDepartment.reset();

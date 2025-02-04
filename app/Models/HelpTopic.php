@@ -52,6 +52,11 @@ class HelpTopic extends Model
         return $this->hasOne(Form::class);
     }
 
+    public function nonConfig(): HasOne
+    {
+        return $this->hasOne(HelpTopicNonConfig::class);
+    }
+
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);

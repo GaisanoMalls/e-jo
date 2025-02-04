@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
-
 class UpdateHelpTopic extends Component
 {
     use BasicModelQueries, TicketApprovalLevel;

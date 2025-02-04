@@ -7,7 +7,7 @@
 @section('manage-breadcrumbs')
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Manage</li>
-        <li class="breadcrumb-item active">SLA Plans</li>
+        <li class="breadcrumb-item active">Service Level Agreement (SLA)</li>
     </ol>
 @endsection
 
@@ -31,10 +31,8 @@
                                 </p>
                             </div>
                             <div class="col-md-4">
-                                <div
-                                    class="d-flex align-items-center justify-content-start justify-content-lg-end justify-content-md-end">
-                                    <button type="button"
-                                        class="btn d-flex align-items-center justify-content-center gap-2 btn btn__add__sla"
+                                <div class="d-flex align-items-center justify-content-start justify-content-lg-end justify-content-md-end">
+                                    <button type="button" class="btn d-flex align-items-center justify-content-center gap-2 btn btn__add__sla"
                                         data-bs-toggle="modal" data-bs-target="#addNewSLAModal">
                                         <i class="fa-solid fa-plus"></i>
                                         Create SLA

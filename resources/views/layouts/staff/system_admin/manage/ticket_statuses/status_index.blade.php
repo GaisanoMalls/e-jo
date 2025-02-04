@@ -7,7 +7,7 @@
 @section('manage-breadcrumbs')
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Manage</li>
-        <li class="breadcrumb-item active">Ticket Statuses</li>
+        <li class="breadcrumb-item active">Ticket Status</li>
     </ol>
 @endsection
 
@@ -66,8 +66,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center text-start gap-2 td__content">
                                                     <span>{{ $status->tickets()->count() }}</span>
-                                                    <i class="fa-solid fa-envelope"
-                                                        style="font-size: 13px; color: #8d94a1;"></i>
+                                                    <i class="fa-solid fa-envelope" style="font-size: 13px; color: #8d94a1;"></i>
                                                 </div>
                                             </td>
                                             <td>
