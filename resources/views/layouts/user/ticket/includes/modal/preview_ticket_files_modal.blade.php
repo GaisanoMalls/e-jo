@@ -1,6 +1,5 @@
 <!-- Preview Ticket Files Modal -->
-<div class="modal fade ticket__actions__modal" id="requesterTicketFilesModalForm" tabindex="-1"
-    aria-labelledby="modalFormLabel" aria-hidden="true">
+<div class="modal fade ticket__actions__modal" id="requesterTicketFilesModalForm" tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered custom__modal">
         <div class="modal-content custom__modal__content">
             <div class="modal__header d-flex justify-content-between align-items-center">
@@ -11,22 +10,21 @@
             </div>
             <div class="modal__body mt-3">
                 <ul class="list-group list-group-flush">
-                    @foreach ($ticket->fileAttachments as $ticket)
+                    @foreach ($ticket->fileAttachments as $file)
                         <li class="list-group-item d-flex align-items-center px-0 py-3 justify-content-between">
-                            <a href="{{ Storage::url($ticket->file_attachment) }}" class="file__preview__link"
-                                target="_blank">
+                            <a href="{{ Storage::url($file->file_attachment) }}" class="file__preview__link" target="_blank">
                                 <div class="d-flex align-items-center gap-2">
-                                    @switch(pathinfo(basename($ticket->file_attachment), PATHINFO_EXTENSION))
+                                    @switch(pathinfo(basename($file->file_attachment), PATHINFO_EXTENSION))
                                         @case('jpeg')
-                                            <img src="{{ Storage::url($ticket->file_attachment) }}" class="file__preview">
+                                            <img src="{{ Storage::url($file->file_attachment) }}" class="file__preview">
                                         @break
 
                                         @case('jpg')
-                                            <img src="{{ Storage::url($ticket->file_attachment) }}" class="file__preview">
+                                            <img src="{{ Storage::url($file->file_attachment) }}" class="file__preview">
                                         @break
 
                                         @case('png')
-                                            <img src="{{ Storage::url($ticket->file_attachment) }}" class="file__preview">
+                                            <img src="{{ Storage::url($file->file_attachment) }}" class="file__preview">
                                         @break
 
                                         @case('pdf')
@@ -55,14 +53,15 @@
 
                                         @default
                                     @endswitch
-                                    <p class="mb-0" style="font-size: 14px;">{{ basename($ticket->file_attachment) }}
+                                    <p class="mb-0" style="font-size: 14px;">{{ basename($file->file_attachment) }}
                                     </p>
                                 </div>
                             </a>
-                            <a href="{{ Storage::url($ticket->file_attachment) }}" class="file__preview__link" download
+                            @livewire('download-file', ['filePath' => $file->file_attachment])
+                            {{-- <a href="{{ Storage::url($ticket->file_attachment) }}" class="file__preview__link" download
                                 target="_blank" style="font-size: 20px;">
                                 <i class="fa-solid fa-download"></i>
-                            </a>
+                            </a> --}}
                         </li>
                     @endforeach
                 </ul>

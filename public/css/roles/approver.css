@@ -8414,14 +8414,6 @@ nav .nav__user__picture {
      object-fit: cover;
 }
 
-.file__preview__link {
-  text-decoration: none !important;
-  color: #123831;
-}
-.file__preview__link:hover {
-  color: #123831;
-}
-
 .notification__canvas {
   min-width: 27% !important;
 }

@@ -1,6 +1,5 @@
 <!-- Preview Ticket Files Modal -->
-<div class="modal fade ticket__actions__modal" id="ticketFilesModalForm" tabindex="-1" aria-labelledby="modalFormLabel"
-    aria-hidden="true">
+<div class="modal fade ticket__actions__modal" id="ticketFilesModalForm" tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered custom__modal">
         <div class="modal-content custom__modal__content">
             <div class="modal__header d-flex justify-content-between align-items-center">
@@ -54,14 +53,12 @@
 
                                         @default
                                     @endswitch
-                                    <p class="mb-0" style="font-size: 14px;">{{ basename($file->file_attachment) }}
+                                    <p class="mb-0" style="font-size: 14px;">
+                                        {{ basename($file->file_attachment) }}
                                     </p>
                                 </div>
                             </a>
-                            <a href="{{ Storage::url($file->file_attachment) }}" download target="_blank"
-                                style="font-size: 20px;">
-                                <i class="fa-solid fa-download"></i>
-                            </a>
+                            @livewire('download-file', ['filePath' => $file->file_attachment])
                         </li>
                     @endforeach
                 </ul>

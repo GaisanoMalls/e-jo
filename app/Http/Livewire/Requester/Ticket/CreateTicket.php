@@ -52,6 +52,7 @@ class CreateTicket extends Component
     public ?int $priorityLevel = null;
     public ?int $serviceDepartment = null;
     public ?int $helpTopic = null;
+    public bool $isHelpTopicHasNoApprovalConfig = false;
     public array|string $fileAttachments = [];
     public array $allowedExtensions = [
         'jpeg',
@@ -124,6 +125,93 @@ class CreateTicket extends Component
         $this->setDefaultPriorityLevel();
     }
 
+    private function fetchNonCofiguredApprovers()
+    {
+        
+    }
+
+    public function updatedServiceDepartment($value)
+    {
+        $this->helpTopics = HelpTopic::with(['team', 'sla'])
+            ->whereHas('serviceDepartment', fn($query) =>
+                $query->where('service_department_id', $value))
+            ->orWhere(function ($query) {
+                $query->withWhereHas('configurations')
+                    ->withWhereHas('nonConfig');
+            })
+            ->get();
+
+        $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);
+    }
+
+    public function updatedHelpTopic($value)
+    {
+        $this->helpTopic = $value;
+        $this->headerFields = [];
+        $this->rowFields = [];
+        $this->filledForms = [];
+        $this->isHeaderFieldSet = false;
+
+        $this->isHelpTopicHasNoApprovalConfig = HelpTopic::where('id', $value)
+            ->whereDoesntHave('configurations')
+            ->whereHas('nonConfig', fn($query) => $query->where('help_topic_id', $value))
+            ->exists();
+
+        $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) =>
+            $helpTopic->where('help_topics.id', $value))
+            ->pluck('id')
+            ->first();
+
+        $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) =>
+            $helpTopic->where('help_topics.id', $value))
+            ->pluck('id')
+            ->first();
+
+        $helpTopicForm = Form::with('fields')->where('help_topic_id', $value)->first(); // Get the help topic form
+
+        if ($helpTopicForm) {
+            foreach ($helpTopicForm->fields as $field) {
+                // Iterate through the fields to search for a field whose type is file.
+                if ($field->type === 'file') {
+                    $this->fileAttachments = []; // Clear the file attachments associated with the ticket
+                    $this->dispatchBrowserEvent('hide-ticket-file-attachment-field-container');
+                } else {
+                    $this->dispatchBrowserEvent('show-ticket-file-attachment-field-container');
+                }
+            }
+
+            $this->isHelpTopicHasForm = true;
+            $this->helpTopicForm = $helpTopicForm;
+            $this->formId = $helpTopicForm->id;
+            $this->formName = $helpTopicForm->name;
+
+            $this->formFields = $helpTopicForm->fields->map(function ($field) {
+                return [
+                    'row' => null,
+                    'id' => $field->id,
+                    'name' => $field->name,
+                    'label' => $field->label,
+                    'type' => $field->type,
+                    'variable_name' => $field->variable_name,
+                    'is_required' => $field->is_required,
+                    'is_enabled' => $field->is_enabled,
+                    'value' => null, // To store the value of the given inputs
+                    'assigned_column' => $field->assigned_column,
+                    'is_header_field' => $field->is_header_field,
+                    'is_for_ticket_number' => $field->is_for_ticket_number,
+                    'form' => $this->helpTopicForm->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
+                ];
+            })->toArray();
+
+            $this->description = null; // Not necessary when using custom form.
+            $this->helpTopicForm = $helpTopicForm; // Assign the helpTopicForm property of the selected help topic form.
+            $this->dispatchBrowserEvent('show-help-topic-forms');
+        } else {
+            $this->isHelpTopicHasForm = false;
+            $this->dispatchBrowserEvent('hide-ticket-description-container');
+        }
+    }
+
     public function sendTicket()
     {
         $this->validate();
@@ -165,34 +253,40 @@ class CreateTicket extends Component
                     }
                 }
 
-                $approvers = User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
-                    ->withWhereHas('helpTopicApprovals', function ($query) use ($ticket) {
-                        $query->withWhereHas('configuration', function ($config) use ($ticket) {
-                            $config->with('approvers')
-                                ->where('bu_department_id', $ticket->user->buDepartments->pluck('id')->first());
+                if ($this->isHelpTopicHasNoApprovalConfig) {
+                    // Email and notify the service department admin that belongs to the BU set in non-configured help topic approvals
+
+                } else {
+                    // Filter the approvers that were assigned in the approval configuration
+                    $approvers = User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
+                        ->withWhereHas('helpTopicApprovals', function ($query) use ($ticket) {
+                            $query->withWhereHas('configuration', function ($config) use ($ticket) {
+                                $config->with('approvers')
+                                    ->where('bu_department_id', $ticket->user->buDepartments->pluck('id')->first());
+                            });
+                        })->get();
+
+                    $approvers->each(function ($approver) use ($ticket) {
+                        $approver->helpTopicApprovals->each(function ($helpTopicApproval) use ($ticket) {
+                            TicketApproval::create([
+                                'ticket_id' => $ticket->id,
+                                'help_topic_approver_id' => $helpTopicApproval->id,
+                            ]);
                         });
-                    })->get();
 
-                $approvers->each(function ($approver) use ($ticket) {
-                    $approver->helpTopicApprovals->each(function ($helpTopicApproval) use ($ticket) {
-                        TicketApproval::create([
-                            'ticket_id' => $ticket->id,
-                            'help_topic_approver_id' => $helpTopicApproval->id,
-                        ]);
+                        if ($approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+                            Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
+                            Notification::send(
+                                $approver,
+                                new AppNotification(
+                                    ticket: $ticket,
+                                    title: "Ticket #{$ticket->ticket_number} (New)",
+                                    message: "{$ticket->user->profile->getFullName} created a ticket"
+                                )
+                            );
+                        }
                     });
-
-                    if ($approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
-                        Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
-                        Notification::send(
-                            $approver,
-                            new AppNotification(
-                                ticket: $ticket,
-                                title: "Ticket #{$ticket->ticket_number} (New)",
-                                message: "{$ticket->user->profile->getFullName} created a ticket"
-                            )
-                        );
-                    }
-                });
+                }
 
                 if ($this->isHelpTopicHasForm) {
                     $this->saveFieldValues($ticket);
@@ -349,79 +443,6 @@ class CreateTicket extends Component
                     ->max(25600) //25600 (25 MB)
             ],
         ]);
-    }
-
-    public function updatedServiceDepartment($value)
-    {
-        $this->helpTopics = HelpTopic::with(['team', 'sla'])
-            ->whereHas('serviceDepartment', fn($query) =>
-                $query->where('service_department_id', $value))
-            ->whereHas('configurations')
-            ->get();
-
-        $this->dispatchBrowserEvent('get-help-topics-from-service-department', ['helpTopics' => $this->helpTopics]);
-    }
-
-    public function updatedHelpTopic($value)
-    {
-        $this->headerFields = [];
-        $this->rowFields = [];
-        $this->filledForms = [];
-        $this->isHeaderFieldSet = false;
-
-        $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) =>
-            $helpTopic->where('help_topics.id', $value))
-            ->pluck('id')
-            ->first();
-
-        $this->sla = ServiceLevelAgreement::withWhereHas('helpTopics', fn($helpTopic) =>
-            $helpTopic->where('help_topics.id', $value))
-            ->pluck('id')
-            ->first();
-
-        $helpTopicForm = Form::with('fields')->where('help_topic_id', $value)->first(); // Get the help topic form
-
-        if ($helpTopicForm) {
-            foreach ($helpTopicForm->fields as $field) {
-                // Iterate through the fields to search for a field whose type is file.
-                if ($field->type === 'file') {
-                    $this->fileAttachments = []; // Clear the file attachments associated with the ticket
-                    $this->dispatchBrowserEvent('hide-ticket-file-attachment-field-container');
-                } else {
-                    $this->dispatchBrowserEvent('show-ticket-file-attachment-field-container');
-                }
-            }
-
-            $this->isHelpTopicHasForm = true;
-            $this->helpTopicForm = $helpTopicForm;
-            $this->formId = $helpTopicForm->id;
-            $this->formName = $helpTopicForm->name;
-
-            $this->formFields = $helpTopicForm->fields->map(function ($field) {
-                return [
-                    'row' => null,
-                    'id' => $field->id,
-                    'name' => $field->name,
-                    'label' => $field->label,
-                    'type' => $field->type,
-                    'variable_name' => $field->variable_name,
-                    'is_required' => $field->is_required,
-                    'is_enabled' => $field->is_enabled,
-                    'value' => null, // To store the value of the given inputs
-                    'assigned_column' => $field->assigned_column,
-                    'is_header_field' => $field->is_header_field,
-                    'is_for_ticket_number' => $field->is_for_ticket_number,
-                    'form' => $this->helpTopicForm->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
-                ];
-            })->toArray();
-
-            $this->description = null; // Not necessary when using custom form.
-            $this->helpTopicForm = $helpTopicForm; // Assign the helpTopicForm property of the selected help topic form.
-            $this->dispatchBrowserEvent('show-help-topic-forms');
-        } else {
-            $this->isHelpTopicHasForm = false;
-            $this->dispatchBrowserEvent('hide-ticket-description-container');
-        }
     }
 
     public function cancel()

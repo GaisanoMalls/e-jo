@@ -13,6 +13,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Str;
 
 trait Utils
@@ -182,6 +183,11 @@ trait Utils
             'timer' => $timer,
             'percentageElapsed' => (int) $percentageElapsed
         ];
+    }
+
+    public function downloadFile($path)
+    {
+        return Storage::download($path);
     }
 
     /**

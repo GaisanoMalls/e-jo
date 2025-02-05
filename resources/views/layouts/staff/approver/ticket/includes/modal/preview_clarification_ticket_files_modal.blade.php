@@ -1,6 +1,6 @@
 <!-- Preview Ticket Files Modal -->
-<div class="modal fade ticket__actions__modal" id="previewClarificaionFileModal{{ $clarification->id }}" tabindex="-1"
-    aria-labelledby="modalFormLabel" aria-hidden="true">
+<div class="modal fade ticket__actions__modal" id="previewClarificaionFileModal{{ $clarification->id }}" tabindex="-1" aria-labelledby="modalFormLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered custom__modal">
         <div class="modal-content custom__modal__content">
             <div class="modal__header d-flex justify-content-between align-items-center">
@@ -8,7 +8,7 @@
                     {{ $clarification->fileAttachments->count() > 1
                         ? 'Reply file attachments'
                         : 'Reply file
-                                                                                attachment' }}
+                                                                                                    attachment' }}
                     ({{ $clarification->fileAttachments->count() }})
                 </h6>
             </div>
@@ -16,23 +16,19 @@
                 <ul class="list-group list-group-flush">
                     @foreach ($clarification->fileAttachments as $clarificationFile)
                         <li class="list-group-item d-flex align-items-center px-0 py-3 justify-content-between">
-                            <a href="{{ Storage::url($clarificationFile->file_attachment) }}"
-                                class="file__preview__link" target="_blank">
+                            <a href="{{ Storage::url($clarificationFile->file_attachment) }}" class="file__preview__link" target="_blank">
                                 <div class="d-flex align-items-center gap-2">
                                     @switch(pathinfo(basename($clarificationFile->file_attachment), PATHINFO_EXTENSION))
                                         @case('jpeg')
-                                            <img src="{{ Storage::url($clarificationFile->file_attachment) }}"
-                                                class="file__preview">
+                                            <img src="{{ Storage::url($clarificationFile->file_attachment) }}" class="file__preview">
                                         @break
 
                                         @case('jpg')
-                                            <img src="{{ Storage::url($clarificationFile->file_attachment) }}"
-                                                class="file__preview">
+                                            <img src="{{ Storage::url($clarificationFile->file_attachment) }}" class="file__preview">
                                         @break
 
                                         @case('png')
-                                            <img src="{{ Storage::url($clarificationFile->file_attachment) }}"
-                                                class="file__preview">
+                                            <img src="{{ Storage::url($clarificationFile->file_attachment) }}" class="file__preview">
                                         @break
 
                                         @case('pdf')
@@ -65,10 +61,7 @@
                                         {{ basename($clarificationFile->file_attachment) }}</p>
                                 </div>
                             </a>
-                            <a href="{{ Storage::url($clarificationFile->file_attachment) }}"
-                                class="file__preview__link" download target="_blank" style="font-size: 20px;">
-                                <i class="fa-solid fa-download"></i>
-                            </a>
+                            @livewire('download-file', ['filePath' => $clarificationFile->file_attachment])
                         </li>
                     @endforeach
                 </ul>
