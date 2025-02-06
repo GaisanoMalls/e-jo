@@ -10,7 +10,6 @@ use App\Models\HelpTopic;
 use App\Models\HelpTopicApprover;
 use App\Models\HelpTopicConfiguration;
 use App\Models\HelpTopicCosting;
-use App\Models\HelpTopicNonConfig;
 use App\Models\Role;
 use App\Models\SpecialProject;
 use App\Models\Team;
@@ -26,13 +25,11 @@ class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
     public bool $isSpecialProject = false;
-    public bool $isIncludeApprovalConfiguration = true;
     public ?Collection $teams = null;
     public ?string $name = null;
     public ?int $sla = null;
     public ?int $serviceDepartment = null;
     public ?int $team = null;
-    public ?int $nonConfigBuDepartment = null;
 
     // Costing Configuration
     public ?float $amount = null;
@@ -89,9 +86,8 @@ class CreateHelpTopic extends Component
             'sla' => ['required'],
             'serviceDepartment' => ['required'],
             'team' => ['required'],
-            'nonConfigBuDepartment' => ['required_if:isIncludeApprovalConfiguration,false'],
-            'selectedBuDepartment' => [empty($this->configurations) && $this->isIncludeApprovalConfiguration ? 'required' : 'nullable'],
-            'selectedApprovalLevel' => [empty($this->configurations) && $this->isIncludeApprovalConfiguration ? 'accepted' : 'nullable'],
+            'selectedBuDepartment' => [empty($this->configurations) ? 'required' : 'nullable'],
+            'selectedApprovalLevel' => [empty($this->configurations) ? 'accepted' : 'nullable'],
             'teams' => '',
         ];
     }
@@ -101,13 +97,11 @@ class CreateHelpTopic extends Component
         return [
             'selectedBuDepartment.required' => 'BU department field is required',
             'selectedApprovalLevel.accepted' => 'Level of approval field is required',
-            'nonConfigBuDepartment.required_if' => 'BU department field is required'
         ];
     }
 
     private function actionOnSubmit()
     {
-        $this->resetExcept('isIncludeApprovalConfiguration');
         $this->resetValidation();
         $this->emit('loadHelpTopics');
         $this->dispatchBrowserEvent('reset-help-topic-form-fields');
@@ -128,14 +122,7 @@ class CreateHelpTopic extends Component
                     'slug' => Str::slug($this->name),
                 ]);
 
-                if (!$this->isIncludeApprovalConfiguration) {
-                    HelpTopicNonConfig::create([
-                        'help_topic_id' => $helpTopic->id,
-                        'bu_department_id' => $this->nonConfigBuDepartment
-                    ]);
-                }
-
-                if (!empty($this->configurations && $this->isIncludeApprovalConfiguration)) {
+                if (!empty($this->configurations)) {
                     // Save help topic and its configurations
                     foreach ($this->configurations as $config) {
                         $helpTopicConfiguration = HelpTopicConfiguration::create([
@@ -186,25 +173,6 @@ class CreateHelpTopic extends Component
         }
     }
 
-    public function updatedIsIncludeApprovalConfiguration($value)
-    {
-        if ($value === true) {
-            $this->dispatchBrowserEvent('show-approval-configuration');
-            $this->reset('nonConfigBuDepartment');
-        } else {
-            $this->dispatchBrowserEvent('show-non-config-bu-department');
-            $this->reset(
-                'selectedBuDepartment',
-                'selectedApprovalLevel',
-                'level1Approvers',
-                'level2Approvers',
-                'level3Approvers',
-                'level4Approvers',
-                'level5Approvers'
-            );
-        }
-    }
-
     public function updatedIsSpecialProject($value)
     {
         if ($value === true) {
@@ -220,67 +188,65 @@ class CreateHelpTopic extends Component
 
     public function saveConfiguration()
     {
-        if ($this->isIncludeApprovalConfiguration) {
-            if (!$this->selectedBuDepartment) {
-                $this->addError('selectedBuDepartment', 'BU department field is required.');
-                return;
-            } else {
-                $this->resetValidation('selectedBuDepartment');
-            }
+        if (!$this->selectedBuDepartment) {
+            $this->addError('selectedBuDepartment', 'BU department field is required.');
+            return;
+        } else {
+            $this->resetValidation('selectedBuDepartment');
+        }
 
-            if (!$this->selectedApprovalLevel) {
-                $this->addError('selectedApprovalLevel', 'Level of approval field is required.');
-                return;
-            } else {
-                $this->resetValidation('selectedApprovalLevel');
-            }
+        if (!$this->selectedApprovalLevel) {
+            $this->addError('selectedApprovalLevel', 'Level of approval field is required.');
+            return;
+        } else {
+            $this->resetValidation('selectedApprovalLevel');
+        }
 
-            foreach ($this->configurations as $config) {
-                if ($config['bu_department_id'] == $this->selectedBuDepartment) {
-                    $this->addError('selectedBuDepartment', 'BU department already exists');
+        foreach ($this->configurations as $config) {
+            if ($config['bu_department_id'] == $this->selectedBuDepartment) {
+                $this->addError('selectedBuDepartment', 'BU department already exists');
+                return;
+            }
+        }
+
+        if (!empty($this->selectedLevels)) {
+            foreach ($this->selectedLevels as $level) {
+                if (empty($this->{"level{$level}Approvers"})) {
+                    session()->flash('level_approver_message', "Level $level approver field is required.");
                     return;
                 }
             }
+        }
 
-            if (!empty($this->selectedLevels)) {
-                foreach ($this->selectedLevels as $level) {
-                    if (empty($this->{"level{$level}Approvers"})) {
-                        session()->flash('level_approver_message', "Level $level approver field is required.");
-                        return;
-                    }
-                }
-            }
+        if ($this->selectedApprovalLevel && $this->selectedBuDepartment) {
+            // Check if BU department and level of approval is selected
+            $approvers = [
+                'level1' => array_map('intval', $this->level1Approvers),
+                'level2' => array_map('intval', $this->level2Approvers),
+                'level3' => array_map('intval', $this->level3Approvers),
+                'level4' => array_map('intval', $this->level4Approvers),
+                'level5' => array_map('intval', $this->level5Approvers),
+            ];
 
-            if ($this->selectedApprovalLevel && $this->selectedBuDepartment) {
-                // Check if BU department and level of approval is selected
-                $approvers = [
-                    'level1' => array_map('intval', $this->level1Approvers),
-                    'level2' => array_map('intval', $this->level2Approvers),
-                    'level3' => array_map('intval', $this->level3Approvers),
-                    'level4' => array_map('intval', $this->level4Approvers),
-                    'level5' => array_map('intval', $this->level5Approvers),
-                ];
+            $approversCount = array_sum(array_map('count', $approvers));
 
-                $approversCount = array_sum(array_map('count', $approvers));
+            // Get the selected BU Department name
+            $buDepartmentName = collect($this->queryBUDepartments())
+                ->where('id', $this->selectedBuDepartment)
+                ->pluck('name')
+                ->first();
 
-                // Get the selected BU Department name
-                $buDepartmentName = collect($this->queryBUDepartments())
-                    ->where('id', $this->selectedBuDepartment)
-                    ->pluck('name')
-                    ->first();
+            // Add to the configurations array
+            $this->configurations[] = [
+                'bu_department_id' => $this->selectedBuDepartment,
+                'bu_department_name' => $buDepartmentName,
+                'approvers_count' => $approversCount,
+                'level_of_approval' => $this->levelOfApproval,
+                'approvers' => $approvers,
+            ];
 
-                // Add to the configurations array
-                $this->configurations[] = [
-                    'bu_department_id' => $this->selectedBuDepartment,
-                    'bu_department_name' => $buDepartmentName,
-                    'approvers_count' => $approversCount,
-                    'level_of_approval' => $this->levelOfApproval,
-                    'approvers' => $approvers,
-                ];
-
-                $this->resetValidation();
-                $this->resetApprovalConfigFields();
-            }
+            $this->resetValidation();
+            $this->resetApprovalConfigFields();
         }
     }
 

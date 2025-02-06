@@ -10,6 +10,7 @@ use App\Http\Traits\Utils;
 use App\Mail\Requester\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\Branch;
+use App\Models\Department;
 use App\Models\FieldHeaderValue;
 use App\Models\FieldRowValue;
 use App\Models\Form;
@@ -125,16 +126,19 @@ class CreateTicket extends Component
         $this->setDefaultPriorityLevel();
     }
 
-    private function fetchNonCofiguredApprovers()
+    private function fetchNonCofiguredApprovers(Department $department)
     {
-        
+        return User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
+            ->whereHas('departments', fn($query) => $query->where('departments.id', $department->id))
+            ->get();
     }
 
     public function updatedServiceDepartment($value)
     {
         $this->helpTopics = HelpTopic::with(['team', 'sla'])
-            ->whereHas('serviceDepartment', fn($query) =>
-                $query->where('service_department_id', $value))
+            ->whereHas('serviceDepartment', function ($query) use ($value) {
+                $query->where('service_department_id', $value);
+            })
             ->orWhere(function ($query) {
                 $query->withWhereHas('configurations')
                     ->withWhereHas('nonConfig');
@@ -262,30 +266,36 @@ class CreateTicket extends Component
                         ->withWhereHas('helpTopicApprovals', function ($query) use ($ticket) {
                             $query->withWhereHas('configuration', function ($config) use ($ticket) {
                                 $config->with('approvers')
-                                    ->where('bu_department_id', $ticket->user->buDepartments->pluck('id')->first());
+                                    ->whereIn('bu_department_id', $ticket->user->buDepartments->pluck('id'));
                             });
                         })->get();
 
-                    $approvers->each(function ($approver) use ($ticket) {
-                        $approver->helpTopicApprovals->each(function ($helpTopicApproval) use ($ticket) {
-                            TicketApproval::create([
-                                'ticket_id' => $ticket->id,
-                                'help_topic_approver_id' => $helpTopicApproval->id,
-                            ]);
-                        });
 
-                        if ($approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
-                            Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
-                            Notification::send(
-                                $approver,
-                                new AppNotification(
-                                    ticket: $ticket,
-                                    title: "Ticket #{$ticket->ticket_number} (New)",
-                                    message: "{$ticket->user->profile->getFullName} created a ticket"
-                                )
-                            );
-                        }
-                    });
+                    if ($approvers->isNotEmpty()) {
+                        $approvers->each(function ($approver) use ($ticket) {
+                            $approver->helpTopicApprovals->each(function ($helpTopicApproval) use ($ticket) {
+                                TicketApproval::create([
+                                    'ticket_id' => $ticket->id,
+                                    'help_topic_approver_id' => $helpTopicApproval->id,
+                                ]);
+                            });
+
+                            if ($approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+                                Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
+                                Notification::send(
+                                    $approver,
+                                    new AppNotification(
+                                        ticket: $ticket,
+                                        title: "Ticket #{$ticket->ticket_number} (New)",
+                                        message: "{$ticket->user->profile->getFullName} created a ticket"
+                                    )
+                                );
+                            }
+                        });
+                    } else {
+                        noty()->addWarning('No configured approvers were found for this help topic. Please contact the administrator.');
+                        return;
+                    }
                 }
 
                 if ($this->isHelpTopicHasForm) {

@@ -9,7 +9,7 @@
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Team</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">SLA</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Form</th>
-                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Configurations</th>
+                        <th class="border-0 table__head__label" style="padding: 17px 30px;">Approval Configuration</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Created</th>
                         <th class="border-0 table__head__label" style="padding: 17px 30px;">Date Updated</th>
                     </tr>
@@ -18,8 +18,7 @@
                     @foreach ($helpTopics as $helpTopic)
                         <tr wire:key="help-topic-{{ $helpTopic->id }}">
                             <td>
-                                <div
-                                    class="d-flex gap-4 justify-content-between align-items-center text-start td__content">
+                                <div class="d-flex gap-4 justify-content-between align-items-center text-start td__content">
                                     <span>{{ $helpTopic->name }}</span>
                                 </div>
                             </td>
@@ -41,9 +40,8 @@
                             <td>
                                 <div class="d-flex align-items-center gap-1 text-start td__content">
                                     @if ($helpTopic->form)
-                                        <span wire:click="viewHelpTopicForm({{ $helpTopic->id }})"
-                                            data-bs-toggle="modal" data-bs-target="#viewFormModal"
-                                            class="btn__view__form">
+                                        <span wire:click="viewHelpTopicForm({{ $helpTopic->id }})" data-bs-toggle="modal"
+                                            data-bs-target="#viewFormModal" class="btn__view__form">
                                             View
                                         </span>
                                     @else
@@ -57,7 +55,7 @@
                                         @if ($helpTopic->configurations->count() >= 1)
                                             {{ $helpTopic->configurations->count() }}
                                         @else
-                                            ---
+                                            N/A
                                         @endif
                                     </span>
                                 </div>
@@ -74,14 +72,12 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-end pe-2 gap-1">
-                                    <button data-tooltip="View" data-tooltip-position="top"
-                                        data-tooltip-font-size="11px"
+                                    <button data-tooltip="View" data-tooltip-position="top" data-tooltip-font-size="11px"
                                         onclick="window.location.href='{{ route('staff.manage.help_topic.edit_details', $helpTopic->id) }}'"
                                         type="button" class="btn action__button">
                                         <i class="bi bi-eye"></i>
                                     </button>
-                                    <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal"
-                                        data-bs-target="#deleteHelpTopicModal"
+                                    <button class="btn btn-sm action__button mt-0" data-bs-toggle="modal" data-bs-target="#deleteHelpTopicModal"
                                         wire:click="deleteHelpTopic({{ $helpTopic->id }})">
                                         <i class="bi bi-trash"></i>
                                     </button>
@@ -99,14 +95,12 @@
     </div>
 
     {{-- Delete Help Topic Modal --}}
-    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="deleteHelpTopicModal"
-        tabindex="-1" aria-hidden="true">
+    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="deleteHelpTopicModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <form wire:submit.prevent="delete">
                     <div class="modal-body border-0 text-center pt-4 pb-1">
-                        <h6 class="fw-bold mb-4"
-                            style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                        <h6 class="fw-bold mb-4" style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
                             Confirm Delete
                         </h6>
                         <p class="mb-1" style="font-weight: 500; font-size: 15px;">
@@ -116,13 +110,11 @@
                     </div>
                     <hr>
                     <div class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
-                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
-                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit"
                             class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
                             wire:click="delete">
-                            <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm"
-                                role="status" aria-hidden="true">
+                            <span wire:loading wire:target="delete" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                             </span>
                             Yes, delete
                         </button>
@@ -133,14 +125,12 @@
     </div>
 
     {{-- Delete help topic form --}}
-    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="deleteHelpTopicFormModal"
-        tabindex="-1" aria-hidden="true">
+    <div wire:ignore.self class="modal fade modal__confirm__delete__help__topic" id="deleteHelpTopicFormModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <form wire:submit.prevent="delete">
                     <div class="modal-body border-0 text-center pt-4 pb-1">
-                        <h6 class="fw-bold mb-4"
-                            style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                        <h6 class="fw-bold mb-4" style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
                             Confirm Delete
                         </h6>
                         <p class="mb-1" style="font-weight: 500; font-size: 15px;">
@@ -149,15 +139,13 @@
                         <strong>{{ $deleteHelpTopicFormName }}</strong>
                     </div>
                     <hr>
-                    <div wire:click="cancelDeleteForHelpTopicForm"
-                        class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
-                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
-                            data-bs-dismiss="modal">Cancel</button>
+                    <div wire:click="cancelDeleteForHelpTopicForm" class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
+                        <button type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal" data-bs-dismiss="modal">Cancel</button>
                         <button type="button"
                             class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
                             wire:click="deleteHelpTopicForm">
-                            <span wire:loading wire:target="deleteHelpTopicForm"
-                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                            <span wire:loading wire:target="deleteHelpTopicForm" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true">
                             </span>
                             Yes, delete
                         </button>
@@ -168,8 +156,8 @@
     </div>
 
     {{-- View help topic form --}}
-    <div wire:ignore.self class="modal fade help__topic__modal" id="viewFormModal" tabindex="-1"
-        aria-labelledby="viewFormModalModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade help__topic__modal" id="viewFormModal" tabindex="-1" aria-labelledby="viewFormModalModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 80rem !important;">
             <div class="modal-content modal__content">
                 <div class="modal-header modal__header p-0 border-0 mb-3">
@@ -181,15 +169,12 @@
                     </button>
                 </div>
                 @if ($helpTopicForm)
-                    <div wire:key="form-{{ $helpTopicForm->id }}"
-                        class="d-flex flex-column gap-2 py-3 helptopic__form__list">
+                    <div wire:key="form-{{ $helpTopicForm->id }}" class="d-flex flex-column gap-2 py-3 helptopic__form__list">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center gap-3 helptopic__form__name__header">
-                                <div class="d-flex align-items-center gap-2"
-                                    style="font-size: 0.95rem; color: black;">
+                                <div class="d-flex align-items-center gap-2" style="font-size: 0.95rem; color: black;">
                                     @if ($editFormNameCurrentlyEditing && $editFormId == $helpTopicForm->id)
-                                        <input wire:model="editFormName"
-                                            class="form-control border-0 edit__form__name__field" type="text"
+                                        <input wire:model="editFormName" class="form-control border-0 edit__form__name__field" type="text"
                                             placeholder="Enter form name">
                                     @else
                                         <i class="bi bi-journal-text"></i>
@@ -201,21 +186,15 @@
                                         <button wire:click="updateFormName" type="button"
                                             class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
                                             style="height: 4px; width: 4px;">
-                                            <i wire:loading.remove
-                                                wire:target="editFormName({{ $helpTopicForm->id }})"
-                                                class="bi bi-check-lg"></i>
-                                            <i wire:loading wire:target="editFormName({{ $helpTopicForm->id }})"
-                                                class='bx bx-loader bx-spin'></i>
+                                            <i wire:loading.remove wire:target="editFormName({{ $helpTopicForm->id }})" class="bi bi-check-lg"></i>
+                                            <i wire:loading wire:target="editFormName({{ $helpTopicForm->id }})" class='bx bx-loader bx-spin'></i>
                                         </button>
-                                        <button wire:click="discardEditFormName({{ $helpTopicForm->id }})"
-                                            type="button"
+                                        <button wire:click="discardEditFormName({{ $helpTopicForm->id }})" type="button"
                                             class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
                                             style="height: 4px; width: 4px;">
-                                            <i wire:loading.remove
-                                                wire:target="discardEditFormName({{ $helpTopicForm->id }})"
-                                                class="bi bi-x" style="font-size: 16px;"></i>
-                                            <i wire:loading
-                                                wire:target="discardEditFormName({{ $helpTopicForm->id }})"
+                                            <i wire:loading.remove wire:target="discardEditFormName({{ $helpTopicForm->id }})" class="bi bi-x"
+                                                style="font-size: 16px;"></i>
+                                            <i wire:loading wire:target="discardEditFormName({{ $helpTopicForm->id }})"
                                                 class='bx bx-loader bx-spin'></i>
                                         </button>
                                     </div>
@@ -223,22 +202,20 @@
                                     <button wire:click="editFormName({{ $helpTopicForm->id }})" type="button"
                                         class="btn btn-sm d-flex border-0 align-items-center justify-content-center d-none btn__edit__form__name"
                                         style="height: 4px; width: 4px;">
-                                        <i wire:loading.remove wire:target="editFormName({{ $helpTopicForm->id }})"
-                                            class="bi bi-pencil" style="font-size: 11px;"></i>
-                                        <i wire:loading wire:target="editFormName({{ $helpTopicForm->id }})"
-                                            class='bx bx-loader bx-spin'></i>
+                                        <i wire:loading.remove wire:target="editFormName({{ $helpTopicForm->id }})" class="bi bi-pencil"
+                                            style="font-size: 11px;"></i>
+                                        <i wire:loading wire:target="editFormName({{ $helpTopicForm->id }})" class='bx bx-loader bx-spin'></i>
                                     </button>
                                 @endif
                             </div>
-                            <div wire:click="addFieldToSelectedForm({{ $helpTopicForm->id }})"
-                                class="d-flex align-items-center gap-1">
+                            <div wire:click="addFieldToSelectedForm({{ $helpTopicForm->id }})" class="d-flex align-items-center gap-1">
                                 <button data-bs-target="#addFieldForSelectedForm" data-bs-toggle="modal"
                                     class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0">
                                     <i class="bi bi-plus-lg"></i>
                                 </button>
                                 <button wire:click="deleteHelpTopicFormConfirm({{ $helpTopicForm }})"
-                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                    data-bs-toggle="modal" data-bs-target="#deleteHelpTopicFormModal">
+                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0" data-bs-toggle="modal"
+                                    data-bs-target="#deleteHelpTopicFormModal">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
@@ -246,35 +223,28 @@
                         @if ($helpTopicForm->fields)
                             <div class="d-flex flex-wrap align-items-center gap-1">
                                 @foreach ($helpTopicForm->fields as $field)
-                                    <span wire:key="field-{{ $field->id }}"
-                                        class="d-flex align-items-center gap-2 form__fields__container"
+                                    <span wire:key="field-{{ $field->id }}" class="d-flex align-items-center gap-2 form__fields__container"
                                         style="font-size: 0.75rem; border: 1px solid #dddddd; border-radius: 20px; padding: 3px 7px 3px 8px; {{ $field->is_enabled ? 'color: black;' : 'color: #6b7280;' }} {{ $editSelectedFieldIsCurrentlyEditing && $editSelectedFieldId === $field->id ? 'border: 0.08rem solid #d32839; font-weight: 500; color: #d32839;' : '' }}">
                                         {{ $field->name }}
                                         @if (!$editSelectedFieldIsCurrentlyEditing || $editSelectedFieldId !== $field->id)
                                             <div class="d-flex align-items-center gap-1 d-none field__container">
-                                                <button
-                                                    wire:click="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
-                                                    type="button"
-                                                    class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
+                                                <button wire:click="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
+                                                    type="button" class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
                                                     style="height: 4px; width: 4px;">
                                                     <i wire:loading.remove
                                                         wire:target="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
                                                         class="bi bi-pencil" style="font-size: 11px;"></i>
-                                                    <i wire:loading
-                                                        wire:target="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
+                                                    <i wire:loading wire:target="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
                                                         class='bx bx-loader bx-spin' style="font-size: 13px;"></i>
                                                 </button>
-                                                <button wire:click="deleteSelectedFormField({{ $field->id }})"
-                                                    type="button"
+                                                <button wire:click="deleteSelectedFormField({{ $field->id }})" type="button"
                                                     class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
-                                                    style="height: 4px; width: 4px;" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteFormFieldModal">
-                                                    <i wire:loading.remove
-                                                        wire:target="deleteSelectedFormField({{ $field->id }})"
+                                                    style="height: 4px; width: 4px;" data-bs-toggle="modal" data-bs-target="#deleteFormFieldModal">
+                                                    <i wire:loading.remove wire:target="deleteSelectedFormField({{ $field->id }})"
                                                         class="bi bi-trash text-danger" style="font-size: 11px;"></i>
                                                     <i wire:loading="deleteSelectedFormField({{ $field->id }})"
-                                                        wire:target="deleteSelectedFormField({{ $field->id }})"
-                                                        class="bx bx-loader bx-spin" style="font-size: 13px;"></i>
+                                                        wire:target="deleteSelectedFormField({{ $field->id }})" class="bx bx-loader bx-spin"
+                                                        style="font-size: 13px;"></i>
                                                 </button>
                                             </div>
                                         @endif
@@ -286,11 +256,9 @@
                                     style="background-color: #f3f4f6; margin-left: 2px; margin-right: 2px; border: 0.08rem solid #dddddd;">
                                     @if ($editSelectedFieldIsHeaderField)
                                         <div class="row mb-3">
-                                            <div
-                                                class="col-lg-2 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            <div class="col-lg-2 col-md-6 d-flex flex-column justify-content-end position-relative">
                                                 <div class="mb-2">
-                                                    <label for="fieldName"
-                                                        class="form-label text-muted form__field__label"
+                                                    <label for="fieldName" class="form-label text-muted form__field__label"
                                                         style="font-weight: 500;">
                                                         Assign column
                                                     </label>
@@ -298,21 +266,17 @@
                                                         <div id="edit-select-field-column-number" wire:ignore></div>
                                                     </div>
                                                     @error('editSelectedFieldAssignedColumnNumber')
-                                                        <span class="error__message position-absolute"
-                                                            style="bottom: -13px !important;">
+                                                        <span class="error__message position-absolute" style="bottom: -13px !important;">
                                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                                             {{ $message }}
                                                         </span>
                                                     @enderror
                                                 </div>
                                             </div>
-                                            <div
-                                                class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                                <div class="form-check"
-                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
-                                                    <input wire:model="editSelectedFieldIsForTicketNumber"
-                                                        class="form-check-input" type="checkbox" role="switch"
-                                                        id="forTicketNumber" wire:loading.attr="disabled"
+                                            <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                                <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
+                                                    <input wire:model="editSelectedFieldIsForTicketNumber" class="form-check-input" type="checkbox"
+                                                        role="switch" id="forTicketNumber" wire:loading.attr="disabled"
                                                         style="margin-right: 10px !important;">
                                                     <label class="form-check-label" for="forTicketNumber">
                                                         Associate with the ticket number
@@ -321,69 +285,55 @@
                                             </div>
                                         </div>
                                     @endif
-                                    <div
-                                        class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                    <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                                         <div class="mb-3">
-                                            <label for="fieldName" class="form-label text-muted form__field__label"
-                                                style="font-weight: 500;">
+                                            <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
                                                 Field name
                                             </label>
-                                            <input wire:model="editSelectedFieldName" class="form-control form__field"
-                                                type="text" id="fieldName" placeholder="Enter field name">
+                                            <input wire:model="editSelectedFieldName" class="form-control form__field" type="text"
+                                                id="fieldName" placeholder="Enter field name">
                                             @error('editSelectedFieldName')
-                                                <span class="error__message position-absolute"
-                                                    style="bottom: -3px !important;">
+                                                <span class="error__message position-absolute" style="bottom: -3px !important;">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                                     {{ $message }}
                                                 </span>
                                             @enderror
                                         </div>
                                     </div>
-                                    <div
-                                        class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                    <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                                         <div class="mb-3">
-                                            <label class="form-label text-muted form__field__label"
-                                                style="font-weight: 500;">Type</label>
+                                            <label class="form-label text-muted form__field__label" style="font-weight: 500;">Type</label>
                                             <div class="w-100">
                                                 <div id="edit-selected-field-type" wire:ignore>
                                                 </div>
                                             </div>
                                             @error('editSelectedFieldType')
-                                                <span class="error__message position-absolute"
-                                                    style="bottom: -3px !important;">
+                                                <span class="error__message position-absolute" style="bottom: -3px !important;">
                                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                                     {{ $message }}
                                                 </span>
                                             @enderror
                                         </div>
                                     </div>
-                                    <div
-                                        class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                    <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                                         <div class="w-100 d-flex align-items-center" style="margin-bottom: 19px;">
-                                            <div class="form-check mx-0"
-                                                style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                            <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
                                                 <input wire:model="editSelectedFieldRequired" class="form-check-input"
-                                                    id="edit-selected-field-required" type="checkbox" role="switch"
-                                                    wire:loading.attr="disabled"
+                                                    id="edit-selected-field-required" type="checkbox" role="switch" wire:loading.attr="disabled"
                                                     style="margin-right: 10px !important;">
                                             </div>
-                                            <label class="form-label text-muted mb-1 form__field__label"
-                                                for="edit-selected-field-required"
+                                            <label class="form-label text-muted mb-1 form__field__label" for="edit-selected-field-required"
                                                 style="font-weight: 500;">Required</label>
                                         </div>
                                     </div>
-                                    <div
-                                        class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                    <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                                         <div class="w-100 d-flex align-items-center" style="margin-bottom: 19px;">
-                                            <div class="form-check mx-0"
-                                                style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                            <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
                                                 <input wire:model="editSelectedFieldEnabled" class="form-check-input"
-                                                    id="edit-selected-field-required" type="checkbox" role="switch"
-                                                    wire:loading.attr="disabled"
+                                                    id="edit-selected-field-required" type="checkbox" role="switch" wire:loading.attr="disabled"
                                                     style="margin-right: 10px !important;">
                                             </div>
-                                            <label class="form-label text-muted mb-1 form__field__label"
-                                                r="edit-selected-field-enabled"
+                                            <label class="form-label text-muted mb-1 form__field__label" r="edit-selected-field-enabled"
                                                 style="font-weight: 500;">Enabled</label>
                                         </div>
                                     </div>
@@ -397,9 +347,8 @@
                                                 color: white;
                                                 font-weight: 500;
                                                 box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
-                                            <span wire:loading wire:target="updateSelectedFormField"
-                                                class="spinner-border spinner-border-sm" role="status"
-                                                aria-hidden="true">
+                                            <span wire:loading wire:target="updateSelectedFormField" class="spinner-border spinner-border-sm"
+                                                role="status" aria-hidden="true">
                                             </span>
                                             Update
                                         </button>
@@ -429,14 +378,12 @@
     </div>
 
     {{-- Confirm delete selected form field --}}
-    <div wire:ignore.self class="modal fade modal__confirm__delete__form__field" id="deleteFormFieldModal"
-        tabindex="-1" aria-hidden="true">
+    <div wire:ignore.self class="modal fade modal__confirm__delete__form__field" id="deleteFormFieldModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal__content">
                 <form wire:submit.prevent="delete">
                     <div class="modal-body border-0 text-center pt-4 pb-1">
-                        <h6 class="fw-bold mb-4"
-                            style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
+                        <h6 class="fw-bold mb-4" style="text-transform: uppercase; letter-spacing: 1px; color: #696f77;">
                             Confirm Delete
                         </h6>
                         <p class="mb-1" style="font-weight: 500; font-size: 15px;">
@@ -446,16 +393,15 @@
                     </div>
                     <hr>
                     <div class="d-flex align-items-center justify-content-center gap-3 pb-4 px-4">
-                        <button wire:click="cancelDeleteSelectedFormField" type="button"
-                            class="btn w-50 btn__cancel__delete btn__confirm__modal" data-bs-toggle="modal"
-                            data-bs-target="#viewFormModal">
+                        <button wire:click="cancelDeleteSelectedFormField" type="button" class="btn w-50 btn__cancel__delete btn__confirm__modal"
+                            data-bs-toggle="modal" data-bs-target="#viewFormModal">
                             Cancel
                         </button>
                         <button type="submit"
                             class="btn d-flex align-items-center justify-content-center gap-2 w-50 btn__confirm__delete btn__confirm__modal"
                             wire:click="deleteFormField">
-                            <span wire:loading wire:target="deleteFormField" class="spinner-border spinner-border-sm"
-                                role="status" aria-hidden="true">
+                            <span wire:loading wire:target="deleteFormField" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true">
                             </span>
                             Yes, delete
                         </button>
@@ -477,8 +423,8 @@
                 </div>
                 @if (!$this->hasAssociatedTicketFieldExists())
                     <div class="form-check mb-3 px-3" style="white-space: nowrap; margin-left: 13px;">
-                        <input wire:model="selectedFormFieldAsHeaderField" class="form-check-input" type="checkbox"
-                            role="switch" id="add-form-field-as-heder-check" wire:loading.attr="disabled">
+                        <input wire:model="selectedFormFieldAsHeaderField" class="form-check-input" type="checkbox" role="switch"
+                            id="add-form-field-as-heder-check" wire:loading.attr="disabled">
                         <label class="form-check-label" for="add-form-field-as-heder-check">
                             As header field
                         </label>
@@ -487,8 +433,7 @@
                         <div class="row mb-3">
                             <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                                 <div class="mb-2">
-                                    <label for="fieldName" class="form-label text-muted form__field__label"
-                                        style="font-weight: 500;">
+                                    <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
                                         Assign column
                                     </label>
                                     <div>
@@ -503,13 +448,10 @@
                                 </div>
                             </div>
                             @if (!$this->hasAssociatedTicketField())
-                                <div
-                                    class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                    <div class="form-check"
-                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
-                                        <input wire:model="selectedFormFieldIsForTicketNumber"
-                                            class="form-check-input" type="checkbox" role="switch"
-                                            id="for-ticket-number" wire:loading.attr="disabled"
+                                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                    <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
+                                        <input wire:model="selectedFormFieldIsForTicketNumber" class="form-check-input" type="checkbox"
+                                            role="switch" id="for-ticket-number" wire:loading.attr="disabled"
                                             style="margin-right: 10px !important;">
                                         <label class="form-check-label" for="for-ticket-number">
                                             Associate with the ticket number
@@ -530,14 +472,13 @@
                     <div class="row mb-3">
                         <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                             <div class="mb-2">
-                                <label for="fieldName" class="form-label text-muted form__field__label"
-                                    style="font-weight: 500;">
+                                <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
                                     Field name
                                     <em style="font-size: 0.75rem;">(No special characters)</em>
                                 </label>
                                 <div class="d-flex align-items-center text-start px-0 td__content">
-                                    <input wire:model="selectedFormFieldName" class="form-control form__field"
-                                        type="text" id="fieldName" placeholder="Enter field name">
+                                    <input wire:model="selectedFormFieldName" class="form-control form__field" type="text" id="fieldName"
+                                        placeholder="Enter field name">
                                 </div>
                                 @error('selectedFormFieldName')
                                     <span class="error__message position-absolute" style="bottom: -5px !important;">
@@ -549,8 +490,7 @@
                         </div>
                         <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                             <div class="mb-2">
-                                <label class="form-label text-muted form__field__label"
-                                    style="font-weight: 500;">Type</label>
+                                <label class="form-label text-muted form__field__label" style="font-weight: 500;">Type</label>
                                 <div class="d-flex align-items-center text-start px-0 td__content">
                                     <div class="w-100">
                                         <div id="add-selected-form-field-select-field-type" wire:ignore></div>
@@ -566,28 +506,22 @@
                         </div>
                         <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                             <div class="mb-4 d-flex flex-column gap-2">
-                                <label class="form-label text-muted form__field__label"
-                                    style="font-weight: 500;">Required</label>
+                                <label class="form-label text-muted form__field__label" style="font-weight: 500;">Required</label>
                                 <div class="w-100">
-                                    <div class="form-check mx-0"
-                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                        <input wire:model="selectedFormFieldIsRequired" class="form-check-input"
-                                            type="checkbox" role="switch" wire:loading.attr="disabled"
-                                            style="margin-right: 10px !important;">
+                                    <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                        <input wire:model="selectedFormFieldIsRequired" class="form-check-input" type="checkbox" role="switch"
+                                            wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                             <div class="mb-4 d-flex flex-column gap-2">
-                                <label class="form-label text-muted form__field__label"
-                                    style="font-weight: 500;">Enabled</label>
+                                <label class="form-label text-muted form__field__label" style="font-weight: 500;">Enabled</label>
                                 <div class="w-100">
-                                    <div class="form-check mx-0"
-                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                        <input wire:model="selectedFormFieldIsEnabled" class="form-check-input"
-                                            type="checkbox" role="switch" wire:loading.attr="disabled"
-                                            style="margin-right: 10px !important;">
+                                    <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                        <input wire:model="selectedFormFieldIsEnabled" class="form-check-input" type="checkbox" role="switch"
+                                            wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                     </div>
                                 </div>
                             </div>
@@ -631,8 +565,7 @@
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
                                                         style="height: 0; min-width: 200px;">
                                                         @if ($editAddedFieldId === $key)
-                                                            <input wire:model="editAddedFieldName"
-                                                                class="form-control form__field" type="text"
+                                                            <input wire:model="editAddedFieldName" class="form-control form__field" type="text"
                                                                 placeholder="Enter field name">
                                                         @else
                                                             <span>{{ $field['name'] }}</span>
@@ -646,8 +579,7 @@
                                                     @enderror
                                                 </td>
                                                 <td>
-                                                    <div class="d-flex align-items-center text-start px-0 td__content"
-                                                        style="height: 0;">
+                                                    <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
                                                         @if ($editAddedFieldId === $key)
                                                             <div class="w-100">
                                                                 <div id="edit-added-select-field-type" wire:ignore>
@@ -669,8 +601,7 @@
                                                         style="height: 0; min-width: 200px;">
                                                         @if ($editAddedFieldId === $key)
                                                             <div style="min-width: 40px;">
-                                                                <div id="edit-added-select-assigned-column"
-                                                                    wire:ignore>
+                                                                <div id="edit-added-select-assigned-column" wire:ignore>
                                                                 </div>
                                                             </div>
                                                         @else
@@ -678,31 +609,26 @@
                                                         @endif
                                                     </div>
                                                     @error('selectedFormFieldColumnNumber')
-                                                        <span class="error__message position-absolute"
-                                                            style="bottom: -10px !important;">
+                                                        <span class="error__message position-absolute" style="bottom: -10px !important;">
                                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                                             {{ $message }}
                                                         </span>
                                                     @enderror
                                                 </td>
                                                 <td>
-                                                    <div class="d-flex align-items-center text-start px-0 td__content"
-                                                        style="height: 0;">
+                                                    <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
                                                         @if ($editAddedFieldId === $key)
                                                             <div class="w-100">
                                                                 <div class="form-check mx-0"
                                                                     style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                                    <input wire:model="editAddedFieldIsHeaderField"
-                                                                        class="form-check-input" type="checkbox"
-                                                                        role="switch" wire:loading.attr="disabled"
-                                                                        style="margin-right: 10px !important;"
-                                                                        @disabled($this->hasAssociatedTicketFieldExists())>
+                                                                    <input wire:model="editAddedFieldIsHeaderField" class="form-check-input"
+                                                                        type="checkbox" role="switch" wire:loading.attr="disabled"
+                                                                        style="margin-right: 10px !important;" @disabled($this->hasAssociatedTicketFieldExists())>
                                                                 </div>
                                                             </div>
                                                         @else
                                                             @if ($field['is_header_field'])
-                                                                <i class="bi bi-check-circle-fill"
-                                                                    style="color: #9da85c;"></i>
+                                                                <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
                                                             @else
                                                                 <i class="bi bi-x-circle text-muted"></i>
                                                             @endif
@@ -710,23 +636,19 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="d-flex align-items-center text-start px-0 td__content"
-                                                        style="height: 0;">
+                                                    <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
                                                         @if ($editAddedFieldId === $key)
                                                             <div class="w-100">
                                                                 <div class="form-check mx-0"
                                                                     style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                                    <input wire:model="editAddedFieldIsForTicketNumber"
-                                                                        class="form-check-input" type="checkbox"
-                                                                        role="switch" wire:loading.attr="disabled"
-                                                                        style="margin-right: 10px !important;"
-                                                                        @disabled($this->hasAssociatedTicketFieldExists() || !$editAddedFieldIsHeaderField)>
+                                                                    <input wire:model="editAddedFieldIsForTicketNumber" class="form-check-input"
+                                                                        type="checkbox" role="switch" wire:loading.attr="disabled"
+                                                                        style="margin-right: 10px !important;" @disabled($this->hasAssociatedTicketFieldExists() || !$editAddedFieldIsHeaderField)>
                                                                 </div>
                                                             </div>
                                                         @else
                                                             @if ($field['is_for_ticket_number'])
-                                                                <i class="bi bi-check-circle-fill"
-                                                                    style="color: #9da85c;"></i>
+                                                                <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
                                                             @else
                                                                 <i class="bi bi-x-circle text-muted"></i>
                                                             @endif
@@ -734,22 +656,19 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div class="d-flex align-items-center text-start px-0 td__content"
-                                                        style="height: 0;">
+                                                    <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
                                                         @if ($editAddedFieldId === $key)
                                                             <div class="w-100">
                                                                 <div class="form-check mx-0"
                                                                     style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                                    <input wire:model="editAddedFieldRequired"
-                                                                        class="form-check-input" type="checkbox"
-                                                                        role="switch" wire:loading.attr="disabled"
+                                                                    <input wire:model="editAddedFieldRequired" class="form-check-input"
+                                                                        type="checkbox" role="switch" wire:loading.attr="disabled"
                                                                         style="margin-right: 10px !important;">
                                                                 </div>
                                                             </div>
                                                         @else
                                                             @if ($field['is_required'])
-                                                                <i class="bi bi-check-circle-fill"
-                                                                    style="color: #9da85c;"></i>
+                                                                <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
                                                             @else
                                                                 <i class="bi bi-x-circle text-muted"></i>
                                                             @endif
@@ -763,16 +682,14 @@
                                                             <div class="w-100">
                                                                 <div class="form-check mx-0"
                                                                     style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                                    <input wire:model="editAddedFieldEnabled"
-                                                                        class="form-check-input" type="checkbox"
-                                                                        role="switch" wire:loading.attr="disabled"
+                                                                    <input wire:model="editAddedFieldEnabled" class="form-check-input"
+                                                                        type="checkbox" role="switch" wire:loading.attr="disabled"
                                                                         style="margin-right: 10px !important;">
                                                                 </div>
                                                             </div>
                                                         @else
                                                             @if ($field['is_enabled'])
-                                                                <i class="bi bi-check-circle-fill"
-                                                                    style="color: #9da85c;"></i>
+                                                                <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
                                                             @else
                                                                 <i class="bi bi-x-circle text-muted"></i>
                                                             @endif
@@ -786,14 +703,12 @@
                                                     @enderror
                                                 </td>
                                                 <td class="px-0">
-                                                    <div
-                                                        class="d-flex align-items-center gap-2 justify-content-end px-2">
+                                                    <div class="d-flex align-items-center gap-2 justify-content-end px-2">
                                                         @if ($editAddedFieldId === $key)
                                                             <button
                                                                 class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
                                                                 wire:click="updateSelectedFormAddedField({{ $key }})">
-                                                                <i class="bi bi-check-lg"
-                                                                    style="font-size: 18px;"></i>
+                                                                <i class="bi bi-check-lg" style="font-size: 18px;"></i>
                                                             </button>
                                                             <button
                                                                 class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
@@ -826,14 +741,13 @@
                     <div class="d-flex align-items-center gap-2">
                         <button wire:click="selectedFormSaveAddedField" type="button"
                             class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send">
-                            <span wire:loading wire:target="selectedFormSaveAddedField"
-                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                            <span wire:loading wire:target="selectedFormSaveAddedField" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true">
                             </span>
                             Save field
                         </button>
-                        <button wire:click="cancelAddFieldToSelectedForm" type="button"
-                            class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
-                            data-bs-target="#viewFormModal" data-bs-toggle="modal">
+                        <button wire:click="cancelAddFieldToSelectedForm" type="button" class="btn m-0 btn__modal__footer btn__cancel"
+                            id="btnCloseModal" data-bs-target="#viewFormModal" data-bs-toggle="modal">
                             Back
                         </button>
                     </div>

@@ -36,7 +36,6 @@ class User extends Authenticatable
         'email',
         'password',
         'is_active',
-        'is_highest_approver',
     ];
 
     /**

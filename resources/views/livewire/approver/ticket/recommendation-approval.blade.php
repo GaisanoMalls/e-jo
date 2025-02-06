@@ -8,15 +8,18 @@
     <div>
         @if ($latestRecommendation)
             @if (auth()->user()->hasRole(Role::APPROVER) && $latestRecommendation)
-                <div class="d-flex flex-column rounded-3 mb-4 flex-wrap gap-2 border-0 p-3" style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+                <div class="d-flex flex-column rounded-3 mb-4 flex-wrap gap-2 border-0 p-3"
+                    style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-1">
                         <span class="d-flex align-items-center border-0" style="font-size: 0.9rem;">
                             <span class="me-2">
                                 <div class="d-flex align-items-center">
                                     @if ($latestRecommendation->requestedByServiceDeptAdmin->profile->picture)
-                                        <img src="{{ Storage::url($latestRecommendation->requestedByServiceDeptAdmin->profile->picture) }}" class="image-fluid rounded-circle" style="height: 26px !important; width: 26px !important;">
+                                        <img src="{{ Storage::url($latestRecommendation->requestedByServiceDeptAdmin->profile->picture) }}"
+                                            class="image-fluid rounded-circle" style="height: 26px !important; width: 26px !important;">
                                     @else
-                                        <div class="d-flex align-items-center justify-content-center rounded-circle me-1 p-2 text-white" style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
+                                        <div class="d-flex align-items-center justify-content-center rounded-circle me-1 p-2 text-white"
+                                            style="background-color: #196837; height: 26px !important; width: 26px !important; font-size: 0.7rem;">
                                             {{ $latestRecommendation->requestedByServiceDeptAdmin->profile->getNameInitial() }}
                                         </div>
                                     @endif
@@ -44,13 +47,18 @@
                     @if (!$this->isApprovalApproved($latestRecommendation))
                         @if ($this->isApproverInRecommendationApprovers($ticket, $latestRecommendation) && $latestRecommendation)
                             <div class="d-flex mt-2 gap-2">
-                                <button type="button" class="btn d-flex align-items-center justify-content-center w-auto gap-2" wire:click="approveTicketRecommendation" wire:loading.attr="disabled" style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #FFF; font-weight: 500; background-color: #D32839;">
-                                    <span wire:loading wire:target="approveTicketRecommendation" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                <button type="button" class="btn d-flex align-items-center justify-content-center w-auto gap-2"
+                                    wire:click="approveTicketRecommendation" wire:loading.attr="disabled"
+                                    style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #FFF; font-weight: 500; background-color: #D32839;">
+                                    <span wire:loading wire:target="approveTicketRecommendation" class="spinner-border spinner-border-sm"
+                                        role="status" aria-hidden="true">
                                     </span>
                                     <span wire:loading.remove wire:target="approveTicketRecommendation">Approve</span>
                                     <span wire:loading wire:target="approveTicketRecommendation">Processing...</span>
                                 </button>
-                                <button type="button" class="btn d-flex align-items-center justify-content-center w-auto" data-bs-toggle="modal" data-bs-target="#disapproveTicketRecommendationModal" style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #3e3d3d; font-weight: 500; background-color: #f3f4f6;">
+                                <button type="button" class="btn d-flex align-items-center justify-content-center w-auto" data-bs-toggle="modal"
+                                    data-bs-target="#disapproveTicketRecommendationModal"
+                                    style="padding-top: 15px; padding-bottom: 15px; font-size: 0.75rem; height: 20px; color: #3e3d3d; font-weight: 500; background-color: #f3f4f6;">
                                     Disapprove
                                 </button>
                             </div>
@@ -76,7 +84,8 @@
                                         </div>
                                         <div class="d-flex gap-1">
                                             @foreach ($approvers as $approver)
-                                                <small class="rounded-5 border border-2 px-2" style="font-size: 0.70rem;">{{ $approver->profile->getFullName }}</small>
+                                                <small class="rounded-5 border border-2 px-2"
+                                                    style="font-size: 0.70rem;">{{ $approver->profile->getFullName }}</small>
                                             @endforeach
                                         </div>
                                     </div>
@@ -95,25 +104,27 @@
             @endif
 
             @if ($currentRecommendation->approvalStatus->approval_status === RecommendationApprovalStatusEnum::DISAPPROVED->value)
-                <div class="alert d-inline-block mb-4 gap-1 border-0 px-3 py-2" role="alert" style="font-size: 13px; background-color: #cff4fc; color: #055160;">
+                <div class="alert d-inline-block mb-4 gap-1 border-0 px-3 py-2" role="alert"
+                    style="font-size: 13px; background-color: #cff4fc; color: #055160;">
                     <i class="bi bi-info-circle-fill" style="color: #d32839;"></i>
                     Disapproved
                 </div>
             @endif
         @endif
 
-        @if ($approvalHistory->isNotEmpty())
+        @if ($approvalHistories->isNotEmpty())
             <div class="accordion mb-4" id="approvalHistoryAccordion">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="box-shadow: none; font-size: 13px;">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true"
+                            aria-controls="collapseOne" style="box-shadow: none; font-size: 13px;">
                             Approval history
                         </button>
                     </h2>
                     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#approvalHistoryAccordion">
                         <div class="accordion-body">
                             <ol class="list-group">
-                                @foreach ($approvalHistory as $recommendation)
+                                @foreach ($approvalHistories as $recommendation)
                                     <li class="list-group-item d-flex justify-content-between">
                                         <div class="me-auto ms-2" style="font-size: 13px;">
                                             <div class="d-flex align-items-center gap-2 mb-1">
@@ -156,7 +167,10 @@
                                                 @endif
                                                 <div>
                                                     <p class="mb-0">
-                                                        <button class="btn btn-sm p-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#showApprovers{{ $recommendation->id }}" aria-expanded="false" aria-controls="showApprovers{{ $recommendation->id }}" style="font-size: 13px; text-decoration: underline !important;">
+                                                        <button class="btn btn-sm p-0 border-0" type="button" data-bs-toggle="collapse"
+                                                            data-bs-target="#showApprovers{{ $recommendation->id }}" aria-expanded="false"
+                                                            aria-controls="showApprovers{{ $recommendation->id }}"
+                                                            style="font-size: 13px; text-decoration: underline !important;">
                                                             Show approvers
                                                         </button>
                                                     </p>
@@ -172,7 +186,8 @@
                                                                                 <div class="d-flex flex-column gap-1">
                                                                                     <div class="d-flex align-items-center gap-1">
                                                                                         @if ($this->isLevelApproved($level, $recommendation))
-                                                                                            <i class="bi bi-check-circle-fill" style="font-size: 0.75rem; color: green;"></i>
+                                                                                            <i class="bi bi-check-circle-fill"
+                                                                                                style="font-size: 0.75rem; color: green;"></i>
                                                                                         @elseif ($this->isDisApprovedRecommendationLevel($level, $recommendation))
                                                                                             <i class="bi bi-x-circle-fill" style="color: red;"></i>
                                                                                         @else
@@ -184,7 +199,8 @@
                                                                                     </div>
                                                                                     <div class="d-flex gap-1">
                                                                                         @foreach ($approvers as $approver)
-                                                                                            <small class="rounded-5 border border-2 px-2" style="font-size: 0.70rem;">{{ $approver->profile->getFullName }}</small>
+                                                                                            <small class="rounded-5 border border-2 px-2"
+                                                                                                style="font-size: 0.70rem;">{{ $approver->profile->getFullName }}</small>
                                                                                         @endforeach
                                                                                     </div>
                                                                                 </div>
@@ -215,12 +231,14 @@
         @endif
 
         {{-- Reason for disapproval modal --}}
-        <div wire:ignore.self class="modal fade ticket__actions__modal" id="disapproveTicketRecommendationModal" tabindex="-1" aria-labelledby="modalFormLabel" aria-hidden="true">
+        <div wire:ignore.self class="modal fade ticket__actions__modal" id="disapproveTicketRecommendationModal" tabindex="-1"
+            aria-labelledby="modalFormLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered custom__modal">
                 <div class="modal-content d-flex flex-column custom__modal__content">
                     <div class="modal__header d-flex justify-content-between align-items-center">
                         <h6 class="modal__title">Disapprove ticket request</h6>
-                        <button class="btn d-flex align-items-center justify-content-center modal__close__button" data-bs-dismiss="modal" id="btnCloseModal">
+                        <button class="btn d-flex align-items-center justify-content-center modal__close__button" data-bs-dismiss="modal"
+                            id="btnCloseModal">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
@@ -238,7 +256,8 @@
                                     </span>
                                 @enderror
                             </div>
-                            <button wire:loading.attr="disabled" wire:target="disapproveTicketRecommendation" type="submit" class="btn d-flex align-items-center justify-content-center mt-3 gap-2"
+                            <button wire:loading.attr="disabled" wire:target="disapproveTicketRecommendation" type="submit"
+                                class="btn d-flex align-items-center justify-content-center mt-3 gap-2"
                                 style="padding: 0.6rem 1rem;
                                     border-radius: 0.563rem;
                                     font-size: 0.875rem;
@@ -246,7 +265,8 @@
                                     color: white;
                                     font-weight: 500;
                                     box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
-                                <span wire:loading wire:target="disapproveTicketRecommendation" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                <span wire:loading wire:target="disapproveTicketRecommendation" class="spinner-border spinner-border-sm"
+                                    role="status" aria-hidden="true">
                                 </span>
                                 <span wire:loading.remove wire:target="disapproveTicketRecommendation">
                                     Disapprove
