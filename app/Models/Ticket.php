@@ -110,6 +110,11 @@ class Ticket extends Model
         return $this->hasOne(TicketCustomFormFooter::class);
     }
 
+    public function nonConfigApprover(): HasOne
+    {
+        return $this->hasOne(NonConfigApprover::class);
+    }
+
     public function recommendations(): HasMany
     {
         return $this->hasMany(Recommendation::class);
