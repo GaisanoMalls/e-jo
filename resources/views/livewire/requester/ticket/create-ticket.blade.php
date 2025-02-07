@@ -80,6 +80,25 @@
                                 @enderror
                             </div>
                         </div>
+                        @if ($isBuNotInApprovalConfig)
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label input__field__label">
+                                        Service Department Admin
+                                        <em>(Optional)</em>
+                                    </label>
+                                    <div>
+                                        <div id="user-create-ticket-service-department-admin-dropdown" wire:ignore></div>
+                                    </div>
+                                    @error('serviceDepartmentAdmins')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        @endif
                         <div class="mb-3">
                             <label for="ticketSubject" class="form-label input__field__label">
                                 Subject
@@ -542,6 +561,29 @@
 
         window.addEventListener('show-ticket-file-attachment-field-container', () => {
             ticketFileAttachmentContainer.style.display = 'block';
+        });
+
+        window.addEventListener('show-requester-service-department-admins', (event) => {
+            const serviceDepartmentAdminSelect = document.querySelector('#user-create-ticket-service-department-admin-dropdown');
+            const serviceDepartmentAdmins = event.detail.serviceDepartmentAdmins;
+
+            const serviceDepartmentAdminOptions = serviceDepartmentAdmins.map(serviceDeptAdmin => ({
+                label: `${serviceDeptAdmin.profile.first_name} ${serviceDeptAdmin.profile.middle_name ? serviceDeptAdmin.profile.middle_name[0] + '.' : ''} ${serviceDeptAdmin.profile.last_name}`,
+                value: serviceDeptAdmin.id
+            }));
+
+            VirtualSelect.init({
+                ele: serviceDepartmentAdminSelect,
+                options: serviceDepartmentAdminOptions,
+                search: true,
+                multiple: true,
+                showValueAsTags: true,
+                markSearchResults: true,
+            });
+
+            serviceDepartmentAdminSelect.addEventListener('change', (event) => {
+                @this.set('serviceDepartmentAdmins', event.target.value);
+            })
         });
 
         // Validate file

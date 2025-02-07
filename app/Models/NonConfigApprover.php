@@ -20,10 +20,8 @@ class NonConfigApprover extends Model
      * 
      * @example
      * {
-     *  'approvers': {
-     *      'id': {},
-     *      'is_approved': true|false
-     *  }
+     *  'id': [],
+     *  'is_approved': true|false
      * }
      */
     protected $casts = [

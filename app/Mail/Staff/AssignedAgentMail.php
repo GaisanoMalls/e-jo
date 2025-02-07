@@ -35,7 +35,7 @@ class AssignedAgentMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address(auth()->user()->email, auth()->user()->profile->getFullName),
+            from: new Address(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')),
             to: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
             subject: "Ticket assigned to you - {$this->ticket->ticket_number}"
         );

@@ -15,6 +15,8 @@ use App\Models\FieldHeaderValue;
 use App\Models\FieldRowValue;
 use App\Models\Form;
 use App\Models\HelpTopic;
+use App\Models\HelpTopicConfiguration;
+use App\Models\NonConfigApprover;
 use App\Models\PriorityLevel;
 use App\Models\Role;
 use App\Models\ServiceLevelAgreement;
@@ -31,6 +33,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
@@ -53,7 +56,8 @@ class CreateTicket extends Component
     public ?int $priorityLevel = null;
     public ?int $serviceDepartment = null;
     public ?int $helpTopic = null;
-    public bool $isHelpTopicHasNoApprovalConfig = false;
+    public bool $isBuNotInApprovalConfig = false;
+    public array $serviceDepartmentAdmins = [];
     public array|string $fileAttachments = [];
     public array $allowedExtensions = [
         'jpeg',
@@ -126,11 +130,25 @@ class CreateTicket extends Component
         $this->setDefaultPriorityLevel();
     }
 
-    private function fetchNonCofiguredApprovers(Department $department)
+    private function fetchRequesterServiceDepartmentAdmins()
     {
-        return User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
-            ->whereHas('departments', fn($query) => $query->where('departments.id', $department->id))
+        return User::role([Role::SERVICE_DEPARTMENT_ADMIN])
+            ->with('profile')
+            ->whereHas('buDepartments', fn($query) => $query->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')))
             ->get();
+    }
+
+    private function filterServiceDepartmentAdmins(HelpTopic|int $helpTopicId)
+    {
+        $this->isBuNotInApprovalConfig = HelpTopicConfiguration::where('help_topic_id', $helpTopicId)
+            ->whereIn('bu_department_id', auth()->user()->buDepartments->pluck('id'))
+            ->doesntExist();
+
+        if ($this->isBuNotInApprovalConfig) {
+            $this->dispatchBrowserEvent('show-requester-service-department-admins', [
+                'serviceDepartmentAdmins' => $this->fetchRequesterServiceDepartmentAdmins()
+            ]);
+        }
     }
 
     public function updatedServiceDepartment($value)
@@ -138,10 +156,6 @@ class CreateTicket extends Component
         $this->helpTopics = HelpTopic::with(['team', 'sla'])
             ->whereHas('serviceDepartment', function ($query) use ($value) {
                 $query->where('service_department_id', $value);
-            })
-            ->orWhere(function ($query) {
-                $query->withWhereHas('configurations')
-                    ->withWhereHas('nonConfig');
             })
             ->get();
 
@@ -156,10 +170,7 @@ class CreateTicket extends Component
         $this->filledForms = [];
         $this->isHeaderFieldSet = false;
 
-        $this->isHelpTopicHasNoApprovalConfig = HelpTopic::where('id', $value)
-            ->whereDoesntHave('configurations')
-            ->whereHas('nonConfig', fn($query) => $query->where('help_topic_id', $value))
-            ->exists();
+        $this->filterServiceDepartmentAdmins($this->helpTopic);
 
         $this->team = Team::withWhereHas('helpTopics', fn($helpTopic) =>
             $helpTopic->where('help_topics.id', $value))
@@ -257,8 +268,31 @@ class CreateTicket extends Component
                     }
                 }
 
-                if ($this->isHelpTopicHasNoApprovalConfig) {
+                if ($this->isBuNotInApprovalConfig && !empty($this->serviceDepartmentAdmins)) {
                     // Email and notify the service department admin that belongs to the BU set in non-configured help topic approvals
+                    NonConfigApprover::create([
+                        'ticket_id' => $ticket->id,
+                        'approvers' => [
+                            'id' => array_map('intval', $this->serviceDepartmentAdmins),
+                            'is_approved' => false
+                        ]
+                    ]);
+
+                    $serviceDeptAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
+                        ->whereIn('id', $this->serviceDepartmentAdmins)
+                        ->get();
+
+                    $serviceDeptAdmins->each(function ($serviceDeptAdmin) use ($ticket) {
+                        Mail::to($serviceDeptAdmin)->send(new TicketCreatedMail($ticket, $serviceDeptAdmin));
+                        Notification::send(
+                            $serviceDeptAdmin,
+                            new AppNotification(
+                                ticket: $ticket,
+                                title: "Ticket #{$ticket->ticket_number} (New)",
+                                message: "{$ticket->user->profile->getFullName} created a ticket"
+                            )
+                        );
+                    });
 
                 } else {
                     // Filter the approvers that were assigned in the approval configuration
@@ -269,7 +303,6 @@ class CreateTicket extends Component
                                     ->whereIn('bu_department_id', $ticket->user->buDepartments->pluck('id'));
                             });
                         })->get();
-
 
                     if ($approvers->isNotEmpty()) {
                         $approvers->each(function ($approver) use ($ticket) {
@@ -292,9 +325,6 @@ class CreateTicket extends Component
                                 );
                             }
                         });
-                    } else {
-                        noty()->addWarning('No configured approvers were found for this help topic. Please contact the administrator.');
-                        return;
                     }
                 }
 

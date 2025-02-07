@@ -78,7 +78,6 @@ class CreateHelpTopic extends Component
         $this->fetchCostingApprovers();
     }
 
-
     public function rules()
     {
         return [
