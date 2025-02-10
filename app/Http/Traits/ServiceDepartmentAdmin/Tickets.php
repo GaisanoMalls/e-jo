@@ -38,13 +38,19 @@ trait Tickets
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
                     });
             })
-            ->orWhereHas('recommendations', function ($recommendation) {
-                $recommendation->whereHas('approvalStatus', function ($status) {
-                    $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING);
+            ->orWhere(function ($query) {
+                $query->whereHas('recommendations', function ($recommendation) {
+                    $recommendation->whereHas('approvalStatus', function ($status) {
+                        $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING);
+                    })
+                        ->whereHas('approvers', function ($approver) {
+                            $approver->where('recommendation_approvers.approver_id', auth()->user()->id);
+                        });
                 })
-                    ->whereHas('approvers', function ($approver) {
-                        $approver->where('recommendation_approvers.approver_id', auth()->user()->id);
+                    ->whereHas('nonConfigApprover', function ($approver) {
+                        $approver->whereJsonContains('approvers->id', auth()->user()->id);
                     });
+
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);

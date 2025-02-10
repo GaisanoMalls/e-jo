@@ -17,11 +17,15 @@ trait Tickets
                 $query->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                     ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
             })
-            ->whereHas('teams', callback: function ($team) {
+            ->whereHas('teams', function ($team) {
                 $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray());
             })
-            ->whereHas('ticketApprovals', function ($approval) {
-                $approval->orWhere('is_approved', true);
+            ->where(function ($query) {
+                $query->whereHas('ticketApprovals', function ($approval) {
+                    $approval->orWhere('is_approved', true);
+                })
+                    ->orWhereHas('nonConfigApprover', fn($approver) => $approver->whereJsonContains('approvers->is_approved', true))
+                    ->orWhereDoesntHave('nonConfigApprover');
             })
             ->orderByDesc('created_at')
             ->get();

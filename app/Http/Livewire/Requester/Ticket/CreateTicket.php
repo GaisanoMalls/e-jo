@@ -268,15 +268,21 @@ class CreateTicket extends Component
                     }
                 }
 
-                if ($this->isBuNotInApprovalConfig && !empty($this->serviceDepartmentAdmins)) {
-                    // Email and notify the service department admin that belongs to the BU set in non-configured help topic approvals
-                    NonConfigApprover::create([
-                        'ticket_id' => $ticket->id,
-                        'approvers' => [
-                            'id' => array_map('intval', $this->serviceDepartmentAdmins),
-                            'is_approved' => false
-                        ]
-                    ]);
+                if ($this->isBuNotInApprovalConfig) {
+                    if (!empty($this->serviceDepartmentAdmins)) {
+                        NonConfigApprover::create([
+                            'ticket_id' => $ticket->id,
+                            'approvers' => [
+                                'id' => array_map('intval', $this->serviceDepartmentAdmins),
+                                'is_approved' => false
+                            ]
+                        ]);
+                    } else {
+                        $ticket->update([
+                            'status_id' => Status::APPROVED,
+                            'approval_status' => ApprovalStatusEnum::APPROVED
+                        ]);
+                    }
 
                     $serviceDeptAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
                         ->whereIn('id', $this->serviceDepartmentAdmins)
