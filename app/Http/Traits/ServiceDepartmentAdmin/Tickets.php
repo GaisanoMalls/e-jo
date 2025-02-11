@@ -87,6 +87,9 @@ trait Tickets
                         $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
                     });
             })
+            ->orWhereHas('nonConfigApprover', function ($approver) {
+                $approver->whereJsonContains('approvers->id', auth()->user()->id);
+            })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
             })

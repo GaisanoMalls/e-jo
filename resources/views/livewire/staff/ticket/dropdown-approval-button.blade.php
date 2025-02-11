@@ -18,11 +18,22 @@
                     <i class="bi bi-x-lg"></i>
                 </button>
             @else
-                <button type="button"
-                    class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
-                    data-bs-toggle="dropdown" aria-expanded="false" @disabled(!$isApproverIsInConfiguration || $this->isLevel1Approved($ticket))>
-                    <i class="fa-regular fa-handshake"></i>
-                </button>
+                @if ($hasNonConfigApproval)
+                    <button type="button"
+                        class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
+                        data-bs-toggle="dropdown" aria-expanded="false" @disabled($nonConfigApprovalIsApproved || !$isApproverIsInNonConfigApproval) @style([
+                            'color: white' => $nonConfigApprovalIsApproved && $isApproverIsInNonConfigApproval,
+                            'background-color: #FF8B8B' => $nonConfigApprovalIsApproved && $isApproverIsInNonConfigApproval,
+                        ])>
+                        <i class="fa-regular fa-handshake"></i>
+                    </button>
+                @else
+                    <button type="button"
+                        class="btn btn btn-sm border-0 m-auto ticket__detatails__btn__close d-flex align-items-center justify-content-center"
+                        data-bs-toggle="dropdown" aria-expanded="false" @disabled(!$isApproverIsInConfiguration || $this->isLevel1Approved($ticket))>
+                        <i class="fa-regular fa-handshake"></i>
+                    </button>
+                @endif
             @endif
 
             @if ($ticket->approval_status === ApprovalStatusEnum::APPROVED || $this->isLevel1Approved($ticket))
@@ -30,13 +41,20 @@
             @elseif ($ticket->approval_status === ApprovalStatusEnum::DISAPPROVED)
                 <small class="ticket__details__topbuttons__label">Disapproved</small>
             @else
-                <small class="ticket__details__topbuttons__label" @style(['color: rgb(153, 153, 153)' => !$isApproverIsInConfiguration])>Approval</small>
+                @if ($hasNonConfigApproval)
+                    <small class="ticket__details__topbuttons__label">
+                        {{ $nonConfigApprovalIsApproved ? 'Approved' : 'Approval' }}
+                    </small>
+                @else
+                    <small class="ticket__details__topbuttons__label" @style(['color: rgb(153, 153, 153)' => !$isApproverIsInConfiguration])>Approval</small>
+                @endif
             @endif
 
             @if (
-                $ticket->approval_status !== ApprovalStatusEnum::APPROVED &&
+                ($ticket->approval_status !== ApprovalStatusEnum::APPROVED &&
                     $ticket->approval_status !== ApprovalStatusEnum::DISAPPROVED &&
-                    $isApproverIsInConfiguration)
+                    $isApproverIsInConfiguration) ||
+                    ($hasNonConfigApproval && !$nonConfigApprovalIsApproved))
                 <ul class="dropdown-menu dropdown-menu-end approval__dropdown__menu slideIn animate">
                     <li>
                         <button type="button" class="btn d-flex align-items-center gap-2 w-100 dropdown__select__button button__approve"
