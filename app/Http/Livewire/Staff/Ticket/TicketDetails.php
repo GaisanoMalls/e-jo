@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire\Staff\Ticket;
 
+use App\Enums\TicketSlaExtensionStatusEnum;
 use App\Http\Traits\Utils;
 use App\Models\ActivityLog;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\TicketSlaExtension;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -15,6 +18,10 @@ class TicketDetails extends Component
     use Utils;
 
     public Ticket $ticket;
+    public ?User $slaExtensionRequestedBy;
+    public bool $canExtendSLA = false;
+    public bool $canApproveSlaExtension = false;
+    public bool $isRequestingForSlaExtension = false;
 
     protected $listeners = ['loadTicketDetails' => '$refresh'];
 
@@ -70,11 +77,37 @@ class TicketDetails extends Component
         }
     }
 
+    public function extendSLA()
+    {
+        sleep(1);
+        TicketSlaExtension::updateOrCreate(
+            ['ticket_id' => $this->ticket->id],
+            [
+                'requested_by' => auth()->user()->id,
+                'status' => TicketSlaExtensionStatusEnum::REQUESTING->value
+            ]
+        );
+        $this->emitSelf('loadTicketDetails');
+    }
+
+    public function deleteSlaExtension()
+    {
+        $this->ticket?->slaExtension()->delete();
+        $this->emitSelf('loadTicketDetails');
+    }
+
     public function render()
     {
         if ($this->isSlaOverdue($this->ticket)) {
             $this->ticket->update(['status_id', Status::OVERDUE]);
         }
+
+        $this->slaExtensionRequestedBy = $this->ticket?->slaExtension?->requestedBy;
+        $this->isRequestingForSlaExtension = $this->ticket?->slaExtension?->status->value === TicketSlaExtensionStatusEnum::REQUESTING->value;
+        $this->canExtendSLA = auth()->user()->isAgent() && $this->ticket->agent_id !== null;
+        $this->canApproveSlaExtension = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
+            ->whereHas('buDepartments', fn($buDepartment) => $buDepartment->whereIn('departments.id', $this->slaExtensionRequestedBy?->buDepartments->pluck('id') ?? []))->exists();
+
         return view('livewire.staff.ticket.ticket-details');
     }
 }

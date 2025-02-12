@@ -115,6 +115,11 @@ class Ticket extends Model
         return $this->hasOne(NonConfigApprover::class);
     }
 
+    public function slaExtension(): HasOne
+    {
+        return $this->hasOne(TicketSlaExtension::class);
+    }
+
     public function recommendations(): HasMany
     {
         return $this->hasMany(Recommendation::class);

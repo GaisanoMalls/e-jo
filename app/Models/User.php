@@ -110,6 +110,11 @@ class User extends Authenticatable
         return $this->hasMany(TicketSubtask::class, 'assignee_id');
     }
 
+    public function requestedTicketExtensions(): HasMany
+    {
+        return $this->hasMany(TicketSlaExtension::class, 'requested_by');
+    }
+
     public function serviceDepartments(): BelongsToMany
     {
         return $this->belongsToMany(ServiceDepartment::class, 'user_service_department', 'user_id', 'service_department_id');
@@ -145,7 +150,7 @@ class User extends Authenticatable
      */
     public function isSystemAdmin(): bool
     {
-        return $this->role === Role::SYSTEM_ADMIN;
+        return $this->hasRole(Role::SYSTEM_ADMIN);
     }
 
     /**
@@ -155,7 +160,7 @@ class User extends Authenticatable
      */
     public function isServiceDepartmentAdmin(): bool
     {
-        return $this->role === Role::SERVICE_DEPARTMENT_ADMIN;
+        return $this->hasRole(Role::SERVICE_DEPARTMENT_ADMIN);
     }
 
     /**
@@ -165,7 +170,7 @@ class User extends Authenticatable
      */
     public function isAgent(): bool
     {
-        return $this->role === Role::AGENT;
+        return $this->hasRole(Role::AGENT);
     }
 
     /**
@@ -175,7 +180,7 @@ class User extends Authenticatable
      */
     public function isApprover(): bool
     {
-        return $this->role === Role::APPROVER;
+        return $this->hasRole(Role::APPROVER);
     }
 
     /**
@@ -185,7 +190,7 @@ class User extends Authenticatable
      */
     public function isUser(): bool
     {
-        return $this->role === Role::USER;
+        return $this->hasRole(Role::USER);
     }
 
     /**
