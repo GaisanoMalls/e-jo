@@ -1,6 +1,5 @@
 @php
     use App\Enums\ApprovalStatusEnum;
-    use App\Models\Role;
 @endphp
 
 <div>
@@ -53,7 +52,7 @@
                     <small class="position-relative ticket__details__info">
                         <i class="fa-solid fa-people-group me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->getTeams() }}
-                        @if ($ticket->team_id && auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+                        @if ($ticket->team_id && auth()->user()->isServiceDepartmentAdmin())
                             <i wire:click="removeAssignedTeam" class="bi bi-x ms-2 text-danger position-absolute"
                                 style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
                         @endif
@@ -75,7 +74,7 @@
                     <small class="position-relative ticket__details__info {{ $ticket->agent_id != null ? '' : 'not__set' }}">
                         <i class="fa-solid fa-user-check me-1 text-muted" style="font-size: 11px;"></i>
                         {{ $ticket->agent_id != null ? $ticket->agent->profile->getFullName : '' }}
-                        @if ($ticket->agent_id && auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+                        @if ($ticket->agent_id && auth()->user()->isServiceDepartmentAdmin())
                             <i wire:click="removeAssignedAgent" class="bi bi-x ms-2 text-danger position-absolute"
                                 style="font-size: 17px; transform: translateY(-10%); margin-left: 1px !important;"></i>
                         @endif
@@ -119,11 +118,13 @@
                     </div>
                     @if ($canExtendSLA)
                         <div class="d-inline">
-                            <button type="button" class="btn btn-sm" style="font-size: 12px; color: white; background-color: #d32839;"
-                                data-bs-toggle="collapse" data-bs-target="#collapse-extend-sla" aria-expanded="false"
-                                aria-controls="collapse-extend-sla" @disabled($isRequestingForSlaExtension)>
-                                Extend SLA
-                            </button>
+                            @if (!$isRequestingForSlaExtension)
+                                <button type="button" class="btn btn-sm" style="font-size: 12px; color: white; background-color: #d32839;"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse-extend-sla" aria-expanded="false"
+                                    aria-controls="collapse-extend-sla">
+                                    Extend SLA
+                                </button>
+                            @endif
 
                             @if ($isRequestingForSlaExtension)
                                 <div class="rounded-3 mt-1 position-relative" style="font-size: 12px; background-color: #d1e7dd; padding: 7px 10px;">
@@ -202,6 +203,23 @@
             function percentageToDegrees(percentage) {
                 return percentage / 100 * 360
             }
+        });
+
+        const collapseExtendSla = document.querySelector('#collapse-extend-sla');
+        const btnCancelExtendSla = document.querySelector('#btn-cancel-extend-sla');
+        const btnExtendSla = document.querySelector('[data-bs-target="#collapse-extend-sla"]');
+
+        btnCancelExtendSla.addEventListener('click', () => {
+            collapseExtendSla.classList.remove('show');
+            btnExtendSla.disabled = false;
+        })
+
+        collapseExtendSla.addEventListener('show.bs.collapse', () => {
+            btnExtendSla.disabled = true;
+        });
+
+        collapseExtendSla.addEventListener('hide.bs.collapse', () => {
+            btnExtendSla.disabled = false;
         });
     </script>
 @endpush

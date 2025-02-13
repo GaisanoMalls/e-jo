@@ -6,7 +6,6 @@ use App\Http\Requests\AuthRequest;
 use App\Http\Traits\AuthRedirect;
 use App\Models\User;
 use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
 
 class AuthUser extends Component
 {
@@ -44,7 +43,7 @@ class AuthUser extends Component
             $this->addError('email', 'Email not found.');
         }
 
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password, 'is_active' => true])) {
+        if (auth()->attempt(['email' => $this->email, 'password' => $this->password, 'is_active' => true])) {
             session()->regenerate();
             return $this->redirectAuthenticatedWithRole();
         }

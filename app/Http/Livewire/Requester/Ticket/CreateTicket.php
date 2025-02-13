@@ -10,7 +10,6 @@ use App\Http\Traits\Utils;
 use App\Mail\Requester\TicketCreatedMail;
 use App\Models\ActivityLog;
 use App\Models\Branch;
-use App\Models\Department;
 use App\Models\FieldHeaderValue;
 use App\Models\FieldRowValue;
 use App\Models\Form;
@@ -30,10 +29,8 @@ use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
@@ -234,8 +231,8 @@ class CreateTicket extends Component
         try {
             DB::transaction(function () {
                 $ticket = Ticket::create([
-                    'user_id' => Auth::user()->id,
-                    'branch_id' => $this->branch ?: Auth::user()->branches->pluck('id')->first(),
+                    'user_id' => auth()->user()->id,
+                    'branch_id' => $this->branch ?: auth()->user()->branches->pluck('id')->first(),
                     'service_department_id' => $this->serviceDepartment,
                     'help_topic_id' => $this->helpTopic,
                     'status_id' => Status::OPEN,
@@ -319,7 +316,7 @@ class CreateTicket extends Component
                                 ]);
                             });
 
-                            if ($approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+                            if ($approver->isServiceDepartmentAdmin()) {
                                 Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
                                 Notification::send(
                                     $approver,

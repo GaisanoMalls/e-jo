@@ -2,13 +2,11 @@
 
 namespace App\Http\Livewire\Approver\Ticket;
 
-use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use App\Mail\Staff\ApprovedTicketMail;
 use App\Models\ActivityLog;
 use App\Models\Role;
-use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\User;
@@ -87,7 +85,7 @@ class TicketLevelApproval extends Component
     public function approveTicket()
     {
         try {
-            if (auth()->user()->hasRole(Role::APPROVER)) {
+            if (auth()->user()->isApprover()) {
                 DB::transaction(function () {
                     // Get the agents.
                     $agents = User::role(Role::AGENT)

@@ -2,9 +2,7 @@
 
 namespace App\Http\Livewire\Approver\Ticket;
 
-use App\Models\RecommendationApprovalStatus;
 use Exception;
-use App\Models\Role;
 use App\Models\User;
 use App\Models\Ticket;
 use Illuminate\Support\Carbon;

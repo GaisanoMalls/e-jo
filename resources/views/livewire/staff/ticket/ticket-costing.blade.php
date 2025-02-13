@@ -1,5 +1,4 @@
 @php
-    use App\Models\Role;
     use App\Enums\SpecialProjectStatusEnum;
 @endphp
 
@@ -36,11 +35,10 @@
                                     @if ($editingFieldId === $ticket->ticketCosting->id && !$this->isDoneCostingApprovals($ticket))
                                         <button wire:click="updateTicketCostingAmount"
                                             class="btn btn-sm d-flex ms-2 rounded-circle align-items-center justify-content-center btn__update__costing">
-                                            <i class="bi bi-check-lg" wire:loading.class="d-none"
-                                                wire:target="updateTicketCostingAmount" style="font-size: 18px;"></i>
+                                            <i class="bi bi-check-lg" wire:loading.class="d-none" wire:target="updateTicketCostingAmount"
+                                                style="font-size: 18px;"></i>
                                             <div wire:loading wire:target="updateTicketCostingAmount"
-                                                class="spinner-border spinner-border-sm loading__spinner"
-                                                role="status">
+                                                class="spinner-border spinner-border-sm loading__spinner" role="status">
                                                 <span class="sr-only">Loading...</span>
                                             </div>
                                         </button>
@@ -51,19 +49,15 @@
                                             @if ($editingFieldId === $ticket->ticketCosting->id)
                                                 <i class="bi bi-x-lg" wire:loading.class="d-none"
                                                     wire:target="toggleEditCostingAmount({{ $ticket->ticketCosting->id }})"></i>
-                                                <div wire:loading
-                                                    wire:target="toggleEditCostingAmount({{ $ticket->ticketCosting->id }})"
-                                                    class="spinner-border spinner-border-sm loading__spinner"
-                                                    role="status">
+                                                <div wire:loading wire:target="toggleEditCostingAmount({{ $ticket->ticketCosting->id }})"
+                                                    class="spinner-border spinner-border-sm loading__spinner" role="status">
                                                     <span class="sr-only">Loading...</span>
                                                 </div>
                                             @else
                                                 <i class="bi bi-pencil" wire:loading.class="d-none"
                                                     wire:target="toggleEditCostingAmount({{ $ticket->ticketCosting->id }})"></i>
-                                                <div wire:loading
-                                                    wire:target="toggleEditCostingAmount({{ $ticket->ticketCosting->id }})"
-                                                    class="spinner-border spinner-border-sm loading__spinner"
-                                                    role="status">
+                                                <div wire:loading wire:target="toggleEditCostingAmount({{ $ticket->ticketCosting->id }})"
+                                                    class="spinner-border spinner-border-sm loading__spinner" role="status">
                                                     <span class="sr-only">Loading...</span>
                                                 </div>
                                             @endif
@@ -77,16 +71,15 @@
                                 <small class="text-muted text-sm costing__header__label">Costing Attachment</small>
                                 @if ($ticket->ticketCosting->fileAttachments->count() > 0)
                                     <div class="d-flex align-items-center gap-2">
-                                        <small class="mb-1 mt-2 costing__labels show__costing__attachments"
-                                            data-bs-toggle="modal" data-bs-target="#costingPreviewFileAttachmentModal">
+                                        <small class="mb-1 mt-2 costing__labels show__costing__attachments" data-bs-toggle="modal"
+                                            data-bs-target="#costingPreviewFileAttachmentModal">
                                             <i class="fa-solid fa-file-zipper"></i>
                                             {{ $ticket->ticketCosting->fileAttachments->count() }}
                                             attached
                                             {{ $ticket->ticketCosting->fileAttachments->count() > 1 ? 'files' : 'file' }}
                                         </small>
                                         @if ($this->isDoneTicketCostingAndPlanning($ticket))
-                                            <small
-                                                class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status"
+                                            <small class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status"
                                                 style="margin-top: 4px;">
                                                 <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
                                                 {{ $ticket->specialProjectStatus->costing_and_planning_status }}
@@ -113,8 +106,8 @@
                         @if ($this->isDoneSpecialProjectAmountApproval($ticket) && $ticket->ticketCosting->prFileAttachments->count() > 0)
                             <div class="d-flex flex-column justify-content-between gap-2">
                                 <small class="text-muted text-sm costing__header__label">PR Attachment</small>
-                                <small class="mb-1 mt-2 costing__labels show__costing__attachments"
-                                    data-bs-toggle="modal" data-bs-target="#costingPreviewPRFileAttachmentModal">
+                                <small class="mb-1 mt-2 costing__labels show__costing__attachments" data-bs-toggle="modal"
+                                    data-bs-target="#costingPreviewPRFileAttachmentModal">
                                     <i class="fa-solid fa-file-zipper"></i>
                                     {{ $ticket->ticketCosting->prFileAttachments->count() }}
                                     attached
@@ -145,9 +138,7 @@
                                                     src="https://avatars.githubusercontent.com/u/63698615?s=400&u=49142410ee5c191a78412e36511c8b927fc6b1b1&v=4"
                                                     data-tooltip="{{ $costingApprover->profile->getFullName }}  {{ $this->isDoneCostingApproval1($ticket) ? '(Approved)' : 'For approval' }}"
                                                     data-tooltip-position="top" data-tooltip-font-size="11px">
-                                                @if (
-                                                    $this->approvedByCostingApprover1($costingApprover, $ticket) ||
-                                                        $this->approvedByCostingApprover2($costingApprover, $ticket))
+                                                @if ($this->approvedByCostingApprover1($costingApprover, $ticket) || $this->approvedByCostingApprover2($costingApprover, $ticket))
                                                     <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle costing__approver__approved__badge"
                                                         style="background-color: green">
                                                         <i class="bi bi-check-lg"></i>
@@ -162,14 +153,12 @@
                                             <div class="d-flex position-relative">
                                                 <small
                                                     class="d-flex align-items-center justify-content-center gap-1 rounded-circle costing__approver__initial"
-                                                    style="background-color: {{ $costingApprover->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) ? '#9DA85C' : '#3B4053' }}"
+                                                    style="background-color: {{ $costingApprover->isServiceDepartmentAdmin() ? '#9DA85C' : '#3B4053' }}"
                                                     data-tooltip="{{ $costingApprover->profile->getFullName }}  {{ $this->isDoneCostingApproval1($ticket) ? '(Approved)' : '(For approval)' }}"
                                                     data-tooltip-position="top" data-tooltip-font-size="11px">
                                                     {{ $costingApprover->profile->getNameInitial() }}
                                                 </small>
-                                                @if (
-                                                    $this->approvedByCostingApprover1($costingApprover, $ticket) ||
-                                                        $this->approvedByCostingApprover2($costingApprover, $ticket))
+                                                @if ($this->approvedByCostingApprover1($costingApprover, $ticket) || $this->approvedByCostingApprover2($costingApprover, $ticket))
                                                     <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle costing__approver__approved__badge"
                                                         style="background-color: green">
                                                         <i class="bi bi-check-lg"></i>
@@ -204,8 +193,7 @@
                                             For approval
                                         </small>
                                     @else
-                                        <small
-                                            class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                        <small class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
                                             <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
                                             Approved
                                         </small>
@@ -216,10 +204,8 @@
                                             class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
                                             <i class="bi bi-check2-circle" wire:loading.class="d-none"
                                                 wire:target="approveCostingApproval1({{ $ticket }})"></i>
-                                            <div wire:loading
-                                                wire:target="approveCostingApproval1({{ $ticket }})"
-                                                class="spinner-border spinner-border-sm loading__spinner"
-                                                role="status">
+                                            <div wire:loading wire:target="approveCostingApproval1({{ $ticket }})"
+                                                class="spinner-border spinner-border-sm loading__spinner" role="status">
                                                 <span class="sr-only">Loading...</span>
                                             </div>
                                             Approve
@@ -227,11 +213,8 @@
                                         @if ($this->isDoneCostingApproval1($ticket) && $this->isCostingAmountNeedCOOApproval($ticket))
                                             <button
                                                 class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
-                                                <i class="bi bi-reply" wire:loading.class="d-none"
-                                                    style="transform: scaleX(-1);"></i>
-                                                <div wire:loading
-                                                    class="spinner-border spinner-border-sm loading__spinner"
-                                                    role="status">
+                                                <i class="bi bi-reply" wire:loading.class="d-none" style="transform: scaleX(-1);"></i>
+                                                <div wire:loading class="spinner-border spinner-border-sm loading__spinner" role="status">
                                                     <span class="sr-only">Loading...</span>
                                                 </div>
                                                 Forward
@@ -254,8 +237,7 @@
                                             For approval
                                         </small>
                                     @else
-                                        <small
-                                            class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                        <small class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
                                             <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
                                             Approved
                                         </small>
@@ -273,7 +255,7 @@
                             <small class="text-muted text-sm costing__header__label">
                                 Item Availability Status
                             </small>
-                            @if (auth()->user()->hasRole(Role::AGENT) && $this->currentAgentAssignedInPurchasingTeam())
+                            @if (auth()->user()->isAgent() && $this->currentAgentAssignedInPurchasingTeam())
                                 <div class="btn-group">
                                     <button type="button"
                                         class="btn btn-sm d-flex align-items-center justify-content-center gap-2 px-2 py-1 rounded-2 dropdown-toggle btn__purchase"
@@ -282,15 +264,14 @@
                                             class="spinner-border spinner-border-sm loading__spinner" role="status">
                                             <span class="sr-only">Loading...</span>
                                         </div>
-                                        @if (auth()->user()->hasRole(Role::AGENT))
+                                        @if (auth()->user()->isAgent())
                                             {{ $ticket->specialProjectStatus->purchasing_status ?: 'Action' }}
                                         @else
                                             In progress
                                         @endif
                                     </button>
                                     @if ($this->isOnlyAgent(auth()->user()->id))
-                                        <ul wire:ignore.self
-                                            class="dropdown-menu dropdown-menu-end position-absolute purchase__dropdown">
+                                        <ul wire:ignore.self class="dropdown-menu dropdown-menu-end position-absolute purchase__dropdown">
                                             @if ($this->isPRApproved($ticket))
                                                 <li>
                                                     <button
@@ -319,8 +300,7 @@
                                     @endif
                                 </div>
                             @else
-                                <small
-                                    class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
+                                <small class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
                                     @if ($ticket->specialProjectStatus->purchasing_status)
                                         @if ($ticket->specialProjectStatus->purchasing_status === SpecialProjectStatusEnum::ON_ORDERED->value)
                                             <i class="fa-solid fa-cart-arrow-down" style="color: green;"></i>
@@ -341,8 +321,8 @@
         </div>
 
         <!-- Preview Ticket Costing Files Modal -->
-        <div wire:ignore.self class="modal fade ticket__costing__modal" tabindex="-1"
-            id="costingPreviewFileAttachmentModal" aria-labelledby="modalFormLabel" aria-hidden="true">
+        <div wire:ignore.self class="modal fade ticket__costing__modal" tabindex="-1" id="costingPreviewFileAttachmentModal"
+            aria-labelledby="modalFormLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered custom__modal">
                 @if ($ticket->ticketCosting->fileAttachments->count() !== 0)
                     <div class="modal-content custom__modal__content">
@@ -355,33 +335,24 @@
                                                 Add new attachment
                                             </label>
                                         </div>
-                                        <div x-data="{ isUploading: false, progress: 1 }"
-                                            x-on:livewire-upload-start="isUploading = true; progress = 1"
-                                            x-on:livewire-upload-finish="isUploading = false"
-                                            x-on:livewire-upload-error="isUploading = false"
+                                        <div x-data="{ isUploading: false, progress: 1 }" x-on:livewire-upload-start="isUploading = true; progress = 1"
+                                            x-on:livewire-upload-finish="isUploading = false" x-on:livewire-upload-error="isUploading = false"
                                             x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                            <input
-                                                class="form-control form-control-sm border-0 costing__file__attachment"
-                                                type="file" accept=".pdf" wire:model="additionalCostingFiles"
-                                                multiple id="upload-{{ $uploadFileCostingCount }}"
-                                                onchange="validateCostingFile()">
-                                            <div x-transition.duration.500ms x-show="isUploading"
-                                                class="progress progress-sm mt-1" style="height: 10px;">
-                                                <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                                    role="progressbar" aria-label="Animated striped example"
-                                                    aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                                            <input class="form-control form-control-sm border-0 costing__file__attachment" type="file"
+                                                accept=".pdf" wire:model="additionalCostingFiles" multiple
+                                                id="upload-{{ $uploadFileCostingCount }}" onchange="validateCostingFile()">
+                                            <div x-transition.duration.500ms x-show="isUploading" class="progress progress-sm mt-1"
+                                                style="height: 10px;">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                                    aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
                                                     x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
                                                 </div>
                                             </div>
-                                            <div class="d-flex align-items-center justify-content-between"
-                                                x-transition.duration.500ms>
-                                                <span x-show="isUploading" x-text="progress + '%'"
-                                                    style="font-size: 12px;">
+                                            <div class="d-flex align-items-center justify-content-between" x-transition.duration.500ms>
+                                                <span x-show="isUploading" x-text="progress + '%'" style="font-size: 12px;">
                                                 </span>
-                                                <span class="d-flex align-items-center gap-1"
-                                                    style="font-size: 12px;">
-                                                    <i x-show="isUploading" class='bx bx-loader-circle bx-spin'
-                                                        style="font-size: 14px;"></i>
+                                                <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
+                                                    <i x-show="isUploading" class='bx bx-loader-circle bx-spin' style="font-size: 14px;"></i>
                                                     <span x-show="isUploading">Uploading...</span>
                                                 </span>
                                             </div>
@@ -390,9 +361,8 @@
                                     </div>
                                     <button type="submit"
                                         class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
-                                        <span wire:loading wire:target="saveAdditionalCostingFiles"
-                                            class="spinner-border spinner-border-sm" role="status"
-                                            aria-hidden="true">
+                                        <span wire:loading wire:target="saveAdditionalCostingFiles" class="spinner-border spinner-border-sm"
+                                            role="status" aria-hidden="true">
                                         </span>
                                         Save
                                     </button>
@@ -411,25 +381,21 @@
                         <div class="modal__body mt-3">
                             <ul class="list-group list-group-flush">
                                 @foreach ($ticket->ticketCosting->fileAttachments->sortByDesc('created_at') as $file)
-                                    <li
-                                        class="list-group-item d-flex align-items-center px-0 py-3 justify-content-between">
+                                    <li class="list-group-item d-flex align-items-center px-0 py-3 justify-content-between">
                                         <a href="{{ Storage::url($file->file_attachment) }}" target="_blank">
                                             <div class="d-flex align-items-center gap-2">
                                                 @switch(pathinfo(basename($file->file_attachment),
                                                     PATHINFO_EXTENSION))
                                                     @case('jpeg')
-                                                        <img src="{{ Storage::url($file->file_attachment) }}"
-                                                            class="file__preview">
+                                                        <img src="{{ Storage::url($file->file_attachment) }}" class="file__preview">
                                                     @break
 
                                                     @case('jpg')
-                                                        <img src="{{ Storage::url($file->file_attachment) }}"
-                                                            class="file__preview">
+                                                        <img src="{{ Storage::url($file->file_attachment) }}" class="file__preview">
                                                     @break
 
                                                     @case('png')
-                                                        <img src="{{ Storage::url($file->file_attachment) }}"
-                                                            class="file__preview">
+                                                        <img src="{{ Storage::url($file->file_attachment) }}" class="file__preview">
                                                     @break
 
                                                     @case('pdf')
@@ -463,27 +429,21 @@
                                                 </p>
                                             </div>
                                         </a>
-                                        <div
-                                            class="d-flex align-items-center gap-4 file__attachment__actions__container">
+                                        <div class="d-flex align-items-center gap-4 file__attachment__actions__container">
                                             @if ($this->isOnlyAgent($ticket->agent_id) && !$this->isDoneSpecialProjectAmountApproval($ticket))
-                                                <a type="button" class="file__attachment__action__button"
-                                                    wire:key="{{ $file->id }}"
+                                                <a type="button" class="file__attachment__action__button" wire:key="{{ $file->id }}"
                                                     wire:click="deleteCostingAttachent({{ $file->id }})">
                                                     <i class="bi bi-trash" wire:loading.class="d-none"
                                                         wire:target="deleteCostingAttachent({{ $file->id }})"></i>
-                                                    <div wire:loading
-                                                        wire:target="deleteCostingAttachent({{ $file->id }})"
-                                                        class="spinner-border spinner-border-sm loading__spinner"
-                                                        role="status">
+                                                    <div wire:loading wire:target="deleteCostingAttachent({{ $file->id }})"
+                                                        class="spinner-border spinner-border-sm loading__spinner" role="status">
                                                         <span class="sr-only">Loading...</span>
                                                     </div>
                                                 </a>
                                             @endif
                                             <a type="button" class="file__attachment__action__button"
-                                                href="{{ Storage::url($file->file_attachment) }}" download
-                                                target="_blank">
-                                                <i class="bi bi-cloud-arrow-down"
-                                                    style="font-size: 18px !important;"></i>
+                                                href="{{ Storage::url($file->file_attachment) }}" download target="_blank">
+                                                <i class="bi bi-cloud-arrow-down" style="font-size: 18px !important;"></i>
                                             </a>
                                         </div>
                                     </li>
@@ -497,8 +457,8 @@
 
         <!-- Preview Ticket Costing PR Files Modal -->
         @if ($ticket->ticketCosting->prFileAttachments)
-            <div wire:ignore.self class="modal fade ticket__costing__modal" tabindex="-1"
-                id="costingPreviewPRFileAttachmentModal" aria-labelledby="modalFormLabel" aria-hidden="true">
+            <div wire:ignore.self class="modal fade ticket__costing__modal" tabindex="-1" id="costingPreviewPRFileAttachmentModal"
+                aria-labelledby="modalFormLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered custom__modal">
                     @if ($ticket->ticketCosting->prFileAttachments->count() !== 0)
                         <div class="modal-content custom__modal__content">
@@ -511,25 +471,21 @@
                             <div class="modal__body mt-3">
                                 <ul class="list-group list-group-flush">
                                     @foreach ($ticket->ticketCosting->prFileAttachments->sortByDesc('created_at') as $file)
-                                        <li
-                                            class="list-group-item d-flex align-items-center px-0 py-3 justify-content-between">
+                                        <li class="list-group-item d-flex align-items-center px-0 py-3 justify-content-between">
                                             <a href="{{ Storage::url($file->file_attachment) }}" target="_blank">
                                                 <div class="d-flex align-items-center gap-2">
                                                     @switch(pathinfo(basename($file->file_attachment),
                                                         PATHINFO_EXTENSION))
                                                         @case('jpeg')
-                                                            <img src="{{ Storage::url($file->file_attachment) }}"
-                                                                class="file__preview">
+                                                            <img src="{{ Storage::url($file->file_attachment) }}" class="file__preview">
                                                         @break
 
                                                         @case('jpg')
-                                                            <img src="{{ Storage::url($file->file_attachment) }}"
-                                                                class="file__preview">
+                                                            <img src="{{ Storage::url($file->file_attachment) }}" class="file__preview">
                                                         @break
 
                                                         @case('png')
-                                                            <img src="{{ Storage::url($file->file_attachment) }}"
-                                                                class="file__preview">
+                                                            <img src="{{ Storage::url($file->file_attachment) }}" class="file__preview">
                                                         @break
 
                                                         @case('pdf')
@@ -563,13 +519,10 @@
                                                     </p>
                                                 </div>
                                             </a>
-                                            <div
-                                                class="d-flex align-items-center gap-4 file__attachment__actions__container">
+                                            <div class="d-flex align-items-center gap-4 file__attachment__actions__container">
                                                 <a type="button" class="file__attachment__action__button"
-                                                    href="{{ Storage::url($file->file_attachment) }}" download
-                                                    target="_blank">
-                                                    <i class="bi bi-cloud-arrow-down"
-                                                        style="font-size: 18px !important;"></i>
+                                                    href="{{ Storage::url($file->file_attachment) }}" download target="_blank">
+                                                    <i class="bi bi-cloud-arrow-down" style="font-size: 18px !important;"></i>
                                                 </a>
                                             </div>
                                         </li>
@@ -583,14 +536,14 @@
         @endif
 
         {{-- Add costing file --}}
-        <div wire:ignore.self class="modal fade ticket__costing__modal" id="addCostingFileModal" tabindex="-1"
-            aria-labelledby="modalFormLabel" aria-hidden="true">
+        <div wire:ignore.self class="modal fade ticket__costing__modal" id="addCostingFileModal" tabindex="-1" aria-labelledby="modalFormLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered custom__modal">
                 <div class="modal-content custom__modal__content">
                     <div class="modal__header d-flex justify-content-between align-items-center">
                         <h6 class="modal__title">Costing Attachment</h6>
-                        <button class="btn d-flex align-items-center justify-content-center modal__close__button"
-                            data-bs-dismiss="modal" id="btnCloseModal">
+                        <button class="btn d-flex align-items-center justify-content-center modal__close__button" data-bs-dismiss="modal"
+                            id="btnCloseModal">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
@@ -603,31 +556,24 @@
                                             Attachment
                                         </label>
                                     </div>
-                                    <div x-data="{ isUploading: false, progress: 1 }"
-                                        x-on:livewire-upload-start="isUploading = true; progress = 1"
-                                        x-on:livewire-upload-finish="isUploading = false"
-                                        x-on:livewire-upload-error="isUploading = false"
+                                    <div x-data="{ isUploading: false, progress: 1 }" x-on:livewire-upload-start="isUploading = true; progress = 1"
+                                        x-on:livewire-upload-finish="isUploading = false" x-on:livewire-upload-error="isUploading = false"
                                         x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                        <input class="form-control form-control-sm border-0 costing__file__attachment"
-                                            type="file" accept=".pdf" wire:model="newCostingFiles" multiple
-                                            id="upload-{{ $uploadFileCostingCount }}"
+                                        <input class="form-control form-control-sm border-0 costing__file__attachment" type="file"
+                                            accept=".pdf" wire:model="newCostingFiles" multiple id="upload-{{ $uploadFileCostingCount }}"
                                             onchange="validateCostingFile()">
-                                        <div x-transition.duration.500ms x-show="isUploading"
-                                            class="progress progress-sm mt-1" style="height: 10px;">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                                role="progressbar" aria-label="Animated striped example"
-                                                aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                                        <div x-transition.duration.500ms x-show="isUploading" class="progress progress-sm mt-1"
+                                            style="height: 10px;">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                                aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
                                                 x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
                                             </div>
                                         </div>
-                                        <div class="d-flex align-items-center justify-content-between"
-                                            x-transition.duration.500ms>
-                                            <span x-show="isUploading" x-text="progress + '%'"
-                                                style="font-size: 12px;">
+                                        <div class="d-flex align-items-center justify-content-between" x-transition.duration.500ms>
+                                            <span x-show="isUploading" x-text="progress + '%'" style="font-size: 12px;">
                                             </span>
                                             <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
-                                                <i x-show="isUploading" class='bx bx-loader-circle bx-spin'
-                                                    style="font-size: 14px;"></i>
+                                                <i x-show="isUploading" class='bx bx-loader-circle bx-spin' style="font-size: 14px;"></i>
                                                 <span x-show="isUploading">Uploading...</span>
                                             </span>
                                         </div>
@@ -636,8 +582,8 @@
                                 </div>
                                 <button type="submit"
                                     class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
-                                    <span wire:loading wire:target="saveNewCostingFiles"
-                                        class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                    <span wire:loading wire:target="saveNewCostingFiles" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true">
                                     </span>
                                     Save
                                 </button>

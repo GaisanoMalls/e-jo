@@ -1,12 +1,11 @@
 @php
-    use App\Models\Role;
     use App\Models\Status;
     use App\Enums\ApprovalStatusEnum;
 @endphp
 
 <div>
     @if ($ticket->status->id == Status::APPROVED)
-        @if (auth()->user()->hasRole(Role::AGENT))
+        @if (auth()->user()->isAgent())
             <a href="{{ route('staff.tickets.open_tickets') }}" type="button"
                 class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
                 <i class="fa-solid fa-arrow-left"></i>
@@ -56,8 +55,7 @@
     @endif
     @if (
         $ticket->status->id == Status::CLOSED ||
-            ($ticket->approval_status == ApprovalStatusEnum::APPROVED &&
-                $ticket->approval_status == ApprovalStatusEnum::DISAPPROVED))
+            ($ticket->approval_status == ApprovalStatusEnum::APPROVED && $ticket->approval_status == ApprovalStatusEnum::DISAPPROVED))
         <a href="{{ route('staff.tickets.closed_tickets') }}" type="button"
             class="btn btn-sm rounded-circle text-muted d-flex align-items-center justify-content-center text-center btn__back">
             <i class="fa-solid fa-arrow-left"></i>

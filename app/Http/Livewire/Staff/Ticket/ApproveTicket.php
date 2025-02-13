@@ -13,7 +13,6 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -88,7 +87,7 @@ class ApproveTicket extends Component
                         $this->emit($event);
                     }
                 } else {
-                    if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) && $this->isCurrentLevelApprover()) {
+                    if (auth()->user()->isServiceDepartmentAdmin() && $this->isCurrentLevelApprover()) {
                         if ($this->ticket->status_id != Status::APPROVED && $this->ticket->approval_status != ApprovalStatusEnum::APPROVED) {
                             if ($this->isApproverIsInConfiguration($this->ticket)) {
                                 $approvedLevel = $this->approveLevelOfApproval($this->ticket);

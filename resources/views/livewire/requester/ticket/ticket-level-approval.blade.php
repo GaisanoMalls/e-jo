@@ -1,7 +1,3 @@
-@php
-    use App\Models\Role;
-@endphp
-
 <div>
     <div class="card border-0 p-0 card__ticket__details">
         <div class="d-flex flex-column gap-3 ticket__details__card__body__right">
@@ -31,12 +27,14 @@
                                         </div>
                                         <div class="d-flex align-items-center" style="padding: 4px 0 4px 0;">
                                             @if ($approver->profile->picture)
-                                                <img src="{{ Storage::url($approver->profile->picture) }}" class="image-fluid level__approval__approver__picture">
+                                                <img src="{{ Storage::url($approver->profile->picture) }}"
+                                                    class="image-fluid level__approval__approver__picture">
                                             @else
-                                                <div class="level__approval__approver__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white" @style([
-                                                    'background-color: #3b4053' => $approver->hasRole(Role::APPROVER),
-                                                    'background-color: #9DA85C' => $approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN),
-                                                ])>
+                                                <div class="level__approval__approver__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
+                                                    @style([
+                                                        'background-color: #3b4053' => $approver->isApprover(),
+                                                        'background-color: #9DA85C' => $approver->isServiceDepartmentAdmin(),
+                                                    ])>
                                                     {{ $approver->profile->getNameInitial() }}
                                                 </div>
                                             @endif

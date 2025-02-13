@@ -4,8 +4,6 @@ namespace App\Http\Livewire\Approver\Notification;
 
 use App\Http\Traits\AppErrorLog;
 use App\Models\ActivityLog;
-use App\Models\Role;
-use App\Models\Status;
 use App\Models\Ticket;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +33,7 @@ class NotificationList extends Component
                 $notification = auth()->user()->notifications->find($notificationId);
                 (!$notification->read()) ? $notification->markAsRead() : null;
 
-                if (auth()->user()->hasRole(Role::APPROVER)) {
+                if (auth()->user()->isApprover()) {
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
 
                     // if ($ticket->status_id != Status::VIEWED) {

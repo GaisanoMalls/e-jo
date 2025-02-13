@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
 
         Gate::after(function ($user, $ability) {
-            return $user->hasRole(Role::SYSTEM_ADMIN); // note: this returns a boolean
+            return $user->isSystemAdmin(); // This returns a boolean
         });
 
         // Search for overdue tickets and update their status to 'Overdue.

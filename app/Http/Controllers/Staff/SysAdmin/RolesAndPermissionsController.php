@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Staff\SysAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
-use Spatie\Permission\Models\Permission;
 
 class RolesAndPermissionsController extends Controller
 {

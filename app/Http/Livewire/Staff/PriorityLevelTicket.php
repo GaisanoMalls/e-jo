@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Staff;
 
 use App\Enums\ApprovalStatusEnum;
 use App\Models\PriorityLevel;
-use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
@@ -129,7 +128,7 @@ class PriorityLevelTicket extends Component
     {
         $currentUser = User::find(auth()->user()->id);
 
-        if ($currentUser->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+        if ($currentUser->isServiceDepartmentAdmin()) {
             $this->priorityLevelTickets = Ticket::where(function ($statusQuery) {
                 $statusQuery->whereNotIn('status_id', [Status::OVERDUE, Status::CLOSED, Status::DISAPPROVED])
                     ->whereIn('approval_status', [ApprovalStatusEnum::FOR_APPROVAL, ApprovalStatusEnum::APPROVED]);
@@ -159,7 +158,7 @@ class PriorityLevelTicket extends Component
                 ->paginate($this->paginatePageNumber);
         }
 
-        if ($currentUser->hasRole(Role::AGENT)) {
+        if ($currentUser->isAgent()) {
             $this->priorityLevelTickets = Ticket::where(function ($statusQuery) {
                 $statusQuery->whereNotIn('status_id', [Status::OVERDUE, Status::CLOSED])
                     ->whereIn('approval_status', [ApprovalStatusEnum::APPROVED]);
@@ -179,7 +178,7 @@ class PriorityLevelTicket extends Component
                 ->paginate($this->paginatePageNumber);
         }
 
-        if ($currentUser->hasRole(Role::SYSTEM_ADMIN)) {
+        if ($currentUser->isSystemAdmin()) {
             $this->priorityLevelTickets = Ticket::where(function ($statusQuery) {
                 $statusQuery->whereNotIn('status_id', [Status::OVERDUE, Status::CLOSED])
                     ->whereIn('approval_status', [ApprovalStatusEnum::APPROVED, ApprovalStatusEnum::FOR_APPROVAL]);

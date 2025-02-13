@@ -8,7 +8,6 @@ use App\Http\Traits\Utils;
 use App\Mail\Requester\RequesterClarificationMail;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
-use App\Models\ClarificationFile;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;

@@ -1,7 +1,3 @@
-@php
-    use App\Models\Role;
-@endphp
-
 <div class="sidebar" id="sidebar__toggle" x-data="{ scrollPosition: localStorage.getItem('sidebarScrollPosition') || 0 }" x-init="() => { $el.scrollTop = scrollPosition }"
     @scroll="scrollPosition = $el.scrollTop; localStorage.setItem('sidebarScrollPosition', scrollPosition)">
     @livewire('staff.sidebar-account')
@@ -21,7 +17,7 @@
                 <li class="mb-1">
                     @livewire('staff.collapse-ticket-status')
                 </li>
-                @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+                @if (auth()->user()->isServiceDepartmentAdmin())
                     <li class="mb-1">
                         <a href="{{ route('staff.feedbacks') }}"
                             class="btn d-flex btn-block align-items-center w-100 sidebar__buttons {{ Route::is('staff.feedbacks') ? 'sidebar__btn__active active' : '' }} gap-3 border-0">
@@ -53,7 +49,7 @@
                     </a>
                 </li>
                 {{-- <hr> --}}
-                @if (auth()->user()->hasRole(Role::SYSTEM_ADMIN))
+                @if (auth()->user()->isSystemAdmin())
                     <li class="mb-1">
                         <a href="{{ route('staff.manage.roles_and_permissions.index') }}"
                             class="btn d-flex btn-block align-items-center w-100 sidebar__buttons {{ Route::is('staff.manage.*') ? 'sidebar__btn__active active' : '' }} gap-3 border-0">

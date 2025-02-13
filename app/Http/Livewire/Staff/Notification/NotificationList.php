@@ -51,7 +51,7 @@ class NotificationList extends Component
                 $notification = auth()->user()->notifications->find($notificationId);
                 (!$notification->read()) ? $notification->markAsRead() : null;
 
-                if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+                if (auth()->user()->isServiceDepartmentAdmin()) {
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
 
                     if (

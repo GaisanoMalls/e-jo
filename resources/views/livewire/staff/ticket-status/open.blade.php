@@ -1,7 +1,3 @@
-@php
-    use App\Models\Role;
-@endphp
-
 <div>
     <div class="tickets__card__header px-4 py-5">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-5">
@@ -179,7 +175,7 @@
                     </thead>
                     <tbody>
                         @foreach ($openTickets as $ticket)
-                            @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+                            @if (auth()->user()->isServiceDepartmentAdmin())
                                 <tr wire:key="seen-ticket-{{ $ticket->id }}" wire:click="seenTicket({{ $ticket->id }})" class="ticket__tr">
                                 @else
                                 <tr class="ticket__tr" onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'">

@@ -1,9 +1,3 @@
-@php
-    use App\Models\Role;
-    use App\Enums\FieldTypesEnum as FieldType;
-    use App\Enums\ApprovalStatusEnum as Status;
-@endphp
-
 <div class="mb-4">
     @if (!empty($customFormHeaderFields) || !empty($customFormRowFields))
         <div class="row" id="ticket-custom-form">

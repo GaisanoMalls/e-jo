@@ -6,7 +6,6 @@ use App\Http\Requests\Requester\UpdateProfileRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -28,7 +27,7 @@ class Profile extends Component
 
     public function mount()
     {
-        $authUser = Auth::user();
+        $authUser = auth()->user();
 
         $this->first_name = $authUser->profile->first_name;
         $this->middle_name = $authUser->profile->middle_name;
@@ -64,7 +63,7 @@ class Profile extends Component
 
         try {
             DB::transaction(function () {
-                $user = Auth::user();
+                $user = auth()->user();
                 $pictureName = $this->picture ? $this->generateNewProfilePictureName($this->picture) : null;
 
                 $user->update(['email' => $this->email]);

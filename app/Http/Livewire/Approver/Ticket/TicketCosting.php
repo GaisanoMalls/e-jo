@@ -45,7 +45,7 @@ class TicketCosting extends Component
     public function isSpecialProjectCostingApprover2(int $approverId)
     {
         return auth()->user()->id === $approverId
-            && auth()->user()->hasRole(Role::APPROVER)
+            && auth()->user()->isApprover()
             && SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)
                 ->whereJsonContains('fpm_coo_approver->approver_id', $approverId)
                 ->exists();

@@ -3,16 +3,13 @@
 namespace App\Http\Traits;
 
 use App\Enums\ApprovalStatusEnum;
-use App\Models\Form;
 use App\Models\Role;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Status;
 use App\Models\Ticket;
-use App\Models\TicketCustomFormFooter;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Str;
 
@@ -117,11 +114,11 @@ trait Utils
     {
         //        $staffRolePath = '';
         return match (true) {
-            Auth::user()->hasRole(Role::SYSTEM_ADMIN) => 'system_admin',
-            Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) => 'service_department_admin',
-            Auth::user()->hasRole(Role::APPROVER) => 'approver',
-            Auth::user()->hasRole(Role::AGENT) => 'agent',
-            Auth::user()->hasRole(Role::USER) => 'requester',
+            auth()->user()->isSystemAdmin() => 'system_admin',
+            auth()->user()->isServiceDepartmentAdmin() => 'service_department_admin',
+            auth()->user()->isApprover() => 'approver',
+            auth()->user()->isAgent() => 'agent',
+            auth()->user()->isUser() => 'requester',
             default => 'guest',
         };
     }
@@ -262,13 +259,13 @@ trait Utils
 
     public function isOnlyAgent(?int $agentId)
     {
-        return auth()->user()->id === $agentId && auth()->user()->hasRole(Role::AGENT);
+        return auth()->user()->id === $agentId && auth()->user()->isAgent();
     }
 
     public function isSpecialProjectCostingApprover2(int $approverId, Ticket $ticket)
     {
         return auth()->user()->id === $approverId
-            && auth()->user()->hasRole(Role::APPROVER)
+            && auth()->user()->isApprover()
             && SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
                 ->whereJsonContains('fpm_coo_approver->approver_id', $approverId)
                 ->exists();

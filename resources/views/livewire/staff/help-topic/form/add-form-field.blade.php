@@ -1,14 +1,9 @@
-@php
-    use App\Models\Role;
-@endphp
-
 <div>
     <div class="row mb-4">
         <div class="col-md-6">
             <div class="mb-2">
                 <label for="formName" class="form-label form__field__label">Form name</label>
-                <input type="text" wire:model="formName" class="form-control form__field" id="formName"
-                    placeholder="Enter help topic name">
+                <input type="text" wire:model="formName" class="form-control form__field" id="formName" placeholder="Enter help topic name">
                 @error('formName')
                     <span class="error__message">
                         <i class="fa-solid fa-triangle-exclamation"></i>
@@ -75,8 +70,8 @@
             <small class="fw-semibold text-danger mb-1">{{ session('has_associated_ticket_field') }}</small>
         @endif
         <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
-            <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch"
-                id="headerFieldCheck" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+            <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch" id="headerFieldCheck"
+                wire:loading.attr="disabled" style="margin-right: 10px !important;">
             <label class="form-check-label" for="headerFieldCheck">
                 As header field
             </label>
@@ -85,8 +80,7 @@
             <div class="row mb-3">
                 <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                     <div class="mb-2">
-                        <label for="fieldName" class="form-label text-muted form__field__label"
-                            style="font-weight: 500;">
+                        <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
                             Assign column
                         </label>
                         <div>
@@ -103,9 +97,8 @@
                 @if (!$this->hasAssociatedTicketField())
                     <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                         <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
-                            <input wire:model="isForTicketNumber" class="form-check-input" type="checkbox"
-                                role="switch" id="forTicketNumber" wire:loading.attr="disabled"
-                                style="margin-right: 10px !important;">
+                            <input wire:model="isForTicketNumber" class="form-check-input" type="checkbox" role="switch" id="forTicketNumber"
+                                wire:loading.attr="disabled" style="margin-right: 10px !important;">
                             <label class="form-check-label" for="forTicketNumber">
                                 Associate with the ticket number
                             </label>
@@ -122,8 +115,7 @@
                         <em style="font-size: 0.75rem;">(No special characters)</em>
                     </label>
                     <div class="d-flex align-items-center text-start px-0 td__content">
-                        <input wire:model="name" class="form-control form__field" type="text" id="fieldName"
-                            placeholder="Enter field name">
+                        <input wire:model="name" class="form-control form__field" type="text" id="fieldName" placeholder="Enter field name">
                     </div>
                     @error('name')
                         <span class="error__message position-absolute" style="bottom: -5px !important;">
@@ -189,8 +181,7 @@
                         <span wire:loading.remove wire:target="addField">
                             <i class="bi bi-save"></i>
                         </span>
-                        <div wire:loading wire:target="addField"
-                            class="spinner-border spinner-border-sm loading__spinner" role="status">
+                        <div wire:loading wire:target="addField" class="spinner-border spinner-border-sm loading__spinner" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
                         Add field
@@ -219,26 +210,23 @@
                             @foreach ($addedFields as $key => $field)
                                 <tr wire:key="normal-field-{{ $key + 1 }}">
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0;">
+                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
                                             @if ($editingFieldId === $key)
-                                                <input wire:model="editingFieldName" class="form-control form__field"
-                                                    type="text" placeholder="Enter field name">
+                                                <input wire:model="editingFieldName" class="form-control form__field" type="text"
+                                                    placeholder="Enter field name">
                                             @else
                                                 <span>{{ $field['name'] }}</span>
                                             @endif
                                         </div>
                                         @error('editingFieldName')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -10px !important;">
+                                            <span class="error__message position-absolute" style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
                                         @enderror
                                     </td>
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0;">
+                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
                                             @if ($editingFieldId === $key)
                                                 <div>
                                                     <div id="editing-select-field-type" wire:ignore></div>
@@ -248,16 +236,14 @@
                                             @endif
                                         </div>
                                         @error('editingFieldType')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -10px !important;">
+                                            <span class="error__message position-absolute" style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
                                         @enderror
                                     </td>
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0; min-width: 200px;">
+                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div style="min-width: 40px;">
                                                     <div id="editing-select-assigned-column" wire:ignore></div>
@@ -271,24 +257,20 @@
                                             @endif
                                         </div>
                                         @error('editingAssignedColumn')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -10px !important;">
+                                            <span class="error__message position-absolute" style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
                                         @enderror
                                     </td>
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0; min-width: 200px;">
+                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
                                                     <div class="form-check mx-0"
                                                         style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingAsHeaderField"
-                                                            class="form-check-input" type="checkbox" role="switch"
-                                                            wire:loading.attr="disabled"
-                                                            style="margin-right: 10px !important;">
+                                                        <input wire:model="editingAsHeaderField" class="form-check-input" type="checkbox"
+                                                            role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                                     </div>
                                                 </div>
                                             @else
@@ -300,24 +282,20 @@
                                             @endif
                                         </div>
                                         @error('editingAsHeaderField')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -10px !important;">
+                                            <span class="error__message position-absolute" style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
                                         @enderror
                                     </td>
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0; min-width: 200px;">
+                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
                                                     <div class="form-check mx-0"
                                                         style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingIsForTicketNumber"
-                                                            class="form-check-input" type="checkbox" role="switch"
-                                                            wire:loading.attr="disabled"
-                                                            style="margin-right: 10px !important;"
+                                                        <input wire:model="editingIsForTicketNumber" class="form-check-input" type="checkbox"
+                                                            role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;"
                                                             @disabled(!$editingAsHeaderField)>
                                                     </div>
                                                 </div>
@@ -330,24 +308,20 @@
                                             @endif
                                         </div>
                                         @error('editingIsForTicketNumber')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -10px !important;">
+                                            <span class="error__message position-absolute" style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
                                         @enderror
                                     </td>
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0;">
+                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
                                                     <div class="form-check mx-0"
                                                         style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingFieldRequired"
-                                                            class="form-check-input" type="checkbox" role="switch"
-                                                            wire:loading.attr="disabled"
-                                                            style="margin-right: 10px !important;">
+                                                        <input wire:model="editingFieldRequired" class="form-check-input" type="checkbox"
+                                                            role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                                     </div>
                                                 </div>
                                             @else
@@ -359,24 +333,20 @@
                                             @endif
                                         </div>
                                         @error('editingFieldRequired')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -10px !important;">
+                                            <span class="error__message position-absolute" style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
                                         @enderror
                                     </td>
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content"
-                                            style="height: 0; min-width: 200px;">
+                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
                                                     <div class="form-check mx-0"
                                                         style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingFieldEnable"
-                                                            class="form-check-input" type="checkbox" role="switch"
-                                                            wire:loading.attr="disabled"
-                                                            style="margin-right: 10px !important;">
+                                                        <input wire:model="editingFieldEnable" class="form-check-input" type="checkbox"
+                                                            role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                                     </div>
                                                 </div>
                                             @else
@@ -388,8 +358,7 @@
                                             @endif
                                         </div>
                                         @error('editingFieldEnable')
-                                            <span class="error__message position-absolute"
-                                                style="bottom: -10px !important;">
+                                            <span class="error__message position-absolute" style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
                                             </span>
@@ -398,24 +367,20 @@
                                     <td class="px-0">
                                         <div class="d-flex align-items-center gap-2 justify-content-end px-2">
                                             @if ($editingFieldId === $key)
-                                                <button
-                                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
                                                     wire:click="updateAddedField({{ $key }})">
                                                     <i class="bi bi-check-lg" style="font-size: 18px;"></i>
                                                 </button>
-                                                <button
-                                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
                                                     wire:click="cancelEditAddedField({{ $key }})">
                                                     <i class="bi bi-x-lg"></i>
                                                 </button>
                                             @else
-                                                <button
-                                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
                                                     wire:click="toggleEditAddedField({{ $key }})">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <button
-                                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
                                                     wire:click="removeField({{ $key }})">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
@@ -434,13 +399,11 @@
         <div class="d-flex align-items-center m-0 gap-2">
             <button wire:click="saveForm" type="button"
                 class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send">
-                <span wire:loading wire:target="saveForm" class="spinner-border spinner-border-sm" role="status"
-                    aria-hidden="true">
+                <span wire:loading wire:target="saveForm" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                 </span>
                 Save form
             </button>
-            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal"
-                data-bs-dismiss="modal" wire:click="cancel">
+            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal" data-bs-dismiss="modal" wire:click="cancel">
                 Cancel
             </button>
         </div>

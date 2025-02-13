@@ -10,7 +10,6 @@ use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\TicketSlaExtension;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class TicketDetails extends Component
@@ -52,7 +51,7 @@ class TicketDetails extends Component
 
     public function removeAssignedTeam()
     {
-        if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+        if (auth()->user()->isServiceDepartmentAdmin()) {
             $this->ticket->update(['team_id' => null]);
             $this->removeAssignedAgent();
             $this->actionOnSubmit();
@@ -64,7 +63,7 @@ class TicketDetails extends Component
 
     public function removeAssignedAgent()
     {
-        if (Auth::user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+        if (auth()->user()->isServiceDepartmentAdmin()) {
             $this->ticket->update([
                 'agent_id' => null,
                 'status_id' => Status::APPROVED,
@@ -92,8 +91,10 @@ class TicketDetails extends Component
 
     public function deleteSlaExtension()
     {
-        $this->ticket?->slaExtension()->delete();
-        $this->emitSelf('loadTicketDetails');
+        if (auth()->user()->isAgent()) {
+            $this->ticket?->slaExtension()->delete();
+            $this->emitSelf('loadTicketDetails');
+        }
     }
 
     public function render()

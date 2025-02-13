@@ -3,13 +3,12 @@
 namespace App\Http\Traits;
 
 use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Auth;
 
 trait Logout
 {
     public function doLogout($request)
     {
-        Auth::logout();
+        auth()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

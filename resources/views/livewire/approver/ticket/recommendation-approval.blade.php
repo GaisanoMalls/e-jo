@@ -1,5 +1,4 @@
 @php
-    use App\Models\Role;
     use Illuminate\Support\Carbon;
     use App\Enums\RecommendationApprovalStatusEnum;
 @endphp
@@ -7,7 +6,7 @@
 @if ($recommendations->isNotEmpty() && $this->isRecommendationRequested())
     <div>
         @if ($latestRecommendation)
-            @if (auth()->user()->hasRole(Role::APPROVER) && $latestRecommendation)
+            @if (auth()->user()->isApprover() && $latestRecommendation)
                 <div class="d-flex flex-column rounded-3 mb-4 flex-wrap gap-2 border-0 p-3"
                     style="margin-left: 1px; margin-right: 1px; box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-1">

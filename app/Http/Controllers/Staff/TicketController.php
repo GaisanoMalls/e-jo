@@ -8,8 +8,6 @@ use App\Http\Traits\TicketsByStaffWithSameTemplates;
 use App\Http\Traits\Utils;
 use App\Models\PriorityLevel;
 use App\Models\Reply;
-use App\Models\Role;
-use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
 

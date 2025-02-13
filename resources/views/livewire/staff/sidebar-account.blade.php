@@ -1,7 +1,3 @@
-@php
-    use App\Models\Role;
-@endphp
-
 <div>
     <div class="sidebar__user text-center">
         <div class="position-relative d-flex justify-content-center">
@@ -14,19 +10,19 @@
             @endif
             <div class="sidebar__badge__bottom">
                 <span class="badge user__role__badge">
-                    @if (auth()->user()->hasRole(Role::SYSTEM_ADMIN))
+                    @if (auth()->user()->isSystemAdmin())
                         System Admin
                     @endif
-                    @if (auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN))
+                    @if (auth()->user()->isServiceDepartmentAdmin())
                         Service Department Admin
                     @endif
-                    @if (auth()->user()->hasRole(Role::APPROVER))
+                    @if (auth()->user()->isApprover())
                         Approver
                     @endif
-                    @if (auth()->user()->hasRole(Role::AGENT))
+                    @if (auth()->user()->isAgent())
                         Agent
                     @endif
-                    @if (auth()->user()->hasRole(Role::USER))
+                    @if (auth()->user()->isUser())
                         User
                     @endif
                 </span>
@@ -35,7 +31,7 @@
         <h6 class="my-3 sidebar__userfullname">
             {{ auth()->user()->profile->getFullName }}
         </h6>
-        @if (!auth()->user()->hasRole(Role::SYSTEM_ADMIN))
+        @if (!auth()->user()->isSystemAdmin())
             <p class="sidebar__userdepartment">
                 {{ auth()->user()->getBuDepartments() . ' -' }}
                 {{ auth()->user()->getBranches() ?? '' }}

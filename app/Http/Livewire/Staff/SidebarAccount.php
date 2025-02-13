@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Staff;
 use App\Http\Traits\ServiceDepartmentAdmin\Tickets as ServiceDepartmentAdminTickets;
 use App\Http\Traits\Agent\Tickets as AgentTickets;
 use App\Models\PriorityLevel;
-use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
@@ -89,15 +88,15 @@ class SidebarAccount extends Component
     {
         $currentUser = User::find(auth()->user()->id);
 
-        if ($currentUser->hasRole(Role::SERVICE_DEPARTMENT_ADMIN)) {
+        if ($currentUser->isServiceDepartmentAdmin()) {
             $ticketCount = $this->countServiceDeptAdminTicketsByPriorityLevel($priorityLevel);
         }
 
-        if ($currentUser->hasRole(Role::AGENT)) {
+        if ($currentUser->isAgent()) {
             $ticketCount = $this->countAgentTicketsByPriorityLevel($priorityLevel);
         }
 
-        if ($currentUser->hasRole(Role::SYSTEM_ADMIN)) {
+        if ($currentUser->isSystemAdmin()) {
             $ticketCount = Ticket::whereNotIn('status_id', [Status::CLOSED, Status::OVERDUE, Status::DISAPPROVED])
                 ->where('priority_level_id', $priorityLevel->id)
                 ->count();

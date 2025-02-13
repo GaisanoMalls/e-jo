@@ -1,9 +1,8 @@
 @php
-    use App\Models\Role;
     use App\Models\Status;
 @endphp
 
-@if ((auth()->user()->hasRole(Role::SERVICE_DEPARTMENT_ADMIN) || auth()->user()->hasRole(Role::AGENT)) && $ticket->status_id !== Status::DISAPPROVED)
+@if ((auth()->user()->isServiceDepartmentAdmin() || auth()->user()->isAgent()) && $ticket->status_id !== Status::DISAPPROVED)
     <div>
         @if ($ticket->status_id == Status::CLOSED)
             <div class="d-flex flex-column">

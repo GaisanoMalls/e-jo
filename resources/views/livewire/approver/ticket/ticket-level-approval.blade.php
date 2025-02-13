@@ -1,5 +1,4 @@
 @php
-    use App\Models\Role;
     use App\Models\Status;
 @endphp
 
@@ -26,8 +25,7 @@
                         </div>
                         @foreach ($approvers as $approver)
                             <div class="d-flex flex-column">
-                                <div
-                                    class="d-flex align-items-center justify-content-between ps-3 position-relative level__approver__container">
+                                <div class="d-flex align-items-center justify-content-between ps-3 position-relative level__approver__container">
                                     <div class="level__approval__approver__dot position-absolute rounded-circle">
                                     </div>
                                     <div class="d-flex align-items-center" style="padding: 4px 0 4px 0;">
@@ -37,8 +35,8 @@
                                         @else
                                             <div class="level__approval__approver__name__initial d-flex align-items-center p-2 me-2 justify-content-center text-white"
                                                 @style([
-                                                    'background-color: #3b4053' => $approver->hasRole(Role::APPROVER),
-                                                    'background-color: #9DA85C' => $approver->hasRole(Role::SERVICE_DEPARTMENT_ADMIN),
+                                                    'background-color: #3b4053' => $approver->isApprover(),
+                                                    'background-color: #9DA85C' => $approver->isServiceDepartmentAdmin(),
                                                 ])>
                                                 {{ $approver->profile->getNameInitial() }}
                                             </div>

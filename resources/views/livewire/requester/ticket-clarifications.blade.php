@@ -1,5 +1,4 @@
 @php
-    use App\Models\Role;
     use App\Models\Status;
 @endphp
 
@@ -12,13 +11,11 @@
                     <div class="card border-0 p-0 card__ticket__details"
                         style="width: fit-content; max-width: 70%;
                         {{ $clarification->user_id === auth()->user()->id ? 'background-color: #D0F0F7; margin-left: auto;' : 'background-color: #E9ECEF; margin-right: auto;' }}">
-                        <div
-                            class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
+                        <div class="ticket__details__card__header d-flex pb-0 align-items-center justify-content-between">
                             <div class="d-flex align-items-center w-100">
-                                @if (!$clarification->user->hasRole(Role::USER))
+                                @if (!$clarification->user->isUser())
                                     @if ($clarification->user->profile->picture)
-                                        <img src="{{ Storage::url($clarification->user->profile->picture) }}"
-                                            alt=""
+                                        <img src="{{ Storage::url($clarification->user->profile->picture) }}" alt=""
                                             class="image-fluid ticket__details__user__picture
                                          reply__ticket__details__user__picture">
                                     @else
@@ -29,9 +26,8 @@
                                     @endif
                                 @endif
                                 <div class="d-flex flex-wrap justify-content-between w-100">
-                                    @if (!$clarification->user->hasRole(Role::USER))
-                                        <small
-                                            class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
+                                    @if (!$clarification->user->isUser())
+                                        <small class="pe-3 ticket__details__user__fullname reply__ticket__details__user__fullname">
                                             {{ $clarification->user->profile->getFullName }}
                                             {{ $clarification->user_id === auth()->user()->id ? '(me)' : '' }}
                                         </small>
@@ -53,8 +49,7 @@
                                     <div class="ticket__attachments d-inline-flex gap-1" data-bs-toggle="modal"
                                         data-bs-target="#replyTicketFilesModalForm{{ $clarification->id }}">
                                         <i class="fa-solid fa-file-image"></i>
-                                        <small
-                                            class="attachment__count">{{ $clarification->fileAttachments->count() }}</small>
+                                        <small class="attachment__count">{{ $clarification->fileAttachments->count() }}</small>
                                         <small class="attachment__label">
                                             {{ $clarification->fileAttachments->count() > 1 ? 'file attachments' : 'file attachment' }}
                                         </small>
@@ -74,8 +69,7 @@
                 <button type="button"
                     class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center
                     justify-content-center gap-2 float-end"
-                    data-bs-toggle="modal" data-bs-target="#ticketClarificationModal"
-                    wire:click="getLatestClarification">
+                    data-bs-toggle="modal" data-bs-target="#ticketClarificationModal" wire:click="getLatestClarification">
                     <i class="fa-solid fa-pen"></i>
                     <span class="lbl__reply">Clarify</span>
                 </button>

@@ -1,8 +1,3 @@
-@php
-    use App\Models\Role;
-    use App\Enums\FieldTypesEnum as FieldType;
-@endphp
-
 @if (!empty($customFormHeaderFields) || !empty($customFormRowFields))
     <div class="mb-4">
         <div class="row" id="ticket-custom-form">

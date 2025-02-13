@@ -13,7 +13,6 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\AppNotification;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -58,7 +57,7 @@ class ApproveTicket extends Component
     public function approveTicket()
     {
         try {
-            if (Auth::user()->hasRole(Role::APPROVER) && $this->isCurrentLevelApprover()) {
+            if (auth()->user()->isApprover() && $this->isCurrentLevelApprover()) {
                 DB::transaction(function () {
                     if ($this->ticket->status_id != Status::APPROVED && $this->ticket->approval_status != ApprovalStatusEnum::APPROVED) {
                         $approvedLevel = $this->approveLevelOfApproval($this->ticket);

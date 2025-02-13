@@ -1,16 +1,16 @@
 @php
-    use App\Models\Role;
     use Illuminate\Support\Carbon;
     use App\Enums\RecommendationApprovalStatusEnum;
 @endphp
 
 @if ($recommendations->isNotEmpty() && $this->isRecommendationRequested())
-<div>
+    <div>
         @if ($approvalHistory->isNotEmpty())
             <div class="accordion mb-4" id="approvalHistoryAccordion">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="box-shadow: none; font-size: 13px;">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true"
+                            aria-controls="collapseOne" style="box-shadow: none; font-size: 13px;">
                             Approval history
                         </button>
                     </h2>
@@ -60,7 +60,10 @@
                                                 @endif
                                                 <div>
                                                     <p class="mb-0">
-                                                        <button class="btn btn-sm p-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#showApprovers{{ $recommendation->id }}" aria-expanded="false" aria-controls="showApprovers{{ $recommendation->id }}" style="font-size: 13px; text-decoration: underline !important;">
+                                                        <button class="btn btn-sm p-0 border-0" type="button" data-bs-toggle="collapse"
+                                                            data-bs-target="#showApprovers{{ $recommendation->id }}" aria-expanded="false"
+                                                            aria-controls="showApprovers{{ $recommendation->id }}"
+                                                            style="font-size: 13px; text-decoration: underline !important;">
                                                             Show approvers
                                                         </button>
                                                     </p>
@@ -76,7 +79,8 @@
                                                                                 <div class="d-flex flex-column gap-1">
                                                                                     <div class="d-flex align-items-center gap-1">
                                                                                         @if ($this->isLevelApproved($level, $recommendation))
-                                                                                            <i class="bi bi-check-circle-fill" style="font-size: 0.75rem; color: green;"></i>
+                                                                                            <i class="bi bi-check-circle-fill"
+                                                                                                style="font-size: 0.75rem; color: green;"></i>
                                                                                         @elseif ($this->isDisApprovedRecommendationLevel($level, $recommendation))
                                                                                             <i class="bi bi-x-circle-fill" style="color: red;"></i>
                                                                                         @else
@@ -88,7 +92,8 @@
                                                                                     </div>
                                                                                     <div class="d-flex gap-1">
                                                                                         @foreach ($approvers as $approver)
-                                                                                            <small class="rounded-5 border border-2 px-2" style="font-size: 0.70rem;">{{ $approver->profile->getFullName }}</small>
+                                                                                            <small class="rounded-5 border border-2 px-2"
+                                                                                                style="font-size: 0.70rem;">{{ $approver->profile->getFullName }}</small>
                                                                                         @endforeach
                                                                                     </div>
                                                                                 </div>

@@ -1,7 +1,3 @@
-@php
-    use App\Models\Role;
-@endphp
-
 <div>
     <button wire:ignore.self
         class="btn btn-toggle d-flex gap-3 justify-content-between btn-block align-items-center w-100 border-0 sidebar__buttons sidebar__btn__collapse {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'sidebar__btn__active active' : '' }}"
@@ -31,7 +27,7 @@
                     @endif
                 </a>
             </li>
-            @if (!auth()->user()->hasRole(Role::AGENT))
+            @if (!auth()->user()->isAgent())
                 <li>
                     <a href="{{ route('staff.tickets.viewed_tickets') }}"
                         class="position-relative link-dark d-flex align-items-center text-decoration-none rounded justify-content-between sidebar__collapse__btnlink
