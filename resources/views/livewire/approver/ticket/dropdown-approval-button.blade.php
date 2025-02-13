@@ -3,7 +3,6 @@
 @endphp
 
 <div>
-
     <div class="btn-group">
         <div class="d-flex flex-column">
             @if ($ticket->approval_status === ApprovalStatusEnum::APPROVED)
