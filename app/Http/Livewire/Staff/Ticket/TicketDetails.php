@@ -19,8 +19,9 @@ class TicketDetails extends Component
     public Ticket $ticket;
     public ?User $slaExtensionRequestedBy;
     public bool $canExtendSLA = false;
-    public bool $canApproveSlaExtension = false;
+    public bool $isSlaExtensionApprover = false;
     public bool $isRequestingForSlaExtension = false;
+    public ?string $slaExtensionRequester = null;
 
     protected $listeners = ['loadTicketDetails' => '$refresh'];
 
@@ -79,13 +80,18 @@ class TicketDetails extends Component
     public function extendSLA()
     {
         sleep(1);
-        TicketSlaExtension::updateOrCreate(
-            ['ticket_id' => $this->ticket->id],
-            [
-                'requested_by' => auth()->user()->id,
-                'status' => TicketSlaExtensionStatusEnum::REQUESTING->value
-            ]
-        );
+        if (auth()->user()->isAgent()) {
+            TicketSlaExtension::updateOrCreate(
+                ['ticket_id' => $this->ticket->id],
+                [
+                    'requested_by' => auth()->user()->id,
+                    'status' => TicketSlaExtensionStatusEnum::REQUESTING->value
+                ]
+            );
+        } else {
+            noty()->addWarning('You are not allowed to request for SLA extension.');
+        }
+
         $this->emitSelf('loadTicketDetails');
     }
 
@@ -94,6 +100,22 @@ class TicketDetails extends Component
         if (auth()->user()->isAgent()) {
             $this->ticket?->slaExtension()->delete();
             $this->emitSelf('loadTicketDetails');
+        }
+    }
+
+    public function approveSlaExtension()
+    {
+        if (auth()->user()->isServiceDepartmentAdmin()) {
+            if ($this->ticket->slaExtension->status->value === TicketSlaExtensionStatusEnum::REQUESTING->value) {
+                $this->ticket->slaExtension()->update([
+                    'status' => TicketSlaExtensionStatusEnum::APPROVED
+                ]);
+                noty()->addSuccess('SLA extension request has been successfully approved.');
+            } else {
+                noty()->addInfo('SLA extension has already been approved.');
+            }
+        } else {
+            noty()->addWarning('You are not allowed to approve the SLA extension');
         }
     }
 
@@ -106,8 +128,11 @@ class TicketDetails extends Component
         $this->slaExtensionRequestedBy = $this->ticket?->slaExtension?->requestedBy;
         $this->isRequestingForSlaExtension = $this->ticket?->slaExtension?->status->value === TicketSlaExtensionStatusEnum::REQUESTING->value;
         $this->canExtendSLA = auth()->user()->isAgent() && $this->ticket->agent_id !== null;
-        $this->canApproveSlaExtension = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-            ->whereHas('buDepartments', fn($buDepartment) => $buDepartment->whereIn('departments.id', $this->slaExtensionRequestedBy?->buDepartments->pluck('id') ?? []))->exists();
+        $this->slaExtensionRequester = $this->ticket?->slaExtension?->requestedBy->profile->getFullName;
+        $this->isSlaExtensionApprover = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
+            ->whereHas('buDepartments', fn($buDepartment) => $buDepartment->whereIn('departments.id', $this->slaExtensionRequestedBy?->buDepartments->pluck('id') ?? []))
+            ->exists()
+            && $this->ticket->nonConfigApprover()->whereJsonContains('approvers->id', auth()->user()->id)->exists();
 
         return view('livewire.staff.ticket.ticket-details');
     }

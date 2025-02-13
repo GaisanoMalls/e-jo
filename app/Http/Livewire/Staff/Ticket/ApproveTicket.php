@@ -79,13 +79,8 @@ class ApproveTicket extends Component
                         'approval_status' => ApprovalStatusEnum::APPROVED
                     ]);
 
-                    $this->dispatchBrowserEvent('close-modal');
                     ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
-
-                    $events = ['loadDropdownApprovalButton', 'loadLevelOfApproval', 'loadTicketLogs', 'loadTicketStatusTextHeader'];
-                    foreach ($events as $event) {
-                        $this->emit($event);
-                    }
+                    return redirect()->route('staff.ticket.view_ticket', $this->ticket->id);
                 } else {
                     if (auth()->user()->isServiceDepartmentAdmin() && $this->isCurrentLevelApprover()) {
                         if ($this->ticket->status_id != Status::APPROVED && $this->ticket->approval_status != ApprovalStatusEnum::APPROVED) {

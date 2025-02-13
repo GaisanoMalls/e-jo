@@ -2,7 +2,7 @@
     use App\Enums\SpecialProjectStatusEnum;
 @endphp
 
-<div wire:poll.visible>
+<div>
     @if (!is_null($ticket->ticketCosting))
         <div class="card border-0 p-0 card__ticket__details">
             <div class="row p- gap-2 justify-content-center ticket__costing__container">
