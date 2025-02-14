@@ -127,11 +127,16 @@
                                             type="button">
                                             Clarifications
                                         </a>
+                                        <a onclick="window.location='{{ route('staff.ticket.ticket_clarifications', $ticket->id) }}'"
+                                            class="btn btn-sm px-0 rounded-0 {{ Route::is('staff.ticket.ticket_clarifications') ? 'active' : '' }}"
+                                            type="button">
+                                            Subtasks
+                                        </a>
                                     @endif
                                 </div>
                             </div>
                             {{-- Replies/Comments --}}
-                            @section('ticket-reply-clarifications')
+                            @section('ticket-reply-clarifications-subtasks')
                                 @livewire('staff.ticket-replies', ['ticket' => $ticket])
                             @show
                             {{-- End Replies/Comments --}}

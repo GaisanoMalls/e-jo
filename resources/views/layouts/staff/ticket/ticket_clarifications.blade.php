@@ -4,6 +4,6 @@
     @livewire('staff.ticket.load-ticket-clarifications-count', ['ticket' => $ticket])
 @endsection
 
-@section('ticket-reply-clarifications')
+@section('ticket-reply-clarifications-subtasks')
     @livewire('staff.ticket-clarifications', ['ticket' => $ticket])
 @endsection
