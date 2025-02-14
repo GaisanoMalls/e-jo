@@ -7802,7 +7802,7 @@ a:hover {
 .page__wrapper .page__main__header {
   position: fixed;
   top: 0;
-  z-index: 9;
+  z-index: 3;
   width: 100%;
   display: flex;
   align-items: center;
@@ -7961,7 +7961,7 @@ a:hover {
   position: fixed;
   top: 72px;
   left: 0;
-  z-index: 90;
+  z-index: 3;
   width: 290px;
   height: 100%;
   padding: 20px 0;
@@ -8928,7 +8928,7 @@ a:hover {
   position: sticky;
   background-color: #ffffff;
   border-radius: 0.5rem;
-  z-index: 4;
+  z-index: 3;
 }
 .ticket__section .ticket__details__top .ticket__details__topbuttons__label {
   font-size: 0.75rem;

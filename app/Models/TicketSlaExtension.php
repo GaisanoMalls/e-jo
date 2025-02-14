@@ -15,7 +15,8 @@ class TicketSlaExtension extends Model
     protected $fillable = [
         'ticket_id',
         'requested_by',
-        'status'
+        'status',
+        'is_new_sla_set'
     ];
 
     protected $casts = [
@@ -29,6 +30,8 @@ class TicketSlaExtension extends Model
 
     public function requestedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'requested_by')->with(['profile', 'buDepartments']);
+        return $this->belongsTo(User::class, 'requested_by')
+            ->with(['profile', 'buDepartments'])
+            ->withWhereHas('roles', fn($query) => $query->where('roles.name', Role::AGENT));
     }
 }

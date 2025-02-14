@@ -705,7 +705,7 @@ a {
     .page__main__header {
         position: fixed;
         top: 0;
-        z-index: 9;
+        z-index: 3;
         width: 100%;
         display: -webkit-box;
         display: -ms-flexbox;
@@ -897,7 +897,7 @@ a {
     position: fixed;
     top: 72px;
     left: 0;
-    z-index: 90;
+    z-index: 3;
     width: 290px;
     height: 100%;
     padding: 20px 0;
@@ -2106,7 +2106,7 @@ a {
         background-color: $white;
         border-radius: $border-radius-8;
         // box-shadow: rgba(33, 35, 38, 0.1) 0px 7px 7px -7px;
-        z-index: 4;
+        z-index: 3;
 
         .ticket__details__topbuttons__label {
             font-size: $fs-12;

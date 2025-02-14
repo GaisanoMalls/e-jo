@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'requested_by')->constrained('users')->cascadeOnDelete();
             $table->enum('status', TicketSlaExtensionStatusEnum::toArray())->default(TicketSlaExtensionStatusEnum::REQUESTING->value);
+            $table->boolean('is_new_sla_set')->default(false);
             $table->timestamps();
         });
     }

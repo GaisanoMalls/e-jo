@@ -2,7 +2,7 @@
     use App\Enums\ApprovalStatusEnum;
 @endphp
 
-<div wire:poll.visible.30s>
+<div wire:poll.visible.60s>
     <div class="card border-0 p-0 card__ticket__details">
         <div class="ticket__details__card__body__right">
             <div class="d-flex align-items-center gap-2 mb-3">
@@ -116,14 +116,22 @@
                     @if ($this->ticket->agent_id !== null)
                         <div class="d-inline">
                             @if (auth()->user()->isAgent() && !$isRequestingForSlaExtension)
-                                <button type="button" class="btn btn-sm" style="font-size: 12px; color: white; background-color: #d32839;"
-                                    data-bs-toggle="collapse" data-bs-target="#collapse-extend-sla" aria-expanded="false"
-                                    aria-controls="collapse-extend-sla">
-                                    Extend SLA
-                                </button>
+                                @if ($isNewSlaSet)
+                                    <button type="button" class="btn btn-sm" style="font-size: 12px; color: white; background-color: #d32839;"
+                                        data-bs-toggle="collapse" data-bs-target="#collapse-extend-sla" aria-expanded="false"
+                                        aria-controls="collapse-extend-sla">
+                                        Extend SLA
+                                    </button>
+                                @else
+                                    <div class="rounded-3 mt-1 position-relative"
+                                        style="font-size: 12px; background-color: #d1e7dd; padding: 7px 10px;">
+                                        SLA extension is approved.
+                                        <br>
+                                        Wait until Service Department Admin assign a new SLA
+                                    </div>
+                                @endif
                             @endif
 
-                            @dump($isSlaExtensionApprover)
                             @if ($isRequestingForSlaExtension)
                                 <div class="rounded-3 mt-1 position-relative" style="font-size: 12px; background-color: #d1e7dd; padding: 7px 10px;">
                                     @if ($isSlaExtensionApprover)
@@ -131,36 +139,41 @@
                                         <br>
                                         Approve request?
                                         <div class="d-flex align-items-center gap-2 my-1">
-                                            <button wire:click="extendSLA" wire:loading.attr="disabled" wire:target="extendSLA"
+                                            <button wire:click="approveSlaExtension" wire:loading.attr="disabled"
+                                                wire:target="approveSlaExtension,rejectSlaExtension"
                                                 class="btn btn-sm rounded-2 d-flex align-items-center justify-content-center gap-1 px-2 py-1 text-white"
                                                 style="font-size: 12px; background-color: #d32839;">
-                                                <div wire:loading wire:target="extendSLA" class="spinner-border spinner-border-sm loading__spinner"
-                                                    role="status" style="height: 11px; width: 11px;">
+                                                <div wire:loading wire:target="approveSlaExtension"
+                                                    class="spinner-border spinner-border-sm loading__spinner" role="status"
+                                                    style="height: 11px; width: 11px;">
                                                     <span class="sr-only">Loading...</span>
                                                 </div>
-                                                <span wire:loading.remove wire:target="extendSLA">Approve</span>
-                                                <span wire:loading wire:target="extendSLA">Processing ...</span>
+                                                <span wire:loading.remove wire:target="approveSlaExtension">Approve</span>
+                                                <span wire:loading wire:target="approveSlaExtension">Processing ...</span>
                                             </button>
-                                            <button id="btn-cancel-extend-sla" class="btn btn-sm rounded-2 px-2 py-1"
+                                            <button wire:click="rejectSlaExtension" id="btn-cancel-extend-sla" class="btn btn-sm rounded-2 px-2 py-1"
                                                 style="font-size: 12px; color: #d32839; border: 1px solid #d32839;" wire:loading.attr="disabled"
-                                                wire:target="extendSLA">Reject</button>
+                                                wire:target="rejectSlaExtension,approveSlaExtension">
+                                                <span wire:loading.remove wire:target="rejectSlaExtension">Reject</span>
+                                                <span wire:loading wire:target="rejectSlaExtension">Rejecting...</span>
+                                            </button>
                                         </div>
                                     @else
                                         Pending approval for SLA extension
                                         @if ($this->ticket?->slaExtension?->requested_by === auth()->user()->id)
-                                            <button type="button" wire:click="deleteSlaExtension"
+                                            <button type="button" wire:click="cancelSlaExtensionRequest"
                                                 class="btn btn-sm border border-white d-flex align-items-center justify-content-center rounded-circle ms-auto position-absolute"
                                                 style="height: 25px;
-                                            width: 25px;
-                                            font-size: 13px;
-                                            background-color: #e9ecef;
-                                            right: -0.7rem;
-                                            top: 50%;
-                                            transform: translateY(-50%);"
+                                                width: 25px;
+                                                font-size: 13px;
+                                                background-color: #e9ecef;
+                                                right: -0.7rem;
+                                                top: 50%;
+                                                transform: translateY(-50%);"
                                                 data-tooltip="Cancel request for SLA extension" data-tooltip-position="top"
                                                 data-tooltip-font-size="11px">
-                                                <i class='bx bx-loader bx-spin' wire:loading wire:target="deleteSlaExtension"></i>
-                                                <i class="bi bi-arrow-clockwise" wire:loading.remove wire:target="deleteSlaExtension"></i>
+                                                <i class='bx bx-loader bx-spin' wire:loading wire:target="cancelSlaExtensionRequest"></i>
+                                                <i class="bi bi-x-lg" wire:loading.remove wire:target="cancelSlaExtensionRequest"></i>
                                             </button>
                                         @endif
                                         <br>
@@ -181,24 +194,45 @@
                                         <br>
                                         Do you wish to continue?
                                         <div class="d-flex align-items-center gap-2 my-1">
-                                            <button wire:click="extendSLA" wire:loading.attr="disabled" wire:target="extendSLA"
+                                            <button wire:click="requestSlaExtension" wire:loading.attr="disabled" wire:target="requestSlaExtension"
                                                 class="btn btn-sm rounded-2 d-flex align-items-center justify-content-center gap-1 px-2 py-1 text-white"
                                                 style="font-size: 12px; background-color: #d32839;">
-                                                <div wire:loading wire:target="extendSLA" class="spinner-border spinner-border-sm loading__spinner"
-                                                    role="status" style="height: 11px; width: 11px;">
+                                                <div wire:loading wire:target="requestSlaExtension"
+                                                    class="spinner-border spinner-border-sm loading__spinner" role="status"
+                                                    style="height: 11px; width: 11px;">
                                                     <span class="sr-only">Loading...</span>
                                                 </div>
-                                                <span wire:loading.remove wire:target="extendSLA">Yes</span>
-                                                <span wire:loading wire:target="extendSLA">Processing ...</span>
+                                                <span wire:loading.remove wire:target="requestSlaExtension">Yes</span>
+                                                <span wire:loading wire:target="requestSlaExtension">Requesting...</span>
                                             </button>
                                             <button id="btn-cancel-extend-sla" class="btn btn-sm rounded-2 px-2 py-1"
                                                 style="font-size: 12px; color: #d32839; border: 1px solid #d32839;" wire:loading.attr="disabled"
-                                                wire:target="extendSLA">No</button>
+                                                wire:target="requestSlaExtension">No</button>
                                         </div>
                                     </div>
                                 @endif
                             @endif
                         </div>
+
+                        @if (auth()->user()->isServiceDepartmentAdmin() && $isSlaExtensionApproved && !$isNewSlaSet && $isSlaExtensionApprover)
+                            <div class="my-2 d-flex gap-2">
+                                <div class="w-100">
+                                    <div>
+                                        <div id="select-sla" placeholder="Select SLA" wire:ignore></div>
+                                    </div>
+                                    @error('selectedSla')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                                <button wire:click="saveNewSla" class="btn rounded-3 d-flex align-items-center justify-content-center"
+                                    style="width: 45px; height: 45px; font-size: 20px; color: #d32839; background-color: #e9ecef;">
+                                    <i class="bi bi-check-circle"></i>
+                                </button>
+                            </div>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -242,17 +276,45 @@
         const btnCancelExtendSla = document.querySelector('#btn-cancel-extend-sla');
         const btnExtendSla = document.querySelector('[data-bs-target="#collapse-extend-sla"]');
 
-        btnCancelExtendSla.addEventListener('click', () => {
-            collapseExtendSla.classList.remove('show');
-            btnExtendSla.disabled = false;
-        })
+        if (btnCancelExtendSla) {
+            btnCancelExtendSla.addEventListener('click', () => {
+                collapseExtendSla.classList.remove('show');
+                btnExtendSla.disabled = false;
+            })
+        }
 
-        collapseExtendSla.addEventListener('show.bs.collapse', () => {
-            btnExtendSla.disabled = true;
+        if (collapseExtendSla) {
+            collapseExtendSla.addEventListener('show.bs.collapse', () => {
+                btnExtendSla.disabled = true;
+            });
+
+            collapseExtendSla.addEventListener('hide.bs.collapse', () => {
+                btnExtendSla.disabled = false;
+            });
+        }
+
+        const serviceLevelAgreements = @json($serviceLevelAgreements);
+        const extendSelectSla = document.querySelector('#select-sla');
+
+        const serviceLevelAgreementOption = serviceLevelAgreements.map(sla => ({
+            label: sla.time_unit,
+            value: sla.id
+        }))
+
+        VirtualSelect.init({
+            ele: extendSelectSla,
+            options: serviceLevelAgreementOption,
+            search: true,
+            markSearchResults: true,
+            popupDropboxBreakpoint: '3000px',
         });
 
-        collapseExtendSla.addEventListener('hide.bs.collapse', () => {
-            btnExtendSla.disabled = false;
+        extendSelectSla.addEventListener('change', (event) => {
+            @this.set('selectedSla', parseInt(event.target.value));
+        });
+
+        extendSelectSla.addEventListener('reset', () => {
+            @this.set('selectedSla', null);
         });
     </script>
 @endpush
