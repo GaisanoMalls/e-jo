@@ -11,6 +11,7 @@ use App\Http\Controllers\Staff\FeedbackController as StaffFeedbackContoller;
 use App\Http\Controllers\Staff\RecommendationsController;
 use App\Http\Controllers\Staff\ServiceDeptAdmin\AnnouncementController;
 use App\Http\Controllers\Staff\ServiceDeptAdmin\TicketClarificationController;
+use App\Http\Controllers\Staff\SubtaskController;
 use App\Http\Controllers\Staff\SysAdmin\AccountAgentController;
 use App\Http\Controllers\Staff\SysAdmin\AccountApproverController;
 use App\Http\Controllers\Staff\SysAdmin\AccountsController;
@@ -73,6 +74,7 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
                 Route::get('/{ticket}/view', 'viewTicket')->name('view_ticket');
                 Route::middleware(['auth'])->group(function () {
                     Route::get('/{ticket}/clarifications', TicketClarificationController::class)->name('ticket_clarifications');
+                    Route::get('/{ticket}/subtasks', SubtaskController::class)->name('ticket_subtasks');
                 });
             });
         });
