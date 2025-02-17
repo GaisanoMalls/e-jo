@@ -296,25 +296,27 @@
         const serviceLevelAgreements = @json($serviceLevelAgreements);
         const extendSelectSla = document.querySelector('#select-sla');
 
-        const serviceLevelAgreementOption = serviceLevelAgreements.map(sla => ({
-            label: sla.time_unit,
-            value: sla.id
-        }))
+        if (extendSelectSla) {
+            const serviceLevelAgreementOption = serviceLevelAgreements.map(sla => ({
+                label: sla.time_unit,
+                value: sla.id
+            }))
 
-        VirtualSelect.init({
-            ele: extendSelectSla,
-            options: serviceLevelAgreementOption,
-            search: true,
-            markSearchResults: true,
-            popupDropboxBreakpoint: '3000px',
-        });
+            VirtualSelect.init({
+                ele: extendSelectSla,
+                options: serviceLevelAgreementOption,
+                search: true,
+                markSearchResults: true,
+                popupDropboxBreakpoint: '3000px',
+            });
 
-        extendSelectSla.addEventListener('change', (event) => {
-            @this.set('selectedSla', parseInt(event.target.value));
-        });
+            extendSelectSla.addEventListener('change', (event) => {
+                @this.set('selectedSla', parseInt(event.target.value));
+            });
 
-        extendSelectSla.addEventListener('reset', () => {
-            @this.set('selectedSla', null);
-        });
+            extendSelectSla.addEventListener('reset', () => {
+                @this.set('selectedSla', null);
+            });
+        }
     </script>
 @endpush

@@ -1,12 +1,12 @@
 <div>
-    <div wire:ignore.self class="modal fade ticket__actions__modal" id="assignTicketModal" tabindex="-1"
-        aria-labelledby="modalFormLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade ticket__actions__modal" id="assignTicketModal" tabindex="-1" aria-labelledby="modalFormLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom__modal">
             <div class="modal-content d-flex flex-column custom__modal__content">
                 <div class="modal__header d-flex justify-content-between align-items-center">
                     <h6 class="modal__title">Ticket Assigning</h6>
-                    <button class="btn d-flex align-items-center justify-content-center modal__close__button"
-                        data-bs-dismiss="modal" id="btnCloseModal">
+                    <button class="btn d-flex align-items-center justify-content-center modal__close__button" data-bs-dismiss="modal"
+                        id="btnCloseModal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -56,9 +56,16 @@
                             @enderror
                         </div>
                         <button type="submit"
-                            class="btn mt-3 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
-                            <span wire:loading wire:target="saveAssignTicket" class="spinner-border spinner-border-sm"
-                                role="status" aria-hidden="true">
+                            class="mt-3 btn btn-sm d-flex gap-2 align-items-center justify-content-center bg-danger rounded-2 text-white"
+                            style="padding: 0.6rem 1rem;
+                                border-radius: 0.563rem;
+                                font-size: 0.875rem;
+                                background-color: #d32839;
+                                color: white;
+                                font-weight: 500;
+                                box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
+                            <span wire:loading wire:target="saveAssignTicket" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true">
                             </span>
                             Assign
                         </button>

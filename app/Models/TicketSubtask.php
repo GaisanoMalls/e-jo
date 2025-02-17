@@ -15,8 +15,8 @@ class TicketSubtask extends Model
     protected $fillable = [
         'ticket_id',
         'team_id',
-        'assignee_id',
-        'task_name',
+        'agent_id',
+        'name',
         'status',
     ];
 
@@ -27,8 +27,13 @@ class TicketSubtask extends Model
         return $this->belongsTo(Ticket::class);
     }
 
-    public function assignedTo(): BelongsTo
+    public function team(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'assignee_id');
+        return $this->belongsTo(Team::class);
+    }
+
+    public function assignedAgent(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'agent_id');
     }
 }

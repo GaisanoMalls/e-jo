@@ -1428,6 +1428,13 @@ a {
                 color: #ff0808;
             }
         }
+
+        .subtask__status__button__option {
+            &:focus {
+                color: white;
+                background-color: #dc3545 !important;
+            }
+        }
     }
 
     .card__ticket__details {

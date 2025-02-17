@@ -4,8 +4,8 @@ namespace App\Enums;
 
 enum SubtaskStatusEnum: string
 {
-    case DONE = 'Done';
     case OPEN = 'Open';
+    case DONE = 'Done';
 
     public static function toArray(): array
     {

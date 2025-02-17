@@ -8372,6 +8372,10 @@ a:hover {
 .ticket__section .ticket__details__container .card__ticket__details__right .btn__clear__tags {
   color: #ff0808;
 }
+.ticket__section .ticket__details__container .subtask__status__button__option:focus {
+  color: white;
+  background-color: #dc3545 !important;
+}
 .ticket__section .card__ticket__details {
   overflow: hidden;
   border-radius: 0.625rem;
