@@ -67,9 +67,16 @@ class NotificationList extends Component
 
                 $this->triggerEvents();
 
-                return (array_key_exists('forClarification', $notification->data)) && $notification->data['forClarification']
-                    ? redirect()->route('staff.ticket.ticket_clarifications', $notification->data['ticket']['id'])
-                    : redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
+                if (array_key_exists('forClarification', $notification->data) || array_key_exists('forSubtask', $notification->data)) {
+                    if ($notification->data['forClarification']) {
+                        return redirect()->route('staff.ticket.ticket_clarifications', $notification->data['ticket']['id']);
+                    }
+                    if ($notification->data['forSubtask']) {
+                        return redirect()->route('staff.ticket.ticket_subtasks', $notification->data['ticket']['id']);
+                    }
+                } else {
+                    return redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
+                }
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

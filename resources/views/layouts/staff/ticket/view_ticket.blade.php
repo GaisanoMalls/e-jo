@@ -3,7 +3,9 @@
     @livewire('staff.ticket.load-disapproval-reason', ['ticket' => $ticket])
     @if ($ticket)
         <div class="ticket__section" x-data="{ pinned: true }">
-            <button :class="pinned ? 'd-none' : ''" class="btn btn-sm bg-blue d-flex align-items-center rounded-circle justify-content-center position-fixed p-0 text-white shadow" style="font-size: 1rem; height: 30px; width: 30px; top: 94px; right: 51px; z-index: 2; background-color: #D32839;" @click="pinned = true">
+            <button :class="pinned ? 'd-none' : ''"
+                class="btn btn-sm bg-blue d-flex align-items-center rounded-circle justify-content-center position-fixed p-0 text-white shadow"
+                style="font-size: 1rem; height: 30px; width: 30px; top: 94px; right: 51px; z-index: 2; background-color: #D32839;" @click="pinned = true">
                 <i class="bi bi-pin-angle-fill"></i>
             </button>
             <div class="row">
@@ -17,7 +19,8 @@
                             </div>
                             <div class="d-flex align-items-center gap-4">
                                 @livewire('staff.ticket.priority-level', ['ticket' => $ticket])
-                                <button class="btn btn-sm btn__change__priority__level p-0" style="height: 30px; width: 30px; font-size: 1rem; color: #D32839;" @click="pinned = false">
+                                <button class="btn btn-sm btn__change__priority__level p-0"
+                                    style="height: 30px; width: 30px; font-size: 1rem; color: #D32839;" @click="pinned = false">
                                     <i class="bi bi-pin-angle-fill"></i>
                                 </button>
                             </div>
@@ -60,9 +63,11 @@
                                     <div class="ticket__details__card__header d-flex justify-content-between flex-wrap">
                                         <div class="d-flex align-items-center user__account__media">
                                             @if ($requester->profile->picture)
-                                                <img src="{{ Storage::url($requester->profile->picture) }}" class="image-fluid ticket__details__user__picture" alt="">
+                                                <img src="{{ Storage::url($requester->profile->picture) }}"
+                                                    class="image-fluid ticket__details__user__picture" alt="">
                                             @else
-                                                <div class="user__name__initial d-flex align-items-center justify-content-center me-2 p-2 text-white" style="background-color: #24695C;">
+                                                <div class="user__name__initial d-flex align-items-center justify-content-center me-2 p-2 text-white"
+                                                    style="background-color: #24695C;">
                                                     {{ $requester->profile->getNameInitial() }}
                                                 </div>
                                             @endif
@@ -70,7 +75,9 @@
                                                 <small class="ticket__details__user__fullname">
                                                     <span>{{ $requester->profile->getFullName }}</span>
                                                     @if ($requester->trashed())
-                                                        <i class="bi bi-exclamation-circle-fill text-danger ms-1" style="font-size: 0.7rem;" data-tooltip="Archived" data-tooltip-position="right" data-tooltip-font-size="0.7rem" data-tooltip-max-width="200px" data-tooltip-additional-classes="rounded-3"></i>
+                                                        <i class="bi bi-exclamation-circle-fill text-danger ms-1" style="font-size: 0.7rem;"
+                                                            data-tooltip="Archived" data-tooltip-position="right" data-tooltip-font-size="0.7rem"
+                                                            data-tooltip-max-width="200px" data-tooltip-additional-classes="rounded-3"></i>
                                                     @endif
                                                 </small>
                                                 <small class="ticket__details__user__department">
@@ -92,7 +99,8 @@
                                         <div class="ticket__description mt-3">{!! $ticket->description !!}</div>
                                     @endif
                                     @if ($ticket->fileAttachments->count() > 0)
-                                        <div class="ticket__attachments d-inline-flex mb-3 gap-1" data-bs-toggle="modal" data-bs-target="#ticketFilesModalForm">
+                                        <div class="ticket__attachments d-inline-flex mb-3 gap-1" data-bs-toggle="modal"
+                                            data-bs-target="#ticketFilesModalForm">
                                             <i class="fa-solid fa-file-zipper"></i>
                                             <small class="attachment__count">{{ $ticket->fileAttachments->count() }}</small>
                                             <small class="attachment__label">
@@ -110,16 +118,20 @@
                                 </small>
                                 <div class="d-flex align-items-center threads__clarifications__tab__container gap-3">
                                     @if (auth()->user()->isServiceDepartmentAdmin())
-                                        <a onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'" class="btn btn-sm rounded-0 {{ Route::is('staff.ticket.view_ticket') ? 'active' : '' }} px-0" type="button">
+                                        <a onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'"
+                                            class="btn btn-sm rounded-0 {{ Route::is('staff.ticket.view_ticket') ? 'active' : '' }} px-0" type="button">
                                             Reply Threads
                                         </a>
-                                        <a onclick="window.location='{{ route('staff.ticket.ticket_clarifications', $ticket->id) }}'" class="btn btn-sm rounded-0 {{ Route::is('staff.ticket.ticket_clarifications') ? 'active' : '' }} px-0" type="button">
+                                        <a onclick="window.location='{{ route('staff.ticket.ticket_clarifications', $ticket->id) }}'"
+                                            class="btn btn-sm rounded-0 {{ Route::is('staff.ticket.ticket_clarifications') ? 'active' : '' }} px-0"
+                                            type="button">
                                             Clarifications
                                         </a>
-                                        <a onclick="window.location='{{ route('staff.ticket.ticket_subtasks', $ticket->id) }}'" class="btn btn-sm rounded-0 {{ Route::is('staff.ticket.ticket_subtasks') ? 'active' : '' }} px-0" type="button">
-                                            Subtasks
-                                        </a>
                                     @endif
+                                    <a onclick="window.location='{{ route('staff.ticket.ticket_subtasks', $ticket->id) }}'"
+                                        class="btn btn-sm rounded-0 {{ Route::is('staff.ticket.ticket_subtasks') ? 'active' : '' }} px-0" type="button">
+                                        Subtasks
+                                    </a>
                                 </div>
                             </div>
                             {{-- Replies/Comments --}}

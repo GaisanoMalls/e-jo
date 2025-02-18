@@ -20,7 +20,8 @@ class AppNotification extends Notification implements ShouldQueue
         protected readonly Ticket $ticket,
         protected readonly string $title,
         protected readonly string $message,
-        protected readonly bool $forClarification = false
+        protected readonly bool $forClarification = false,
+        protected readonly bool $forSubtask = false
     ) {
     }
 
@@ -48,6 +49,7 @@ class AppNotification extends Notification implements ShouldQueue
             'title' => $this->title,
             'message' => $this->message,
             'forClarification' => $this->forClarification,
+            'forSubtask' => $this->forSubtask
         ];
     }
 }
