@@ -162,12 +162,6 @@
                                         {{ $message }}
                                     </span>
                                 @enderror
-                                {{-- @if (session()->has('subtaskNameExists'))
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ session('subtaskNameExists') }}
-                                    </span>
-                                @endif --}}
                             </div>
                             <div class="my-2">
                                 <label class="ticket__actions__label mb-2">

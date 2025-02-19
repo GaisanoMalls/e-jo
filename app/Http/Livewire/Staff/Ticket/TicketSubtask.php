@@ -68,10 +68,15 @@ class TicketSubtask extends Component
 
         try {
             if (auth()->user()->isServiceDepartmentAdmin()) {
-                // if (TSubtask::where('name', $this->subtaskName)->exists()) {
-                //     $this->addError('editSubtaskName', 'Subtask is already exists');
-                //     return;
-                // }
+                $isTicketSubtaskExists = TSubtask::where([
+                    ['ticket_id', $this->ticket->id],
+                    ['name', $this->subtaskName]
+                ])->exists();
+
+                if ($isTicketSubtaskExists) {
+                    $this->addError('subtaskName', 'Subtask is already exists');
+                    return;
+                }
 
                 TSubtask::create([
                     'ticket_id' => $this->ticket->id,
@@ -157,6 +162,17 @@ class TicketSubtask extends Component
 
         try {
             if (auth()->user()->isServiceDepartmentAdmin()) {
+                $isTicketSubtaskExists = TSubtask::where([
+                    ['ticket_id', $this->ticket->id],
+                    ['name', $this->editSubtaskName]
+                ])->whereNot('id', $this->editSubtaskId)
+                    ->exists();
+
+                if ($isTicketSubtaskExists) {
+                    $this->addError('editSubtaskName', 'Subtask is already exists');
+                    return;
+                }
+
                 TSubtask::where([
                     ['id', $this->editSubtaskId],
                     ['ticket_id', $this->ticket->id]

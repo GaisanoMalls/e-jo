@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
             $table->foreignIdFor(Team::class, 'team_id')->constrained('teams')->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'agent_id')->nullable()->constrained('users')->cascadeOnDelete();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->enum('status', SubtaskStatusEnum::toArray())->default(SubtaskStatusEnum::OPEN->value);
             $table->timestamps();
         });
