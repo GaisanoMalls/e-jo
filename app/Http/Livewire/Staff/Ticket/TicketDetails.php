@@ -115,8 +115,11 @@ class TicketDetails extends Component
                 ActivityLog::make(ticket_id: $this->ticket->id, description: 'sent a request for SLA extension');
 
                 $slaExtensionApprovers = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->whereHas('buDepartments', fn($buDepartment) => $buDepartment->whereIn('departments.id', $this->slaExtensionRequestedBy?->buDepartments->pluck('id') ?? []))
+                    ->whereHas('buDepartments', function ($buDepartment) {
+                        $buDepartment->whereIn('departments.id', $this->ticket?->slaExtension?->requestedBy?->buDepartments->pluck('id') ?? []);
+                    })
                     ->get();
+
                 $slaExtensionApprovers->each(function ($slaExtensionApprover) {
                     Notification::send(
                         $slaExtensionApprover,
@@ -236,6 +239,7 @@ class TicketDetails extends Component
                     )
                 );
 
+                noty()->addSuccess('SLA has been successfully updated from ' . $this->ticket->sla->time_unit . ' to ' . $this->selectedServiceLevelAgreement->time_unit);
                 $this->reset('selectedSla');
                 $this->resetValidation('selectedSla');
             }

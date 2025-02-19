@@ -116,7 +116,7 @@
                     @if ($this->ticket->agent_id !== null)
                         <div class="d-inline">
                             @if (auth()->user()->isAgent() && !$isRequestingForSlaExtension)
-                                @if ($isNewSlaSet)
+                                @if ($isNewSlaSet || (!$isRequestingForSlaExtension && !$isSlaExtensionApproved))
                                     <button type="button" class="btn btn-sm" style="font-size: 12px; color: white; background-color: #d32839;"
                                         data-bs-toggle="collapse" data-bs-target="#collapse-extend-sla" aria-expanded="false"
                                         aria-controls="collapse-extend-sla">
