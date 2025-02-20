@@ -14,8 +14,6 @@ use App\Models\FieldHeaderValue;
 use App\Models\FieldRowValue;
 use App\Models\Form;
 use App\Models\HelpTopic;
-use App\Models\HelpTopicConfiguration;
-use App\Models\NonConfigApprover;
 use App\Models\PriorityLevel;
 use App\Models\Role;
 use App\Models\ServiceLevelAgreement;
@@ -53,7 +51,7 @@ class CreateTicket extends Component
     public ?int $priorityLevel = null;
     public ?int $serviceDepartment = null;
     public ?int $helpTopic = null;
-    public bool $isBuNotInApprovalConfig = false;
+    public bool $doesntHaveApprovalConfig = false;
     public array $serviceDepartmentAdmins = [];
     public array|string $fileAttachments = [];
     public array $allowedExtensions = [
@@ -135,13 +133,13 @@ class CreateTicket extends Component
             ->get();
     }
 
-    private function filterServiceDepartmentAdmins(HelpTopic|int $helpTopicId)
+    private function filterServiceDepartmentAdmins(int $helpTopicId)
     {
-        $this->isBuNotInApprovalConfig = HelpTopicConfiguration::where('help_topic_id', $helpTopicId)
-            ->whereIn('bu_department_id', auth()->user()->buDepartments->pluck('id'))
-            ->doesntExist();
+        $this->doesntHaveApprovalConfig = HelpTopic::where('id', $helpTopicId)
+            ->whereDoesntHave('configurations')
+            ->exists();
 
-        if ($this->isBuNotInApprovalConfig) {
+        if ($this->doesntHaveApprovalConfig) {
             $this->dispatchBrowserEvent('show-requester-service-department-admins', [
                 'serviceDepartmentAdmins' => $this->fetchRequesterServiceDepartmentAdmins()
             ]);
@@ -265,21 +263,11 @@ class CreateTicket extends Component
                     }
                 }
 
-                if ($this->isBuNotInApprovalConfig) {
-                    if (!empty($this->serviceDepartmentAdmins)) {
-                        NonConfigApprover::create([
-                            'ticket_id' => $ticket->id,
-                            'approvers' => [
-                                'id' => array_map('intval', $this->serviceDepartmentAdmins),
-                                'is_approved' => false
-                            ]
-                        ]);
-                    } else {
-                        $ticket->update([
-                            'status_id' => Status::APPROVED,
-                            'approval_status' => ApprovalStatusEnum::APPROVED
-                        ]);
-                    }
+                if ($this->doesntHaveApprovalConfig) {
+                    $ticket->update([
+                        'status_id' => Status::APPROVED,
+                        'approval_status' => ApprovalStatusEnum::APPROVED
+                    ]);
 
                     $serviceDeptAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
                         ->whereIn('id', $this->serviceDepartmentAdmins)

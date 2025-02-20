@@ -80,12 +80,12 @@
                                 @enderror
                             </div>
                         </div>
-                        @if ($isBuNotInApprovalConfig)
+                        @if ($doesntHaveApprovalConfig)
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label input__field__label">
-                                        Service Department Admin
-                                        <em>(Optional)</em>
+                                        Select who will be notified
+                                        <em>(Service Department Administrators)</em>
                                     </label>
                                     <div>
                                         <div id="user-create-ticket-service-department-admin-dropdown" wire:ignore></div>

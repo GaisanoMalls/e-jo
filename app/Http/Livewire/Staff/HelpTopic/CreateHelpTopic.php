@@ -25,6 +25,7 @@ class CreateHelpTopic extends Component
 {
     use Utils, BasicModelQueries;
     public bool $isSpecialProject = false;
+    public bool $isRequiresApproval = true;
     public ?Collection $teams = null;
     public ?string $name = null;
     public ?int $sla = null;
@@ -85,8 +86,8 @@ class CreateHelpTopic extends Component
             'sla' => ['required'],
             'serviceDepartment' => ['required'],
             'team' => ['required'],
-            'selectedBuDepartment' => [empty($this->configurations) ? 'required' : 'nullable'],
-            'selectedApprovalLevel' => [empty($this->configurations) ? 'accepted' : 'nullable'],
+            'selectedBuDepartment' => [$this->isRequiresApproval && empty($this->configurations) ? 'required' : 'nullable'],
+            'selectedApprovalLevel' => [$this->isRequiresApproval && empty($this->configurations) ? 'accepted' : 'nullable'],
             'teams' => '',
         ];
     }
@@ -97,6 +98,11 @@ class CreateHelpTopic extends Component
             'selectedBuDepartment.required' => 'BU department field is required',
             'selectedApprovalLevel.accepted' => 'Level of approval field is required',
         ];
+    }
+
+    public function updatedIsRequiresApproval()
+    {
+        $this->dispatchBrowserEvent('reload-help-topic-approval-config');
     }
 
     private function actionOnSubmit()
@@ -121,7 +127,7 @@ class CreateHelpTopic extends Component
                     'slug' => Str::slug($this->name),
                 ]);
 
-                if (!empty($this->configurations)) {
+                if ($this->isRequiresApproval && !empty($this->configurations)) {
                     // Save help topic and its configurations
                     foreach ($this->configurations as $config) {
                         $helpTopicConfiguration = HelpTopicConfiguration::create([

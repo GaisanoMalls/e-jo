@@ -20,12 +20,8 @@ trait Tickets
             ->whereHas('teams', function ($team) {
                 $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray());
             })
-            ->where(function ($query) {
-                $query->whereHas('ticketApprovals', function ($approval) {
-                    $approval->orWhere('is_approved', true);
-                })
-                    ->orWhereHas('nonConfigApprover', fn($approver) => $approver->whereJsonContains('approvers->is_approved', true))
-                    ->orWhereDoesntHave('nonConfigApprover');
+            ->orWhereHas('ticketApprovals', function ($approval) {
+                $approval->orWhere('is_approved', true);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -47,7 +43,7 @@ trait Tickets
             ->whereHas('teams', function ($team) {
                 $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray());
             })
-            ->whereHas('ticketApprovals', function ($approval) {
+            ->orWhereHas('ticketApprovals', function ($approval) {
                 $approval->orWhere('is_approved', true);
             })
             ->orderByDesc('created_at')
@@ -72,7 +68,7 @@ trait Tickets
                     ->orWhereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
                     ->orWhereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
             })
-            ->whereHas('ticketApprovals', function ($approval) {
+            ->orWhereHas('ticketApprovals', function ($approval) {
                 $approval->orWhere('is_approved', true);
             })
             ->orderByDesc('created_at')
@@ -94,7 +90,7 @@ trait Tickets
             ->whereHas('teams', callback: function ($team) {
                 $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray());
             })
-            ->whereHas('ticketApprovals', function ($approval) {
+            ->orWhereHas('ticketApprovals', function ($approval) {
                 $approval->orWhere('is_approved', true);
             })
             ->orderByDesc('created_at')
@@ -116,7 +112,7 @@ trait Tickets
             ->whereHas('teams', function ($team) {
                 $team->whereIn('teams.id', auth()->user()->teams->pluck('id')->toArray());
             })
-            ->whereHas('ticketApprovals', function ($approval) {
+            ->orWhereHas('ticketApprovals', function ($approval) {
                 $approval->orWhere('is_approved', true);
             })
             ->orderByDesc('created_at')

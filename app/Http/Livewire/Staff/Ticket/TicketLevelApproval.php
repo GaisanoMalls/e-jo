@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Staff\Ticket;
 
 use App\Http\Traits\Utils;
-use App\Models\NonConfigApprover;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\User;
@@ -17,8 +16,6 @@ class TicketLevelApproval extends Component
     public Ticket $ticket;
     public Collection $approvers;
     public Collection $ticketApprovals;
-    public ?NonConfigApprover $nonConfigApproval = null;
-    public ?Collection $nonConfigApprovers = null;
     public bool $nonConfigApprovalIsApproved = false;
     public array $approvalLevels = [1, 2, 3, 4, 5];
 
@@ -31,11 +28,6 @@ class TicketLevelApproval extends Component
                 $approver->where('help_topic_id', $this->ticket->helpTopic?->id)
                     ->whereIn('level', $this->approvalLevels);
             })->get();
-        $this->nonConfigApproval = NonConfigApprover::where('ticket_id', $this->ticket->id)->first();
-        $this->nonConfigApprovers = User::with('profile')
-            ->whereIn('id', data_get($this->nonConfigApproval, 'approvers.id', []))
-            ->get();
-        $this->nonConfigApprovalIsApproved = data_get($this->nonConfigApproval, 'approvers.is_approved', false);
     }
 
     public function fetchApprovers(int $level)
