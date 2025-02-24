@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.visible.20s>
     <button wire:ignore.self
         class="btn btn-toggle d-flex gap-3 justify-content-between btn-block align-items-center w-100 border-0 sidebar__buttons sidebar__btn__collapse {{ Route::is('staff.tickets.*') || Route::is('staff.ticket.*') ? 'sidebar__btn__active active' : '' }}"
         data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="true" wire:click="tiggerEvents">

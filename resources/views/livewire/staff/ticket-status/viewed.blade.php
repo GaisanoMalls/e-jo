@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.visible.20s>
     <div class="tickets__card__header px-4 py-5">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-5">
             <div class="d-flex flex-column me-3">

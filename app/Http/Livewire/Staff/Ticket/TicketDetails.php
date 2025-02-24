@@ -114,9 +114,14 @@ class TicketDetails extends Component
                 );
                 ActivityLog::make(ticket_id: $this->ticket->id, description: 'sent a request for SLA extension');
 
+                $slaRequester = User::role(Role::AGENT)
+                    ->with('buDepartments')
+                    ->where('id', auth()->user()->id)
+                    ->first();
+
                 $slaExtensionApprovers = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                    ->whereHas('buDepartments', function ($buDepartment) {
-                        $buDepartment->whereIn('departments.id', $this->ticket?->slaExtension?->requestedBy?->buDepartments->pluck('id') ?? []);
+                    ->whereHas('buDepartments', function ($buDepartment) use ($slaRequester) {
+                        $buDepartment->whereIn('departments.id', $slaRequester->buDepartments->pluck('id'));
                     })
                     ->get();
 
@@ -272,7 +277,6 @@ class TicketDetails extends Component
             ->where('id', auth()->user()->id)
             ->whereHas('buDepartments', fn($buDepartment) => $buDepartment->whereIn('departments.id', $this->slaExtensionRequestedBy?->buDepartments->pluck('id') ?? []))
             ->first() !== null;
-
         $this->serviceLevelAgreements = $this->queryServiceLevelAgreements();
 
         return view('livewire.staff.ticket.ticket-details');

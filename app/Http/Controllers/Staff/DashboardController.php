@@ -40,27 +40,6 @@ class DashboardController extends Controller
                 'routeName' => "staff.tickets.open_tickets"
             ],
             [
-                'name' => 'Viewed',
-                'color' => '#7ba504',
-                'count' => $this->viewedTickets,
-                'icon' => 'fa-eye',
-                'routeName' => "staff.tickets.viewed_tickets"
-            ],
-            [
-                'name' => 'Approved',
-                'color' => '#14532d',
-                'count' => $this->approvedTickets,
-                'icon' => 'fa-thumbs-up',
-                'routeName' => "staff.tickets.approved_tickets"
-            ],
-            [
-                'name' => 'Disapproved',
-                'color' => '#be123c',
-                'count' => $this->disapprovedTickets,
-                'icon' => 'fa-thumbs-down',
-                'routeName' => "staff.tickets.disapproved_tickets"
-            ],
-            [
                 'name' => 'Claimed',
                 'color' => '#78716c',
                 'count' => $this->claimedTickets,
@@ -89,6 +68,35 @@ class DashboardController extends Controller
                 'routeName' => "staff.tickets.closed_tickets"
             ]
         ];
+
+        if (!auth()->user()->isAgent()) {
+            // Additional statuses except for agents
+            $additionalStatuses = [
+                [
+                    'name' => 'Viewed',
+                    'color' => '#7ba504',
+                    'count' => $this->viewedTickets,
+                    'icon' => 'fa-eye',
+                    'routeName' => "staff.tickets.viewed_tickets"
+                ],
+                [
+                    'name' => 'Approved',
+                    'color' => '#14532d',
+                    'count' => $this->approvedTickets,
+                    'icon' => 'fa-thumbs-up',
+                    'routeName' => "staff.tickets.approved_tickets"
+                ],
+                [
+                    'name' => 'Disapproved',
+                    'color' => '#be123c',
+                    'count' => $this->disapprovedTickets,
+                    'icon' => 'fa-thumbs-down',
+                    'routeName' => "staff.tickets.disapproved_tickets"
+                ]
+            ];
+
+            $ticketStatuses = array_merge($ticketStatuses, $additionalStatuses);
+        }
 
         return view('layouts.staff.system_admin.dashboard', compact([
             'ticketStatuses',

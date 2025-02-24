@@ -1,3 +1,7 @@
+@php
+    use App\Enums\SubtaskStatusEnum;
+@endphp
+
 <div>
     <div class="card border-0 p-3">
         @if ($subtasks->isNotEmpty())
@@ -8,7 +12,9 @@
                         <th scope="col" class="px-3 py-2" style="font-size: 13px;">Team</th>
                         <th scope="col" class="px-3 py-2" style="font-size: 13px;">Assignee</th>
                         <th scope="col" class="px-3 py-2" style="font-size: 13px;">Status</th>
-                        <th scope="col" class="px-3 py-2 text-center" style="font-size: 13px;">Action</th>
+                        @if (auth()->user()->isServiceDepartmentAdmin())
+                            <th scope="col" class="px-3 py-2 text-center" style="font-size: 13px;">Action</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -17,14 +23,14 @@
                             <td class="px-3 py-2" style="font-size: 13px;">{{ $subtask->name }}</td>
                             <td class="px-3 py-2" style="font-size: 13px;">{{ $subtask->team->name }}</td>
                             <td class="px-3 py-2" style="font-size: 13px;">{{ $subtask->assignedAgent?->profile->getFullName }}</td>
-                            <td class="px-3 py-2 d-flex align-items-center" style="font-size: 13px;">
+                            <td class="px-3 py-2 d-flex align-items-center" @style(['font-size: 13px', 'background-color: #65b556' => $subtask->status->value === SubtaskStatusEnum::DONE->value, 'color: #FFFFFF' => $subtask->status->value === SubtaskStatusEnum::DONE->value])>
                                 {{ $subtask->status }}
                                 @if (auth()->user()->isAgent() || auth()->user()->isServiceDepartmentAdmin())
                                     <div class="dropstart ms-auto">
                                         <button type="button"
                                             class="btn btn-sm rounded-circle d-flex align-items-center justify-content-center text-muted"
                                             data-bs-toggle="dropdown" aria-expanded="false" style="height: 20px; width: 20px;">
-                                            <i class="bi bi-three-dots-vertical"></i>
+                                            <i class="bi bi-three-dots-vertical" @style(['color: #FFFFFF' => $subtask->status->value === SubtaskStatusEnum::DONE->value])></i>
                                         </button>
                                         <ul class="dropdown-menu py-2">
                                             @foreach ($subtaskStatuses as $subtastStatus)
@@ -43,15 +49,17 @@
                                     </div>
                                 @endif
                             </td>
-                            <td class="px-3" style="font-size: 13px;">
-                                <button wire:click="editSubtask({{ $subtask->id }})"
-                                    class="btn btn-sm d-flex align-items-center justify-content-center bg-blue rounded-2 gap-1 mx-auto"
-                                    style="font-size: 11px; padding: 1px 6px; background-color: #f3f4f6; border: 1px solid rgb(223, 228, 233);"
-                                    data-bs-toggle="modal" data-bs-target="#editSubtaskModal">
-                                    <i class="bi bi-pencil"></i>
-                                    Edit
-                                </button>
-                            </td>
+                            @if (auth()->user()->isServiceDepartmentAdmin())
+                                <td class="px-3" style="font-size: 13px;">
+                                    <button wire:click="editSubtask({{ $subtask->id }})"
+                                        class="btn btn-sm d-flex align-items-center justify-content-center bg-blue rounded-2 gap-1 mx-auto"
+                                        style="font-size: 11px; padding: 1px 6px; background-color: #f3f4f6; border: 1px solid rgb(223, 228, 233);"
+                                        data-bs-toggle="modal" data-bs-target="#editSubtaskModal">
+                                        <i class="bi bi-pencil"></i>
+                                        Edit
+                                    </button>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>

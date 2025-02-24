@@ -29,7 +29,7 @@ class TicketSubtask extends Component
 
     public ?int $editSubtaskId = null;
     public ?string $editSubtaskName = null;
-    public ?int $editSubtaskTeam = null;
+    public ?int $editSubtaskTeam = null;    
     public ?int $editSubtaskAgent = null;
 
     public function rules()
