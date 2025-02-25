@@ -47,6 +47,7 @@ class SendClarification extends Component
             'loadTicketDetails',
             'loadBackButtonHeader',
             'loadClarificationsCount',
+            'loadNewClarificationIcon',
             'loadTicketClarifications',
             'loadTicketStatusHeaderText',
         ];

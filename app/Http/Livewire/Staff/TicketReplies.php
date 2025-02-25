@@ -130,6 +130,11 @@ class TicketReplies extends Component
         }
     }
 
+    public function getLatestReply()
+    {
+        $this->emit('loadLatestReply');
+    }
+
     public function render()
     {
         return view('livewire.staff.ticket-replies');

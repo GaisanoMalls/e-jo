@@ -33,10 +33,12 @@
                             <div class="ticket__details__card__header d-flex flex-wrap justify-content-between">
                                 <div class="d-flex align-items-center user__account__media">
                                     @if ($ticket->user->profile->picture)
-                                        <img src="{{ Storage::url($ticket->user->profile->picture) }}" class="image-fluid ticket__details__user__picture" alt="">
+                                        <img src="{{ Storage::url($ticket->user->profile->picture) }}" class="image-fluid ticket__details__user__picture"
+                                            alt="">
                                     @else
                                         <div class="user__name__initial d-flex align-items-center p-2 me-2 justify-content-center
-                                    text-white" style="background-color: #24695C;">
+                                    text-white"
+                                            style="background-color: #24695C;">
                                             {{ $ticket->user->profile->getNameInitial() }}</div>
                                     @endif
                                     <div class="d-flex flex-column">
@@ -61,7 +63,8 @@
                                     <div class="ticket__description">{!! $ticket->description !!}</div>
                                 @endif
                                 @if ($ticket->fileAttachments->count() > 0)
-                                    <div class="ticket__attachments d-inline-flex gap-1 mb-3" data-bs-toggle="modal" data-bs-target="#requesterTicketFilesModalForm">
+                                    <div class="ticket__attachments d-inline-flex gap-1 mb-3" data-bs-toggle="modal"
+                                        data-bs-target="#requesterTicketFilesModalForm">
                                         <i class="fa-solid fa-file-zipper"></i>
                                         <small class="attachment__count">{{ $ticket->fileAttachments->count() }}</small>
                                         <small class="attachment__label">
@@ -73,15 +76,21 @@
                         </div>
                         <div class="mb-4 mt-4 d-flex align-items-center justify-content-between">
                             <small class="ticket__discussions text-muted">
-                            @section('count-replyThraeds-clarificafions')
+                            @section('count-replyThreads-clarificafions')
                                 @livewire('requester.ticket.load-discussions-count', ['ticket' => $ticket])
                             @show
                         </small>
                         <div class="d-flex align-items-center gap-3 threads__clarifications__tab__container">
-                            <a onclick="window.location='{{ route('user.ticket.view_ticket', $ticket->id) }}'" class="btn btn-sm px-0 rounded-0 {{ Route::is('user.ticket.view_ticket') ? 'active' : '' }}" type="button">
+                            <a onclick="window.location='{{ route('user.ticket.view_ticket', $ticket->id) }}'"
+                                class="btn btn-sm px-0 rounded-0 position-relative {{ Route::is('user.ticket.view_ticket') ? 'active' : '' }}"
+                                type="button">
+                                @livewire('ticket-notif.new-reply-icon', ['ticket' => $ticket])
                                 Reply Threads
                             </a>
-                            <a onclick="window.location='{{ route('user.ticket.ticket_clarifications', $ticket->id) }}'" class="btn btn-sm px-0 rounded-0 {{ Route::is('user.ticket.ticket_clarifications') ? 'active' : '' }}" type="button">
+                            <a onclick="window.location='{{ route('user.ticket.ticket_clarifications', $ticket->id) }}'"
+                                class="btn btn-sm px-0 rounded-0 position-relative {{ Route::is('user.ticket.ticket_clarifications') ? 'active' : '' }}"
+                                type="button">
+                                @livewire('ticket-notif.new-clarification-icon', ['ticket' => $ticket])
                                 Clarifications
                             </a>
                         </div>

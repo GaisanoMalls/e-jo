@@ -1,3 +1,7 @@
+@php
+    use App\Models\Status;
+@endphp
+
 <div wire:init="loadClarifications">
     @if (!is_null($clarifications))
         <div wire:poll.visible.7s>
@@ -132,6 +136,15 @@
                 <div class="alert alert-warning py-3 px-3 rounded-3" style="margin: 20px 0px;">
                     <small style="font-size: 14px;">No replies.</small>
                 </div>
+            @endif
+
+            @if ($ticket->status_id != Status::CLOSED && $ticket->status_id != Status::DISAPPROVED)
+                <button type="button"
+                    class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2 float-end"
+                    data-bs-toggle="modal" data-bs-target="#sendTicketClarificationModal" wire:click="getLatestClarification">
+                    <i class="fa-solid fa-pen"></i>
+                    <span class="lbl__reply">Clarify</span>
+                </button>
             @endif
         </div>
     @else

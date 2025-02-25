@@ -5,9 +5,6 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\Requester\Tickets;
 use App\Http\Traits\Utils;
-use App\Models\Branch;
-use App\Models\HelpTopic;
-use App\Models\ServiceDepartment;
 use App\Models\Ticket;
 
 class TicketsController extends Controller

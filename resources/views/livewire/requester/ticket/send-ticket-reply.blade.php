@@ -4,8 +4,8 @@
             <div class="modal-content d-flex flex-column custom__modal__content">
                 <div class="modal__header d-flex justify-content-between align-items-center">
                     <h6 class="modal__title">Write your reply</h6>
-                    <button class="btn d-flex align-items-center justify-content-center modal__close__button"
-                        data-bs-dismiss="modal" id="btnCloseModal">
+                    <button class="btn d-flex align-items-center justify-content-center modal__close__button" data-bs-dismiss="modal"
+                        id="btnCloseModal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -28,15 +28,14 @@
                                 <label class="ticket__actions__label">Attach file</label>
                                 <div wire:loading wire:target="replyFiles">
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="spinner-border text-info" style="height: 15px; width: 15px;"
-                                            role="status">
+                                        <div class="spinner-border text-info" style="height: 15px; width: 15px;" role="status">
                                         </div>
                                         <small style="fot-size: 12px;">Uploading...</small>
                                     </div>
                                 </div>
                             </div>
-                            <input class="form-control ticket__file__input w-auto my-3" type="file"
-                                wire:model="replyFiles" multiple id="upload-{{ $upload }}">
+                            <input class="form-control ticket__file__input w-auto my-3" type="file" wire:model="replyFiles" multiple
+                                id="upload-{{ $upload }}">
                             @error('replyFiles.*')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -44,10 +43,9 @@
                                 </span>
                             @enderror
                         </div>
-                        <button type="submit"
-                            class="btn mt-4 d-flex align-items-center justify-content-center gap-2 btn__send__ticket__reply">
-                            <span wire:loading wire:target="sendTicketReply" class="spinner-border spinner-border-sm"
-                                role="status" aria-hidden="true">
+                        <button type="submit" class="btn mt-4 d-flex align-items-center justify-content-center gap-2 btn__send__ticket__reply">
+                            <span wire:loading wire:target="sendTicketReply" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true">
                             </span>
                             Send
                         </button>

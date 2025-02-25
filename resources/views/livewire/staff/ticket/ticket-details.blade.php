@@ -8,7 +8,7 @@
             <div class="d-flex align-items-center gap-2 mb-3">
                 <small class="ticket__actions__label">Ticket Details</small>
             </div>
-            <div wire:loading.class="text-muted" class="d-flex flex-column gap-2">
+            <div class="d-flex flex-column gap-2">
                 <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                     <small class="ticket__details__info__label">
                         Approval status:

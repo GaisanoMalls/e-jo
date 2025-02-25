@@ -8,7 +8,6 @@ use App\Http\Traits\Utils;
 use App\Mail\Staff\StaffReplyMail;
 use App\Models\ActivityLog;
 use App\Models\Reply;
-use App\Models\ReplyFile;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Notifications\AppNotification;
@@ -46,6 +45,7 @@ class ReplyTicket extends Component
             'loadTicketReplies',
             'loadDiscussionCount',
             'loadBackButtonHeader',
+            'loadNewReplyIcon',
             'loadTicketStatusTextHeader',
             'loadSidebarCollapseTicketStatus',
         ];

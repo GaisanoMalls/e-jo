@@ -17,7 +17,7 @@ class LatestReply extends Component
     public function render()
     {
         $this->latestReply = Reply::where('ticket_id', $this->ticket->id)
-            ->where('user_id', '!=', auth()->user()->id)
+            ->whereNot('user_id', auth()->user()->id)
             ->orderByDesc('created_at')
             ->first();
 

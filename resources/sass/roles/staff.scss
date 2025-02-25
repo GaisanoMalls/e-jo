@@ -2242,6 +2242,26 @@ a {
     }
 }
 
+.btn__reply__ticket {
+    border-radius: $border-radius-9;
+    font-size: $fs-14;
+    padding: 0.45rem 0.8rem;
+    font-weight: $fw-400;
+    box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12),
+        0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+    background-color: #00695b;
+    color: #ffffff;
+
+    &:hover {
+        background-color: #00695b;
+        color: #ffffff;
+    }
+
+    i {
+        font-size: $fs-12;
+    }
+}
+
 .modal__confirm__close__ticket {
     .btn__confirm__modal {
         @include generic.button-config;
@@ -4798,6 +4818,27 @@ input[type="checkbox"] {
 }
 
 // End Directory Section
+
+@media (max-width: 767px) {
+    .btn__reply__ticket {
+        .lbl__reply {
+            display: none !important;
+        }
+    }
+
+    .btn__reply__ticket.btn__reply__ticket__mobile {
+        position: fixed !important;
+        bottom: 11px;
+        right: 30px;
+        z-index: 1;
+        border-radius: $border-radius-50 !important;
+        height: 3rem;
+        width: 3rem;
+        opacity: 0.8;
+        box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12),
+            0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);
+    }
+}
 
 @media (max-width: 400px) {
     .btn__add__user__account,

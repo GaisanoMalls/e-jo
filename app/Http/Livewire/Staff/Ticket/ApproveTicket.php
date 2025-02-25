@@ -34,11 +34,11 @@ class ApproveTicket extends Component
             'loadCustomForm',
             'loadTicketTags',
             'loadTicketLogs',
+            'loadTicketReplies',
             'loadTicketDetails',
             'loadTicketActions',
             'loadLevelOfApproval',
             'loadBackButtonHeader',
-            'loadReplyButtonHeader',
             'loadDisapprovalReason',
             'loadClarificationButtonHeader',
             'loadSidebarCollapseTicketStatus'

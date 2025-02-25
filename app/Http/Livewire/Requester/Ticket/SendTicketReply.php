@@ -44,6 +44,7 @@ class SendTicketReply extends Component
     {
         $events = [
             'loadTicketLogs',
+            'loadNewReplyIcon',
             'loadTicketDetails',
             'loadDiscussionsCount',
             'loadTicketDiscussions',

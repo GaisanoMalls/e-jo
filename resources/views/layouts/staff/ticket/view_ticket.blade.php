@@ -37,12 +37,6 @@
                                 @if ($ticket->isSpecialProject() && auth()->user()->isAgent())
                                     @livewire('staff.ticket.load-costing-button-header', ['ticket' => $ticket])
                                 @endif
-                                @if (Route::is('staff.ticket.view_ticket'))
-                                    @livewire('staff.ticket.load-reply-button-header', ['ticket' => $ticket])
-                                @endif
-                                @if (Route::is('staff.ticket.ticket_clarifications') && auth()->user()->isServiceDepartmentAdmin())
-                                    @livewire('staff.ticket.load-clarify-ticket-button-header', ['ticket' => $ticket])
-                                @endif
                                 @if (auth()->user()->isAgent())
                                     @livewire('staff.ticket.claim-ticket', ['ticket' => $ticket])
                                 @endif
@@ -117,14 +111,17 @@
                                     @show
                                 </small>
                                 <div class="d-flex align-items-center threads__clarifications__tab__container gap-3">
+                                    <a onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'"
+                                        class="btn btn-sm rounded-0 position-relative {{ Route::is('staff.ticket.view_ticket') ? 'active' : '' }} px-0"
+                                        type="button">
+                                        @livewire('ticket-notif.new-reply-icon', ['ticket' => $ticket])
+                                        Reply Threads
+                                    </a>
                                     @if (auth()->user()->isServiceDepartmentAdmin())
-                                        <a onclick="window.location='{{ route('staff.ticket.view_ticket', $ticket->id) }}'"
-                                            class="btn btn-sm rounded-0 {{ Route::is('staff.ticket.view_ticket') ? 'active' : '' }} px-0" type="button">
-                                            Reply Threads
-                                        </a>
                                         <a onclick="window.location='{{ route('staff.ticket.ticket_clarifications', $ticket->id) }}'"
-                                            class="btn btn-sm rounded-0 {{ Route::is('staff.ticket.ticket_clarifications') ? 'active' : '' }} px-0"
+                                            class="btn btn-sm rounded-0 position-relative  {{ Route::is('staff.ticket.ticket_clarifications') ? 'active' : '' }} px-0"
                                             type="button">
+                                            @livewire('ticket-notif.new-clarification-icon', ['ticket' => $ticket])
                                             Clarifications
                                         </a>
                                     @endif

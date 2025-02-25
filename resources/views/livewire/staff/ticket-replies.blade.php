@@ -1,3 +1,8 @@
+@php
+    use App\Models\Status;
+    use App\Enums\ApprovalStatusEnum;
+@endphp
+
 <div wire:init="loadReplies">
     @if (!is_null($replies))
         <div wire:poll.visible>
@@ -246,6 +251,24 @@
                 <div class="alert alert-warning py-3 px-3 rounded-3" style="margin: 20px 0px;">
                     <small style="font-size: 14px;">No replies.</small>
                 </div>
+            @endif
+
+            @if ($ticket->status_id != Status::CLOSED && $ticket->status_id != Status::DISAPPROVED)
+                @if (auth()->user()->isServiceDepartmentAdmin() && $ticket->approval_status === ApprovalStatusEnum::FOR_APPROVAL)
+                    <button type="button"
+                        class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2 float-end"
+                        @disabled($ticket->approval_status === ApprovalStatusEnum::FOR_APPROVAL) @style(['cursor: not-allowed' => $ticket->approval_status === ApprovalStatusEnum::FOR_APPROVAL])>
+                        <i class="fa-solid fa-pen"></i>
+                        <span class="lbl__reply">Reply</span>
+                    </button>
+                @else
+                    <button type="button"
+                        class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2 float-end"
+                        data-bs-toggle="modal" data-bs-target="#replyTicketModal" wire:click="getLatestReply">
+                        <i class="fa-solid fa-pen"></i>
+                        <span class="lbl__reply">Reply</span>
+                    </button>
+                @endif
             @endif
         </div>
     @else

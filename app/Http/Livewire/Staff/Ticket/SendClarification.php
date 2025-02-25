@@ -8,7 +8,6 @@ use App\Http\Traits\Utils;
 use App\Mail\Staff\StaffClarificationMail;
 use App\Models\ActivityLog;
 use App\Models\Clarification;
-use App\Models\ClarificationFile;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
@@ -47,6 +46,7 @@ class SendClarification extends Component
             'loadTicketLogs',
             'loadBackButtonHeader',
             'loadClarificationCount',
+            'loadNewClarificationIcon',
             'loadTicketClarifications',
             'loadTicketStatusTextHeader',
             'loadSidebarCollapseTicketStatus',

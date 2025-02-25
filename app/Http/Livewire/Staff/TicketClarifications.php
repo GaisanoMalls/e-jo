@@ -17,6 +17,11 @@ class TicketClarifications extends Component
         $this->clarifications = $this->ticket->clarifications;
     }
 
+    public function getLatestClarification()
+    {
+        $this->emit('loadLatestClarification');
+    }
+
     public function render()
     {
         return view('livewire.staff.ticket-clarifications');

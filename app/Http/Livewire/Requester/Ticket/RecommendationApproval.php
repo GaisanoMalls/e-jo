@@ -4,16 +4,11 @@ namespace App\Http\Livewire\Requester\Ticket;
 
 use App\Enums\RecommendationApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
-use App\Models\ActivityLog;
 use App\Models\Recommendation;
 use App\Models\RecommendationApprover;
 use App\Models\Ticket;
 use App\Models\User;
-use App\Notifications\AppNotification;
-use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use App\Http\Traits\RecommendationApproval as RecommendationApprovalTrait;
 
