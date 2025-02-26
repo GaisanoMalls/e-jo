@@ -427,7 +427,7 @@
         });
 
         // Approval Configurations
-        let loadHelpTopicConfig = () => {
+        const loadHelpTopicConfig = () => {
             const buDepartmentSelect = document.querySelector('#select-help-topic-bu-department');
             const approvalLevelSelect = document.querySelector('#select-help-topic-approval-level');
 
@@ -528,7 +528,8 @@
                     approverSelect.setOptions(approverOptions);
                 }
             });
-            //reset fields after save config
+
+            // Reset fields after save config
             window.addEventListener('reset-select-fields', () => {
                 buDepartmentSelect.reset();
                 approvalLevelSelect.reset();

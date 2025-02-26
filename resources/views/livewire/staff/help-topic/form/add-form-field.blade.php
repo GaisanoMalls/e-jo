@@ -70,6 +70,14 @@
             <small class="fw-semibold text-danger mb-1">{{ session('has_associated_ticket_field') }}</small>
         @endif
         <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
+            <input wire:model="" class="form-check-input" type="checkbox" role="switch" id="predefinedFieldCheck" wire:loading.attr="disabled"
+                style="margin-right: 10px !important;">
+            <label class="form-check-label" for="predefinedFieldCheck">
+                As predefined field
+            </label>
+        </div>
+
+        <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
             <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch" id="headerFieldCheck"
                 wire:loading.attr="disabled" style="margin-right: 10px !important;">
             <label class="form-check-label" for="headerFieldCheck">

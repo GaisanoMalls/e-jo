@@ -25,6 +25,7 @@ return new class extends Migration {
             $table->enum('assigned_column', [1, 2, null])->nullable();
             $table->boolean('is_header_field')->default(0);
             $table->boolean('is_for_ticket_number')->default(0);
+            $table->boolean('is_auto_value')->default(false);
             $table->timestamps();
         });
     }
