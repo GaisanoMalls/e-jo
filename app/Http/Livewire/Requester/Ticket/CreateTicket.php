@@ -284,7 +284,6 @@ class CreateTicket extends Component
                             )
                         );
                     });
-
                 } else {
                     // Filter the approvers that were assigned in the approval configuration
                     $approvers = User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])

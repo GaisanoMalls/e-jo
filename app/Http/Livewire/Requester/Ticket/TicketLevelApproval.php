@@ -22,7 +22,7 @@ class TicketLevelApproval extends Component
             ->get();
     }
 
-    public function fetchedApprovers(int $level)
+    public function fetchApprovers(int $level)
     {
         return User::with('profile')->withWhereHas('helpTopicApprovals', function ($query) use ($level) {
             $query->where('level', $level)
