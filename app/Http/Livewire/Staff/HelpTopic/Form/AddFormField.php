@@ -28,7 +28,8 @@ class AddFormField extends Component
     public array $addedHeaderFields = [];
     public array $fieldColumnNumber = [1, 2];
     public ?int $assignedColumn = null;
-    public ?bool $asHeaderField = false;
+    public bool $asHeaderField = false;
+    public bool $asPredefinedField = false;
     public bool $isForTicketNumber = false;
     public bool $isRequired = false;
     public bool $isEnabled = false;

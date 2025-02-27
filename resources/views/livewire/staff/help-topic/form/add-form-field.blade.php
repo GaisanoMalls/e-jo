@@ -69,52 +69,76 @@
         @if (session()->has('has_associated_ticket_field'))
             <small class="fw-semibold text-danger mb-1">{{ session('has_associated_ticket_field') }}</small>
         @endif
-        <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
-            <input wire:model="" class="form-check-input" type="checkbox" role="switch" id="predefinedFieldCheck" wire:loading.attr="disabled"
-                style="margin-right: 10px !important;">
-            <label class="form-check-label" for="predefinedFieldCheck">
-                As predefined field
-            </label>
-        </div>
-
-        <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
-            <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch" id="headerFieldCheck"
-                wire:loading.attr="disabled" style="margin-right: 10px !important;">
-            <label class="form-check-label" for="headerFieldCheck">
-                As header field
-            </label>
-        </div>
-        @if ($asHeaderField)
-            <div class="row mb-3">
-                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                    <div class="mb-2">
-                        <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
-                            Assign column
-                        </label>
-                        <div>
-                            <div id="select-field-column-number" wire:ignore></div>
+        <div class="row">
+            <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
+                <input wire:model="asPredefinedField" class="form-check-input" type="checkbox" role="switch" id="predefinedFieldCheck"
+                    wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                <label class="form-check-label" for="predefinedFieldCheck">
+                    As predefined field
+                </label>
+            </div>
+            @if ($asPredefinedField)
+                <div class="row mb-3">
+                    <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                        <div class="mb-2">
+                            <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
+                                Assign column
+                            </label>
+                            <div>
+                                <div id="select-field-column-number" wire:ignore></div>
+                            </div>
+                            @error('assignedColumn')
+                                <span class="error__message position-absolute" style="bottom: -13px !important;">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                            @enderror
                         </div>
-                        @error('assignedColumn')
-                            <span class="error__message position-absolute" style="bottom: -13px !important;">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ $message }}
-                            </span>
-                        @enderror
                     </div>
                 </div>
-                @if (!$this->hasAssociatedTicketField())
+            @endif
+        </div>
+
+        <div class="row">
+            <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
+                <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch" id="headerFieldCheck"
+                    wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                <label class="form-check-label" for="headerFieldCheck">
+                    As header field
+                </label>
+            </div>
+            @if ($asHeaderField)
+                <div class="row mb-3">
                     <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                        <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
-                            <input wire:model="isForTicketNumber" class="form-check-input" type="checkbox" role="switch" id="forTicketNumber"
-                                wire:loading.attr="disabled" style="margin-right: 10px !important;">
-                            <label class="form-check-label" for="forTicketNumber">
-                                Associate with the ticket number
+                        <div class="mb-2">
+                            <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
+                                Assign column
                             </label>
+                            <div>
+                                <div id="select-field-column-number" wire:ignore></div>
+                            </div>
+                            @error('assignedColumn')
+                                <span class="error__message position-absolute" style="bottom: -13px !important;">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ $message }}
+                                </span>
+                            @enderror
                         </div>
                     </div>
-                @endif
-            </div>
-        @endif
+                    @if (!$this->hasAssociatedTicketField())
+                        <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                            <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
+                                <input wire:model="isForTicketNumber" class="form-check-input" type="checkbox" role="switch" id="forTicketNumber"
+                                    wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                <label class="form-check-label" for="forTicketNumber">
+                                    Associate with the ticket number
+                                </label>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            @endif
+        </div>
         <div class="row mb-3">
             <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                 <div class="mb-2">
