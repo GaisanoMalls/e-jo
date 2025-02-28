@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,12 +22,13 @@ class Field extends Model
         'is_enabled',
         'assigned_column',
         'is_header_field',
-        'is_for_ticket_number'
+        'config'
     ];
 
     protected $casts = [
         'is_required' => 'bool',
-        'is_enabled' => 'bool'
+        'is_enabled' => 'bool',
+        'config' => AsArrayObject::class
     ];
 
     public function form(): BelongsTo

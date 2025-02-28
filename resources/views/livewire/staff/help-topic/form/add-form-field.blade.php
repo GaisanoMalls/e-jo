@@ -82,12 +82,12 @@
                     <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                         <div class="mb-2">
                             <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
-                                Assign column
+                                Get default value from
                             </label>
                             <div>
-                                <div id="select-field-column-number" wire:ignore></div>
+                                <div id="select-field-predefined" wire:ignore></div>
                             </div>
-                            @error('assignedColumn')
+                            @error('predefinedFieldGetConfig')
                                 <span class="error__message position-absolute" style="bottom: -13px !important;">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     {{ $message }}
@@ -98,7 +98,6 @@
                 </div>
             @endif
         </div>
-
         <div class="row">
             <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
                 <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch" id="headerFieldCheck"
@@ -260,7 +259,7 @@
                                     <td class="position-relative">
                                         <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
                                             @if ($editingFieldId === $key)
-                                                <div>
+                                                <div style="width: 112px;">
                                                     <div id="editing-select-field-type" wire:ignore></div>
                                                 </div>
                                             @else
@@ -277,7 +276,7 @@
                                     <td class="position-relative">
                                         <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
-                                                <div style="min-width: 40px;">
+                                                <div style="width: 85px;">
                                                     <div id="editing-select-assigned-column" wire:ignore></div>
                                                 </div>
                                             @else
@@ -450,9 +449,28 @@
         const selectRequired = document.querySelector('#select-required-field');
         const selectEnable = document.querySelector('#select-enable-field');
 
-        window.addEventListener('show-select-column-number', () => {
+        window.addEventListener('show-select-predefined-field', (event) => {
+            const selectFieldPredefined = document.querySelector('#select-field-predefined');
+            console.log(event.detail.predefinedFieldValues);
+
+            const predefinedFieldValueOption = event.detail.predefinedFieldValues.map(predefinedField => ({
+                label: predefinedField.label,
+                value: predefinedField.value
+            }));
+
+            VirtualSelect.init({
+                ele: selectFieldPredefined,
+                options: predefinedFieldValueOption,
+            });
+
+            selectFieldPredefined.addEventListener('change', (event) => {
+                @this.set('predefinedFieldGetConfig', event.target.value);
+            });
+        });
+
+        window.addEventListener('show-select-column-number', (event) => {
             const selectFieldAssignColumn = document.querySelector('#select-field-column-number');
-            const columnNumberOption = @json($fieldColumnNumber).map(colNumber => ({
+            const columnNumberOption = event.detail.columnNumbers.map(colNumber => ({
                 label: `Column ${colNumber}`,
                 value: colNumber
             }));
@@ -590,7 +608,8 @@
                 ele: editingSelectFieldType,
                 options: fieldTypeOption,
                 search: true,
-                popupDropboxBreakpoint: '3000px'
+                popupDropboxBreakpoint: '3000px',
+                hideClearButton: true,
             });
 
             const headerFieldColumnOption = [1, 2, 'None'].map(column => ({
@@ -601,7 +620,8 @@
             VirtualSelect.init({
                 ele: editingSelectAssignedColumn,
                 options: headerFieldColumnOption,
-                popupDropboxBreakpoint: '3000px'
+                popupDropboxBreakpoint: '3000px',
+                hideClearButton: true,
             });
 
             // Reset the select field first before assigning a new value.

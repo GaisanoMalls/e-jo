@@ -7,6 +7,7 @@ use App\Http\Traits\Utils;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -38,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::after(function ($user, $ability) {
             return $user->isSystemAdmin(); // This returns a boolean
         });
-
+        
         // Search for overdue tickets and update their status to 'Overdue.
         if (Schema::hasTable('tickets')) {
             Ticket::whereNot('status_id', Status::CLOSED)

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\HelpTopic\Form;
 use App\Enums\FieldEnableOptionEnum;
 use App\Enums\FieldRequiredOptionEnum;
 use App\Enums\FieldTypesEnum;
+use App\Enums\PredefinedFieldValueEnum;
 use App\Http\Requests\SysAdmin\Manage\HelpTopic\CustomField\CustomFieldRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Models\Form;
@@ -21,6 +22,7 @@ class AddFormField extends Component
     public ?int $helpTopic = null;
     public array $visibleTo = [];
     public array $editableTo = [];
+    public ?string $predefinedFieldGetConfig = null;
     public ?string $name = null;
     public ?string $type = null;
     public ?string $variableName = null;
@@ -72,11 +74,23 @@ class AddFormField extends Component
     public function updatedAsHeaderField($value)
     {
         if ($value) {
-            $this->dispatchBrowserEvent('show-select-column-number');
             $this->hasAssociatedTicketField();
+            $this->dispatchBrowserEvent('show-select-column-number', [
+                'columnNumbers' => $this->fieldColumnNumber
+            ]);
         } else {
             $this->assignedColumn = null;
-            $this->isForTicketNumber = false;
+        }
+    }
+
+    public function updatedAsPredefinedField($value)
+    {
+        if ($value) {
+            $this->dispatchBrowserEvent('show-select-predefined-field', [
+                'predefinedFieldValues' => PredefinedFieldValueEnum::getOptions()
+            ]);
+        } else {
+            $this->predefinedFieldGetConfig = null;
         }
     }
 
@@ -119,6 +133,15 @@ class AddFormField extends Component
 
     public function addField()
     {
+        if ($this->asPredefinedField) {
+            if (!$this->predefinedFieldGetConfig) {
+                $this->addError('predefinedFieldGetConfig', 'This field is required');
+                return;
+            } else {
+                $this->resetValidation('predefinedFieldGetConfig');
+            }
+        }
+
         if ($this->asHeaderField) {
             if (!$this->assignedColumn) {
                 $this->addError('assignedColumn', 'This field is required');
@@ -169,7 +192,9 @@ class AddFormField extends Component
             'isEnabled' => $this->isEnabled,
             'asHeaderField' => $this->asHeaderField,
             'assignedColumn' => $this->asHeaderField ? $this->assignedColumn : null,
-            'isForTicketNumber' => $this->isForTicketNumber
+            'config' => [
+                'get_value_from' => $this->predefinedFieldGetConfig ?? null
+            ]
         ]);
 
         $this->reset([
@@ -180,8 +205,6 @@ class AddFormField extends Component
             'isEnabled',
             'assignedColumn',
             'asHeaderField',
-            'isForTicketNumber',
-            'isForTicketNumber'
         ]);
 
         $this->resetValidation();
@@ -327,7 +350,6 @@ class AddFormField extends Component
                             'is_enabled' => $field['isEnabled'],
                             'assigned_column' => $field['assignedColumn'],
                             'is_header_field' => $field['asHeaderField'] == 'Yes' ? true : false,
-                            'is_for_ticket_number' => $field['isForTicketNumber']
                         ]);
                     }
 
