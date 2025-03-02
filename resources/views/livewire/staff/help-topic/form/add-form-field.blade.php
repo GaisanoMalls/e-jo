@@ -71,8 +71,7 @@
         @endif
         <div class="row">
             <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
-                <input wire:model="asPredefinedField" class="form-check-input" type="checkbox" role="switch" id="predefinedFieldCheck"
-                    wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                <input wire:model="asPredefinedField" class="form-check-input" type="checkbox" role="switch" id="predefinedFieldCheck" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                 <label class="form-check-label" for="predefinedFieldCheck">
                     As predefined field
                 </label>
@@ -100,8 +99,7 @@
         </div>
         <div class="row">
             <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
-                <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch" id="headerFieldCheck"
-                    wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch" id="headerFieldCheck" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                 <label class="form-check-label" for="headerFieldCheck">
                     As header field
                 </label>
@@ -127,8 +125,7 @@
                     @if (!$this->hasAssociatedTicketField())
                         <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                             <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
-                                <input wire:model="isForTicketNumber" class="form-check-input" type="checkbox" role="switch" id="forTicketNumber"
-                                    wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                <input wire:model="isForTicketNumber" class="form-check-input" type="checkbox" role="switch" id="forTicketNumber" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                 <label class="form-check-label" for="forTicketNumber">
                                     Associate with the ticket number
                                 </label>
@@ -145,7 +142,7 @@
                         Field name
                         <em style="font-size: 0.75rem;">(No special characters)</em>
                     </label>
-                    <div class="d-flex align-items-center text-start px-0 td__content">
+                    <div class="d-flex align-items-center td__content px-0 text-start">
                         <input wire:model="name" class="form-control form__field" type="text" id="fieldName" placeholder="Enter field name">
                     </div>
                     @error('name')
@@ -159,7 +156,7 @@
             <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                 <div class="mb-2">
                     <label class="form-label text-muted form__field__label" style="font-weight: 500;">Type</label>
-                    <div class="d-flex align-items-center text-start px-0 td__content">
+                    <div class="d-flex align-items-center td__content px-0 text-start">
                         <div class="w-100">
                             <div id="select-field-type" wire:ignore></div>
                         </div>
@@ -175,7 +172,7 @@
             <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                 <div class="mb-2">
                     <label class="form-label text-muted form__field__label" style="font-weight: 500;">Required</label>
-                    <div class="d-flex align-items-center text-start px-0 td__content">
+                    <div class="d-flex align-items-center td__content px-0 text-start">
                         <div class="w-100">
                             <div id="select-required-field" wire:ignore></div>
                         </div>
@@ -191,7 +188,7 @@
             <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                 <div class="mb-2">
                     <label class="form-label text-muted form__field__label" style="font-weight: 500;">Enable</label>
-                    <div class="d-flex align-items-center text-start px-0 td__content">
+                    <div class="d-flex align-items-center td__content px-0 text-start">
                         <div class="w-100">
                             <div id="select-enable-field" wire:ignore></div>
                         </div>
@@ -204,11 +201,9 @@
                     </span>
                 @enderror
             </div>
-            <div class="col-12 mt-3 col-md-6 d-flex flex-column justify-content-end mx-0">
+            <div class="col-12 col-md-6 d-flex flex-column justify-content-end mx-0 mt-3">
                 <div class="mb-2">
-                    <button wire:click="addField" type="button"
-                        class="btn btn-sm d-flex gap-2 align-items-center justify-content-center outline-none px-3 rounded-3"
-                        style="height: 45px; background-color: #edeef0; border: 1px solid #e7e9eb; margin-bottom: 10px;">
+                    <button wire:click="addField" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-3 gap-2 px-3 outline-none" style="height: 45px; background-color: #edeef0; border: 1px solid #e7e9eb; margin-bottom: 10px;">
                         <span wire:loading.remove wire:target="addField">
                             <i class="bi bi-save"></i>
                         </span>
@@ -223,28 +218,32 @@
 
         @if (!empty($addedFields))
             <div class="row my-4 px-3">
-                <h6 class="p-0 mx-2" style="font-size: 15px;">Form fields</h6>
+                <h6 class="mx-2 p-0" style="font-size: 15px;">Form fields</h6>
                 <div class="table-responsive custom__table">
-                    <table class="table mb-0 border-0" style="table-layout: fixed;">
+                    <table class="mb-0 table border-0" style="table-layout: fixed;">
                         <thead>
                             <tr>
-                                <th class="border-0 table__head__label px-2">Name</th>
-                                <th class="border-0 table__head__label px-2">Type</th>
-                                <th class="border-0 table__head__label px-2">Assigned Column</th>
-                                <th class="border-0 table__head__label px-2">Header Field</th>
-                                <th class="border-0 table__head__label px-2">For Ticket Number</th>
-                                <th class="border-0 table__head__label px-2">Required</th>
-                                <th class="border-0 table__head__label px-2">Enable</th>
+                                <th class="table__head__label border-0 px-2">Name</th>
+                                <th class="table__head__label border-0 px-2">Type</th>
+                                <th class="table__head__label border-0 px-2">Assigned Column</th>
+                                <th class="table__head__label d-flex flex-column position-relative border-0 px-2">
+                                    Pre-defined
+                                    <div class="position-absolute" style="font-size: 0.65rem; bottom: -3px;">
+                                        Get value from
+                                    </div>
+                                </th>
+                                <th class="table__head__label border-0 px-2">Header Field</th>
+                                <th class="table__head__label border-0 px-2">Required</th>
+                                <th class="table__head__label border-0 px-2">Enable</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($addedFields as $key => $field)
                                 <tr wire:key="normal-field-{{ $key + 1 }}">
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
+                                        <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0;">
                                             @if ($editingFieldId === $key)
-                                                <input wire:model="editingFieldName" class="form-control form__field" type="text"
-                                                    placeholder="Enter field name">
+                                                <input wire:model="editingFieldName" class="form-control form__field" type="text" placeholder="Enter field name">
                                             @else
                                                 <span>{{ $field['name'] }}</span>
                                             @endif
@@ -257,7 +256,7 @@
                                         @enderror
                                     </td>
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
+                                        <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0;">
                                             @if ($editingFieldId === $key)
                                                 <div style="width: 112px;">
                                                     <div id="editing-select-field-type" wire:ignore></div>
@@ -274,7 +273,7 @@
                                         @enderror
                                     </td>
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0; min-width: 200px;">
+                                        <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div style="width: 85px;">
                                                     <div id="editing-select-assigned-column" wire:ignore></div>
@@ -295,13 +294,34 @@
                                         @enderror
                                     </td>
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0; min-width: 200px;">
+                                        <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
-                                                    <div class="form-check mx-0"
-                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingAsHeaderField" class="form-check-input" type="checkbox"
-                                                            role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                                    <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingIsForTicketNumber" class="form-check-input" type="checkbox" role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;" @disabled(!$editingAsHeaderField)>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                @if ($field['config']['get_value_from']['value'])
+                                                    {{ $field['config']['get_value_from']['label'] }}
+                                                @else
+                                                    <i class="bi bi-x-circle text-muted"></i>
+                                                @endif
+                                            @endif
+                                        </div>
+                                        @error('editingIsForTicketNumber')
+                                            <span class="error__message position-absolute" style="bottom: -10px !important;">
+                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    </td>
+                                    <td class="position-relative">
+                                        <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0; min-width: 200px;">
+                                            @if ($editingFieldId === $key)
+                                                <div class="w-100">
+                                                    <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingAsHeaderField" class="form-check-input" type="checkbox" role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                                     </div>
                                                 </div>
                                             @else
@@ -320,39 +340,11 @@
                                         @enderror
                                     </td>
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0; min-width: 200px;">
+                                        <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
-                                                    <div class="form-check mx-0"
-                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingIsForTicketNumber" class="form-check-input" type="checkbox"
-                                                            role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;"
-                                                            @disabled(!$editingAsHeaderField)>
-                                                    </div>
-                                                </div>
-                                            @else
-                                                @if ($field['isForTicketNumber'])
-                                                    <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
-                                                @else
-                                                    <i class="bi bi-x-circle text-muted"></i>
-                                                @endif
-                                            @endif
-                                        </div>
-                                        @error('editingIsForTicketNumber')
-                                            <span class="error__message position-absolute" style="bottom: -10px !important;">
-                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </td>
-                                    <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
-                                            @if ($editingFieldId === $key)
-                                                <div class="w-100">
-                                                    <div class="form-check mx-0"
-                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingFieldRequired" class="form-check-input" type="checkbox"
-                                                            role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                                    <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingFieldRequired" class="form-check-input" type="checkbox" role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                                     </div>
                                                 </div>
                                             @else
@@ -371,13 +363,11 @@
                                         @enderror
                                     </td>
                                     <td class="position-relative">
-                                        <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0; min-width: 200px;">
+                                        <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
-                                                    <div class="form-check mx-0"
-                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingFieldEnable" class="form-check-input" type="checkbox"
-                                                            role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                                    <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingFieldEnable" class="form-check-input" type="checkbox" role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                                     </div>
                                                 </div>
                                             @else
@@ -396,23 +386,19 @@
                                         @enderror
                                     </td>
                                     <td class="px-0">
-                                        <div class="d-flex align-items-center gap-2 justify-content-end px-2">
+                                        <div class="d-flex align-items-center justify-content-end gap-2 px-2">
                                             @if ($editingFieldId === $key)
-                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                    wire:click="updateAddedField({{ $key }})">
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0" wire:click="updateAddedField({{ $key }})">
                                                     <i class="bi bi-check-lg" style="font-size: 18px;"></i>
                                                 </button>
-                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                    wire:click="cancelEditAddedField({{ $key }})">
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0" wire:click="cancelEditAddedField({{ $key }})">
                                                     <i class="bi bi-x-lg"></i>
                                                 </button>
                                             @else
-                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                    wire:click="toggleEditAddedField({{ $key }})">
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0" wire:click="toggleEditAddedField({{ $key }})">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                    wire:click="removeField({{ $key }})">
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0" wire:click="removeField({{ $key }})">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             @endif
@@ -426,15 +412,14 @@
             </div>
         @endif
     </div>
-    <div class="modal-footer modal__footer p-0 mt-3 justify-content-between border-0 gap-2">
+    <div class="modal-footer modal__footer justify-content-between mt-3 gap-2 border-0 p-0">
         <div class="d-flex align-items-center m-0 gap-2">
-            <button wire:click="saveForm" type="button"
-                class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send">
+            <button wire:click="saveForm" type="button" class="btn d-flex align-items-center justify-content-center btn__modal__footer btn__send m-0 gap-2">
                 <span wire:loading wire:target="saveForm" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                 </span>
                 Save form
             </button>
-            <button type="button" class="btn m-0 btn__modal__footer btn__cancel" id="btnCloseModal" data-bs-dismiss="modal" wire:click="cancel">
+            <button type="button" class="btn btn__modal__footer btn__cancel m-0" id="btnCloseModal" data-bs-dismiss="modal" wire:click="cancel">
                 Cancel
             </button>
         </div>

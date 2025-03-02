@@ -8,6 +8,7 @@ use App\Enums\FieldTypesEnum;
 use App\Enums\PredefinedFieldValueEnum;
 use App\Http\Requests\SysAdmin\Manage\HelpTopic\CustomField\CustomFieldRequest;
 use App\Http\Traits\AppErrorLog;
+use App\Models\Field;
 use App\Models\Form;
 use App\Models\HelpTopic;
 use App\Models\Role;
@@ -192,9 +193,7 @@ class AddFormField extends Component
             'isEnabled' => $this->isEnabled,
             'asHeaderField' => $this->asHeaderField,
             'assignedColumn' => $this->asHeaderField ? $this->assignedColumn : null,
-            'config' => [
-                'get_value_from' => $this->predefinedFieldGetConfig ?? null
-            ]
+            'config' => Field::setConfig($this->predefinedFieldGetConfig)
         ]);
 
         $this->reset([
@@ -350,6 +349,7 @@ class AddFormField extends Component
                             'is_enabled' => $field['isEnabled'],
                             'assigned_column' => $field['assignedColumn'],
                             'is_header_field' => $field['asHeaderField'] == 'Yes' ? true : false,
+                            'config' => $field['config'],
                         ]);
                     }
 

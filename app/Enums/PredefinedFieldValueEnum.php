@@ -2,8 +2,6 @@
 
 namespace App\Enums;
 
-use Carbon\Carbon;
-
 enum PredefinedFieldValueEnum: string
 {
     case CURRENT_DATE = 'current_date';
