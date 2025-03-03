@@ -63,11 +63,8 @@
     </div>
     <div class="row">
         <h6>Add fields</h6>
-        @if (session()->has('required_form_fields_error'))
-            <small class="fw-semibold text-danger mb-1">{{ session('required_form_fields_error') }}</small>
-        @endif
-        @if (session()->has('has_associated_ticket_field'))
-            <small class="fw-semibold text-danger mb-1">{{ session('has_associated_ticket_field') }}</small>
+        @if (session()->has('requiredFormFieldsError'))
+            <small class="fw-semibold text-danger mb-1">{{ session('requiredFormFieldsError') }}</small>
         @endif
         <div class="row">
             <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
@@ -79,12 +76,12 @@
             </div>
             @if ($asPredefinedField)
                 <div class="row mb-3">
-                    <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                    <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
                         <div class="mb-2">
                             <label class="form-label text-muted form__field__label" style="font-weight: 500;">
                                 Get default value from
                             </label>
-                            <div>
+                            <div class="">
                                 <div id="select-field-predefined" wire:ignore></div>
                             </div>
                             @error('predefinedFieldGetConfig')
@@ -213,6 +210,9 @@
         @if (!empty($addedFields))
             <div class="row my-4 px-3">
                 <h6 class="mx-2 p-0" style="font-size: 15px;">Form fields</h6>
+                @if (session()->has('editingConfigValueError'))
+                    <small class="fw-semibold text-danger mb-1">{{ session('editingConfigValueError') }}</small>
+                @endif
                 <div class="table-responsive custom__table">
                     <table class="mb-0 table border-0" style="table-layout: fixed;">
                         <thead>
@@ -448,6 +448,7 @@
             VirtualSelect.init({
                 ele: selectFieldPredefined,
                 options: predefinedFieldValueOption,
+                disabledOptions: event.detail.getValuesFrom
             });
 
             selectFieldPredefined.addEventListener('change', (event) => {
@@ -629,6 +630,7 @@
                 options: editingPredefinedFieldValueOption,
                 popupDropboxBreakpoint: '3000px',
                 hideClearButton: true,
+                disabledOptions: event.detail.getValuesFrom,
             });
 
             // Reset the select field first before assigning a new value.
@@ -639,6 +641,7 @@
             editingSelectFieldType.setValue(currentFieldType);
             editingSelectAssignedColumn.setValue(currentAssignedCoumn == null ? 'None' : currentAssignedCoumn);
             editingSelectPredefined.setValue(currentPredefinedFieldConfig);
+            editingSelectPredefined.validate();
 
             editingSelectFieldType.addEventListener('change', (event) => {
                 @this.set('editingFieldType', event.target.value);

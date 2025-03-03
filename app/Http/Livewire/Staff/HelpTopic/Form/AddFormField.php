@@ -28,6 +28,7 @@ class AddFormField extends Component
     public ?string $type = null;
     public ?string $variableName = null;
     public array $addedFields = [];
+    public array $getValuesFrom = [];
     public array $addedHeaderFields = [];
     public array $fieldColumnNumber = [1, 2];
     public ?int $assignedColumn = null;
@@ -75,7 +76,6 @@ class AddFormField extends Component
     public function updatedAsHeaderField($value)
     {
         if ($value) {
-            $this->hasAssociatedTicketField();
             $this->dispatchBrowserEvent('show-select-column-number', [
                 'columnNumbers' => $this->fieldColumnNumber
             ]);
@@ -88,7 +88,8 @@ class AddFormField extends Component
     {
         if ($value) {
             $this->dispatchBrowserEvent('show-select-predefined-field', [
-                'predefinedFieldValues' => PredefinedFieldValueEnum::getOptions()
+                'predefinedFieldValues' => PredefinedFieldValueEnum::getOptions(),
+                'getValuesFrom' => $this->getValuesFrom
             ]);
         } else {
             $this->predefinedFieldGetConfig = null;
@@ -124,14 +125,6 @@ class AddFormField extends Component
         }
     }
 
-    public function hasAssociatedTicketField()
-    {
-        return $this->asHeaderField
-            && !empty(array_filter($this->addedFields, function ($field) {
-                return $field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER;
-            }));
-    }
-
     public function addField()
     {
         if ($this->asPredefinedField) {
@@ -150,10 +143,6 @@ class AddFormField extends Component
             } else {
                 $this->resetValidation('assignedColumn');
             }
-        }
-
-        if ($this->hasAssociatedTicketField()) {
-            session()->flash('has_associated_ticket_field', 'Oops! There is already a field associated with the ticket number.');
         }
 
         if (!$this->name) {
@@ -208,6 +197,11 @@ class AddFormField extends Component
             'predefinedFieldGetConfig'
         ]);
 
+        // Extract and add the value to getValuesFrom array
+        $this->getValuesFrom = array_map(function ($field) {
+            return $field['config']['get_value_from']['value'];
+        }, $this->addedFields);
+
         $this->resetValidation();
         $this->dispatchBrowserEvent('clear-form-fields');
     }
@@ -238,7 +232,8 @@ class AddFormField extends Component
                         'currentFieldType' => $this->editingFieldType,
                         'currentAssignedCoumn' => $this->editingAssignedColumn,
                         'editingPredefinedFieldValues' => PredefinedFieldValueEnum::getOptions(),
-                        'currentPredefinedFieldConfig' => $this->editingConfigValue
+                        'currentPredefinedFieldConfig' => $this->editingConfigValue,
+                        'getValuesFrom' => $this->getValuesFrom
                     ]);
                 }
             }
@@ -267,6 +262,15 @@ class AddFormField extends Component
 
             foreach ($this->addedFields as $key => &$field) {
                 if ($this->editingFieldId === $fieldKey && $key === $fieldKey) {
+                    $oldValue = $field['config']['get_value_from']['value'];
+                    $newValue = $this->editingConfigValue;
+
+                    if (!$this->editingConfigValue) {
+                        session()->flash('editingConfigValueError', 'Predefined field value is required');
+                        return;
+                    }
+
+                    // Update the field config
                     $field['name'] = $this->editingFieldName;
                     $field['type'] = $this->editingFieldType;
                     $field['variable_name'] = $this->editingFieldVariableName;
@@ -275,6 +279,12 @@ class AddFormField extends Component
                     $field['asHeaderField'] = $this->editingAsHeaderField;
                     $field['assignedColumn'] = $this->editingAssignedColumn == 'None' ? null : $this->editingAssignedColumn;
                     $field['config'] = Field::setConfig($this->editingConfigValue);
+
+                    // Update getValuesFrom array
+                    $index = array_search($oldValue, $this->getValuesFrom);
+                    if ($index !== false) {
+                        $this->getValuesFrom[$index] = $newValue;
+                    }
                 }
             }
             $this->editFieldAction();
@@ -301,6 +311,9 @@ class AddFormField extends Component
         $this->editingFieldRequired = false;
         $this->editingFieldEnable = false;
         $this->editingAsHeaderField = false;
+        if ($this->asPredefinedField) {
+            $this->asPredefinedField = false;
+        }
         $this->resetValidation();
     }
 
@@ -324,12 +337,12 @@ class AddFormField extends Component
 
         try {
             if (empty($this->addedFields) && $this->name && $this->type && $this->isRequired && $this->isEnabled) {
-                session()->flash('required_form_fields_error', 'Please add the fields first');
+                session()->flash('requiredFormFieldsError', 'Please add the fields first');
                 return;
             }
 
             if (empty($this->addedFields)) {
-                session()->flash('required_form_fields_error', 'Form fields are required');
+                session()->flash('requiredFormFieldsError', 'Form fields are required');
                 return;
             }
 

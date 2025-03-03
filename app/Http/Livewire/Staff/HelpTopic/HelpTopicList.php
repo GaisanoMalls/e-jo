@@ -9,10 +9,8 @@ use App\Enums\PredefinedFieldValueEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Field;
-use App\Models\FieldHeaderValue;
 use App\Models\Form;
 use App\Models\HelpTopic;
-use App\Models\Ticket;
 use Exception;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
@@ -497,15 +495,15 @@ class HelpTopicList extends Component
         $this->selectedFormVariableName = $this->convertToVariable($value);
     }
 
-    public function hasAssociatedTicketFieldExists()
-    {
-        return Field::whereJsonContains('config->get_value_from->value', PredefinedFieldValueEnum::TICKET_NUMBER)->exists();
-    }
+    // public function hasAssociatedTicketFieldExists()
+    // {
+    //     return Field::whereJsonContains('config->get_value_from->value', PredefinedFieldValueEnum::TICKET_NUMBER)->exists();
+    // }
 
     public function hasAssociatedTicketField()
     {
         return $this->selectedFormFieldAsHeaderField
-            && Field::where('is_for_ticket_number', true)->exists();
+            && Field::whereJsonContains('config->get_value_from->value', PredefinedFieldValueEnum::TICKET_NUMBER)->exists();
     }
 
     public function updatedSelectedFormFieldAsHeaderField($value)

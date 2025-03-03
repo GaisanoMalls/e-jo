@@ -421,46 +421,43 @@
                         Add fields to {{ $selectedFormName }} form
                     </h1>
                 </div>
-                @if (!$this->hasAssociatedTicketFieldExists())
-                    <div class="form-check mb-3 px-3" style="white-space: nowrap; margin-left: 13px;">
-                        <input wire:model="selectedFormFieldAsHeaderField" class="form-check-input" type="checkbox" role="switch"
-                            id="add-form-field-as-heder-check" wire:loading.attr="disabled">
-                        <label class="form-check-label" for="add-form-field-as-heder-check">
-                            As header field
-                        </label>
-                    </div>
-                    @if ($selectedFormFieldAsHeaderField)
-                        <div class="row mb-3">
+                <div class="form-check mb-3 px-3" style="white-space: nowrap; margin-left: 13px;">
+                    <input wire:model="selectedFormFieldAsHeaderField" class="form-check-input" type="checkbox" role="switch"
+                        id="add-form-field-as-heder-check" wire:loading.attr="disabled">
+                    <label class="form-check-label" for="add-form-field-as-heder-check">
+                        As header field
+                    </label>
+                </div>
+                @if ($selectedFormFieldAsHeaderField)
+                    <div class="row mb-3">
+                        <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                            <div class="mb-2">
+                                <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
+                                    Assign column
+                                </label>
+                                <div>
+                                    <div id="add-selected-form-field-select-column-number" wire:ignore></div>
+                                </div>
+                                @error('selectedFormFieldColumnNumber')
+                                    <span class="error__message position-absolute" style="bottom: -13px !important;">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        @if (!$this->hasAssociatedTicketField())
                             <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                <div class="mb-2">
-                                    <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
-                                        Assign column
+                                <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
+                                    <input wire:model="selectedFormFieldIsForTicketNumber" class="form-check-input" type="checkbox" role="switch"
+                                        id="for-ticket-number" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                    <label class="form-check-label" for="for-ticket-number">
+                                        Associate with the ticket number
                                     </label>
-                                    <div>
-                                        <div id="add-selected-form-field-select-column-number" wire:ignore></div>
-                                    </div>
-                                    @error('selectedFormFieldColumnNumber')
-                                        <span class="error__message position-absolute" style="bottom: -13px !important;">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            {{ $message }}
-                                        </span>
-                                    @enderror
                                 </div>
                             </div>
-                            @if (!$this->hasAssociatedTicketField())
-                                <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                    <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
-                                        <input wire:model="selectedFormFieldIsForTicketNumber" class="form-check-input" type="checkbox"
-                                            role="switch" id="for-ticket-number" wire:loading.attr="disabled"
-                                            style="margin-right: 10px !important;">
-                                        <label class="form-check-label" for="for-ticket-number">
-                                            Associate with the ticket number
-                                        </label>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 @endif
                 <div class="mx-1">
                     <h6>Add field</h6>
