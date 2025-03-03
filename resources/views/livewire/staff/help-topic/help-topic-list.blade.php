@@ -929,10 +929,5 @@
             addSelectedFormFieldSelectFieldType.reset();
             editAddedSelectFieldType.reset();
         });
-
-        window.addEventListener('close-delete-confirmation-of-helptopic-form', () => {
-            $('#viewFormModal').modal('show');
-            $('#deleteHelpTopicFormModal').modal('hide');
-        });
     </script>
 @endpush

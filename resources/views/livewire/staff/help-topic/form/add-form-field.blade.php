@@ -71,7 +71,8 @@
         @endif
         <div class="row">
             <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
-                <input wire:model="asPredefinedField" class="form-check-input" type="checkbox" role="switch" id="predefinedFieldCheck" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                <input wire:model="asPredefinedField" class="form-check-input" type="checkbox" role="switch" id="predefinedFieldCheck"
+                    wire:loading.attr="disabled" style="margin-right: 10px !important;">
                 <label class="form-check-label" for="predefinedFieldCheck">
                     As predefined field
                 </label>
@@ -80,7 +81,7 @@
                 <div class="row mb-3">
                     <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                         <div class="mb-2">
-                            <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
+                            <label class="form-label text-muted form__field__label" style="font-weight: 500;">
                                 Get default value from
                             </label>
                             <div>
@@ -99,7 +100,8 @@
         </div>
         <div class="row">
             <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
-                <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch" id="headerFieldCheck" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch" id="headerFieldCheck"
+                    wire:loading.attr="disabled" style="margin-right: 10px !important;">
                 <label class="form-check-label" for="headerFieldCheck">
                     As header field
                 </label>
@@ -122,16 +124,6 @@
                             @enderror
                         </div>
                     </div>
-                    @if (!$this->hasAssociatedTicketField())
-                        <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                            <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
-                                <input wire:model="isForTicketNumber" class="form-check-input" type="checkbox" role="switch" id="forTicketNumber" wire:loading.attr="disabled" style="margin-right: 10px !important;">
-                                <label class="form-check-label" for="forTicketNumber">
-                                    Associate with the ticket number
-                                </label>
-                            </div>
-                        </div>
-                    @endif
                 </div>
             @endif
         </div>
@@ -203,7 +195,9 @@
             </div>
             <div class="col-12 col-md-6 d-flex flex-column justify-content-end mx-0 mt-3">
                 <div class="mb-2">
-                    <button wire:click="addField" type="button" class="btn btn-sm d-flex align-items-center justify-content-center rounded-3 gap-2 px-3 outline-none" style="height: 45px; background-color: #edeef0; border: 1px solid #e7e9eb; margin-bottom: 10px;">
+                    <button wire:click="addField" type="button"
+                        class="btn btn-sm d-flex align-items-center justify-content-center rounded-3 gap-2 px-3 outline-none"
+                        style="height: 45px; background-color: #edeef0; border: 1px solid #e7e9eb; margin-bottom: 10px;">
                         <span wire:loading.remove wire:target="addField">
                             <i class="bi bi-save"></i>
                         </span>
@@ -229,7 +223,7 @@
                                 <th class="table__head__label d-flex flex-column position-relative border-0 px-2">
                                     Pre-defined
                                     <div class="position-absolute" style="font-size: 0.65rem; bottom: -3px;">
-                                        Get value from
+                                        (Get value from)
                                     </div>
                                 </th>
                                 <th class="table__head__label border-0 px-2">Header Field</th>
@@ -243,7 +237,8 @@
                                     <td class="position-relative">
                                         <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0;">
                                             @if ($editingFieldId === $key)
-                                                <input wire:model="editingFieldName" class="form-control form__field" type="text" placeholder="Enter field name">
+                                                <input wire:model="editingFieldName" class="form-control form__field" type="text"
+                                                    placeholder="Enter field name">
                                             @else
                                                 <span>{{ $field['name'] }}</span>
                                             @endif
@@ -296,10 +291,8 @@
                                     <td class="position-relative">
                                         <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
-                                                <div class="w-100">
-                                                    <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingIsForTicketNumber" class="form-check-input" type="checkbox" role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;" @disabled(!$editingAsHeaderField)>
-                                                    </div>
+                                                <div style="width: 145px;">
+                                                    <div id="editing-select-predefined" wire:ignore></div>
                                                 </div>
                                             @else
                                                 @if ($field['config']['get_value_from']['value'])
@@ -309,7 +302,7 @@
                                                 @endif
                                             @endif
                                         </div>
-                                        @error('editingIsForTicketNumber')
+                                        @error('editingConfigValue')
                                             <span class="error__message position-absolute" style="bottom: -10px !important;">
                                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                                 {{ $message }}
@@ -320,8 +313,10 @@
                                         <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
-                                                    <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingAsHeaderField" class="form-check-input" type="checkbox" role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                                    <div class="form-check mx-0"
+                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingAsHeaderField" class="form-check-input" type="checkbox"
+                                                            role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                                     </div>
                                                 </div>
                                             @else
@@ -343,8 +338,10 @@
                                         <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
-                                                    <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingFieldRequired" class="form-check-input" type="checkbox" role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                                    <div class="form-check mx-0"
+                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingFieldRequired" class="form-check-input" type="checkbox"
+                                                            role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                                     </div>
                                                 </div>
                                             @else
@@ -366,8 +363,10 @@
                                         <div class="d-flex align-items-center td__content px-0 text-start" style="height: 0; min-width: 200px;">
                                             @if ($editingFieldId === $key)
                                                 <div class="w-100">
-                                                    <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                        <input wire:model="editingFieldEnable" class="form-check-input" type="checkbox" role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                                    <div class="form-check mx-0"
+                                                        style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                        <input wire:model="editingFieldEnable" class="form-check-input" type="checkbox"
+                                                            role="switch" wire:loading.attr="disabled" style="margin-right: 10px !important;">
                                                     </div>
                                                 </div>
                                             @else
@@ -388,17 +387,21 @@
                                     <td class="px-0">
                                         <div class="d-flex align-items-center justify-content-end gap-2 px-2">
                                             @if ($editingFieldId === $key)
-                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0" wire:click="updateAddedField({{ $key }})">
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                    wire:click="updateAddedField({{ $key }})">
                                                     <i class="bi bi-check-lg" style="font-size: 18px;"></i>
                                                 </button>
-                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0" wire:click="cancelEditAddedField({{ $key }})">
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                    wire:click="cancelEditAddedField({{ $key }})">
                                                     <i class="bi bi-x-lg"></i>
                                                 </button>
                                             @else
-                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0" wire:click="toggleEditAddedField({{ $key }})">
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                    wire:click="toggleEditAddedField({{ $key }})">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0" wire:click="removeField({{ $key }})">
+                                                <button class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                    wire:click="removeField({{ $key }})">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             @endif
@@ -414,7 +417,8 @@
     </div>
     <div class="modal-footer modal__footer justify-content-between mt-3 gap-2 border-0 p-0">
         <div class="d-flex align-items-center m-0 gap-2">
-            <button wire:click="saveForm" type="button" class="btn d-flex align-items-center justify-content-center btn__modal__footer btn__send m-0 gap-2">
+            <button wire:click="saveForm" type="button"
+                class="btn d-flex align-items-center justify-content-center btn__modal__footer btn__send m-0 gap-2">
                 <span wire:loading wire:target="saveForm" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                 </span>
                 Save form
@@ -436,8 +440,6 @@
 
         window.addEventListener('show-select-predefined-field', (event) => {
             const selectFieldPredefined = document.querySelector('#select-field-predefined');
-            console.log(event.detail.predefinedFieldValues);
-
             const predefinedFieldValueOption = event.detail.predefinedFieldValues.map(predefinedField => ({
                 label: predefinedField.label,
                 value: predefinedField.value
@@ -451,6 +453,11 @@
             selectFieldPredefined.addEventListener('change', (event) => {
                 @this.set('predefinedFieldGetConfig', event.target.value);
             });
+
+            window.addEventListener('clear-form-fields', () => {
+                selectFieldPredefined.reset();
+            });
+
         });
 
         window.addEventListener('show-select-column-number', (event) => {
@@ -585,9 +592,12 @@
         window.addEventListener('edit-added-field-show-select-field', (event) => {
             const currentFieldType = event.detail.currentFieldType
             const currentAssignedCoumn = event.detail.currentAssignedCoumn;
+            const currentPredefinedFieldConfig = event.detail.currentPredefinedFieldConfig;
+            const editingPredefinedFieldValues = event.detail.editingPredefinedFieldValues;
 
             const editingSelectFieldType = document.querySelector('#editing-select-field-type');
             const editingSelectAssignedColumn = document.querySelector('#editing-select-assigned-column');
+            const editingSelectPredefined = document.querySelector('#editing-select-predefined');
 
             VirtualSelect.init({
                 ele: editingSelectFieldType,
@@ -609,12 +619,26 @@
                 hideClearButton: true,
             });
 
+            const editingPredefinedFieldValueOption = editingPredefinedFieldValues.map(predefinedField => ({
+                label: predefinedField.label,
+                value: predefinedField.value
+            }));
+
+            VirtualSelect.init({
+                ele: editingSelectPredefined,
+                options: editingPredefinedFieldValueOption,
+                popupDropboxBreakpoint: '3000px',
+                hideClearButton: true,
+            });
+
             // Reset the select field first before assigning a new value.
             editingSelectFieldType.reset();
             editingSelectAssignedColumn.reset();
+            editingSelectPredefined.reset();
 
             editingSelectFieldType.setValue(currentFieldType);
             editingSelectAssignedColumn.setValue(currentAssignedCoumn == null ? 'None' : currentAssignedCoumn);
+            editingSelectPredefined.setValue(currentPredefinedFieldConfig);
 
             editingSelectFieldType.addEventListener('change', (event) => {
                 @this.set('editingFieldType', event.target.value);
@@ -624,8 +648,16 @@
                 @this.set('editingAssignedColumn', event.target.value);
             });
 
+            editingSelectPredefined.addEventListener('change', (event) => {
+                @this.set('editingConfigValue', event.target.value);
+            })
+
             editingSelectAssignedColumn.addEventListener('reset', () => {
                 @this.set('editingAssignedColumn', null);
+            });
+
+            editingSelectPredefined.addEventListener('reset', () => {
+                @this.set('editingConfigValue', null);
             });
 
             window.addEventListener('disable-assigned-column-field', () => {

@@ -19,7 +19,6 @@
                     </span>
                 </a>
             </li>
-
             <li>
                 <a href="{{ route('staff.manage.branch.index') }}"
                     class="btn d-flex align-items-center border-0 settings__tab__button

@@ -34,7 +34,7 @@ class Field extends Model
 
     public static function setConfig($configField)
     {
-        $fieldLabel = "";
+        $fieldLabel = null;
 
         foreach (PredefinedFieldValueEnum::getOptions() as $option) {
             if ($option['value'] === $configField) {

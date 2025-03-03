@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\HelpTopic;
 use App\Enums\FieldEnableOptionEnum;
 use App\Enums\FieldRequiredOptionEnum;
 use App\Enums\FieldTypesEnum;
+use App\Enums\PredefinedFieldValueEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Models\Field;
@@ -111,18 +112,9 @@ class HelpTopicList extends Component
 
     public function deleteHelpTopicForm()
     {
-        try {
-            $helpTopicForm = Form::findOrFail($this->deleteHelpTopicFormId);
-            if ($helpTopicForm) {
-                $helpTopicForm->delete();
-                $this->deleteHelpTopicFormId = null;
-                $this->emitSelf('loadHelpTopics');
-                $this->reset('deleteHelpTopicFormId', 'deleteHelpTopicFormName');
-                $this->dispatchBrowserEvent('close-delete-confirmation-of-helptopic-form');
-            }
-        } catch (Exception $e) {
-            AppErrorLog::getError($e->getMessage());
-        }
+        $helpTopicForm = Form::findOrFail($this->deleteHelpTopicFormId);
+        $helpTopicForm->delete();
+        return redirect()->route('staff.manage.help_topic.index');
     }
 
     public function editFormName(Form $form)
@@ -507,7 +499,7 @@ class HelpTopicList extends Component
 
     public function hasAssociatedTicketFieldExists()
     {
-        return Field::where('is_for_ticket_number', true)->exists();
+        return Field::whereJsonContains('config->get_value_from->value', PredefinedFieldValueEnum::TICKET_NUMBER)->exists();
     }
 
     public function hasAssociatedTicketField()

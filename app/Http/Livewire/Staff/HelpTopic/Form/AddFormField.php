@@ -42,10 +42,10 @@ class AddFormField extends Component
     public ?string $editingFieldType = null;
     public ?string $editingFieldVariableName = null;
     public ?string $editingAssignedColumn = null; // 1, 2, 'None'
+    public ?string $editingConfigValue = null;
     public bool $editingFieldRequired = false;
     public bool $editingFieldEnable = false;
     public bool $editingAsHeaderField = false;
-    public bool $editingIsForTicketNumber = false;
 
     public function rules()
     {
@@ -108,7 +108,7 @@ class AddFormField extends Component
     public function updatedEditingAsHeaderField($value)
     {
         if (!$value) {
-            $this->editingIsForTicketNumber = false;
+            $this->reset('editingConfigValue');
             $this->dispatchBrowserEvent('disable-assigned-column-field');
         } else {
             $this->dispatchBrowserEvent('enable-assigned-column-field');
@@ -128,7 +128,7 @@ class AddFormField extends Component
     {
         return $this->asHeaderField
             && !empty(array_filter($this->addedFields, function ($field) {
-                return $field['isForTicketNumber'];
+                return $field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER;
             }));
     }
 
@@ -204,6 +204,8 @@ class AddFormField extends Component
             'isEnabled',
             'assignedColumn',
             'asHeaderField',
+            'asPredefinedField',
+            'predefinedFieldGetConfig'
         ]);
 
         $this->resetValidation();
@@ -224,7 +226,7 @@ class AddFormField extends Component
                     $this->editingFieldVariableName = $field['variable_name'];
                     $this->editingAsHeaderField = $field['asHeaderField'];
                     $this->editingAssignedColumn = $field['assignedColumn'];
-                    $this->editingIsForTicketNumber = $field['isForTicketNumber'];
+                    $this->editingConfigValue = $field['config']['get_value_from']['value'];
 
                     if (!$this->editingAsHeaderField) {
                         $this->dispatchBrowserEvent('editing-disable-current-assigned-column');
@@ -235,6 +237,8 @@ class AddFormField extends Component
                     $this->dispatchBrowserEvent('edit-added-field-show-select-field', [
                         'currentFieldType' => $this->editingFieldType,
                         'currentAssignedCoumn' => $this->editingAssignedColumn,
+                        'editingPredefinedFieldValues' => PredefinedFieldValueEnum::getOptions(),
+                        'currentPredefinedFieldConfig' => $this->editingConfigValue
                     ]);
                 }
             }
@@ -270,7 +274,7 @@ class AddFormField extends Component
                     $field['isEnabled'] = $this->editingFieldEnable;
                     $field['asHeaderField'] = $this->editingAsHeaderField;
                     $field['assignedColumn'] = $this->editingAssignedColumn == 'None' ? null : $this->editingAssignedColumn;
-                    $field['isForTicketNumber'] = $this->editingIsForTicketNumber;
+                    $field['config'] = Field::setConfig($this->editingConfigValue);
                 }
             }
             $this->editFieldAction();
@@ -297,7 +301,6 @@ class AddFormField extends Component
         $this->editingFieldRequired = false;
         $this->editingFieldEnable = false;
         $this->editingAsHeaderField = false;
-        $this->editingIsForTicketNumber = false;
         $this->resetValidation();
     }
 
@@ -357,7 +360,7 @@ class AddFormField extends Component
                     noty()->addSuccess('Form created successfully');
 
                 } else {
-                    $this->addError('helpTopic', 'There is already an existing form for this help topic');
+                    $this->addError('helpTopic', 'A form for this help topic already exists');
                 }
             });
         } catch (Exception $e) {
