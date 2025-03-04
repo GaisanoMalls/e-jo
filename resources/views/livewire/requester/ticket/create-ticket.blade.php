@@ -1,5 +1,6 @@
 @php
     use App\Enums\FieldTypesEnum as FieldType;
+    use App\Enums\PredefinedFieldValueEnum;
 @endphp
 
 <div>
@@ -146,7 +147,7 @@
                                         @endif
                                         @foreach ($formFields as $fieldKey => $formField)
                                             @if ($formField['is_enabled'])
-                                                @if (!$formField['is_for_ticket_number'])
+                                                @if (!$this->isPredefinedField($formField))
                                                     <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
                                                         <label class="form-label input__field__label" style="white-space: nowrap">
                                                             {{ $formField['label'] }}

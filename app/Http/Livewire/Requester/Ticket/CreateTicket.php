@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Requester\Ticket;
 
 use App\Enums\ApprovalStatusEnum;
+use App\Enums\PredefinedFieldValueEnum;
 use App\Http\Requests\Requester\StoreTicketRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
@@ -25,6 +26,7 @@ use App\Models\TicketCustomFormFooter;
 use App\Models\TicketTeam;
 use App\Models\User;
 use App\Notifications\AppNotification;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -208,10 +210,12 @@ class CreateTicket extends Component
                     'value' => null, // To store the value of the given inputs
                     'assigned_column' => $field->assigned_column,
                     'is_header_field' => $field->is_header_field,
-                    'is_for_ticket_number' => $field->is_for_ticket_number,
+                    'config' => $field->config,
                     'form' => $this->helpTopicForm->only(['id', 'help_topic_id', 'visible_to', 'editable_to', 'name'])
                 ];
             })->toArray();
+
+            // dump($this->formFields);
 
             $this->description = null; // Not necessary when using custom form.
             $this->helpTopicForm = $helpTopicForm; // Assign the helpTopicForm property of the selected help topic form.
@@ -220,6 +224,16 @@ class CreateTicket extends Component
             $this->isHelpTopicHasForm = false;
             $this->dispatchBrowserEvent('hide-ticket-description-container');
         }
+    }
+
+    public function isPredefinedField($formField)
+    {
+        return ($formField['config']['get_value_from']['label'] !== null && $formField['config']['get_value_from']['value'] !== null)
+            && $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value
+            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value
+            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_BRANCH->value
+            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_DEPARTMENT->value
+            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value;
     }
 
     public function sendTicket()
@@ -332,7 +346,7 @@ class CreateTicket extends Component
         }
     }
 
-    public function saveFieldValues(Ticket $ticket)
+    private function saveFieldValues(Ticket $ticket)
     {
         foreach ($this->headerFields as $fields) {
             foreach ($fields as $field) {
@@ -356,28 +370,44 @@ class CreateTicket extends Component
         }
     }
 
-    public function generatePONUmber()
-    {
-        return $this->poNumber = $this->generatedTicketNumber();
-    }
-
     public function addFieldValues()
     {
         if (!$this->poNumber) {
-            $this->generatePONUmber();
+            $this->poNumber = $this->generatedTicketNumber();
         }
 
-        $formFields = array_map(function ($field) {
-            if ($field['is_header_field'] && $field['is_for_ticket_number']) {
+        $user = auth()->user()->role(Role::USER)->first();
+        $formFields = array_map(function ($field) use ($user) {
+            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value) {
+                $field['value'] = Carbon::now()->format('m-d-Y');
+            }
+
+            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value) {
                 $field['value'] = $this->poNumber;
             }
+
+            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_BRANCH->value) {
+                $user->load('branches');
+                $field['value'] = $user->branches->first()->name;
+            }
+
+            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_DEPARTMENT->value) {
+                $user->load('buDepartments');
+                $field['value'] = $user->buDepartments->first()->name;
+            }
+
+            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value) {
+                $user->load('profile');
+                $field['value'] = $user->profile->getFullName;
+            }
+
             return $field;
         }, $this->formFields);
 
         // Validate required fields
         $validationErrors = [];
         foreach ($formFields as $field) {
-            if ($field['is_required'] && empty($field['value'])) {
+            if ($field['is_required'] && empty($field['value']) && $field['config']['get_value_from']['value'] === null) {
                 $validationErrors[] = "{$field['label']} field is required.";
             }
         }
