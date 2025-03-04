@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->boolean('is_enabled')->default(false);
             $table->enum('assigned_column', [1, 2, null])->nullable();
             $table->boolean('is_header_field')->default(0);
-            $table->json('config')->nullable();
+            $table->json('config');
             $table->timestamps();
         });
     }

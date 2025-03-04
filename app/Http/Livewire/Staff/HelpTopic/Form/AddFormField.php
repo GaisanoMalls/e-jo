@@ -199,8 +199,11 @@ class AddFormField extends Component
 
         // Extract and add the value to getValuesFrom array
         $this->getValuesFrom = array_map(function ($field) {
-            return $field['config']['get_value_from']['value'];
+            return $field['config']['get_value_from']['value'] ?? null;
         }, $this->addedFields);
+
+        // Remove null values from the array
+        $this->getValuesFrom = array_filter($this->getValuesFrom);
 
         $this->resetValidation();
         $this->dispatchBrowserEvent('clear-form-fields');
@@ -264,11 +267,6 @@ class AddFormField extends Component
                 if ($this->editingFieldId === $fieldKey && $key === $fieldKey) {
                     $oldValue = $field['config']['get_value_from']['value'];
                     $newValue = $this->editingConfigValue;
-
-                    if (!$this->editingConfigValue) {
-                        session()->flash('editingConfigValueError', 'Predefined field value is required');
-                        return;
-                    }
 
                     // Update the field config
                     $field['name'] = $this->editingFieldName;

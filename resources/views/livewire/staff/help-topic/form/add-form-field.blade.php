@@ -210,9 +210,6 @@
         @if (!empty($addedFields))
             <div class="row my-4 px-3">
                 <h6 class="mx-2 p-0" style="font-size: 15px;">Form fields</h6>
-                @if (session()->has('editingConfigValueError'))
-                    <small class="fw-semibold text-danger mb-1">{{ session('editingConfigValueError') }}</small>
-                @endif
                 <div class="table-responsive custom__table">
                     <table class="mb-0 table border-0" style="table-layout: fixed;">
                         <thead>
