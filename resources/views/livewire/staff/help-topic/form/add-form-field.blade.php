@@ -71,7 +71,7 @@
                 <input wire:model="asPredefinedField" class="form-check-input" type="checkbox" role="switch" id="predefinedFieldCheck"
                     wire:loading.attr="disabled" style="margin-right: 10px !important;">
                 <label class="form-check-label" for="predefinedFieldCheck">
-                    As predefined field
+                    Set as predefined field
                 </label>
             </div>
             @if ($asPredefinedField)
@@ -100,7 +100,7 @@
                 <input wire:model="asHeaderField" class="form-check-input" type="checkbox" role="switch" id="headerFieldCheck"
                     wire:loading.attr="disabled" style="margin-right: 10px !important;">
                 <label class="form-check-label" for="headerFieldCheck">
-                    As header field
+                    Set as header field
                 </label>
             </div>
             @if ($asHeaderField)

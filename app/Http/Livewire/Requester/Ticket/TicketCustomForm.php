@@ -26,6 +26,8 @@ class TicketCustomForm extends Component
             ->where('ticket_id', $this->ticket->id)
             ->get()
             ->toArray();
+
+        // dump($this->customFormRowFields);
     }
 
     public function getFilteredRowFields()

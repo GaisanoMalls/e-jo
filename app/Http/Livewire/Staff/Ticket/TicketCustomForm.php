@@ -24,6 +24,7 @@ class TicketCustomForm extends Component
             ->where('ticket_id', $this->ticket->id)
             ->get()
             ->toArray();
+            
         $this->customFormRowFields = FieldRowValue::with('field')
             ->where('ticket_id', $this->ticket->id)
             ->get()

@@ -79,7 +79,6 @@ class CreateTicket extends Component
     public array $filledForms = []; // Insert the filled forms here.
     public array $headerFields = [];
     public array $rowFields = [];
-    public int $rowCount = 1;
     public ?string $poNumber = null;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
@@ -125,6 +124,23 @@ class CreateTicket extends Component
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('clear-branch-dropdown-select');
         $this->setDefaultPriorityLevel();
+    }
+
+    public function updatedFileAttachments(&$value)
+    {
+        $this->validate([
+            'fileAttachments.*' => [
+                'nullable',
+                File::types($this->allowedExtensions)
+                    ->max(25600) //25600 (25 MB)
+            ],
+        ]);
+    }
+
+    public function cancel()
+    {
+        $this->reset();
+        $this->dispatchBrowserEvent('clear-select-dropdown');
     }
 
     private function fetchRequesterServiceDepartmentAdmins()
@@ -236,6 +252,156 @@ class CreateTicket extends Component
             || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value;
     }
 
+    private function saveFieldValues(Ticket $ticket)
+    {
+        foreach ($this->headerFields as $fields) {
+            foreach ($fields as $field) {
+                FieldHeaderValue::create([
+                    'ticket_id' => $ticket->id,
+                    'field_id' => $field['id'],
+                    'value' => $field['value']
+                ]);
+            }
+        }
+
+        foreach ($this->rowFields as $fields) {
+            foreach ($fields as $field) {
+                FieldRowValue::create([
+                    'ticket_id' => $ticket->id,
+                    'field_id' => $field['id'],
+                    'value' => $field['value'],
+                    'row' => $field['row']
+                ]);
+            }
+        }
+    }
+
+    public function addFieldValues()
+    {
+        if (!$this->poNumber) {
+            $this->poNumber = $this->generatedTicketNumber();
+        }
+
+        $user = auth()->user()->role(Role::USER)->first();
+        $rowCount = count($this->filledForms) + 1; // Initialize row count for the new batch
+
+        $formFields = array_map(function ($field) use ($user, &$rowCount) {
+            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value) {
+                $field['value'] = Carbon::now()->format('m-d-Y');
+            }
+
+            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value) {
+                $field['value'] = $this->poNumber;
+            }
+
+            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_BRANCH->value) {
+                $user->load('branches');
+                $field['value'] = $user->branches->first()->name;
+            }
+
+            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_DEPARTMENT->value) {
+                $user->load('buDepartments');
+                $field['value'] = $user->buDepartments->first()->name;
+            }
+
+            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value) {
+                $user->load('profile');
+                $field['value'] = $user->profile->getFullName;
+            }
+            // Assign row count for each field in the batch
+            $field['row'] = $rowCount;
+            return $field;
+        }, $this->formFields);
+
+        // Validate required fields
+        $validationErrors = [];
+        foreach ($formFields as $field) {
+            if ($field['is_required'] && empty($field['value']) && $field['config']['get_value_from']['value'] === null) {
+                $validationErrors[] = "{$field['label']} field is required.";
+            }
+        }
+
+        if (!empty($validationErrors)) {
+            foreach ($validationErrors as $error) {
+                session()->flash('custom_form_field_message', $error);
+            }
+            return;
+        }
+
+        $this->filledForms[] = $formFields;
+
+        if (!$this->isHeaderFieldSet) {
+            $this->headerFields = array_map(function ($fields) {
+                return array_filter($fields, fn($field) => $field['is_header_field'] && $field['is_enabled']);
+            }, $this->filledForms);
+
+            $this->isHeaderFieldSet = true;
+        }
+
+        $this->rowFields = array_map(function ($fields) {
+            return array_filter($fields, fn($field) => !$field['is_header_field'] && $field['is_enabled']);
+        }, $this->filledForms);
+
+        $this->resetFormFields();
+    }
+
+    public function getFilteredRowFields()
+    {
+        $headers = array_unique(
+            array_column(
+                array_merge(...$this->rowFields),
+                'name'
+            )
+        );
+
+        $filteredFields = [];
+
+        foreach ($headers as $header) {
+            $filteredFields[$header] = array_map(function ($fields) use ($header) {
+                return array_filter($fields, function ($field) use ($header) {
+                    return $field['name'] === $header;
+                });
+            }, $this->rowFields);
+        }
+
+        return ['headers' => $headers, 'fields' => $filteredFields];
+    }
+
+    public function removeField(int $fieldKey)
+    {
+        try {
+            // Check if the counts are equal before proceeding
+            if (count($this->rowFields) === count($this->filledForms)) {
+                // Use array_filter to remove the element more efficiently
+                $this->rowFields = array_filter(
+                    $this->rowFields,
+                    fn($key) => $key !== $fieldKey,
+                    ARRAY_FILTER_USE_KEY
+                );
+
+                $this->filledForms = array_filter(
+                    $this->filledForms,
+                    fn($key) => $key !== $fieldKey,
+                    ARRAY_FILTER_USE_KEY
+                );
+            }
+
+        } catch (Throwable $e) {
+            AppErrorLog::getError($e->getMessage());
+            \Log::error('Error on line: ', [$e->getLine()]);
+        }
+
+    }
+
+    public function resetFormFields()
+    {
+        foreach ($this->formFields as &$field) {
+            if (!$field['is_header_field'] && !empty($field['value'])) {
+                $field['value'] = '';
+            }
+        }
+    }
+
     public function sendTicket()
     {
         $this->validate();
@@ -344,171 +510,6 @@ class CreateTicket extends Component
             AppErrorLog::getError($e->getMessage());
             Log::error('Error on line: ', [$e->getLine()]);
         }
-    }
-
-    private function saveFieldValues(Ticket $ticket)
-    {
-        foreach ($this->headerFields as $fields) {
-            foreach ($fields as $field) {
-                FieldHeaderValue::create([
-                    'ticket_id' => $ticket->id,
-                    'field_id' => $field['id'],
-                    'value' => $field['value']
-                ]);
-            }
-        }
-
-        foreach ($this->rowFields as $fields) {
-            foreach ($fields as $field) {
-                FieldRowValue::create([
-                    'ticket_id' => $ticket->id,
-                    'field_id' => $field['id'],
-                    'value' => $field['value'],
-                    'row' => $field['row']
-                ]);
-            }
-        }
-    }
-
-    public function addFieldValues()
-    {
-        if (!$this->poNumber) {
-            $this->poNumber = $this->generatedTicketNumber();
-        }
-
-        $user = auth()->user()->role(Role::USER)->first();
-        $formFields = array_map(function ($field) use ($user) {
-            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value) {
-                $field['value'] = Carbon::now()->format('m-d-Y');
-            }
-
-            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value) {
-                $field['value'] = $this->poNumber;
-            }
-
-            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_BRANCH->value) {
-                $user->load('branches');
-                $field['value'] = $user->branches->first()->name;
-            }
-
-            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_DEPARTMENT->value) {
-                $user->load('buDepartments');
-                $field['value'] = $user->buDepartments->first()->name;
-            }
-
-            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value) {
-                $user->load('profile');
-                $field['value'] = $user->profile->getFullName;
-            }
-
-            return $field;
-        }, $this->formFields);
-
-        // Validate required fields
-        $validationErrors = [];
-        foreach ($formFields as $field) {
-            if ($field['is_required'] && empty($field['value']) && $field['config']['get_value_from']['value'] === null) {
-                $validationErrors[] = "{$field['label']} field is required.";
-            }
-        }
-
-        if (!empty($validationErrors)) {
-            foreach ($validationErrors as $error) {
-                session()->flash('custom_form_field_message', $error);
-            }
-            return;
-        }
-
-        $this->filledForms[] = $formFields;
-        $this->rowCount++;
-
-        if (!$this->isHeaderFieldSet) {
-            $this->headerFields = array_map(function ($fields) {
-                return array_filter($fields, fn($field) => $field['is_header_field'] && $field['is_enabled']);
-            }, $this->filledForms);
-
-            $this->isHeaderFieldSet = true;
-        }
-
-        $this->rowFields = array_map(function ($fields) {
-            return array_filter($fields, fn($field) => !$field['is_header_field'] && $field['is_enabled']);
-        }, $this->filledForms);
-
-        $this->resetFormFields();
-    }
-
-    public function getFilteredRowFields()
-    {
-        $headers = array_unique(
-            array_column(
-                array_merge(...$this->rowFields),
-                'name'
-            )
-        );
-
-        $filteredFields = [];
-
-        foreach ($headers as $header) {
-            $filteredFields[$header] = array_map(function ($fields) use ($header) {
-                return array_filter($fields, function ($field) use ($header) {
-                    return $field['name'] === $header;
-                });
-            }, $this->rowFields);
-        }
-
-        return ['headers' => $headers, 'fields' => $filteredFields];
-    }
-
-    public function removeField(int $fieldKey)
-    {
-        try {
-            // Check if the counts are equal before proceeding
-            if (count($this->rowFields) === count($this->filledForms)) {
-                // Use array_filter to remove the element more efficiently
-                $this->rowFields = array_filter(
-                    $this->rowFields,
-                    fn($key) => $key !== $fieldKey,
-                    ARRAY_FILTER_USE_KEY
-                );
-
-                $this->filledForms = array_filter(
-                    $this->filledForms,
-                    fn($key) => $key !== $fieldKey,
-                    ARRAY_FILTER_USE_KEY
-                );
-            }
-
-        } catch (Throwable $e) {
-            AppErrorLog::getError($e->getMessage());
-            \Log::error('Error on line: ', [$e->getLine()]);
-        }
-
-    }
-
-    public function resetFormFields()
-    {
-        foreach ($this->formFields as &$field) {
-            if (!$field['is_header_field'] && !empty($field['value'])) {
-                $field['value'] = '';
-            }
-        }
-    }
-
-    public function updatedFileAttachments(&$value)
-    {
-        $this->validate([
-            'fileAttachments.*' => [
-                'nullable',
-                File::types($this->allowedExtensions)
-                    ->max(25600) //25600 (25 MB)
-            ],
-        ]);
-    }
-
-    public function cancel()
-    {
-        $this->reset();
-        $this->dispatchBrowserEvent('clear-select-dropdown');
     }
 
     public function render()
