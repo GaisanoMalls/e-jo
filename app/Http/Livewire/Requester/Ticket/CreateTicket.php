@@ -287,7 +287,7 @@ class CreateTicket extends Component
 
         $formFields = array_map(function ($field) use ($user, &$rowCount) {
             if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value) {
-                $field['value'] = Carbon::now()->format('m-d-Y');
+                $field['value'] = Carbon::now();
             }
 
             if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value) {
