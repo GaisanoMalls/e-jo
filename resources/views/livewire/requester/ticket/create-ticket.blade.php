@@ -89,7 +89,7 @@
                                         <em>(Service Department Administrators or Approvers)</em>
                                     </label>
                                     <div>
-                                        <div id="user-create-ticket-service-department-admin-dropdown" wire:ignore></div>
+                                        <div id="non-config-approver-select" placeholder="Select (Optional)" wire:ignore></div>
                                     </div>
                                     @error('serviceDepartmentAdmins')
                                         <span class="error__message">
@@ -578,7 +578,7 @@
         });
 
         window.addEventListener('fetch-nonconfig-approvers', (event) => {
-            const serviceDepartmentAdminSelect = document.querySelector('#user-create-ticket-service-department-admin-dropdown');
+            const nonConfigApproverSelect = document.querySelector('#non-config-approver-select');
             const nonConfigApprovers = event.detail.nonConfigApprovers;
 
             const nonConfigApproverOption = nonConfigApprovers.map(approver => ({
@@ -588,7 +588,7 @@
             }));
 
             VirtualSelect.init({
-                ele: serviceDepartmentAdminSelect,
+                ele: nonConfigApproverSelect,
                 options: nonConfigApproverOption,
                 search: true,
                 multiple: true,
@@ -597,8 +597,8 @@
                 hasOptionDescription: true
             });
 
-            serviceDepartmentAdminSelect.addEventListener('change', (event) => {
-                @this.set('serviceDepartmentAdmins', event.target.value);
+            nonConfigApproverSelect.addEventListener('change', (event) => {
+                @this.set('selectedNonConfigApprovers', event.target.value);
             })
         });
 

@@ -5,10 +5,8 @@ namespace App\Http\Livewire\Staff\Notification;
 use App\Enums\ApprovalStatusEnum;
 use App\Http\Traits\AppErrorLog;
 use App\Models\ActivityLog;
-use App\Models\Role;
 use App\Models\Status;
 use App\Models\Ticket;
-use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -73,6 +71,8 @@ class NotificationList extends Component
                     }
                     if ($notification->data['forSubtask']) {
                         return redirect()->route('staff.ticket.ticket_subtasks', $notification->data['ticket']['id']);
+                    } else {
+                        return redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);
                     }
                 } else {
                     return redirect()->route('staff.ticket.view_ticket', $notification->data['ticket']['id']);

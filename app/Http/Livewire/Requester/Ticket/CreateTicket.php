@@ -54,7 +54,7 @@ class CreateTicket extends Component
     public ?int $serviceDepartment = null;
     public ?int $helpTopic = null;
     public bool $doesntHaveApprovalConfig = false;
-    public array $serviceDepartmentAdmins = [];
+    public array $selectedNonConfigApprovers = [];
     public array|string $fileAttachments = [];
     public array $allowedExtensions = [
         'jpeg',
@@ -491,14 +491,14 @@ class CreateTicket extends Component
                         'approval_status' => ApprovalStatusEnum::APPROVED
                     ]);
 
-                    $serviceDeptAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                        ->whereIn('id', $this->serviceDepartmentAdmins)
+                    $nonConfigApprovers = User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
+                        ->whereIn('id', $this->selectedNonConfigApprovers)
                         ->get();
 
-                    $serviceDeptAdmins->each(function ($serviceDeptAdmin) use ($ticket) {
-                        Mail::to($serviceDeptAdmin)->send(new TicketCreatedMail($ticket, $serviceDeptAdmin));
+                    $nonConfigApprovers->each(function ($nonConfigApprover) use ($ticket) {
+                        Mail::to($nonConfigApprover)->send(new TicketCreatedMail($ticket, $nonConfigApprover));
                         Notification::send(
-                            $serviceDeptAdmin,
+                            $nonConfigApprover,
                             new AppNotification(
                                 ticket: $ticket,
                                 title: "Ticket #{$ticket->ticket_number} (New)",
