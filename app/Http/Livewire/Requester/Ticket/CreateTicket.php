@@ -144,10 +144,10 @@ class CreateTicket extends Component
         $this->dispatchBrowserEvent('clear-select-dropdown');
     }
 
-    private function fetchRequesterServiceDepartmentAdmins()
+    private function fetchNonConfigApprovers()
     {
-        return User::role([Role::SERVICE_DEPARTMENT_ADMIN])
-            ->with('profile')
+        return User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
+            ->with(['profile', 'roles', 'buDepartments'])
             ->whereHas('buDepartments', fn($query) => $query->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')))
             ->get();
     }
@@ -159,8 +159,8 @@ class CreateTicket extends Component
             ->exists();
 
         if ($this->doesntHaveApprovalConfig) {
-            $this->dispatchBrowserEvent('show-requester-service-department-admins', [
-                'serviceDepartmentAdmins' => $this->fetchRequesterServiceDepartmentAdmins()
+            $this->dispatchBrowserEvent('fetch-nonconfig-approvers', [
+                'nonConfigApprovers' => $this->fetchNonConfigApprovers()
             ]);
         }
     }

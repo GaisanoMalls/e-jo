@@ -86,7 +86,7 @@
                                 <div class="mb-3">
                                     <label class="form-label input__field__label">
                                         Select who will be notified
-                                        <em>(Service Department Administrators)</em>
+                                        <em>(Service Department Administrators or Approvers)</em>
                                     </label>
                                     <div>
                                         <div id="user-create-ticket-service-department-admin-dropdown" wire:ignore></div>
@@ -157,7 +157,7 @@
                                                                 </label>
                                                                 <input type="text" class="form-control input__field"
                                                                     value="{{ $fieldValue['value'] }}" disabled>
-                                                            </div>  
+                                                            </div>
                                                         @endif
                                                     @endforeach
                                                 @else
@@ -577,22 +577,24 @@
             ticketFileAttachmentContainer.style.display = 'block';
         });
 
-        window.addEventListener('show-requester-service-department-admins', (event) => {
+        window.addEventListener('fetch-nonconfig-approvers', (event) => {
             const serviceDepartmentAdminSelect = document.querySelector('#user-create-ticket-service-department-admin-dropdown');
-            const serviceDepartmentAdmins = event.detail.serviceDepartmentAdmins;
+            const nonConfigApprovers = event.detail.nonConfigApprovers;
 
-            const serviceDepartmentAdminOptions = serviceDepartmentAdmins.map(serviceDeptAdmin => ({
-                label: `${serviceDeptAdmin.profile.first_name} ${serviceDeptAdmin.profile.middle_name ? serviceDeptAdmin.profile.middle_name[0] + '.' : ''} ${serviceDeptAdmin.profile.last_name}`,
-                value: serviceDeptAdmin.id
+            const nonConfigApproverOption = nonConfigApprovers.map(approver => ({
+                label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
+                value: approver.id,
+                description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
             }));
 
             VirtualSelect.init({
                 ele: serviceDepartmentAdminSelect,
-                options: serviceDepartmentAdminOptions,
+                options: nonConfigApproverOption,
                 search: true,
                 multiple: true,
                 showValueAsTags: true,
                 markSearchResults: true,
+                hasOptionDescription: true
             });
 
             serviceDepartmentAdminSelect.addEventListener('change', (event) => {
