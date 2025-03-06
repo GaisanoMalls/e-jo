@@ -36,7 +36,7 @@ class Profile extends Model
         $suffix = $this->suffix ?? '';
 
         return Attribute::make(
-            get: fn() => "$this->first_name $middleInitial $this->last_name $suffix"
+            get: fn() => trim("$this->first_name $middleInitial $this->last_name $suffix")
         );
     }
 

@@ -145,9 +145,22 @@
                                                 {{ session('custom_form_field_message') }}
                                             </small>
                                         @endif
+
                                         @foreach ($formFields as $fieldKey => $formField)
                                             @if ($formField['is_enabled'])
-                                                @if (!$this->isPredefinedField($formField))
+                                                @if ($this->isPredefinedField($formField))
+                                                    @foreach ($fieldsWithDefaultValues as $fieldValue)
+                                                        @if ($formField['label'] === $fieldValue['label'])
+                                                            <div class="col-md-6 mb-3">
+                                                                <label class="form-label input__field__label" style="white-space: nowrap">
+                                                                    {{ $fieldValue['label'] }}
+                                                                </label>
+                                                                <input type="text" class="form-control input__field"
+                                                                    value="{{ $fieldValue['value'] }}" disabled>
+                                                            </div>  
+                                                        @endif
+                                                    @endforeach
+                                                @else
                                                     <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
                                                         <label class="form-label input__field__label" style="white-space: nowrap">
                                                             {{ $formField['label'] }}

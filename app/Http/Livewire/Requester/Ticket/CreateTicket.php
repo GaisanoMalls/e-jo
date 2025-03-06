@@ -79,6 +79,7 @@ class CreateTicket extends Component
     public array $filledForms = []; // Insert the filled forms here.
     public array $headerFields = [];
     public array $rowFields = [];
+    public array $fieldsWithDefaultValues = [];
     public ?string $poNumber = null;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
@@ -231,7 +232,7 @@ class CreateTicket extends Component
                 ];
             })->toArray();
 
-            // dump($this->formFields);
+            $this->fieldsWithDefaultValues = $this->assignDefaultValues($this->formFields);
 
             $this->description = null; // Not necessary when using custom form.
             $this->helpTopicForm = $helpTopicForm; // Assign the helpTopicForm property of the selected help topic form.
@@ -240,6 +241,49 @@ class CreateTicket extends Component
             $this->isHelpTopicHasForm = false;
             $this->dispatchBrowserEvent('hide-ticket-description-container');
         }
+    }
+
+    private function assignDefaultValues(array $formFields)
+    {
+        if (!$this->poNumber) {
+            $this->poNumber = $this->generatedTicketNumber();
+        }
+
+        $user = auth()->user()->role(Role::USER)->first();
+
+        $fields = array_map(function ($field) use ($user) {
+            if ($field['config']['get_value_from']['value'] !== null) {
+                if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value) {
+                    $field['value'] = Carbon::now()->format('M j, Y');
+                }
+
+                if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value) {
+                    $field['value'] = $this->poNumber;
+                }
+
+                if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_BRANCH->value) {
+                    $user->load('branches');
+                    $field['value'] = $user->branches->first()->name;
+                }
+
+                if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_DEPARTMENT->value) {
+                    $user->load('buDepartments');
+                    $field['value'] = $user->buDepartments->first()->name;
+                }
+
+                if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value) {
+                    $user->load('profile');
+                    $field['value'] = $user->profile->getFullName;
+                }
+
+                return [
+                    'label' => $field['label'],
+                    'value' => $field['value'],
+                ];
+            }
+        }, $formFields);
+
+        return array_filter($fields);
     }
 
     public function isPredefinedField($formField)
@@ -278,14 +322,10 @@ class CreateTicket extends Component
 
     public function addFieldValues()
     {
-        if (!$this->poNumber) {
-            $this->poNumber = $this->generatedTicketNumber();
-        }
-
         $user = auth()->user()->role(Role::USER)->first();
         $rowCount = count($this->filledForms) + 1; // Initialize row count for the new batch
 
-        $formFields = array_map(function ($field) use ($user, &$rowCount) {
+        $fields = array_map(function ($field) use ($user, &$rowCount) {
             if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value) {
                 $field['value'] = Carbon::now();
             }
@@ -308,14 +348,16 @@ class CreateTicket extends Component
                 $user->load('profile');
                 $field['value'] = $user->profile->getFullName;
             }
+
             // Assign row count for each field in the batch
             $field['row'] = $rowCount;
             return $field;
+
         }, $this->formFields);
 
         // Validate required fields
         $validationErrors = [];
-        foreach ($formFields as $field) {
+        foreach ($fields as $field) {
             if ($field['is_required'] && empty($field['value']) && $field['config']['get_value_from']['value'] === null) {
                 $validationErrors[] = "{$field['label']} field is required.";
             }
@@ -328,7 +370,7 @@ class CreateTicket extends Component
             return;
         }
 
-        $this->filledForms[] = $formFields;
+        $this->filledForms[] = $fields;
 
         if (!$this->isHeaderFieldSet) {
             $this->headerFields = array_map(function ($fields) {
