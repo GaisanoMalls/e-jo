@@ -23,7 +23,7 @@ trait Tickets
                         $team->whereIn('teams.id', auth()->user()->teams->pluck('id'));
                     });
             })
-            ->orWhereHas('ticketApprovals', function ($approval) {
+            ->whereHas('ticketApprovals', function ($approval) {
                 $approval->where('is_approved', true);
             })
             ->orderByDesc('created_at')
@@ -47,7 +47,7 @@ trait Tickets
                         $team->whereIn('teams.id', auth()->user()->teams->pluck('id'));
                     });
             })
-            ->orWhereHas('ticketApprovals', function ($approval) {
+            ->whereHas('ticketApprovals', function ($approval) {
                 $approval->orWhere('is_approved', true);
             })
             ->orderByDesc('created_at')
@@ -74,7 +74,7 @@ trait Tickets
                         $team->whereIn('teams.id', auth()->user()->teams->pluck('id'));
                     });
             })
-            ->orWhereHas('ticketApprovals', function ($approval) {
+            ->whereHas('ticketApprovals', function ($approval) {
                 $approval->orWhere('is_approved', true);
             })
             ->orderByDesc('created_at')
@@ -98,7 +98,7 @@ trait Tickets
                         $team->whereIn('teams.id', auth()->user()->teams->pluck('id'));
                     });
             })
-            ->orWhereHas('ticketApprovals', function ($approval) {
+            ->whereHas('ticketApprovals', function ($approval) {
                 $approval->orWhere('is_approved', true);
             })
             ->orderByDesc('created_at')
@@ -122,7 +122,7 @@ trait Tickets
                         $team->whereIn('teams.id', auth()->user()->teams->pluck('id'));
                     });
             })
-            ->orWhereHas('ticketApprovals', function ($approval) {
+            ->whereHas('ticketApprovals', function ($approval) {
                 $approval->orWhere('is_approved', true);
             })
             ->orderByDesc('created_at')

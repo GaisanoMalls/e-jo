@@ -252,9 +252,9 @@ class CreateTicket extends Component
         $user = auth()->user()->role(Role::USER)->first();
 
         $fields = array_map(function ($field) use ($user) {
-            if ($field['config']['get_value_from']['value'] !== null) {
+            if (isset($field['config']['get_value_from']['value'])) {
                 if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value) {
-                    $field['value'] = Carbon::now()->format('M j, Y');
+                    $field['value'] = Carbon::now()->format('F j, Y');
                 }
 
                 if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value) {
@@ -275,25 +275,15 @@ class CreateTicket extends Component
                     $user->load('profile');
                     $field['value'] = $user->profile->getFullName;
                 }
-
-                return [
-                    'label' => $field['label'],
-                    'value' => $field['value'],
-                ];
             }
+
+            return [
+                'label' => $field['label'],
+                'value' => $field['value'],
+            ];
         }, $formFields);
 
         return array_filter($fields);
-    }
-
-    public function isPredefinedField($formField)
-    {
-        return ($formField['config']['get_value_from']['label'] !== null && $formField['config']['get_value_from']['value'] !== null)
-            && $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value
-            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value
-            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_BRANCH->value
-            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_DEPARTMENT->value
-            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value;
     }
 
     private function saveFieldValues(Ticket $ticket)
@@ -320,33 +310,45 @@ class CreateTicket extends Component
         }
     }
 
+    public function isPredefinedField($formField)
+    {
+        return (isset($formField['config']['get_value_from']['label']) && isset($formField['config']['get_value_from']['value']))
+            && $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value
+            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value
+            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_BRANCH->value
+            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_DEPARTMENT->value
+            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value;
+    }
+
     public function addFieldValues()
     {
         $user = auth()->user()->role(Role::USER)->first();
         $rowCount = count($this->filledForms) + 1; // Initialize row count for the new batch
 
         $fields = array_map(function ($field) use ($user, &$rowCount) {
-            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value) {
-                $field['value'] = Carbon::now();
-            }
+            if (isset($field['config']['get_value_from']['value'])) {
+                if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value) {
+                    $field['value'] = Carbon::now();
+                }
 
-            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value) {
-                $field['value'] = $this->poNumber;
-            }
+                if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value) {
+                    $field['value'] = $this->poNumber;
+                }
 
-            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_BRANCH->value) {
-                $user->load('branches');
-                $field['value'] = $user->branches->first()->name;
-            }
+                if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_BRANCH->value) {
+                    $user->load('branches');
+                    $field['value'] = $user->branches->first()->name;
+                }
 
-            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_DEPARTMENT->value) {
-                $user->load('buDepartments');
-                $field['value'] = $user->buDepartments->first()->name;
-            }
+                if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_DEPARTMENT->value) {
+                    $user->load('buDepartments');
+                    $field['value'] = $user->buDepartments->first()->name;
+                }
 
-            if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value) {
-                $user->load('profile');
-                $field['value'] = $user->profile->getFullName;
+                if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value) {
+                    $user->load('profile');
+                    $field['value'] = $user->profile->getFullName;
+                }
             }
 
             // Assign row count for each field in the batch
@@ -358,7 +360,7 @@ class CreateTicket extends Component
         // Validate required fields
         $validationErrors = [];
         foreach ($fields as $field) {
-            if ($field['is_required'] && empty($field['value']) && $field['config']['get_value_from']['value'] === null) {
+            if ($field['is_required'] && empty($field['value']) && isset($field['config']['get_value_from']['value'])) {
                 $validationErrors[] = "{$field['label']} field is required.";
             }
         }
