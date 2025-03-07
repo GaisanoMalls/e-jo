@@ -17,7 +17,8 @@ class Clarification extends Model
     protected $fillable = [
         'user_id',
         'ticket_id',
-        'description'
+        'description',
+        'is_viewed'
     ];
 
     public function user(): BelongsTo
