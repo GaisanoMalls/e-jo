@@ -5,6 +5,7 @@ namespace App\Http\Livewire\TicketNotif;
 use App\Models\Reply;
 use App\Models\Ticket;
 use Livewire\Component;
+use Route;
 
 class NewReplyIcon extends Component
 {
@@ -13,13 +14,33 @@ class NewReplyIcon extends Component
 
     protected $listeners = ['loadNewReplyIcon' => '$refresh'];
 
+    private function routeByUserRole()
+    {
+        $currentUser = auth()->user();
+        if ($currentUser->isSystemAdmin() || $currentUser->isServiceDepartmentAdmin() || $currentUser->isAgent()) {
+            return 'staff.ticket.view_ticket';
+        }
+
+        if ($currentUser->isUser()) {
+            return 'user.ticket.view_ticket';
+        }
+    }
+
     public function render()
     {
-        $latestReply = Reply::where('ticket_id', $this->ticket->id)
+        $unviewedReply = Reply::where([
+            ['user_id', '!=', auth()->user()->id],
+            ['ticket_id', $this->ticket->id],
+            ['is_viewed', false]
+        ])
             ->orderByDesc('created_at')
             ->first();
 
-        $this->ticketHasNewReply = $latestReply && $latestReply->user_id != auth()->user()->id;
+        if (isset($unviewedReply) && Route::is($this->routeByUserRole())) {
+            $unviewedReply->update(['is_viewed' => true]);
+        } else {
+            $this->ticketHasNewReply = $unviewedReply && $unviewedReply->user_id != auth()->user()->id;
+        }
 
         return view('livewire.ticket-notif.new-reply-icon');
     }

@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->foreignIdFor(Ticket::class, 'ticket_id')->constrained('tickets')->cascadeOnDelete();
             $table->foreignIdFor(Reply::class, 'quoted_reply_id')->nullable()->constrained('replies')->nullOnDelete();
             $table->longText('description');
+            $table->boolean('is_viewed')->default(false);
             $table->timestamps();
         });
     }

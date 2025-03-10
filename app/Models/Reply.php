@@ -15,7 +15,13 @@ class Reply extends Model
 {
     use HasFactory, Utils;
 
-    protected $fillable = ['ticket_id', 'user_id', 'quoted_reply_id', 'description'];
+    protected $fillable = [
+        'ticket_id',
+        'user_id',
+        'quoted_reply_id',
+        'description',
+        'is_viewed'
+    ];
 
     public function fileAttachments(): HasMany
     {

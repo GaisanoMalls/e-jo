@@ -18,9 +18,9 @@ class NewClarificationIcon extends Component
     {
         $currentUser = auth()->user();
         if ($currentUser->isSystemAdmin() || $currentUser->isServiceDepartmentAdmin() || $currentUser->isAgent()) {
-            return 'agent.ticket.ticket_clarifications';
+            return 'staff.ticket.ticket_clarifications';
         }
-        dump($currentUser->isUser());
+
         if ($currentUser->isUser()) {
             return 'user.ticket.ticket_clarifications';
         }
@@ -28,15 +28,15 @@ class NewClarificationIcon extends Component
 
     public function render()
     {
-        // dump($this->routeByUserRole());
         $unviewedClarification = Clarification::where([
+            ['user_id', '!=', auth()->user()->id],
             ['ticket_id', $this->ticket->id],
             ['is_viewed', false]
         ])
             ->orderByDesc('created_at')
             ->first();
 
-        if (isset($unviewedClarification) && $this->routeByUserRole()) {
+        if (isset($unviewedClarification) && Route::is($this->routeByUserRole())) {
             $unviewedClarification->update(['is_viewed' => true]);
         } else {
             $this->ticketHasNewClarification = $unviewedClarification && $unviewedClarification->user_id != auth()->user()->id;
