@@ -64,7 +64,6 @@ trait Tickets
                         ApprovalStatusEnum::APPROVED
                     ]);
             })
-            ->whereNotNull('agent_id')
             ->where(function ($query) {
                 $query->where(function ($query) {
                     $query->whereIn('branch_id', auth()->user()->branches->pluck('id'))
