@@ -21,7 +21,11 @@ class ReopenTicket extends Component
     {
         try {
             if (auth()->user()->isAgent() || auth()->user()->isServiceDepartmentAdmin()) {
-                $this->ticket->update(['status_id' => Status::OPEN]);
+                if ($this->ticket->where('status_id', Status::OVERDUE)) {
+                    $this->ticket->update(['is_overdue' => true]);
+                } else {
+                    $this->ticket->update(['status_id' => Status::OPEN]);
+                }
 
                 // Get the requester's service department admins.
                 $serviceDeptAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
