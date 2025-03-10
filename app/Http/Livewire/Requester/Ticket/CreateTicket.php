@@ -249,8 +249,7 @@ class CreateTicket extends Component
             $this->poNumber = $this->generatedTicketNumber();
         }
 
-        $user = auth()->user()->role(Role::USER)->first();
-
+        $user = User::role(Role::USER)->find(auth()->user()->id);
         $fields = array_map(function ($field) use ($user) {
             if (isset($field['config']['get_value_from']['value'])) {
                 if ($field['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value) {
@@ -322,7 +321,7 @@ class CreateTicket extends Component
 
     public function addFieldValues()
     {
-        $user = auth()->user()->role(Role::USER)->first();
+        $user = User::role(Role::USER)->find(auth()->user()->id);
         $rowCount = count($this->filledForms) + 1; // Initialize row count for the new batch
 
         $fields = array_map(function ($field) use ($user, &$rowCount) {
