@@ -28,43 +28,47 @@ class ReopenTicket extends Component
                     ])->exists()
                 ) {
                     $this->ticket->update(['is_overdue' => true, 'status_id' => Status::OPEN]);
+                }
 
-                    // Get the requester's service department admins.
-                    $serviceDeptAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
-                        ->whereHas('buDepartments', fn($query) => $query->whereIn('departments.id', $this->ticket->user->buDepartments->pluck('id')))
-                        ->whereHas('branches', fn($query) => $query->whereIn('branches.id', $this->ticket->user->branches->pluck('id')))
-                        ->get();
+                if ($this->ticket->where('status_id', Status::CLOSED)->exists()) {
+                    $this->ticket->update(['status_id' => Status::OPEN]);
+                }
 
-                    // Get the current service department admin
-                    $currentServiceDeptAdmin = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->with('profile')->find(auth()->user()->id);
+                // Get the requester's service department admins.
+                $serviceDeptAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
+                    ->whereHas('buDepartments', fn($query) => $query->whereIn('departments.id', $this->ticket->user->buDepartments->pluck('id')))
+                    ->whereHas('branches', fn($query) => $query->whereIn('branches.id', $this->ticket->user->branches->pluck('id')))
+                    ->get();
 
-                    // Notify the requester's service department admins
-                    $serviceDeptAdmins->each(function ($serviceDeptAdmin) use ($currentServiceDeptAdmin) {
-                        Notification::send(
-                            $serviceDeptAdmin,
-                            new AppNotification(
-                                ticket: $this->ticket,
-                                title: "Ticket #{$this->ticket->ticket_number} (Reopened)",
-                                message: $currentServiceDeptAdmin?->profile->getFullName . " reopened the ticket."
-                            )
-                        );
-                    });
+                // Get the current service department admin
+                $currentServiceDeptAdmin = User::role(Role::SERVICE_DEPARTMENT_ADMIN)->with('profile')->find(auth()->user()->id);
 
-                    // Get the current agent
-                    $currentAgent = User::role(Role::AGENT)->with('profile')->find(auth()->user()->id);
-
-                    // Notify the requester
+                // Notify the requester's service department admins
+                $serviceDeptAdmins->each(function ($serviceDeptAdmin) use ($currentServiceDeptAdmin) {
                     Notification::send(
-                        $this->ticket->user,
+                        $serviceDeptAdmin,
                         new AppNotification(
                             ticket: $this->ticket,
                             title: "Ticket #{$this->ticket->ticket_number} (Reopened)",
-                            message: $currentAgent?->profile->getFullName . " reopened the ticket."
+                            message: $currentServiceDeptAdmin?->profile->getFullName . " reopened the ticket."
                         )
                     );
+                });
 
-                    ActivityLog::make(ticket_id: $this->ticket->id, description: 'reopened the ticket');
-                }
+                // Get the current agent
+                $currentAgent = User::role(Role::AGENT)->with('profile')->find(auth()->user()->id);
+
+                // Notify the requester
+                Notification::send(
+                    $this->ticket->user,
+                    new AppNotification(
+                        ticket: $this->ticket,
+                        title: "Ticket #{$this->ticket->ticket_number} (Reopened)",
+                        message: $currentAgent?->profile->getFullName . " reopened the ticket."
+                    )
+                );
+
+                ActivityLog::make(ticket_id: $this->ticket->id, description: 'reopened the ticket');
             } else {
                 noty()->addWarning('You are not allowed to reopen this ticket.');
             }
