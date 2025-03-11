@@ -44,6 +44,11 @@ class ApproverTicketsController extends Controller
         return $this->renderTicketView('on_process');
     }
 
+    public function claimedTickets()
+    {
+        return $this->renderTicketView('claimed');
+    }
+
     public function closedTickets()
     {
         return $this->renderTicketView('closed');

@@ -11,22 +11,23 @@ class TicketTab extends Component
 {
     use Tickets, Utils;
 
-    public Collection $openTickets;
-    public Collection $viewedTickets;
-    public Collection $approvedTickets;
-    public Collection $disapprovedTickets;
-    public Collection $onProcessTickets;
-    public Collection $closedTickets;
-    public Collection $forApprovalTickets;
+    public int $countOpenTickets;
+    public int $countViewedTickets;
+    public int $countApprovedTickets;
+    public int $countDisapprovedTickets;
+    public int $countOnProcessTickets;
+    public int $countClaimedTickets;
+    public int $countClosedTickets;
 
     public function mount()
     {
-        $this->openTickets = $this->getOpenTickets();
-        $this->viewedTickets = $this->getViewedTickets();
-        $this->approvedTickets = $this->getApprovedTickets();
-        $this->disapprovedTickets = $this->getDisapprovedTickets();
-        $this->onProcessTickets = $this->getOnProcessTickets();
-        $this->closedTickets = $this->getClosedTickets();
+        $this->countOpenTickets = $this->getOpenTickets()->count();
+        $this->countViewedTickets = $this->getViewedTickets()->count();
+        $this->countApprovedTickets = $this->getApprovedTickets()->count();
+        $this->countDisapprovedTickets = $this->getDisapprovedTickets()->count();
+        $this->countOnProcessTickets = $this->getOnProcessTickets()->count();
+        $this->countClaimedTickets = $this->getClaimedTickets()->count();
+        $this->countClosedTickets = $this->getClosedTickets()->count();
     }
 
     public function render()

@@ -113,7 +113,13 @@
                             <!-- END -->
                         </div>
                     </div>
-                    @if ($this->ticket->agent_id !== null)
+                    @if ($ticket->is_overdue)
+                        <div class="alert alert-warning p-2 mt-2" role="alert" style="font-size: 13px; color: red;">
+                            <i class="bi bi-info-circle-fill"></i>
+                            This ticket has reached its due date.
+                        </div>
+                    @endif
+                    @if ($ticket->agent_id !== null)
                         <div class="d-inline">
                             @if (auth()->user()->isAgent() && !$isRequestingForSlaExtension)
                                 @if ($isNewSlaSet || (!$isRequestingForSlaExtension && !$isSlaExtensionApproved))
@@ -160,7 +166,7 @@
                                         </div>
                                     @else
                                         Pending approval for SLA extension
-                                        @if ($this->ticket?->slaExtension?->requested_by === auth()->user()->id)
+                                        @if ($ticket?->slaExtension?->requested_by === auth()->user()->id)
                                             <button type="button" wire:click="cancelSlaExtensionRequest"
                                                 class="btn btn-sm border border-white d-flex align-items-center justify-content-center rounded-circle ms-auto position-absolute"
                                                 style="height: 25px;
@@ -180,7 +186,7 @@
                                         <span>Requested By:</span>
                                         <span>
                                             {{ $slaExtensionRequester }}
-                                            @if ($this->ticket?->slaExtension?->requested_by === auth()->user()->id)
+                                            @if ($ticket?->slaExtension?->requested_by === auth()->user()->id)
                                                 <span>(You)</span>
                                             @endif
                                         </span>

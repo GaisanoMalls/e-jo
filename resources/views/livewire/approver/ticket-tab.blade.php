@@ -5,7 +5,7 @@
                 class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
                 {{ Route::is('approver.tickets.open') ? 'ticket__tab__link active' : '' }}"
                 wire:ignore.self>
-                <span class="ticket__count__tab">{{ $openTickets->count() }}</span>
+                <span class="ticket__count__tab">{{ $countOpenTickets }}</span>
                 Open
             </a>
         </li>
@@ -14,7 +14,7 @@
                 class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
                 {{ Route::is('approver.tickets.viewed') ? 'ticket__tab__link active' : '' }}"
                 wire:ignore.self>
-                <span class="ticket__count__tab">{{ $viewedTickets->count() }}</span>
+                <span class="ticket__count__tab">{{ $countViewedTickets }}</span>
                 Viewed
             </a>
         </li>
@@ -23,7 +23,7 @@
                 class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
                 {{ Route::is('approver.tickets.approved') ? 'ticket__tab__link active' : '' }}"
                 wire:ignore.self>
-                <span class="ticket__count__tab">{{ $approvedTickets->count() }}</span>
+                <span class="ticket__count__tab">{{ $countApprovedTickets }}</span>
                 Approved
             </a>
         </li>
@@ -32,7 +32,7 @@
                 class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
                 {{ Route::is('approver.tickets.disapproved') ? 'ticket__tab__link active' : '' }}"
                 wire:ignore.self>
-                <span class="ticket__count__tab">{{ $disapprovedTickets->count() }}</span>
+                <span class="ticket__count__tab">{{ $countDisapprovedTickets }}</span>
                 Disapproved
             </a>
         </li>
@@ -41,8 +41,17 @@
                 class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
                 {{ Route::is('approver.tickets.on_process') ? 'ticket__tab__link active' : '' }}"
                 wire:ignore.self>
-                <span class="ticket__count__tab">{{ $onProcessTickets->count() }}</span>
+                <span class="ticket__count__tab">{{ $countOnProcessTickets }}</span>
                 On Process
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('approver.tickets.claimed') }}"
+                class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
+                {{ Route::is('approver.tickets.claimed') ? 'ticket__tab__link active' : '' }}"
+                wire:ignore.self>
+                <span class="ticket__count__tab">{{ $countClaimedTickets }}</span>
+                Claimed
             </a>
         </li>
         <li class="nav-item">
@@ -50,7 +59,7 @@
                 class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
                 {{ Route::is('approver.tickets.closed') ? 'ticket__tab__link active' : '' }}"
                 wire:ignore.self>
-                <span class="ticket__count__tab">{{ $closedTickets->count() }}</span>
+                <span class="ticket__count__tab">{{ $countClosedTickets }}</span>
                 Closed
             </a>
         </li>

@@ -4,7 +4,7 @@
 
 @if (
     (auth()->user()->isServiceDepartmentAdmin() || auth()->user()->isAgent()) &&
-        ($ticket->status_id !== Status::DISAPPROVED && ($ticket->status_id !== Status::OVERDUE && $ticket->status_id !== Status::CLOSED)))
+        ($ticket->status_id !== Status::DISAPPROVED && $ticket->status_id !== Status::CLOSED))
     <div>
         @if ($ticket->status_id == Status::CLOSED)
             <div class="d-flex flex-column">

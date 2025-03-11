@@ -111,6 +111,26 @@ trait Tickets
             ->get();
     }
 
+    public function getClaimedTickets()
+    {
+        return Ticket::whereHas('user', fn($user) => $user->withTrashed())
+            ->where(function ($statusQuery) {
+                $statusQuery->whereNotNull('agent_id')
+                    ->where([
+                        ['status_id', Status::CLAIMED],
+                        ['approval_status', ApprovalStatusEnum::APPROVED]
+                    ]);
+            })
+            ->whereHas('user.buDepartments', function ($department) {
+                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+            })
+            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
+                $approver->where('user_id', auth()->user()->id);
+            })
+            ->orderByDesc('created_at')
+            ->get();
+    }
+
     public function getClosedTickets()
     {
         return Ticket::whereHas('user', fn($user) => $user->withTrashed())
