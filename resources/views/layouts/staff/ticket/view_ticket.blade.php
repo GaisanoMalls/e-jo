@@ -1,3 +1,7 @@
+@php
+    use App\Models\Status;
+@endphp
+
 @extends('layouts.staff.base', ['title' => $ticket->subject])
 @section('main-content')
     @livewire('staff.ticket.load-disapproval-reason', ['ticket' => $ticket])
@@ -141,8 +145,10 @@
                             <div class="container__ticket__details__right">
                                 @livewire('staff.ticket.ticket-details', ['ticket' => $ticket])
                                 @livewire('staff.ticket.ticket-level-approval', ['ticket' => $ticket])
-                                @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
-                                @livewire('staff.ticket.ticket-tag', ['ticket' => $ticket])
+                                @if ($ticket->status_id !== Status::CLOSED && $ticket->status_id !== Status::OVERDUE && $ticket->status_id !== Status::DISAPPROVED)
+                                    @livewire('staff.ticket.ticket-actions', ['ticket' => $ticket])
+                                    @livewire('staff.ticket.ticket-tag', ['ticket' => $ticket])
+                                @endif
                                 @livewire('ticket-activity-logs', ['ticket' => $ticket])
                             </div>
                         </div>

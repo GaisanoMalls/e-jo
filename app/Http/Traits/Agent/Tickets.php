@@ -21,8 +21,11 @@ trait Tickets
                         $team->whereIn('teams.id', auth()->user()->teams->pluck('id'));
                     });
             })
-            ->orWhereHas('ticketApprovals', function ($approval) {
-                $approval->where('is_approved', true);
+            ->where(function ($query) {
+                $query->whereHas('ticketApprovals', function ($approval) {
+                    $approval->where('is_approved', true);
+                })
+                    ->orWhereDoesntHave('ticketApprovals');
             })
             ->orderByDesc('created_at')
             ->get();
@@ -43,8 +46,11 @@ trait Tickets
                         $team->whereIn('teams.id', auth()->user()->teams->pluck('id'));
                     });
             })
-            ->orWhereHas('ticketApprovals', function ($approval) {
-                $approval->where('is_approved', true);
+            ->where(function ($query) {
+                $query->whereHas('ticketApprovals', function ($approval) {
+                    $approval->where('is_approved', true);
+                })
+                    ->orWhereDoesntHave('ticketApprovals');
             })
             ->orderByDesc('created_at')
             ->get();
@@ -67,8 +73,12 @@ trait Tickets
                         $team->whereIn('teams.id', auth()->user()->teams->pluck('id'));
                     });
             })
-            ->orWhereHas('ticketApprovals', function ($approval) {
-                $approval->where('is_approved', true);
+            // ->whereHas('helpTopic.configurations')
+            ->where(function ($query) {
+                $query->whereHas('ticketApprovals', function ($approval) {
+                    $approval->where('is_approved', true);
+                })
+                    ->orWhereDoesntHave('ticketApprovals');
             })
             ->orderByDesc('created_at')
             ->get();
@@ -83,15 +93,17 @@ trait Tickets
             ])
             ->whereNotNull('agent_id')
             ->where(function ($query) {
-
                 $query->whereIn('branch_id', auth()->user()->branches->pluck('id'))
                     ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                     ->whereHas('teams', function ($team) {
                         $team->whereIn('teams.id', auth()->user()->teams->pluck('id'));
                     });
             })
-            ->orWhereHas('ticketApprovals', function ($approval) {
-                $approval->where('is_approved', true);
+            ->where(function ($query) {
+                $query->whereHas('ticketApprovals', function ($approval) {
+                    $approval->where('is_approved', true);
+                })
+                    ->orWhereDoesntHave('ticketApprovals');
             })
             ->orderByDesc('created_at')
             ->get();
@@ -112,8 +124,11 @@ trait Tickets
                         $team->whereIn('teams.id', auth()->user()->teams->pluck('id'));
                     });
             })
-            ->orWhereHas('ticketApprovals', function ($approval) {
-                $approval->where('is_approved', true);
+            ->where(function ($query) {
+                $query->whereHas('ticketApprovals', function ($approval) {
+                    $approval->where('is_approved', true);
+                })
+                    ->orWhereDoesntHave('ticketApprovals');
             })
             ->orderByDesc('created_at')
             ->get();

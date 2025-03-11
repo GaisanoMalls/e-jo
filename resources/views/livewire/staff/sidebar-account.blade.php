@@ -37,6 +37,11 @@
                 {{ auth()->user()->getBranches() ?? '' }}
             </p>
         @endif
+        @if (auth()->user()->isAgent())
+            <small style="font-size: 12px;">
+                {{ auth()->user()->getTeams() }}
+            </small>
+        @endif
         @if ($priorityLevels->isNotEmpty())
             <div class="mt-4 d-flex staff__ticket__count align-items-center justify-content-around">
                 @foreach ($priorityLevels as $priority)
