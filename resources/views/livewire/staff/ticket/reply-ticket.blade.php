@@ -1,12 +1,12 @@
 <div>
-    <div wire:ignore.self class="modal fade modal-xl ticket__actions__modal" id="replyTicketModal" tabindex="-1"
-        aria-labelledby="modalFormLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade modal-xl ticket__actions__modal" id="replyTicketModal" tabindex="-1" aria-labelledby="modalFormLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom__modal">
             <div class="modal-content d-flex flex-column custom__modal__content">
                 <div class="modal__header d-flex justify-content-between align-items-center">
                     <h6 class="modal__title">Write your reply</h6>
-                    <button class="btn d-flex align-items-center justify-content-center modal__close__button"
-                        data-bs-dismiss="modal" id="btnCloseModal">
+                    <button class="btn d-flex align-items-center justify-content-center modal__close__button" data-bs-dismiss="modal"
+                        id="btnCloseModal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -29,15 +29,14 @@
                                 <label class="ticket__actions__label">Attach file</label>
                                 <div wire:loading wire:target="replyFiles">
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="spinner-border text-info" style="height: 15px; width: 15px;"
-                                            role="status">
+                                        <div class="spinner-border text-info" style="height: 15px; width: 15px;" role="status">
                                         </div>
                                         <small style="fot-size: 12px;">Uploading...</small>
                                     </div>
                                 </div>
                             </div>
-                            <input class="form-control ticket__file__input w-auto my-3" type="file"
-                                wire:model="replyFiles" multiple id="upload-{{ $upload }}">
+                            <input class="form-control ticket__file__input w-auto my-3" type="file" wire:model="replyFiles" multiple
+                                id="upload-{{ $upload }}">
                             @error('replyFiles.*')
                                 <span class="error__message">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -45,15 +44,22 @@
                                 </span>
                             @enderror
                         </div>
-                        <button type="submit"
-                            class="btn mt-4 d-flex align-items-center justify-content-center gap-2 modal__footer__button modal__btnsubmit__bottom">
-                            <span wire:loading wire:target="replyTicket" class="spinner-border spinner-border-sm"
-                                role="status" aria-hidden="true">
+                        <button type="submit" class="btn mt-3 d-flex align-items-center justify-content-center gap-2"
+                            style="padding: 0.6rem 1rem;
+                                border-radius: 0.563rem;
+                                font-size: 0.875rem;
+                                background-color: #d32839;
+                                color: white;
+                                font-weight: 500;
+                                box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
+                            <span wire:loading wire:target="replyTicket" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                             </span>
-                            Send
-                            <div wire:loading.remove wire:target="replyTicket">
-                                <i class="bi bi-send-fill"></i>
-                            </div>
+                            <span wire:loading.remove wire:target="replyTicket">
+                                Send
+                            </span>
+                            <span wire:loading wire:target="replyTicket">
+                                Sending
+                            </span>
                         </button>
                     </form>
                 </div>

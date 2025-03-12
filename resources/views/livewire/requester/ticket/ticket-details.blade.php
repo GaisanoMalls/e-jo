@@ -80,19 +80,24 @@
                 </div>
                 <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                     <small class="ticket__details__info__label" style="font-weight: 500;">
-                        SLA:
+                        Service Level Agreement:
                     </small>
                     <div class="d-flex align-items-center gap-2">
                         @if ($isSlaApproved)
                             @livewire('sla-timer', ['ticket' => $ticket])
                         @endif
                         <small class="ticket__details__info">
-                            <i class="fa-solid fa-clock me-1 text-muted {{ $isSlaApproved ? 'bx-flashing' : '' }}"
-                                style="font-size: 11px;"></i>
+                            <i class="fa-solid fa-clock me-1 text-muted {{ $isSlaApproved ? 'bx-flashing' : '' }}" style="font-size: 11px;"></i>
                             {{ $ticket->sla?->time_unit }}
                         </small>
                     </div>
                 </div>
+                @if ($ticket->is_overdue)
+                    <div class="alert alert-warning p-2 mt-2" role="alert" style="font-size: 13px; color: red;">
+                        <i class="bi bi-info-circle-fill"></i>
+                        This ticket has reached its due date.
+                    </div>
+                @endif
             </div>
         </div>
     </div>

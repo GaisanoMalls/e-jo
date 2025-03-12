@@ -87,7 +87,8 @@
                                 @livewire('sla-timer', ['ticket' => $ticket])
                             @endif
                             <!-- Progress bar 4 -->
-                            <div class="progress mx-auto" data-value='{{ $this->ticketSLATimer($ticket)['percentageElapsed'] }}'>
+                            <div wire:poll.visible.60s class="progress mx-auto"
+                                data-value='{{ $this->ticketSLATimer($ticket)['percentageElapsed'] }}'>
                                 <span class="progress-left {{ $this->isSlaApproved($ticket) && !$this->isSlaOverdue($ticket) ? 'bx-flashing' : '' }}">
                                     <span wire:ignore class="progress-bar" @style([
                                         'border-color: #8BE78B;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 0 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 49,

@@ -64,7 +64,8 @@ class AssignTicket extends Component
             'loadTicketDetails',
             'loadTicketActions',
             'loadBackButtonHeader',
-            'loadTicketStatusTextHeader'
+            'loadTicketStatusTextHeader',
+            'loadSidebarCollapseTicketStatus'
         ];
 
         foreach ($events as $event) {

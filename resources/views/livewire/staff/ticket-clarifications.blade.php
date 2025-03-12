@@ -138,7 +138,7 @@
                 </div>
             @endif
 
-            @if ($ticket->status_id != Status::CLOSED && $ticket->status_id != Status::DISAPPROVED)
+            @if ($ticket->status_id != Status::CLOSED && $ticket->status_id != Status::DISAPPROVED && $ticket->status_id !== Status::OVERDUE)
                 <button type="button"
                     class="btn btn__reply__ticket btn__reply__ticket__mobile mb-4 mt-5 d-flex align-items-center justify-content-center gap-2 float-end"
                     data-bs-toggle="modal" data-bs-target="#sendTicketClarificationModal" wire:click="getLatestClarification">

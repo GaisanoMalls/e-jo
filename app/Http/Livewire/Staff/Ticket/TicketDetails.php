@@ -249,8 +249,7 @@ class TicketDetails extends Component
                 $this->resetValidation('selectedSla');
             }
 
-            $this->emitSelf('loadTicketDetails');
-            $this->emit('loadTicketLogs');
+            return redirect()->route('staff.ticket.view_ticket', $this->ticket->id);
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }

@@ -1,12 +1,12 @@
 <div>
-    <div wire:ignore.self class="modal fade ticket__actions__modal" id="requestForApprovalModal" tabindex="-1"
-        aria-labelledby="modalFormLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade ticket__actions__modal" id="requestForApprovalModal" tabindex="-1" aria-labelledby="modalFormLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered custom__modal">
             <div class="modal-content d-flex flex-column custom__modal__content">
                 <div class="modal__header d-flex justify-content-between align-items-center">
                     <h6 class="modal__title">Request for approval</h6>
-                    <button class="btn d-flex align-items-center justify-content-center modal__close__button"
-                        data-bs-dismiss="modal" id="btnCloseModal">
+                    <button class="btn d-flex align-items-center justify-content-center modal__close__button" data-bs-dismiss="modal"
+                        id="btnCloseModal">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -45,13 +45,15 @@
                                 color: white;
                                 font-weight: 500;
                                 box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
-                            <span wire:loading wire:target="sendRequestRecommendationApproval"
-                                class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                            <span wire:loading wire:target="sendRequestRecommendationApproval" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true">
                             </span>
                             <span wire:loading.remove wire:target="sendRequestRecommendationApproval">
-                                Submit
+                                Request
                             </span>
-                            <span wire:loading wire:target="sendRequestRecommendationApproval">Sending Request...</span>
+                            <span wire:loading wire:target="sendRequestRecommendationApproval">
+                                Requesting
+                            </span>
                         </button>
                     </form>
                 </div>

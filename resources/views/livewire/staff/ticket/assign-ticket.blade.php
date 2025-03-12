@@ -55,8 +55,7 @@
                                 </span>
                             @enderror
                         </div>
-                        <button type="submit"
-                            class="mt-3 btn btn-sm d-flex gap-2 align-items-center justify-content-center bg-danger rounded-2 text-white"
+                        <button type="submit" class="btn mt-3 d-flex align-items-center justify-content-center gap-2"
                             style="padding: 0.6rem 1rem;
                                 border-radius: 0.563rem;
                                 font-size: 0.875rem;
@@ -67,7 +66,12 @@
                             <span wire:loading wire:target="saveAssignTicket" class="spinner-border spinner-border-sm" role="status"
                                 aria-hidden="true">
                             </span>
-                            Assign
+                            <span wire:loading.remove wire:target="saveAssignTicket">
+                                Assign
+                            </span>
+                            <span wire:loading wire:target="saveAssignTicket">
+                                Assigning
+                            </span>
                         </button>
                     </form>
                 </div>

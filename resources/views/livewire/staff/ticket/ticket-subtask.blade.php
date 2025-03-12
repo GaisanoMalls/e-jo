@@ -1,4 +1,5 @@
 @php
+    use App\Models\Status;
     use App\Enums\SubtaskStatusEnum;
 @endphp
 
@@ -66,7 +67,7 @@
             </table>
         @endif
 
-        @if (auth()->user()->isServiceDepartmentAdmin())
+        @if (auth()->user()->isServiceDepartmentAdmin() && $ticket->status_id !== Status::OVERDUE)
             <button wire:click="addSubtaskButton" class="btn btn-sm d-flex align-items-center justify-content-center bg-danger rounded-2 text-white"
                 style="width: 98px; font-size: 12px;" data-bs-toggle="modal" data-bs-target="#createSubtaskModal">
                 Add Subtask

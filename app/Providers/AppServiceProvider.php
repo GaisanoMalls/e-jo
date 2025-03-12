@@ -41,9 +41,12 @@ class AppServiceProvider extends ServiceProvider
         // Search for overdue tickets and update their status to 'Overdue.
         if (Schema::hasTable('tickets')) {
             Ticket::whereNot('status_id', Status::CLOSED)
-                ->where('approval_status', ApprovalStatusEnum::APPROVED)
+                ->where([
+                    ['approval_status', ApprovalStatusEnum::APPROVED],
+                    ['is_overdue', false]
+                ])
                 ->each(function ($ticket, $key) {
-                    if ($this->isSlaOverdue($ticket) && $ticket->is_overdue === false) {
+                    if ($this->isSlaOverdue($ticket)) {
                         $ticket->update([
                             'status_id' => Status::OVERDUE
                         ]);

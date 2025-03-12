@@ -30,7 +30,7 @@ trait BasicModelQueries
 
     public function queryServiceLevelAgreements()
     {
-        return ServiceLevelAgreement::orderByDesc('created_at')->get();
+        return ServiceLevelAgreement::orderBy('hours')->get();
     }
 
     public function queryRoles()

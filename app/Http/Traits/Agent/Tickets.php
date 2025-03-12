@@ -21,10 +21,11 @@ trait Tickets
                         $team->whereIn('teams.id', auth()->user()->teams->pluck('id'));
                     });
             })
+
             ->where(function ($query) {
                 $query->whereHas('ticketApprovals', function ($approval) {
                     $approval->where('is_approved', true);
-                })
+                })->orWhere('is_overdue', true)
                     ->orWhereDoesntHave('ticketApprovals');
             })
             ->orderByDesc('created_at')
@@ -49,8 +50,8 @@ trait Tickets
             ->where(function ($query) {
                 $query->whereHas('ticketApprovals', function ($approval) {
                     $approval->where('is_approved', true);
-                })
-                    ->orWhereDoesntHave('ticketApprovals');
+                })->orWhereDoesntHave('ticketApprovals')
+                    ->orWhere('is_overdue', true);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -67,6 +68,10 @@ trait Tickets
                     ]);
             })
             ->where(function ($query) {
+                $query->whereNotNull('agent_id')
+                    ->orWhereNull('agent_id');
+            })
+            ->where(function ($query) {
                 $query->whereIn('branch_id', auth()->user()->branches->pluck('id'))
                     ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                     ->whereHas('teams', function ($team) {
@@ -77,8 +82,8 @@ trait Tickets
             ->where(function ($query) {
                 $query->whereHas('ticketApprovals', function ($approval) {
                     $approval->where('is_approved', true);
-                })
-                    ->orWhereDoesntHave('ticketApprovals');
+                })->orWhereDoesntHave('ticketApprovals')
+                    ->orWhere('is_overdue', true);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -102,8 +107,8 @@ trait Tickets
             ->where(function ($query) {
                 $query->whereHas('ticketApprovals', function ($approval) {
                     $approval->where('is_approved', true);
-                })
-                    ->orWhereDoesntHave('ticketApprovals');
+                })->orWhereDoesntHave('ticketApprovals')
+                    ->orWhere('is_overdue', true);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -116,7 +121,10 @@ trait Tickets
                 ['status_id', Status::CLOSED],
                 ['approval_status', ApprovalStatusEnum::APPROVED]
             ])
-            ->whereNotNull('agent_id')
+            ->where(function ($query) {
+                $query->whereNotNull('agent_id')
+                    ->orWhereNull('agent_id');
+            })
             ->where(function ($query) {
                 $query->whereIn('branch_id', auth()->user()->branches->pluck('id'))
                     ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
@@ -127,8 +135,8 @@ trait Tickets
             ->where(function ($query) {
                 $query->whereHas('ticketApprovals', function ($approval) {
                     $approval->where('is_approved', true);
-                })
-                    ->orWhereDoesntHave('ticketApprovals');
+                })->orWhereDoesntHave('ticketApprovals')
+                    ->orWhere('is_overdue', true);
             })
             ->orderByDesc('created_at')
             ->get();
