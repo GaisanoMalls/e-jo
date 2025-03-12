@@ -189,7 +189,7 @@ class Ticket extends Model
 
         // return '';
 
-        return $this->teams()->first()->name;
+        return $this->teams()?->first()->name;
     }
 
     public function isSpecialProject(): bool
