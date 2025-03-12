@@ -177,17 +177,19 @@ class Ticket extends Model
 
     public function getTeams(): string
     {
-        $teamNames = [];
+        // $teamNames = [];
 
-        foreach ($this->teams as $team) {
-            $teamNames[] = $team->name;
-        }
+        // foreach ($this->teams as $team) {
+        //     $teamNames[] = $team->name;
+        // }
 
-        if (!empty($teamNames)) {
-            return implode(', ', $teamNames);
-        }
+        // if (!empty($teamNames)) {
+        //     return implode(', ', $teamNames);
+        // }
 
-        return '';
+        // return '';
+
+        return $this->teams()->first()->name;
     }
 
     public function isSpecialProject(): bool
