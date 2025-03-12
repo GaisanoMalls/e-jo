@@ -13,7 +13,10 @@ trait Tickets
         return Ticket::whereHas('user', fn($user) => $user->withTrashed())
             ->where('approval_status', ApprovalStatusEnum::APPROVED)
             ->whereIn('status_id', [Status::APPROVED, Status::OPEN])
-            ->whereNull('agent_id')
+            ->where(function ($query) {
+                $query->whereNotNull('agent_id')
+                    ->orWhereNotNull('agent_id');
+            })
             ->where(function ($query) {
                 $query->whereIn('branch_id', auth()->user()->branches->pluck('id'))
                     ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
