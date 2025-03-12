@@ -17,6 +17,7 @@ class TicketTab extends Component
     public int $countDisapprovedTickets;
     public int $countOnProcessTickets;
     public int $countClaimedTickets;
+    public int $countOverdueTickets;
     public int $countClosedTickets;
 
     public function mount()
@@ -27,6 +28,7 @@ class TicketTab extends Component
         $this->countDisapprovedTickets = $this->getDisapprovedTickets()->count();
         $this->countOnProcessTickets = $this->getOnProcessTickets()->count();
         $this->countClaimedTickets = $this->getClaimedTickets()->count();
+        $this->countOverdueTickets = $this->getOverdueTickets()->count();
         $this->countClosedTickets = $this->getClosedTickets()->count();
     }
 

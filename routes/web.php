@@ -196,6 +196,7 @@ Route::middleware(['auth', Role::approversOnly()])->group(function () {
                 Route::get('/on-process', 'onProcessTickets')->name('on_process');
                 Route::get('/on-process', 'onProcessTickets')->name('on_process');
                 Route::get('/claimed', 'claimedTickets')->name('claimed');
+                Route::get('/overdue', 'overdueTickets')->name('overdue');
                 Route::get('/closed', 'closedTickets')->name('closed');
                 Route::get('/costing-approval', 'costingApprovals')->name('costing_approval');
             });

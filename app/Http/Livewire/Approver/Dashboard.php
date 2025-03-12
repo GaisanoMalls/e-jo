@@ -26,6 +26,7 @@ class Dashboard extends Component
         $this->disapprovedTickets = $this->getDisapprovedTickets()->count();
         $this->onProcessTickets = $this->getOnProcessTickets()->count();
         $this->claimedTickets = $this->getClaimedTickets()->count();
+        $this->overdueTickets = $this->getOverdueTickets()->count();
         $this->closedTickets = $this->getClosedTickets()->count();
 
         $totalTickets = $this->openTickets
@@ -34,6 +35,7 @@ class Dashboard extends Component
             + $this->disapprovedTickets
             + $this->onProcessTickets
             + $this->claimedTickets
+            + $this->overdueTickets
             + $this->closedTickets;
 
         $ticketStatuses = [
@@ -78,6 +80,13 @@ class Dashboard extends Component
                 'count' => $this->claimedTickets,
                 'icon' => 'fa-list-check',
                 'routeName' => "approver.tickets.claimed"
+            ],
+            [
+                'name' => 'Overdue',
+                'color' => '#EA001C',
+                'count' => $this->overdueTickets,
+                'icon' => 'fa-triangle-exclamation"',
+                'routeName' => "approver.tickets.overdue"
             ],
             [
                 'name' => 'Closed',

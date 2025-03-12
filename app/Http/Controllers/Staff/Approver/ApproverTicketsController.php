@@ -49,6 +49,11 @@ class ApproverTicketsController extends Controller
         return $this->renderTicketView('claimed');
     }
 
+    public function overdueTickets()
+    {
+        return $this->renderTicketView('overdue');
+    }
+
     public function closedTickets()
     {
         return $this->renderTicketView('closed');

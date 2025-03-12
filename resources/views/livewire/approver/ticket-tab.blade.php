@@ -55,6 +55,15 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="{{ route('approver.tickets.overdue') }}"
+                class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
+                {{ Route::is('approver.tickets.overdue') ? 'ticket__tab__link active' : '' }}"
+                wire:ignore.self>
+                <span class="ticket__count__tab">{{ $countOverdueTickets }}</span>
+                Overdue
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ route('approver.tickets.closed') }}"
                 class="nav-link d-flex align-items-center justify-content-center gap-3 ticket__tab__link
                 {{ Route::is('approver.tickets.closed') ? 'ticket__tab__link active' : '' }}"
