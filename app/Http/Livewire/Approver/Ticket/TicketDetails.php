@@ -12,14 +12,8 @@ class TicketDetails extends Component
     use Utils;
 
     public Ticket $ticket;
-    public bool $isSlaApproved = false;
 
     protected $listeners = ['loadTicketDetails' => 'mount'];
-
-    public function mount()
-    {
-        $this->isSlaApproved = $this->isSlaApproved($this->ticket);
-    }
 
     public function render()
     {

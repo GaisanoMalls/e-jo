@@ -178,7 +178,7 @@
         @endif
         @livewire('staff.ticket.assign-tag', ['ticket' => $ticket])
         @livewire('staff.ticket.close-ticket', ['ticket' => $ticket])
-        @if (auth()->user()->isServiceDepartmentAdmin() || auth()->user()->isAgent())
+        @if ((auth()->user()->isServiceDepartmentAdmin() || auth()->user()->isAgent()) && $ticket->status_id === Status::CLOSED)
             @livewire('staff.ticket.reopen-ticket', ['ticket' => $ticket])
         @endif
         @include('layouts.staff.ticket.modal.preview_ticket_files_modal')

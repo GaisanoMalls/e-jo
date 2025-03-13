@@ -21,16 +21,7 @@ class ReopenTicket extends Component
     {
         try {
             if (auth()->user()->isAgent() || auth()->user()->isServiceDepartmentAdmin()) {
-                if (
-                    $this->ticket->where([
-                        ['status_id', Status::OVERDUE],
-                        ['is_overdue', false]
-                    ])->exists()
-                ) {
-                    $this->ticket->update(['is_overdue' => true, 'status_id' => Status::OPEN]);
-                }
-
-                if ($this->ticket->where('status_id', Status::CLOSED)->exists()) {
+                if ($this->ticket->status_id === Status::CLOSED) {
                     $this->ticket->update(['status_id' => Status::OPEN]);
                 }
 

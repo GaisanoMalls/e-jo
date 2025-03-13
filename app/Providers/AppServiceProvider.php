@@ -43,12 +43,15 @@ class AppServiceProvider extends ServiceProvider
             Ticket::whereNot('status_id', Status::CLOSED)
                 ->where([
                     ['approval_status', ApprovalStatusEnum::APPROVED],
-                    ['is_overdue', false]
+                    ['has_reached_due_date', false]
                 ])
                 ->each(function ($ticket, $key) {
+                    // Iterate through the tickets whose status is Closed, approval status is Approved, and are not overdue,
+                    // then update their status to Overdue when reaeched its due date
                     if ($this->isSlaOverdue($ticket)) {
                         $ticket->update([
-                            'status_id' => Status::OVERDUE
+                            'status_id' => Status::OVERDUE,
+                            'has_reached_due_date' => true
                         ]);
                     }
                 });

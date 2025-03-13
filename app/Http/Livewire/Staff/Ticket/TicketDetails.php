@@ -103,7 +103,7 @@ class TicketDetails extends Component
     {
         try {
             sleep(1);
-            if (auth()->user()->isAgent()) {
+            if (auth()->user()->isAgent() && !$this->ticket->has_reached_due_date) {
                 TicketSlaExtension::updateOrCreate(
                     ['ticket_id' => $this->ticket->id],
                     [
@@ -150,7 +150,7 @@ class TicketDetails extends Component
     public function cancelSlaExtensionRequest()
     {
         try {
-            if (auth()->user()->isAgent()) {
+            if (auth()->user()->isAgent() && !$this->ticket->has_reached_due_date) {
                 $this->ticket?->slaExtension()?->delete();
                 ActivityLog::make(ticket_id: $this->ticket->id, description: 'cancelled the request for SLA extension');
                 return redirect()->route('staff.ticket.view_ticket', $this->ticket->id);
@@ -163,7 +163,7 @@ class TicketDetails extends Component
     public function approveSlaExtension()
     {
         try {
-            if (auth()->user()->isServiceDepartmentAdmin()) {
+            if (auth()->user()->isServiceDepartmentAdmin() && !$this->ticket->has_reached_due_date) {
                 if ($this->ticket->slaExtension->status->value === TicketSlaExtensionStatusEnum::REQUESTING->value) {
                     $this->ticket->slaExtension()->update([
                         'status' => TicketSlaExtensionStatusEnum::APPROVED
@@ -195,7 +195,7 @@ class TicketDetails extends Component
     {
         try {
             sleep(1);
-            if (auth()->user()->isServiceDepartmentAdmin()) {
+            if (auth()->user()->isServiceDepartmentAdmin() && !$this->ticket->has_reached_due_date) {
                 $this->ticket?->slaExtension()->delete();
                 noty()->addSuccess('Request for SLA extension has been rejected.');
 
@@ -220,7 +220,7 @@ class TicketDetails extends Component
     public function saveNewSla()
     {
         try {
-            if (auth()->user()->isServiceDepartmentAdmin()) {
+            if (auth()->user()->isServiceDepartmentAdmin() && !$this->ticket->has_reached_due_date) {
                 if (!$this->selectedSla) {
                     $this->addError('selectedSla', 'SLA field is required.');
                     return;

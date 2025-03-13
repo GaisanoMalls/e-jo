@@ -24,7 +24,7 @@ trait Tickets
             ->where(function ($query) {
                 $query->whereHas('ticketApprovals', function ($approval) {
                     $approval->where('is_approved', true);
-                })->orWhere('is_overdue', true)
+                })->orWhere('has_reached_due_date', true)
                     ->orWhereDoesntHave('ticketApprovals');
             })
             ->orderByDesc('created_at')
@@ -50,7 +50,7 @@ trait Tickets
                 $query->whereHas('ticketApprovals', function ($approval) {
                     $approval->where('is_approved', true);
                 })->orWhereDoesntHave('ticketApprovals')
-                    ->orWhere('is_overdue', true);
+                    ->orWhere('has_reached_due_date', true);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -82,7 +82,7 @@ trait Tickets
                 $query->whereHas('ticketApprovals', function ($approval) {
                     $approval->where('is_approved', true);
                 })->orWhereDoesntHave('ticketApprovals')
-                    ->orWhere('is_overdue', true);
+                    ->orWhere('has_reached_due_date', true);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -107,7 +107,7 @@ trait Tickets
                 $query->whereHas('ticketApprovals', function ($approval) {
                     $approval->where('is_approved', true);
                 })->orWhereDoesntHave('ticketApprovals')
-                    ->orWhere('is_overdue', true);
+                    ->orWhere('has_reached_due_date', true);
             })
             ->orderByDesc('created_at')
             ->get();
@@ -135,7 +135,7 @@ trait Tickets
                 $query->whereHas('ticketApprovals', function ($approval) {
                     $approval->where('is_approved', true);
                 })->orWhereDoesntHave('ticketApprovals')
-                    ->orWhere('is_overdue', true);
+                    ->orWhere('has_reached_due_date', true);
             })
             ->orderByDesc('created_at')
             ->get();

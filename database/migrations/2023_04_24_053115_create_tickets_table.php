@@ -36,7 +36,7 @@ class CreateTicketsTable extends Migration
             $table->longText('description')->nullable();
             $table->string('approval_status');
             $table->dateTime('svcdept_date_approved')->nullable();
-            $table->boolean('is_overdue')->default(false);
+            $table->boolean('has_reached_due_date')->default(false);
             $table->timestamps();
         });
     }

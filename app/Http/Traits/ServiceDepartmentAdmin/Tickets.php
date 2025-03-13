@@ -50,7 +50,7 @@ trait Tickets
                     ->orWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                         $approver->where('user_id', auth()->user()->id);
                     })
-                    ->orWhere('is_overdue', true);
+                    ->orWhere('has_reached_due_date', true);
             })
             ->orderByDesc('created_at')
             ->get();

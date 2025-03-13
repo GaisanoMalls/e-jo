@@ -1,4 +1,5 @@
 @php
+    use App\Models\Status;
     use App\Enums\ApprovalStatusEnum;
 @endphp
 
@@ -81,46 +82,62 @@
                 <div class="d-inline flex-column w-100">
                     <div class="d-flex flex-wrap align-items-center gap-2 justify-content-between">
                         <small class="ticket__details__info__label">
-                            Service Level Agreement:</small>
-                        <div class="d-flex align-items-center gap-2">
-                            @if ($this->isSlaApproved($ticket))
-                                @livewire('sla-timer', ['ticket' => $ticket])
-                            @endif
-                            <!-- Progress bar 4 -->
-                            <div wire:poll.visible.60s class="progress mx-auto"
-                                data-value='{{ $this->ticketSLATimer($ticket)['percentageElapsed'] }}'>
-                                <span class="progress-left {{ $this->isSlaApproved($ticket) && !$this->isSlaOverdue($ticket) ? 'bx-flashing' : '' }}">
-                                    <span wire:ignore class="progress-bar" @style([
-                                        'border-color: #8BE78B;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 0 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 49,
-                                        'border-color: #F79500;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 50 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 79,
-                                        'border-color: #940000;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 80 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 100,
-                                    ])></span>
-                                </span>
-                                <span
-                                    class="progress-right {{ $this->isSlaApproved($ticket) && !$this->isSlaOverdue($ticket) ? 'bx-flashing' : '' }}">
-                                    <span wire:ignore class="progress-bar" @style([
-                                        'border-color: #8BE78B;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 0 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 49,
-                                        'border-color: #F79500;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 50 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 79,
-                                        'border-color: #940000;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 80 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 100,
-                                    ])></span>
-                                </span>
-                                <div class="progress-value w-100 h-100 rounded-circle d-flex flex-column align-items-center justify-content-center">
-                                    <div class="fw-bold progress__initial__value">
-                                        {{ $this->getSLADays($ticket) }}
-                                    </div>
-                                    <span class="unit">{{ $this->getSLAUnit($ticket) }}</sup>
+                            Service Level Agreement:
+                        </small>
+                        @if ($ticket->has_reached_due_date || $ticket->status_id === Status::CLOSED)
+                            <div class="rounded-circle d-flex flex-column align-items-center justify-content-center"
+                                style="height: 50px; width: 50px; border: 4px solid #8BE78B;">
+                                <div class="fw-bold" style="font-size: 0.875rem;">
+                                    {{ $this->getSLADays($ticket) }}
                                 </div>
+                                <span class="unit" style="font-size: 9px; margin-top: -4px;">
+                                    {{ $this->getSLAUnit($ticket) }}
+                                </span>
                             </div>
-                            <!-- END -->
-                        </div>
+                        @else
+                            <div class="d-flex align-items-center gap-2">
+                                @if ($this->isSlaApproved($ticket))
+                                    @livewire('sla-timer', ['ticket' => $ticket])
+                                @endif
+
+                                <!-- Progress bar 4 -->
+                                <div wire:poll.visible.60s class="progress mx-auto"
+                                    data-value='{{ $this->ticketSLATimer($ticket)['percentageElapsed'] }}'>
+                                    <span
+                                        class="progress-left {{ $this->isSlaApproved($ticket) && !$this->isSlaOverdue($ticket) ? 'bx-flashing' : '' }}">
+                                        <span wire:ignore class="progress-bar" @style([
+                                            'border-color: #8BE78B;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 0 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 49,
+                                            'border-color: #F79500;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 50 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 79,
+                                            'border-color: #940000;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 80 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 100,
+                                        ])></span>
+                                    </span>
+                                    <span
+                                        class="progress-right {{ $this->isSlaApproved($ticket) && !$this->isSlaOverdue($ticket) ? 'bx-flashing' : '' }}">
+                                        <span wire:ignore class="progress-bar" @style([
+                                            'border-color: #8BE78B;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 0 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 49,
+                                            'border-color: #F79500;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 50 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 79,
+                                            'border-color: #940000;' => $this->ticketSLATimer($ticket)['percentageElapsed'] >= 80 && $this->ticketSLATimer($ticket)['percentageElapsed'] <= 100,
+                                        ])></span>
+                                    </span>
+                                    <div
+                                        class="progress-value w-100 h-100 rounded-circle d-flex flex-column align-items-center justify-content-center">
+                                        <div class="fw-bold progress__initial__value">
+                                            {{ $this->getSLADays($ticket) }}
+                                        </div>
+                                        <span class="unit">{{ $this->getSLAUnit($ticket) }}</sup>
+                                    </div>
+                                </div>
+                                <!-- END -->
+                            </div>
+                        @endif
                     </div>
-                    @if ($ticket->is_overdue)
+                    @if ($ticket->has_reached_due_date)
                         <div class="alert alert-warning p-2 mt-2" role="alert" style="font-size: 13px; color: red;">
                             <i class="bi bi-info-circle-fill"></i>
                             This ticket has reached its due date.
                         </div>
                     @endif
-                    @if ($ticket->agent_id !== null)
+                    @if ($ticket->agent_id !== null && !$ticket->has_reached_due_date)
                         <div class="d-inline">
                             @if (auth()->user()->isAgent() && !$isRequestingForSlaExtension)
                                 @if ($isNewSlaSet || (!$isRequestingForSlaExtension && !$isSlaExtensionApproved))
