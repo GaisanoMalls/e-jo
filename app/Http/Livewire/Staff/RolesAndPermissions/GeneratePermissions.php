@@ -14,7 +14,7 @@ class GeneratePermissions extends Component
         $permission = new PermissionSeeder;
         $permission->run();
         $this->emit('loadPermissionList');
-        noty()->addSuccess('Ticket permissions have been successfully generated');
+        noty()->addSuccess('Ticket permissions have been successfully generated.');
     }
 
     public function render()

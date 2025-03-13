@@ -147,7 +147,7 @@ class TeamList extends Component
             });
 
             if ($subteamUpdated) {
-                noty()->addSuccess('A new subteam have been added');
+                noty()->addSuccess('A new subteam have been added.');
                 $this->addedSubteams = [];
             }
 
@@ -183,7 +183,7 @@ class TeamList extends Component
             Team::find($this->teamDeleteId)->delete();
             $this->teamDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
-            noty()->addSuccess('Team successfully deleted');
+            noty()->addSuccess('Team successfully deleted.');
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

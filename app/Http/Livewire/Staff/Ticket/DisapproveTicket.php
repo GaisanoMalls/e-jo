@@ -66,7 +66,7 @@ class DisapproveTicket extends Component
 
                 ActivityLog::make(ticket_id: $this->ticket->id, description: 'disapproved the ticket');
                 $this->actionOnSubmit();
-                noty()->addSuccess('Ticket has been disapproved');
+                noty()->addSuccess('Ticket has been disapproved.');
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

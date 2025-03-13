@@ -13,7 +13,7 @@ class GenerateDefaultRolePermissions extends Component
         $directPermissions = new DirectPermissionSeeder;
         $directPermissions->run();
         $this->emit('loadAssignPermissionList');
-        noty()->addSuccess('Default permissions have been successfully assigned to all users');
+        noty()->addSuccess('Default permissions have been successfully assigned to all users.');
     }
 
     public function render()

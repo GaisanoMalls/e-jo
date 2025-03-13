@@ -110,7 +110,7 @@ class GivePermissionList extends Component
                 break;
 
             default:
-                noty()->addError('Undefined role name');
+                noty()->addWarning('Undefined role name.');
         }
 
         $this->emit('loadAssignPermissionList');

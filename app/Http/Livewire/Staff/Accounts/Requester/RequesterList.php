@@ -33,7 +33,7 @@ class RequesterList extends Component
             User::where('id', $this->requesterDeleteId)->delete();
             $this->requesterDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
-            noty()->addSuccess("Requester's account has been deleted");
+            noty()->addSuccess("Requester's account has been deleted.");
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

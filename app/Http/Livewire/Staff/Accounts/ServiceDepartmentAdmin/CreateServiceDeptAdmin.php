@@ -78,7 +78,7 @@ class CreateServiceDeptAdmin extends Component
                 ]);
 
                 $this->actionOnSubmit();
-                noty()->addSuccess('Account successfully created');
+                noty()->addSuccess('Account successfully created.');
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

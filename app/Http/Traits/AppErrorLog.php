@@ -13,7 +13,7 @@ trait AppErrorLog
 
         if ($notify) {
             // Show pop-up toastr/notification
-            noty()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong.');
         }
     }
 }

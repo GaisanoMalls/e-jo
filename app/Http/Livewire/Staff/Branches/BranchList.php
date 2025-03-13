@@ -59,7 +59,7 @@ class BranchList extends Component
             $this->clearFormField();
             $this->fetchBranches();
             $this->dispatchBrowserEvent('close-modal');
-            noty()->addSuccess('Branch successfully updated');
+            noty()->addSuccess('Branch successfully updated.');
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
@@ -80,7 +80,7 @@ class BranchList extends Component
             $this->branchDeleteId = null;
             $this->fetchBranches();
             $this->dispatchBrowserEvent('close-modal');
-            noty()->addSuccess('Branch successfully deleted');
+            noty()->addSuccess('Branch successfully deleted.');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }

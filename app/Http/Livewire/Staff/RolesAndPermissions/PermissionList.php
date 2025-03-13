@@ -21,9 +21,9 @@ class PermissionList extends Component
     {
         try {
             $permission->delete();
-            noty()->addSuccess('Permission successfully deleted');
+            noty()->addSuccess('Permission successfully deleted.');
         } catch (\Exception $e) {
-            noty()->addError('Oops, something went wrong');
+            noty()->addError('Oops, something went wrong.');
         }
     }
 

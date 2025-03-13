@@ -45,7 +45,7 @@ class SlaList extends Component
         $this->clearFormFields();
         $this->fetchServiceLevelAgreements();
         $this->dispatchBrowserEvent('close-modal');
-        noty()->addSuccess('SLA successfully updated');
+        noty()->addSuccess('SLA successfully updated.');
     }
 
     public function editSLA(ServiceLevelAgreement $serviceLevelAgreement)
@@ -86,7 +86,7 @@ class SlaList extends Component
             $this->slaDeleteId = null;
             $this->fetchServiceLevelAgreements();
             $this->dispatchBrowserEvent('close-modal');
-            noty()->addSuccess('SLA successfully deleted');
+            noty()->addSuccess('SLA successfully deleted.');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }

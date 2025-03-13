@@ -18,7 +18,7 @@ class DownloadFile extends Component
             if (Storage::exists($filePath)) {
                 return Storage::download($filePath);
             } else {
-                noty()->addInfo("File not found");
+                noty()->addInfo("File not found.");
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

@@ -18,7 +18,7 @@ class CreateTag extends Component
 
     public function rules()
     {
-        return(new StoreTagRequest())->rules();
+        return (new StoreTagRequest())->rules();
     }
 
     public function clearFormField()
@@ -44,7 +44,7 @@ class CreateTag extends Component
             ]);
 
             $this->actionOnSubmit();
-            noty()->addSuccess('Tag created');
+            noty()->addSuccess('Tag created successfully.');
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

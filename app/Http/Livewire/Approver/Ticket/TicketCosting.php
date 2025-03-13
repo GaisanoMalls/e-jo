@@ -85,7 +85,7 @@ class TicketCosting extends Component
                     noty()->addSuccess('Ticket costing is approved.');
                 }
             } else {
-                noty()->addWarning("Sorry, You don't have permission to approve the costing");
+                noty()->addWarning("Sorry, You don't have permission to approve the costing.");
             }
 
         } catch (Exception $e) {
@@ -127,7 +127,7 @@ class TicketCosting extends Component
                 $this->redirectRoute('approver.tickets.costing_approval');
 
             } else {
-                noty()->addWarning("Sorry, You have no permission to disapprove the costing");
+                noty()->addWarning("Sorry, You have no permission to disapprove the costing.");
             }
 
         } catch (Exception $e) {

@@ -62,7 +62,7 @@ class ApproverList extends Component
 
             $this->approverDeleteId = null;
             $this->actionOnSubmit();
-            noty()->addSuccess('Approver account has been deleted');
+            noty()->addSuccess('Approver account has been deleted.');
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

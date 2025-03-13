@@ -110,7 +110,7 @@ class TicketLevelApproval extends Component
                 ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the level 2 approval');
                 $this->actionOnSubmit();
             } else {
-                noty()->addError('You have no rights/permission to approve the ticket');
+                noty()->addWarning('You hamessage: ve no rights/permission to approve the ticket.');
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

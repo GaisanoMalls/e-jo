@@ -105,7 +105,7 @@ class ApproveTicket extends Component
                                 ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
                             }
                         } else {
-                            noty()->addError("You are not authorized to approve this ticket. The first approver must be the requester's service department administrator.");
+                            noty()->addWarning("You are not authorized to approve this ticket. The first approver must be the requester's service department administrator.");
                             $this->dispatchBrowserEvent('close-modal');
                             return;
                         }
@@ -113,7 +113,7 @@ class ApproveTicket extends Component
                         noty()->addInfo('Ticket has already been approved by other service dept. admin');
                     }
                 } else {
-                    noty()->addError('You have no rights/permission to approve the ticket');
+                    noty()->addWarning('You have no rights/permission to approve the ticket.');
                 }
             });
 

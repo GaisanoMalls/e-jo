@@ -58,7 +58,7 @@ class ServiceDepartmentList extends Component
                     'slug' => Str::slug($this->name),
                 ]);
 
-            noty()->addSuccess('Service department successfully updated');
+            noty()->addSuccess('Service department successfully updated.');
             $this->dispatchBrowserEvent('close-modal');
             $this->clearFormField();
             $this->fetchServiceDepartments();
@@ -83,7 +83,7 @@ class ServiceDepartmentList extends Component
             $this->serviceDepartmentDeleteId = null;
             $this->fetchServiceDepartments();
             $this->dispatchBrowserEvent('close-modal');
-            noty()->addSuccess('Service department successfully deleted');
+            noty()->addSuccess('Service department successfully deleted.');
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
         }

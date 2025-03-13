@@ -60,7 +60,7 @@ class TagList extends Component
             $this->fetchTags();
             $this->clearFormField();
             $this->dispatchBrowserEvent('close-modal');
-            noty()->addSuccess('Tag updated');
+            noty()->addSuccess('Tag updated successfully.');
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
@@ -81,7 +81,7 @@ class TagList extends Component
             $this->tagDeleteId = null;
             $this->fetchTags();
             $this->dispatchBrowserEvent('close-modal');
-            noty()->addSuccess('Tag successfully deleted');
+            noty()->addSuccess('Tag deleted successfully.');
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

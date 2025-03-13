@@ -71,7 +71,7 @@ class TicketDetails extends Component
                 $this->ticket->update(['team_id' => null]);
                 $this->removeAssignedAgent();
                 $this->actionOnSubmit();
-                ActivityLog::make(ticket_id: $this->ticket->id, description: 'removed the team assigned on this ticket');
+                ActivityLog::make(ticket_id: $this->ticket->id, description: 'removed the team assigned on this ticket.');
             } else {
                 noty()->addWarning('You are not allowed to remove the assigned team');
             }
@@ -92,7 +92,7 @@ class TicketDetails extends Component
                 $this->actionOnSubmit();
                 ActivityLog::make(ticket_id: $this->ticket->id, description: 'removed the agent assigned on this ticket');
             } else {
-                noty()->addWarning('You are not allowed to remove the assigned agent');
+                noty()->addWarning('You are not allowed to remove the assigned agent.');
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
@@ -184,7 +184,7 @@ class TicketDetails extends Component
                     noty()->addInfo('SLA extension has already been approved.');
                 }
             } else {
-                noty()->addWarning('You are not allowed to approve the SLA extension');
+                noty()->addWarning('You are not allowed to approve the SLA extension.');
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
@@ -244,7 +244,7 @@ class TicketDetails extends Component
                     )
                 );
 
-                noty()->addSuccess('SLA has been successfully updated from ' . $this->ticket->sla->time_unit . ' to ' . $this->selectedServiceLevelAgreement->time_unit);
+                noty()->addSuccess('SLA has been successfully updated from ' . $this->ticket->sla->time_unit . ' to ' . $this->selectedServiceLevelAgreement->time_unit . ".");
                 $this->reset('selectedSla');
                 $this->resetValidation('selectedSla');
             }

@@ -6,10 +6,8 @@ use App\Http\Requests\SysAdmin\Manage\Account\StoreApproverRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\Utils;
-use App\Models\Level;
 use App\Models\Profile;
 use App\Models\Role;
-use App\Models\SpecialProjectAmountApproval;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -58,7 +56,9 @@ class CreateApprover extends Component
                 $approver->buDepartments()->attach(array_map('intval', $this->bu_departments));
                 $approver->branches()->attach(array_map('intval', $this->branches));
                 $approver->givePermissionTo(
-                    Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::APPROVER))->pluck('name')->toArray()
+                    Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::APPROVER))
+                        ->pluck('name')
+                        ->toArray()
                 );
 
                 Profile::create([
@@ -76,7 +76,7 @@ class CreateApprover extends Component
                 ]);
 
                 $this->actionOnSubmit();
-                noty()->addSuccess('Account successfully created');
+                noty()->addSuccess('Account successfully created.');
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

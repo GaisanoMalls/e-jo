@@ -50,7 +50,7 @@ class ClaimTicket extends Component
         try {
             DB::transaction(function () {
                 if (!is_null($this->ticket->agent_id)) {
-                    noty()->addError('Ticket has already been claimed by another agent. Select another ticket to claim.');
+                    noty()->addWarning('Ticket has already been claimed by another agent. Select another ticket to claim.');
                     return;
                 }
 

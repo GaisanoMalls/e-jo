@@ -113,7 +113,7 @@ class AddCosting extends Component
                                     ])->update(['ticket_id' => $this->ticket->id]);
                             }
                         } else {
-                            noty()->addError('No costing approver is found. Please contact the administrator');
+                            noty()->addWarning('No cosmessage: ting approver is found. Please contact the administrator.');
                         }
 
                         foreach ($this->costingFiles as $uploadedCostingFile) {

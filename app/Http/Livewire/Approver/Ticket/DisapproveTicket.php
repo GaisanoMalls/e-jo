@@ -66,7 +66,7 @@ class DisapproveTicket extends Component
 
                     ActivityLog::make(ticket_id: $this->ticket->id, description: 'disapproved the ticket');
                     $this->actionOnSubmit();
-                    noty()->addSuccess('Ticket has been disapproved');
+                    noty()->addSuccess('Ticket has been disapproved.');
                 } else {
                     noty()->addInfo("Prior levels must be approved before approving this level.");
                     return;

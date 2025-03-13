@@ -82,7 +82,7 @@ class HelpTopicList extends Component
                 $helpTopic->delete();
                 $this->deleteHelpTopicId = null;
                 $this->dispatchBrowserEvent('close-modal');
-                noty()->addSuccess('Help topic successfully deleted');
+                noty()->addSuccess('Help topic successfully deleted.');
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
@@ -227,7 +227,7 @@ class HelpTopicList extends Component
                 ['is_for_ticket_number', true]
             ])->exists()
         ) {
-            noty()->addError('Field associated with ticket number already exists');
+            noty()->addWarning('Field associated with ticket number already exists.');
             return;
         }
 

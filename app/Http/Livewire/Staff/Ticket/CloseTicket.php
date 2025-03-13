@@ -15,17 +15,21 @@ class CloseTicket extends Component
 
     public function closeTicket()
     {
-        $this->ticket->update(['status_id' => Status::CLOSED]);
-        ActivityLog::make(ticket_id: $this->ticket->id, description: 'closed the ticket');
-        Notification::send(
-            $this->ticket->user,
-            new AppNotification(
-                ticket: $this->ticket,
-                title: "Ticket #{$this->ticket->ticket_number} (Closed)",
-                message: "{$this->ticket->agent?->profile->getFullName} closed the ticket."
-            )
-        );
-        noty()->addSuccess('Ticket has been closed');
+        if ($this->ticket->status_id !== Status::CLOSED) {
+            $this->ticket->update(['status_id' => Status::CLOSED]);
+            ActivityLog::make(ticket_id: $this->ticket->id, description: 'closed the ticket');
+            Notification::send(
+                $this->ticket->user,
+                new AppNotification(
+                    ticket: $this->ticket,
+                    title: "Ticket #{$this->ticket->ticket_number} (Closed)",
+                    message: "{$this->ticket->agent?->profile->getFullName} closed the ticket."
+                )
+            );
+            noty()->addSuccess('Ticket has been closed.');
+        } else {
+            noty()->addWarning('Ticket has already been closed.');
+        }
         return redirect()->route('staff.ticket.view_ticket', $this->ticket->id);
     }
 

@@ -90,7 +90,7 @@ class BUDepartmentList extends Component
             Department::find($this->buDepartmentDeleteId)->delete();
             $this->buDepartmentDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
-            noty()->addSuccess('BU/Department successfully deleted');
+            noty()->addSuccess('BU/Department successfully deleted.');
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

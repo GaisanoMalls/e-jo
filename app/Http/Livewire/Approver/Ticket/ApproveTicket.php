@@ -94,11 +94,11 @@ class ApproveTicket extends Component
                             ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
                         }
                     } else {
-                        noty()->addInfo('Ticket has already been approved by other Service Department Admin');
+                        noty()->addInfo('Ticket has already been approved by other Service Department Admin.');
                     }
                 });
             } else {
-                noty()->addError('You have no rights/permission to approve the ticket');
+                noty()->addError('You have no rights/permission to approve the ticket.');
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

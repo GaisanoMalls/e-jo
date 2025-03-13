@@ -138,7 +138,7 @@ class TicketCosting extends Component
                         ]);
                     }
                 } else {
-                    noty()->addError('File attachment for costing is required');
+                    noty()->addError('File attachment for costing is required.');
                 }
             } else {
                 $this->editingFieldId = null;
@@ -177,7 +177,7 @@ class TicketCosting extends Component
                         'costing_and_planning_status' => SpecialProjectStatusEnum::DONE
                     ]);
                 } else {
-                    noty()->addError('File attachment for costing is required');
+                    noty()->addError('File attachment for costing is required.');
                 }
             } else {
                 $this->editingFieldId = null;
@@ -214,10 +214,10 @@ class TicketCosting extends Component
                     $this->emit('loadServiceDeptAdminTicketCosting');
                     noty()->addSuccess('Ticket costing is approved.');
                 } else {
-                    noty()->addError('Approval failed. Costing attachment is required');
+                    noty()->addError('Approval failed. Costing attachment is required.');
                 }
             } else {
-                noty()->addWarning("Sorry, You have no permission to approve the costing");
+                noty()->addWarning("Sorry, You have no permission to approve the costing.");
             }
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

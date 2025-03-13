@@ -45,7 +45,7 @@ class ServiceDeptAdminList extends Component
 
             $this->serviceDeptAdminDeleteId = null;
             $this->dispatchBrowserEvent('close-modal');
-            noty()->addSuccess('Service department admin account has been deleted');
+            noty()->addSuccess('Service department admin account has been deleted.');
 
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());

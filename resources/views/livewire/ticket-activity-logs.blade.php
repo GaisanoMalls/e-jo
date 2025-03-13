@@ -1,12 +1,9 @@
-<div>
+<div wire:poll.visible.8s>
     <div class="card border-0 p-0 card__ticket__details card__ticket__details__right">
         <div class="ticket__details__card__body__right log__container">
             <div class="d-flex align-items-center justify-content-between mb-2">
                 <div class="d-flex align-items-center gap-2">
                     <small class="ticket__actions__label">Ticket Activity Logs</small>
-                    <div wire:loading class="spinner-border spinner-border-sm loading__spinner" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
                 </div>
                 @if ($ticketLogs->isNotEmpty())
                     <div class="btn-group">
