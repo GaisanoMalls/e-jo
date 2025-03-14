@@ -13,7 +13,7 @@ class TicketDetails extends Component
 
     public Ticket $ticket;
 
-    protected $listeners = ['loadTicketDetails' => 'mount'];
+    protected $listeners = ['loadTicketDetails' => '$refresh'];
 
     public function render()
     {
