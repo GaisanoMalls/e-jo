@@ -1,4 +1,5 @@
 @php
+    use App\Models\Status;
     use App\Enums\ApprovalStatusEnum;
 @endphp
 
