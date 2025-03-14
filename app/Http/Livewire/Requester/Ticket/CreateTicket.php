@@ -489,7 +489,8 @@ class CreateTicket extends Component
                 if ($this->doesntHaveApprovalConfig) {
                     $ticket->update([
                         'status_id' => Status::APPROVED,
-                        'approval_status' => ApprovalStatusEnum::APPROVED
+                        'approval_status' => ApprovalStatusEnum::APPROVED,
+                        'svcdept_date_approved' => Carbon::now()
                     ]);
 
                     $nonConfigApprovers = User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])

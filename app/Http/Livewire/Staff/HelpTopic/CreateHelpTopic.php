@@ -82,7 +82,7 @@ class CreateHelpTopic extends Component
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:help_topics,name'],
+            'name' => ['required'],
             'sla' => ['required'],
             'serviceDepartment' => ['required'],
             'team' => ['required'],
@@ -119,7 +119,7 @@ class CreateHelpTopic extends Component
                 // dd($helpTopicExists);
 
                 if ($helpTopicExists) {
-                    $this->addError('name', 'Name already exists in the selected Service Department.');
+                    $this->addError('name', 'The name already exists in the selected Service Department.');
                     return;
                 }
 
