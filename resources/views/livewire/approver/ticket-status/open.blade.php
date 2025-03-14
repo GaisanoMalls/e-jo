@@ -27,7 +27,7 @@
                         </thead>
                         <tbody>
                             @foreach ($openTickets as $ticket)
-                                <tr class="clickable_tr" data-ticket-id="{{ $ticket->id }}" onclick="window.location='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
+                                <tr wire:key="seen-ticket-{{ $ticket->id }}" wire:click="seenTicket({{ $ticket->id }})" class="clickable_tr">
                                     <td class="custom__table__data">
                                         <div class="ticket__list__status__line" style="background-color: {{ $ticket->priorityLevel->color ?? '' }};">
                                         </div>
