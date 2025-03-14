@@ -536,27 +536,27 @@
                 dynamicApprovalLevelContainer.innerHTML = '';
             });
 
-            window.addEventListener('reset-help-topic-form-fields', () => {
-                const selectElements = [
-                    '#select-help-topic-sla',
-                    '#select-help-topic-service-department',
-                    '#select-help-topic-team',
-                    '#select-help-topic-bu-department',
-                    '#select-help-topic-approval-level',
-                    '#select-help-topic-costing-approver',
-                    '#select-help-topic-final-costing-approver'
-                ];
+            // window.addEventListener('reset-help-topic-form-fields', () => {
+            //     const selectElements = [
+            //         '#select-help-topic-sla',
+            //         '#select-help-topic-service-department',
+            //         '#select-help-topic-team',
+            //         '#select-help-topic-bu-department',
+            //         '#select-help-topic-approval-level',
+            //         '#select-help-topic-costing-approver',
+            //         '#select-help-topic-final-costing-approver'
+            //     ];
 
-                selectElements.forEach(selector => {
-                    const selectElement = document.querySelector(selector);
-                    if (selectElement && selectElement.virtualSelect) {
-                        selectElement.virtualSelect.reset();
-                    }
-                });
+            //     selectElements.forEach(selector => {
+            //         const selectElement = document.querySelector(selector);
+            //         if (selectElement && selectElement.virtualSelect) {
+            //             selectElement.virtualSelect.reset();
+            //         }
+            //     });
 
-                document.querySelector('#help-topic-approval-container').innerHTML = '';
-                teamSelect.disable();
-            });
+            //     document.querySelector('#help-topic-approval-container').innerHTML = '';
+            //     teamSelect.disable();
+            // });
 
             // Edit Configuration
             const selectEditBuDepartment = document.querySelector('#select-edit-config-bu-department');

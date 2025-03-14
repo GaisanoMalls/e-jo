@@ -95,7 +95,10 @@ trait Tickets
                 ['status_id', Status::OVERDUE],
                 ['approval_status', ApprovalStatusEnum::APPROVED]
             ])
-            ->whereNotNull('agent_id')
+            ->where(function ($query) {
+                $query->whereNotNull('agent_id')
+                    ->orWhereNull('agent_id');
+            })
             ->where(function ($query) {
                 $query->whereIn('branch_id', auth()->user()->branches->pluck('id'))
                     ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))

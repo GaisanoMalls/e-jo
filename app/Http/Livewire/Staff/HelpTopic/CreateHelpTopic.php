@@ -105,25 +105,29 @@ class CreateHelpTopic extends Component
         $this->dispatchBrowserEvent('reload-help-topic-approval-config');
     }
 
-    private function actionOnSubmit()
-    {
-        $this->resetValidation();
-        $this->emit('loadHelpTopics');
-        $this->dispatchBrowserEvent('reset-help-topic-form-fields');
-    }
-
     public function saveHelpTopic()
     {
         $this->validate();
 
         try {
             DB::transaction(function () {
-                $teamName = $this->team ? Team::find($this->team)->name : '';
+                $helpTopicExists = HelpTopic::where([
+                    ['service_department_id', $this->serviceDepartment],
+                    ['name', $this->name]
+                ])->exists();
+
+                // dd($helpTopicExists);
+
+                if ($helpTopicExists) {
+                    $this->addError('name', 'Name already exists in the selected Service Department.');
+                    return;
+                }
+
                 $helpTopic = HelpTopic::create([
                     'service_department_id' => $this->serviceDepartment,
                     'team_id' => $this->team,
                     'service_level_agreement_id' => $this->sla,
-                    'name' => $this->name . ($teamName ? " - {$teamName}" : ''),
+                    'name' => $this->name,
                     'slug' => Str::slug($this->name),
                 ]);
 
@@ -170,8 +174,8 @@ class CreateHelpTopic extends Component
                     ]);
                 }
 
-                $this->actionOnSubmit();
                 noty()->addSuccess('Help topic created successfully.');
+                return redirect()->route('staff.manage.help_topic.create_help_topic');
             });
         } catch (Exception $e) {
             AppErrorLog::getError($e->getMessage());
