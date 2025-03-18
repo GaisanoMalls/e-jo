@@ -514,7 +514,7 @@ class CreateTicket extends Component
                         ->withWhereHas('helpTopicApprovals', function ($query) use ($ticket) {
                             $query->withWhereHas('configuration', function ($config) use ($ticket) {
                                 $config->with('approvers')
-                                    ->whereIn('bu_department_id', $ticket->user->buDepartments->pluck('id'));
+                                    ->orWhereIn('bu_department_id', $ticket->user->buDepartments->pluck('id'));
                             });
                         })->get();
 
@@ -527,7 +527,7 @@ class CreateTicket extends Component
                                 ]);
                             });
 
-                            if ($approver->isServiceDepartmentAdmin()) {
+                            if ($approver->isServiceDepartmentAdmin() || $approver->isApprover()) {
                                 Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
                                 Notification::send(
                                     $approver,

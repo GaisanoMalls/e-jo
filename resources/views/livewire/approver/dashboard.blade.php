@@ -1,4 +1,4 @@
-<div class="row">
+<div wire:poll.visible.6s class="row">
     @foreach ($ticketStatuses as $status)
         @php
             $percentage = $totalTickets > 0 ? ($status['count'] / $totalTickets) * 100 : 0;
@@ -11,7 +11,9 @@
                         <div class="d-flex align-items-center progress__bar__container gap-2">
                             <p class="progress__bar__ticket__count mb-0" style="color: {{ $status['color'] }}">{{ $status['count'] }}</p>
                             <div class="progress custom__progress">
-                                <div class="progress-bar custom__progress__bar" role="progressbar" style="width: {{ $percentage }}%; background-color: {{ $status['color'] }};" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar custom__progress__bar" role="progressbar"
+                                    style="width: {{ $percentage }}%; background-color: {{ $status['color'] }};" aria-valuenow="{{ $percentage }}"
+                                    aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
                     </div>

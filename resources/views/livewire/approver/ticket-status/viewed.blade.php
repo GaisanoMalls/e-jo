@@ -29,7 +29,8 @@
                             @foreach ($viewedTickets as $ticket)
                                 <tr onclick="window.location.href='{{ route('approver.ticket.view_ticket_details', $ticket->id) }}'">
                                     <td class="custom__table__data">
-                                        <div class="ticket__list__status__line" style="background-color: {{ $ticket->priorityLevel->color ?? '' }};"></div>
+                                        <div class="ticket__list__status__line" style="background-color: {{ $ticket->priorityLevel->color ?? '' }};">
+                                        </div>
                                         <p class="mb-0">
                                             {{ $ticket->dateCreated() }} @ {{ $ticket->created_at->format('g:i A') }}
                                         </p>
