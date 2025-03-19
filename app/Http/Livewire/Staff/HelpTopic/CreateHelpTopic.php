@@ -370,7 +370,7 @@ class CreateHelpTopic extends Component
             (array) $this->level5Approvers
         );
 
-        $filteredApprovers = User::with(['profile', 'roles', 'buDepartments'])
+        $filteredApprovers = User::with(['profile', 'roles', 'buDepartments', 'branches'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->whereNotIn('id', $this->selectedApprovers)
             ->orderByDesc('created_at')
