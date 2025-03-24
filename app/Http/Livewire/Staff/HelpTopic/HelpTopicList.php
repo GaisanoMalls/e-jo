@@ -12,6 +12,7 @@ use App\Models\Field;
 use App\Models\Form;
 use App\Models\HelpTopic;
 use Exception;
+use Illuminate\Database\Eloquent\Casts\ArrayObject;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
 
@@ -45,11 +46,12 @@ class HelpTopicList extends Component
     public bool $editSelectedFieldRequired = false;
     public bool $editSelectedFieldEnabled = false;
     public bool $editSelectedFieldIsHeaderField = false;
-    public bool $editSelectedFieldIsForTicketNumber = false;
     public bool $editSelectedFieldIsCurrentlyEditing = false;
-    public bool $editSelectedFieldIsAssociatedWithTicketNumber = false;
     public ?string $deleteSelectedFormFieldName = null;
-    public ?int $deleteSelectedFormFieldId = null;
+    private ?int $deleteSelectedFormFieldId = null;
+    private ?ArrayObject $editSelectedFieldConfig = null;
+    public ?string $editSelectedFieldGetConfigValueFrom = null;
+    public bool $editAsPredefinedField = false;
 
     public ?int $editFormId = null;
     public ?string $editFormName = null;
@@ -149,19 +151,66 @@ class HelpTopicList extends Component
         $this->editSelectedFieldId = $field->id;
         $this->editSelectedFieldName = $field->name;
         $this->editSelectedFieldType = $field->type;
-        $this->editSelectedFieldIsHeaderField = $field->is_header_field;
-        $this->editSelectedFieldAssignedColumnNumber = $field->assigned_column;
-        $this->editSelectedFieldIsForTicketNumber = $field->is_for_ticket_number;
         $this->editSelectedFieldRequired = $field->is_required;
         $this->editSelectedFieldEnabled = $field->is_enabled;
-        $this->editSelectedFieldIsAssociatedWithTicketNumber = $field->is_for_ticket_number;
+        $this->editSelectedFieldAssignedColumnNumber = $field->assigned_column;
+        $this->editSelectedFieldIsHeaderField = $field->is_header_field;
+        $this->editSelectedFieldConfig = $field->config;
+        $this->editAsPredefinedField = $field->config['get_value_from']['value'] !== null;
 
         $this->resetValidation();
 
-        $this->dispatchBrowserEvent('event-edit-select-field', [
+        $this->dispatchBrowserEvent('edit-form-select-field', [
             'editCurrentSelectedFieldColumnNumber' => $this->editSelectedFieldAssignedColumnNumber,
             'editCurrentSelectedFieldType' => $this->editSelectedFieldType,
         ]);
+
+        $this->dispatchBrowserEvent('show-edit-select-predefined-field', [
+            'takenPredefinedFieldValues' => $this->takenPredefinedFieldValues(),
+            'editPredefinedFieldValues' => PredefinedFieldValueEnum::getOptions(),
+            'editCurrentPredefinedValue' => $this->editSelectedFieldConfig['get_value_from']['value'] ?? null
+        ]);
+    }
+
+    public function updatedEditAsPredefinedField($value)
+    {
+        if ($value) {
+            $this->dispatchBrowserEvent('show-edit-select-predefined-field', [
+                'takenPredefinedFieldValues' => $this->takenPredefinedFieldValues(),
+                'editPredefinedFieldValues' => PredefinedFieldValueEnum::getOptions(),
+                'editCurrentPredefinedValue' => $this->editSelectedFieldConfig['get_value_from']['value'] ?? null
+            ]);
+        } else {
+            $this->dispatchBrowserEvent('reset-config-value-field');
+        }
+    }
+
+    public function updatedEditSelectedFieldIsHeaderField($value)
+    {
+        if ($value) {
+            $this->dispatchBrowserEvent('edit-form-select-field', [
+                'editCurrentSelectedFieldColumnNumber' => $this->editSelectedFieldAssignedColumnNumber,
+                'editCurrentSelectedFieldType' => $this->editSelectedFieldType,
+            ]);
+        } else {
+            $this->dispatchBrowserEvent('reset-column-field');
+        }
+    }
+
+    private function takenPredefinedFieldValues()
+    {
+        return Field::where('form_id', $this->editSelectedFieldFormId)
+            ->get()
+            ->filter(function ($field) {
+                $config = $field->config; // Directly access the ArrayObject
+                return isset($config['get_value_from']['value']);
+            })
+            ->pluck('config')
+            ->map(function ($config) {
+                return $config['get_value_from']['value'];
+            })
+            ->values()
+            ->toArray();
     }
 
     public function cancelEditFormName()
@@ -210,6 +259,29 @@ class HelpTopicList extends Component
 
     public function updateSelectedFormField()
     {
+        $configFieldValue = Field::find($this->editSelectedFieldId)
+            ->whereNot('id', $this->editSelectedFieldId)
+            ->whereJsonContains('config->get_value_from->value', $this->editSelectedFieldGetConfigValueFrom)
+            ->first();
+
+        if ($this->editAsPredefinedField) {
+            if (!$this->editSelectedFieldGetConfigValueFrom) {
+                $this->addError('editSelectedFieldGetConfigValueFrom', 'Predefined field is required');
+                return;
+            }
+
+            if ($configFieldValue) {
+                $this->resetValidation('editSelectedFieldGetConfigValueFrom');
+                $this->addError('editSelectedFieldGetConfigValueFrom', "Predefined field value already assigned in field: {$configFieldValue->name}");
+                return;
+            }
+        }
+
+        if ($this->editSelectedFieldIsHeaderField && !$this->editSelectedFieldAssignedColumnNumber) {
+            $this->addError('editSelectedFieldAssignedColumnNumber', 'Column field is required');
+            return;
+        }
+
         if (!$this->editSelectedFieldName) {
             $this->addError('editSelectedFieldName', 'Field name is required');
             return;
@@ -220,16 +292,6 @@ class HelpTopicList extends Component
             return;
         }
 
-        if (
-            $this->editSelectedFieldIsForTicketNumber &&
-            Field::where([
-                ['id', '!=', $this->editSelectedFieldId],
-                ['is_for_ticket_number', true]
-            ])->exists()
-        ) {
-            noty()->addWarning('Field associated with ticket number already exists.');
-            return;
-        }
 
         Field::where([
             ['id', $this->editSelectedFieldId],
@@ -244,7 +306,7 @@ class HelpTopicList extends Component
                 'is_enabled' => $this->editSelectedFieldEnabled,
                 'assigned_column' => $this->editSelectedFieldAssignedColumnNumber ?? null,
                 'is_header_field' => $this->editSelectedFieldIsHeaderField,
-                'is_for_ticket_number' => $this->editSelectedFieldIsForTicketNumber
+                'config' => Field::setConfig($this->editSelectedFieldGetConfigValueFrom)
             ]);
 
         $this->editSelectedFieldIsCurrentlyEditing = false;
@@ -482,28 +544,12 @@ class HelpTopicList extends Component
         $this->editSelectedFieldEnabled = false;
         $this->editSelectedFieldAssignedColumnNumber = null;
         $this->editSelectedFieldIsHeaderField = false;
-        $this->editSelectedFieldIsForTicketNumber = false;
-    }
-
-    public function convertToVariable($variable)
-    {
-        return preg_replace('/[^a-zA-Z0-9_.]+/', '_', strtolower(trim($variable)));
+        $this->editSelectedFieldConfig = null;
     }
 
     public function updatedSelectedFormFieldName($value)
     {
         $this->selectedFormVariableName = $this->convertToVariable($value);
-    }
-
-    // public function hasAssociatedTicketFieldExists()
-    // {
-    //     return Field::whereJsonContains('config->get_value_from->value', PredefinedFieldValueEnum::TICKET_NUMBER)->exists();
-    // }
-
-    public function hasAssociatedTicketField()
-    {
-        return $this->selectedFormFieldAsHeaderField
-            && Field::whereJsonContains('config->get_value_from->value', PredefinedFieldValueEnum::TICKET_NUMBER)->exists();
     }
 
     public function updatedSelectedFormFieldAsHeaderField($value)
@@ -514,6 +560,11 @@ class HelpTopicList extends Component
             $this->selectedFormFieldColumnNumber = null;
             $this->selectedFormFieldAsHeaderField = false;
         }
+    }
+
+    public function convertToVariable($variable)
+    {
+        return preg_replace('/[^a-zA-Z0-9_.]+/', '_', strtolower(trim($variable)));
     }
 
     public function render()

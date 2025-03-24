@@ -254,37 +254,67 @@
                             @if ($editSelectedFieldIsCurrentlyEditing && $editSelectedFieldFormId === $helpTopicForm->id)
                                 <div class="row mt-1 px-3 py-4 rounded-3"
                                     style="background-color: #f3f4f6; margin-left: 2px; margin-right: 2px; border: 0.08rem solid #dddddd;">
-                                    @if ($editSelectedFieldIsHeaderField)
-                                        <div class="row mb-3">
-                                            <div class="col-lg-2 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                                <div class="mb-2">
-                                                    <label for="fieldName" class="form-label text-muted form__field__label"
-                                                        style="font-weight: 500;">
-                                                        Assign column
-                                                    </label>
-                                                    <div>
-                                                        <div id="edit-select-field-column-number" wire:ignore></div>
-                                                    </div>
-                                                    @error('editSelectedFieldAssignedColumnNumber')
-                                                        <span class="error__message position-absolute" style="bottom: -13px !important;">
-                                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                                <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
-                                                    <input wire:model="editSelectedFieldIsForTicketNumber" class="form-check-input" type="checkbox"
-                                                        role="switch" id="forTicketNumber" wire:loading.attr="disabled"
-                                                        style="margin-right: 10px !important;">
-                                                    <label class="form-check-label" for="forTicketNumber">
-                                                        Associate with the ticket number
-                                                    </label>
-                                                </div>
-                                            </div>
+                                    <div class="row">
+                                        <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
+                                            <input wire:model="editAsPredefinedField" class="form-check-input" type="checkbox" role="switch"
+                                                id="editPredefinedFieldCheck" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                            <label class="form-check-label" for="editPredefinedFieldCheck">
+                                                Set as predefined field
+                                            </label>
                                         </div>
-                                    @endif
+                                        @if ($editAsPredefinedField)
+                                            <div class="row mb-3">
+                                                <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                                    <div class="mb-2">
+                                                        <label class="form-label text-muted form__field__label" style="font-weight: 500;">
+                                                            Get default value from
+                                                        </label>
+                                                        <div>
+                                                            <div id="edit-selected-field-get-config-value-from" wire:ignore></div>
+                                                        </div>
+                                                        @error('editSelectedFieldGetConfigValueFrom')
+                                                            <span class="error__message position-absolute" style="bottom: -13px !important;">
+                                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
+                                            <input wire:model="editSelectedFieldIsHeaderField" class="form-check-input" type="checkbox"
+                                                role="switch" id="editSelectedFieldIsHeader" wire:loading.attr="disabled"
+                                                style="margin-right: 10px !important;">
+                                            <label class="form-check-label" for="editSelectedFieldIsHeader">
+                                                Set as header field
+                                            </label>
+                                        </div>
+                                        @if ($editSelectedFieldIsHeaderField)
+                                            <div class="row mb-3">
+                                                <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                                    <div class="mb-2">
+                                                        <label for="fieldName" class="form-label text-muted form__field__label"
+                                                            style="font-weight: 500;">
+                                                            Assign column
+                                                        </label>
+                                                        <div>
+                                                            <div id="edit-select-field-column-number" wire:ignore></div>
+                                                        </div>
+                                                        @error('editSelectedFieldAssignedColumnNumber')
+                                                            <span class="error__message position-absolute" style="bottom: -13px !important;">
+                                                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+
                                     <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
                                         <div class="mb-3">
                                             <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
@@ -446,17 +476,18 @@
                                 @enderror
                             </div>
                         </div>
-                        @if (!$this->hasAssociatedTicketField())
-                            <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
-                                    <input wire:model="selectedFormFieldIsForTicketNumber" class="form-check-input" type="checkbox" role="switch"
-                                        id="for-ticket-number" wire:loading.attr="disabled" style="margin-right: 10px !important;">
-                                    <label class="form-check-label" for="for-ticket-number">
-                                        Associate with the ticket number
-                                    </label>
-                                </div>
+
+                        {{-- @if (!$this->hasAssociatedTicketField()) --}}
+                        <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                            <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
+                                <input wire:model="selectedFormFieldIsForTicketNumber" class="form-check-input" type="checkbox" role="switch"
+                                    id="for-ticket-number" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                <label class="form-check-label" for="for-ticket-number">
+                                    Associate with the ticket number
+                                </label>
                             </div>
-                        @endif
+                        </div>
+                        {{-- @endif --}}
                     </div>
                 @endif
                 <div class="mx-1">
@@ -809,15 +840,15 @@
         })
 
         // Edit seleted field
-        window.addEventListener('event-edit-select-field', (event) => {
+        window.addEventListener('edit-form-select-field', (event) => {
             const editSelectedFieldType = document.querySelector('#edit-selected-field-type');
             const editSelectFieldColumnNumber = document.querySelector('#edit-select-field-column-number');
 
             const editCurrentSelectedFieldType = event.detail.editCurrentSelectedFieldType;
             const editCurrentSelectedFieldColumnNumber = event.detail.editCurrentSelectedFieldColumnNumber;
 
-            const editHeaderFieldColumnOption = [1, 2, 'None'].map(column => ({
-                label: !isNaN(column) ? `Column ${column}` : column,
+            const editHeaderFieldColumnOption = [1, 2].map(column => ({
+                label: `Column ${column}`,
                 value: column
             }));
 
@@ -850,6 +881,10 @@
                 });
 
                 editSelectFieldColumnNumber.addEventListener('reset', () => {
+                    @this.set('editSelectedFieldAssignedColumnNumber', null);
+                });
+
+                window.addEventListener('reset-column-field', () => {
                     @this.set('editSelectedFieldAssignedColumnNumber', null);
                 });
             }
@@ -918,6 +953,36 @@
             }
         });
 
+        window.addEventListener('show-edit-select-predefined-field', (event) => {
+            const editSelectGetConfigValueField = document.querySelector('#edit-selected-field-get-config-value-from');
+            const editCurrentPredefinedValue = event.detail.editCurrentPredefinedValue;
+            const editPredefinedFieldValues = event.detail.editPredefinedFieldValues;
+
+            const editPredefinedFieldValueOption = editPredefinedFieldValues.map(predefinedField => ({
+                label: predefinedField.label,
+                value: predefinedField.value
+            }));
+
+            VirtualSelect.init({
+                ele: editSelectGetConfigValueField,
+                options: editPredefinedFieldValueOption,
+                popupDropboxBreakpoint: '3000px',
+                hideClearButton: true,
+            });
+
+            if (editSelectGetConfigValueField) {
+                editSelectGetConfigValueField.reset();
+                editSelectGetConfigValueField.setValue(editCurrentPredefinedValue);
+
+                editSelectGetConfigValueField.addEventListener('change', (event) => {
+                    @this.set('editSelectedFieldGetConfigValueFrom', event.target.value);
+                });
+
+                window.addEventListener('reset-config-value-field', () => {
+                    @this.set('editSelectedFieldGetConfigValueFrom', null);
+                });
+            }
+        })
 
         window.addEventListener('close-selected-form-add-field', () => {
             $('#viewFormModal').modal('show');

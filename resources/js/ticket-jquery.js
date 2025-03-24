@@ -1,34 +1,22 @@
-$(document).ready(function () {
-    $('#toggle__more__menu').click(function () {
-        $this = $(this);
-        $('.sidebar').toggleClass('close');
-        $('#page__main__header').toggleClass('close');
+document.addEventListener("DOMContentLoaded", function () {
+    // Toggle sidebar and header
+    const toggleMenuButton = document.getElementById('toggle__more__menu');
+    const sidebar = document.querySelector('.sidebar');
+    const header = document.getElementById('page__main__header');
+
+    toggleMenuButton.addEventListener('click', function () {
+        sidebar.classList.toggle('close');
+        header.classList.toggle('close');
     });
 
-    $('#checkbox__select__all').click(function (event) {
-        if (this.checked) {
-            $(':checkbox').prop('checked', true);
-        } else {
-            $(':checkbox').prop('checked', false);
-        }
-    });
-    
-    // Clear modal input field when closed
-    $('#modalForm').on('hidden.bs.modal', function () {
-        $(this).find('form').trigger('reset');
-    });
-
-    // $('#ticketCheckbox').hide();
-    // $('#btnSelectTicket').click(() => {
-    //     $('#ticketCheckbox').toggle('fast');
-    //     $('#ticketCheckbox:checked').prop('checked', false);
-    //     $('#btnSelectTicket').toggleClass('ticket__checked');
-    //     $('.ticket__checkbox').show();
-    // });
-
-    // $('#btnSelectTicket').click(() => {
-    //     $('#ticketCheckbox').toggle('fast');
-    //     $('.ticket__checkbox').show();
-    // });
+    // Clear modal input fields when modal is closed
+    const modalForm = document.getElementById('modalForm');
+    if (modalForm) {
+        modalForm.addEventListener('hidden.bs.modal', function () {
+            const form = modalForm.querySelector('form');
+            if (form) {
+                form.reset();
+            }
+        });
+    }
 });
-
