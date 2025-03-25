@@ -72,14 +72,4 @@ class AnnouncementController extends Controller
             return back()->with('success', 'Announcemant cannot be deleted.');
         }
     }
-
-    public function sendEmailCopy(Request $request)
-    {
-        //
-    }
-
-    public function saveAsDraft(Request $request, Announcement $announcement)
-    {
-        //
-    }
 }

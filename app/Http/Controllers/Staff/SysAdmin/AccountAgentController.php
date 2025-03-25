@@ -11,7 +11,6 @@ class AccountAgentController extends Controller
 {
     use Utils, BasicModelQueries;
 
-
     public function viewDetails(User $agent)
     {
         return view('layouts.staff.system_admin.manage.accounts.roles.details.agent_details', compact('agent'));

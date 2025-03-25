@@ -93,7 +93,9 @@ class CreateAgent extends Component
                 $agent->serviceDepartments()->attach($this->service_department);
                 $agent->subteams()->attach(array_map('intval', $this->selectedSubteams));
                 $agent->givePermissionTo(
-                    Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::AGENT))->pluck('name')->toArray()
+                    Permission::withWhereHas('roles', fn($role) => $role->where('roles.name', Role::AGENT))
+                        ->pluck('name')
+                        ->toArray()
                 );
 
                 $fullname = $this->first_name . $this->middle_name ?? "" . $this->last_name;

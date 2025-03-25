@@ -99,21 +99,19 @@ trait Tickets
                 ->where('approval_status', ApprovalStatusEnum::APPROVED);
         })
             ->whereHas('user', function ($user) {
-                // Group conditions for clarity
                 $user->withTrashed()
                     ->where(function ($query) {
-                    // User must have BOTH branches AND departments
-                    $query->whereHas('branches', function ($branch) {
-                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id'));
+                        $query->whereHas('branches', function ($branch) {
+                            $branch->whereIn('branches.id', auth()->user()->branches->pluck('id'));
+                        })
+                            ->whereHas('buDepartments', function ($department) {
+                                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
+                            });
                     })
-                        ->whereHas('buDepartments', function ($department) {
-                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
-                    });
-                })
                     ->orWhereHas('tickets', function ($ticket) {
-                    $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
-                        ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
-                });
+                        $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
+                            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
+                    });
             })
             ->orderByDesc('created_at')
             ->get();
