@@ -452,10 +452,37 @@
                     </h1>
                 </div>
                 <div class="form-check mb-3 px-3" style="white-space: nowrap; margin-left: 13px;">
+                    <input wire:model="selectedFormFieldAsPredefinedField" class="form-check-input" type="checkbox" role="switch"
+                        id="add-form-field-as-predefined-field" wire:loading.attr="disabled">
+                    <label class="form-check-label" for="add-form-field-as-predefined-field">
+                        Set as predefined field
+                    </label>
+                </div>
+                @if ($selectedFormFieldAsPredefinedField)
+                    <div class="row mb-3">
+                        <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
+                            <div class="mb-2">
+                                <label class="form-label text-muted form__field__label" style="font-weight: 500;">
+                                    Get default value from
+                                </label>
+                                <div>
+                                    <div id="add-selected-form-field-get-config-value-from" wire:ignore></div>
+                                </div>
+                                @error('selectedFormFieldGetConfigValueFrom')
+                                    <span class="error__message position-absolute" style="bottom: -13px !important;">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                <div class="form-check mb-3 px-3" style="white-space: nowrap; margin-left: 13px;">
                     <input wire:model="selectedFormFieldAsHeaderField" class="form-check-input" type="checkbox" role="switch"
                         id="add-form-field-as-heder-check" wire:loading.attr="disabled">
                     <label class="form-check-label" for="add-form-field-as-heder-check">
-                        As header field
+                        Set as header field
                     </label>
                 </div>
                 @if ($selectedFormFieldAsHeaderField)
@@ -476,18 +503,6 @@
                                 @enderror
                             </div>
                         </div>
-
-                        {{-- @if (!$this->hasAssociatedTicketField()) --}}
-                        <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                            <div class="form-check" style="white-space: nowrap; margin-left: 13px; margin-bottom: 20px;">
-                                <input wire:model="selectedFormFieldIsForTicketNumber" class="form-check-input" type="checkbox" role="switch"
-                                    id="for-ticket-number" wire:loading.attr="disabled" style="margin-right: 10px !important;">
-                                <label class="form-check-label" for="for-ticket-number">
-                                    Associate with the ticket number
-                                </label>
-                            </div>
-                        </div>
-                        {{-- @endif --}}
                     </div>
                 @endif
                 <div class="mx-1">
@@ -502,7 +517,7 @@
                             <div class="mb-2">
                                 <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
                                     Field name
-                                    <em style="font-size: 0.75rem;">(No special characters)</em>
+                                    <em style="font-size: 0.75rem;">(Avoid using special characters)</em>
                                 </label>
                                 <div class="d-flex align-items-center text-start px-0 td__content">
                                     <input wire:model="selectedFormFieldName" class="form-control form__field" type="text" id="fieldName"
@@ -580,8 +595,13 @@
                                             <th class="border-0 table__head__label px-2">Name</th>
                                             <th class="border-0 table__head__label px-2">Type</th>
                                             <th class="border-0 table__head__label px-2">Assigned Column</th>
+                                            <th class="border-0 table__head__label d-flex flex-column position-relative border-0 px-2">
+                                                Pre-defined
+                                                <div class="position-absolute" style="font-size: 0.65rem; bottom: -3px;">
+                                                    (Get value from)
+                                                </div>
+                                            </th>
                                             <th class="border-0 table__head__label px-2">Header Field</th>
-                                            <th class="border-0 table__head__label px-2">For Ticket Number</th>
                                             <th class="border-0 table__head__label px-2">Required</th>
                                             <th class="border-0 table__head__label px-2">Enable</th>
                                         </tr>
@@ -592,169 +612,64 @@
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
                                                         style="height: 0; min-width: 200px;">
-                                                        @if ($editAddedFieldId === $key)
-                                                            <input wire:model="editAddedFieldName" class="form-control form__field" type="text"
-                                                                placeholder="Enter field name">
-                                                        @else
-                                                            <span>{{ $field['name'] }}</span>
-                                                        @endif
+                                                        <span>{{ $field['name'] }}</span>
                                                     </div>
-                                                    @error('editAddedFieldName')
-                                                        <span class="error__message">
-                                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
-                                                        @if ($editAddedFieldId === $key)
-                                                            <div class="w-100">
-                                                                <div id="edit-added-select-field-type" wire:ignore>
-                                                                </div>
-                                                            </div>
-                                                        @else
-                                                            <span>{{ $field['type'] }}</span>
-                                                        @endif
+                                                        <span>{{ $field['type'] }}</span>
                                                     </div>
-                                                    @error('editAddedFieldType')
-                                                        <span class="error__message">
-                                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
                                                 </td>
                                                 <td class="position-relative">
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
                                                         style="height: 0; min-width: 200px;">
-                                                        @if ($editAddedFieldId === $key)
-                                                            <div style="min-width: 40px;">
-                                                                <div id="edit-added-select-assigned-column" wire:ignore>
-                                                                </div>
-                                                            </div>
-                                                        @else
-                                                            {{ $field['assigned_column'] ?? '---' }}
-                                                        @endif
+                                                        {{ $field['assigned_column'] ?? '---' }}
                                                     </div>
-                                                    @error('selectedFormFieldColumnNumber')
-                                                        <span class="error__message position-absolute" style="bottom: -10px !important;">
-                                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
-                                                        @if ($editAddedFieldId === $key)
-                                                            <div class="w-100">
-                                                                <div class="form-check mx-0"
-                                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                                    <input wire:model="editAddedFieldIsHeaderField" class="form-check-input"
-                                                                        type="checkbox" role="switch" wire:loading.attr="disabled"
-                                                                        style="margin-right: 10px !important;" @disabled($this->hasAssociatedTicketFieldExists())>
-                                                                </div>
-                                                            </div>
+                                                        @if ($field['config']['get_value_from']['value'])
+                                                            {{ $field['config']['get_value_from']['label'] }}
                                                         @else
-                                                            @if ($field['is_header_field'])
-                                                                <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
-                                                            @else
-                                                                <i class="bi bi-x-circle text-muted"></i>
-                                                            @endif
+                                                            --
                                                         @endif
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
-                                                        @if ($editAddedFieldId === $key)
-                                                            <div class="w-100">
-                                                                <div class="form-check mx-0"
-                                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                                    <input wire:model="editAddedFieldIsForTicketNumber" class="form-check-input"
-                                                                        type="checkbox" role="switch" wire:loading.attr="disabled"
-                                                                        style="margin-right: 10px !important;" @disabled($this->hasAssociatedTicketFieldExists() || !$editAddedFieldIsHeaderField)>
-                                                                </div>
-                                                            </div>
+                                                        @if ($field['is_header_field'])
+                                                            <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
                                                         @else
-                                                            @if ($field['is_for_ticket_number'])
-                                                                <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
-                                                            @else
-                                                                <i class="bi bi-x-circle text-muted"></i>
-                                                            @endif
+                                                            <i class="bi bi-x-circle text-muted"></i>
                                                         @endif
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content" style="height: 0;">
-                                                        @if ($editAddedFieldId === $key)
-                                                            <div class="w-100">
-                                                                <div class="form-check mx-0"
-                                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                                    <input wire:model="editAddedFieldRequired" class="form-check-input"
-                                                                        type="checkbox" role="switch" wire:loading.attr="disabled"
-                                                                        style="margin-right: 10px !important;">
-                                                                </div>
-                                                            </div>
+                                                        @if ($field['is_required'])
+                                                            <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
                                                         @else
-                                                            @if ($field['is_required'])
-                                                                <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
-                                                            @else
-                                                                <i class="bi bi-x-circle text-muted"></i>
-                                                            @endif
+                                                            <i class="bi bi-x-circle text-muted"></i>
                                                         @endif
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center text-start px-0 td__content"
                                                         style="height: 0; min-width: 200px;">
-                                                        @if ($editAddedFieldId === $key)
-                                                            <div class="w-100">
-                                                                <div class="form-check mx-0"
-                                                                    style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                                    <input wire:model="editAddedFieldEnabled" class="form-check-input"
-                                                                        type="checkbox" role="switch" wire:loading.attr="disabled"
-                                                                        style="margin-right: 10px !important;">
-                                                                </div>
-                                                            </div>
+                                                        @if ($field['is_enabled'])
+                                                            <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
                                                         @else
-                                                            @if ($field['is_enabled'])
-                                                                <i class="bi bi-check-circle-fill" style="color: #9da85c;"></i>
-                                                            @else
-                                                                <i class="bi bi-x-circle text-muted"></i>
-                                                            @endif
+                                                            <i class="bi bi-x-circle text-muted"></i>
                                                         @endif
                                                     </div>
-                                                    @error('editAddedFieldEnabled')
-                                                        <span class="error__message">
-                                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
                                                 </td>
                                                 <td class="px-0">
                                                     <div class="d-flex align-items-center gap-2 justify-content-end px-2">
-                                                        @if ($editAddedFieldId === $key)
-                                                            <button
-                                                                class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                                wire:click="updateSelectedFormAddedField({{ $key }})">
-                                                                <i class="bi bi-check-lg" style="font-size: 18px;"></i>
-                                                            </button>
-                                                            <button
-                                                                class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                                wire:click="cancelEditSelectedFormAddedFieldAction({{ $key }})">
-                                                                <i class="bi bi-x-lg"></i>
-                                                            </button>
-                                                        @else
-                                                            <button
-                                                                class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                                wire:click="editSelectedFormAddedField({{ $key }})">
-                                                                <i class="bi bi-pencil"></i>
-                                                            </button>
-                                                            <button
-                                                                class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
-                                                                wire:click="removeSelectedFormAddedField({{ $key }})">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        @endif
+                                                        <button
+                                                            class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0"
+                                                            wire:click="removeSelectedFormAddedField({{ $key }})">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -820,10 +735,30 @@
             addSelectedFormFieldSelectFieldType.reset();
         });
 
-        window.addEventListener('add-selected-form-show-select-column-number', () => {
-            const addSelectedFormFieldSelectColumnNumber = document.querySelector(
-                '#add-selected-form-field-select-column-number')
+        window.addEventListener('add-selected-form-show-select-get-config-value-from', (event) => {
+            const addSelectedFormFieldGetConfigValueFromSelect = document.querySelector('#add-selected-form-field-get-config-value-from');
+            const takenPredefinedFieldValues = event.detail.takenPredefinedFieldValues;
+            const selectedFormFieldPredefinedFieldValues = event.detail.selectedFormFieldPredefinedFieldValues;
 
+            const selectedFormFieldPredefinedFieldValueOption = selectedFormFieldPredefinedFieldValues
+                .filter(predefinedField => !takenPredefinedFieldValues.includes(predefinedField.value)) // Filter out taken items
+                .map(predefinedField => ({
+                    label: predefinedField.label,
+                    value: predefinedField.value
+                }));
+
+            VirtualSelect.init({
+                ele: addSelectedFormFieldGetConfigValueFromSelect,
+                options: selectedFormFieldPredefinedFieldValueOption,
+            });
+
+            addSelectedFormFieldGetConfigValueFromSelect.addEventListener('change', (event) => {
+                @this.set('selectedFormFieldGetConfigValueFrom', event.target.value);
+            });
+        });
+
+        window.addEventListener('add-selected-form-show-select-column-number', () => {
+            const addSelectedFormFieldSelectColumnNumber = document.querySelector('#add-selected-form-field-select-column-number');
             const addFormFieldFieldColumnNumberOption = [1, 2].map(column => ({
                 label: `Column ${column}`,
                 value: column
@@ -835,9 +770,9 @@
             });
 
             addSelectedFormFieldSelectColumnNumber.addEventListener('change', (event) => {
-                @this.set('selectedFormFieldColumnNumber', event.target.value);
+                @this.set('selectedFormFieldColumnNumber', parseInt(event.target.value));
             });
-        })
+        });
 
         // Edit seleted field
         window.addEventListener('edit-form-select-field', (event) => {
@@ -883,74 +818,11 @@
                 editSelectFieldColumnNumber.addEventListener('reset', () => {
                     @this.set('editSelectedFieldAssignedColumnNumber', null);
                 });
-
-                window.addEventListener('reset-column-field', () => {
-                    @this.set('editSelectedFieldAssignedColumnNumber', null);
-                });
             }
 
             editSelectedFieldType.addEventListener('change', (event) => {
                 @this.set('editSelectedFieldType', event.target.value);
             });
-        });
-
-        // Edit selected form (added fields)
-        window.addEventListener('edit-selected-form-added-field-show-select-field', (event) => {
-            const editAddedFieldType = event.detail.editAddedFieldType;
-            const editAddedFieldAssignedColumn = event.detail.editAddedFieldAssignedColumn;
-            const editAddedFieldIsHeaderField = event.detail.editAddedFieldIsHeaderField;
-            const editAddedSelectFieldType = document.querySelector('#edit-added-select-field-type');
-
-            if (editAddedSelectFieldType) {
-                VirtualSelect.init({
-                    ele: editAddedSelectFieldType,
-                    options: addFormFieldFieldTypeOption,
-                    search: true,
-                    popupDropboxBreakpoint: '3000px'
-                });
-
-                editAddedSelectFieldType.reset();
-                editAddedSelectFieldType.setValue(editAddedFieldType);
-
-                editAddedSelectFieldType.addEventListener('change', (event) => {
-                    @this.set('editAddedFieldType', event.target.value);
-                });
-            }
-
-            const editAddedSelectAssignedColumn = document.querySelector('#edit-added-select-assigned-column');
-            const editAddedColumnOption = [1, 2].map(column => ({
-                label: `Column ${column}`,
-                value: column
-            }));
-
-            if (editAddedSelectAssignedColumn) {
-                VirtualSelect.init({
-                    ele: editAddedSelectAssignedColumn,
-                    options: editAddedColumnOption,
-                    popupDropboxBreakpoint: '3000px'
-                });
-
-                if (!editAddedFieldIsHeaderField) {
-                    editAddedSelectAssignedColumn.disable();
-                } else {
-                    editAddedSelectAssignedColumn.enable();
-                }
-
-                editAddedSelectAssignedColumn.reset();
-                editAddedSelectAssignedColumn.setValue(editAddedFieldAssignedColumn);
-
-                editAddedSelectAssignedColumn.addEventListener('change', (event) => {
-                    @this.set('editAddedFieldAssignedColumn', parseInt(event.target.value));
-                });
-
-                window.addEventListener('enable-edit-assign-column', () => {
-                    editAddedSelectAssignedColumn.enable();
-                });
-
-                window.addEventListener('disable-edit-assign-column', () => {
-                    editAddedSelectAssignedColumn.disable();
-                });
-            }
         });
 
         window.addEventListener('show-edit-select-predefined-field', (event) => {
@@ -976,10 +848,6 @@
 
                 editSelectGetConfigValueField.addEventListener('change', (event) => {
                     @this.set('editSelectedFieldGetConfigValueFrom', event.target.value);
-                });
-
-                window.addEventListener('reset-config-value-field', () => {
-                    @this.set('editSelectedFieldGetConfigValueFrom', null);
                 });
             }
         })
