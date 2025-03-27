@@ -511,11 +511,11 @@ class CreateTicket extends Component
                 } else {
                     // Filter the approvers that were assigned in the approval configuration
                     $approvers = User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
-                        ->withWhereHas('helpTopicApprovals', function ($query) use ($ticket) {
-                            $query->withWhereHas('configuration', function ($config) use ($ticket) {
-                                $config->with('approvers')
-                                    ->orWhereIn('bu_department_id', $ticket->user->buDepartments->pluck('id'));
-                            });
+                        ->withWhereHas('helpTopicApprovals.configuration', function ($config) use ($ticket) {
+                            $config->whereIn('bu_department_id', $ticket->user->buDepartments->pluck('id'))
+                                ->withWhereHas('approvers.approver.branches', function ($branch) {
+                                    $branch->whereIn('branches.id', auth()->user()->branches->pluck('id'));
+                                });
                         })->get();
 
                     if ($approvers->isNotEmpty()) {

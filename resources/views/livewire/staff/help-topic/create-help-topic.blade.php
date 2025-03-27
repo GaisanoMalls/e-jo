@@ -117,7 +117,7 @@
                                     {{ session('level_approver_message') }}
                                 </span>
                             @endif
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-2">
                                     <label for="department" class="form-label form__field__label">BU Department</label>
                                     <div>
@@ -131,7 +131,21 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="mb-2">
+                                    <label for="branch" class="form-label form__field__label">Branch</label>
+                                    <div>
+                                        <div id="select-help-topic-branch" wire:ignore></div>
+                                    </div>
+                                    @error('selectedBranch')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="mb-2">
                                     <label for="department" class="form-label form__field__label">Level of Approval</label>
                                     <div>
@@ -163,6 +177,7 @@
                                         <tr>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">Branch</th>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
                                             <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
                                                 Actions
@@ -177,6 +192,9 @@
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     {{ $config['bu_department_name'] }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $config['branch_name'] }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     {{ $config['approvers_count'] }}
@@ -242,8 +260,8 @@
                                     <div class="col-md-4" id="costing-approver-container">
                                         <div class="mb-3">
                                             <label class="finalCostingApprover form-label form__field__label">Final
-                                                Cost
-                                                Approver</label>
+                                                Costing Approver
+                                            </label>
                                             <div>
                                                 <div id="select-help-topic-final-costing-approver" wire:ignore></div>
                                             </div>
@@ -295,6 +313,20 @@
                                         <div id="select-edit-config-bu-department" wire:ignore></div>
                                     </div>
                                     @error('editBuDepartment')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label form__field__label">
+                                        Branch
+                                    </label>
+                                    <div>
+                                        <div id="select-edit-config-branch" wire:ignore></div>
+                                    </div>
+                                    @error('editBranch')
                                         <span class="error__message">
                                             <i class="fa-solid fa-triangle-exclamation"></i>
                                             {{ $message }}
@@ -429,12 +461,19 @@
         // Approval Configurations
         const loadHelpTopicConfig = () => {
             const buDepartmentSelect = document.querySelector('#select-help-topic-bu-department');
+            const branchSelect = document.querySelector('#select-help-topic-branch');
             const approvalLevelSelect = document.querySelector('#select-help-topic-approval-level');
 
             const buDepartments = @json($buDepartments);
             const buDepartmentOption = buDepartments.map(buDepartment => ({
                 label: buDepartment.name,
                 value: buDepartment.id
+            }));
+
+            const branches = @json($branches);
+            const branchOption = branches.map(branch => ({
+                label: branch.name,
+                value: branch.id
             }));
 
             const approvalLevels = @json($approvalLevels);
@@ -451,6 +490,20 @@
             });
 
             VirtualSelect.init({
+                ele: branchSelect,
+                options: branchOption,
+                search: true,
+                markSearchResults: true,
+            });
+
+            VirtualSelect.init({
+                ele: buDepartmentSelect,
+                options: branchOption,
+                search: true,
+                markSearchResults: true,
+            });
+
+            VirtualSelect.init({
                 ele: approvalLevelSelect,
                 options: approvalLevelOption,
                 markSearchResults: true,
@@ -458,6 +511,10 @@
 
             buDepartmentSelect.addEventListener('change', (event) => {
                 @this.set('selectedBuDepartment', parseInt(event.target.value));
+            });
+
+            branchSelect.addEventListener('change', (event) => {
+                @this.set('selectedBranch', parseInt(event.target.value));
             });
 
             const dynamicApprovalLevelContainer = document.querySelector('#help-topic-approval-container');
@@ -532,39 +589,24 @@
             // Reset fields after save config
             window.addEventListener('reset-select-fields', () => {
                 buDepartmentSelect.reset();
+                branchSelect.reset();
                 approvalLevelSelect.reset();
                 dynamicApprovalLevelContainer.innerHTML = '';
             });
 
-            // window.addEventListener('reset-help-topic-form-fields', () => {
-            //     const selectElements = [
-            //         '#select-help-topic-sla',
-            //         '#select-help-topic-service-department',
-            //         '#select-help-topic-team',
-            //         '#select-help-topic-bu-department',
-            //         '#select-help-topic-approval-level',
-            //         '#select-help-topic-costing-approver',
-            //         '#select-help-topic-final-costing-approver'
-            //     ];
-
-            //     selectElements.forEach(selector => {
-            //         const selectElement = document.querySelector(selector);
-            //         if (selectElement && selectElement.virtualSelect) {
-            //             selectElement.virtualSelect.reset();
-            //         }
-            //     });
-
-            //     document.querySelector('#help-topic-approval-container').innerHTML = '';
-            //     teamSelect.disable();
-            // });
-
             // Edit Configuration
             const selectEditBuDepartment = document.querySelector('#select-edit-config-bu-department');
+            const selectEditBranch = document.querySelector('#select-edit-config-branch');
             const selectEditConfigLevelOfApproval = document.querySelector('#select-edit-config-level-of-approval');
 
             VirtualSelect.init({
                 ele: selectEditBuDepartment,
                 options: buDepartmentOption,
+            });
+
+            VirtualSelect.init({
+                ele: selectEditBranch,
+                options: branchOption,
             });
 
             VirtualSelect.init({
@@ -574,12 +616,15 @@
 
             window.addEventListener('edit-help-topic-configuration', (event) => {
                 const buDeptId = event.detail.editBuDepartment;
+                const branchId = event.detail.editBranch
                 const levelOfApproval = event.detail.editLevelOfApproval;
 
                 selectEditBuDepartment.reset();
+                selectEditBranch.reset();
                 selectEditConfigLevelOfApproval.reset();
 
                 selectEditBuDepartment.setValue(buDeptId);
+                selectEditBranch.setValue(branchId);
                 selectEditConfigLevelOfApproval.setValue(levelOfApproval);
             });
 
@@ -587,8 +632,16 @@
                 @this.set('editBuDepartment', parseInt(event.target.value));
             });
 
+            selectEditBranch.addEventListener('change', (event) => {
+                @this.set('editBranch', parseInt(event.target.value));
+            });
+
             selectEditBuDepartment.addEventListener('reset', () => {
                 @this.set('editBuDepartment', null);
+            });
+
+            selectEditBranch.addEventListener('reset', () => {
+                @this.set('editBranch', null);
             });
 
             const editHelpTopicApprovalConfigContainer = document.querySelector('#edit-help-topic-approval-config-container');
@@ -670,10 +723,18 @@
                     }
                 }
             });
+            window.addEventListener('edit-reset-select-fields', () => {
+                $('#editConfigurationModal').modal('hide');
+                selectEditBuDepartment.reset();
+                selectEditBranch.reset();
+                selectEditConfigLevelOfApproval.reset();
+                editHelpTopicApprovalConfigContainer.innerHTML = '';
+            });
         }
 
         window.addEventListener('load', () => {
             loadHelpTopicConfig();
+
         });
 
         window.addEventListener('reload-help-topic-approval-config', () => {
@@ -719,15 +780,6 @@
                 const selectedFinalCostingApprovers = event.target.value;
                 @this.set('finalCostingApprovers', selectedFinalCostingApprovers);
             });
-        });
-
-
-
-        window.addEventListener('edit-reset-select-fields', () => {
-            selectEditBuDepartment.reset();
-            selectEditConfigLevelOfApproval.reset();
-            editHelpTopicApprovalConfigContainer.innerHTML = '';
-            $('#editConfigurationModal').modal('hide');
         });
     </script>
 @endpush

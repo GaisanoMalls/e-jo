@@ -54,7 +54,6 @@ trait Tickets
             })
             ->orderByDesc('created_at')
             ->get();
-        ;
     }
 
     /**

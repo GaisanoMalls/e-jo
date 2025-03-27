@@ -92,7 +92,7 @@
                             <i class="bi bi-caret-right-fill" style="font-size: 1rem;"></i>
                             Approval
                         </h6>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-2">
                                 <label for="department" class="form-label form__field__label">BU Department</label>
                                 <div>
@@ -106,7 +106,21 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="mb-2">
+                                <label for="department" class="form-label form__field__label">Branch</label>
+                                <div>
+                                    <div id="select-help-topic-branch" wire:ignore></div>
+                                </div>
+                                @error('selectedBranch')
+                                    <span class="error__message">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="mb-2">
                                 <label for="department" class="form-label form__field__label">Level of
                                     Approval
@@ -141,6 +155,7 @@
                                         <tr>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">Branch</th>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
                                             <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
                                                 Actions
@@ -155,6 +170,9 @@
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     {{ $addedConfig['bu_department_name'] }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $addedConfig['branch_name'] }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     {{ $addedConfig['approvers_count'] }}
@@ -181,6 +199,7 @@
                                         <tr>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">No.</th>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">BU Department</th>
+                                            <th style="font-size: 0.85rem; padding: 17px 21px;">Branch</th>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">Level of Approvals</th>
                                             <th style="font-size: 0.85rem; padding: 17px 21px;">Approvers</th>
                                             <th class="text-center" style="font-size: 0.85rem; padding: 17px 21px;">
@@ -196,6 +215,9 @@
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     {{ $currentConfig->buDepartment->name }}
+                                                </td>
+                                                <td class="td__content" style="font-size: 0.85rem;">
+                                                    {{ $currentConfig->branch->name }}
                                                 </td>
                                                 <td class="td__content" style="font-size: 0.85rem;">
                                                     {{ $currentConfig->level_of_approval }}
@@ -309,7 +331,14 @@
                             <label for="approvers" class="form-label form__field__label">
                                 BU Department
                             </label>
-                            <input class="form-control form__field" type="text" value="{{ $currentConfigBuDepartment?->name }}" readonly>
+                            <input class="form-control form__field" type="text" value="{{ $currentConfigBuDepartment?->name }}" readonly
+                                disabled>
+                        </div>
+                        <div class="mb-2">
+                            <label for="approvers" class="form-label form__field__label">
+                                Branch
+                            </label>
+                            <input class="form-control form__field" type="text" value="{{ $currentConfigBranch?->name }}" readonly disabled>
                         </div>
                         <div class="mb-2">
                             <label for="approvers" class="form-label form__field__label">Assigned Approvers</label>
@@ -517,12 +546,19 @@
 
             // Approval Configurations
             const buDepartmentSelect = document.querySelector('#select-help-topic-bu-department');
+            const branchSelect = document.querySelector('#select-help-topic-branch');
             const approvalLevelSelect = document.querySelector('#select-help-topic-approval-level');
 
             const buDepartments = @json($buDepartments);
             const buDepartmentOption = buDepartments.map(buDepartment => ({
                 label: buDepartment.name,
                 value: buDepartment.id
+            }));
+
+            const branches = @json($branches);
+            const branchOption = branches.map(branch => ({
+                label: branch.name,
+                value: branch.id
             }));
 
             const approvalLevels = @json($approvalLevels);
@@ -536,7 +572,13 @@
                 options: buDepartmentOption,
                 search: true,
                 markSearchResults: true,
-                selectedValue: '{{ $selectedBuDepartment }}'
+            });
+
+            VirtualSelect.init({
+                ele: branchSelect,
+                options: branchOption,
+                search: true,
+                markSearchResults: true,
             });
 
             VirtualSelect.init({
@@ -544,11 +586,14 @@
                 options: approvalLevelOption,
                 search: true,
                 markSearchResults: true,
-                selectedValue: '{{ $levelOfApproval }}'
             });
 
             buDepartmentSelect.addEventListener('change', (event) => {
                 @this.set('selectedBuDepartment', parseInt(event.target.value));
+            });
+
+            branchSelect.addEventListener('change', (event) => {
+                @this.set('selectedBranch', parseInt(event.target.value));
             });
 
             approvalLevelSelect.addEventListener('change', (event) => {
@@ -611,7 +656,7 @@
                     const approverOptions = levelApprovers.map(approver => ({
                         label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
                         value: approver.id,
-                        description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
+                        description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')}) - ${approver.branches.map(branch => branch.name).join(', ')}`
                     }));
 
                     approverSelect.setOptions(approverOptions);
@@ -621,6 +666,7 @@
             //reset fields after save config
             window.addEventListener('reset-select-fields', () => {
                 buDepartmentSelect.reset();
+                branchSelect.reset();
                 approvalLevelSelect.reset();
                 dynamicApprovalLevelContainer.innerHTML = '';
             });

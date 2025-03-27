@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Staff\HelpTopic;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\BasicModelQueries;
 use App\Http\Traits\TicketApprovalLevel;
+use App\Models\Branch;
 use App\Models\Department;
 use App\Models\HelpTopic;
 use App\Models\HelpTopicApprover;
@@ -35,10 +36,10 @@ class UpdateHelpTopic extends Component
     public bool $isSpecialProject = false;
 
     // Costing Configuration
-    public $costingApprovers = [];
-    public $finalCostingApprovers = [];
-    public $costingApproversList = [];
-    public $finalCostingApproversList = [];
+    public array|null|Collection $costingApprovers = [];
+    public array|null|Collection $finalCostingApprovers = [];
+    public array $costingApproversList = [];
+    public array $finalCostingApproversList = [];
     public bool $showCostingApproverSelect = false;
 
     // Approval Configurations
@@ -56,14 +57,17 @@ class UpdateHelpTopic extends Component
     public bool $selectedApprovalLevel = false;
     public ?int $levelOfApproval = null;
 
-    public Collection $buDepartments;
+    public array $buDepartments = [];
+    public array $branches = [];
     public int $selectedApproversCount = 0;
     public ?int $selectedBuDepartment = null;
+    public ?int $selectedBranch = null;
     public ?Collection $currentConfigurations = null;
     public array $addedConfigurations = [];
 
     // Edit help topic configuration
     public ?Department $currentConfigBuDepartment = null;
+    public ?Branch $currentConfigBranch = null;
     public ?HelpTopicConfiguration $currentHelpTopicConfiguration = null;
     public ?int $editLevelOfApproval = null;
     public array $editLevel1Approvers = [];
@@ -93,7 +97,8 @@ class UpdateHelpTopic extends Component
         $this->fetchCostingApprovers();
         $this->loadCurrentConfigurations();
 
-        $this->buDepartments = $this->queryBUDepartments()->except($this->helpTopic->configurations->pluck('bu_department_id')->toArray());
+        $this->buDepartments = $this->queryBUDepartments()->toArray();
+        $this->branches = $this->queryBranches()->toArray();
 
         $this->costingApprovers = is_array($this->helpTopic->costing?->costing_approvers)
             ? $this->helpTopic->costing->costing_approvers
@@ -114,6 +119,7 @@ class UpdateHelpTopic extends Component
             'name' => "required|unique:help_topics,name,{$this->helpTopic->id}",
             'sla' => 'required',
             'serviceDepartment' => 'required',
+
             'team' => 'nullable|required_if:isSpecialProject,true',
             'amount' => $this->isSpecialProject ? 'required|numeric' : 'nullable|numeric',
         ];
@@ -157,6 +163,7 @@ class UpdateHelpTopic extends Component
                     $helpTopicConfiguration = HelpTopicConfiguration::create([
                         'help_topic_id' => $this->helpTopic->id,
                         'bu_department_id' => $config['bu_department_id'],
+                        'branch_id' => $config['branch_id'],
                         'level_of_approval' => $config['level_of_approval']
                     ]);
 
@@ -218,7 +225,7 @@ class UpdateHelpTopic extends Component
 
     public function loadCurrentConfigurations()
     {
-        return $this->currentConfigurations = $this->helpTopic->configurations()->with('buDepartment')->get();
+        return $this->currentConfigurations = $this->helpTopic->configurations()->with(['buDepartment', 'branch'])->get();
     }
 
     public function getFilteredApprovers($level)
@@ -231,7 +238,7 @@ class UpdateHelpTopic extends Component
             (array) $this->level5Approvers
         );
 
-        $filteredApprovers = User::with(['profile', 'roles', 'buDepartments'])
+        $filteredApprovers = User::with(['profile', 'roles', 'buDepartments', 'branches'])
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->whereNotIn('id', $this->selectedApprovers)
             ->orderByDesc('created_at')
@@ -277,6 +284,13 @@ class UpdateHelpTopic extends Component
             $this->resetValidation('selectedBuDepartment');
         }
 
+        if (!$this->selectedBranch) {
+            $this->addError('selectedBranch', 'Branch field is required.');
+            return;
+        } else {
+            $this->resetValidation('selectedBranch');
+        }
+
         if (!$this->levelOfApproval) {
             $this->addError('levelOfApproval', 'Level of approval field is required.');
             return;
@@ -300,10 +314,19 @@ class UpdateHelpTopic extends Component
             ->pluck('name')
             ->first();
 
+        // Get the selected branch name
+        $brachName = collect($this->branches)
+            ->where('id', $this->selectedBranch)
+            ->pluck('name')
+            ->first();
+
+
         // Add to the configurations array
         $this->addedConfigurations[] = [
             'bu_department_id' => $this->selectedBuDepartment,
+            'branch_id' => $this->selectedBranch,
             'bu_department_name' => $buDepartmentName,
+            'branch_name' => $brachName,
             'approvers_count' => $approversCount,
             'approvers' => $approvers,
             'level_of_approval' => $this->levelOfApproval
@@ -315,6 +338,7 @@ class UpdateHelpTopic extends Component
     private function resetApprovalConfigFields()
     {
         $this->selectedBuDepartment = null;
+        $this->selectedBranch = null;
         $this->levelOfApproval = null;
         $this->level1Approvers = [];
         $this->level2Approvers = [];
@@ -328,6 +352,7 @@ class UpdateHelpTopic extends Component
     {
         $this->currentHelpTopicConfiguration = $helpTopicConfiguration;
         $this->currentConfigBuDepartment = $helpTopicConfiguration->buDepartment;
+        $this->currentConfigBranch = $helpTopicConfiguration->branch;
 
         $currentConfigLevelOfApproval = HelpTopicApprover::with('configuration')
             ->where([
