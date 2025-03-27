@@ -8,11 +8,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
 
 class RequesterClarificationMail extends Mailable implements ShouldQueue
 {
@@ -57,7 +55,7 @@ class RequesterClarificationMail extends Mailable implements ShouldQueue
                 'ticketSubject' => "Requester's Clarification",
                 'message' => "{$this->clarificationDescription}",
                 'sender' => auth()->user()->profile->getFullName,
-                'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/clarifications",
+                'url' => env('APP_URL') . "/staff/ticket/{$this->ticket->id}/clarifications",
             ]
         );
     }

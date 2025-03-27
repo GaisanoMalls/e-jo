@@ -49,7 +49,7 @@ trait Tickets
                     ->where('approval_status', ApprovalStatusEnum::DISAPPROVED);
             })
             ->whereHas('user.buDepartments', function ($department) {
-                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
@@ -62,7 +62,7 @@ trait Tickets
     {
         return Ticket::where('status_id', Status::VIEWED)
             ->whereHas('user.buDepartments', function ($department) {
-                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
             })
             ->whereHas('ticketApprovals', function ($approval) {
                 $approval->where('is_approved', false)
@@ -82,7 +82,7 @@ trait Tickets
                     ->where('approval_status', ApprovalStatusEnum::APPROVED);
             })
             ->whereHas('user.buDepartments', function ($department) {
-                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
@@ -102,7 +102,7 @@ trait Tickets
                     ]);
             })
             ->whereHas('user.buDepartments', function ($department) {
-                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
@@ -122,7 +122,7 @@ trait Tickets
                     ]);
             })
             ->whereHas('user.buDepartments', function ($department) {
-                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
@@ -141,7 +141,7 @@ trait Tickets
                 ]);
             })
             ->whereHas('user.buDepartments', function ($department) {
-                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);
@@ -160,7 +160,7 @@ trait Tickets
                 ]);
             })
             ->whereHas('user.buDepartments', function ($department) {
-                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
                 $approver->where('user_id', auth()->user()->id);

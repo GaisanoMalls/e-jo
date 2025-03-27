@@ -320,7 +320,6 @@ class UpdateHelpTopic extends Component
             ->pluck('name')
             ->first();
 
-
         // Add to the configurations array
         $this->addedConfigurations[] = [
             'bu_department_id' => $this->selectedBuDepartment,
@@ -374,7 +373,11 @@ class UpdateHelpTopic extends Component
             ->role([Role::APPROVER, Role::SERVICE_DEPARTMENT_ADMIN])
             ->withWhereHas('buDepartments', function ($department) {
                 $department->where('departments.id', $this->currentConfigBuDepartment->id);
-            })->get();
+            })
+            ->withWhereHas('branches', function ($branch) {
+                $branch->where('branches.id', $this->currentConfigBranch->id);
+            })
+            ->get();
 
         $this->dispatchBrowserEvent('edit-load-current-configuration', [
             'buDepartmentApprovers' => $buDepartmentApprovers,

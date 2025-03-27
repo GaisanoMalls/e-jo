@@ -106,14 +106,14 @@ class SendTicketReply extends Component
 
                 $serviceDepartmentAdmins->each(function ($serviceDepartmentAdmin) use ($latestStaff) {
                     if (
-                        $this->ticket->whereIn('service_department_id', $serviceDepartmentAdmin->serviceDepartments->pluck('id')->toArray())
-                            ->whereIn('branch_id', $serviceDepartmentAdmin->branches->pluck('id')->toArray())
+                        $this->ticket->whereIn('service_department_id', $serviceDepartmentAdmin->serviceDepartments->pluck('id'))
+                            ->whereIn('branch_id', $serviceDepartmentAdmin->branches->pluck('id'))
                             ->orWhereHas('user', function ($user) use ($serviceDepartmentAdmin) {
                                 $user->whereHas('branches', function ($branch) use ($serviceDepartmentAdmin) {
-                                    $branch->whereIn('branches.id', $serviceDepartmentAdmin->branches->pluck('id')->toArray());
+                                    $branch->whereIn('branches.id', $serviceDepartmentAdmin->branches->pluck('id'));
                                 })
                                     ->whereHas('buDepartments', function ($department) use ($serviceDepartmentAdmin) {
-                                        $department->whereIn('departments.id', $serviceDepartmentAdmin->buDepartments->pluck('id')->toArray());
+                                        $department->whereIn('departments.id', $serviceDepartmentAdmin->buDepartments->pluck('id'));
                                     });
                             })
                             ->exists()

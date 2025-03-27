@@ -51,7 +51,7 @@ class UpdateAgent extends Component
         $this->service_department = $this->agent->serviceDepartments->pluck('id')->first();
         $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->whereIn('branches.id', $this->branches))->get();
         $this->teams = Team::withWhereHas('serviceDepartment', fn($query) => $query->where('service_departments.id', $this->service_department))->get();
-        $this->subteams = Subteam::withWhereHas('team', fn($query) => $query->whereIn('teams.id', $this->teams->pluck('id')->toArray()))->get();
+        $this->subteams = Subteam::withWhereHas('team', fn($query) => $query->whereIn('teams.id', $this->teams->pluck('id')))->get();
         $this->currentTeams = $this->agent->teams->pluck('id')->toArray();
         $this->currentSubteams = $this->agent->subteams->pluck('id')->toArray();
         $this->currentPermissions = $this->agent->getDirectPermissions()->pluck('name')->toArray();

@@ -96,7 +96,7 @@ class SendClarification extends Component
 
                 $requesterServiceDepartmentAdmins = User::with('profile')
                     ->whereHas('buDepartments', function ($serviceDepartment) {
-                        $serviceDepartment->whereIn('departments.id', $this->ticket->user->buDepartments->pluck('id')->toArray());
+                        $serviceDepartment->whereIn('departments.id', $this->ticket->user->buDepartments->pluck('id'));
                     })
                     ->role(Role::SERVICE_DEPARTMENT_ADMIN)
                     ->get();

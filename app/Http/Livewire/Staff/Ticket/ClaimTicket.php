@@ -65,7 +65,7 @@ class ClaimTicket extends Component
                     ->with('profile')
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
                     ->withWhereHas('teams', function ($team) {
-                        $team->whereIn('teams.id', $this->ticket->teams->pluck('id')->toArray());
+                        $team->whereIn('teams.id', $this->ticket->teams->pluck('id'));
                     })
                     ->withWhereHas('serviceDepartments', function ($serviceDepartment) {
                         $serviceDepartment->where('service_departments.id', $this->ticket->service_department_id);
@@ -74,7 +74,7 @@ class ClaimTicket extends Component
                 $coAgents = User::whereNot('id', $agent->id)
                     ->withWhereHas('roles', fn($role) => $role->where('name', Role::AGENT))
                     ->withWhereHas('teams', function ($team) use ($agent) {
-                        $team->whereIn('teams.id', $agent->teams->pluck('id')->toArray());
+                        $team->whereIn('teams.id', $agent->teams->pluck('id'));
                     })
                     ->withWhereHas('serviceDepartments', function ($serviceDepartment) use ($agent) {
                         $serviceDepartment->where('service_departments.id', $agent->serviceDepartments->pluck('id')->first());

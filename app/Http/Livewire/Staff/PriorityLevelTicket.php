@@ -137,14 +137,14 @@ class PriorityLevelTicket extends Component
                 ->whereHas('user', function ($user) {
                     $user->withTrashed()
                         ->whereHas('branches', function ($branch) {
-                            $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                            $branch->whereIn('branches.id', auth()->user()->branches->pluck('id'));
                         })
                         ->whereHas('buDepartments', function ($department) {
-                            $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                            $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
                         })
                         ->orWhereHas('tickets', function ($ticket) {
-                            $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
+                            $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
+                                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
                         });
                 })
                 ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
@@ -164,8 +164,8 @@ class PriorityLevelTicket extends Component
                     ->whereIn('approval_status', [ApprovalStatusEnum::APPROVED]);
             })
                 ->where('priority_level_id', $this->priorityLevel->id)
-                ->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray())
+                ->whereIn('branch_id', auth()->user()->branches->pluck('id'))
+                ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'))
                 ->whereHas('agent', fn($agent) => $agent->where('id', auth()->user()->id))
                 ->whereHas('ticketApprovals', function ($approval) {
                     $approval->orWhere('is_approved', true);

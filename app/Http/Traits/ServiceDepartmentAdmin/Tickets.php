@@ -70,10 +70,6 @@ trait Tickets
                     ApprovalStatusEnum::FOR_APPROVAL
                 ]);
         })
-            ->where(function ($query) {
-                $query->whereIn('branch_id', auth()->user()->branches->pluck('id'))
-                    ->orWhereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
-            })
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
                     ->whereHas('branches', function ($branch) {
@@ -81,6 +77,10 @@ trait Tickets
                     })
                     ->whereHas('buDepartments', function ($department) {
                         $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
+                    })
+                    ->orWhereHas('tickets', function ($ticket) {
+                        $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
+                            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
                     });
             })
             ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
@@ -99,18 +99,20 @@ trait Tickets
         })
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
-                    ->where(function ($query) {
-                        $query->whereHas('branches', function ($branch) {
-                            $branch->whereIn('branches.id', auth()->user()->branches->pluck('id'));
-                        })
-                            ->whereHas('buDepartments', function ($department) {
-                                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
-                            });
+                    ->whereHas('branches', function ($branch) {
+                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id'));
+                    })
+                    ->whereHas('buDepartments', function ($department) {
+                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
                     })
                     ->orWhereHas('tickets', function ($ticket) {
                         $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
                     });
+            })
+            ->where(function ($ticket) {
+                $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderByDesc('created_at')
             ->get();
@@ -125,11 +127,15 @@ trait Tickets
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
                     ->whereHas('branches', function ($branch) {
-                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id'));
                     })
                     ->whereHas('buDepartments', function ($department) {
-                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
                     });
+            })
+            ->where(function ($ticket) {
+                $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderByDesc('created_at')
             ->get();
@@ -145,15 +151,19 @@ trait Tickets
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
                     ->whereHas('branches', function ($branch) {
-                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray());
+                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id'));
                     })
                     ->whereHas('buDepartments', function ($department) {
-                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
                     })
                     ->orWhereHas('tickets', function ($ticket) {
-                        $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id')->toArray())
-                            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id')->toArray());
+                        $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
+                            ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
                     });
+            })
+            ->where(function ($ticket) {
+                $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderByDesc('created_at')
             ->get();
@@ -176,20 +186,22 @@ trait Tickets
             })
             ->whereHas('user', function ($user) {
                 $user->withTrashed()
-                    ->where(function ($query) {
-                        // User must have BOTH branches AND departments
-                        $query->whereHas('branches', function ($branch) {
-                            $branch->whereIn('branches.id', auth()->user()->branches->pluck('id'));
-                        })
-                            ->whereHas('buDepartments', function ($department) {
-                            $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
-                        });
+                    // User must have BOTH branches AND departments
+                    ->whereHas('branches', function ($branch) {
+                        $branch->whereIn('branches.id', auth()->user()->branches->pluck('id'));
+                    })
+                    ->whereHas('buDepartments', function ($department) {
+                        $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
                     })
                     // OR the user has tickets in specific branches/service departments
                     ->orWhereHas('tickets', function ($ticket) {
                         $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
                     });
+            })
+            ->where(function ($ticket) {
+                $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderByDesc('created_at')
             ->get();
@@ -217,6 +229,10 @@ trait Tickets
                         $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
                     });
+            })
+            ->where(function ($ticket) {
+                $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderByDesc('created_at')
             ->get();
@@ -247,6 +263,10 @@ trait Tickets
                         $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
                             ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
                     });
+            })
+            ->where(function ($ticket) {
+                $ticket->whereIn('branch_id', auth()->user()->branches->pluck('id'))
+                    ->whereIn('service_department_id', auth()->user()->serviceDepartments->pluck('id'));
             })
             ->orderByDesc('created_at')
             ->get();

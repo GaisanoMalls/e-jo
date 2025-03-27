@@ -16,10 +16,10 @@ class FeedbackController extends Controller
                     ->whereHas('user', function ($user) {
                         $user->with('profile')
                             ->whereHas('buDepartments', fn($department) => $department->where('departments.id', auth()->user()->buDepartments->pluck('id')->first()))
-                            ->whereHas('branches', fn($branch) => $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')->toArray()));
+                            ->whereHas('branches', fn($branch) => $branch->whereIn('branches.id', auth()->user()->branches->pluck('id')));
                     })
                     ->orWhereHas('serviceDepartment', function ($serviceDepartment) {
-                        $serviceDepartment->whereIn('service_departments.id', auth()->user()->serviceDepartments->pluck('id')->toArray());
+                        $serviceDepartment->whereIn('service_departments.id', auth()->user()->serviceDepartments->pluck('id'));
                     });
             })->get()
         ]);

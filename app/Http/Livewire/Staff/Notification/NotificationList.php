@@ -37,7 +37,7 @@ class NotificationList extends Component
     {
         return $ticket->withWhereHas('user', function ($requester) {
             $requester->withWhereHas('buDepartments', function ($department) {
-                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id')->toArray());
+                $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
             });
         })->exists();
     }

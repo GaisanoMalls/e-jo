@@ -67,7 +67,7 @@ trait RecommendationApproval
     {
         $requesterServiceDepartmentAdmins = User::with('profile')
             ->whereHas('buDepartments', function ($serviceDepartment) use ($ticket) {
-                $serviceDepartment->whereIn('departments.id', $ticket->user->buDepartments->pluck('id')->toArray());
+                $serviceDepartment->whereIn('departments.id', $ticket->user->buDepartments->pluck('id'));
             })
             ->role(Role::SERVICE_DEPARTMENT_ADMIN)
             ->get();

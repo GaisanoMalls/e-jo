@@ -771,7 +771,7 @@
             const buDepartmentApproversOption = buDepartmentApprovers.map(approver => ({
                 label: `${approver.profile.first_name} ${approver.profile.middle_name ? approver.profile.middle_name[0] + '.' : ''} ${approver.profile.last_name}`,
                 value: approver.id,
-                description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')})`
+                description: `${approver.roles.map(role => role.name).join(', ')} (${approver.bu_departments.map(department => department.name).join(', ')}) - ${approver.branches.map(branch => branch.name).join(', ')}`
             }));
 
             selectEditCurrentConfigLevelOfApprovalSelect.reset();

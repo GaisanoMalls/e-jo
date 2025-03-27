@@ -30,10 +30,10 @@ class TicketActions extends Component
     {
         return User::where('id', auth()->user()->id)
             ->withWhereHas('branches', function ($branch) {
-                $branch->whereIn('branches.id', $this->ticket->user->branches->pluck('id')->toArray());
+                $branch->whereIn('branches.id', $this->ticket->user->branches->pluck('id'));
             })
             ->withWhereHas('buDepartments', function ($department) {
-                $department->whereIn('departments.id', $this->ticket->user->buDepartments->pluck('id')->toArray());
+                $department->whereIn('departments.id', $this->ticket->user->buDepartments->pluck('id'));
             })
             ->withWhereHas('roles', fn($role) => $role->where('name', Role::SERVICE_DEPARTMENT_ADMIN))
             ->exists();

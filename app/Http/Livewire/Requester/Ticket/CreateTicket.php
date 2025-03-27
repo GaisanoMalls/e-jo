@@ -513,19 +513,19 @@ class CreateTicket extends Component
                     $approvers = User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
                         ->withWhereHas('helpTopicApprovals.configuration', function ($config) use ($ticket) {
                             $config->whereIn('bu_department_id', $ticket->user->buDepartments->pluck('id'))
-                                ->withWhereHas('approvers.approver.branches', function ($branch) {
-                                    $branch->whereIn('branches.id', auth()->user()->branches->pluck('id'));
-                                });
+                                ->whereIn('branch_id', $ticket->user->branches->pluck('id'));
                         })->get();
 
                     if ($approvers->isNotEmpty()) {
                         $approvers->each(function ($approver) use ($ticket) {
-                            $approver->helpTopicApprovals->each(function ($helpTopicApproval) use ($ticket) {
-                                TicketApproval::create([
-                                    'ticket_id' => $ticket->id,
-                                    'help_topic_approver_id' => $helpTopicApproval->id,
-                                ]);
-                            });
+                            $approver->helpTopicApprovals()
+                                ->whereHas('configuration', fn($config) => $config->whereIn('branch_id', $ticket->user->branches->pluck('id')))
+                                ->each(function ($helpTopicApproval) use ($ticket) {
+                                    TicketApproval::create([
+                                        'ticket_id' => $ticket->id,
+                                        'help_topic_approver_id' => $helpTopicApproval->id,
+                                    ]);
+                                });
 
                             if ($approver->isServiceDepartmentAdmin() || $approver->isApprover()) {
                                 Mail::to($approver)->send(new TicketCreatedMail($ticket, $approver));
@@ -561,7 +561,7 @@ class CreateTicket extends Component
         return view('livewire.requester.ticket.create-ticket', [
             'priorityLevels' => $this->queryPriorityLevels(),
             'serviceDepartments' => $this->queryServiceDepartments(),
-            'branches' => Branch::whereNotIn('id', auth()->user()->branches->pluck('id')->toArray())->get(),
+            'branches' => Branch::whereNotIn('id', auth()->user()->branches->pluck('id'))->get(),
         ]);
     }
 }

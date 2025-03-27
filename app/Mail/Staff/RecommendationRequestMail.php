@@ -57,7 +57,7 @@ class RecommendationRequestMail extends Mailable
                 'agentFullName' => $this->recipient->profile->getFullName,
                 'agentBUDept' => $this->recipient->getBUDepartments(),
                 'agentBranch' => $this->recipient->getBranches(),
-                'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/view",
+                'url' => env('APP_URL') . "/staff/ticket/{$this->ticket->id}/view",
             ]
         );
     }

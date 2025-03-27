@@ -55,7 +55,7 @@ class StaffReplyMail extends Mailable
                 'ticketSubject' => "Ticket Reply",
                 'message' => "{$this->message}",
                 'sender' => auth()->user()->profile->getFullName,
-                'url' => "http://10.10.99.81:8000/user/ticket/{$this->ticket->id}/view"
+                'url' => env('APP_URL') . "/user/ticket/{$this->ticket->id}/view"
             ]
         );
     }
