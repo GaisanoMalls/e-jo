@@ -42,7 +42,7 @@ class ActivityLog extends Model
         static::create([
             'ticket_id' => $ticket_id,
             'user_id' => auth()->user()->id,
-            'description' => $description,
+            'description' => $description
         ]);
     }
 

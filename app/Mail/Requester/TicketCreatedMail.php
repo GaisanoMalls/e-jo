@@ -37,7 +37,7 @@ class TicketCreatedMail extends Mailable implements ShouldQueue
         return new Envelope(
             from: new Address(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')),
             to: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
-            subject: "New Ticket - {$this->ticket->ticket_number}",
+            subject: "New Ticket Created - {$this->ticket->ticket_number}",
         );
     }
 
@@ -51,10 +51,13 @@ class TicketCreatedMail extends Mailable implements ShouldQueue
         return new Content(
             markdown: 'mail.requester.ticket-created-mail',
             with: [
-                'newTicketMessage' => "New Ticket - {$this->ticket->ticket_number}",
-                'message' => "A new ticket has been created by {$this->ticket->user->profile->getFullName}",
-                // 'url' => "http://10.10.99.81:8000/staff/ticket/{$this->ticket->id}/view" // Using IP Address
-                'url' => env('APP_URL') . "/staff/ticket/{$this->ticket->id}/view" // Using Herd
+                'headerGreeting' => "Good Day {$this->recipient->profile->getFullName}",
+                'message' => "This is to inform you that a new ticket has been created by {$this->ticket->user->profile->getFullName}, with a ticket number of **{$this->ticket->ticket_number}**.",
+                'subject' => $this->ticket->subject,
+                'branch' => $this->ticket->user->getBranches(),
+                'department' => $this->ticket->user->getBUDepartments(),
+                'dateCreated' => $this->ticket->dateCreated(),
+                'ticketURL' => env('APP_URL') . "/staff/ticket/{$this->ticket->id}/view" // Using Herd
             ]
         );
     }

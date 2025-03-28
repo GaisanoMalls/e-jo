@@ -67,43 +67,12 @@ class ApproveTicket extends Component
     {
         try {
             DB::transaction(function () {
-
                 if (auth()->user()->isServiceDepartmentAdmin() && $this->isCurrentLevelApprover()) {
                     if ($this->ticket->status_id != Status::APPROVED && $this->ticket->approval_status != ApprovalStatusEnum::APPROVED) {
                         if ($this->isApproverIsInConfiguration($this->ticket)) {
-                            $approvedLevel = $this->approveLevelOfApproval($this->ticket);
-
-                            if ($approvedLevel) {
-                                $agents = User::with('profile')
-                                    ->withWhereHas('teams', function ($team) {
-                                        $team->whereIn('teams.id', $this->ticket->teams->pluck('id'));
-                                    })
-                                    ->withWhereHas('serviceDepartments', function ($serviceDepartment) {
-                                        $serviceDepartment->where('service_departments.id', $this->ticket->service_department_id);
-                                    })
-                                    ->role(Role::AGENT)
-                                    ->get();
-
-                                $this->ticket->customFormFooter?->update([
-                                    'noted_by' => auth()->user()->id,
-                                ]);
-
-                                // Notify the agents through app and email.
-                                $agents->each(function ($agent) {
-                                    Mail::to($agent)->send(new ApprovedTicketMail($this->ticket, $agent));
-                                    Notification::send(
-                                        $agent,
-                                        new AppNotification(
-                                            ticket: $this->ticket,
-                                            title: "Ticket #{$this->ticket->ticket_number} (Approved)",
-                                            message: "You have a new ticket. "
-                                        )
-                                    );
-                                });
-
-                                $this->actionOnSubmit();
-                                ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
-                            }
+                            $this->approveLevelOfApproval($this->ticket);
+                            $this->actionOnSubmit();
+                            ActivityLog::make(ticket_id: $this->ticket->id, description: 'approved the ticket');
                         } else {
                             noty()->addWarning("You are not authorized to approve this ticket. The first approver must be the requester's service department administrator.");
                             $this->dispatchBrowserEvent('close-modal');

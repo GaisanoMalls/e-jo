@@ -105,6 +105,36 @@ trait TicketApprovalLevel
         static::notifyAndEmailRequester($ticket);
     }
 
+    private static function notifyAgents(Ticket $ticket)
+    {
+        $agents = User::with('profile')
+            ->withWhereHas('teams', function ($team) use ($ticket) {
+                $team->whereIn('teams.id', $ticket->teams->pluck('id'));
+            })
+            ->withWhereHas('serviceDepartments', function ($serviceDepartment) use ($ticket) {
+                $serviceDepartment->where('service_departments.id', $ticket->service_department_id);
+            })
+            ->role(Role::AGENT)
+            ->get();
+
+        $ticket->customFormFooter?->update([
+            'noted_by' => auth()->user()->id,
+        ]);
+
+        // Notify the agents through app and email.
+        $agents->each(function ($agent) use ($ticket) {
+            Mail::to($agent)->send(new ApprovedTicketMail($ticket, $agent));
+            Notification::send(
+                $agent,
+                new AppNotification(
+                    ticket: $ticket,
+                    title: "Ticket #{$ticket->ticket_number} (Approved)",
+                    message: "You have a new ticket. "
+                )
+            );
+        });
+    }
+
     private function approveLevelOfApproval(Ticket $ticket)
     {
         $isAllLevelApproved = true;
@@ -193,6 +223,7 @@ trait TicketApprovalLevel
                     'approval_status' => ApprovalStatusEnum::APPROVED,
                     'svcdept_date_approved' => Carbon::now(),
                 ]);
+                static::notifyAgents($ticket);
             }
 
             return true;

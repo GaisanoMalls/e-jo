@@ -2,6 +2,7 @@
 
 namespace App\Mail\Staff;
 
+use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -37,7 +38,7 @@ class ApprovedTicketMail extends Mailable implements ShouldQueue
         return new Envelope(
             from: new Address(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')),
             to: [new Address($this->recipient->email, $this->recipient->profile->getFullName)],
-            subject: "New Ticket - {$this->ticket->ticket_number}",
+            subject: "New Ticket Created - {$this->ticket->ticket_number}",
         );
     }
 
@@ -48,16 +49,21 @@ class ApprovedTicketMail extends Mailable implements ShouldQueue
      */
     public function content(): Content
     {
+        // Get the current approver who is responsible for approving the ticket.
+        $approver = User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
+            ->with('profile')
+            ->find(auth()->user()->id);
+
         return new Content(
             markdown: 'mail.staff.approved-ticket-mail',
             with: [
-                'ticketNumber' => "Ticket #{$this->ticket->ticket_number}",
-                'ticketSubject' => $this->ticket->subject,
-                'ticketDescription' => $this->ticket->description,
-                'requesterFullName' => $this->ticket->user->profile->getFullName,
-                'requesterOtherInfo' => "{$this->ticket->user->getBUDepartments()} - {$this->ticket->user->getBranches()}",
-                'approver' => auth()->user()->profile->getFullName,
-                'url' => env('APP_URL') . "/staff/ticket/{$this->ticket->id}/view",
+                'headerGreeting' => "Good Day {$this->recipient->profile->getFullName}",
+                'message' => "This is to inform you that the approver {$approver->profile->getFullName} has approved the requested ticket created by {$this->ticket->user->profile->getFullName}",
+                'subject' => $this->ticket->subject,
+                'branch' => $this->ticket->user->getBranches(),
+                'department' => $this->ticket->user->getBUDepartments(),
+                'dateCreated' => $this->ticket->dateCreated(),
+                'ticketURL' => env('APP_URL') . "/staff/ticket/{$this->ticket->id}/view",
             ]
         );
     }
