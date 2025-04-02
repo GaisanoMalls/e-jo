@@ -18,12 +18,14 @@ class NotificationList extends Component
     private function triggerEvents()
     {
         $events = [
-            'approverLoadNotificationList',
-            'approverLoadNotificationCanvas',
-            'approverLoadNavlinkNotification',
+            'approverLoadNotificationList', // Listener from NotificationList.php
+            'approverLoadNotificationCanvas', // Listener from NotificationCanvas.php
+            'approverLoadUnreadNotificationCount', // Listener from UnreadNotificationCount.php
         ];
 
         foreach ($events as $event) {
+            // Iterates over the $events array
+            // For each event in the array, the emit method is called to broadcast the event to the corresponding Livewire listeners.
             $this->emit($event);
         }
     }
@@ -32,19 +34,30 @@ class NotificationList extends Component
     {
         try {
             DB::transaction(function () use ($notificationId) {
+                // The notification with the given $notificationId is retrieved for the currently logged-in user
                 $notification = auth()->user()->notifications->find($notificationId);
-                (!$notification->read()) ? $notification->markAsRead() : null;
+                if (!$notification->read()) {
+                    // Mark the notification as read if the notification is not already marked as read.
+                    $notification->markAsRead();
+                }
 
+                // Checks if the currently logged-in user has the role of an approver
                 if (auth()->user()->isApprover()) {
+                    // The associated ticket is retrieved using the ticket id stored in the notification's data field.
+                    // If the ticket does not exist, an exception is thrown
                     $ticket = Ticket::findOrFail($notification->data['ticket']['id']);
 
+                    // Checks if the ticket's status is not yet VIEWED and its approval status is not APPROVED
                     if ($ticket->status_id != Status::VIEWED && $ticket->approval_status != ApprovalStatusEnum::APPROVED) {
+                        // Update the ticket status to viewed
                         $ticket->update(['status_id' => Status::VIEWED]);
+                        // Create a log of the viewed ticket.
                         ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');
                     }
 
+                    // To emit Livewire events that update the notification list
                     $this->triggerEvents();
-                    ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');
+                    // Redirect the approver to the ticket details page for the associated ticket.
                     redirect()->route('approver.ticket.view_ticket_details', $notification->data['ticket']['id']);
                 }
             });
@@ -56,7 +69,9 @@ class NotificationList extends Component
 
     public function deleteNotification($notificationId)
     {
+        // Retrieve a single notification of the currently logged in user (approver) with the given id.
         auth()->user()->notifications->find($notificationId)->delete();
+        // After deleting the notification, the triggerEvents method is called to emit Livewire events that update the notification list, notification canvas, and unread notification count.
         $this->triggerEvents();
     }
 

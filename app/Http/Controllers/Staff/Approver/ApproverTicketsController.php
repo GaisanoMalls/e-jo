@@ -14,9 +14,7 @@ class ApproverTicketsController extends Controller
 
     private function renderTicketView($viewName)
     {
-        return (!$this->costingApprover2Only())
-            ? view("layouts.staff.approver.ticket.statuses.$viewName")
-            : abort(403, 'Unauthorized access');
+        return view("layouts.staff.approver.ticket.statuses.$viewName");
     }
 
     public function openTickets()
