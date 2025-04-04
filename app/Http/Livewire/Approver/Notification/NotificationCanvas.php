@@ -8,6 +8,16 @@ class NotificationCanvas extends Component
 {
     protected $listeners = ['approverLoadNotificationCanvas' => '$refresh'];
 
+    /**
+     * Emits a series of predefined Livewire events to update notification-related components.
+     *
+     * This function broadcasts multiple events to ensure that the notification list,
+     * notification canvas, and unread notification count are updated in real-time.
+     * It iterates over a predefined list of event names and emits each event to its
+     * corresponding Livewire listener.
+     *
+     * @return void
+     */
     private function triggerEvents()
     {
         $events = [
@@ -23,6 +33,16 @@ class NotificationCanvas extends Component
         }
     }
 
+    /**
+     * Marks all unread notifications of the currently logged-in user as read.
+     *
+     * This function retrieves all unread notifications for the currently logged-in user
+     * and marks them as read using the `markAsRead` method. After marking the notifications
+     * as read, it triggers predefined Livewire events to update the notification list,
+     * notification canvas, and unread notification count in real-time.
+     *
+     * @return void
+     */
     public function markAllAsRead()
     {
         // Mark the unread notifications of the currently logged in user as read.
@@ -31,6 +51,16 @@ class NotificationCanvas extends Component
         $this->triggerEvents();
     }
 
+    /**
+     * Deletes all notifications of the currently logged-in user.
+     *
+     * This function retrieves all notifications for the currently logged-in user
+     * and deletes them one by one using the `delete` method. After deleting the notifications,
+     * it triggers predefined Livewire events to update the notification list,
+     * notification canvas, and unread notification count in real-time.
+     *
+     * @return void
+     */
     public function clearNotifications()
     {
         // Delete all notifications of the currently logged in user.

@@ -8,6 +8,15 @@ class NavlinkNotification extends Component
 {
     protected $listeners = ['approverLoadNotificationCanvas' => '$refresh'];
 
+    /**
+     * Emits a series of predefined Livewire events to update notification-related components.
+     *
+     * This function broadcasts multiple events to ensure that the notification list,
+     * notification canvas, and unread notification count are updated in real-time.
+     * It is typically called when a user interacts with the notification system.
+     *
+     * @return void
+     */
     private function triggerEvents()
     {
         $events = [
@@ -23,12 +32,23 @@ class NavlinkNotification extends Component
         }
     }
 
+    /**
+     * Triggers events to update notification-related components.
+     *
+     * This function is called when the approver interacts with the notification system,
+     * such as clicking a button to view notifications. It ensures that the notification list,
+     * notification canvas, and unread notification count are updated in real-time by calling
+     * the `triggerEvents` method.
+     *
+     * @return void
+     */
     public function approverShowNotifications()
     {
         // To trigger the events when the button is clicked with this function.
         // This will load the following: notifications, total number of notifications
         $this->triggerEvents();
     }
+
     public function render()
     {
         return view('livewire.approver.notification.navlink-notification');

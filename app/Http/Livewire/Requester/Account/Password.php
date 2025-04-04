@@ -18,21 +18,41 @@ class Password extends Component
         return (new UpdatePasswordRequest())->rules();
     }
 
-    /** Perform livewire events upon form submission. */
+    /**
+     * Resets form state and validation errors.
+     * 
+     * Performs cleanup actions after form submission by:
+     * 1. Resetting all component properties to their initial state
+     * 2. Clearing all validation error messages
+     *
+     * @return void
+     */
     private function actionOnSubmit()
     {
         $this->reset();
         $this->resetValidation();
     }
 
+    /**
+     * Updates the authenticated user's password.
+     * 
+     * Handles password update workflow by:
+     * 1. Validating the new password input
+     * 2. Hashing and saving the new password
+     * 3. Performing form cleanup
+     * 4. Showing success notification
+     *
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException If password validation fails
+     * @uses \Illuminate\Support\Facades\Hash For password hashing
+     * @emits success notification Via noty()
+     */
     public function savePassword()
     {
-        // Save password of the current/authenticated user (requester/sender).
         $this->validate();
         auth()->user()->update(['password' => Hash::make($this->new_password)]);
         $this->actionOnSubmit();
         noty()->addSuccess('Your password has been updated.');
-
     }
 
     public function render()

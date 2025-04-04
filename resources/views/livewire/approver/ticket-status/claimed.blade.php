@@ -1,5 +1,5 @@
 @php
-    use App\Enums\ApprovalStatusEnum;
+    use App\Models\Status;
 @endphp
 
 <div>
@@ -67,7 +67,7 @@
                                                 For Approval
                                             </small>
                                         @endif
-                                        @if ($ticket->approval_status === ApprovalStatusEnum::CLAIMED)
+                                        @if ($ticket->status_id === Status::CLAIMED)
                                             <small class="rounded-5"
                                                 style="background-color: #243C44; color: #FFFFFF; font-size: 11px; padding: 7px 11px;">
                                                 <i class="fa-solid fa-check me-1"></i>

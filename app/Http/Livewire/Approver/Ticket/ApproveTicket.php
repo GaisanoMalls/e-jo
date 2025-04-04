@@ -24,6 +24,23 @@ class ApproveTicket extends Component
 
     public Ticket $ticket;
 
+    /**
+     * Emits a series of predefined Livewire events to update ticket-related components.
+     *
+     * This function broadcasts multiple events to ensure that various parts of the ticket
+     * interface are updated in real-time. It iterates over a predefined list of event names
+     * and emits each event to its corresponding Livewire listener.
+     *
+     * Events emitted:
+     * - 'loadTicketLogs': Updates the ticket logs component.
+     * - 'loadTicketDetails': Updates the ticket details component.
+     * - 'loadLevelOfApproval': Updates the level of approval component.
+     * - 'loadTicketStatusHeaderText': Updates the ticket status header text.
+     * - 'loadDropdownApprovalButton': Updates the dropdown approval button.
+     * - 'remountRequesterCustomForm': Remounts the requester's custom form.
+     *
+     * @return void
+     */
     private function triggerEvents()
     {
         $events = [
@@ -41,7 +58,16 @@ class ApproveTicket extends Component
     }
 
     /**
-     * Perform livewire events upon form submission.
+     * Handles post-submission actions for ticket approval.
+     *
+     * This function performs two key actions after a ticket approval process:
+     * 1. Emits predefined Livewire events to update ticket-related components in real-time.
+     *    These events ensure that the ticket logs, details, approval levels, and other UI elements
+     *    are refreshed to reflect the latest changes.
+     * 2. Dispatches a browser event to close the modal window, providing a seamless user experience
+     *    after the ticket approval process is completed.
+     *
+     * @return void
      */
     private function actionOnSubmit()
     {
@@ -49,11 +75,37 @@ class ApproveTicket extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
+    /**
+     * Checks if the currently logged-in user is an approver for the current level of the ticket.
+     *
+     * This function determines whether the logged-in user is listed as an approver for the
+     * current help topic associated with the ticket. It queries the approvers of the help topic
+     * to check if the user's ID exists in the list of approvers.
+     *
+     * @return bool Returns true if the user is an approver for the current level, otherwise false.
+     */
     public function isCurrentLevelApprover()
     {
         return $this->ticket->helpTopic->approvers()->where('user_id', auth()->user()->id)->exists();
     }
 
+    /**
+     * Approves the current ticket if the logged-in user has the necessary permissions.
+     *
+     * This function handles the ticket approval process for the currently logged-in user. It performs the following steps:
+     * 1. Checks if the user is an approver and is authorized to approve the current level of the ticket.
+     * 2. Executes a database transaction to:
+     *    - Verify that the ticket has not already been approved.
+     *    - Approve the current level of the ticket.
+     *    - Notify agents associated with the ticket via email and in-app notifications.
+     *    - Update the ticket's custom form footer with the approver's ID.
+     *    - Log the approval activity.
+     * 3. Emits Livewire events to update ticket-related components and closes the modal window.
+     * 4. Provides feedback to the user if the ticket has already been approved or if the user lacks the necessary permissions.
+     *
+     * @return void
+     * @throws Exception If an error occurs during the database transaction or notification process.
+     */
     public function approveTicket()
     {
         try {

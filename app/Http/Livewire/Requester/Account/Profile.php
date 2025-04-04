@@ -42,14 +42,38 @@ class Profile extends Component
         return (new UpdateProfileRequest())->rules();
     }
 
-    /** Reset the file input field after form submission. */
+    /**
+     * Resets the profile picture upload field and increments the upload counter.
+     * 
+     * Performs two actions:
+     * 1. Clears the current picture selection (resets the 'picture' property)
+     * 2. Increments the imageUpload counter to force UI refresh of the file input
+     *
+     * This is typically used to:
+     * - Cancel an upload selection
+     * - Reset the file input after processing
+     * - Force re-rendering of the file input component
+     *
+     * @return void
+     */
     public function resetFileField()
     {
         $this->reset('picture');
         $this->imageUpload++;
     }
 
-    /** Perform livewire events upon form submission. */
+    /**
+     * Handles post-submission cleanup and UI refresh for profile updates.
+     * 
+     * Performs three key actions:
+     * 1. Resets validation errors
+     * 2. Emits event to refresh profile preview
+     * 3. Emits event to refresh navigation profile picture
+     *
+     * @return void
+     * @fires loadProfilePreview To refresh profile preview component
+     * @fires loadNavProfilePic To refresh navigation profile picture
+     */
     private function actionOnSubmit()
     {
         $this->resetValidation();
@@ -57,6 +81,34 @@ class Profile extends Component
         $this->emit('loadNavProfilePic');
     }
 
+    /**
+     * Saves and updates user profile information.
+     * 
+     * Handles complete profile update workflow including:
+     * 1. Validating input fields
+     * 2. Processing updates in a database transaction:
+     *    - Updates user email
+     *    - Updates profile attributes (name, contact info)
+     *    - Manages profile picture upload/storage:
+     *      - Generates new filename for uploaded pictures
+     *      - Handles existing picture deletion
+     *      - Stores new pictures in appropriate directory
+     * 3. Provides appropriate user feedback:
+     *    - Success notification for changes
+     *    - Info notification when no changes made
+     * 4. Performs post-submission cleanup
+     * 
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException If validation fails
+     * @throws \Exception On database or file operation errors (handled internally)
+     *
+     * @uses \Illuminate\Support\Facades\Storage For file operations
+     * @uses \Illuminate\Support\Facades\DB For transaction safety
+     * @uses \App\Models\AppErrorLog For error tracking
+     * @uses noty() For user notifications
+     *
+     * @fires actionOnSubmit After successful processing
+     */
     public function saveProfile()
     {
         $this->validate();

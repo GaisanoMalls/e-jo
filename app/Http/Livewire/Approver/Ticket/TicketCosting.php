@@ -36,12 +36,40 @@ class TicketCosting extends Component
         return (new ReasonOfDisapprovalRequest())->messages();
     }
 
+    /**
+     * Performs cleanup actions after a disapproval form submission.
+     *
+     * Resets the disapproval reason field and closes the modal window.
+     * This ensures a clean state for subsequent disapproval actions.
+     *
+     * @return void
+     * @dispatches close-modal Browser event
+     */
     private function actionOnSubmit()
     {
         $this->reset('reasonOfDisapproval');
         $this->dispatchBrowserEvent('close-modal');
     }
 
+    /**
+     * Checks if the authenticated user is the second approver for special project costing.
+     *
+     * Verifies three conditions:
+     * 1. The authenticated user matches the provided approver ID
+     * 2. The user has general approver privileges
+     * 3. The user is specifically listed as the FPM COO approver in the special project amount approval records
+     *    for the current ticket (checked via JSON field)
+     *
+     * @param int $approverId The approver ID to validate against the current user
+     * @return bool Returns true if:
+     *              - Current user matches the provided approver ID
+     *              - User has approver role
+     *              - User is designated as FPM COO approver for this ticket's special project
+     *             Returns false otherwise
+     *
+     * @uses \App\Models\SpecialProjectAmountApproval For approval records check
+     * @uses JSON field query (whereJsonContains) for approver verification
+     */
     public function isSpecialProjectCostingApprover2(int $approverId)
     {
         return auth()->user()->id === $approverId
@@ -51,6 +79,34 @@ class TicketCosting extends Component
                 ->exists();
     }
 
+    /**
+     * Processes second-level approval for special project costing.
+     *
+     * Handles the FPM COO approval workflow for ticket costing by:
+     * 1. Verifying user has approval permission via isSpecialProjectCostingApprover2()
+     * 2. Checking prerequisite conditions:
+     *    - First approval is completed (isDoneCostingApproval1)
+     *    - COO approval is required (isCostingAmountNeedCOOApproval)
+     * 3. In a database transaction:
+     *    - Updates ticket status to APPROVED
+     *    - Marks FPM COO approval in SpecialProjectAmountApproval
+     *    - Records approval timestamp
+     *    - Creates ApprovedCosting record
+     * 4. Provides user feedback via notifications
+     * 5. Handles errors gracefully with logging
+     *
+     * @return void
+     * @throws \Exception On database errors (handled internally)
+     *
+     * @uses \App\Models\SpecialProjectAmountApproval For approval tracking
+     * @uses \App\Models\ApprovedCosting To record approved costing
+     * @uses \App\Models\Status For APPROVED status
+     * @uses Carbon For timestamp management
+     * @uses noty() For user notifications
+     *
+     * @fires loadApproverTicketCosting After successful approval
+     * @emits success/error notifications Via noty()
+     */
     public function approveCostingApproval2()
     {
         try {
@@ -93,6 +149,33 @@ class TicketCosting extends Component
         }
     }
 
+    /**
+     * Processes second-level disapproval for special project costing.
+     *
+     * Handles the FPM COO disapproval workflow by:
+     * 1. Validating the disapproval reason input
+     * 2. Verifying user has disapproval permission via isSpecialProjectCostingApprover2()
+     * 3. In a database transaction:
+     *    - Updates service department admin approval status to false
+     *    - Clears approval date
+     *    - Creates DisapprovedCosting record with reason and amount
+     * 4. Performs post-submission cleanup and redirection
+     * 5. Provides user feedback via notifications
+     * 6. Handles errors gracefully with logging
+     *
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException If validation fails
+     * @throws \Exception On database errors (handled internally)
+     *
+     * @uses \App\Models\SpecialProjectAmountApproval For approval tracking
+     * @uses \App\Models\DisapprovedCosting To record disapproval
+     * @uses Carbon For timestamp management
+     * @uses noty() For user notifications
+     *
+     * @fires actionOnSubmit After successful processing
+     * @redirects approver.tickets.costing_approval After completion
+     * @emits warning/error notifications Via noty()
+     */
     public function disapproveCostingApproval2()
     {
         $this->validate();
@@ -135,6 +218,21 @@ class TicketCosting extends Component
         }
     }
 
+    /**
+     * Checks if the second-level (FPM COO) costing approval has been granted.
+     *
+     * Verifies whether the special project amount approval record for the current ticket
+     * has been approved at the FPM COO level by checking the JSON field containing
+     * approval status.
+     *
+     * @return bool Returns true if:
+     *              - A SpecialProjectAmountApproval record exists for the current ticket
+     *              - The 'fpm_coo_approver->is_approved' JSON field is set to true
+     *             Returns false otherwise
+     *
+     * @uses \App\Models\SpecialProjectAmountApproval For approval status tracking
+     * @uses JSON field query (whereJsonContains) for approval status check
+     */
     public function isCostingApproval2Approved()
     {
         return SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)

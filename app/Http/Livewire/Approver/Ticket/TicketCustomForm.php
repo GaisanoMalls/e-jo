@@ -34,6 +34,31 @@ class TicketCustomForm extends Component
             ->toArray();
     }
 
+    /**
+     * Organizes custom form row fields into a structured format with headers and row-based values.
+     *
+     * Processes the customFormRowFields property to generate:
+     * - A unique list of field names as headers
+     * - A structured array of row data with field values grouped by row ID
+     *
+     * The resulting array structure is useful for display purposes, such as generating tables
+     * where each row represents a form row and columns represent the field values.
+     *
+     * @return array Returns an associative array with two keys:
+     *               - 'headers': Array of unique field names (columns)
+     *               - 'fields': Nested array where:
+     *                 - First level keys are row IDs
+     *                 - Second level contains field-value pairs for each row
+     *
+     * @example
+     * [
+     *     'headers' => ['name', 'email', 'phone'],
+     *     'fields' => [
+     *         1 => ['name' => 'John', 'email' => 'john@example.com', 'phone' => '12345'],
+     *         2 => ['name' => 'Jane', 'email' => 'jane@example.com', 'phone' => '67890']
+     *     ]
+     * ]
+     */
     public function getFilteredRowFields()
     {
         $headers = [];

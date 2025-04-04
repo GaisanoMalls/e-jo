@@ -40,7 +40,33 @@ class SendClarification extends Component
         return (new StoreClarificationRequest())->messages();
     }
 
-    /** Perform livewire events upon form submission. */
+    /**
+     * Performs cleanup and UI refresh actions after form submission.
+     * 
+     * This method handles post-submission tasks by:
+     * 1. Resetting form-related properties:
+     *    - Clearing clarification files
+     *    - Incrementing upload counter
+     *    - Resetting description field
+     * 2. Emitting events to refresh various UI components:
+     *    - Ticket logs
+     *    - Ticket details
+     *    - Clarifications list
+     *    - Latest clarification
+     *    - Status header text
+     * 3. Managing modal windows:
+     *    - Closing current modal
+     *    - Triggering modal reload
+     * 
+     * @return void
+     * @fires loadTicketLogs
+     * @fires loadTicketDetails
+     * @fires loadClarifications
+     * @fires loadLatestClarification
+     * @fires loadTicketStatusHeaderText
+     * @dispatches close-modal Browser event
+     * @dispatches reload-modal Browser event
+     */
     private function actionOnSubmit()
     {
         $this->clarificationFiles = [];
@@ -55,6 +81,36 @@ class SendClarification extends Component
         $this->dispatchBrowserEvent('reload-modal');
     }
 
+    /**
+     * Processes and sends a ticket clarification with optional attachments.
+     *
+     * This method handles the complete clarification workflow:
+     * 1. Validates input data
+     * 2. Updates ticket status to ON_PROCESS
+     * 3. Creates a new clarification record
+     * 4. Processes file attachments if present
+     * 5. Notifies relevant parties (Service Department Admins and requester)
+     * 6. Logs the activity
+     * 7. Performs post-submission cleanup
+     *
+     * The operation runs in a database transaction to ensure data consistency.
+     * Includes proper error handling that logs exceptions to AppErrorLog.
+     *
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException If validation fails
+     * @throws \Exception If any other error occurs during processing (handled internally)
+     *
+     * @uses \App\Models\Clarification For creating clarification records
+     * @uses \App\Models\Status For ON_PROCESS status
+     * @uses \App\Notifications\AppNotification For sending notifications
+     * @uses \App\Mail\StaffClarificationMail For sending email notifications
+     * @uses \App\Models\ActivityLog For activity tracking
+     * @uses \App\Models\AppErrorLog For error logging
+     *
+     * @fires actionOnSubmit After successful processing
+     * @dispatches \Illuminate\Notifications\Notification To Service Department Admins
+     * @dispatches \Illuminate\Mail\Mailable To ticket requester
+     */
     public function sendClarification()
     {
         $this->validate();

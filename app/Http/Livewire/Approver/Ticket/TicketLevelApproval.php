@@ -37,6 +37,29 @@ class TicketLevelApproval extends Component
             })->get();
     }
 
+    /**
+     * Retrieves approvers for a specific approval level based on ticket context.
+     *
+     * Fetches users with approver profiles who are configured to approve tickets:
+     * - At the specified approval level
+     * - For the ticket's help topic
+     * - Within the ticket requester's BU departments and branches
+     *
+     * The query includes eager loading of user profiles and nested relationships
+     * for efficient data retrieval.
+     *
+     * @param int $level The approval level to filter by (e.g., 1 for first-level approval)
+     * @return \Illuminate\Database\Eloquent\Collection Returns a collection of User models with:
+     *         - Profile data loaded
+     *         - Help topic approval configurations
+     *         - Filtered by the ticket's context
+     *         Returns empty collection if no matching approvers found
+     *
+     * @throws \Exception If ticket user relationships are not properly loaded
+     *
+     * @uses \App\Models\User The base user model
+     * @uses \App\Models\HelpTopicApproval For approval level configuration
+     */
     public function fetchApprovers(int $level)
     {
         return User::with('profile')
@@ -51,6 +74,22 @@ class TicketLevelApproval extends Component
             })->get();
     }
 
+    /**
+     * Checks if the current ticket has been approved.
+     *
+     * Verifies whether there exists any approved ticket approval record that:
+     * 1. Belongs to the current ticket
+     * 2. Is marked as approved (is_approved = true)
+     * 3. Is associated with the ticket's help topic approver
+     *
+     * @return bool Returns true if an approved ticket approval exists for:
+     *              - The current ticket
+     *              - The ticket's help topic
+     *             Returns false otherwise
+     *
+     * @uses \App\Models\TicketApproval For approval records
+     * @uses withWhereHas For efficient relationship filtering
+     */
     public function isApprovalApproved()
     {
         return TicketApproval::where([
@@ -62,6 +101,26 @@ class TicketLevelApproval extends Component
             ->exists();
     }
 
+    /**
+     * Checks if the ticket has been approved at a specific approval level.
+     *
+     * Verifies whether there exists an approved ticket approval record that:
+     * 1. Belongs to the current ticket
+     * 2. Is marked as approved (is_approved = true)
+     * 3. Is associated with an approver configured for:
+     *    - The specified approval level
+     *    - The ticket's help topic
+     *
+     * @param int $level The approval level to check (e.g., 1, 2, etc.)
+     * @return bool Returns true if an approved ticket approval exists for:
+     *              - The current ticket
+     *              - The specified approval level
+     *              - The ticket's help topic
+     *             Returns false otherwise
+     *
+     * @uses \App\Models\TicketApproval For approval records
+     * @uses withWhereHas For efficient relationship filtering
+     */
     public function islevelApproved(int $level)
     {
         return TicketApproval::where([
@@ -76,6 +135,19 @@ class TicketLevelApproval extends Component
             ->exists();
     }
 
+    /**
+     * Handles post-submission actions for ticket approval.
+     * 
+     * Performs three key actions after form submission:
+     * 1. Emits event to refresh level of approval data
+     * 2. Emits event to refresh ticket logs
+     * 3. Redirects to the approved tickets route
+     *
+     * @return void
+     * @fires loadLevelOfApproval To refresh approval level data
+     * @fires loadTicketLogs To refresh ticket logs
+     * @redirects approver.tickets.approved After successful submission
+     */
     private function actionOnSubmit()
     {
         $this->emit('loadLevelOfApproval');
@@ -83,6 +155,30 @@ class TicketLevelApproval extends Component
         $this->redirectRoute('approver.tickets.approved');
     }
 
+    /**
+     * Approves a ticket and notifies relevant agents.
+     *
+     * Handles the ticket approval workflow by:
+     * 1. Verifying the user has approver permissions
+     * 2. In a database transaction:
+     *    - Finds all agents in the ticket's branch and service department
+     *    - Sends email and in-app notifications to each agent
+     * 3. Logs the approval activity
+     * 4. Performs post-approval actions (refresh and redirect)
+     * 5. Handles errors gracefully with logging
+     *
+     * @return void
+     * @throws \Exception On database or notification errors (handled internally)
+     *
+     * @uses \App\Models\User For agent lookup
+     * @uses \App\Mail\ApprovedTicketMail For email notifications
+     * @uses \App\Notifications\AppNotification For in-app notifications
+     * @uses \App\Models\ActivityLog For activity tracking
+     * @uses noty() For user feedback
+     *
+     * @fires actionOnSubmit After successful approval
+     * @emits warning notification Via noty() if unauthorized
+     */
     public function approveTicket()
     {
         try {

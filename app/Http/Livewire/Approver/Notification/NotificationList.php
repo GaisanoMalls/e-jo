@@ -15,6 +15,21 @@ class NotificationList extends Component
 {
     protected $listeners = ['approverLoadNotificationList' => '$refresh'];
 
+    /**
+     * Emits a series of predefined Livewire events to update notification-related components.
+     *
+     * This function broadcasts multiple events to ensure that the notification list,
+     * notification canvas, and unread notification count are updated in real-time.
+     * It iterates over a predefined list of event names and emits each event to its
+     * corresponding Livewire listener.
+     *
+     * Events emitted:
+     * - 'approverLoadNotificationList': Updates the notification list component.
+     * - 'approverLoadNotificationCanvas': Updates the notification canvas component.
+     * - 'approverLoadUnreadNotificationCount': Updates the unread notification count component.
+     *
+     * @return void
+     */
     private function triggerEvents()
     {
         $events = [
@@ -30,6 +45,20 @@ class NotificationList extends Component
         }
     }
 
+    /**
+     * Marks a specific notification as read and updates the associated ticket's status.
+     *
+     * This function retrieves a notification for the currently logged-in user using the given notification ID.
+     * If the notification is unread, it marks it as read. If the user is an approver, it retrieves the associated
+     * ticket using the ticket ID stored in the notification's data field. If the ticket's status is not yet VIEWED
+     * and its approval status is not APPROVED, the ticket's status is updated to VIEWED, and an activity log is created.
+     * Afterward, predefined Livewire events are triggered to update notification-related components, and the user
+     * is redirected to the ticket details page.
+     *
+     * @param int $notificationId The ID of the notification to be marked as read.
+     * @return void
+     * @throws Exception If an error occurs during the database transaction or if the ticket does not exist.
+     */
     public function readNotification($notificationId)
     {
         try {
@@ -67,6 +96,17 @@ class NotificationList extends Component
         }
     }
 
+    /**
+     * Deletes a specific notification for the currently logged-in user.
+     *
+     * This function retrieves a single notification for the currently logged-in user (approver)
+     * using the given notification ID and deletes it from the database. After deleting the notification,
+     * it triggers predefined Livewire events to update the notification list, notification canvas,
+     * and unread notification count in real-time.
+     *
+     * @param int $notificationId The ID of the notification to be deleted.
+     * @return void
+     */
     public function deleteNotification($notificationId)
     {
         // Retrieve a single notification of the currently logged in user (approver) with the given id.
