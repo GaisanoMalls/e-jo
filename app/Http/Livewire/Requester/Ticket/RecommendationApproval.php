@@ -91,49 +91,127 @@ class RecommendationApproval extends Component
             ->exists(); // Return boolean if any matching records exist
     }
 
+    /**
+     * Checks if a recommendation has been approved at a specific level.
+     *
+     * Verifies whether the given recommendation has been approved:
+     * 1. At the specified approval level
+     * 2. For the current ticket
+     * 3. By checking for existing approved records in RecommendationApprover
+     *
+     * @param int $level The approval level to check (e.g., 1 for first-level approval)
+     * @param Recommendation $recommendation The recommendation to verify
+     * @return bool Returns true if an approved record exists matching all criteria,
+     *              false otherwise
+     *
+     * @uses \App\Models\RecommendationApprover For approval records
+     */
     public function isLevelApproved(int $level, Recommendation $recommendation)
     {
         return RecommendationApprover::where([
-            ['is_approved', true],
-            ['level', $level]
-        ])->withWhereHas('recommendation', function ($query) use ($recommendation) {
-            $query->where([
-                ['ticket_id', $this->ticket->id],
-                ['recommendation_id', $recommendation->id],
-            ]);
-        })->exists();
+            ['is_approved', true],  // Only approved records
+            ['level', $level]       // Matching the specified level
+        ])
+            ->withWhereHas('recommendation', function ($query) use ($recommendation) {
+                $query->where([
+                    ['ticket_id', $this->ticket->id],           // For current ticket
+                    ['recommendation_id', $recommendation->id]  // And specific recommendation
+                ]);
+            })
+            ->exists(); // Return boolean result
     }
 
+    /**
+     * Checks if a recommendation was disapproved at a specific approval level.
+     *
+     * Verifies three conditions for disapproval:
+     * 1. The recommendation has DISAPPROVED status in approvalStatus
+     * 2. The specified approval level matches
+     * 3. The approver explicitly marked as not approved (is_approved = false)
+     *
+     * @param int $level The approval level to check (e.g., 1, 2)
+     * @param Recommendation $recommendation The recommendation to verify
+     * @return bool Returns true if:
+     *              - Recommendation is disapproved at specified level
+     *              - With explicit rejection flag
+     *             Returns false otherwise
+     *
+     * @uses \App\Models\RecommendationApprover For approval records
+     * @uses \App\Enums\RecommendationApprovalStatusEnum For DISAPPROVED status
+     */
     public function isDisApprovedRecommendationLevel(int $level, Recommendation $recommendation)
     {
         return RecommendationApprover::withWhereHas('recommendation.approvalStatus', function ($status) {
+            // Check for DISAPPROVED status in related approvalStatus
             $status->where('approval_status', RecommendationApprovalStatusEnum::DISAPPROVED);
         })
             ->where([
-                ['recommendation_id', $recommendation->id],
-                ['level', $level],
-                ['is_approved', false]
-            ])->exists();
+                ['recommendation_id', $recommendation->id],  // Specific recommendation
+                ['level', $level],                          // Specified approval level
+                ['is_approved', false]                      // Explicit disapproval
+            ])
+            ->exists();  // Boolean result
     }
 
+    /**
+     * Verifies if a recommendation is officially disapproved with a documented reason.
+     *
+     * Checks for a formal disapproval by verifying:
+     * 1. The recommendation has DISAPPROVED status
+     * 2. A disapproval reason is specified (not null)
+     * 3. The status record matches the specific recommendation
+     *
+     * This ensures only properly documented disapprovals are recognized.
+     *
+     * @param Recommendation $recommendation The recommendation to check
+     * @return bool Returns true if:
+     *              - Recommendation is marked DISAPPROVED
+     *              - Has a non-null disapproval reason
+     *              - Status matches the recommendation
+     *             Returns false otherwise
+     *
+     * @uses \App\Models\Recommendation For recommendation records
+     * @uses \App\Enums\RecommendationApprovalStatusEnum For status values
+     */
     public function isDisapprovedRecommendation(Recommendation $recommendation)
     {
         return Recommendation::withWhereHas('approvalStatus', function ($status) use ($recommendation) {
             $status->where([
-                ['recommendation_id', $recommendation->id],
-                ['approval_status', RecommendationApprovalStatusEnum::DISAPPROVED]
-            ])->whereNotNull('disapproved_reason');
-        })->exists();
+                ['recommendation_id', $recommendation->id],  // Match specific recommendation
+                ['approval_status', RecommendationApprovalStatusEnum::DISAPPROVED]  // Disapproved status
+            ])->whereNotNull('disapproved_reason');  // Must have reason specified
+        })->exists();  // Boolean result
     }
 
+    /**
+     * Retrieves all SDA-requested recommendations for the current ticket with related data.
+     *
+     * Fetches recommendation records that:
+     * - Belong to the current ticket (ticket_id match)
+     * - Were formally requested by a Service Department Administrator (non-null requested_by_sda_id)
+     * - Includes eager-loaded relationships:
+     *   - Requesting SDA's profile data
+     *   - Approval status information
+     *
+     * @return \Illuminate\Database\Eloquent\Collection Returns a collection of:
+     *         - Recommendation models
+     *         - With loaded relationships
+     *         - Ordered by creation date (descending)
+     *         Empty collection if no matching records found
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If ticket not found
+     * @uses \App\Models\Recommendation For recommendation records
+     */
     private function getRecommendations()
     {
         return Recommendation::with([
-            'requestedByServiceDeptAdmin.profile',
-            'approvalStatus'
-        ])->where('ticket_id', $this->ticket->id)
-            ->whereNotNull('requested_by_sda_id')
-            ->get();
+            'requestedByServiceDeptAdmin.profile',  // Load SDA requester's profile
+            'approvalStatus'                       // Load approval status
+        ])
+            ->where('ticket_id', $this->ticket->id)    // Filter by current ticket
+            ->whereNotNull('requested_by_sda_id')      // Only formally requested recommendations
+            ->orderByDesc('created_at')                // Newest first
+            ->get(); // Return collection of recommendations
     }
 
     public function render()

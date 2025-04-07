@@ -14,7 +14,6 @@ class HelpTopicConfiguration extends Model
     protected $fillable = [
         'help_topic_id',
         'bu_department_id',
-        'branch_id',
         'level_of_approval'
     ];
 
@@ -26,11 +25,6 @@ class HelpTopicConfiguration extends Model
     public function buDepartment(): BelongsTo
     {
         return $this->belongsTo(Department::class, 'bu_department_id');
-    }
-
-    public function branch(): BelongsTo
-    {
-        return $this->belongsTo(Branch::class);
     }
 
     public function approvers(): HasMany
