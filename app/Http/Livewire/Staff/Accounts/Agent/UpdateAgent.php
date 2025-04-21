@@ -79,44 +79,106 @@ class UpdateAgent extends Component
         ];
     }
 
+    /**
+     * Updates the list of business unit departments based on the selected branches.
+     *
+     * This method retrieves all departments associated with the selected branches
+     * and updates the `BUDepartments` property. It also dispatches a browser event
+     * to send the updated list of business unit departments to the frontend.
+     *
+     * @return void
+     */
     public function updatedBranches()
     {
+        // Retrieve departments that are associated with the selected branches
         $this->BUDepartments = Department::withWhereHas('branches', fn($query) => $query->whereIn('branches.id', $this->branches))->get();
+
+        // Dispatch a browser event with the retrieved departments
         $this->dispatchBrowserEvent('get-branch-bu-departments', [
+            // Pass the departments collection to the frontend
             'BUDepartments' => $this->BUDepartments,
         ]);
     }
 
+    /**
+     * Updates the list of teams based on the selected service department.
+     *
+     * This method retrieves all teams associated with the selected service department
+     * and updates the `teams` property. It also dispatches a browser event to send
+     * the updated list of teams to the frontend.
+     *
+     * @return void
+     */
     public function updatedServiceDepartment()
     {
+        // Retrieve teams associated with the selected service department.
         $this->teams = Team::withWhereHas('serviceDepartment', fn($query) => $query->where('service_departments.id', $this->service_department))->get();
+
+        // Dispatch a browser event to send the updated list of teams to the frontend.
         $this->dispatchBrowserEvent('get-teams-service-department', [
+            // Pass the retrieved teams to the frontend.
             'teams' => $this->teams,
         ]);
     }
 
+    /**
+     * Updates the list of subteams based on the selected teams.
+     *
+     * This method retrieves all subteams associated with the selected teams
+     * and updates the `subteams` property. It also dispatches a browser event
+     * to send the updated list of subteams to the frontend.
+     *
+     * @return void
+     */
     public function updatedSelectedTeams()
     {
+        // Retrieve subteams associated with the selected teams.
         $this->subteams = Subteam::withWhereHas('team', fn($query) => $query->whereIn('teams.id', $this->selectedTeams))->get();
+
+        // Dispatch a browser event to send the updated subteams to the frontend.
         $this->dispatchBrowserEvent('get-subteams', [
+            // Pass the retrieved subteams to the frontend.
             'subteams' => $this->subteams
         ]);
     }
 
+    /**
+     * Updates the agent's account and associated entities.
+     *
+     * This method performs the following steps:
+     * 1. Validates the input data.
+     * 2. Executes a database transaction to:
+     *    - Update the agent's email address.
+     *    - Synchronize the agent's associations with branches, teams, business unit departments, service departments, and subteams.
+     *    - Update the agent's permissions.
+     *    - Update the agent's profile with their name, suffix, and slug.
+     * 3. Displays a success notification upon successful update.
+     * 4. Logs any errors that occur during the process.
+     *
+     * @return void
+     */
     public function updateAgentAccount()
     {
+        // Validate the input data before proceeding.
         $this->validate();
 
         try {
+            // Begin a database transaction to ensure atomicity.
             DB::transaction(function () {
+                // Update the agent's email address.
                 $this->agent->update(['email' => $this->email]);
+
+                // Synchronize the agent's associations with branches, teams, and other entities.
                 $this->agent->branches()->sync($this->branches);
                 $this->agent->teams()->sync($this->selectedTeams);
                 $this->agent->buDepartments()->sync([$this->bu_department]);
                 $this->agent->serviceDepartments()->sync([$this->service_department]);
                 $this->agent->subteams()->sync(array_map('intval', $this->selectedSubteams));
+
+                // Synchronize the agent's permissions.
                 $this->agent->syncPermissions($this->permissions);
 
+                // Update the agent's profile with their name, suffix, and slug.
                 $this->agent->profile()->update([
                     'first_name' => $this->first_name,
                     'middle_name' => $this->middle_name,
@@ -130,10 +192,12 @@ class UpdateAgent extends Component
                     ])),
                 ]);
 
+                // Display a success notification to the user.
                 noty()->addSuccess("You have successfully updated the account for {$this->agent->profile->getFullName}.");
             });
 
         } catch (Exception $e) {
+            // Log any errors that occur during the process.
             AppErrorLog::getError($e->getMessage());
         }
     }
