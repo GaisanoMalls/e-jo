@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\AccountCreationController;
 use App\Http\Controllers\Staff\Approver\ApproverDashboardController;
 use App\Http\Controllers\Staff\Approver\ApproverTicketsController;
 use App\Http\Controllers\Staff\Approver\NotificationController as ApproverNotificationController;
@@ -31,11 +32,13 @@ use App\Http\Controllers\User\AccountController as UserAccountSettingsController
 use App\Http\Controllers\User\Dashboard as UserDashboardController;
 use App\Http\Controllers\User\FeedbackController as UserFeedbackController;
 use App\Http\Controllers\User\TicketsController as UserTicketsController;
+use App\Http\Controllers\UserApprovalController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/forgot-password', ForgotPasswordController::class)->name('forgot_password');
+Route::get('/create-account', AccountCreationController::class)->name('create_account');
 
 // * Auth routes
 Route::controller(AuthController::class)->group(function () {
@@ -199,6 +202,11 @@ Route::middleware(['auth', Role::approversOnly()])->group(function () {
                 Route::get('/overdue', 'overdueTickets')->name('overdue');
                 Route::get('/closed', 'closedTickets')->name('closed');
                 Route::get('/costing-approval', 'costingApprovals')->name('costing_approval');
+            });
+        });
+        Route::prefix('accounts')->name('accounts.')->group(function () {
+            Route::controller(UserApprovalController::class)->group(function () {
+                Route::get('/approval', 'openAccounts')->name('approval');
             });
         });
         Route::prefix('ticket')->name('ticket.')->group(function () {

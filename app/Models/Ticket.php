@@ -196,4 +196,9 @@ class Ticket extends Model
     {
         return $this->helpTopic?->specialProject !== null;
     }
+
+    public function specialProjectAmountApproval()
+    {
+        return $this->belongsTo(SpecialProjectAmountApproval::class, 'id', 'ticket_id');
+    }
 }

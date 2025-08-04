@@ -6,6 +6,7 @@ use App\Enums\SpecialProjectStatusEnum;
 use App\Http\Requests\Agent\StoreTicketCostingRequest;
 use App\Http\Traits\AppErrorLog;
 use App\Http\Traits\Utils;
+use App\Models\HelpTopicCosting;
 use App\Models\SpecialProjectAmountApproval;
 use App\Models\Ticket;
 use App\Models\TicketCosting;
@@ -74,15 +75,11 @@ class AddCosting extends Component
                         $existingTicketCosting->update(['amount' => $this->amount]);
                     } else {
                         // Get the costing approver id
-                        $approver1Id = SpecialProjectAmountApproval::all()->pluck('service_department_admin_approver')
-                            ->map(function ($item, $key) {
-                                return $item['approver_id']; // Access the approver_id from each item
-                            })->first();
+                        $costingApprovers = HelpTopicCosting::where('help_topic_id', $this->ticket->help_topic_id)
+                            ->first(['costing_approvers', 'final_costing_approvers']);
+                        $approver1Id = $costingApprovers->costing_approvers[0] ?? null;
 
-                        $approver2Id = SpecialProjectAmountApproval::all()->pluck('fpm_coo_approver')
-                            ->map(function ($item, $key) {
-                                return $item['approver_id']; // Access the approver_id from each item
-                            })->first();
+                        $approver2Id = $costingApprovers->final_costing_approvers[0] ?? null;
 
                         if ($approver1Id && $approver2Id) {
                             // Create a costing when approver is found
@@ -92,15 +89,15 @@ class AddCosting extends Component
                             ]);
 
                             if (SpecialProjectAmountApproval::whereNotNull('ticket_id')->exists()) {
-                                SpecialProjectAmountApproval::create([
+                                SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)->update([
                                     'ticket_id' => $this->ticket->id,
                                     'service_department_admin_approver' => [
-                                        'approver_id' => $approver1Id,
+                                        'approver_id' => (int) $approver1Id,
                                         'is_approved' => false,
                                         'date_approved' => null
                                     ],
                                     'fpm_coo_approver' => [
-                                        'approver_id' => $approver2Id,
+                                        'approver_id' => (int) $approver2Id,
                                         'is_approved' => false,
                                         'date_approved' => null
                                     ]

@@ -18,12 +18,14 @@ use App\Models\HelpTopic;
 use App\Models\PriorityLevel;
 use App\Models\Role;
 use App\Models\ServiceLevelAgreement;
+use App\Models\SpecialProjectAmountApproval;
 use App\Models\Status;
 use App\Models\Team;
 use App\Models\Ticket;
 use App\Models\TicketApproval;
 use App\Models\TicketCustomFormFooter;
 use App\Models\TicketTeam;
+use App\Models\TicketFile;
 use App\Models\User;
 use App\Notifications\AppNotification;
 use Carbon\Carbon;
@@ -734,7 +736,7 @@ class CreateTicket extends Component
             // Log the error message to AppErrorLog
             AppErrorLog::getError($e->getMessage());
             // Also log the line number where error occurred
-            \Log::error('Error on line: ', [$e->getLine()]);
+            Log::error('Error on line: ', [$e->getLine()]);
         }
     }
 
@@ -861,15 +863,15 @@ class CreateTicket extends Component
                     // Normal approval process for configured tickets
                     $approvers = User::role([Role::SERVICE_DEPARTMENT_ADMIN, Role::APPROVER])
                         ->withWhereHas('helpTopicApprovals.configuration', function ($config) use ($ticket) {
-                            $config->whereIn('bu_department_id', $ticket->user->buDepartments->pluck('id'))
-                                ->whereIn('branch_id', $ticket->user->branches->pluck('id'));
+                            $config->whereIn('bu_department_id', $ticket->user->buDepartments->pluck('id'));
+                                // ->whereIn('branch_id', $ticket->user->branches->pluck('id'));
                         })->get();
 
                     if ($approvers->isNotEmpty()) {
                         $approvers->each(function ($approver) use ($ticket) {
                             // Create approval records
                             $approver->helpTopicApprovals()
-                                ->whereHas('configuration', fn($config) => $config->whereIn('branch_id', $ticket->user->branches->pluck('id')))
+                                // ->whereHas('configuration', fn($config) => $config->whereIn('branch_id', $ticket->user->branches->pluck('id')))
                                 ->each(function ($helpTopicApproval) use ($ticket) {
                                     TicketApproval::create([
                                         'ticket_id' => $ticket->id,
@@ -898,6 +900,13 @@ class CreateTicket extends Component
                     $this->saveFieldValues($ticket);
                 }
 
+                if($ticket->isSpecialProject()) {
+                    // Attach special project if applicable
+                    SpecialProjectAmountApproval::create([
+                        'ticket_id' => $ticket->id
+                    ]);
+                }
+
                 // Log the ticket creation activity
                 ActivityLog::make(ticket_id: $ticket->id, description: 'created a ticket');
 
@@ -910,7 +919,7 @@ class CreateTicket extends Component
         } catch (Exception $e) {
             // Log any errors that occur
             AppErrorLog::getError($e->getMessage());
-            Log::error('Error on line: ', [$e->getLine()]);
+            Log::error('Error on line: ', [$e->getLine(), 'File: ' . $e->getFile(), 'Message: ' . $e->getMessage()]);
         }
     }
 

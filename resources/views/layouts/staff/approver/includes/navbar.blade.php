@@ -72,6 +72,14 @@
                             aria-current="page" href="">Tickets</a>
                     </li>
                 @endif
+
+                @if (Utils::isUserApprover()) 
+                    <li class="nav-item custom__nav__item text-center">
+                        <a href="{{ route('approver.accounts.approval') }}"
+                            class="nav-link custom__nav__link {{ Route::is('approver.accounts.*') ? 'active' : '' }}"
+                            aria-current="page" href="">Account Requests</a>
+                    </li>
+                @endif
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-4">
                 <li class="nav-item my-auto dropdown">

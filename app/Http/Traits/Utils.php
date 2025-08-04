@@ -8,6 +8,7 @@ use App\Models\SpecialProjectAmountApproval;
 use App\Models\Status;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\UserApproval;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Storage;
@@ -283,12 +284,13 @@ trait Utils
 
     public function costingApprovers(Ticket $ticket)
     {
-        $costingApprovers = SpecialProjectAmountApproval::all();
+        $costingApprovers = SpecialProjectAmountApproval::where('ticket_id', $ticket->id)->get();
+
         $approverIds = array_merge(
             $costingApprovers->pluck('service_department_admin_approver.approver_id')->toArray(),
-            ($this->isCostingAmountNeedCOOApproval($ticket))
-            ? $costingApprovers->pluck('fpm_coo_approver.approver_id')->toArray()
-            : []
+            $this->isCostingAmountNeedCOOApproval($ticket)
+                ? $costingApprovers->pluck('fpm_coo_approver.approver_id')->toArray()
+                : []
         );
 
         return User::with('profile')->whereIn('id', $approverIds)->get();
@@ -297,8 +299,8 @@ trait Utils
     public function isCostingAmountNeedCOOApproval(Ticket $ticket)
     {
         return ($ticket->ticketCosting && $ticket->helpTopic && $ticket->isSpecialProject())
-            ? ($ticket->ticketCosting->amount >= $ticket->helpTopic->specialProject->amount) // true
-            : false;
+            ? (($ticket->ticketCosting->amount >= $ticket->helpTopic->specialProject->amount) ? 1 : 0)
+            : 0;
     }
 
     public function approvedByCostingApprover1(User $approver, Ticket $ticket)
@@ -317,6 +319,22 @@ trait Utils
             ->exists();
     }
 
+    public function disapprovedByCostingApprover1(User $approver, Ticket $ticket)
+    {
+        return SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
+            ->where(fn($approver1) => $approver1->whereJsonContains('service_department_admin_approver->approver_id', $approver->id)
+                ->whereJsonContains('service_department_admin_approver->is_approved', false))
+            ->exists();
+    }
+
+    public function disapprovedByCostingApprover2(User $approver, Ticket $ticket)
+    {
+        return SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
+            ->where(fn($approver2) => $approver2->whereJsonContains('fpm_coo_approver->approver_id', $approver->id)
+                ->whereJsonContains('fpm_coo_approver->is_approved', false))
+            ->exists();
+    }
+
     public function isDoneCostingApprovals(Ticket $ticket)
     {
         return $this->isDoneCostingApproval1($ticket) || $this->isDoneCostingApproval2($ticket);
@@ -326,7 +344,7 @@ trait Utils
     {
         return SpecialProjectAmountApproval::where([
             ['ticket_id', $ticket->id],
-            ['service_department_admin_approver->is_approved', true],
+            // ['service_department_admin_approver->is_approved', true],
             ['service_department_admin_approver->date_approved', '!=', null]
         ])->exists();
     }
@@ -335,9 +353,8 @@ trait Utils
     {
         return SpecialProjectAmountApproval::where([
             ['ticket_id', $ticket->id],
-            ['fpm_coo_approver->is_approved', true],
-            ['fpm_coo_approver->date_approved', '!=', null],
-            ['is_done', true]
+            // ['fpm_coo_approver->is_approved', true],
+            ['fpm_coo_approver->date_approved', '!=', null]
         ])->exists();
     }
 
@@ -345,7 +362,9 @@ trait Utils
     {
         return SpecialProjectAmountApproval::where([
             ['ticket_id', $ticket->id],
-            ['is_done', true],
+            ['is_done', 0],
+            ['service_department_admin_approver->date_approved', '!=', null],
+            ['fpm_coo_approver->date_approved', '!=', null]
         ])->exists();
     }
 
@@ -354,4 +373,11 @@ trait Utils
         $approverId = User::role(Role::APPROVER)->where('id', auth()->user()->id)->value('id');
         return SpecialProjectAmountApproval::whereJsonContains('fpm_coo_approver->approver_id', $approverId)->exists();
     }
+
+    public static function isUserApprover(): bool
+    {
+        $approverId = User::role(Role::APPROVER)->where('id', auth()->user()->id)->value('id');
+        return UserApproval::where('approver_id', $approverId)->exists();
+    }
+
 }

@@ -1,5 +1,6 @@
 @php
     use App\Enums\SpecialProjectStatusEnum;
+    use App\Models\Status;
 @endphp
 
 <div>
@@ -163,6 +164,11 @@
                                                         style="background-color: green">
                                                         <i class="bi bi-check-lg"></i>
                                                     </div>
+                                                @elseif ($this->disapprovedByCostingApprover1($costingApprover, $ticket) && $this->isDoneCostingApproval1($ticket)  || $this->disapprovedByCostingApprover2($costingApprover, $ticket) && $this->isDoneCostingApproval2($ticket))
+                                                    <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle costing__approver__approved__badge"
+                                                        style="background-color: red">
+                                                        <i class="bi bi-x-lg"></i>
+                                                    </div>
                                                 @else
                                                     <div class="position-absolute rounded-circle costing__approver__approved__badge bx-flashing"
                                                         style="background-color: #FFA500">
@@ -179,7 +185,7 @@
                             <div class="d-flex flex-column justify-content-between gap-2">
                                 <small class="text-muted text-sm costing__header__label">
                                     @if ($this->isDoneCostingApproval1($ticket))
-                                        Appoval Status
+                                        Approval Status
                                     @else
                                         Action
                                     @endif
@@ -210,7 +216,7 @@
                                             </div>
                                             Approve
                                         </button>
-                                        @if ($this->isDoneCostingApproval1($ticket) && $this->isCostingAmountNeedCOOApproval($ticket))
+                                        {{-- @if ($this->isDoneCostingApproval1($ticket) && $this->isCostingAmountNeedCOOApproval($ticket))
                                             <button
                                                 class="btn btn-sm d-flex align-items-center justify-content-center gap-1 rounded-2 btn__approve__costing">
                                                 <i class="bi bi-reply" wire:loading.class="d-none" style="transform: scaleX(-1);"></i>
@@ -219,7 +225,7 @@
                                                 </div>
                                                 Forward
                                             </button>
-                                        @endif
+                                        @endif --}}
                                     </div>
                                 @endif
                             </div>
@@ -236,6 +242,11 @@
                                             <i class="fa-solid fa-paper-plane me-1" style="color: orange;"></i>
                                             For approval
                                         </small>
+                                    @elseif ($this->isCostingAmountNeedCOOApproval($ticket) && $this->isDoneCostingApproval2($ticket) && $this->disapprovedByCostingApprover2($costingApprover, $ticket))
+                                        <small class="d-flex align-items-center justify-content-center gap-1 rounded-4 disapproved__costing__status">
+                                            <i class="fa-solid fa-circle-check me-1" style="color: red;"></i>
+                                            Disapproved
+                                        </small> 
                                     @else
                                         <small class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
                                             <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
@@ -270,9 +281,9 @@
                                             In progress
                                         @endif
                                     </button>
-                                    @if ($this->isOnlyAgent(auth()->user()->id))
+                                    @if ($this->isOnlyAgent(auth()->user()->id) && $ticket->status_id === Status::CLAIMED)
                                         <ul wire:ignore.self class="dropdown-menu dropdown-menu-end position-absolute purchase__dropdown">
-                                            @if ($this->isPRApproved($ticket))
+                                            @if ($this->isDoneCostingApproval1($ticket))
                                                 <li>
                                                     <button
                                                         class="dropdown-item d-flex align-items-center gap-2 {{ $ticket->specialProjectStatus->purchasing_status === SpecialProjectStatusEnum::ON_ORDERED->value ? 'fw-semibold' : '' }}"

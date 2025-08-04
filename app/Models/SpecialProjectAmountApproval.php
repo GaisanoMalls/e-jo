@@ -14,8 +14,8 @@ class SpecialProjectAmountApproval extends Model
 
     protected $fillable = [
         'ticket_id',
-        'service_department_admin_approver',
-        'fpm_coo_approver',
+        'service_department_admin_approver' => 'array',
+        'fpm_coo_approver' => 'array',
         'is_done'
     ];
 
@@ -41,4 +41,5 @@ class SpecialProjectAmountApproval extends Model
     {
         return $this->hasMany(DisapprovedCosting::class);
     }
+    
 }

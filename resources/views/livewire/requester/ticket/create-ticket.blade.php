@@ -86,7 +86,7 @@
                                 <div class="mb-3">
                                     <label class="form-label input__field__label">
                                         Select who will be notified
-                                        <em>(Service Department Administrators or Approvers)</em>
+                                        {{-- <em>(Service Department Administrators or Approvers)</em> --}}
                                     </label>
                                     <div>
                                         <div id="non-config-approver-select" placeholder="Select (Optional)" wire:ignore></div>
@@ -197,13 +197,43 @@
                                                                 @disabled($isHeaderFieldSet && $formField['is_header_field'])>
                                                         @endif
 
-                                                        {{-- Amount field --}}
+                                                        {{-- Amount field  --}}
                                                         @if ($formField['type'] === FieldType::AMOUNT->value)
+                                                            @php
+                                                                $isTotalPrice = strtolower($formField['label']) === 'total price';
+                                                                // Find the keys for Quantity and Unit Price fields
+                                                                $quantityKey = collect($formFields)->search(fn($f) => strtolower($f['label']) === 'quantity');
+                                                                $unitPriceKey = collect($formFields)->search(fn($f) => strtolower($f['label']) === 'unit price');
+                                                            @endphp
+                                                            <div
+                                                                @if($isTotalPrice && $quantityKey !== false && $unitPriceKey !== false)
+                                                                    x-data="{
+                                                                        get quantity() { return $wire.formFields[{{ $quantityKey }}]?.value || 0 },
+                                                                        get unitPrice() { return $wire.formFields[{{ $unitPriceKey }}]?.value || 0 },
+                                                                        set total(val) { $wire.set('formFields.{{ $fieldKey }}.value', val) }
+                                                                    }"
+                                                                    x-effect="total = parseFloat(quantity || 0) * parseFloat(unitPrice || 0)"
+                                                                @endif
+                                                            >
+                                                                <input
+                                                                    wire:model="formFields.{{ $fieldKey }}.value"
+                                                                    type="number"
+                                                                    id="field-{{ $fieldKey }}"
+                                                                    class="form-control input__field"
+                                                                    placeholder="Enter {{ Str::lower($formField['label']) }}"
+                                                                    @disabled($isHeaderFieldSet && $formField['is_header_field'])
+                                                                    @if($isTotalPrice) readonly @endif
+                                                                >
+                                                            </div>
+                                                        @endif
+                                                        {{-- @if ($formField['type'] === FieldType::AMOUNT->value)
                                                             <input wire:model="formFields.{{ $fieldKey }}.value" type="number"
                                                                 id="field-{{ $fieldKey }}" class="form-control input__field"
                                                                 placeholder="Enter {{ Str::lower($formField['label']) }}"
                                                                 @disabled($isHeaderFieldSet && $formField['is_header_field'])>
-                                                        @endif
+                                                        @endif --}}
+
+                                                        {{-- Need to change here for dynamic process for the total price of the help topic PR - ICT Support --}}
                                                     </div>
                                                 @endif
                                             @endif
@@ -362,34 +392,46 @@
                                         Attachment
                                     </label>
                                 </div>
-                                <div x-data="{ isUploading: false, progress: 1 }" x-on:livewire-upload-start="isUploading = true; progress = 1"
-                                    x-on:livewire-upload-finish="isUploading = false" x-on:livewire-upload-error="isUploading = false"
-                                    x-on:livewire-upload-progress="progress = $event.detail.progress">
-                                    <input class="form-control form-control-sm border-0 ticket__file" type="file"
-                                        accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv" wire:model="fileAttachments" multiple
-                                        id="upload-{{ $upload }}" onchange="validateFile()">
-                                    <div x-transition.duration.500ms x-show="isUploading" class="progress progress-sm mt-1" style="height: 10px;">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                                            aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
-                                            x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
+                                    <div x-data="{ isUploading: false, progress: 1 }" x-on:livewire-upload-start="isUploading = true; progress = 1"
+                                        x-on:livewire-upload-finish="isUploading = false" x-on:livewire-upload-error="isUploading = false"
+                                        x-on:livewire-upload-progress="progress = $event.detail.progress">
+                                        <input class="form-control form-control-sm border-0 ticket__file" type="file"
+                                            accept=".xlsx,.xls,image/*,.doc,.docx,.pdf,.csv" wire:model="fileAttachments" multiple
+                                            id="upload-{{ $upload }}" onchange="validateFile(); logSelectedFiles(this)">
+                                        <div x-transition.duration.500ms x-show="isUploading" class="progress progress-sm mt-1" style="height: 10px;">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                                aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                                                x-bind:style="`width: ${progress}%; background-color: #7e8da3;`">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between" x-transition.duration.500ms>
+                                            <span x-show="isUploading" x-text="progress + '%'" style="font-size: 12px;">
+                                            </span>
+                                            <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
+                                                <i x-show="isUploading" class='bx bx-loader-circle bx-spin' style="font-size: 14px;"></i>
+                                                <span x-show="isUploading">Uploading...</span>
+                                            </span>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between" x-transition.duration.500ms>
-                                        <span x-show="isUploading" x-text="progress + '%'" style="font-size: 12px;">
+                                    <script>
+                                        function logSelectedFiles(input) {
+                                            if (input.files.length > 0) {
+                                                console.log(`${input.files.length} file(s) selected:`);
+                                                for (let i = 0; i < input.files.length; i++) {
+                                                    console.log(`- ${input.files[i].name}`);
+                                                }
+                                            } else {
+                                                console.log("No files selected.");
+                                            }
+                                        }
+                                    </script>
+                                    <span class="error__message" id="exclude-exe-file-message"></span>
+                                    @error('fileAttachments.*')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
                                         </span>
-                                        <span class="d-flex align-items-center gap-1" style="font-size: 12px;">
-                                            <i x-show="isUploading" class='bx bx-loader-circle bx-spin' style="font-size: 14px;"></i>
-                                            <span x-show="isUploading">Uploading...</span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <span class="error__message" id="exclude-exe-file-message"></span>
-                                @error('fileAttachments.*')
-                                    <span class="error__message">
-                                        <i class="fa-solid fa-triangle-exclamation"></i>
-                                        {{ $message }}
-                                    </span>
-                                @enderror
+                                    @enderror
                             </div>
                         </div>
                     </div>

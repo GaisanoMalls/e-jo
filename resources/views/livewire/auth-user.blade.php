@@ -32,5 +32,6 @@
             <span wire:loading wire:target="login">Signing in...</span>
         </button>
         <a href="{{ route('forgot_password') }}" class="mt-4 link">Forgot password?</a>
+        <a href="{{ route('create_account') }}" class="mt-4 link">Requester Account Creation</a>
     </form>
 </div>

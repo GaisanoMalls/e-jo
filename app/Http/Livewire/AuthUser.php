@@ -43,7 +43,7 @@ class AuthUser extends Component
             $this->addError('email', 'Email not found.');
         }
 
-        if (auth()->attempt(['email' => $this->email, 'password' => $this->password, 'is_active' => true])) {
+        if (auth()->attempt(['email' => $this->email, 'password' => $this->password, 'is_active' => 1])) {
             session()->regenerate();
             return $this->redirectAuthenticatedWithRole();
         }

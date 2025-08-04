@@ -8836,6 +8836,15 @@ a:hover {
   border: 0.01rem solid #d1d3d3;
   height: 24px;
 }
+.ticket__section .card__ticket__details .ticket__costing__container .disapproved__costing__status {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: red;
+  padding: 2px 7px;
+  background-color: #f5f7f9;
+  border: 0.01rem solid #d1d3d3;
+  height: 24px;
+}
 .ticket__section .card__ticket__details .ticket__costing__container .costing__approver__container .costing__approver__picture {
   height: 27px;
   width: 27px;

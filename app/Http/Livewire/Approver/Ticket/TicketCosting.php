@@ -239,6 +239,12 @@ class TicketCosting extends Component
             ->whereJsonContains('fpm_coo_approver->is_approved', true)->exists();
     }
 
+    public function isCostingApproval2Disapproved()
+    {
+        return SpecialProjectAmountApproval::where('ticket_id', $this->ticket->id)
+            ->whereJsonContains('fpm_coo_approver->is_approved', false)->exists();
+    }
+
     public function render()
     {
         return view('livewire.approver.ticket.ticket-costing');

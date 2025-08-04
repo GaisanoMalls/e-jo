@@ -1,3 +1,7 @@
+@php
+    use App\Enums\SpecialProjectStatusEnum;
+@endphp
+
 <div>
     @if (!is_null($ticket->ticketCosting))
         <div class="card border-0 p-0 card__ticket__details">
@@ -80,6 +84,11 @@
                                                         style="background-color: green">
                                                         <i class="bi bi-check-lg"></i>
                                                     </div>
+                                                @elseif ($this->disapprovedByCostingApprover1($costingApprover, $ticket) && $this->isDoneCostingApproval1($ticket)  || $this->disapprovedByCostingApprover2($costingApprover, $ticket) && $this->isDoneCostingApproval2($ticket))
+                                                    <div class="position-absolute d-flex align-items-center justify-content-center rounded-circle costing__approver__approved__badge"
+                                                        style="background-color: red">
+                                                        <i class="bi bi-x-lg"></i>
+                                                    </div>
                                                 @else
                                                     <div class="position-absolute rounded-circle costing__approver__approved__badge bx-flashing"
                                                         style="background-color: #FFA500">
@@ -104,6 +113,11 @@
                                     <small class="d-flex align-items-center justify-content-center gap-1 rounded-4 approved__costing__status">
                                         <i class="fa-solid fa-circle-check me-1" style="color: green;"></i>
                                         Approved
+                                    </small>
+                                @elseif ($this->isCostingApproval2Disapproved() && $this->isDoneCostingApproval2($ticket))
+                                    <small class="d-flex align-items-center justify-content-center gap-1 rounded-4 disapproved__costing__status">
+                                        <i class="fa-solid fa-circle-xmark me-1" style="color: red;"></i>
+                                        Disapproved
                                     </small>
                                 @else
                                     <div class="d-flex align-items-center gap-2">

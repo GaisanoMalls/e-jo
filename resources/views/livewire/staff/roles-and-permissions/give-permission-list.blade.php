@@ -130,20 +130,22 @@
             hideClearButton: true
         });
 
-        window.addEventListener('refresh-permission-select', (event) => {
-            const refreshPermissionOption = [];
-            const refreshPermissions = event.detail.allPermissions;
-            const currentPermissions = event.detail.currentPermissions;
-
-            refreshPermissions.forEach((permission) => {
-                refreshPermissionOption.push({
-                    label: permission.name,
-                    value: permission.name
+        window.addEventListener('refresh-permission-select', event => {
+            const selectPermission = document.querySelector('#select-assign-permission');
+            if (selectPermission) {
+                // Re-initialize or update options
+                VirtualSelect.init({
+                    ele: selectPermission,
+                    options: event.detail.allPermissions.map(permission => ({
+                        label: permission.name,
+                        value: permission.name
+                    })),
+                    multiple: true,
+                    showValueAsTags: true,
+                    hideClearButton: true
                 });
-            });
-
-            selectPermission.setOptions(refreshPermissionOption)
-            selectPermission.setValue(currentPermissions)
+                selectPermission.setValue(event.detail.currentPermissions);
+            }
         });
 
         // Set value for permissions

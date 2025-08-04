@@ -208,7 +208,7 @@ class TicketCosting extends Component
                         ->update([
                             'service_department_admin_approver->is_approved' => true,
                             'service_department_admin_approver->date_approved' => Carbon::now(),
-                            'is_done' => !$this->isCostingAmountNeedCOOApproval($ticket) ? true : false
+                            'is_done' => !$this->isCostingAmountNeedCOOApproval($ticket) ? 1 : 0
                         ]);
 
                     $this->emit('loadServiceDeptAdminTicketCosting');

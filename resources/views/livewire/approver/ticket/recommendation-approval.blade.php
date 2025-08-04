@@ -111,7 +111,7 @@
             @endif
         @endif
 
-        @if ($approvalHistories->isNotEmpty())
+        @if ($approvalHistory->isNotEmpty())
             <div class="accordion mb-4" id="approvalHistoryAccordion">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingOne">
@@ -123,7 +123,7 @@
                     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#approvalHistoryAccordion">
                         <div class="accordion-body">
                             <ol class="list-group">
-                                @foreach ($approvalHistories as $recommendation)
+                                @foreach ($approvalHistory as $recommendation)
                                     <li class="list-group-item d-flex justify-content-between">
                                         <div class="me-auto ms-2" style="font-size: 13px;">
                                             <div class="d-flex align-items-center gap-2 mb-1">

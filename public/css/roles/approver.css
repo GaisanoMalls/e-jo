@@ -8160,6 +8160,15 @@ nav .nav__user__picture {
   border: 0.01rem solid #d1d3d3;
   height: 24px;
 }
+.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__costing__container .disapproved__costing__status {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: red;
+  padding: 2px 7px;
+  background-color: #f5f7f9;
+  border: 0.01rem solid #d1d3d3;
+  height: 24px;
+}
 .approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__costing__container .costing__approver__container .costing__approver__picture {
   height: 27px;
   width: 27px;
@@ -8185,14 +8194,14 @@ nav .nav__user__picture {
   color: white;
   right: -2px;
 }
-.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__costing__container .btn__approve__costing {
+.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__costing__container .btn__disapprove__costing {
   font-size: 0.813rem;
   background-color: #d32839;
   color: white;
   outline: none;
   font-weight: 500;
 }
-.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__costing__container .btn__disapprove__costing {
+.approver__section .ticket__card .ticket__details__section .card__ticket__details .ticket__costing__container .btn__approve__costing {
   font-size: 0.813rem;
   background-color: #7ba504;
   color: white;
