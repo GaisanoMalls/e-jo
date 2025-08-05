@@ -22,7 +22,7 @@ class ReopenTicket extends Component
         try {
             if (auth()->user()->isAgent() || auth()->user()->isServiceDepartmentAdmin()) {
                 if ($this->ticket->status_id === Status::CLOSED) {
-                    $this->ticket->update(['status_id' => Status::OPEN]);
+                    $this->ticket->update(['status_id' => Status::CLAIMED]);
 
                     // Get the requester's service department admins.
                     $serviceDeptAdmins = User::role(Role::SERVICE_DEPARTMENT_ADMIN)
