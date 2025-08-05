@@ -169,6 +169,16 @@ class SendClarification extends Component
                     );
                 });
 
+                Notification::send(
+                        $requester->user ?? $this->ticket->user,
+                        new AppNotification(
+                            ticket: $this->ticket,
+                            title: "Ticket #{$this->ticket->ticket_number} (Clarification)",
+                            message: auth()->user()->profile->getFullName . " sent a clarification",
+                            forClarification: true
+                        )
+                    );
+
                 Mail::to($this->ticket->user)->send(new StaffClarificationMail($this->ticket, $this->ticket->user, $this->description));
                 ActivityLog::make(ticket_id: $this->ticket->id, description: $logDescription);
             });
