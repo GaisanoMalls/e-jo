@@ -25,20 +25,42 @@ trait Tickets
                     ]);
             })
             ->where(function ($query) {
-                $query->orWhereHas('recommendations', function ($recommendation) {
+                $userId = auth()->user()->id;
+
+                $query->orWhereHas('recommendations', function ($recommendation) use ($userId) {
                     $recommendation->whereHas('approvalStatus', function ($status) {
                         $status->where('approval_status', RecommendationApprovalStatusEnum::PENDING);
                     })
-                        ->orWhereHas('approvers', function ($approver) {
-                            $approver->where('recommendation_approvers.approver_id', auth()->user()->id);
-                        });
-                })
-                    ->orWhereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                        $approver->where('user_id', auth()->user()->id);
+                    ->orWhereHas('approvers', function ($approver) use ($userId) {
+                        $approver->where('recommendation_approvers.approver_id', $userId);
                     });
+                })
+
+                // Replace the original helpTopicApprover with logic that checks for level and approval
+                ->orWhere(function ($subQuery) use ($userId) {
+                    $subQuery->whereHas('ticketApprovals.helpTopicApprover', function ($q) use ($userId) {
+                        $q->where('user_id', $userId)
+                        ->where(function ($levelQuery) use ($userId) {
+                            $levelQuery->where('level', 1)
+                                ->orWhere(function ($level2Query) use ($userId) {
+                                    $level2Query->where('level', 2)
+                                        ->whereExists(function ($existsQuery) {
+                                            $existsQuery->selectRaw(1)
+                                                ->from('ticket_approval as ta1')
+                                                ->join('help_topic_approvers as hta1', 'ta1.help_topic_approver_id', '=', 'hta1.id')
+                                                ->whereColumn('ta1.ticket_id', 'tickets.id')
+                                                ->whereColumn('hta1.help_topic_id', 'help_topic_approvers.help_topic_id')
+                                                ->where('hta1.level', 1)
+                                                ->where('ta1.is_approved', 1);
+                                        });
+                                });
+                        });
+                    });
+                });
             })
             ->orderByDesc('created_at')
             ->get();
+
     }
 
     public function getDisapprovedTickets()
@@ -51,9 +73,6 @@ trait Tickets
             ->whereHas('user.buDepartments', function ($department) {
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
             })
-            ->whereHas('ticketApprovals.helpTopicApprover', function ($approver) {
-                $approver->where('user_id', auth()->user()->id);
-            })
             ->orderByDesc('created_at')
             ->get();
     }
@@ -65,11 +84,29 @@ trait Tickets
                 $department->whereIn('departments.id', auth()->user()->buDepartments->pluck('id'));
             })
             ->whereHas('ticketApprovals', function ($approval) {
+                $userId = auth()->user()->id;
+
                 $approval->where('is_approved', false)
-                    ->whereHas('helpTopicApprover', function ($approver) {
-                        $approver->where('user_id', auth()->user()->id);
+                    ->whereHas('helpTopicApprover', function ($approver) use ($userId) {
+                        $approver->where('user_id', $userId)
+                            ->where(function ($levelQuery) {
+                                $levelQuery->where('level', 1)
+                                    ->orWhere(function ($level2Query) {
+                                        $level2Query->where('level', 2)
+                                            ->whereExists(function ($existsQuery) {
+                                                $existsQuery->selectRaw(1)
+                                                    ->from('ticket_approval as ta1')
+                                                    ->join('help_topic_approvers as hta1', 'ta1.help_topic_approver_id', '=', 'hta1.id')
+                                                    ->whereColumn('ta1.ticket_id', 'ticket_approval.ticket_id')
+                                                    ->whereColumn('hta1.help_topic_id', 'help_topic_approvers.help_topic_id')
+                                                    ->where('hta1.level', 1)
+                                                    ->where('ta1.is_approved', 1);
+                                            });
+                                    });
+                            });
                     });
             })
+
             ->orderByDesc('created_at')
             ->get();
     }
