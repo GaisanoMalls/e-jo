@@ -3,7 +3,7 @@
     use App\Enums\ApprovalStatusEnum;
 @endphp
 
-@if ($ticket->status_id != Status::CLOSED && $ticket->approval_status == ApprovalStatusEnum::APPROVED && $this->isDoneFirstLevelApproval())
+@if ($ticket->status_id != Status::CLOSED && $ticket->approval_status == ApprovalStatusEnum::APPROVED)
     <div class="d-flex flex-column">
         @if ($ticket->status_id == Status::CLAIMED)
             <button style="background-color: {{ $ticket->status->color }} !important;"
