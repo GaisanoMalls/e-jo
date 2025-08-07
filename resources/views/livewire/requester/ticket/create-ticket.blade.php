@@ -200,7 +200,7 @@
                                                         {{-- Amount field  --}}
                                                         @if ($formField['type'] === FieldType::AMOUNT->value)
                                                             @php
-                                                                $isTotalPrice = strtolower($formField['label']) === 'total price';
+                                                                $isTotalPrice = strtolower($formField['label']) === 'total price' || strtolower($formField['label']) === 'total';
                                                                 // Find the keys for Quantity and Unit Price fields
                                                                 $quantityKey = collect($formFields)->search(fn($f) => strtolower($f['label']) === 'quantity');
                                                                 $unitPriceKey = collect($formFields)->search(fn($f) => strtolower($f['label']) === 'unit price');
