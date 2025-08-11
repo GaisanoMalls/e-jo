@@ -37,6 +37,7 @@ use App\Http\Controllers\User\TicketsController as UserTicketsController;
 use App\Http\Controllers\UserApprovalController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\ForcePasswordChange;
 
 
 Route::get('/forgot-password', ForgotPasswordController::class)->name('forgot_password');
@@ -50,8 +51,15 @@ Route::controller(AuthController::class)->group(function () {
     });
 });
 
+// Force change password page (must be authenticated)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/force-change-password', function () {
+        return view('layouts.auth.force-change-password');
+    })->name('force_password');
+});
+
 // * Staff Routes
-Route::middleware(['auth', Role::staffsOnly()])->group(function () {
+Route::middleware(['auth', ForcePasswordChange::class, Role::staffsOnly()])->group(function () {
     Route::prefix('staff')->name('staff.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::controller(StaffTicketController::class)->group(function () {
@@ -233,7 +241,7 @@ Route::middleware(['auth', Role::approversOnly()])->group(function () {
 });
 
 // * User Routes
-Route::middleware(['auth', Role::requestersOnly()])->group(function () {
+Route::middleware(['auth', ForcePasswordChange::class, Role::requestersOnly()])->group(function () {
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/dashboard', UserDashboardController::class)->name('dashboard');
         Route::prefix('tickets')->name('tickets.')->group(function () {

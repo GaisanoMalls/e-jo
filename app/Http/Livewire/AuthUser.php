@@ -45,6 +45,10 @@ class AuthUser extends Component
 
         if (auth()->attempt(['email' => $this->email, 'password' => $this->password, 'is_active' => 1])) {
             session()->regenerate();
+            // If new account (created_at == updated_at) force password change
+            if (auth()->user()->created_at && auth()->user()->updated_at && auth()->user()->created_at->equalTo(auth()->user()->updated_at)) {
+                return redirect()->route('force_password');
+            }
             return $this->redirectAuthenticatedWithRole();
         }
 

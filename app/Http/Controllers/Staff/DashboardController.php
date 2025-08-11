@@ -4,6 +4,14 @@ namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\TicketsByStaffWithSameTemplates;
+use App\Models\ActivityLog;
+use App\Models\HelpTopic;
+use App\Models\Role;
+use App\Models\ServiceDepartment;
+use App\Models\Status;
+use App\Models\Ticket;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class DashboardController extends Controller
@@ -69,7 +77,9 @@ class DashboardController extends Controller
             ]
         ];
 
-        if (!auth()->user()->isAgent()) {
+        /** @var User $currentUser */
+        $currentUser = auth()->user();
+        if (!$currentUser || !$currentUser->isAgent()) {
             // Additional statuses except for agents
             $additionalStatuses = [
                 [
@@ -98,9 +108,112 @@ class DashboardController extends Controller
             $ticketStatuses = array_merge($ticketStatuses, $additionalStatuses);
         }
 
+        // Ticket Activity (last 30 days)
+        $startDate = Carbon::now()->subDays(29)->startOfDay();
+        $endDate = Carbon::now()->endOfDay();
+
+        $dateRange = collect(range(0, 29))->map(function ($i) {
+            return Carbon::now()->subDays(29 - $i)->toDateString();
+        });
+
+        $createdSeries = $dateRange->map(function ($date) {
+            return Ticket::whereDate('created_at', $date)->count();
+        });
+
+        $closedSeries = $dateRange->map(function ($date) {
+            return ActivityLog::whereDate('created_at', $date)
+                ->where('description', 'like', '%closed the ticket%')
+                ->count();
+        });
+
+        $reopenedSeries = $dateRange->map(function ($date) {
+            return ActivityLog::whereDate('created_at', $date)
+                ->where('description', 'like', '%reopened the ticket%')
+                ->count();
+        });
+
+        $assignedSeries = $dateRange->map(function ($date) {
+            // Using claimed as assigned indicator
+            return ActivityLog::whereDate('created_at', $date)
+                ->where('description', 'like', '%claimed the ticket%')
+                ->count();
+        });
+
+        $disapprovedSeries = $dateRange->map(function ($date) {
+            // Using claimed as assigned indicator
+            return ActivityLog::whereDate('created_at', $date)
+                ->where('description', 'like', '%disapproved the ticket%')
+                ->count();
+        });
+
+        $overdueSeries = $dateRange->map(function ($date) {
+            return Ticket::where('status_id', Status::OVERDUE)
+                ->whereDate('updated_at', $date)
+                ->count();
+        });
+
+        $ticketActivity = [
+            'labels' => $dateRange->map(fn($d) => Carbon::parse($d)->format('m-d')),
+            'series' => [
+                'created' => $createdSeries,
+                'closed' => $closedSeries,
+                'reopened' => $reopenedSeries,
+                'assigned' => $assignedSeries,
+                'disapproved' => $disapprovedSeries,
+                'overdue' => $overdueSeries,
+            ]
+        ];
+
+        // Statistics: Department, Topics, Agent
+        $departments = ServiceDepartment::query()->get(['id','name']);
+        $departmentStats = $departments->map(function ($dept) {
+            $ticketQuery = Ticket::where('service_department_id', $dept->id);
+            return [
+                'name' => $dept->name,
+                'opened' => (clone $ticketQuery)->count(),
+                'assigned' => (clone $ticketQuery)->whereNotNull('agent_id')->count(),
+                'overdue' => (clone $ticketQuery)->where('status_id', Status::OVERDUE)->count(),
+                'closed' => (clone $ticketQuery)->where('status_id', Status::CLOSED)->count(),
+                'reopened' => ActivityLog::whereIn('ticket_id', (clone $ticketQuery)->pluck('id'))
+                    ->where('description', 'like', '%reopened the ticket%')->count(),
+            ];
+        });
+
+        $helpTopics = HelpTopic::query()->get(['id','name']);
+        $topicStats = $helpTopics->map(function ($topic) {
+            $ticketQuery = Ticket::where('help_topic_id', $topic->id);
+            return [
+                'name' => $topic->name,
+                'opened' => (clone $ticketQuery)->count(),
+                'assigned' => (clone $ticketQuery)->whereNotNull('agent_id')->count(),
+                'overdue' => (clone $ticketQuery)->where('status_id', Status::OVERDUE)->count(),
+                'closed' => (clone $ticketQuery)->where('status_id', Status::CLOSED)->count(),
+                'reopened' => ActivityLog::whereIn('ticket_id', (clone $ticketQuery)->pluck('id'))
+                    ->where('description', 'like', '%reopened the ticket%')->count(),
+            ];
+        });
+
+        $agents = User::role(Role::AGENT)->with('profile')->get(['id','email']);
+        $agentStats = $agents->map(function ($agent) {
+            $assignedQuery = Ticket::where('agent_id', $agent->id);
+            return [
+                'name' => $agent->profile?->getFullName ?? $agent->email,
+                'opened' => 0, // agents don't open tickets
+                'assigned' => (clone $assignedQuery)->count(),
+                'overdue' => (clone $assignedQuery)->where('status_id', Status::OVERDUE)->count(),
+                'closed' => (clone $assignedQuery)->where('status_id', Status::CLOSED)->count(),
+                'reopened' => ActivityLog::whereIn('ticket_id', (clone $assignedQuery)->pluck('id'))
+                    ->where('description', 'like', '%reopened the ticket%')->count(),
+            ];
+        });
+
         return view('layouts.staff.system_admin.dashboard', compact([
             'ticketStatuses',
-            'totalTickets'
+            'totalTickets',
+            'ticketActivity',
+            'departmentStats',
+            'topicStats',
+            'agentStats',
         ]));
     }
 }

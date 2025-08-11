@@ -13,5 +13,15 @@
         <div class="col-xl-12 box-col-12 des-xl-100 content__container">
             @include('layouts.staff.includes.dashboard.ticket_statuses', ['ticketStatuses' => $ticketStatuses, 'totalTickets' => $totalTickets])
         </div>
+        <div class="col-xl-12 box-col-12 des-xl-100 content__container">
+            @include('layouts.staff.system_admin.includes.ticket_activity', ['ticketActivity' => $ticketActivity])
+        </div>
+        <div class="col-xl-12 box-col-12 des-xl-100 content__container">
+            @include('layouts.staff.system_admin.includes.statistics', [
+                'departmentStats' => $departmentStats,
+                'topicStats' => $topicStats,
+                'agentStats' => $agentStats
+            ])
+        </div>
     </div>
 @endsection
