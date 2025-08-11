@@ -190,6 +190,61 @@
                     </span>
                 @enderror
             </div>
+            
+            {{-- Options for checkbox and dropdown fields --}}
+            @if(in_array($type, ['checkbox', 'dropdown']))
+                <div class="col-12 mt-3">
+                    <div class="mb-2">
+                        <label class="form-label text-muted form__field__label" style="font-weight: 500;">
+                            {{ ucfirst($type) }} Options
+                        </label>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input wire:model="newOption" wire:keydown.enter="addOption" 
+                                    class="form-control form__field" type="text" 
+                                    placeholder="Enter option and press Enter or click Add">
+                            </div>
+                            <div class="col-md-4">
+                                <button wire:click="addOption" type="button" 
+                                    class="btn btn-sm btn-outline-primary">
+                                    Add Option
+                                </button>
+                            </div>
+                        </div>
+                        @error('newOption')
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ $message }}
+                            </span>
+                        @enderror
+                        @error('fieldOptions')
+                            <span class="error__message">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ $message }}
+                            </span>
+                        @enderror
+                    </div>
+                    
+                    @if(!empty($fieldOptions))
+                        <div class="mt-2">
+                            <small class="text-muted">Current Options:</small>
+                            <div class="d-flex flex-wrap gap-2 mt-1">
+                                @foreach($fieldOptions as $index => $option)
+                                    <span class="badge bg-light text-dark d-flex align-items-center gap-1" 
+                                        style="border: 1px solid #dee2e6;">
+                                        {{ $option }}
+                                        <button wire:click="removeOption({{ $index }})" 
+                                            type="button" class="btn-close btn-close-sm" 
+                                            style="font-size: 0.6rem;" aria-label="Remove">
+                                        </button>
+                                    </span>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            @endif
+            
             <div class="col-12 col-md-6 d-flex flex-column justify-content-end mx-0 mt-3">
                 <div class="mb-2">
                     <button wire:click="addField" type="button"

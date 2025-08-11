@@ -5,7 +5,7 @@
                 <div class="row my-3 mx-auto px-1 rounded-3 custom__form">
                     <div class="d-flex align-items-center justify-content-between flex-row mb-3">
                         <h6 class="fw-bold mt-2 mb-0 text-end mt-4 form__name" style="text-transform: uppercase;">
-                            {{ $ticket->helpTopic->form->name }}
+                            {{ $ticket->customFormFooter->form->name ?? 'Custom Form' }}
                         </h6>
                         <img src="{{ asset('images/gmall-davao-pr-form.png') }}" class="pr__form__gmall__logo mt-3" alt="GMall Ticketing System"
                             height="50px;">
@@ -71,8 +71,22 @@
                                             @foreach ($fields as $field)
                                                 <tr class="row__field">
                                                     @foreach ($headers as $header)
-                                                        <td class="field__value">
-                                                            {{ $field[$header] ?? '' }}
+                                                        <td class="field__value" style="word-wrap: break-word; max-width: 200px;">
+                                                            @php
+                                                                $fieldValue = $field[$header] ?? '';
+                                                                $fieldType = $this->getFieldType($header);
+                                                            @endphp
+                                                            @if ($fieldType === 'checkbox')
+                                                                @php
+                                                                    $checkboxValue = is_string($fieldValue) ? json_decode($fieldValue, true) : $fieldValue;
+                                                                    $checkboxValue = is_array($checkboxValue) ? $checkboxValue : [];
+                                                                @endphp
+                                                                <div style="word-wrap: break-word; white-space: normal; line-height: 1.4;">
+                                                                    {{ implode(', ', $checkboxValue) }}
+                                                                </div>
+                                                            @else
+                                                                {{ $fieldValue }}
+                                                            @endif
                                                         </td>
                                                     @endforeach
                                                 </tr>
@@ -151,7 +165,7 @@
                         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
                         heightLeft -= pageHeight;
                     }
-                    pdf.save('{{ $ticket->helpTopic->form->name }}.pdf');
+                    pdf.save('{{ $ticket->customFormFooter->form->name ?? 'custom-form' }}.pdf');
                 }
             });
         });

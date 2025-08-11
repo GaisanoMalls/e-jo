@@ -15,12 +15,13 @@ use Exception;
 use Illuminate\Database\Eloquent\Casts\ArrayObject;
 use Livewire\Component;
 use Spatie\LaravelOptions\Options;
+use Illuminate\Database\Eloquent\Collection;
 
 class HelpTopicList extends Component
 {
     use BasicModelQueries;
 
-    public ?Form $helpTopicForm = null;
+    public Collection $helpTopicForms;
     public ?int $deleteHelpTopicId = null;
     public ?int $deleteHelpTopicFormId = null;
     public ?string $deleteHelpTopicFormName = null;
@@ -53,6 +54,8 @@ class HelpTopicList extends Component
     private ?ArrayObject $editSelectedFieldConfig = null;
     public ?string $editSelectedFieldGetConfigValueFrom = null;
     public bool $editAsPredefinedField = false;
+    public array $editFieldOptions = [];
+    public ?string $editNewOption = null;
 
     public ?int $editFormId = null;
     public ?string $editFormName = null;
@@ -86,7 +89,7 @@ class HelpTopicList extends Component
     {
         $this->cancelEditFormName();
         $this->editSelectedFieldIsCurrentlyEditing = false;
-        $this->helpTopicForm = $helpTopic->form;
+        $this->helpTopicForms = $helpTopic->form;
     }
 
     public function deleteHelpTopicFormConfirm(Form $form)
@@ -148,6 +151,15 @@ class HelpTopicList extends Component
         $this->editSelectedFieldIsHeaderField = $field->is_header_field;
         $this->editSelectedFieldConfig = $field->config;
         $this->editAsPredefinedField = $field->config['get_value_from']['value'] !== null;
+        
+        // Load existing options for checkbox/dropdown fields
+        if (in_array($field->type, ['checkbox', 'dropdown']) && $field->config) {
+            $config = is_string($field->config) ? json_decode($field->config, true) : $field->config;
+            $this->editFieldOptions = $config['options'] ?? [];
+        } else {
+            $this->editFieldOptions = [];
+        }
+        $this->editNewOption = null;
 
         $this->resetValidation();
 
@@ -188,6 +200,37 @@ class HelpTopicList extends Component
             $this->editSelectedFieldAssignedColumnNumber = null;
             $this->resetValidation('editSelectedFieldAssignedColumnNumber');
         }
+    }
+
+    public function updatedEditSelectedFieldType()
+    {
+        // Clear options when field type changes during edit
+        $this->editFieldOptions = [];
+        $this->editNewOption = null;
+        $this->resetValidation(['editFieldOptions', 'editNewOption']);
+    }
+
+    public function addEditOption()
+    {
+        if (!$this->editNewOption) {
+            $this->addError('editNewOption', 'Option is required');
+            return;
+        }
+        
+        if (in_array($this->editNewOption, $this->editFieldOptions)) {
+            $this->addError('editNewOption', 'Option already exists');
+            return;
+        }
+        
+        $this->editFieldOptions[] = $this->editNewOption;
+        $this->editNewOption = null;
+        $this->resetValidation('editNewOption');
+    }
+
+    public function removeEditOption($index)
+    {
+        unset($this->editFieldOptions[$index]);
+        $this->editFieldOptions = array_values($this->editFieldOptions);
     }
 
     private function takenPredefinedFieldValues()
@@ -285,6 +328,20 @@ class HelpTopicList extends Component
             return;
         }
 
+        // Validate options for checkbox and dropdown fields
+        if (in_array($this->editSelectedFieldType, ['checkbox', 'dropdown']) && empty($this->editFieldOptions)) {
+            $this->addError('editFieldOptions', 'At least one option is required for ' . $this->editSelectedFieldType . ' fields');
+            return;
+        } else {
+            $this->resetValidation('editFieldOptions');
+        }
+
+        $config = Field::setConfig($this->editSelectedFieldGetConfigValueFrom);
+        
+        // Add options to config for checkbox and dropdown fields
+        if (in_array($this->editSelectedFieldType, ['checkbox', 'dropdown'])) {
+            $config = json_encode(['options' => $this->editFieldOptions]);
+        }
 
         Field::where([
             ['id', $this->editSelectedFieldId],
@@ -299,7 +356,7 @@ class HelpTopicList extends Component
                 'is_enabled' => $this->editSelectedFieldEnabled,
                 'assigned_column' => $this->editSelectedFieldAssignedColumnNumber ?? null,
                 'is_header_field' => $this->editSelectedFieldIsHeaderField,
-                'config' => Field::setConfig($this->editSelectedFieldGetConfigValueFrom)
+                'config' => $config
             ]);
 
         $this->editSelectedFieldIsCurrentlyEditing = false;
@@ -461,6 +518,8 @@ class HelpTopicList extends Component
         $this->editSelectedFieldAssignedColumnNumber = null;
         $this->editSelectedFieldIsHeaderField = false;
         $this->editSelectedFieldConfig = null;
+        $this->editFieldOptions = [];
+        $this->editNewOption = null;
     }
 
     public function updatedSelectedFormFieldName($value)

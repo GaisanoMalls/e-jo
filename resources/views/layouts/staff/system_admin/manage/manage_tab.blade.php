@@ -29,6 +29,24 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('staff.manage.store.index') }}"
+                    class="btn d-flex align-items-center border-0 settings__tab__button
+                    {{ Route::is('staff.manage.store.*') ? 'settings__active__tab' : '' }}">
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
+                        Stores
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('staff.manage.store_groups.index') }}"
+                    class="btn d-flex align-items-center border-0 settings__tab__button
+                    {{ Route::is('staff.manage.store_groups.*') ? 'settings__active__tab' : '' }}">
+                    <span class="rounded-2" style="padding: 0.4rem 0;">
+                        Store Groups
+                    </span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('staff.manage.bu_department.index') }}"
                     class="btn d-flex align-items-center border-0 settings__tab__button
                     {{ Route::is('staff.manage.bu_department.*') ? 'settings__active__tab' : '' }}">

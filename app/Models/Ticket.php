@@ -189,7 +189,7 @@ class Ticket extends Model
 
         // return '';
 
-        return $this->teams()?->first()->name;
+        return $this->teams()?->first()->name ?? 'No team Assigned'; // change this for the teams
     }
 
     public function isSpecialProject(): bool

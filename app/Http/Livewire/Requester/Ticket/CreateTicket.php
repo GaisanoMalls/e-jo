@@ -72,9 +72,12 @@ class CreateTicket extends Component
 
     // Help topic form
     public ?Form $helpTopicForm = null;
+    public $helpTopicForms = null;
+    public ?int $selectedFormId = null;
     public ?int $formId = null;
     public ?string $formName = null;
     public bool $isHelpTopicHasForm = false;
+    public bool $hasMultipleForms = false;
     public bool $isHeaderFieldSet = false;
     public bool $isHeaderFieldsHasValues = false;
     public array $formFields = [];
@@ -83,12 +86,26 @@ class CreateTicket extends Component
     public array $rowFields = [];
     public array $fieldsWithDefaultValues = [];
     public ?string $poNumber = null;
+    public ?\Illuminate\Support\Collection $storeGroups = null;
+    public ?\Illuminate\Support\Collection $stores = null;
 
     protected $listeners = ['clearTicketErrorMessages' => 'clearErrorMessage'];
 
     public function mount()
     {
         $this->setDefaultPriorityLevel();
+        $this->fetchStoreGroups();
+        $this->fetchStores();
+    }
+
+    public function fetchStoreGroups()
+    {
+        $this->storeGroups = $this->queryStoreGroups();
+    }
+
+    public function fetchStores()
+    {
+        $this->stores = $this->queryStores();
     }
 
     public function rules()
@@ -168,6 +185,9 @@ class CreateTicket extends Component
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('clear-branch-dropdown-select');
         $this->setDefaultPriorityLevel();
+        // Re-fetch data after reset to ensure properties are initialized
+        $this->fetchStoreGroups();
+        $this->fetchStores();
     }
 
     public function updatedFileAttachments(&$value)
@@ -197,6 +217,8 @@ class CreateTicket extends Component
     {
         $this->reset();
         $this->dispatchBrowserEvent('clear-select-dropdown');
+        $this->fetchStoreGroups();
+        $this->fetchStores();
     }
 
     /**
@@ -334,10 +356,56 @@ class CreateTicket extends Component
             ->pluck('id') // Get only the ID
             ->first(); // Take the first result
 
-        // Get the form and its fields for the selected help topic
-        $helpTopicForm = Form::with('fields')->where('help_topic_id', $value)->first(); // Get the help topic form
+        // Get all forms for the selected help topic
+        $helpTopicForms = Form::with('fields')->where('help_topic_id', $value)->get();
+        
+        // Set the forms collection
+        $this->helpTopicForms = $helpTopicForms;
 
-        // Check if form exists for this help topic
+        // Check if forms exist for this help topic
+        if ($helpTopicForms->count() > 0) {
+            // Check if there are multiple forms
+            if ($helpTopicForms->count() > 1) {
+                $this->hasMultipleForms = true;
+                $this->isHelpTopicHasForm = false; // Don't show form until one is selected
+                $this->helpTopicForm = null;
+                $this->formFields = [];
+                $this->fieldsWithDefaultValues = [];
+                
+                // Dispatch event to show form selector
+                $this->dispatchBrowserEvent('show-form-selector', [
+                    'forms' => $helpTopicForms->map(function($form) {
+                        return [
+                            'id' => $form->id,
+                            'name' => $form->name
+                        ];
+                    })->toArray()
+                ]);
+                
+                // Show file attachment field by default
+                $this->dispatchBrowserEvent('show-ticket-file-attachment-field-container');
+                return;
+            } else {
+                // Single form - load it directly
+                $this->hasMultipleForms = false;
+                $helpTopicForm = $helpTopicForms->first();
+                $this->loadSelectedForm($helpTopicForm);
+            }
+        } else {
+            // No form exists for this help topic
+            $this->isHelpTopicHasForm = false;
+            $this->hasMultipleForms = false;
+
+            // Hide description container since we're not using custom form
+            $this->dispatchBrowserEvent('hide-ticket-description-container');
+        }
+    }
+
+    /**
+     * Load the selected form and its fields
+     */
+    public function loadSelectedForm($helpTopicForm)
+    {
         if ($helpTopicForm) {
             // Process each field in the form
             foreach ($helpTopicForm->fields as $field) {
@@ -370,7 +438,7 @@ class CreateTicket extends Component
                     'variable_name' => $field->variable_name,
                     'is_required' => $field->is_required,
                     'is_enabled' => $field->is_enabled,
-                    'value' => null,  // Will be populated with user input
+                    'value' => $field->type === 'checkbox' ? [] : null,  // Initialize as array for checkboxes
                     'assigned_column' => $field->assigned_column,
                     'is_header_field' => $field->is_header_field,
                     'config' => $field->config,
@@ -390,13 +458,25 @@ class CreateTicket extends Component
 
             // Show the form UI
             $this->dispatchBrowserEvent('show-help-topic-forms');
-        } else {
-            // No form exists for this help topic
-            $this->isHelpTopicHasForm = false;
-
-            // Hide description container since we're not using custom form
-            $this->dispatchBrowserEvent('hide-ticket-description-container');
+            
+            // Refresh store groups for dynamic dropdowns
+            $this->fetchStoreGroups();
         }
+    }
+
+    /**
+     * Handle form selection when multiple forms are available
+     */
+    public function updatedSelectedFormId($value)
+    {
+        if ($value && $this->helpTopicForms) {
+            $selectedForm = $this->helpTopicForms->firstWhere('id', $value);
+            if ($selectedForm) {
+                $this->loadSelectedForm($selectedForm);
+            }
+        }
+        // Refresh store groups when form selection changes
+        $this->fetchStoreGroups();
     }
 
     /**
@@ -502,7 +582,7 @@ class CreateTicket extends Component
                 FieldHeaderValue::create([
                     'ticket_id' => $ticket->id,
                     'field_id' => $field['id'],
-                    'value' => $field['value']
+                    'value' => is_array($field['value']) ? json_encode($field['value']) : $field['value']
                 ]);
             }
         }
@@ -512,7 +592,7 @@ class CreateTicket extends Component
                 FieldRowValue::create([
                     'ticket_id' => $ticket->id,
                     'field_id' => $field['id'],
-                    'value' => $field['value'],
+                    'value' => is_array($field['value']) ? json_encode($field['value']) : $field['value'],
                     'row' => $field['row']
                 ]);
             }
@@ -539,12 +619,13 @@ class CreateTicket extends Component
      */
     public function isPredefinedField($formField)
     {
-        return (isset($formField['config']['get_value_from']['label']) && isset($formField['config']['get_value_from']['value']))
-            && $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value
+        return isset($formField['config']['get_value_from']['label']) 
+            && isset($formField['config']['get_value_from']['value'])
+            && ($formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::CURRENT_DATE->value
             || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::TICKET_NUMBER->value
             || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_BRANCH->value
             || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_DEPARTMENT->value
-            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value;
+            || $formField['config']['get_value_from']['value'] === PredefinedFieldValueEnum::USER_FULL_NAME->value);
     }
 
     /**
@@ -757,7 +838,8 @@ class CreateTicket extends Component
             // Check if field is NOT a header field AND has a non-empty value
             if (!$field['is_header_field'] && !empty($field['value'])) {
                 // Clear the field's value while preserving other properties
-                $field['value'] = '';
+                // For checkbox fields, reset to empty array; for others, reset to empty string
+                $field['value'] = $field['type'] === 'checkbox' ? [] : '';
             }
         }
         // Note: The &$field reference is automatically undone after loop completion
@@ -817,10 +899,10 @@ class CreateTicket extends Component
                 ]);
 
                 // Handle custom form linking if help topic has a form
-                if ($ticket->helpTopic->form) {
+                if ($this->helpTopicForm) {
                     TicketCustomFormFooter::create([
                         'ticket_id' => $ticket->id,
-                        'form_id' => $ticket->helpTopic->form->id,
+                        'form_id' => $this->formId,
                         'requested_by' => $ticket->user->id
                     ]);
                 }
@@ -925,6 +1007,14 @@ class CreateTicket extends Component
 
     public function render()
     {
+        // Ensure storeGroups and stores are initialized before rendering
+        if ($this->storeGroups === null) {
+            $this->fetchStoreGroups();
+        }
+        if ($this->stores === null) {
+            $this->fetchStores();
+        }
+        
         return view('livewire.requester.ticket.create-ticket', [
             'priorityLevels' => $this->queryPriorityLevels(),
             'serviceDepartments' => $this->queryServiceDepartments(),

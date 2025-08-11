@@ -39,10 +39,13 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center gap-1 text-start td__content">
-                                    @if ($helpTopic->form)
+                                    @if ($helpTopic->form->isNotEmpty())
                                         <span wire:click="viewHelpTopicForm({{ $helpTopic->id }})" data-bs-toggle="modal"
                                             data-bs-target="#viewFormModal" class="btn__view__form">
                                             View
+                                            @if ($helpTopic->form->count() > 1)
+                                                ({{ $helpTopic->form->count() }})  
+                                            @endif
                                         </span>
                                     @else
                                         N/A
@@ -168,240 +171,297 @@
                         <i class="fa-sharp fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                @if ($helpTopicForm)
-                    <div wire:key="form-{{ $helpTopicForm->id }}" class="d-flex flex-column gap-2 py-3 helptopic__form__list">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center gap-3 helptopic__form__name__header">
-                                <div class="d-flex align-items-center gap-2" style="font-size: 0.95rem; color: black;">
+                @if ($helpTopicForms && $helpTopicForms->isNotEmpty())
+                    @foreach ($helpTopicForms as $helpTopicForm)
+                        <div wire:key="form-{{ $helpTopicForm->id }}" class="d-flex flex-column gap-2 py-3 helptopic__form__list">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3 helptopic__form__name__header">
+                                    <div class="d-flex align-items-center gap-2" style="font-size: 0.95rem; color: black;">
+                                        @if ($editFormNameCurrentlyEditing && $editFormId == $helpTopicForm->id)
+                                            <input wire:model="editFormName" class="form-control border-0 edit__form__name__field" type="text"
+                                                placeholder="Enter form name">
+                                        @else
+                                            <i class="bi bi-journal-text"></i>
+                                            {{ $helpTopicForm->name }}
+                                        @endif
+                                    </div>
                                     @if ($editFormNameCurrentlyEditing && $editFormId == $helpTopicForm->id)
-                                        <input wire:model="editFormName" class="form-control border-0 edit__form__name__field" type="text"
-                                            placeholder="Enter form name">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <button wire:click="updateFormName" type="button"
+                                                class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
+                                                style="height: 4px; width: 4px;">
+                                                <i wire:loading.remove wire:target="editFormName({{ $helpTopicForm->id }})" class="bi bi-check-lg"></i>
+                                                <i wire:loading wire:target="editFormName({{ $helpTopicForm->id }})" class='bx bx-loader bx-spin'></i>
+                                            </button>
+                                            <button wire:click="discardEditFormName({{ $helpTopicForm->id }})" type="button"
+                                                class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
+                                                style="height: 4px; width: 4px;">
+                                                <i wire:loading.remove wire:target="discardEditFormName({{ $helpTopicForm->id }})" class="bi bi-x"
+                                                    style="font-size: 16px;"></i>
+                                                <i wire:loading wire:target="discardEditFormName({{ $helpTopicForm->id }})"
+                                                    class='bx bx-loader bx-spin'></i>
+                                            </button>
+                                        </div>
                                     @else
-                                        <i class="bi bi-journal-text"></i>
-                                        {{ $helpTopicForm->name }}
-                                    @endif
-                                </div>
-                                @if ($editFormNameCurrentlyEditing && $editFormId == $helpTopicForm->id)
-                                    <div class="d-flex align-items-center gap-3">
-                                        <button wire:click="updateFormName" type="button"
-                                            class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
+                                        <button wire:click="editFormName({{ $helpTopicForm->id }})" type="button"
+                                            class="btn btn-sm d-flex border-0 align-items-center justify-content-center d-none btn__edit__form__name"
                                             style="height: 4px; width: 4px;">
-                                            <i wire:loading.remove wire:target="editFormName({{ $helpTopicForm->id }})" class="bi bi-check-lg"></i>
+                                            <i wire:loading.remove wire:target="editFormName({{ $helpTopicForm->id }})" class="bi bi-pencil"
+                                                style="font-size: 11px;"></i>
                                             <i wire:loading wire:target="editFormName({{ $helpTopicForm->id }})" class='bx bx-loader bx-spin'></i>
                                         </button>
-                                        <button wire:click="discardEditFormName({{ $helpTopicForm->id }})" type="button"
-                                            class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
-                                            style="height: 4px; width: 4px;">
-                                            <i wire:loading.remove wire:target="discardEditFormName({{ $helpTopicForm->id }})" class="bi bi-x"
-                                                style="font-size: 16px;"></i>
-                                            <i wire:loading wire:target="discardEditFormName({{ $helpTopicForm->id }})"
-                                                class='bx bx-loader bx-spin'></i>
-                                        </button>
-                                    </div>
-                                @else
-                                    <button wire:click="editFormName({{ $helpTopicForm->id }})" type="button"
-                                        class="btn btn-sm d-flex border-0 align-items-center justify-content-center d-none btn__edit__form__name"
-                                        style="height: 4px; width: 4px;">
-                                        <i wire:loading.remove wire:target="editFormName({{ $helpTopicForm->id }})" class="bi bi-pencil"
-                                            style="font-size: 11px;"></i>
-                                        <i wire:loading wire:target="editFormName({{ $helpTopicForm->id }})" class='bx bx-loader bx-spin'></i>
+                                    @endif
+                                </div>
+                                <div wire:click="addFieldToSelectedForm({{ $helpTopicForm->id }})" class="d-flex align-items-center gap-1">
+                                    <button data-bs-target="#addFieldForSelectedForm" data-bs-toggle="modal"
+                                        class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0">
+                                        <i class="bi bi-plus-lg"></i>
                                     </button>
-                                @endif
+                                    <button wire:click="deleteHelpTopicFormConfirm({{ $helpTopicForm }})"
+                                        class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0" data-bs-toggle="modal"
+                                        data-bs-target="#deleteHelpTopicFormModal">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div wire:click="addFieldToSelectedForm({{ $helpTopicForm->id }})" class="d-flex align-items-center gap-1">
-                                <button data-bs-target="#addFieldForSelectedForm" data-bs-toggle="modal"
-                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0">
-                                    <i class="bi bi-plus-lg"></i>
-                                </button>
-                                <button wire:click="deleteHelpTopicFormConfirm({{ $helpTopicForm }})"
-                                    class="btn d-flex align-items-center justify-content-center btn-sm action__button mt-0" data-bs-toggle="modal"
-                                    data-bs-target="#deleteHelpTopicFormModal">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        @if ($helpTopicForm->fields)
-                            <div class="d-flex flex-wrap align-items-center gap-1">
-                                @foreach ($helpTopicForm->fields as $field)
-                                    <span wire:key="field-{{ $field->id }}" class="d-flex align-items-center gap-2 form__fields__container"
-                                        style="font-size: 0.75rem; border: 1px solid #dddddd; border-radius: 20px; padding: 3px 7px 3px 8px; {{ $field->is_enabled ? 'color: black;' : 'color: #6b7280;' }} {{ $editSelectedFieldIsCurrentlyEditing && $editSelectedFieldId === $field->id ? 'border: 0.08rem solid #d32839; font-weight: 500; color: #d32839;' : '' }}">
-                                        {{ $field->name }}
-                                        @if (!$editSelectedFieldIsCurrentlyEditing || $editSelectedFieldId !== $field->id)
-                                            <div class="d-flex align-items-center gap-1 d-none field__container">
-                                                <button wire:click="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
-                                                    type="button" class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
-                                                    style="height: 4px; width: 4px;">
-                                                    <i wire:loading.remove
-                                                        wire:target="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
-                                                        class="bi bi-pencil" style="font-size: 11px;"></i>
-                                                    <i wire:loading wire:target="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
-                                                        class='bx bx-loader bx-spin' style="font-size: 13px;"></i>
-                                                </button>
-                                                <button wire:click="deleteSelectedFormField({{ $field->id }})" type="button"
-                                                    class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
-                                                    style="height: 4px; width: 4px;" data-bs-toggle="modal" data-bs-target="#deleteFormFieldModal">
-                                                    <i wire:loading.remove wire:target="deleteSelectedFormField({{ $field->id }})"
-                                                        class="bi bi-trash text-danger" style="font-size: 11px;"></i>
-                                                    <i wire:loading="deleteSelectedFormField({{ $field->id }})"
-                                                        wire:target="deleteSelectedFormField({{ $field->id }})" class="bx bx-loader bx-spin"
-                                                        style="font-size: 13px;"></i>
-                                                </button>
+                            @if ($helpTopicForm->fields)
+                                <div class="d-flex flex-wrap align-items-center gap-1">
+                                    @foreach ($helpTopicForm->fields as $field)
+                                        <span wire:key="field-{{ $field->id }}" class="d-flex align-items-center gap-2 form__fields__container"
+                                            style="font-size: 0.75rem; border: 1px solid #dddddd; border-radius: 20px; padding: 3px 7px 3px 8px; {{ $field->is_enabled ? 'color: black;' : 'color: #6b7280;' }} {{ $editSelectedFieldIsCurrentlyEditing && $editSelectedFieldId === $field->id ? 'border: 0.08rem solid #d32839; font-weight: 500; color: #d32839;' : '' }}">
+                                            {{ $field->name }}
+                                            @if (!$editSelectedFieldIsCurrentlyEditing || $editSelectedFieldId !== $field->id)
+                                                <div class="d-flex align-items-center gap-1 d-none field__container">
+                                                    <button wire:click="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
+                                                        type="button" class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
+                                                        style="height: 4px; width: 4px;">
+                                                        <i wire:loading.remove
+                                                            wire:target="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
+                                                            class="bi bi-pencil" style="font-size: 11px;"></i>
+                                                        <i wire:loading wire:target="editSelectedField({{ $field->id }}, {{ $helpTopicForm->id }})"
+                                                            class='bx bx-loader bx-spin' style="font-size: 13px;"></i>
+                                                    </button>
+                                                    <button wire:click="deleteSelectedFormField({{ $field->id }})" type="button"
+                                                        class="btn btn-sm d-flex border-0 align-items-center justify-content-center"
+                                                        style="height: 4px; width: 4px;" data-bs-toggle="modal" data-bs-target="#deleteFormFieldModal">
+                                                        <i wire:loading.remove wire:target="deleteSelectedFormField({{ $field->id }})"
+                                                            class="bi bi-trash text-danger" style="font-size: 11px;"></i>
+                                                        <i wire:loading="deleteSelectedFormField({{ $field->id }})"
+                                                            wire:target="deleteSelectedFormField({{ $field->id }})" class="bx bx-loader bx-spin"
+                                                            style="font-size: 13px;"></i>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </span>
+                                    @endforeach
+                                </div>
+                                @if ($editSelectedFieldIsCurrentlyEditing && $editSelectedFieldFormId === $helpTopicForm->id)
+                                    <div class="row mt-1 px-3 py-4 rounded-3"
+                                        style="background-color: #f3f4f6; margin-left: 2px; margin-right: 2px; border: 0.08rem solid #dddddd;">
+                                        <div class="row">
+                                            <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
+                                                <input wire:model="editAsPredefinedField" class="form-check-input" type="checkbox" role="switch"
+                                                    id="editPredefinedFieldCheck" wire:loading.attr="disabled" style="margin-right: 10px !important;">
+                                                <label class="form-check-label" for="editPredefinedFieldCheck">
+                                                    Set as predefined field
+                                                </label>
                                             </div>
-                                        @endif
-                                    </span>
-                                @endforeach
-                            </div>
-                            @if ($editSelectedFieldIsCurrentlyEditing && $editSelectedFieldFormId === $helpTopicForm->id)
-                                <div class="row mt-1 px-3 py-4 rounded-3"
-                                    style="background-color: #f3f4f6; margin-left: 2px; margin-right: 2px; border: 0.08rem solid #dddddd;">
-                                    <div class="row">
-                                        <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
-                                            <input wire:model="editAsPredefinedField" class="form-check-input" type="checkbox" role="switch"
-                                                id="editPredefinedFieldCheck" wire:loading.attr="disabled" style="margin-right: 10px !important;">
-                                            <label class="form-check-label" for="editPredefinedFieldCheck">
-                                                Set as predefined field
-                                            </label>
-                                        </div>
-                                        @if ($editAsPredefinedField)
-                                            <div class="row mb-3">
-                                                <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                                    <div class="mb-2">
-                                                        <label class="form-label text-muted form__field__label" style="font-weight: 500;">
-                                                            Get default value from
-                                                        </label>
-                                                        <div>
-                                                            <div id="edit-selected-field-get-config-value-from" wire:ignore></div>
+                                            @if ($editAsPredefinedField)
+                                                <div class="row mb-3">
+                                                    <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                                        <div class="mb-2">
+                                                            <label class="form-label text-muted form__field__label" style="font-weight: 500;">
+                                                                Get default value from
+                                                            </label>
+                                                            <div>
+                                                                <div id="edit-selected-field-get-config-value-from" wire:ignore></div>
+                                                            </div>
+                                                            @error('editSelectedFieldGetConfigValueFrom')
+                                                                <span class="error__message position-absolute" style="bottom: -13px !important;">
+                                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
                                                         </div>
-                                                        @error('editSelectedFieldGetConfigValueFrom')
-                                                            <span class="error__message position-absolute" style="bottom: -13px !important;">
-                                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
-                                            <input wire:model="editSelectedFieldIsHeaderField" class="form-check-input" type="checkbox"
-                                                role="switch" id="editSelectedFieldIsHeader" wire:loading.attr="disabled"
-                                                style="margin-right: 10px !important;">
-                                            <label class="form-check-label" for="editSelectedFieldIsHeader">
-                                                Set as header field
-                                            </label>
+                                            @endif
                                         </div>
-                                        @if ($editSelectedFieldIsHeaderField)
-                                            <div class="row mb-3">
-                                                <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                                    <div class="mb-2">
-                                                        <label for="fieldName" class="form-label text-muted form__field__label"
-                                                            style="font-weight: 500;">
-                                                            Assign column
-                                                        </label>
-                                                        <div>
-                                                            <div id="edit-select-field-column-number" wire:ignore></div>
+                                        <div class="row">
+                                            <div class="form-check mb-3" style="white-space: nowrap; margin-left: 13px;">
+                                                <input wire:model="editSelectedFieldIsHeaderField" class="form-check-input" type="checkbox"
+                                                    role="switch" id="editSelectedFieldIsHeader" wire:loading.attr="disabled"
+                                                    style="margin-right: 10px !important;">
+                                                <label class="form-check-label" for="editSelectedFieldIsHeader">
+                                                    Set as header field
+                                                </label>
+                                            </div>
+                                            @if ($editSelectedFieldIsHeaderField)
+                                                <div class="row mb-3">
+                                                    <div class="col-lg-4 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                                        <div class="mb-2">
+                                                            <label for="fieldName" class="form-label text-muted form__field__label"
+                                                                style="font-weight: 500;">
+                                                                Assign column
+                                                            </label>
+                                                            <div>
+                                                                <div id="edit-select-field-column-number" wire:ignore></div>
+                                                            </div>
+                                                            @error('editSelectedFieldAssignedColumnNumber')
+                                                                <span class="error__message position-absolute" style="bottom: -13px !important;">
+                                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
                                                         </div>
-                                                        @error('editSelectedFieldAssignedColumnNumber')
-                                                            <span class="error__message position-absolute" style="bottom: -13px !important;">
-                                                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                    </div>
+                                            @endif
+                                        </div>
 
-                                    <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                        <div class="mb-3">
-                                            <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
-                                                Field name
-                                            </label>
-                                            <input wire:model="editSelectedFieldName" class="form-control form__field" type="text"
-                                                id="fieldName" placeholder="Enter field name">
-                                            @error('editSelectedFieldName')
-                                                <span class="error__message position-absolute" style="bottom: -3px !important;">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
-                                            @enderror
+                                        <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            <div class="mb-3">
+                                                <label for="fieldName" class="form-label text-muted form__field__label" style="font-weight: 500;">
+                                                    Field name
+                                                </label>
+                                                <input wire:model="editSelectedFieldName" class="form-control form__field" type="text"
+                                                    id="fieldName" placeholder="Enter field name">
+                                                @error('editSelectedFieldName')
+                                                    <span class="error__message position-absolute" style="bottom: -3px !important;">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                        <div class="mb-3">
-                                            <label class="form-label text-muted form__field__label" style="font-weight: 500;">Type</label>
-                                            <div class="w-100">
-                                                <div id="edit-selected-field-type" wire:ignore>
+                                        <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            <div class="mb-3">
+                                                <label class="form-label text-muted form__field__label" style="font-weight: 500;">Type</label>
+                                                <div class="w-100">
+                                                    <div id="edit-selected-field-type" wire:ignore>
+                                                    </div>
                                                 </div>
+                                                @error('editSelectedFieldType')
+                                                    <span class="error__message position-absolute" style="bottom: -3px !important;">
+                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
                                             </div>
-                                            @error('editSelectedFieldType')
-                                                <span class="error__message position-absolute" style="bottom: -3px !important;">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    {{ $message }}
-                                                </span>
-                                            @enderror
                                         </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                        <div class="w-100 d-flex align-items-center" style="margin-bottom: 19px;">
-                                            <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                <input wire:model="editSelectedFieldRequired" class="form-check-input"
-                                                    id="edit-selected-field-required" type="checkbox" role="switch" wire:loading.attr="disabled"
-                                                    style="margin-right: 10px !important;">
+                                        <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            <div class="w-100 d-flex align-items-center" style="margin-bottom: 19px;">
+                                                <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                    <input wire:model="editSelectedFieldRequired" class="form-check-input"
+                                                        id="edit-selected-field-required" type="checkbox" role="switch" wire:loading.attr="disabled"
+                                                        style="margin-right: 10px !important;">
+                                                </div>
+                                                <label class="form-label text-muted mb-1 form__field__label" for="edit-selected-field-required"
+                                                    style="font-weight: 500;">Required</label>
                                             </div>
-                                            <label class="form-label text-muted mb-1 form__field__label" for="edit-selected-field-required"
-                                                style="font-weight: 500;">Required</label>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
-                                        <div class="w-100 d-flex align-items-center" style="margin-bottom: 19px;">
-                                            <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
-                                                <input wire:model="editSelectedFieldEnabled" class="form-check-input"
-                                                    id="edit-selected-field-required" type="checkbox" role="switch" wire:loading.attr="disabled"
-                                                    style="margin-right: 10px !important;">
+                                        <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-end position-relative">
+                                            <div class="w-100 d-flex align-items-center" style="margin-bottom: 19px;">
+                                                <div class="form-check mx-0" style="white-space: nowrap; margin-left: 13px; margin-bottom: 10px;">
+                                                    <input wire:model="editSelectedFieldEnabled" class="form-check-input"
+                                                        id="edit-selected-field-required" type="checkbox" role="switch" wire:loading.attr="disabled"
+                                                        style="margin-right: 10px !important;">
+                                                </div>
+                                                <label class="form-label text-muted mb-1 form__field__label" r="edit-selected-field-enabled"
+                                                    style="font-weight: 500;">Enabled</label>
                                             </div>
-                                            <label class="form-label text-muted mb-1 form__field__label" r="edit-selected-field-enabled"
-                                                style="font-weight: 500;">Enabled</label>
                                         </div>
-                                    </div>
-                                    <div class="mt-2 d-flex align-items-center gap-2">
-                                        <button wire:click="updateSelectedFormField" type="button"
-                                            class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
-                                            style="padding: 0.6rem 1rem;
-                                                border-radius: 0.563rem;
-                                                font-size: 0.875rem;
-                                                background-color: #d32839;
-                                                color: white;
-                                                font-weight: 500;
-                                                box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
-                                            <span wire:loading wire:target="updateSelectedFormField" class="spinner-border spinner-border-sm"
-                                                role="status" aria-hidden="true">
-                                            </span>
-                                            Update
-                                        </button>
-                                        <button wire:click="cancelEditSelectedFormField" type="button"
-                                            class="btn m-0 btn__modal__footer btn__cancel"
-                                            style="adding: 0.6rem 1rem;
+                                        
+                                        {{-- Options for checkbox and dropdown fields during edit --}}
+                                        @if(in_array($editSelectedFieldType, ['checkbox', 'dropdown']))
+                                            <div class="col-12 mt-3">
+                                                <div class="mb-2">
+                                                    <label class="form-label text-muted form__field__label" style="font-weight: 500;">
+                                                        {{ ucfirst($editSelectedFieldType) }} Options
+                                                    </label>
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <input wire:model="editNewOption" wire:keydown.enter="addEditOption" 
+                                                                class="form-control form__field" type="text" 
+                                                                placeholder="Enter option and press Enter or click Add">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button wire:click="addEditOption" type="button" 
+                                                                class="btn btn-sm btn-outline-primary">
+                                                                Add Option
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    @error('editNewOption')
+                                                        <span class="error__message">
+                                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                    @error('editFieldOptions')
+                                                        <span class="error__message">
+                                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                                
+                                                @if(!empty($editFieldOptions))
+                                                    <div class="mt-2">
+                                                        <small class="text-muted">Current Options:</small>
+                                                        <div class="d-flex flex-wrap gap-2 mt-1">
+                                                            @foreach($editFieldOptions as $index => $option)
+                                                                <span class="badge bg-light text-dark d-flex align-items-center gap-1" 
+                                                                    style="border: 1px solid #dee2e6;">
+                                                                    {{ $option }}
+                                                                    <button wire:click="removeEditOption({{ $index }})" 
+                                                                        type="button" class="btn-close btn-close-sm" 
+                                                                        style="font-size: 0.6rem;" aria-label="Remove">
+                                                                    </button>
+                                                                </span>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        
+                                        <div class="mt-2 d-flex align-items-center gap-2">
+                                            <button wire:click="updateSelectedFormField" type="button"
+                                                class="btn d-flex align-items-center justify-content-center gap-2 m-0 btn__modal__footer btn__send"
+                                                style="padding: 0.6rem 1rem;
                                                     border-radius: 0.563rem;
                                                     font-size: 0.875rem;
-                                                    border: 1px solid #e7e9eb;
-                                                    background-color: transparent;
-                                                    color: #d32839;
-                                                    font-weight: 500;">
-                                            Cancel
-                                        </button>
+                                                    background-color: #d32839;
+                                                    color: white;
+                                                    font-weight: 500;
+                                                    box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(20, 20, 20, 0.12), 0 0.125rem 0.25rem -0.0625rem rgba(20, 20, 20, 0.07);">
+                                                <span wire:loading wire:target="updateSelectedFormField" class="spinner-border spinner-border-sm"
+                                                    role="status" aria-hidden="true">
+                                                </span>
+                                                Update
+                                            </button>
+                                            <button wire:click="cancelEditSelectedFormField" type="button"
+                                                class="btn m-0 btn__modal__footer btn__cancel"
+                                                style="adding: 0.6rem 1rem;
+                                                        border-radius: 0.563rem;
+                                                        font-size: 0.875rem;
+                                                        border: 1px solid #e7e9eb;
+                                                        background-color: transparent;
+                                                        color: #d32839;
+                                                        font-weight: 500;">
+                                                Cancel
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
+                            @else
+                                <em style="font-size: 0.75rem; color: #848d96;">
+                                    Empty fields
+                                </em>
                             @endif
-                        @else
-                            <em style="font-size: 0.75rem; color: #848d96;">
-                                Empty fields
-                            </em>
-                        @endif
-                    </div>
+                        </div>
+                    @endforeach
                 @endif
             </div>
         </div>

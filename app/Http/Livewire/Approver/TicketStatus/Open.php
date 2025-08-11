@@ -33,7 +33,7 @@ class Open extends Component
             ActivityLog::make(ticket_id: $ticket->id, description: 'seen the ticket');
 
             auth()->user()->notifications->each(function ($notification) use ($ticket) {
-                if ($notification->data['ticket']['id'] == $ticket->id) {
+                if (isset($notification->data['ticket']['id']) && $notification->data['ticket']['id'] == $ticket->id) {
                     $notification->markAsRead();
                 }
             });

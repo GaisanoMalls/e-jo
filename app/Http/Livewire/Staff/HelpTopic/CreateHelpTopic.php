@@ -85,7 +85,7 @@ class CreateHelpTopic extends Component
             'name' => ['required'],
             'sla' => ['required'],
             'serviceDepartment' => ['required'],
-            'team' => ['required'],
+            'team' => ['nullable'],
             'selectedBuDepartment' => [$this->isRequiresApproval && empty($this->configurations) ? 'required' : 'nullable'],
             'selectedApprovalLevel' => [$this->isRequiresApproval && empty($this->configurations) ? 'accepted' : 'nullable'],
             'teams' => '',

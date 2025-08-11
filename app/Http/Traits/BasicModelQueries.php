@@ -9,6 +9,8 @@ use App\Models\PriorityLevel;
 use App\Models\ServiceDepartment;
 use App\Models\ServiceLevelAgreement;
 use App\Models\Status;
+use App\Models\Store;
+use App\Models\StoreGroup;
 use App\Models\Suffix;
 use App\Models\Tag;
 use App\Models\Team;
@@ -91,5 +93,15 @@ trait BasicModelQueries
     public function queryTicketStatus()
     {
         return Status::orderByDesc('created_at')->get();
+    }
+
+    public function queryStores()
+    {
+        return Store::with('storeGroup')->orderByDesc('created_at')->get();
+    }
+
+    public function queryStoreGroups()
+    {
+        return StoreGroup::orderByDesc('created_at')->get();
     }
 }

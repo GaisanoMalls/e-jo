@@ -19,6 +19,8 @@ use App\Http\Controllers\Staff\SysAdmin\AccountsController;
 use App\Http\Controllers\Staff\SysAdmin\AccountServiceDeptAdminController;
 use App\Http\Controllers\Staff\SysAdmin\AccountUserController;
 use App\Http\Controllers\Staff\SysAdmin\BranchController;
+use App\Http\Controllers\Staff\SysAdmin\StoreController;
+use App\Http\Controllers\Staff\SysAdmin\StoreGroupController;
 use App\Http\Controllers\Staff\SysAdmin\BUDepartmentController;
 use App\Http\Controllers\Staff\SysAdmin\HelpTopicsController;
 use App\Http\Controllers\Staff\SysAdmin\RolesAndPermissionsController;
@@ -148,6 +150,12 @@ Route::middleware(['auth', Role::staffsOnly()])->group(function () {
                 });
                 Route::prefix('branch')->name('branch.')->group(function () {
                     Route::get('/', BranchController::class)->name('index');
+                });
+                Route::prefix('store')->name('store.')->group(function () {
+                    Route::get('/', StoreController::class)->name('index');
+                });
+                Route::prefix('store-groups')->name('store_groups.')->group(function () {
+                    Route::get('/', StoreGroupController::class)->name('index');
                 });
                 Route::prefix('bu-department')->name('bu_department.')->group(function () {
                     Route::get('/', BUDepartmentController::class)->name('index');

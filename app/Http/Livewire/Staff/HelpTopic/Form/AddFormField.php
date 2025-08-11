@@ -47,6 +47,8 @@ class AddFormField extends Component
     public bool $editingFieldRequired = false;
     public bool $editingFieldEnable = false;
     public bool $editingAsHeaderField = false;
+    public array $fieldOptions = [];
+    public ?string $newOption = null;
 
     public function rules()
     {
@@ -118,11 +120,43 @@ class AddFormField extends Component
 
     public function updatedHelpTopic()
     {
-        if ($this->helpTopicHasExistingForm()) {
-            $this->addError('helpTopic', 'There is already an existing form for this help topic');
-        } else {
-            $this->resetValidation('helpTopic');
+        // if ($this->helpTopicHasExistingForm()) {
+        //     $this->addError('helpTopic', 'There is already an existing form for this help topic');
+        // } else {
+        //     $this->resetValidation('helpTopic');
+        // }
+        $this->resetValidation('helpTopic');
+    }
+
+    public function updatedType()
+    {
+        // Clear options when field type changes
+        $this->fieldOptions = [];
+        $this->newOption = null;
+        $this->resetValidation(['fieldOptions', 'newOption']);
+    }
+
+    public function addOption()
+    {
+        if (!$this->newOption) {
+            $this->addError('newOption', 'Option is required');
+            return;
         }
+        
+        if (in_array($this->newOption, $this->fieldOptions)) {
+            $this->addError('newOption', 'Option already exists');
+            return;
+        }
+        
+        $this->fieldOptions[] = $this->newOption;
+        $this->newOption = null;
+        $this->resetValidation('newOption');
+    }
+
+    public function removeOption($index)
+    {
+        unset($this->fieldOptions[$index]);
+        $this->fieldOptions = array_values($this->fieldOptions);
     }
 
     public function addField()
@@ -159,6 +193,14 @@ class AddFormField extends Component
             $this->resetValidation('type');
         }
 
+        // Validate options for checkbox and dropdown fields
+        if (in_array($this->type, ['checkbox', 'dropdown']) && empty($this->fieldOptions)) {
+            $this->addError('fieldOptions', 'At least one option is required for ' . $this->type . ' fields');
+            return;
+        } else {
+            $this->resetValidation('fieldOptions');
+        }
+
         if (!$this->isRequired) {
             $this->addError('isRequired', 'This field is required');
             return;
@@ -173,6 +215,13 @@ class AddFormField extends Component
             $this->resetValidation('isEnabled');
         }
 
+        $config = Field::setConfig($this->predefinedFieldGetConfig);
+        
+        // Add options to config for checkbox and dropdown fields
+        if (in_array($this->type, ['checkbox', 'dropdown'])) {
+            $config = json_encode(['options' => $this->fieldOptions]);
+        }
+
         array_push($this->addedFields, [
             'name' => $this->name,
             'label' => $this->name,
@@ -182,7 +231,7 @@ class AddFormField extends Component
             'isEnabled' => $this->isEnabled,
             'asHeaderField' => $this->asHeaderField,
             'assignedColumn' => $this->asHeaderField ? $this->assignedColumn : null,
-            'config' => Field::setConfig($this->predefinedFieldGetConfig)
+            'config' => $config
         ]);
 
         $this->reset([
@@ -193,6 +242,8 @@ class AddFormField extends Component
             'isEnabled',
             'assignedColumn',
             'asHeaderField',
+            'fieldOptions',
+            'newOption',
             'asPredefinedField',
             'predefinedFieldGetConfig'
         ]);
@@ -324,9 +375,11 @@ class AddFormField extends Component
         );
     }
 
-    public function helpTopicHasExistingForm()
+    public function helpTopicHasExistingForm($formName)
     {
-        return Form::where('help_topic_id', $this->helpTopic)->exists();
+        return Form::where('help_topic_id', $this->helpTopic)
+               ->where('name', $formName) // Assuming 'type' exists
+               ->exists();
     }
 
     public function saveForm()
@@ -345,7 +398,7 @@ class AddFormField extends Component
             }
 
             DB::transaction(function () {
-                if (!$this->helpTopicHasExistingForm()) {
+                if (!$this->helpTopicHasExistingForm($this->formName)) {
                     $form = Form::create([
                         'help_topic_id' => $this->helpTopic,
                         'visible_to' => $this->visibleTo,

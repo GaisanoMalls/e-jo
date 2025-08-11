@@ -81,6 +81,29 @@
                                 @enderror
                             </div>
                         </div>
+                        @if ($hasMultipleForms)
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label input__field__label">
+                                        Select Form
+                                        @if ($helpTopicForms && $helpTopicForms->count() > 0)
+                                            <span class="fw-normal" style="font-size: 13px;">
+                                                ({{ $helpTopicForms->count() }})
+                                            </span>
+                                        @endif
+                                    </label>
+                                    <div>
+                                        <div id="form-selector-dropdown" wire:ignore></div>
+                                    </div>
+                                    @error('selectedFormId')
+                                        <span class="error__message">
+                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        @endif
                         @if ($doesntHaveApprovalConfig)
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -161,7 +184,11 @@
                                                         @endif
                                                     @endforeach
                                                 @else
-                                                    <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
+                                                    @if ($formField['type'] === FieldType::CHECKBOX->value)
+                                                        <div class="col-12 mb-3" id="form-field-{{ $fieldKey + 1 }}">
+                                                    @else
+                                                        <div class="col-md-6 mb-3" id="form-field-{{ $fieldKey + 1 }}">
+                                                    @endif
                                                         <label class="form-label input__field__label" style="white-space: nowrap">
                                                             {{ $formField['label'] }}
                                                         </label>
@@ -233,7 +260,74 @@
                                                                 @disabled($isHeaderFieldSet && $formField['is_header_field'])>
                                                         @endif --}}
 
-                                                        {{-- Need to change here for dynamic process for the total price of the help topic PR - ICT Support --}}
+                                                        {{-- Checkbox field --}}
+                                                        @if ($formField['type'] === FieldType::CHECKBOX->value)
+                                                            @php
+                                                                $config = is_string($formField['config']) ? json_decode($formField['config'], true) : $formField['config'];
+                                                                $options = $config['options'] ?? [];
+                                                            @endphp
+                                                            <div class="row g-2">
+                                                                @foreach($options as $option)
+                                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                                                                        <div class="form-check p-2" style="min-height: 45px;">
+                                                                            <input wire:model="formFields.{{ $fieldKey }}.value" 
+                                                                                class="form-check-input me-2" type="checkbox" 
+                                                                                value="{{ $option }}" id="checkbox-{{ $fieldKey }}-{{ $loop->index }}"
+                                                                                @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                                            <label class="form-check-label w-100 user-select-none" 
+                                                                                for="checkbox-{{ $fieldKey }}-{{ $loop->index }}"
+                                                                                style="font-size: 0.875rem; line-height: 1.2; cursor: pointer;">
+                                                                                {{ $option }}
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
+
+                                                        {{-- Dropdown field --}}
+                                                        @if ($formField['type'] === FieldType::DROPDOWN->value)
+                                                            @if (strtolower($formField['label']) === 'store group')
+                                                                {{-- Special handling for Store Group field --}}
+                                                                <select wire:model="formFields.{{ $fieldKey }}.value" 
+                                                                    class="form-select input__field" id="field-{{ $fieldKey }}"
+                                                                    @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                                    <option value="">Select Store Group</option>
+                                                                    @if($storeGroups)
+                                                                        @foreach($storeGroups as $storeGroup)
+                                                                            <option value="{{ $storeGroup->id }}">{{ $storeGroup->name }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                            @elseif ($formField['label'] === 'Store Code')
+                                                                {{-- Special handling for Store Code field --}}
+                                                                <select wire:model="formFields.{{ $fieldKey }}.value" 
+                                                                    class="form-select input__field" id="field-{{ $fieldKey }}"
+                                                                    @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                                    <option value="">Select Store Code</option>
+                                                                    @if($stores)
+                                                                        @foreach($stores as $store)
+                                                                            <option value="{{ $store->store_code }}">{{ $store->store_code }} - {{ $store->store_name }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                            @else
+                                                                {{-- Regular dropdown handling --}}
+                                                                @php
+                                                                    $config = is_string($formField['config']) ? json_decode($formField['config'], true) : $formField['config'];
+                                                                    $options = $config['options'] ?? [];
+                                                                @endphp
+                                                                <select wire:model="formFields.{{ $fieldKey }}.value" 
+                                                                    class="form-select input__field" id="field-{{ $fieldKey }}"
+                                                                    @disabled($isHeaderFieldSet && $formField['is_header_field'])>
+                                                                    <option value="">Select {{ Str::lower($formField['label']) }}</option>
+                                                                    @foreach($options as $option)
+                                                                        <option value="{{ $option }}">{{ $option }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            @endif
+                                                        @endif
+
                                                     </div>
                                                 @endif
                                             @endif
@@ -338,6 +432,14 @@
                                                                             <td class="field__value">
                                                                                 @if ($field['type'] == 'date')
                                                                                     {{ date('F j, Y', strtotime($field['value'])) }}
+                                                                                @elseif ($field['type'] == 'checkbox')
+                                                                                    @php
+                                                                                        $checkboxValue = is_string($field['value']) ? json_decode($field['value'], true) : $field['value'];
+                                                                                        $checkboxValue = is_array($checkboxValue) ? $checkboxValue : [];
+                                                                                    @endphp
+                                                                                    <div style="word-wrap: break-word; white-space: normal; line-height: 1.4;">
+                                                                                        {{ implode(', ', $checkboxValue) }}
+                                                                                    </div>
                                                                                 @else
                                                                                     {{ $field['value'] ?? '' }}
                                                                                 @endif
@@ -602,6 +704,13 @@
             serviceDepartmentSelect.reset();
             helpTopicSelect.disable();
             tinymce.get("createTicketDescription").setContent("");
+            
+            // Reset form selector
+            const formSelectorDropdown = document.querySelector('#form-selector-dropdown');
+            if (formSelectorDropdown && formSelectorDropdown.virtualSelect) {
+                formSelectorDropdown.virtualSelect.reset();
+                formSelectorDropdown.style.display = 'none';
+            }
 
             if (selectOtherBranch.checked) {
                 selectOtherBranch.checked = false;
@@ -644,6 +753,40 @@
             })
         });
 
+        // Form selector handling
+        window.addEventListener('show-form-selector', (event) => {
+            const formSelectorDropdown = document.querySelector('#form-selector-dropdown');
+            const forms = event.detail.forms;
+            const formOptions = forms.map(form => ({
+                label: form.name,
+                value: form.id
+            }));
+
+            // Clear any existing VirtualSelect instance
+            if (formSelectorDropdown.virtualSelect) {
+                formSelectorDropdown.virtualSelect.destroy();
+            }
+
+            VirtualSelect.init({
+                ele: formSelectorDropdown,
+                options: formOptions,
+                search: true,
+                markSearchResults: true,
+                placeholder: 'Select a form to fill up'
+            });
+
+            formSelectorDropdown.addEventListener('change', (event) => {
+                @this.set('selectedFormId', parseInt(event.target.value));
+            });
+        });
+
+        window.addEventListener('hide-form-selector', () => {
+            const formSelectorDropdown = document.querySelector('#form-selector-dropdown');
+            if (formSelectorDropdown) {
+                formSelectorDropdown.style.display = 'none';
+            }
+        });
+
         // Validate file
         function validateFile() {
             const excludeEXEfileMessage = document.querySelector('#exclude-exe-file-message');
@@ -684,6 +827,13 @@
             branchSelect.reset();
             helpTopicSelect.disable();
             helpTopicSelect.setOptions([]);
+            
+            // Reset form selector
+            const formSelectorDropdown = document.querySelector('#form-selector-dropdown');
+            if (formSelectorDropdown && formSelectorDropdown.virtualSelect) {
+                formSelectorDropdown.virtualSelect.reset();
+                formSelectorDropdown.style.display = 'none';
+            }
         });
     </script>
 @endpush

@@ -72,6 +72,25 @@ class TicketCustomForm extends Component
         return ['headers' => $headers, 'fields' => $fields];
     }
 
+    public function getFieldType($fieldName)
+    {
+        // Find the field in customFormRowFields to get its type
+        foreach ($this->customFormRowFields as $fieldData) {
+            if ($fieldData['field']['name'] === $fieldName) {
+                return $fieldData['field']['type'] ?? 'text';
+            }
+        }
+        
+        // If not found in row fields, check header fields
+        foreach ($this->customFormHeaderFields as $fieldData) {
+            if ($fieldData['field']['name'] === $fieldName) {
+                return $fieldData['field']['type'] ?? 'text';
+            }
+        }
+        
+        return 'text'; // Default fallback
+    }
+
     public function render()
     {
         return view('livewire.requester.ticket.ticket-custom-form');

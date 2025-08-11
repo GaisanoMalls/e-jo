@@ -30,7 +30,7 @@ class UpdateHelpTopic extends Component
     public string $name;
     public int $sla;
     public int $serviceDepartment;
-    public int $team;
+    public ?int $team = null;
     public ?float $amount = null;
     public bool $isSpecialProject = false;
 
@@ -126,13 +126,12 @@ class UpdateHelpTopic extends Component
 
         try {
             DB::transaction(function () {
-                $teamName = $this->team ? Team::find($this->team)->name : '';
-
+                // Use the name exactly as entered by the user, no team suffix
                 $this->helpTopic->update([
                     'service_department_id' => $this->serviceDepartment,
                     'team_id' => $this->team,
                     'service_level_agreement_id' => $this->sla,
-                    'name' => $this->name . ($teamName ? " - {$teamName}" : ''),
+                    'name' => $this->name,
                     'slug' => Str::slug($this->name),
                 ]);
 
@@ -474,35 +473,35 @@ class UpdateHelpTopic extends Component
                         $selectedApprovers = array_filter($approvers, function ($key) {
                             return in_array(substr($key, -1), $this->editSelectedLevels);
                         }, ARRAY_FILTER_USE_KEY);
-                    }
 
-                    $this->currentHelpTopicConfiguration->update([
-                        'level_of_approval' => $this->editLevelOfApproval
-                    ]);
+                        $this->currentHelpTopicConfiguration->update([
+                            'level_of_approval' => $this->editLevelOfApproval
+                        ]);
 
-                    // Delete existing configuration
-                    $this->currentHelpTopicConfiguration->approvers()->delete();
+                        // Delete existing configuration
+                        $this->currentHelpTopicConfiguration->approvers()->delete();
 
-                    // Create a new configuration
-                    foreach ($selectedApprovers as $level => $approverIds) {
-                        foreach ($approverIds as $approverId) {
-                            $this->currentHelpTopicConfiguration->approvers()->create([
-                                'help_topic_id' => $this->helpTopic->id,
-                                'level' => substr($level, -1), // extract the level number from the key
-                                'user_id' => $approverId,
-                            ]);
+                        // Create a new configuration
+                        foreach ($selectedApprovers as $level => $approverIds) {
+                            foreach ($approverIds as $approverId) {
+                                $this->currentHelpTopicConfiguration->approvers()->create([
+                                    'help_topic_id' => $this->helpTopic->id,
+                                    'level' => substr($level, -1), // extract the level number from the key
+                                    'user_id' => $approverId,
+                                ]);
+                            }
                         }
-                    }
 
-                    // Sync Ticket Approvals for all tickets associated with this help topic
-                    $tickets = Ticket::where('help_topic_id', $this->helpTopic->id)->get();
-                    foreach ($tickets as $ticket) {
-                        $this->syncTicketApprovals($ticket);
-                    }
+                        // Sync Ticket Approvals for all tickets associated with this help topic
+                        $tickets = Ticket::where('help_topic_id', $this->helpTopic->id)->get();
+                        foreach ($tickets as $ticket) {
+                            $this->syncTicketApprovals($ticket);
+                        }
 
-                    $this->emit('remount');
-                    $this->resetEditApprovalConfigFields();
-                    redirect()->route('staff.manage.help_topic.edit_details', $this->helpTopic->id);
+                        $this->emit('remount');
+                        $this->resetEditApprovalConfigFields();
+                        redirect()->route('staff.manage.help_topic.edit_details', $this->helpTopic->id);
+                    }
                 }
             });
         } catch (Exception $e) {
