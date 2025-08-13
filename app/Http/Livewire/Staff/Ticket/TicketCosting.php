@@ -192,7 +192,7 @@ class TicketCosting extends Component
     {
         return auth()->user()->id === $approverId
             && auth()->user()->isServiceDepartmentAdmin()
-            && SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
+                && SpecialProjectAmountApproval::where('ticket_id', $ticket->id)
                 ->whereJsonContains('service_department_admin_approver->approver_id', $approverId)
                 ->exists();
     }

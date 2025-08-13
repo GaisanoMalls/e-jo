@@ -26,7 +26,7 @@
                             <td class="px-3 py-2" style="font-size: 13px;">{{ $subtask->assignedAgent?->profile->getFullName }}</td>
                             <td class="px-3 py-2 d-flex align-items-center" @style(['font-size: 13px', 'background-color: #65b556' => $subtask->status->value === SubtaskStatusEnum::DONE->value, 'color: #FFFFFF' => $subtask->status->value === SubtaskStatusEnum::DONE->value])>
                                 {{ $subtask->status }}
-                                @if (auth()->user()->isAgent() || auth()->user()->isServiceDepartmentAdmin())
+                                @if (auth()->user()->isAgent() && $ticket->status_id !== Status::CLOSED || auth()->user()->isServiceDepartmentAdmin() && $ticket->status_id !== Status::CLOSED)
                                     <div class="dropstart ms-auto">
                                         <button type="button"
                                             class="btn btn-sm rounded-circle d-flex align-items-center justify-content-center text-muted"
